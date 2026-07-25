@@ -40,6 +40,18 @@ export interface ActivityOccasionContent {
   target_audience: string
   show_aqi_widget: boolean
   comparison_table: { feature: string; lengolf: string; alternative: string }[]
+  /**
+   * Optional long-form depth blocks, rendered between "Why LENGOLF" and
+   * "Other Options to Consider". Same body syntax as ExplainerContent:
+   * `\n\n` between paragraphs, single `\n` for line breaks, inline
+   * `**bold**`, and all-pipe paragraphs render as markdown tables.
+   */
+  sections?: { heading: string; body: string }[]
+  /**
+   * Optional FAQ block. Renders via components/shared/FaqSection and emits
+   * FAQPage JSON-LD from the activity route.
+   */
+  faqs?: { question: string; answer: string }[]
 }
 
 export interface FaqContent {

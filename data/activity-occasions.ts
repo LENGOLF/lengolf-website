@@ -131,19 +131,19 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     slug: 'birthday-party-venues-bangkok',
     title: 'Birthday Party Venues in Bangkok | Unique Ideas for Adults',
     meta_description:
-      'Looking for birthday party venues in Bangkok? From indoor golf simulator bars to private dining and rooftop spaces — the best venues for adult birthdays.',
+      'Birthday party venues in Bangkok compared: capacity, real package prices, and what each one includes. Indoor golf bar at BTS Chidlom hosts 10 to 25 guests from 9,999 THB.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
     category: 'social',
     locale: 'en',
-    related_slugs: ['/activities/group-activities-bangkok', '/activities/bachelor-party-ideas-bangkok', '/activities/private-party-venues-bangkok', '/events'],
+    related_slugs: ['/activities/group-activities-bangkok', '/activities/bachelor-party-ideas-bangkok', '/activities/private-party-venues-bangkok', '/events', '/menu'],
     created_at: now,
     updated_at: now,
     content: {
       occasion_type: 'birthday-party',
       intro:
-        'The best birthday party venues in Bangkok for adults pair a real activity with food and drinks, so the night keeps momentum instead of stalling over a long dinner. The right pick depends on your numbers (a small circle of friends, a standard 10–15, or a 25-plus crowd) and whether you want the space to yourselves. Here are the venues worth booking for an adult birthday in Bangkok, with honest notes on capacity, vibe, and what each does best.',
+        'The best birthday party venues in Bangkok for adults pair a real activity with food and drinks, so the night keeps momentum instead of stalling over a long dinner. What you can actually book comes down to headcount: under 10 and almost any bar will take the reservation, 10 to 25 is where all-inclusive packages and exclusive hire start to matter, and past 30 you are into function rooms and full buyouts. LENGOLF sits in that middle band, with birthday packages from 9,999 THB covering simulator bays, catered food, drinks, and 3 hours at BTS Chidlom. This page covers what a birthday party costs, what the package includes, how to book it, and the other Bangkok venues worth comparing, with honest notes on capacity and vibe.',
       why_lengolf:
         'LENGOLF runs event packages built for birthdays. The Small Package (9,999 THB) covers 10–15 guests across 2 bays for 3 hours with 10 beers, 5 cocktails, unlimited soft drinks, and a catered food spread. The Medium Package (21,999 THB) steps up to 15–25 guests, all 4 bays, and an exclusive full-venue rental: the whole room is yours. Both centre on Bravo golf simulators that anyone can play, so the group has something to do together rather than just eat; games like closest to the pin keep non-golfers laughing. Food, drinks, decorations, music, and a DJ setup can be customised to the party, and for a bigger celebration the venue hosts 50+ guests on a custom package. It is inside The Mercury Ville at BTS Chidlom, so guests arrive straight off the BTS.',
       other_activities: [
@@ -159,9 +159,69 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
       comparison_table: [
         { feature: 'All-inclusive package', lengolf: 'From ~9,999 THB (food, drinks, activity)', alternative: 'Usually food/venue separate' },
         { feature: 'Interactive activity', lengolf: 'Golf simulators for all levels', alternative: 'Karaoke, bowling, dining' },
-        { feature: 'Capacity', lengolf: 'Up to 25 (full venue rental)', alternative: 'Varies — rooftops often 10-15' },
+        { feature: 'Capacity', lengolf: 'Up to 25 (full venue rental)', alternative: 'Varies: rooftops often 10-15' },
         { feature: 'Customizable', lengolf: 'Decorations, music, menu', alternative: 'Depends on venue' },
         { feature: 'Cost per person (15 guests)', lengolf: '~667 THB all-in (est.)', alternative: '1,000-3,000 THB' },
+      ],
+      sections: [
+        {
+          heading: 'Birthday Party Packages, Capacity and Cost',
+          body: "A birthday party at LENGOLF is priced as a package, not a per-head cover charge, so the total is known before the night starts. Two standard packages cover most adult birthdays, and anything larger is quoted custom.\n\n| Package | Guests | Bays | Duration | Drinks included | Price |\n|---|---|---|---|---|---|\n| Small Package | 10 to 15 | 2 of 4 bays | 3 hours | 10 beers, 5 cocktails, unlimited soft drinks | 9,999 THB |\n| Medium Package | 15 to 25 | All 4 bays, exclusive venue | 3 hours | 20 beers, 10 cocktails, unlimited soft drinks | 21,999 THB |\n| Custom | 50+ | Full venue | Flexible | Quoted to the party | On request |\n\n**What that works out at per person.** The Small Package lands at roughly 667 THB a head across 15 guests, and the Medium Package at roughly 880 THB a head across 25 guests, with food, drinks, and three hours of golf all inside that number. Most Bangkok party venues bill the room, the catering, and the bar tab separately, so a like for like comparison usually ends up higher than it first looks.\n\n**Smaller birthdays do not need a package.** If the group is eight friends rather than eighteen, book bays on a normal reservation instead. Each simulator bay holds up to 5 players, so two bays cover a small birthday, and Play & Food group sets start from 240 THB NET per person if you want the food sorted at the same time.\n\n**Capacity in plain terms.** Four bays, five players per bay, plus bar and lounge seating. Fifteen to 25 guests is the comfortable range for the whole venue at once; 50 or more is possible on a custom package with a different flow through the space.",
+        },
+        {
+          heading: 'What Is Included in a Birthday Party Booking',
+          body: "**The bays.** Four Bravo golf simulators with club sets provided, so no guest has to bring anything. Five players fit in a bay, which is what makes a party of 20 workable: the group splits across bays and rotates rather than queueing behind one screen.\n\n**The food.** A catered spread from Smith & Co, served straight to the bay. The Small Package covers burgers, sliders, calamari, toast, crab or shrimp ebiko, crispy chicken, BBQ brisket, fries, and a salad. The Medium Package roughly doubles that and adds large pizzas.\n\n**The drinks.** Bottled beer and cocktails come with the package (10 and 5 on the Small, 20 and 10 on the Medium), unlimited soft drinks run throughout, and the full bar stays open for anything beyond the allocation.\n\n**The room.** The Medium Package is an exclusive full-venue rental: no other customers in the space for those three hours. Decorations, a sound system, and a DJ setup can be added on.\n\n**The staff.** Staff set up the simulators and run the games, so the person whose birthday it is (or the friend organising it) is not the one explaining the software to 20 people.",
+        },
+        {
+          heading: 'Food and Drinks for a Birthday Party',
+          body: "Food comes from Smith & Co and is served to the bay, so the party never has to relocate to a table. The package spreads are a starting point rather than a fixed menu: the events team will swap items for dietary requirements, vegetarian guests, or a theme.\n\nBeyond the package allocation the full bar is open for the whole booking: cocktails, Japanese highballs, bottled beer, wine by the glass or bottle, prosecco, and soft drinks. Unlimited soft drinks are included in both packages, which matters when part of the group is not drinking.\n\nOutside food and drinks are not permitted, so anything special for the birthday is arranged with the events team in advance rather than carried in. The full food and drinks menu is published with prices if you want to see what the kitchen and bar run day to day.",
+        },
+        {
+          heading: 'Why an Indoor Golf Bar Suits a Birthday',
+          body: "A birthday needs something for people to do. A long dinner pins everyone into fixed seats for two hours and the guest of honour only ever talks to four people; a normal bar leaves the group standing in a circle. A simulator bay does the opposite: people rotate, watch, heckle, sit down to eat, and get up again, and the room reshuffles itself all night.\n\n**No golf experience needed.** Closest to the pin and longest drive are the games that work for a mixed group, and the simulator does the scoring. First-timers usually enjoy it more than the golfers, because nobody expects them to be good.\n\n**Weather is irrelevant.** The venue is indoors and air-conditioned. Rooftop birthdays in Bangkok are a gamble from May to October, and a hot-season afternoon is its own problem.\n\n**It is genuinely central.** Inside The Mercury Ville at BTS Chidlom, so guests arrive on the BTS instead of sitting in traffic in a taxi. Open 9am to 11pm daily, which means an afternoon birthday works as well as an evening one.\n\n**One venue, not three.** Activity, food, and bar are in the same room, so there is no moving a group of 20 between a restaurant and a bar halfway through the night.",
+        },
+        {
+          heading: 'How to Book a Birthday Party at LENGOLF',
+          body: "**Groups of 10 or more.** Send the enquiry form on the event packages page, or message LINE @lengolf, with the date, the headcount, and roughly what you want to spend. The events team confirms availability, adjusts the package (food swaps, decorations, sound system, DJ), and holds the slot.\n\n**Groups under 10.** No events team needed. Book simulator bays directly at booking.len.golf and order food and drinks at the bay on the night.\n\n**What to have ready.** Date and start time, guest count (a range is fine), any dietary requirements, and whether you want the venue exclusively. Weekend evenings are the first slots to go, so the earlier the enquiry, the more choice of times.\n\n**Paying.** Packages are quoted as a total, so there is no splitting a bar tab at midnight. Anything ordered beyond the package is billed at menu prices at the end.",
+        },
+        {
+          heading: 'How to Choose a Birthday Party Venue in Bangkok',
+          body: "**Start with the headcount, not the venue.** Under 10 guests, most restaurants and bars will take a reservation and no package is needed. Between 10 and 25 is the awkward band where standard tables stop working and you want a group package. Over 30, you are looking at function rooms, event spaces, or a full buyout.\n\n**Decide whether you need the place to yourselves.** A private section of a busy bar is not the same as exclusive hire. If speeches, a playlist, or a cake moment matter, ask specifically whether the whole space is yours or whether other customers stay in the room.\n\n**Check what the quoted price actually covers.** Venue-only quotes tend to land cheap and then grow: catering, bar tab, service charge, and minimum spend get added later. An all-inclusive package that names the food and the drink count is easier to compare and harder to be surprised by.\n\n**Weigh activity against atmosphere.** Rooftops and private dining rooms deliver views and photos. Bowling, karaoke, and simulator bays deliver something for guests to do, which matters more when the group does not all know each other.\n\n**Check how guests get there.** A venue on the BTS or MRT gets everyone there on time. A venue that needs a taxi at 7pm on a Friday does not, and late arrivals kill the first hour of a party.",
+        },
+      ],
+      faqs: [
+        {
+          question: 'How much does a birthday party cost in Bangkok at LENGOLF?',
+          answer: 'Birthday event packages start at 9,999 THB for 10 to 15 guests, which covers 2 simulator bays for 3 hours, 10 beers, 5 cocktails, unlimited soft drinks, and a catered food spread. The Medium Package is 21,999 THB for 15 to 25 guests and adds all 4 bays plus exclusive use of the venue. Across a full group that is roughly 667 to 880 THB per person, all in.',
+        },
+        {
+          question: 'How many guests can you host for a birthday party?',
+          answer: 'The venue has 4 simulator bays holding up to 5 players each, plus bar and lounge seating. Standard packages cover 10 to 25 guests, and larger birthdays of 50 or more are quoted as a custom package.',
+        },
+        {
+          question: 'Can we book the whole venue exclusively for a private party?',
+          answer: 'Yes. The Medium Package (21,999 THB, 15 to 25 guests) is an exclusive full-venue rental for 3 hours, so no other customers are in the space. Custom buyouts for larger groups and longer durations are arranged through the events team.',
+        },
+        {
+          question: 'Is food and drink included in the birthday package?',
+          answer: 'Yes. Both packages include a catered spread from Smith & Co served to the bay, bottled beer, cocktails, and unlimited soft drinks. The full bar stays open for anything beyond the included allocation, billed at menu prices.',
+        },
+        {
+          question: 'Can we customise the food and decorations?',
+          answer: 'Food and drink selections can be fully customised for dietary requirements, vegetarian guests, or an event theme. Decorations, a sound system, and a DJ setup are available as add-ons. Outside food and drinks are not permitted, so anything special is arranged with the events team in advance.',
+        },
+        {
+          question: 'Do birthday guests need golf experience?',
+          answer: 'No. The simulators are built for beginners as much as golfers, clubs are provided, and staff set up games like closest to the pin and longest drive that anyone can play. Most first-timers enjoy it more than the golfers in the group.',
+        },
+        {
+          question: 'How do I book a birthday party?',
+          answer: 'For 10 guests or more, send the enquiry form on the event packages page or message LINE @lengolf with your date, headcount, and budget, and the events team will confirm availability and tailor the package. For smaller birthdays under 10 people, book simulator bays directly at booking.len.golf and order at the bay.',
+        },
+        {
+          question: 'Where is the venue and what are the opening hours?',
+          answer: 'LENGOLF is on Floor 4 of The Mercury Ville at BTS Chidlom, 540 Ploenchit Road, Pathumwan, Bangkok, directly connected to the BTS station. It is open 9am to 11pm daily, so afternoon and evening birthdays both work.',
+        },
       ],
     },
   },
