@@ -200,7 +200,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           className="absolute inset-0 h-full w-full object-cover"
           preload="none"
         >
-          <source src={storageUrl('videos/hero-video.mp4')} type="video/mp4" />
+          {/* 720p30, audio stripped, faststart. Source was 1080p150 with an unused
+              audio track: 29.6 MB vs 4.1 MB here. Cached for a year (immutable name).
+              Single source on purpose. A webm/mp4 pair looked like a further 0.9 MB
+              saving, but Lighthouse showed Chrome fetching the mp4 the instant the
+              webm finished, for 7.6 MB total. One universally supported file beats a
+              smaller one that can double-fetch. */}
+          <source src={storageUrl('videos/hero-loop-720p.mp4')} type="video/mp4" />
           <track kind="captions" srcLang="en" label="English" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-[#005a32]/60" />

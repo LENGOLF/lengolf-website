@@ -101,18 +101,10 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} className={`${poppins.variable} ${notoSansThai.variable} ${notoSansKR.variable} ${notoSansJP.variable} ${notoSansSC.variable}`}>
       <head>
-        {/* Google tag (gtag.js) - Google Ads */}
-        <Script async src="https://www.googletagmanager.com/gtag/js?id=AW-16456389020" strategy="afterInteractive" />
-        <Script
-          id="gtag-init"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'AW-16456389020');`,
-          }}
-        />
+        {/* Google Ads (AW-16456389020) is loaded by GTM tag 90 "Google Tag AW-16456389020",
+            which fires on All Pages and configures enhanced conversions with user_data.
+            Do not add a second gtag.js/config for it here - that duplicates the Ads
+            pageview hit and configures the same target without user_data. */}
         {/* Google Tag Manager */}
         {gtmId && (
           <Script
