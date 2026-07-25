@@ -7,7 +7,7 @@ import { FacebookIcon, LineIcon, InstagramIcon } from '@/components/shared/Socia
 const FOOTER_MENU_KEYS = [
   { key: 'home', href: '/' as const },
   { key: 'aboutUs', href: '/about-us' as const },
-  { key: 'bayRates', href: '/golf' as const },
+  { key: 'simulatorBays', href: '/golf' as const },
   { key: 'events', href: '/events' as const },
   { key: 'lessons', href: '/lessons' as const },
   { key: 'foodDrinks', href: '/menu' as const },
