@@ -50,6 +50,9 @@ next-env.d.ts
 playwright-report/
 test-results/
 
+# Lighthouse CI reports (regenerated per run, uploaded as a CI artifact)
+.lighthouseci/
+
 # Local strategy docs (sensitive — keep off git)
 docs/seo-expansion-strategy.md
 docs/seo-action-plan.md

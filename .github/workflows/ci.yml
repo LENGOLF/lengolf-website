@@ -87,3 +87,78 @@ jobs:
       - name: Stop server
         if: always()
         run: kill "$SERVER_PID" || true
+
+  # Mobile performance floor. See lighthouserc.js for the thresholds, the
+  # measured baselines behind them, and why the homepage is not audited here
+  # (its looping hero video makes Lighthouse return a score of 0 at random).
+  #
+  # This is deliberately a SEPARATE job rather than a few more steps on
+  # build-and-smoke. build-and-smoke is a required check, and anything that can
+  # flake must not sit in the required lane. `lighthouse` is intentionally left
+  # OUT of branch protection to start with, so a red result is a loud, visible
+  # signal on the PR without blocking a merge. Once it has a few weeks of green
+  # history and the thresholds have been calibrated against real runner numbers
+  # (download the lighthouse-reports artifact to read them), promote it to a
+  # required check.
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+
+      # Same curl-poll the smoke job uses, so both jobs fail the same way if the
+      # production server cannot come up.
+      - name: Start server
+        run: |
+          npm run start &
+          echo "SERVER_PID=$!" >> "$GITHUB_ENV"
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:3000/ > /dev/null 2>&1; then
+              echo "Server ready after ~$((i*2))s"
+              break
+            fi
+            if [ "$i" -eq 30 ]; then
+              echo "Server failed to start within 60s"
+              exit 1
+            fi
+            sleep 2
+          done
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+
+      # Pinned to an exact version and run through npx rather than added to
+      # devDependencies on purpose: @lhci/cli pulls in roughly 850 packages that
+      # only this job needs. Putting it in package.json would slow `npm ci` for
+      # the lint and build-and-smoke jobs and every local `npm install` too.
+      - name: Run Lighthouse CI
+        run: npx --yes @lhci/cli@0.15.1 autorun --config=lighthouserc.js
+
+      # Uploaded even when the assertions fail: the report is how you find out
+      # WHICH metric regressed and by how much.
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: .lighthouseci/
+          retention-days: 14
+
+      - name: Stop server
+        if: always()
+        run: kill "$SERVER_PID" || true
