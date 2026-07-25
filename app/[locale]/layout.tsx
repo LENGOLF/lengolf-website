@@ -105,11 +105,20 @@ export default async function LocaleLayout({
             which fires on All Pages and configures enhanced conversions with user_data.
             Do not add a second gtag.js/config for it here - that duplicates the Ads
             pageview hit and configures the same target without user_data. */}
-        {/* Google Tag Manager */}
+        {/* Google Tag Manager.
+            lazyOnload, not afterInteractive: the container pulls ~666 KB of third-party
+            JavaScript (GA4, Google Ads, Meta Pixel, Clarity) and its execution was
+            competing with hydration. Interior pages measured TTI 12.9s against FCP 1.7s,
+            a gap that is script, not media.
+            The trade: GTM now runs during idle after load, so a visitor who leaves within
+            a second or two may not fire a pageview. Conversion Linker still reads the
+            gclid from the URL when it runs, since these are static pages and the URL
+            persists. Watch conversion volume after deploying and revert this one word if
+            it drops materially. */}
         {gtmId && (
           <Script
             id="gtm-init"
-            strategy="afterInteractive"
+            strategy="lazyOnload"
             dangerouslySetInnerHTML={{
               __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
