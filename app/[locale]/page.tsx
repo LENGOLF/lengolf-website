@@ -6,6 +6,7 @@ import SectionWrapper from '@/components/shared/SectionWrapper'
 import BookingCTA from '@/components/shared/BookingCTA'
 import ImageGallery from '@/components/shared/ImageGallery'
 import ServicesCarousel from '@/components/home/ServicesCarousel'
+import HeroVideo from '@/components/home/HeroVideo'
 import { services } from '@/data/pricing'
 import { BUSINESS_INFO, SITE_URL, SOCIAL_LINKS, storageUrl, storageImageUrl } from '@/lib/constants'
 import { getAlternates, getCanonical, OG_LOCALES, type Locale } from '@/lib/translated-routes'
@@ -190,25 +191,16 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           className="absolute inset-0 h-full w-full object-cover"
           sizes="100vw"
         />
-        {/* Video overlay (loads after image) */}
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
+        {/* Autoplaying loop, fetched after the load event so it never becomes the
+            LCP candidate. 720p30 desktop / 480p mobile, audio stripped, faststart.
+            Source was 1080p150 with an unused audio track: 29.6 MB, vs 4.1 MB and
+            2.0 MB here. Single mp4 per breakpoint on purpose - a webm/mp4 pair made
+            Chrome fetch the mp4 the instant the webm finished, for 7.6 MB total. */}
+        <HeroVideo
+          srcDesktop={storageUrl('videos/hero-loop-720p.mp4')}
+          srcMobile={storageUrl('videos/hero-loop-480p.mp4')}
           poster={storageImageUrl('venue/venue-simulator-01.jpg', { width: 1280, quality: 60 })}
-          className="absolute inset-0 h-full w-full object-cover"
-          preload="none"
-        >
-          {/* 720p30, audio stripped, faststart. Source was 1080p150 with an unused
-              audio track: 29.6 MB vs 4.1 MB here. Cached for a year (immutable name).
-              Single source on purpose. A webm/mp4 pair looked like a further 0.9 MB
-              saving, but Lighthouse showed Chrome fetching the mp4 the instant the
-              webm finished, for 7.6 MB total. One universally supported file beats a
-              smaller one that can double-fetch. */}
-          <source src={storageUrl('videos/hero-loop-720p.mp4')} type="video/mp4" />
-          <track kind="captions" srcLang="en" label="English" />
-        </video>
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-[#005a32]/60" />
         <div className="relative z-10 mx-auto max-w-3xl px-6 text-center">
           <Image
