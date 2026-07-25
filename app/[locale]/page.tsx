@@ -200,7 +200,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           className="absolute inset-0 h-full w-full object-cover"
           preload="none"
         >
-          <source src={storageUrl('videos/hero-video.mp4')} type="video/mp4" />
+          {/* 720p30, audio stripped, faststart. Source was 1080p150 with an unused
+              audio track: 29.6 MB vs 3.3 MB here. Cached for a year (immutable name). */}
+          <source src={storageUrl('videos/hero-loop-720p.webm')} type="video/webm" />
+          <source src={storageUrl('videos/hero-loop-720p.mp4')} type="video/mp4" />
           <track kind="captions" srcLang="en" label="English" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-[#005a32]/60" />
