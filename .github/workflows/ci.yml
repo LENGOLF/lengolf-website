@@ -151,6 +151,12 @@ jobs:
 
       # Uploaded even when the assertions fail: the report is how you find out
       # WHICH metric regressed and by how much.
+      #
+      # include-hidden-files is required, not optional. `.lighthouseci` is a
+      # dot-directory, and upload-artifact v4 skips hidden files by default, so
+      # without this the step goes green while uploading nothing at all.
+      # if-no-files-found: error makes that failure mode loud instead of a
+      # warning nobody reads.
       - name: Upload Lighthouse reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -158,6 +164,8 @@ jobs:
           name: lighthouse-reports
           path: .lighthouseci/
           retention-days: 14
+          include-hidden-files: true
+          if-no-files-found: error
 
       - name: Stop server
         if: always()
