@@ -1,9 +1,13 @@
+import { Fragment } from 'react'
 import Link from 'next/link'
 import { Star, ArrowRight, Check } from 'lucide-react'
 import { useLocale } from 'next-intl'
 import { BOOKING_URL, BUSINESS_INFO, SOCIAL_LINKS } from '@/lib/constants'
 import type { ActivityOccasionSeoPage } from '@/types/seo-pages'
 import AqiWidget from '@/components/shared/AqiWidget'
+import BoldText from '@/components/shared/BoldText'
+import MarkdownTable, { isMarkdownTableBlock } from '@/components/shared/MarkdownTable'
+import FaqSection, { type FaqLink } from '@/components/shared/FaqSection'
 
 interface Props {
   data: ActivityOccasionSeoPage
@@ -16,6 +20,15 @@ interface Props {
 //   - Section headers: "Why LENGOLF Is a Great Option", "Other Options to Consider", "How LENGOLF Compares", "Ready to Try It?"
 //   - UI text: "Year-round", "Best:", feature chips, etc.
 // Currently all UI strings are hardcoded English (Phase 1A).
+
+// Phrases inside content.faqs answers that become links. Kept generic so any
+// activity page opting into FAQs picks them up; JSON-LD still gets the plain
+// answer string (getFaqPageJsonLd reads content.faqs directly).
+const faqLinks: Record<string, FaqLink> = {
+  'event packages': { href: '/events' },
+  'food and drinks menu': { href: '/menu' },
+  'booking.len.golf': { href: BOOKING_URL, external: true },
+}
 
 function getMonthName(month: number, locale: string): string {
   return new Intl.DateTimeFormat(locale, { month: 'short' }).format(new Date(2024, month - 1))
@@ -112,6 +125,39 @@ export default function ActivityPageComponent({ data }: Props) {
         </div>
       </section>
 
+      {/* Depth Sections (optional). The "Why LENGOLF" block above is
+          bg-[#f8f9fa], so these start white and alternate from there. */}
+      {content.sections?.map((section, index) => (
+        <section
+          key={section.heading}
+          className={`py-12 md:py-16 ${index % 2 === 0 ? '' : 'bg-[#f8f9fa]'}`}
+        >
+          <div className="mx-auto max-w-[900px] px-5">
+            <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-4">
+              {section.heading}
+            </h2>
+            <div className="text-base leading-relaxed text-muted-foreground md:text-lg space-y-4">
+              {section.body.split('\n\n').map((paragraph, pIdx) => {
+                const lines = paragraph.split('\n')
+                if (isMarkdownTableBlock(lines)) {
+                  return <MarkdownTable key={pIdx} lines={lines} />
+                }
+                return (
+                  <p key={pIdx}>
+                    {lines.map((line, lIdx) => (
+                      <Fragment key={lIdx}>
+                        {lIdx > 0 && <br />}
+                        <BoldText text={line} />
+                      </Fragment>
+                    ))}
+                  </p>
+                )
+              })}
+            </div>
+          </div>
+        </section>
+      ))}
+
       {/* Other Activities Section */}
       {content.other_activities.length > 0 && (
         <section className="py-12 md:py-16">
@@ -170,6 +216,16 @@ export default function ActivityPageComponent({ data }: Props) {
             </div>
           </div>
         </section>
+      )}
+
+      {/* FAQ Section (optional). FAQPage JSON-LD is emitted by the route. */}
+      {content.faqs && content.faqs.length > 0 && (
+        <FaqSection
+          items={content.faqs}
+          links={faqLinks}
+          title="Frequently Asked"
+          titleSuffix="Questions"
+        />
       )}
 
       {/* CTA Section */}

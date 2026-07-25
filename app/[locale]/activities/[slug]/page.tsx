@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getAllSeoPageSlugs, getSeoPageBySlug } from '@/lib/seo-pages'
 import { SITE_URL } from '@/lib/constants'
-import { getActivityPageJsonLd } from '@/lib/jsonld'
+import { getActivityPageJsonLd, getFaqPageJsonLd } from '@/lib/jsonld'
 import ActivityPageComponent from '@/components/activities/ActivityPage'
 import type { ActivityOccasionSeoPage } from '@/types/seo-pages'
 
@@ -52,6 +52,8 @@ export default async function ActivityPage({ params }: Props) {
   }
 
   const jsonLd = getActivityPageJsonLd(page)
+  const faqs = page.content.faqs
+  const faqJsonLd = faqs && faqs.length > 0 ? getFaqPageJsonLd(faqs) : null
 
   return (
     <>
@@ -59,6 +61,12 @@ export default async function ActivityPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
       <ActivityPageComponent data={page} />
     </>
   )
