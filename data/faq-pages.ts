@@ -139,6 +139,45 @@ export const faqPages: FaqSeoPage[] = [
     },
   },
 
+  // ─── ZH: can-i-rent-golf-clubs-in-bangkok ───
+  // Title/meta front-load the ZH rental query (曼谷 高尔夫球杆 租借) and lead with
+  // 收费, matching the fee-shaped ZH GSC signal. Prices follow the ZH currency
+  // ruling (泰铢 spelled out, half-width digits, – ranges) and carry the as-of
+  // marker (截至2026年7月) — every figure traces to the EN entry. Place/brand
+  // names stay in Latin per the ZH transliteration note (BTS Chidlom,
+  // The Mercury Ville, Callaway, Majesty). related_* retargeted to
+  // ZH-translated pages only: the EN twins
+  // (/faq/should-i-bring-golf-clubs-to-thailand-or-rent,
+  // /faq/cost-to-fly-with-golf-clubs-to-thailand) have no ZH translation, so
+  // they are replaced with the in-batch FAQ slugs and the ZH guide.
+  {
+    id: 'faq-1-zh',
+    page_type: 'faq',
+    slug: 'can-i-rent-golf-clubs-in-bangkok',
+    title: '曼谷能租到高尔夫球杆吗？ — 收费、球杆套装与配送方式',
+    meta_description:
+      '在曼谷租高尔夫球杆没问题。LENGOLF每次球位预订免费提供标准套装，Callaway高级套装每小时150泰铢起，带去球场每日1,200泰铢起，截至2026年7月。',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'rental',
+    locale: 'zh',
+    related_slugs: ['/faq/are-rental-golf-clubs-good-enough', '/golf-club-rental', '/guide/golf-club-rental-bangkok-guide'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        '在曼谷可以租到高尔夫球杆——无论是在室内高尔夫场馆里用，还是带到室外球场去打。在LENGOLF，每一次模拟器球位预订都免费包含标准球杆套装。想用更好的装备，室内租借每小时150泰铢起，带去球场每日1,200泰铢起；只要在曼谷市内，无论球场还是酒店都能当日送达，截至2026年7月。',
+      answer_body:
+        '曼谷租球杆有几种选择，取决于你是在室内打，还是要出去下真实球场。\n\n**在LENGOLF（室内高尔夫模拟器）**\n每一次球位预订都免费附带标准球杆套装（男士与女士），内含一号木、铁杆（5–PW）和推杆。想用更好的装备，还有三档升级可选：\n- **标准（免费）：** 每次预订都包含的店内套装，仅限在模拟器球位使用\n- **高级（每小时150泰铢起）：** Callaway Warbird（男士）或Majesty Shuttle（女士）全套\n- **高级+（每小时250泰铢起）：** 搭配Ventus TR杆身与Jaws Raw挖起杆的巡回赛级Callaway Paradym Forged Carbon套装（仅男士）\n\n高级与高级+套装既可在店内使用，也能带到曼谷任何一座球场。带去球场每日1,200泰铢（高级）或1,800泰铢（高级+）起，多日套餐最高可省50%。曼谷市内当日配送500泰铢。\n\n**在室外高尔夫球场**\n曼谷周边多数球场都提供球杆租借，基础套装一轮通常500–1,500泰铢。品质差异很大，有些球场只有年代较久或使用磨损严重的套装。\n\n**专门的租借服务**\n曼谷也有几家公司专做高尔夫球杆租借与配送，像样的套装一般每日800–1,500泰铢起。\n\n**我们的建议**\n对旅行中的球友来说，在LENGOLF租借最划算——尤其是想在下场前先用模拟器试打的人：\n- 每次预订都免费提供标准球杆\n- 高级套装每小时仅150泰铢起\n- 可配送到你的酒店或球场（500泰铢）\n- 先试后买——任何一支球杆都能在我们的模拟器上试打',
+      related_questions: [
+        { slug: 'are-rental-golf-clubs-good-enough', question: '租借的高尔夫球杆够用吗？ — 认真球友的品质判断标准' },
+        { slug: '/guide/golf-club-rental-bangkok-guide', question: '曼谷高尔夫球杆租借 — 去哪里租、费用多少、如何挑选' },
+        { slug: 'how-much-does-indoor-golf-cost-in-bangkok', question: '曼谷室内高尔夫收费 — 每小时550–1,000泰铢的价格全解析' },
+      ],
+    },
+  },
+
   {
     id: 'faq-2',
     page_type: 'faq',
@@ -241,6 +280,46 @@ export const faqPages: FaqSeoPage[] = [
         { slug: 'can-i-rent-golf-clubs-in-bangkok', question: '방콕에서 골프 클럽 대여되나요? — 요금과 수령 방법' },
         { slug: '/guide/round-of-golf-cost-bangkok', question: '방콕 골프 라운딩 비용은? 그린피·캐디피 총정리' },
         { slug: 'best-way-to-learn-golf-in-bangkok', question: '방콕에서 골프 배우는 가장 좋은 방법 — 레슨 요금과 선택 기준' },
+      ],
+    },
+  },
+
+  // ─── ZH: how-much-does-indoor-golf-cost-in-bangkok ───
+  // Static content mirroring the EN entry's literal prices — this is what the
+  // FAQ renderer actually serves. NOTE: the EN sibling has an (unwired)
+  // getIndoorGolfCostContent() dynamic-pricing function that no renderer
+  // calls; do not add a ZH twin unless that family is actually wired up
+  // (same caution as the faq-11-th / faq-2-ja / faq-2-ko precedents).
+  // Prices rendered per the ZH currency ruling (泰铢 spelled out, half-width
+  // digits, – ranges) and stamped with the as-of marker (截至2026年7月).
+  // Title/meta lead with 收费 — the live ZH GSC query is fee-shaped
+  // (室内高尔夫球练习场 收费, pos 26) — with 室内高尔夫 as the head term.
+  // related_* retargeted to ZH-translated pages (the EN corporate-event and
+  // how-long FAQs are untranslated).
+  {
+    id: 'faq-2-zh',
+    page_type: 'faq',
+    slug: 'how-much-does-indoor-golf-cost-in-bangkok',
+    title: '曼谷室内高尔夫收费 — 每小时550–1,000泰铢的价格全解析',
+    meta_description:
+      '曼谷室内高尔夫收费为每小时550–1,000泰铢。LENGOLF球位每小时550泰铢起、最多5人同时使用，标准球杆免费。月套餐与真实球场的费用对比，截至2026年7月。',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'pricing',
+    locale: 'zh',
+    related_slugs: ['/faq/can-i-rent-golf-clubs-in-bangkok', '/guide/round-of-golf-cost-bangkok', '/golf'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        '曼谷的室内高尔夫收费，按场馆、时段和星期几不同，一般在每小时550–1,000泰铢之间。LENGOLF的模拟器球位每小时550泰铢起，一个球位最多可5人同时使用——多人分摊下来，每人每小时只要110泰铢。标准高尔夫球杆的租借，免费包含在每一次预订里，截至2026年7月。',
+      answer_body:
+        '下面把曼谷室内高尔夫的收费逐项拆解给你看。\n\n**LENGOLF球位收费**\n- 平日（周一至周四）14:00前：每小时550泰铢\n- 平日14:00–23:00：每小时750泰铢\n- 周末（周五至周日及公众假期）14:00前：每小时750泰铢\n- 周末14:00–23:00：每小时950泰铢\n\n一个球位最多可5人同时使用，标准高尔夫球杆租借免费。若要使用高级球杆（Callaway Warbird或Majesty Shuttle），每小时加收150泰铢。\n\n**常来球友的月套餐**\n如果你打得比较规律，月套餐更划算。\n- Bronze：5小时3,000泰铢（每小时600泰铢）\n- Silver：15小时8,000泰铢（每小时约533泰铢）\n- Gold：30小时14,000泰铢（每小时约467泰铢）\n- Diamond：时长不限，每月8,000泰铢\n- Diamond+：时长不限，3个月18,000泰铢\n\nEarly Bird套餐（仅限14:00前使用）10小时4,800泰铢起。\n\n**与真实球场相比如何**\n在曼谷近郊的球场打一轮，光是果岭费就要1,500–4,000泰铢，还要再加上球童费（300–400泰铢）、球车租用和往返交通。室内高尔夫在费用上明显更省，不受天气影响，交通也更方便——尤其适合多人一起来。',
+      related_questions: [
+        { slug: 'can-i-rent-golf-clubs-in-bangkok', question: '曼谷能租到高尔夫球杆吗？ — 收费、球杆套装与配送方式' },
+        { slug: '/guide/round-of-golf-cost-bangkok', question: '曼谷打一场高尔夫要多少钱？果岭费与球童费全解析' },
+        { slug: 'best-way-to-learn-golf-in-bangkok', question: '在曼谷学高尔夫的最佳方式 — 课程收费与选择标准' },
       ],
     },
   },
@@ -478,6 +557,43 @@ export const faqPages: FaqSeoPage[] = [
         { slug: 'can-beginners-play-golf-simulators', question: '스크린골프, 초보자도 즐길 수 있을까? — 처음 시작하는 방법' },
         { slug: '/guide/is-indoor-golf-realistic', question: '실내 골프는 얼마나 현실적일까 — 시뮬레이터 정확도 설명' },
         { slug: '/guide/what-is-a-golf-simulator', question: '골프 시뮬레이터란? 작동 원리와 이용 방법 가이드' },
+      ],
+    },
+  },
+
+  // ─── ZH: how-accurate-are-golf-simulators ───
+  // Percentages, the 1–2% measurement tolerance, Bravo, Trackman and Pebble
+  // Beach all trace to the EN entry; % and Latin brand/course names follow the
+  // shipped ZH guide corpus, ranges use the ZH – separator. Swing-data terms
+  // reuse the settled ZH corpus forms (杆头轨迹 / 杆面角度 / 发射角 / 旋转速率 /
+  // 击球垫). No LENGOLF price is quoted here (none in the EN source), so no
+  // as-of marker is needed. related_* retargeted to ZH-translated pages (the
+  // EN do-i-need-experience, practice-golf-swing and how-long FAQs have no ZH
+  // translation).
+  {
+    id: 'faq-6-zh',
+    page_type: 'faq',
+    slug: 'how-accurate-are-golf-simulators',
+    title: '高尔夫模拟器的精度如何？ — 和真实球场差在哪里',
+    meta_description:
+      '最新的高尔夫模拟器在弹道与距离上大致有85–95%的精度。Bravo这类高端系统测量球速、旋转和发射角，误差在1–2%以内。哪些能还原、哪些还原不了，一次说清。',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'general',
+    locale: 'zh',
+    related_slugs: ['/faq/can-beginners-play-golf-simulators', '/guide/is-indoor-golf-realistic', '/golf'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        '最新的高尔夫模拟器精度相当高。Bravo这类高端系统测量球速、发射角和旋转速率，与真实条件的误差在1–2%以内。弹道整体的还原精度，与室外击球相比大致在85–95%。真正有差别的，主要是风的体感、读果岭，以及长草和沙坑这类球场状况。',
+      answer_body:
+        '高尔夫模拟器的精度取决于所用的技术。下面如实梳理一下：哪些部分准，哪些部分还不够准。\n\n**模拟器能准确还原的部分**\n- **球速与距离：** 高端系统的误差在1–2%以内。你在室外用7号铁能打150码，模拟器上也会显示大约150码。\n- **发射角与旋转：** 由雷达或摄像系统高精度测量。这些数据其实比你在室外靠肉眼观察到的更有用。\n- **杆头轨迹与杆面角度：** 模拟器会把击球瞬间球杆的动作原样呈现出来——这是在真实球场上看不见的信息。\n- **球场布局：** 高端模拟器会还原真实球场，距离、障碍和高低落差都相当准确。\n\n**模拟器无法完全还原的部分**\n- **风与天气的体感：** 模拟器能把风算进弹道，但你感觉不到它，这会影响选杆的直觉。\n- **读果岭：** 在模拟器击球垫上推杆，和读真实果岭差别不小，多数球友都清楚这一点。\n- **球位与地形：** 从平整的击球垫上击球，比起倾斜的球位、深长草或沙坑要容易得多。\n- **压力与氛围：** 在真实球场上和别人同组、有球童在旁、还有胜负摆着，是另一种体验。\n\n**用于练习：非常有用**\n打磨挥杆动作、确认各支球杆的距离、建立稳定性，模拟器都很合适。不少巡回赛职业球员也用Trackman做场外练习。在LENGOLF，有数据反馈在手，比起对着一片空地打球，进步会快得多。\n\n**用于娱乐：更加合拍**\n朋友聚会、约会、团体活动这些场合，好玩比精准更重要。和朋友端着鸡尾酒打一轮Pebble Beach，物理演算是90%还是95%，其实一样开心。',
+      related_questions: [
+        { slug: 'can-beginners-play-golf-simulators', question: '零基础也能玩高尔夫模拟器吗？ — 初学者上手指南' },
+        { slug: '/guide/is-indoor-golf-realistic', question: '室内高尔夫真实吗？模拟器准确度与真实球场对比详解' },
+        { slug: '/guide/what-is-a-golf-simulator', question: '什么是高尔夫模拟器？工作原理、真实体验与曼谷试打指南' },
       ],
     },
   },
@@ -754,6 +870,45 @@ export const faqPages: FaqSeoPage[] = [
     },
   },
 
+  // ─── ZH: can-beginners-play-golf-simulators ───
+  // HONESTY: the EN "contact us on LINE @lengolf to book" line is rendered with
+  // the required LENGOLF-scoped construction — 中国人教练／中文课程 negated for
+  // LENGOLF only, paired with the LINE @lengolf Chinese booking allowance
+  // (same wording as the shipped exp-32-zh guide). No city-wide negative about
+  // Bangkok, no claim of Chinese-language lessons.
+  // Coach count (3), 1,800泰铢/hour, free 1-hour trial, 550泰铢 bay rate, 5
+  // players and the Chidlom address all trace to the EN entry; the EN source
+  // does not name a floor, so none is added. ZH keeps The Mercury Ville and
+  // BTS Chidlom in Latin per the transliteration note. Price-bearing lines
+  // carry the as-of marker (截至2026年7月).
+  {
+    id: 'faq-10-zh',
+    page_type: 'faq',
+    slug: 'can-beginners-play-golf-simulators',
+    title: '零基础也能玩高尔夫模拟器吗？ — 初学者上手指南',
+    meta_description:
+      '高尔夫模拟器非常适合初学者：不需要经验、装备和着装要求，工作人员几分钟就能教会你上手。LENGOLF标准球杆免费，球位每小时约550泰铢起，截至2026年7月。',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'general',
+    locale: 'zh',
+    related_slugs: ['/faq/best-way-to-learn-golf-in-bangkok', '/guide/golf-thailand-beginners', '/golf'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        '当然可以——高尔夫模拟器是初学者接触高尔夫最好的地方之一。你不需要经验、不需要装备，也不用懂规则。模拟器会自动记分，显示每一球飞到哪里，还会实时给出挥杆数据。在LENGOLF，工作人员大约2分钟就能教你上手，球杆免费提供。',
+      answer_body:
+        '高尔夫模拟器几乎把真实高尔夫让初学者望而生畏的门槛都拿掉了。\n\n**模拟器为什么适合初学者**\n- **不需要装备：** LENGOLF免费提供标准球杆，空手来就行。\n- **不用先学规则：** 规则由模拟器自动处理，你只管把球打出去。\n- **不会尴尬：** 球位是半独立的空间，不会有人在隔壁球道盯着你的挥杆。\n- **进步看得见：** 实时数据会告诉你这一杆和上一杆之间改变了什么。初学者常常在一次体验里就能感到明显变化。\n- **不赶时间：** 不像球场后面还有组在等，模拟器可以让你慢慢来。\n\n**初学者的一次体验大致是这样**\n1. 工作人员递上球杆，讲解基本握杆和站姿（2分钟）\n2. 你先试打几球，屏幕上会显示弹道和距离\n3. 开始一个游戏模式（近洞比赛在初学者中很受欢迎）\n4. 点上饮料，和朋友较量一番，享受气氛\n5. 30分钟左右，多数初学者就能比较稳定地击中球了\n\n**如果你想认真学高尔夫**\nLENGOLF有三位专精初学者教学的PGA认定教练。课程每小时1,800泰铢起，含带挥杆分析数据的模拟器使用，截至2026年7月。另外还有1小时的免费体验课。需要说明的是，LENGOLF没有中国人教练，也没有中文课程，但预订和事前咨询可以通过LINE @lengolf用中文办理。\n\n**给初学者的一句建议**\n先从7号铁（中等长度的球杆）开始。它最好打，也最快能打出让人满意的结果。合适的球杆工作人员会帮你准备。\n\nLENGOLF的球位收费约为每小时550泰铢，最多可5人同时使用；地点在The Mercury Ville，BTS Chidlom站（4号出口）。',
+      related_questions: [
+        { slug: 'best-way-to-learn-golf-in-bangkok', question: '在曼谷学高尔夫的最佳方式 — 课程收费与选择标准' },
+        { slug: 'how-accurate-are-golf-simulators', question: '高尔夫模拟器的精度如何？ — 和真实球场差在哪里' },
+        { slug: '/guide/golf-simulator-for-non-golfers-guide', question: '非球友能享受高尔夫模拟器吗 — 零基础完整入门指南' },
+      ],
+    },
+  },
+
   {
     id: 'faq-11',
     page_type: 'faq',
@@ -891,6 +1046,47 @@ export const faqPages: FaqSeoPage[] = [
         { slug: 'can-beginners-play-golf-simulators', question: '스크린골프, 초보자도 즐길 수 있을까? — 처음 시작하는 방법' },
         { slug: '/guide/golf-lessons-bangkok-coaches', question: '방콕 골프레슨 — 요금·코치 선택 가이드' },
         { slug: '/guide/golf-thailand-beginners', question: '태국 골프 초보자 가이드 — 시작 전 알아야 할 모든 것' },
+      ],
+    },
+  },
+
+  // ─── ZH: best-way-to-learn-golf-in-bangkok ───
+  // Static content mirroring the EN entry's literal prices — this is what the
+  // FAQ renderer actually serves. NOTE: the EN sibling has an (unwired)
+  // getBestWayToLearnContent() dynamic-pricing function that no renderer
+  // calls; do not add a ZH twin unless that family is actually wired up
+  // (same caution as the faq-11-th / faq-11-ja / faq-11-ko precedents above).
+  // HONESTY: language support uses the required LENGOLF-scoped construction —
+  // 中国人教练／中文课程 negated for LENGOLF only, paired with the LINE @lengolf
+  // Chinese booking allowance and the on-screen-numbers point (the same wording
+  // shipped in exp-32-zh). No city-wide negative about Bangkok. Prices follow
+  // the ZH currency ruling (泰铢, half-width digits, – ranges) and carry the
+  // as-of marker; title/meta front-load the ZH lesson query
+  // (曼谷学高尔夫 / 课程收费).
+  {
+    id: 'faq-11-zh',
+    page_type: 'faq',
+    slug: 'best-way-to-learn-golf-in-bangkok',
+    title: '在曼谷学高尔夫的最佳方式 — 课程收费与选择标准',
+    meta_description:
+      '在曼谷学高尔夫，最快的路径是跟PGA认定教练上模拟器课程。LENGOLF每小时1,800泰铢起，含挥杆数据与即时反馈，还有1小时免费体验课，截至2026年7月。',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'lessons',
+    locale: 'zh',
+    related_slugs: ['/faq/can-beginners-play-golf-simulators', '/lessons', '/guide/golf-lessons-bangkok-coaches'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        '在曼谷学高尔夫，最好的方式是跟着PGA认定教练用高尔夫模拟器上课。模拟器课程能给你练习场拿不到的实时挥杆数据（球速、发射角、旋转速率），还有视频分析和即时反馈。在LENGOLF，由PGA认定教练授课的课程每小时1,800泰铢起，含模拟器使用，截至2026年7月。',
+      answer_body:
+        '在曼谷学高尔夫有好几条路，各有取舍。\n\n**1. 跟教练上模拟器课程（推荐）**\n高尔夫模拟器让教学建立在数据之上，能明显加快进步速度。在LENGOLF，三位泰国PGA认定教练（PRO Boss、PRO Ratchavin、PRO Min）使用Bravo模拟器技术，指导各种水平的球友。击球瞬间球杆到底在做什么——杆头轨迹、杆面角度、球速、旋转——都看得一清二楚，比在练习场靠感觉摸索快得多。\n\n需要说明的是，LENGOLF没有中国人教练，也没有中文课程，但预订和事前咨询可以通过LINE @lengolf用中文办理；而且上课时，杆头速度、发射角这些模拟器数据会显示在屏幕上，即使有语言隔阂，你也能用眼睛看懂该改哪里。\n\n课程收费：\n- 1小时：1,800泰铢（1位球友）\n- 5小时：8,500泰铢（有效期6个月）\n- 10小时：16,000泰铢（有效期12个月）\n- 入门套餐：11,000泰铢（5小时授课 + 5小时练习 + 赠高尔夫手套）\n- 提供1小时免费体验课——请通过LINE @lengolf联系\n\n**2. 练习场的驻场教练**\n曼谷有不少配有教练的练习场，适合想多打球数的人，但没有模拟器那样的数据反馈。练习场还热、噪音大，而且看不清球到底落在哪里。\n\n**3. 球场实地课程**\n有些球场提供下场教学。比起要打基础的初学者，这种形式更适合想学球场策略的进阶球友。\n\n**4. 在YouTube上自学**\n免费，但有风险。缺少反馈，初学者往往会养成日后更难纠正的坏习惯。\n\n**给初学者的建议**\n先从LENGOLF的入门套餐开始（5小时授课 + 5小时练习，11,000泰铢），用模拟器的数据反馈把基本功打扎实；等到准备好下真实球场，再接上Sim to Fairway套餐（13,499泰铢）。',
+      related_questions: [
+        { slug: 'can-beginners-play-golf-simulators', question: '零基础也能玩高尔夫模拟器吗？ — 初学者上手指南' },
+        { slug: '/guide/golf-lessons-bangkok-coaches', question: '曼谷高尔夫课程 — 费用、教练选择与预约指南' },
+        { slug: '/guide/golf-thailand-beginners', question: '泰国高尔夫初学者指南 — 你需要知道的一切' },
       ],
     },
   },
@@ -1475,6 +1671,42 @@ export const faqPages: FaqSeoPage[] = [
         { slug: 'can-i-rent-golf-clubs-in-bangkok', question: '방콕에서 골프 클럽 대여되나요? — 요금과 수령 방법' },
         { slug: '/guide/golf-club-rental-bangkok-guide', question: '방콕 골프 클럽 대여 — 어디서 빌리고 비용은 얼마일까' },
         { slug: '/guide/bring-golf-clubs-thailand-or-rent', question: '태국 골프여행, 클럽 가져갈까 현지 렌탈할까? 판단 가이드' },
+      ],
+    },
+  },
+
+  // ─── ZH: are-rental-golf-clubs-good-enough ───
+  // Title front-loads the ZH rental query (租借高尔夫球杆). Brand and area names
+  // trace to the EN entry; Nichada / Bangna kept in Latin as in the source (the
+  // ZH corpus keeps place/brand names in Latin, only 曼谷 is localized).
+  // The EN source quotes no LENGOLF price, so no as-of marker is needed here.
+  // related_* retargeted to ZH-translated pages — the EN entry's
+  // /golf-in-thailand-guide and the what-golf-clubs-available-rent-bangkok FAQ
+  // have no ZH translation.
+  {
+    id: 'faq-23-zh',
+    page_type: 'faq',
+    slug: 'are-rental-golf-clubs-good-enough',
+    title: '租借的高尔夫球杆够用吗？ — 认真球友的品质判断标准',
+    meta_description:
+      '曼谷的高端球场和LENGOLF这类模拟器场馆，Callaway、TaylorMade租借套装足以让认真的球友放心使用。决定品质的条件与该自带球杆的时机，一次说清。',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'clubs-rental',
+    locale: 'zh',
+    related_slugs: ['/faq/can-i-rent-golf-clubs-in-bangkok', '/golf-club-rental', '/guide/golf-club-rental-bangkok-guide'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        '在高端场馆，答案是够用；在低价球场，多半不够。如果你打的是曼谷的顶级球场，或是LENGOLF这样的模拟器场馆，会遇到Callaway、TaylorMade或Titleist的现行世代租借套装，认真的球友拿来实战完全没问题。',
+      answer_body:
+        '**决定租借球杆品质的几个变量**\n\n1. **品牌与型号年份** — 现行或近几代的Callaway Rogue、TaylorMade Stealth铁杆容错好、表现稳定；十年前的无名铁杆做不到这一点。\n2. **杆身硬度** — 多数租借套装只有标准（regular）硬度。挥速快的人会失去控制，挥速慢的人会损失距离。高端场馆有时备有多种硬度，务必先问清楚。\n3. **套装状态** — 杆面沟槽会磨损，握把会打滑。保养到位的高级租借套装，永远胜过被疏于打理的中阶套装。\n\n**曼谷哪里能租到真正好用的球杆**\n\n曼谷的高端球场——尤其是Nichada、Bangna一带以及城市东侧沿线——通常备有男士、女士，有时还有左手用的Callaway或TaylorMade套装。平价球场和度假村球场则比较难预料，建议提前打电话问清楚他们具体备的是哪个品牌、哪个型号。\n\nLENGOLF的室内模拟器场馆，男士、女士和左手用的租借球杆一律使用Callaway，可以作为“优质租借装备大概是什么水准”的一个参考基准。\n\n**即使租到高级球杆，仍然会失去的两件事**\n\n就算拿到品质不错的租借套装，认真的球友仍要放弃两样东西：\n1. **熟悉感** — 你了解自己的球杆。那种内在的参照，在租借球杆上会完全消失。\n2. **量身调校** — 租借球杆是按平均身材组装的。如果你个子高、对倾角有不同偏好，或习惯非标准的握把尺寸，租借球杆不可能像自己的球杆那样贴合。\n\n**结论**\n\n- 如果这只是一趟高尔夫只占其中一项安排的轻松旅行，高级租借球杆绰绰有余\n- 如果是正式比杆、押着差点的球会对抗赛，或专程为打出最好成绩而去的球场，还是自带球杆\n\n**折中的做法**\n\n不少有经验的高尔夫旅行者会这样安排：重要的球场自带球杆，不那么重要的场合——临时起意去陌生球场打一轮、一次模拟器体验、或轻松的黄昏时段球局——就用租借。这样既不用把球包拖着到处走，关键时刻又能用上自己的装备。',
+      related_questions: [
+        { slug: 'can-i-rent-golf-clubs-in-bangkok', question: '曼谷能租到高尔夫球杆吗？ — 收费、球杆套装与配送方式' },
+        { slug: '/guide/golf-club-rental-bangkok-guide', question: '曼谷高尔夫球杆租借 — 去哪里租、费用多少、如何挑选' },
+        { slug: '/guide/bring-golf-clubs-thailand-or-rent', question: '泰国高尔夫之旅，自带球杆还是当地租借？判断指南' },
       ],
     },
   },
