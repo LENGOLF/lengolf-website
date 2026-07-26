@@ -2629,6 +2629,27 @@ const thaiRedirectTests: ThaiRedirectTest[] = [
   // purpose — every locale (th/ja/ko/zh) now has PRICE_TIER_I18N rows, so no
   // untranslated locale remains to probe. The price-tier registry-consistency
   // section still guards the allowlist ⇄ data-file sync in both directions.
+  // Untranslated FAQ slugs must still 301 in the CJK locales. The registry
+  // sections only compare allowlist ⇄ data; nothing else exercises the
+  // middleware for /faq, so without these the allowlist could widen to an
+  // untranslated slug and ship English content under a locale URL unnoticed.
+  // (Replaces the price-tier negative probe removed above — every locale now
+  // has price tiers, so no untranslated tier remains to test.)
+  {
+    path: "/ja/faq/what-to-wear-to-indoor-golf-bar/",
+    expectedLocation: "/faq/what-to-wear-to-indoor-golf-bar/",
+    label: "Untranslated JA FAQ (only translated slugs may 200)",
+  },
+  {
+    path: "/ko/faq/how-long-does-simulator-golf-take/",
+    expectedLocation: "/faq/how-long-does-simulator-golf-take/",
+    label: "Untranslated KO FAQ (only translated slugs may 200)",
+  },
+  {
+    path: "/zh/faq/can-kids-play-golf-simulators/",
+    expectedLocation: "/faq/can-kids-play-golf-simulators/",
+    label: "Untranslated ZH FAQ (only translated slugs may 200)",
+  },
   // EN-only golf-course routes (near/best-for/compare) build no locale copies
   // (generateStaticParams emits locale: 'en' only) and have dynamicParams:false,
   // so the middleware 301 is the ONLY thing keeping their locale URLs from a

@@ -112,8 +112,27 @@ export const PRICE_TIER_I18N: Partial<
     },
     // JA GSC context (2026-07): Japanese searchers typed 「バンコク の ゴルフ場 安い」
     // and 「バンコク ゴルフ 安い」 and landed on the EN page at pos 58-64 with 0
-    // clicks. JA titles therefore front-load バンコク近郊の安いゴルフ場 plus the
-    // ฿X,XXX ceiling (kept verbatim — it matches the page's UI badges).
+    // clicks. JA titles therefore front-load a バンコク近郊の…ゴルフ場 query phrase
+    // plus the ฿X,XXX ceiling (kept verbatim — it matches the page's UI badges)
+    // and the shared tail — おすすめコースと注意点.
+    //
+    // Title frame is chosen PER TIER, not uniformly (see the same note on ko/zh
+    // below). The 安い ("cheap") phrasing is only accurate at the bottom of the
+    // market, so it stops at ฿2,500; using it on the ฿5,000/฿7,500 pages
+    // contradicted their own framing paragraph directly beneath the title:
+    //   ฿1,500 / ฿2,500 → 安い       (EN: "very low end of the Thai green-fee
+    //                                 market" / "honest mid-budget golf")
+    //   ฿3,500          → コスパの良い (EN: "sweet spot for the budget-conscious
+    //                                 visiting golfer" — value, not bottom-of-market)
+    //   ฿5,000          → プレミアム   (EN: "premium daily-fee golf without
+    //                                 crossing into trophy-course territory")
+    //   ฿7,500          → 名門        (EN: "top end of the visiting-tourist
+    //                                 market", trophy courses — matches 名門コース
+    //                                 already used in that tier's own framing)
+    // The プレミアム／名門 split mirrors the ฿5,000 framing's own line
+    // 「最高級の名門コースの領域には踏み込まない、プレミアムな…」. EN titles are
+    // neutral at every tier ("…Under ฿X,XXX") and TH uses ราคาไม่เกิน; JA keeps a
+    // value frame at the low tiers because that is the attested JA query.
     // Localization decision — opposite of TH: the EN English-language-specific
     // caveats ("limited English on the line", "book-able online in English")
     // are KEPT for JA. Japanese readers ARE international visitors, so a
@@ -125,6 +144,13 @@ export const PRICE_TIER_I18N: Partial<
       catch:
         'クラブハウスの設備は必要最低限と考えてください。ほとんどのコースにドライビングレンジはなく、コースコンディションは降雨量によって大きく変わります。ゴルフカートがない場合もあり、歩きでのラウンドのみのコースも少なくありません。',
     },
+    // KO title frames follow the same per-tier logic documented on the ja rows
+    // above — 저렴한 ("cheap") only at ฿1,500/฿2,500, 가성비 좋은 at ฿3,500
+    // (EN "sweet spot for the budget-conscious visiting golfer"), 프리미엄 at
+    // ฿5,000 (EN "premium daily-fee golf") and 명문 at ฿7,500 (EN "top end of
+    // the visiting-tourist market"; 명문 코스 already appears in that tier's own
+    // KO framing). Do not re-apply one uniform 저렴한 title across all five.
+    //
     // KO localization decision — same as JA, opposite of TH: the EN
     // English-language-specific caveats ("limited English on the line",
     // "book-able online in English") are KEPT — Korean readers ARE
@@ -140,8 +166,14 @@ export const PRICE_TIER_I18N: Partial<
         '클럽하우스 시설은 기본적인 수준이라고 생각해 두세요. 대부분의 코스에 드라이빙 레인지가 없고, 코스 상태는 강우량에 따라 크게 달라져요. 골프 카트가 없는 경우도 있으며, 걸어서만 라운딩해야 하는 코스도 많아요.',
     },
     // ZH GSC context (2026-07): a ZH searcher typed 室内高尔夫球练习场 收费 —
-    // fee/price intent — so titles front-load 曼谷周边便宜高尔夫球场 plus the
-    // ฿X,XXX ceiling (kept verbatim, matching the page's UI badges).
+    // fee/price intent — so titles front-load a 曼谷周边…高尔夫球场 query phrase
+    // plus the ฿X,XXX ceiling (kept verbatim, matching the page's UI badges).
+    // Frame is per tier, as on the ja/ko rows above: 便宜 ("cheap") only at
+    // ฿1,500/฿2,500, 高性价比 at ฿3,500 (EN "sweet spot for the budget-conscious
+    // visiting golfer"), 高端 at ฿5,000 and 顶级 at ฿7,500 — the 高端/顶级 split
+    // mirrors the ฿5,000 framing's own 「尚未跨入顶级名场领域」 and the ฿7,500
+    // framing's 「到访游客市场的最高价位段」. A 便宜 title on the premium tiers
+    // contradicted the framing paragraph rendered directly below it.
     // Localization decision — same as JA/KO, opposite of TH: the EN
     // English-language-specific caveats ("limited English on the line",
     // "book-able online in English") are KEPT — Chinese readers ARE
@@ -199,21 +231,21 @@ export const PRICE_TIER_I18N: Partial<
         'ราคาวันหยุดสุดสัปดาห์มักปรับขึ้น 30-40% ระดับราคานี้จึงเหมาะกับการเล่นวันธรรมดามากที่สุด สนามบางแห่งในกลุ่มบนของระดับราคานี้มีธรรมเนียมทิปแคดดี้ที่จะเพิ่มค่าใช้จ่ายอีก 300-500 บาท จากค่ากรีนฟีที่ประกาศไว้',
     },
     ja: {
-      title: 'バンコク近郊の安いゴルフ場 ฿3,500以下 — おすすめコースと注意点',
+      title: 'バンコク近郊のコスパの良いゴルフ場 ฿3,500以下 — おすすめコースと注意点',
       framing:
         '予算を意識しながら旅行するゴルファーにとって、最もバランスの良い価格帯です。バンコクから1時間圏内のモダンなレイアウトを、キャディーとカート付きの18ホールとしては海外のほとんどの市場では考えられない安さでプレーできます。',
       catch:
         '週末料金は30〜40%上がることが多く、この価格帯が真価を発揮するのは平日プレーです。価格帯上位の一部のコースにはキャディーへのチップの慣習があり、公表されているグリーンフィーに300〜500THBがひそかに上乗せされます。',
     },
     ko: {
-      title: '방콕 근교 저렴한 골프장 ฿3,500 이하 — 추천 코스와 주의할 점',
+      title: '방콕 근교 가성비 좋은 골프장 ฿3,500 이하 — 추천 코스와 주의할 점',
       framing:
         '예산을 생각하며 여행하는 골퍼에게 가장 균형 잡힌 가격대예요. 방콕에서 1시간 이내의 현대적인 코스를, 캐디와 카트가 포함된 18홀 라운딩치고는 해외 대부분의 시장에서 믿기 어려울 만큼 낮은 가격에 즐길 수 있어요.',
       catch:
         '주말 요금은 30~40% 오르는 경우가 많아서, 이 가격대는 평일 플레이에 가장 유용해요. 가격대 상단의 일부 코스에는 캐디 팁 관행이 있어서, 공시된 그린피에 300~500바트가 슬그머니 더해지기도 해요.',
     },
     zh: {
-      title: '曼谷周边便宜高尔夫球场 ฿3,500以下 — 推荐球场与注意事项',
+      title: '曼谷周边高性价比高尔夫球场 ฿3,500以下 — 推荐球场与注意事项',
       framing:
         '对精打细算的到访球友来说，这是最划算的价位段——曼谷1小时以内的现代球场，18洞含球童和球车的价格，在大多数国际市场看来低得难以置信。',
       catch:
@@ -229,21 +261,21 @@ export const PRICE_TIER_I18N: Partial<
         'สนามหลายแห่งในระดับราคานี้ได้รับความนิยมสูงจนทีไทม์วันธรรมดาต้องจองล่วงหน้า 3-7 วัน มารยาทแคดดี้เป็นทางการมากขึ้น คาดหวังแคดดี้ที่แต่งเครื่องแบบและระบบทิปที่มีแบบแผนเมื่อจบรอบ',
     },
     ja: {
-      title: 'バンコク近郊の安いゴルフ場 ฿5,000以下 — おすすめコースと注意点',
+      title: 'バンコク近郊のプレミアムゴルフ場 ฿5,000以下 — おすすめコースと注意点',
       framing:
         '最高級の名門コースの領域には踏み込まない、プレミアムなデイリーフィーゴルフです。この価格帯には、海外のゴルフツアー団体が定期的に利用するバンコク周辺の上位コースが含まれます。コンディションが良く、トーナメント開催にも対応し、英語でのオンライン予約が可能です。',
       catch:
         'この価格帯には人気の高いコースが複数あり、そうしたコースでは平日のティータイムでも3〜7日前の事前予約が必要です。キャディーに関するマナーはより格式があり、制服姿のキャディーと、ラウンド終了時の決まった形のチップを想定しておきましょう。',
     },
     ko: {
-      title: '방콕 근교 저렴한 골프장 ฿5,000 이하 — 추천 코스와 주의할 점',
+      title: '방콕 근교 프리미엄 골프장 ฿5,000 이하 — 추천 코스와 주의할 점',
       framing:
         '최고급 명문 코스 영역까지는 가지 않는, 프리미엄 데일리피 골프예요. 이 가격대에는 해외 골프 투어 그룹이 정기적으로 이용하는 방콕 지역 상위권 코스들이 들어 있어요. 코스 상태가 좋고, 토너먼트 개최가 가능한 수준이며, 영어로 온라인 예약도 할 수 있어요.',
       catch:
         '이 가격대에는 인기가 많은 코스가 여럿 있어서, 평일 티타임도 3~7일 전에 미리 예약해야 해요. 캐디 관련 에티켓은 좀 더 격식을 갖춘 편이라, 유니폼을 입은 캐디와 라운딩이 끝난 뒤의 정해진 형식의 팁 문화를 예상해 두는 게 좋아요.',
     },
     zh: {
-      title: '曼谷周边便宜高尔夫球场 ฿5,000以下 — 推荐球场与注意事项',
+      title: '曼谷周边高端高尔夫球场 ฿5,000以下 — 推荐球场与注意事项',
       framing:
         '尚未跨入顶级名场领域的高端按次收费球场。这个价位段涵盖国际高尔夫旅行团常年使用的曼谷地区较好球场——场地养护到位、具备办赛水准，还能用英语在线预订。',
       catch:
@@ -259,21 +291,21 @@ export const PRICE_TIER_I18N: Partial<
         'ราคาวันหยุดสุดสัปดาห์ของสนามกลุ่มนี้มักสูงกว่าราคาหลักที่ประกาศไว้ หากวันเดินทางของคุณยืดหยุ่นได้ การเล่นวันธรรมดาคุ้มค่ากว่ามาก มีการบังคับใช้กฎการแต่งกาย และการจองออนไลน์ผ่านเว็บไซต์ของสนามเองมักมีราคาถูกที่สุด',
     },
     ja: {
-      title: 'バンコク近郊の安いゴルフ場 ฿7,500以下 — おすすめコースと注意点',
+      title: 'バンコク近郊の名門ゴルフ場 ฿7,500以下 — おすすめコースと注意点',
       framing:
         '観光で訪れるゴルファー向け市場の最上位帯です。この価格帯の名門コースには、オールインクルーシブのプレミアム体験を提供するNikanti（ニカンティ）、Asian Tourの開催実績を持つコース、そしてタイを世界のゴルフ地図に載せたSchmidt-Curley（シュミット・カーリー）やNicklaus（ニクラウス）設計の代表的コースが含まれます。',
       catch:
         'この価格帯のコースでは、週末料金が見出しの上限額を上回ることも珍しくありません。旅行日程に融通が利くなら、平日プレーのほうがはるかに割安です。ドレスコードは厳格に運用されており、コース公式サイトからのオンライン予約が最も安く済むのが一般的です。',
     },
     ko: {
-      title: '방콕 근교 저렴한 골프장 ฿7,500 이하 — 추천 코스와 주의할 점',
+      title: '방콕 근교 명문 골프장 ฿7,500 이하 — 추천 코스와 주의할 점',
       framing:
         '방문 관광객 시장의 최상위 가격대예요. 이 가격대의 명문 코스에는 올인클루시브 프리미엄 경험을 제공하는 Nikanti, Asian Tour 대회를 개최했던 코스, 그리고 태국을 세계 골프 지도에 올려놓은 Schmidt-Curley와 Nicklaus 설계의 대표 코스들이 포함돼요.',
       catch:
         '이 가격대 코스들은 주말 요금이 표시된 상한 금액을 넘어서는 경우가 많아요. 여행 날짜에 여유가 있다면 평일 플레이가 훨씬 더 이득이에요. 드레스 코드가 엄격히 적용되며, 코스 공식 사이트를 통한 온라인 예약이 보통 가장 저렴해요.',
     },
     zh: {
-      title: '曼谷周边便宜高尔夫球场 ฿7,500以下 — 推荐球场与注意事项',
+      title: '曼谷周边顶级高尔夫球场 ฿7,500以下 — 推荐球场与注意事项',
       framing:
         '到访游客市场的最高价位段。这里的名场包括全包式高端体验（Nikanti）、曾承办亚洲巡回赛（Asian Tour）赛事的球场，以及把泰国推上世界高尔夫版图的Schmidt-Curley与尼克劳斯（Nicklaus）设计名作。',
       catch:

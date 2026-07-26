@@ -1,7 +1,8 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getAllSeoPageParams, getSeoPageBySlug, ROUTE_PREFIX_TO_TYPE } from '@/lib/seo-pages'
+import { getAllSeoPageParams, getSeoPageBySlug } from '@/lib/seo-pages'
+import { buildRelatedLabels } from '@/lib/seo-links'
 import { getAlternates, getCanonical } from '@/lib/translated-routes'
 import { getExplainerPageJsonLd } from '@/lib/jsonld'
 import { getFactTokens, interpolateFacts } from '@/lib/site-facts'
@@ -57,45 +58,6 @@ interface Props {
 // the target page's (localized) title instead of title-casing the URL slug.
 // Uses the canonical section map — a local copy here previously drifted
 // (omitted activities/hotels), leaving those links with fallback labels.
-
-// Core static pages referenced from related_slugs — labels come from the
-// ExplainerPage.pathLabels i18n namespace (messages/*.json).
-const STATIC_LABEL_PATHS = new Set([
-  'golf',
-  'lessons',
-  'events',
-  'golf-club-rental',
-  'golf-course-club-rental',
-  'golf-in-thailand-guide',
-  'corporate-golf-packages',
-])
-
-async function buildRelatedLabels(
-  paths: string[] | null,
-  locale: string
-): Promise<Record<string, string>> {
-  if (!paths || paths.length === 0) return {}
-  const t = await getTranslations('ExplainerPage')
-  const entries = await Promise.all(
-    paths.map(async (path): Promise<[string, string] | null> => {
-      const segments = path.split('/').filter(Boolean)
-      // SEO pages (/guide/x, /faq/x, ...): localized title, EN fallback
-      if (segments.length === 2 && ROUTE_PREFIX_TO_TYPE[segments[0]]) {
-        const type = ROUTE_PREFIX_TO_TYPE[segments[0]]
-        const target =
-          (await getSeoPageBySlug(segments[1], type, locale)) ??
-          (await getSeoPageBySlug(segments[1], type, 'en'))
-        return target ? [path, target.title] : null
-      }
-      // Core static pages: label from the pathLabels namespace
-      if (segments.length === 1 && STATIC_LABEL_PATHS.has(segments[0])) {
-        return [path, t(`pathLabels.${segments[0]}`)]
-      }
-      return null // unknown paths keep the component's slug-derived fallback
-    })
-  )
-  return Object.fromEntries(entries.filter((e): e is [string, string] => e !== null))
-}
 
 export async function generateStaticParams() {
   // Only build locale×slug combos that have published content — untranslated
