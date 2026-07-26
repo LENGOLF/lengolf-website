@@ -29,7 +29,7 @@ export const dynamicParams = false
 export async function generateStaticParams() {
   // EN-only: omitting `locale` would cross-product with every locale from the
   // root layout, statically rendering ja/ko/zh copies that the middleware 301s
-  // to English anyway (and whose GolfCourseShared messages don't exist there).
+  // to English anyway.
   return USE_CASES.map((useCase) => ({ locale: 'en', useCase }))
 }
 

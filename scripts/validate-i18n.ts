@@ -12,12 +12,15 @@
  * (terminology / conventions / honesty_constraints / transliterations).
  *
  * Corpus (server-free, imported directly like validate-internal-links.ts):
- *   - data/explainer-pages.ts  — every entry with locale ja/ko/zh/th
+ *   - data/explainer-pages.ts   — every entry with locale ja/ko/zh/th
  *   - data/golf-courses-i18n.ts — REGION_HUB_I18N (ja/ko/zh hub strings)
- * Both are plain data modules (type-only imports), so importing them here does
- * NOT pull lib/pricing.ts / server-only into the script (data/faq-pages.ts is
- * intentionally NOT imported — it runtime-imports lib/pricing and carries no
- * localized content anyway).
+ *   - data/faq-pages.ts         — faqPages entries with locale ja/ko/zh/th
+ *   - data/price-tiers.ts       — PRICE_TIER_I18N (th/ja/ko/zh tier strings)
+ * data/faq-pages.ts imports lib/pricing at module level, but that module is
+ * tsx-safe by design: its React `cache` call falls back to identity outside
+ * the RSC runtime (see the comment in lib/pricing.ts), and the live pricing
+ * fetch only runs inside the exported async helpers, never at import time.
+ * The other three are plain data modules.
  *
  * ERROR-level (exit 1) — a hard defect that must never ship:
  *   1. Emoji in ja/ko/zh content.
@@ -40,7 +43,9 @@ import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { explainerPages } from '@/data/explainer-pages'
 import { REGION_HUB_I18N } from '@/data/golf-courses-i18n'
-import type { ExplainerContent } from '@/types/seo-pages'
+import { faqPages } from '@/data/faq-pages'
+import { PRICE_TIER_I18N } from '@/data/price-tiers'
+import type { ExplainerContent, FaqContent } from '@/types/seo-pages'
 
 type Locale = 'ja' | 'ko' | 'zh' | 'th'
 const LOCALES: Locale[] = ['ja', 'ko', 'zh', 'th']
@@ -80,13 +85,19 @@ const glossaries: Record<Locale, Glossary> = Object.fromEntries(
 
 // 'As of' marker that satisfies conventions.as_of_format, per locale. Derived
 // from each glossary's as_of_format example (JA 現在 majority form + 時点; KO
-// 기준; ZH 截至; TH ณ). Presence of any of these ANYWHERE in an entry means the
-// entry is date-scoped, so its price figures are not flagged by check 9.
+// 기준; ZH 截至; TH ข้อมูล ณ). Presence of any of these ANYWHERE in an entry
+// means the entry is date-scoped, so its price figures are not flagged by
+// check 9.
+//
+// TH must match the full 'ข้อมูล ณ' phrase, not bare 'ณ ': the letter ณ ends
+// the everyday word ประมาณ ("approximately", which precedes prices constantly)
+// and also stands alone as the preposition "at" (ณ จังหวะปะทะลูก) — a bare-ณ
+// marker silently shielded 7 of the 8 TH FAQ entries from this check.
 const AS_OF_MARKERS: Record<Locale, string[]> = {
   ja: ['現在', '時点'],
   ko: ['기준'],
   zh: ['截至'],
-  th: ['ณ '],
+  th: ['ข้อมูล ณ'],
 }
 
 // Locales whose tone forbids emoji + exclamation marks. Derived from the
@@ -150,6 +161,20 @@ function explainerUnits(locale: Locale, entryId: string, title: string, meta: st
   return u
 }
 
+/** Flatten a FaqContent into its lintable strings (slugs are not linted). */
+function faqUnits(locale: Locale, entryId: string, title: string, meta: string | null, c: FaqContent): Unit[] {
+  const u: Unit[] = []
+  const push = (field: string, value: string | null | undefined) => {
+    if (typeof value === 'string' && value.length > 0) u.push({ locale, entryId, field, value })
+  }
+  push('title', title)
+  push('meta_description', meta)
+  push('answer_intro', c.answer_intro)
+  push('answer_body', c.answer_body)
+  c.related_questions?.forEach((q, i) => push(`related_questions[${i}].question`, q.question))
+  return u
+}
+
 // Build the corpus, grouped by entry (as-of scoping is an entry-level fact).
 const entries: { entryId: string; locale: Locale; units: Unit[] }[] = []
 
@@ -161,6 +186,34 @@ for (const page of explainerPages) {
     locale,
     units: explainerUnits(locale, page.id, page.title, page.meta_description, page.content),
   })
+}
+
+for (const page of faqPages) {
+  if (!LOCALES.includes(page.locale as Locale)) continue
+  const locale = page.locale as Locale
+  entries.push({
+    entryId: page.id,
+    locale,
+    units: faqUnits(locale, page.id, page.title, page.meta_description, page.content),
+  })
+}
+
+for (const [tier, byLocale] of Object.entries(PRICE_TIER_I18N)) {
+  if (!byLocale) continue
+  for (const [loc, t] of Object.entries(byLocale)) {
+    if (!t || !LOCALES.includes(loc as Locale)) continue
+    const locale = loc as Locale
+    const entryId = `tier:${tier}:${locale}`
+    entries.push({
+      entryId,
+      locale,
+      units: [
+        { locale, entryId, field: 'title', value: t.title },
+        { locale, entryId, field: 'framing', value: t.framing },
+        { locale, entryId, field: 'catch', value: t.catch },
+      ],
+    })
+  }
 }
 
 for (const [region, byLocale] of Object.entries(REGION_HUB_I18N)) {
@@ -433,6 +486,21 @@ if (process.argv.includes('--self-test')) {
   assert('markup: balanced ** → 0', errsFrom('ja', '**太字**は正常', checkMarkup) === 0)
   assert('markup: lone {{ → 1', errsFrom('ja', '{{price のみ', checkMarkup) === 1)
   assert('markup: complete {{token}} → 0', errsFrom('ja', '{{price}} は有効', checkMarkup) === 0)
+
+  // TH as-of marker must not match the tail of ประมาณ ("approximately") or a
+  // bare prepositional ณ — only the glossary's dated ข้อมูล ณ form counts.
+  assert('as-of th: ประมาณ 500 บาท does not shield', !AS_OF_MARKERS.th.some((m) => 'ราคาโดยทั่วไปเริ่มต้นประมาณ 500 บาท'.includes(m)))
+  assert('as-of th: bare ณ จังหวะ does not shield', !AS_OF_MARKERS.th.some((m) => 'ทำอะไรบ้าง ณ จังหวะปะทะลูก'.includes(m)))
+  assert('as-of th: (ข้อมูล ณ กรกฎาคม 2026) shields', AS_OF_MARKERS.th.some((m) => '(ข้อมูล ณ กรกฎาคม 2026)'.includes(m)))
+
+  // Corpus coverage — each source file actually contributes entries, so a
+  // future filter/import regression can't silently shrink the lint surface.
+  // 'exp-' only: data/faq-pages.ts also carries gg-prefixed ids, which would
+  // keep a gg- check green even if the explainer import/loop regressed.
+  assert('corpus: explainer entries present', entries.some((e) => e.entryId.startsWith('exp-')))
+  assert('corpus: region-hub entries present', entries.some((e) => e.entryId.startsWith('hub:')))
+  assert('corpus: FAQ entries present', entries.some((e) => e.entryId.startsWith('faq-')))
+  assert('corpus: price-tier entries present', entries.some((e) => e.entryId.startsWith('tier:')))
 
   // Checks 1–3 — regex-level detectors
   assert('emoji: ⛳ matches', EMOJI_RE.test('⛳'))
