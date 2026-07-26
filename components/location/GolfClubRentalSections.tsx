@@ -2,7 +2,7 @@ import { getTranslations } from 'next-intl/server'
 import { MapPin, Briefcase } from 'lucide-react'
 import type { LocationPage } from '@/lib/locations'
 import { parseList, parseSemicolonList } from '@/lib/locations'
-import CourseRentalCrossLink from './CourseRentalCrossLink'
+import CourseRentalCrossLink from '@/components/shared/CourseRentalCrossLink'
 
 interface Props {
   data: LocationPage

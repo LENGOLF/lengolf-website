@@ -4,14 +4,23 @@ import { BOOKING_URL, BUSINESS_INFO, SOCIAL_LINKS } from '@/lib/constants'
 import { relatedQuestionPath } from '@/lib/seo-links'
 import BoldText from '@/components/shared/BoldText'
 import MarkdownTable, { isMarkdownTableBlock } from '@/components/shared/MarkdownTable'
+import CourseRentalCrossLink from '@/components/shared/CourseRentalCrossLink'
 import type { FaqSeoPage } from '@/types/seo-pages'
 
 interface Props {
   data: FaqSeoPage
 }
 
+/**
+ * FAQ categories whose readers are deciding about renting clubs — these pages
+ * get the rental banner instead of relying on the generic "Book a Bay" CTA.
+ * Both spellings exist in data/faq-pages.ts ('rental' and 'clubs-rental').
+ */
+const RENTAL_CTA_CATEGORIES = ['rental', 'clubs-rental']
+
 export default function FaqPageComponent({ data }: Props) {
   const { content } = data
+  const showRentalCta = RENTAL_CTA_CATEGORIES.includes(data.category ?? '')
 
   return (
     <div className="faq-page">
@@ -115,6 +124,11 @@ export default function FaqPageComponent({ data }: Props) {
           </div>
         </div>
       </section>
+
+      {/* Rental conversion banner — the same cross-link the location templates
+          use, now also on rental-intent FAQs (the generic "Book a Bay" CTA is
+          the wrong ask for a reader deciding whether to rent clubs at all). */}
+      {showRentalCta && <CourseRentalCrossLink />}
 
       {/* LENGOLF Feature Pills */}
       <section className="py-12 md:py-16 bg-[#f8f9fa]">
