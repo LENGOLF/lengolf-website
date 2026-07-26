@@ -1222,6 +1222,16 @@
     "openGuide": "打开指南",
     "close": "关闭"
   },
+  "GolfCoursePriceTier": {
+    "metaDescription": "汇总平日果岭费不超过฿{amount}的曼谷周边优质高尔夫球场，并介绍这个价位段的注意事项。",
+    "breadcrumbGolfCourses": "高尔夫球场",
+    "breadcrumbCurrent": "฿{amount}以下",
+    "eyebrowBadge": "平日果岭费 · ฿{amount}以下",
+    "catchHeading": "有什么要注意的？",
+    "topCoursesHeading": "平日价格฿{amount}以下的{count}座精选球场",
+    "roundupReason": "平日{price}泰铢起",
+    "otherPriceBands": "其他价格区间"
+  },
   "ExplainerPage": {
     "guideLabel": "LENGOLF指南",
     "bookABay": "预订球位",
@@ -1245,5 +1255,21 @@
       "golf-in-thailand-guide": "泰国高尔夫指南",
       "corporate-golf-packages": "企业高尔夫套餐"
     }
+  },
+  "FaqPage": {
+    "eyebrow": "常见问题",
+    "bookABay": "预订球位",
+    "lineUs": "LINE联系我们",
+    "aboutHeading": "关于LENGOLF",
+    "pillRate": "{rate}/小时，最多{n}人",
+    "pillLocation": "The Mercury Ville，BTS Chidlom站（4号出口）",
+    "pillComfort": "室内空调、风雨无阻、营业至深夜",
+    "ctaTitle": "准备好亲自体验了吗？",
+    "ctaText": "在LENGOLF（{address}）预订您的球位。营业时间：{hours}",
+    "bookNow": "立即预订",
+    "call": "致电 {phone}",
+    "relatedQuestions": "相关问题",
+    "browseAllFaqs": "浏览全部常见问题",
+    "exploreMore": "更多内容"
   }
 }

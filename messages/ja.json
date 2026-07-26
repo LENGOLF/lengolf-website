@@ -1219,6 +1219,16 @@
     "openGuide": "ガイドを開く",
     "close": "閉じる"
   },
+  "GolfCoursePriceTier": {
+    "metaDescription": "平日グリーンフィー฿{amount}以下で回れるバンコク近郊の上位ゴルフ場と、この価格帯で知っておきたいポイントをご紹介します。",
+    "breadcrumbGolfCourses": "ゴルフ場",
+    "breadcrumbCurrent": "฿{amount}以下",
+    "eyebrowBadge": "平日グリーンフィー · ฿{amount}以下",
+    "catchHeading": "注意しておきたい点",
+    "topCoursesHeading": "平日料金฿{amount}以下の上位{count}コース",
+    "roundupReason": "平日{price}THB〜",
+    "otherPriceBands": "その他の価格帯"
+  },
   "ExplainerPage": {
     "guideLabel": "LENGOLFガイド",
     "bookABay": "ベイを予約",
@@ -1242,5 +1252,21 @@
       "golf-in-thailand-guide": "タイゴルフガイド",
       "corporate-golf-packages": "法人ゴルフパッケージ"
     }
+  },
+  "FaqPage": {
+    "eyebrow": "よくあるご質問",
+    "bookABay": "ベイを予約",
+    "lineUs": "LINEで問い合わせ",
+    "aboutHeading": "LENGOLFについて",
+    "pillRate": "1時間{rate}（最大{n}名）",
+    "pillLocation": "ザ・マーキュリービル、BTSチットロム駅（4番出口）",
+    "pillComfort": "冷房完備・雨でも安心・夜遅くまで営業",
+    "ctaTitle": "実際に試してみませんか",
+    "ctaText": "LENGOLF（{address}）でベイを予約。営業時間：{hours}",
+    "bookNow": "今すぐ予約",
+    "call": "電話 {phone}",
+    "relatedQuestions": "関連する質問",
+    "browseAllFaqs": "よくあるご質問をすべて見る",
+    "exploreMore": "もっと見る"
   }
 }

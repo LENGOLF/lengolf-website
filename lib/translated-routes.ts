@@ -123,6 +123,22 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/pattaya",
       "/golf-courses/hua-hin",
       "/golf-courses/chiang-mai",
+      // Translated price-tier pages (data/price-tiers.ts PRICE_TIER_I18N) —
+      // kept in sync by the smoke-test price-tier registry consistency check.
+      "/golf-courses/under/1500-baht",
+      "/golf-courses/under/2500-baht",
+      "/golf-courses/under/3500-baht",
+      "/golf-courses/under/5000-baht",
+      "/golf-courses/under/7500-baht",
+      // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
+      // must stay in sync with the data file; the smoke-test registry-
+      // consistency check (section I) enforces it, mirroring the guide check.
+      "/faq/how-much-does-indoor-golf-cost-in-bangkok",
+      "/faq/can-i-rent-golf-clubs-in-bangkok",
+      "/faq/are-rental-golf-clubs-good-enough",
+      "/faq/best-way-to-learn-golf-in-bangkok",
+      "/faq/how-accurate-are-golf-simulators",
+      "/faq/can-beginners-play-golf-simulators",
       "/guide/corporate-golf-events-bangkok",
       "/guide/best-time-play-golf-thailand",
       "/guide/nikanti-golf-club-bangkok",
@@ -193,6 +209,22 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/pattaya",
       "/golf-courses/hua-hin",
       "/golf-courses/chiang-mai",
+      // Translated price-tier pages (data/price-tiers.ts PRICE_TIER_I18N) —
+      // kept in sync by the smoke-test price-tier registry consistency check.
+      "/golf-courses/under/1500-baht",
+      "/golf-courses/under/2500-baht",
+      "/golf-courses/under/3500-baht",
+      "/golf-courses/under/5000-baht",
+      "/golf-courses/under/7500-baht",
+      // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
+      // must stay in sync with the data file; the smoke-test registry-
+      // consistency check (section I) enforces it, mirroring the guide check.
+      "/faq/how-much-does-indoor-golf-cost-in-bangkok",
+      "/faq/can-i-rent-golf-clubs-in-bangkok",
+      "/faq/are-rental-golf-clubs-good-enough",
+      "/faq/best-way-to-learn-golf-in-bangkok",
+      "/faq/how-accurate-are-golf-simulators",
+      "/faq/can-beginners-play-golf-simulators",
       "/guide/corporate-golf-events-bangkok",
       "/guide/best-time-play-golf-thailand",
       "/guide/nikanti-golf-club-bangkok",
@@ -263,6 +295,22 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/pattaya",
       "/golf-courses/hua-hin",
       "/golf-courses/chiang-mai",
+      // Translated price-tier pages (data/price-tiers.ts PRICE_TIER_I18N) —
+      // kept in sync by the smoke-test price-tier registry consistency check.
+      "/golf-courses/under/1500-baht",
+      "/golf-courses/under/2500-baht",
+      "/golf-courses/under/3500-baht",
+      "/golf-courses/under/5000-baht",
+      "/golf-courses/under/7500-baht",
+      // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
+      // must stay in sync with the data file; the smoke-test registry-
+      // consistency check (section I) enforces it, mirroring the guide check.
+      "/faq/how-much-does-indoor-golf-cost-in-bangkok",
+      "/faq/can-i-rent-golf-clubs-in-bangkok",
+      "/faq/are-rental-golf-clubs-good-enough",
+      "/faq/best-way-to-learn-golf-in-bangkok",
+      "/faq/how-accurate-are-golf-simulators",
+      "/faq/can-beginners-play-golf-simulators",
       "/guide/corporate-golf-events-bangkok",
       "/guide/best-time-play-golf-thailand",
       "/guide/nikanti-golf-club-bangkok",

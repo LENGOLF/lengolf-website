@@ -21,7 +21,17 @@ export function pushDataLayerEvent(payload: DataLayerEvent): void {
   window.dataLayer.push(payload)
 }
 
-export type RentalIntentSource = 'hero' | 'section' | 'footer' | 'sticky_cta' | 'why_rent'
+// 'cross_link' is the CourseRentalCrossLink banner, which appears off the
+// rental landing page itself (location templates, /golf, /lessons, rental-intent
+// FAQs) — kept as its own source so that off-page demand is measurable
+// separately from the on-page hero/section/footer CTAs.
+export type RentalIntentSource =
+  | 'hero'
+  | 'section'
+  | 'footer'
+  | 'sticky_cta'
+  | 'why_rent'
+  | 'cross_link'
 
 export function pushRentalIntent(source: RentalIntentSource): void {
   pushDataLayerEvent({ event: 'rental_intent', source })

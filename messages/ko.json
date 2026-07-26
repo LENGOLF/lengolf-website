@@ -1221,6 +1221,16 @@
     "openGuide": "가이드 열기",
     "close": "닫기"
   },
+  "GolfCoursePriceTier": {
+    "metaDescription": "평일 그린피 ฿{amount} 이하인 방콕 근교 상위 골프장과 이 가격대에서 알아 두어야 할 점을 소개합니다.",
+    "breadcrumbGolfCourses": "골프장",
+    "breadcrumbCurrent": "฿{amount} 이하",
+    "eyebrowBadge": "평일 그린피 · ฿{amount} 이하",
+    "catchHeading": "주의해야 할 점",
+    "topCoursesHeading": "평일 요금 ฿{amount} 이하 상위 {count}개 코스",
+    "roundupReason": "평일 {price}바트부터",
+    "otherPriceBands": "다른 가격대"
+  },
   "ExplainerPage": {
     "guideLabel": "LENGOLF 가이드",
     "bookABay": "베이 예약",
@@ -1244,5 +1254,21 @@
       "golf-in-thailand-guide": "태국 골프 가이드",
       "corporate-golf-packages": "기업 골프 패키지"
     }
+  },
+  "FaqPage": {
+    "eyebrow": "자주 묻는 질문",
+    "bookABay": "베이 예약",
+    "lineUs": "LINE 문의",
+    "aboutHeading": "LENGOLF 소개",
+    "pillRate": "1시간 {rate}, 최대 {n}명",
+    "pillLocation": "The Mercury Ville, BTS 칫롬역 4번 출구",
+    "pillComfort": "에어컨 완비, 비 걱정 없음, 밤늦게까지 영업",
+    "ctaTitle": "직접 체험해 보시겠어요?",
+    "ctaText": "LENGOLF({address})에서 베이를 예약하세요. 영업시간: {hours}",
+    "bookNow": "지금 예약",
+    "call": "전화 {phone}",
+    "relatedQuestions": "관련 질문",
+    "browseAllFaqs": "자주 묻는 질문 전체 보기",
+    "exploreMore": "더 알아보기"
   }
 }

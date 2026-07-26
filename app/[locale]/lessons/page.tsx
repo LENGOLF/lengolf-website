@@ -12,7 +12,7 @@ import { getLessonsPricingJsonLd, getLessonsServiceJsonLd, getFaqPageJsonLd, get
 import FaqSection from '@/components/shared/FaqSection'
 import ClickableImage from '@/components/shared/ClickableImage'
 import PricingTable from '@/components/shared/PricingTable'
-import CourseRentalCrossLink from '@/components/location/CourseRentalCrossLink'
+import CourseRentalCrossLink from '@/components/shared/CourseRentalCrossLink'
 
 const faqLinks: Record<string, { href: string; external?: boolean }> = {
   'booking.len.golf': { href: 'https://booking.len.golf/', external: true },

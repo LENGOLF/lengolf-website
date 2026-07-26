@@ -1,17 +1,35 @@
-import Link from 'next/link'
+import { getLocale, getTranslations } from 'next-intl/server'
+import { Link } from '@/i18n/navigation'
 import { ArrowRight, Check, HelpCircle } from 'lucide-react'
+import { getSiteFacts, getFactTokens } from '@/lib/site-facts'
 import { BOOKING_URL, BUSINESS_INFO, SOCIAL_LINKS } from '@/lib/constants'
 import { relatedQuestionPath } from '@/lib/seo-links'
 import BoldText from '@/components/shared/BoldText'
 import MarkdownTable, { isMarkdownTableBlock } from '@/components/shared/MarkdownTable'
+import CourseRentalCrossLink from '@/components/shared/CourseRentalCrossLink'
 import type { FaqSeoPage } from '@/types/seo-pages'
 
 interface Props {
   data: FaqSeoPage
 }
 
-export default function FaqPageComponent({ data }: Props) {
+/**
+ * FAQ categories whose readers are deciding about renting clubs — these pages
+ * get the rental banner instead of relying on the generic "Book a Bay" CTA.
+ * Both spellings exist in data/faq-pages.ts ('rental' and 'clubs-rental').
+ */
+const RENTAL_CTA_CATEGORIES = ['rental', 'clubs-rental']
+
+export default async function FaqPageComponent({ data }: Props) {
   const { content } = data
+  const showRentalCta = RENTAL_CTA_CATEGORIES.includes(data.category ?? '')
+
+  const locale = await getLocale()
+  const [t, facts, tokens] = await Promise.all([
+    getTranslations('FaqPage'),
+    getSiteFacts(),
+    getFactTokens(locale),
+  ])
 
   return (
     <div className="faq-page">
@@ -19,7 +37,7 @@ export default function FaqPageComponent({ data }: Props) {
       <section className="relative bg-gradient-to-br from-[#1a472a] to-[#2d6a4f] py-16 md:py-24 text-white">
         <div className="mx-auto max-w-[900px] px-5">
           <p className="text-sm font-medium uppercase tracking-wider text-[#d4a843] mb-4">
-            Frequently Asked Question
+            {t('eyebrow')}
           </p>
           <h1 className="text-3xl font-bold md:text-5xl mb-8">{data.title}</h1>
           <div className="flex flex-wrap gap-3">
@@ -29,7 +47,7 @@ export default function FaqPageComponent({ data }: Props) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg bg-[#d4a843] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#c49a3a]"
             >
-              Book a Bay
+              {t('bookABay')}
             </a>
             <a
               href={SOCIAL_LINKS.line}
@@ -37,7 +55,7 @@ export default function FaqPageComponent({ data }: Props) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg border-2 border-white/30 px-6 py-3 font-semibold text-white transition-colors hover:bg-white/10"
             >
-              LINE Us
+              {t('lineUs')}
             </a>
           </div>
         </div>
@@ -116,24 +134,29 @@ export default function FaqPageComponent({ data }: Props) {
         </div>
       </section>
 
+      {/* Rental conversion banner — the same cross-link the location templates
+          use, now also on rental-intent FAQs (the generic "Book a Bay" CTA is
+          the wrong ask for a reader deciding whether to rent clubs at all). */}
+      {showRentalCta && <CourseRentalCrossLink />}
+
       {/* LENGOLF Feature Pills */}
       <section className="py-12 md:py-16 bg-[#f8f9fa]">
         <div className="mx-auto max-w-[900px] px-5">
           <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-6">
-            About LENGOLF
+            {t('aboutHeading')}
           </h2>
           <div className="flex flex-wrap gap-3">
             <div className="flex items-center gap-2 rounded-full bg-[#e8f5e9] px-4 py-2 text-sm text-[#2d6a4f]">
               <Check className="h-4 w-4" />
-              550 THB/hour for up to 5 people
+              {t('pillRate', { rate: tokens.bayHourlyFrom, n: facts.maxPlayersPerBay })}
             </div>
             <div className="flex items-center gap-2 rounded-full bg-[#e8f5e9] px-4 py-2 text-sm text-[#2d6a4f]">
               <Check className="h-4 w-4" />
-              Mercury Ville, BTS Chidlom (Exit 4)
+              {t('pillLocation')}
             </div>
             <div className="flex items-center gap-2 rounded-full bg-[#e8f5e9] px-4 py-2 text-sm text-[#2d6a4f]">
               <Check className="h-4 w-4" />
-              Air-conditioned, rain-proof, open until late
+              {t('pillComfort')}
             </div>
           </div>
         </div>
@@ -142,9 +165,12 @@ export default function FaqPageComponent({ data }: Props) {
       {/* CTA Section */}
       <section className="py-12 md:py-16 bg-gradient-to-br from-[#1a472a] to-[#2d6a4f] text-white text-center">
         <div className="mx-auto max-w-[900px] px-5">
-          <h2 className="text-2xl font-bold md:text-3xl mb-4">Ready to Try It?</h2>
+          <h2 className="text-2xl font-bold md:text-3xl mb-4">{t('ctaTitle')}</h2>
           <p className="text-white/80 mb-8 max-w-lg mx-auto">
-            Book a bay at LENGOLF, {BUSINESS_INFO.addressShort}. Open {BUSINESS_INFO.hours}.
+            {t('ctaText', {
+              address: BUSINESS_INFO.addressShort,
+              hours: BUSINESS_INFO.hours,
+            })}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <a
@@ -153,13 +179,13 @@ export default function FaqPageComponent({ data }: Props) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg bg-[#d4a843] px-8 py-3 font-semibold text-white transition-colors hover:bg-[#c49a3a]"
             >
-              Book Now
+              {t('bookNow')}
             </a>
             <a
               href={`tel:${BUSINESS_INFO.phoneRaw}`}
               className="inline-flex items-center gap-2 rounded-lg border-2 border-white/30 px-8 py-3 font-semibold text-white transition-colors hover:bg-white/10"
             >
-              Call {BUSINESS_INFO.phone}
+              {t('call', { phone: BUSINESS_INFO.phone })}
             </a>
             <a
               href={SOCIAL_LINKS.line}
@@ -167,7 +193,7 @@ export default function FaqPageComponent({ data }: Props) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg border-2 border-white/30 px-8 py-3 font-semibold text-white transition-colors hover:bg-white/10"
             >
-              LINE Us
+              {t('lineUs')}
             </a>
           </div>
         </div>
@@ -178,12 +204,14 @@ export default function FaqPageComponent({ data }: Props) {
         <section className="py-12 md:py-16">
           <div className="mx-auto max-w-[900px] px-5">
             <div className="mb-6 flex flex-wrap items-baseline justify-between gap-3">
-              <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl">Related Questions</h2>
+              <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl">
+                {t('relatedQuestions')}
+              </h2>
               <Link
                 href="/faq/"
                 className="text-sm font-semibold text-[#2d6a4f] underline underline-offset-2 hover:text-[#1a472a]"
               >
-                Browse all FAQs
+                {t('browseAllFaqs')}
               </Link>
             </div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
@@ -210,7 +238,9 @@ export default function FaqPageComponent({ data }: Props) {
       {data.related_slugs && data.related_slugs.length > 0 && (
         <section className="py-12 md:py-16 bg-[#f8f9fa]">
           <div className="mx-auto max-w-[900px] px-5">
-            <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-6">Explore More</h2>
+            <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-6">
+              {t('exploreMore')}
+            </h2>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
               {data.related_slugs.map((path) => {
                 const label = path

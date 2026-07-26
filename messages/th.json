@@ -1172,5 +1172,21 @@
       "golf-in-thailand-guide": "คู่มือกอล์ฟเมืองไทย",
       "corporate-golf-packages": "แพ็กเกจกอล์ฟสำหรับองค์กร"
     }
+  },
+  "FaqPage": {
+    "eyebrow": "คำถามที่พบบ่อย",
+    "bookABay": "จองเบย์",
+    "lineUs": "แชท LINE",
+    "aboutHeading": "เกี่ยวกับ LENGOLF",
+    "pillRate": "{rate}/ชม. เล่นได้สูงสุด {n} คน",
+    "pillLocation": "Mercury Ville, BTS ชิดลม (ทางออก 4)",
+    "pillComfort": "ห้องแอร์ ไม่กลัวฝน เปิดถึงดึก",
+    "ctaTitle": "พร้อมมาลองแล้วหรือยัง?",
+    "ctaText": "จองเบย์ที่ LENGOLF, {address} เปิด {hours}",
+    "bookNow": "จองเลย",
+    "call": "โทร {phone}",
+    "relatedQuestions": "คำถามที่เกี่ยวข้อง",
+    "browseAllFaqs": "ดูคำถามที่พบบ่อยทั้งหมด",
+    "exploreMore": "อ่านเพิ่มเติม"
   }
 }
