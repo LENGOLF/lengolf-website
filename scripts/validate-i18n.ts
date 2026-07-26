@@ -201,7 +201,7 @@ for (const page of faqPages) {
 for (const [tier, byLocale] of Object.entries(PRICE_TIER_I18N)) {
   if (!byLocale) continue
   for (const [loc, t] of Object.entries(byLocale)) {
-    if (!t) continue
+    if (!t || !LOCALES.includes(loc as Locale)) continue
     const locale = loc as Locale
     const entryId = `tier:${tier}:${locale}`
     entries.push({
@@ -495,7 +495,9 @@ if (process.argv.includes('--self-test')) {
 
   // Corpus coverage — each source file actually contributes entries, so a
   // future filter/import regression can't silently shrink the lint surface.
-  assert('corpus: explainer entries present', entries.some((e) => e.entryId.startsWith('exp-') || e.entryId.startsWith('gg-')))
+  // 'exp-' only: data/faq-pages.ts also carries gg-prefixed ids, which would
+  // keep a gg- check green even if the explainer import/loop regressed.
+  assert('corpus: explainer entries present', entries.some((e) => e.entryId.startsWith('exp-')))
   assert('corpus: region-hub entries present', entries.some((e) => e.entryId.startsWith('hub:')))
   assert('corpus: FAQ entries present', entries.some((e) => e.entryId.startsWith('faq-')))
   assert('corpus: price-tier entries present', entries.some((e) => e.entryId.startsWith('tier:')))
