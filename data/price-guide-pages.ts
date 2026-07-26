@@ -152,6 +152,9 @@ const VALUE_REVIEWS = {
 }
 
 // Shared venue comparison data
+// All competitor rates re-verified 2026-07-26 against each venue's own
+// published rate card + Google Maps open status. RAK Screen Golf (Asoke)
+// is deliberately not included: Google Maps marks it permanently closed.
 const SIMULATOR_VENUES = {
   lengolf: {
     name: 'LENGOLF',
@@ -171,7 +174,7 @@ const SIMULATOR_VENUES = {
     cheapest_rate: '600 THB/hr',
     peak_rate: '900 THB/hr (promo)',
     price_includes_tax: true,
-    notes: '+200 THB/hr for private bay. +100 THB/hr per person from 5th player.',
+    notes: '+200 THB/hr for private bay. +100 THB/hr per person from 5th player. Open 10:00–22:00 (from 9:00 weekends).',
   },
   fairway: {
     name: 'Fairway Golf & City Club',
@@ -179,9 +182,39 @@ const SIMULATOR_VENUES = {
     tech: 'Trackman',
     players_per_bay: 8,
     cheapest_rate: '1,000 THB/hr',
-    peak_rate: '1,400 THB/hr',
+    peak_rate: '1,200 THB/hr',
     price_includes_tax: false,
-    notes: 'Prices exclude VAT. Membership packages from 11,000 THB / 10 hours.',
+    notes: 'Flat rates: 1,000 THB/hr Mon–Thu, 1,200 THB/hr Fri–Sun & holidays. Excludes VAT. Open 8:00–02:00.',
+  },
+  grooveGrit: {
+    name: 'Groove & Grit',
+    location: 'Supalai Icon Sathorn, MRT Lumphini',
+    tech: 'Foresight Falcon',
+    players_per_bay: null,
+    cheapest_rate: '~1,000 THB/hr',
+    peak_rate: 'Not published',
+    price_includes_tax: null,
+    notes: 'New golf-and-bar venue in Sathorn. Off-peak morning slots around 1,000 THB/hr via booking apps; full rate card not published. Open 7:00–22:00.',
+  },
+  golfzonBangna: {
+    name: 'Golfzon Bangna',
+    location: 'Bangna-Trad Soi 23 (car access)',
+    tech: 'Golfzon TwoVision',
+    players_per_bay: 4,
+    cheapest_rate: '400 THB/hr',
+    peak_rate: '600 THB/hr',
+    price_includes_tax: null,
+    notes: 'Korean screen golf. Practice mode 400 THB/hr before 14:00, 600 THB/hr after. 18-hole rounds priced per round (600–800 THB/room). Open until late.',
+  },
+  phothalai: {
+    name: 'Phothalai Golf Park',
+    location: 'Pradit Manutham Rd (car access)',
+    tech: 'Trackman 4',
+    players_per_bay: null,
+    cheapest_rate: '1,000 THB/hr',
+    peak_rate: '1,000 THB/hr (flat)',
+    price_includes_tax: null,
+    notes: 'Trackman bays at a large driving-range and wellness complex. Unlimited balls. VIP rooms 1,500–2,000 THB/hr.',
   },
   topgolf: {
     name: 'Topgolf Megacity',
@@ -191,7 +224,7 @@ const SIMULATOR_VENUES = {
     cheapest_rate: '550 THB/hr',
     peak_rate: '1,250 THB/hr',
     price_includes_tax: false,
-    notes: 'Prices exclude service charge + VAT (~17%). 150 THB one-time joining fee. Located 30–45 min from central Bangkok.',
+    notes: 'Prices exclude service charge + VAT (~17%). No joining fee. Solo weekday practice rate 350 THB/hr. Located 30–45 min from central Bangkok.',
   },
 }
 
@@ -203,7 +236,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     slug: 'how-much-does-golf-cost-bangkok',
     title: 'How Much Does Golf Cost in Bangkok? (2026 Complete Guide)',
     meta_description:
-      'Golf in Bangkok costs 550–4,000 THB depending on format. Compare indoor simulator rates (from 550 THB/hr for 5 people) vs outdoor course green fees, driving ranges, and lessons.',
+      'Golf in Bangkok costs 400–4,000 THB depending on format. Compare indoor simulator rates (from 550 THB/hr for 5 people in central Bangkok) vs outdoor green fees, ranges, and lessons.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -214,10 +247,10 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     updated_at: now,
     content: {
       intro:
-        'Golf in Bangkok typically costs between 550 and 4,000 THB, depending on whether you play indoors on a simulator or outdoors on a course. Indoor golf simulators start at 550 THB per hour for up to 5 people — just 110 THB per person. Outdoor courses range from 1,500 to 4,000 THB per round, plus caddie fees and transport.',
+        'Golf in Bangkok typically costs between 400 and 4,000 THB, depending on whether you play indoors on a simulator or outdoors on a course. Indoor golf simulators in central Bangkok start at 550 THB per hour for up to 5 people — just 110 THB per person — while suburban screen-golf venues start around 400 THB. Outdoor courses range from 1,500 to 4,000 THB per round, plus caddie fees and transport.',
       price_breakdown: [
         { item: 'Indoor golf simulator (LENGOLF)', price: '550–950 THB/hr', notes: 'Per bay, up to 5 players. Free club rental included. BTS Chidlom.' },
-        { item: 'Indoor golf simulator (other venues)', price: '550–1,400 THB/hr', notes: 'Varies by venue, time, and day. Some exclude tax.' },
+        { item: 'Indoor golf simulator (other venues)', price: '400–1,400 THB/hr', notes: 'Varies by venue, time, and day. Some exclude tax; the cheapest rates are at car-access venues outside the centre.' },
         { item: 'Outdoor course green fee (weekday)', price: '1,500–3,000 THB', notes: 'Per round. Courses like Alpine, Lakewood, Bangkok Golf Club.' },
         { item: 'Outdoor course green fee (weekend)', price: '2,500–4,000 THB', notes: 'Premium rates on Sat–Sun and public holidays.' },
         { item: 'Caddie fee (outdoor courses)', price: '300–400 THB', notes: 'Required at most Thai courses. Tip of 300–500 THB is customary.' },
@@ -239,7 +272,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
           SIMULATOR_VENUES.topgolf,
         ],
         summary:
-          'LENGOLF offers the lowest per-person cost of any simulator venue in central Bangkok. For a group of 5 at off-peak rates, that\'s 110 THB per person per hour — less than a driving range bucket. Topgolf\'s headline rates look competitive but exclude service charge and VAT (adding ~17%), and the venue is 30–45 minutes from central Bangkok. Fairway Golf & City Club uses premium Trackman technology but at 2x the base rate. Front 9 is closest in pricing to LENGOLF but caps at 4 players per bay.',
+          'LENGOLF offers the lowest per-person cost of any simulator venue in central Bangkok. For a group of 5 at off-peak rates, that\'s 110 THB per person per hour — less than a driving range bucket. Topgolf\'s headline rates look competitive but exclude service charge and VAT (adding ~17%), and the venue is 30–45 minutes from central Bangkok. Fairway Golf & City Club uses premium Trackman technology but at nearly double the base rate. Front 9 is closest in pricing to LENGOLF but caps at 4 players per bay.',
       },
       sections: [
         {
@@ -270,7 +303,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     slug: 'golf-simulator-prices-bangkok',
     title: 'Golf Simulator Prices in Bangkok Compared (2026)',
     meta_description:
-      'Compare golf simulator prices in Bangkok: LENGOLF (from 550 THB/hr), Front 9, Fairway Golf & City Club, and Topgolf Megacity. Full rate cards, packages, and per-person costs.',
+      'Compare golf simulator prices in Bangkok, verified July 2026: LENGOLF from 550 THB/hr vs Front 9, Fairway, Groove & Grit, Golfzon, Phothalai & Topgolf.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -281,7 +314,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     updated_at: now,
     content: {
       intro:
-        'Golf simulator prices in Bangkok range from 550 to 1,400 THB per hour per bay, depending on the venue, time of day, and day of week. LENGOLF starts at 550 THB/hour for up to 5 players. Here\'s an honest comparison of every major simulator venue in central Bangkok.',
+        'Golf simulator prices in Bangkok range from about 400 to 1,400 THB per hour per bay, depending on the venue, time of day, and day of week. In central Bangkok, expect 550–1,200 THB per bay-hour; LENGOLF starts at 550 THB/hour for up to 5 players. Here\'s an honest comparison of every major simulator venue in Bangkok — every rate below was re-verified in July 2026 against each venue\'s own published prices.',
       price_breakdown: [
         { item: 'LENGOLF — Weekday before 14:00', price: '550 THB/hr', notes: 'Up to 5 players. Free standard clubs. BTS Chidlom. VAT included.' },
         { item: 'LENGOLF — Weekday 14:00–23:00', price: '750 THB/hr', notes: 'Up to 5 players. Free standard clubs. VAT included.' },
@@ -289,26 +322,34 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: 'Front 9 — Weekday before 12:00', price: '600 THB/hr', notes: 'Up to 4 players. Trackman. Sukhumvit 47. VAT included.' },
         { item: 'Front 9 — Weekday 12:00–17:00', price: '700 THB/hr', notes: 'Up to 4 players. VAT included.' },
         { item: 'Front 9 — Weekday 17:00–22:00 (promo)', price: '800 THB/hr', notes: 'Promo rate (regular: 1,200 THB). VAT included.' },
-        { item: 'Front 9 — Weekend', price: '800–900 THB/hr', notes: 'Up to 4 players. +200 THB/hr private bay. VAT included.' },
-        { item: 'Fairway Golf — Weekday off-peak', price: '1,000 THB/hr', notes: 'Up to 8 players. Trackman. Sukhumvit 24. Excludes VAT.' },
-        { item: 'Fairway Golf — Weekend peak', price: '1,400 THB/hr', notes: 'Up to 8 players. Excludes VAT.' },
+        { item: 'Front 9 — Weekend', price: '800–900 THB/hr', notes: 'Evening slot is a promo rate (regular: 1,400 THB). +200 THB/hr private bay. VAT included.' },
+        { item: 'Fairway Golf — Mon–Thu (all day)', price: '1,000 THB/hr', notes: 'Up to 8 players. Trackman. Sukhumvit 24. Excludes VAT. Open until 2 AM.' },
+        { item: 'Fairway Golf — Fri–Sun & holidays', price: '1,200 THB/hr', notes: 'Up to 8 players. Excludes VAT.' },
+        { item: 'Groove & Grit — Sathorn', price: '~1,000 THB/hr', notes: 'Foresight Falcon. Supalai Icon Sathorn. Full rate card not published — book via LINE or apps.' },
+        { item: 'Golfzon Bangna — Practice mode', price: '400–600 THB/hr', notes: 'Up to 4 players. 400 THB/hr before 14:00, 600 after. Bangna-Trad 23, car access.' },
+        { item: 'Golfzon Bangna — 18-hole round', price: '600–800 THB', notes: 'Per round per room, not hourly. Korean screen-golf format.' },
+        { item: 'Phothalai Golf Park — Trackman bay', price: '1,000 THB/hr', notes: 'Flat rate, unlimited balls. VIP rooms 1,500–2,000 THB/hr. Pradit Manutham, car access.' },
         { item: 'Topgolf — Mon–Tue', price: '550–650 THB/hr', notes: 'Up to 6 players. Mega Bangna. Excludes SC + VAT (~17%).' },
-        { item: 'Topgolf — Fri–Sat peak', price: '1,150–1,250 THB/hr', notes: 'Up to 6 players. Excludes SC + VAT. 150 THB joining fee.' },
+        { item: 'Topgolf — Fri–Sat peak', price: '1,150–1,250 THB/hr', notes: 'Up to 6 players. Excludes SC + VAT.' },
+        { item: 'Topgolf — Solo weekday practice', price: '350 THB/hr', notes: '1 player, Mon–Fri 9:00–17:00, unlimited balls. Excludes SC + VAT.' },
       ],
       comparison_with_alternatives:
-        'When comparing prices, always check whether tax is included. LENGOLF and Front 9 quote VAT-inclusive prices. Fairway Golf & City Club excludes VAT (add ~7%), and Topgolf Megacity excludes both service charge and VAT (add ~17%), which makes their posted rates 17% lower than the actual cost you\'ll pay. Location also matters: Topgolf is in Mega Bangna — a 30–45 minute drive from central Bangkok — while LENGOLF, Front 9, and Fairway are all on the BTS Sukhumvit line.',
+        'When comparing prices, always check whether tax is included. LENGOLF and Front 9 quote VAT-inclusive prices. Fairway Golf & City Club excludes VAT (add ~7%), and Topgolf Megacity excludes both service charge and VAT (add ~17%), which makes their posted rates 17% lower than the actual cost you\'ll pay. Location matters too: LENGOLF, Front 9, Fairway, and Groove & Grit are all on the BTS/MRT network in central Bangkok, while Golfzon Bangna, Phothalai, and Topgolf Megacity are car-access venues 30–45 minutes out. Finally, note that many lesson-focused studios don\'t publish bay rates at all — you have to call or LINE for a quote.',
       value_proposition:
         'LENGOLF offers the lowest bay rate in central Bangkok at 550 THB/hour, and the lowest per-person rate at 110 THB (group of 5). With free standard club rental, no joining fees, and prices inclusive of tax, what you see is what you pay.',
-      last_verified: '2026-02-19',
+      last_verified: '2026-07-26',
       venue_comparison: {
         venues: [
           SIMULATOR_VENUES.lengolf,
           SIMULATOR_VENUES.front9,
           SIMULATOR_VENUES.fairway,
+          SIMULATOR_VENUES.grooveGrit,
+          SIMULATOR_VENUES.golfzonBangna,
+          SIMULATOR_VENUES.phothalai,
           SIMULATOR_VENUES.topgolf,
         ],
         summary:
-          'For per-person value, LENGOLF is the clear winner at 110 THB per person (5 players, weekday off-peak). Front 9 is the closest competitor at 150 THB per person (4 players). Fairway Golf\'s higher capacity (8 players) helps its per-person cost (125 THB at off-peak), but the base rate is double LENGOLF\'s. Topgolf\'s true cost after tax is 643–1,463 THB/hr, and the Bangna location adds significant transport time and cost from central Bangkok.',
+          'For per-person value in central Bangkok, LENGOLF is the clear winner at 110 THB per person (5 players, weekday off-peak). Front 9 is the closest competitor at 150 THB per person (4 players). Fairway Golf simplified its pricing in 2026 to a flat 1,000 THB/hr Mon–Thu and 1,200 THB/hr Fri–Sun (still excluding VAT) — its 8-player rooms help per-person cost, but the base rate is nearly double LENGOLF\'s. Golfzon Bangna has the cheapest posted practice rate in greater Bangkok (400 THB/hr) but is a car-access venue on Bangna-Trad with 4-player rooms. Topgolf\'s true cost after service charge and VAT is roughly 645–1,465 THB/hr, and the Bangna location adds transport time and cost from central Bangkok.',
       },
       sections: [
         {
@@ -317,19 +358,35 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         },
         {
           heading: 'Front 9: Full Rate Card',
-          body: 'Front 9 is at Rainhill on Sukhumvit 47, between BTS Phrom Phong and Thong Lo. Weekday rates: 600 THB/hr before 12:00, 700 THB/hr from 12:00–17:00, 800 THB/hr from 17:00–22:00 (promo, regular 1,200 THB). Weekend rates: 800 THB/hr before 12:00, 900 THB/hr from 12:00 onward. All prices per bay (up to 4 players), inclusive of VAT. Private bay is +200 THB/hr. 5th player onwards is +100 THB/hr per person. Packages: Early Rise 10x1hr (before noon, 5,490 THB), Anytime 10x1hr (6,990 THB), 20x1hr (12,900 THB), 50x1hr (29,900 THB). Powered by Trackman.',
+          body: 'Front 9 is at Rainhill on Sukhumvit 47, between BTS Phrom Phong and Thong Lo. Weekday rates: 600 THB/hr before 12:00, 700 THB/hr from 12:00–17:00, 800 THB/hr from 17:00–22:00 (promo, regular 1,200 THB). Weekend rates: 800 THB/hr before 12:00, 900 THB/hr from 12:00 onward (the evening slot is a promo rate — regular 1,400 THB). All prices per bay (up to 4 players), inclusive of VAT. Private bay is +200 THB/hr. 5th player onwards is +100 THB/hr per person. Practice packages: Early Rise 10x1hr (mornings only, 5,490 THB), Anytime 10x1hr (6,990 THB), 20x1hr (12,900 THB), 50x1hr (29,900 THB). Memberships run from 14,000 THB (3-month solo) to 30,000 THB (6-month, up to 4 players). Open 10:00–22:00 weekdays, from 9:00 weekends. Powered by Trackman.',
         },
         {
           heading: 'Fairway Golf & City Club: Full Rate Card',
-          body: 'Fairway Golf & City Club is on Sukhumvit 24, near BTS Phrom Phong. Weekday rates: 1,000 THB/hr off-peak (8am–6pm), 1,200 THB/hr on-peak (6pm–close). Weekend rates: 1,200 THB/hr off-peak, 1,400 THB/hr on-peak. All prices per room (up to 8 players), excluding VAT. Membership packages: 10 hrs (11,000 THB / 2 months), 25 hrs (23,500 THB / 4 months, 5% F&B discount), 50 hrs (41,000 THB / 8 months, 8% F&B discount), 100 hrs (75,000 THB / 12 months, 10% F&B discount). Powered by Trackman. Fairway also has a bar, DJs on weekends, and karaoke.',
+          body: 'Fairway Golf & City Club is on Sukhumvit 24, near BTS Phrom Phong. In 2026 they simplified to flat rates: 1,000 THB/hr all day Mon–Thu, and 1,200 THB/hr on Fri–Sun and public holidays. All prices per room (up to 8 players), excluding VAT. Open 8:00 AM to 2 AM daily — the latest closing time of any central Bangkok simulator. Hour-bundle packages (currently promoted at 30% off): 5 hrs 4,500 THB, 10 hrs 7,700 THB, 25 hrs 16,450 THB, 50 hrs 28,700 THB, with validity from 2 to 12 months. Powered by Trackman. Fairway also has a cocktail bar, DJs on weekends, and rooms that convert to karaoke.',
+        },
+        {
+          heading: 'Groove & Grit: New Sim-and-Bar in Sathorn',
+          body: 'Groove & Grit Golf and Bar opened at Supalai Icon Sathorn (near MRT Lumphini) and is the newest simulator-plus-bar concept in central Bangkok — the closest in spirit to LENGOLF, but on the Sathorn side of town. Bays run Foresight Falcon launch monitors with Swing Catalyst and high-speed cameras, and there\'s a wine and premium-spirits lounge with PGA-pro lessons available. Off-peak morning sessions show up around 1,000 THB/hr on booking platforms, but the venue doesn\'t publish a full rate card — contact them for peak pricing. Open 7:00–22:00 daily.',
+        },
+        {
+          heading: 'Golfzon, Kakao Friends & Korean Screen Golf',
+          body: 'Bangkok has a growing Korean screen-golf scene, typically priced per 18-hole round rather than per hour. Golfzon Bangna (Bangna-Trad Soi 23) runs Golfzon TwoVision simulators: practice mode is 400 THB/hr before 14:00 and 600 THB/hr after, while 18-hole rounds cost 600–800 THB per room (up to 4 players), with a Korean kitchen on site. Golfzon Park Sooho at Market Place Ekkamai is open 9:00 AM to 3 AM — the latest hours of any sim venue in Bangkok — but only shares rates by phone. Kakao Friends Screen Golf at Suanplern Market (Rama IV) brings Kakao VX\'s Friends Screen technology and is open until 2 AM; rates are published on-site only. These venues suit golfers who want the authentic Korean screen-golf round format; for hourly social play in the city centre, the BTS-line venues are more convenient.',
+        },
+        {
+          heading: 'Phothalai Golf Park: Trackman at a Driving Range',
+          body: 'Phothalai Golf Park on Pradit Manutham Road (Ekkamai–Ramindra corridor, car access) is a large outdoor driving-range and wellness complex whose indoor Trackman 4 bays rent at a flat 1,000 THB per hour with unlimited balls, any day or time. Small and large VIP rooms go for 1,500 and 2,000 THB/hr. It\'s a strong option if you live on the east side and want Trackman data without central-Bangkok traffic — but there\'s no BTS access, and the vibe is practice-facility rather than social night out.',
         },
         {
           heading: 'Topgolf Megacity: Full Rate Card',
-          body: 'Topgolf Megacity is in Bang Phli near Mega Bangna — approximately 30–45 minutes from central Bangkok by car. It\'s a very different experience from the simulator bars above: it\'s an outdoor multi-story driving range with target-based games, not a traditional enclosed golf simulator. Standard bay rates: Mon–Tue 550–650 THB/hr, Wed–Thu 550–850 THB/hr, Fri 550–1,150 THB/hr, Sat 850–1,250 THB/hr, Sun 850–1,150 THB/hr. VIP bays (up to 12 players): 1,500–2,750 THB/hr with 10,000 THB minimum F&B spend. All prices exclude service charge and VAT — add approximately 17% to posted rates. One-time joining fee of 150 THB for new players. Students receive 50% discount on weekdays.',
+          body: 'Topgolf Megacity is in Bang Phli near Mega Bangna — approximately 30–45 minutes from central Bangkok by car. It\'s a very different experience from the simulator bars above: it\'s an outdoor multi-story driving range with target-based games, not a traditional enclosed golf simulator. Standard bay rates: Mon–Tue 550–650 THB/hr, Wed–Thu 550–850 THB/hr, Fri 550–1,150 THB/hr, Sat 850–1,250 THB/hr, Sun 850–1,150 THB/hr. Solo players can practice for 350 THB/hr on weekdays before 17:00. VIP bays (up to 12 players) run 1,700–3,200 THB/hr. All prices exclude 10% service charge and 7% VAT — add approximately 17% to posted rates. There\'s no longer a joining fee, and students (23 and under, with ID) get 50% off gameplay, food, and drinks on weekdays. Open 9:00–23:00 Sun–Thu, until midnight Fri–Sat.',
+        },
+        {
+          heading: 'Lesson Studios That Don\'t Publish Bay Rates',
+          body: 'Several well-equipped indoor golf studios in Bangkok are academy- or fitting-led and don\'t publish hourly bay rates — you\'ll need to call or LINE for a quote. These include PING Indoor Golf Centre (Sukhumvit 24, Foresight GCQuad/GC3), Golf Swing Academy Bangkok (Sukhumvit 26, Japanese-run, Foresight bays), Home of Golf (Sukhumvit 26 and Rama 2, Trackman), Swing Kings Golf BKK (Asoke, Trackman + Foresight), and Bangkok Golf Centre (Wireless Road, 15 bays). They\'re excellent for structured coaching and club fitting, but for walk-in social play their pricing is opaque — which is exactly why this comparison focuses on venues with published rates.',
         },
         {
           heading: 'Which Venue Is Right for You?',
-          body: 'Choose LENGOLF if you want the best value in central Bangkok — lowest per-person cost, free clubs, BTS access, and a social bar atmosphere. Choose Front 9 if you\'re a serious golfer who values Trackman data and lives near Sukhumvit 47. Choose Fairway Golf & City Club if you want a premium experience with Trackman, have a larger group (up to 8), and don\'t mind paying more. Choose Topgolf Megacity if you want the Topgolf experience — an outdoor driving range with games, food, and a party atmosphere — and don\'t mind traveling to Bangna.',
+          body: 'Choose LENGOLF if you want the best value in central Bangkok — lowest per-person cost, free clubs, BTS access, and a social bar atmosphere. Choose Front 9 if you\'re a serious golfer who values Trackman data and lives near Sukhumvit 47. Choose Fairway Golf & City Club for late-night sessions (open to 2 AM) with a larger group of up to 8, if you don\'t mind paying more. Choose Groove & Grit if you\'re on the Sathorn side and want a premium Foresight setup with a wine bar. Choose Golfzon Bangna or Kakao Friends for the authentic Korean screen-golf round format. Choose Phothalai if you\'re east-side with a car and want flat-rate Trackman practice. And choose Topgolf Megacity if you want the Topgolf experience — an outdoor driving range with games, food, and a party atmosphere — and don\'t mind traveling to Bangna.',
         },
       ],
       curated_reviews: [

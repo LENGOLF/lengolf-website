@@ -115,9 +115,9 @@ export default function PriceGuidePageComponent({ data }: Props) {
                           {venue.cheapest_rate}
                         </td>
                         <td className="py-3 px-3 whitespace-nowrap">{venue.peak_rate}</td>
-                        <td className="py-3 px-3 text-center">{venue.players_per_bay}</td>
+                        <td className="py-3 px-3 text-center">{venue.players_per_bay ?? '—'}</td>
                         <td className="py-3 px-3">{venue.tech}</td>
-                        <td className="py-3 px-3 text-center">{venue.price_includes_tax ? 'Yes' : 'No'}</td>
+                        <td className="py-3 px-3 text-center">{venue.price_includes_tax === null ? '—' : venue.price_includes_tax ? 'Yes' : 'No'}</td>
                         <td className="py-3 pl-3 text-muted-foreground">{venue.location}</td>
                       </tr>
                     )

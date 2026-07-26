@@ -722,17 +722,30 @@ export function getPriceGuidePageJsonLd(page: {
     }
   })
 
-  // Calculate aggregate lowPrice and highPrice from actual parsed offers
+  // The Product below is branded LENGOLF, so competitor rows from comparison
+  // tables (Topgolf, Golfzon, ...) must not become LENGOLF offers — otherwise
+  // Google can render a competitor's cheapest rate as "from ฿X" under our
+  // brand. On comparison pages, LENGOLF's own rows carry the brand name; on
+  // LENGOLF-only pages (e.g. the pricing guide) no row does, so keep them all.
+  const lengolfOffers = parsedOffers.filter((offer) => /lengolf/i.test(offer.name))
+  const brandOffers = lengolfOffers.length > 0 ? lengolfOffers : parsedOffers
+
+  // Calculate aggregate lowPrice and highPrice from actual parsed offers.
+  // Non-numeric prices (e.g. "Free") must not poison the aggregate with NaN.
   const allPrices: number[] = []
-  parsedOffers.forEach((offer) => {
+  const pushPrice = (value: unknown) => {
+    const parsed = parseFloat(value as string)
+    if (Number.isFinite(parsed)) allPrices.push(parsed)
+  }
+  brandOffers.forEach((offer) => {
     if ('price' in offer && offer.price) {
-      allPrices.push(parseFloat(offer.price as string))
+      pushPrice(offer.price)
     }
     if ('lowPrice' in offer && offer.lowPrice) {
-      allPrices.push(parseFloat(offer.lowPrice as string))
+      pushPrice(offer.lowPrice)
     }
     if ('highPrice' in offer && offer.highPrice) {
-      allPrices.push(parseFloat(offer.highPrice as string))
+      pushPrice(offer.highPrice)
     }
   })
 
@@ -754,8 +767,8 @@ export function getPriceGuidePageJsonLd(page: {
       priceCurrency: 'THB',
       lowPrice,
       highPrice,
-      offerCount: page.content.price_breakdown.length,
-      offers: parsedOffers,
+      offerCount: brandOffers.length,
+      offers: brandOffers,
     },
   }
 }
