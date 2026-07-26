@@ -1556,6 +1556,37 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  // TH FAQ catch-up — brings TH from 8 to 14 translated FAQ pages.
+  {
+    path: "/th/faq/how-much-does-indoor-golf-cost-in-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/faq/can-you-play-golf-in-bangkok-when-it-rains/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/faq/should-i-bring-golf-clubs-to-thailand-or-rent/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/faq/cost-to-fly-with-golf-clubs-to-thailand/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/faq/worth-taking-golf-lessons-bangkok-holiday/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/faq/what-golf-clubs-available-rent-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
   // Hotel concierge pages — spot-check a few slugs
   {
     path: "/hotels/things-to-do-near-grand-hyatt-erawan/",
