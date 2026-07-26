@@ -61,6 +61,12 @@ const TRANSLATED_ROUTES: Record<
       "/guide/best-golf-simulators-bangkok",
       "/guide/golf-simulator-vs-real-course-bangkok",
       "/guide/green-fees-bangkok-golf-courses",
+      "/guide/golf-club-baggage-fees-airlines-bangkok",
+      "/guide/bring-golf-clubs-thailand-or-rent",
+      "/guide/how-to-book-golf-tee-times-thailand",
+      "/guide/renting-golf-clubs-thai-golf-courses",
+      "/guide/screen-golf-bangkok",
+      "/guide/round-of-golf-cost-bangkok",
       // Translated region hubs (data/golf-courses-i18n.ts) — kept in sync by the
       // smoke-test region-hub consistency check.
       "/golf-courses/bangkok",

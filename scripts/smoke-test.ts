@@ -1728,6 +1728,44 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  // TH guide catch-up batch — brings TH to parity with ja/ko/zh at 46 guides.
+  // contentAbsent guards unresolved {{fact tokens}} (4 of these entries use them).
+  {
+    path: "/th/guide/golf-club-baggage-fees-airlines-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
+  },
+  {
+    path: "/th/guide/bring-golf-clubs-thailand-or-rent/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
+  },
+  {
+    path: "/th/guide/how-to-book-golf-tee-times-thailand/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
+  },
+  {
+    path: "/th/guide/renting-golf-clubs-thai-golf-courses/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
+  },
+  {
+    path: "/th/guide/screen-golf-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
+  },
+  {
+    path: "/th/guide/round-of-golf-cost-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
+  },
   // Translated JA/KO/ZH price-tier pages (data/price-tiers.ts PRICE_TIER_I18N
   // + per-locale allowlist entries) — all 5 tiers per locale in this batch.
   {
