@@ -67,6 +67,42 @@ export const faqPages: FaqSeoPage[] = [
     },
   },
 
+  // ─── JA: can-i-rent-golf-clubs-in-bangkok ───
+  // Title/meta front-load the JA rental cluster (ゴルフクラブ レンタル /
+  // レンタルクラブ). Prices follow the JA currency ruling (THB abbreviation,
+  // half-width digits, 〜 ranges) — every figure traces to the EN entry.
+  // related_* retargeted to JA-translated pages only: the EN twins
+  // (/faq/should-i-bring-golf-clubs-to-thailand-or-rent,
+  // /faq/cost-to-fly-with-golf-clubs-to-thailand) have no JA translation,
+  // so they are replaced with the in-batch FAQ slugs and the JA guide.
+  {
+    id: 'faq-1-ja',
+    page_type: 'faq',
+    slug: 'can-i-rent-golf-clubs-in-bangkok',
+    title: 'バンコクでゴルフクラブはレンタルできる？ — 料金と受け取り方',
+    meta_description:
+      'バンコクでゴルフクラブのレンタルは可能です。LENGOLFではベイのご予約ごとに標準セットが無料、CallawayやMajestyのプレミアムセットは1時間150THBから、コースへの持ち出しは1日1,200THBから。市内配送にも対応しています（2026年7月現在）。',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'rental',
+    locale: 'ja',
+    related_slugs: ['/faq/are-rental-golf-clubs-good-enough', '/golf-club-rental', '/guide/golf-club-rental-bangkok-guide'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        'バンコクではゴルフクラブをレンタルできます。インドアゴルフ施設で使う場合も、屋外コースに持ち出す場合も対応可能です。LENGOLFでは、シミュレーターベイのご予約すべてに標準クラブセットが無料で付いています。プレミアム機種をご希望なら、館内利用は1時間150THBから、コースへの持ち出しは1日1,200THBから。バンコク市内であれば、ゴルフ場でもホテルでも当日配送に対応しています（2026年7月現在）。',
+      answer_body:
+        'バンコクのクラブレンタルは、インドアでプレーするか屋外コースに出るかで、選択肢が変わります。\n\n**LENGOLF（インドアゴルフシミュレーター）の場合**\nベイのご予約にはすべて、標準クラブセット（メンズ・レディース）が無料で付属します。内容はドライバー、アイアン（5〜PW）、パター。より良い道具をお使いになりたい方には、3段階のアップグレードをご用意しています。\n- **スタンダード（無料）:** すべてのご予約に含まれるハウスセット。シミュレーターでの利用のみ\n- **プレミアム（1時間150THB〜）:** Callaway Warbird（メンズ）またはMajesty（マジェスティ）Shuttle（レディース）のフルセット\n- **プレミアム+（1時間250THB〜）:** Ventus TRシャフトとJaws Rawウェッジを組んだツアーグレードのCallaway Paradym Forged Carbonセット（メンズのみ）\n\nプレミアムとプレミアム+は、館内でもバンコク市内のどのゴルフ場へでも持ち出してご利用いただけます。コースへの持ち出しは1日1,200THB（プレミアム）または1日1,800THB（プレミアム+）から。複数日パッケージなら最大50%オフになります。バンコク市内の当日配送は500THBです。\n\n**屋外ゴルフ場の場合**\nバンコク近郊のコースの多くはクラブレンタルを扱っており、ベーシックなセットで1ラウンドあたり500〜1,500THBが目安。ただし品質の差は大きく、年式の古いセットや使い込まれたセットしか置いていないコースもあります。\n\n**レンタル専門サービス**\nバンコクには、ゴルフクラブのレンタルと配送を専門に扱う会社も数社あります。しっかりしたセットで1日800〜1,500THB程度からが相場です。\n\n**おすすめの選び方**\n旅行で訪れる方には、LENGOLFでのレンタルが最も費用対効果に優れます。コースに出る前にシミュレーターでクラブを試したい方には、特に向いています。\n- ご予約ごとに標準クラブが無料\n- プレミアムセットは1時間150THBから\n- ホテルやゴルフ場への配送に対応（500THB）\n- 試してから買える——気になるクラブはシミュレーターで試打できます',
+      related_questions: [
+        { slug: 'are-rental-golf-clubs-good-enough', question: 'レンタルクラブでも十分？ — 本格派ゴルファーのための品質の見極め方' },
+        { slug: '/guide/golf-club-rental-bangkok-guide', question: 'バンコクのゴルフクラブレンタル — 借りられる場所と費用の目安' },
+        { slug: 'how-much-does-indoor-golf-cost-in-bangkok', question: 'バンコクのインドアゴルフ料金は？ — 1時間550〜1,000THBの相場と内訳' },
+      ],
+    },
+  },
+
   {
     id: 'faq-2',
     page_type: 'faq',
@@ -94,6 +130,45 @@ export const faqPages: FaqSeoPage[] = [
       ],
     },
   },
+
+  // ─── JA: how-much-does-indoor-golf-cost-in-bangkok ───
+  // Static content mirroring the EN entry's literal prices — this is what the
+  // FAQ renderer actually serves. NOTE: the EN sibling has an (unwired)
+  // getIndoorGolfCostContent() dynamic-pricing function that no renderer
+  // calls; do not add a JA twin unless that family is actually wired up
+  // (same caution as the faq-11-th precedent below).
+  // Prices rendered per the JA currency ruling (THB abbreviation, half-width
+  // digits, 〜 ranges) and stamped with an as-of marker. related_* retargeted
+  // to JA-translated pages (the EN corporate-event and how-long FAQs are
+  // untranslated).
+  {
+    id: 'faq-2-ja',
+    page_type: 'faq',
+    slug: 'how-much-does-indoor-golf-cost-in-bangkok',
+    title: 'バンコクのインドアゴルフ料金は？ — 1時間550〜1,000THBの相場と内訳',
+    meta_description:
+      'バンコクのインドアゴルフは1時間550〜1,000THBが相場です。LENGOLFのベイ料金は1時間550THBから、最大5名まで利用でき、標準クラブのレンタルは無料。月額パッケージや屋外ラウンドとの費用比較もまとめました（2026年7月現在）。',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'pricing',
+    locale: 'ja',
+    related_slugs: ['/faq/can-i-rent-golf-clubs-in-bangkok', '/guide/round-of-golf-cost-bangkok', '/golf'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        'バンコクのインドアゴルフは、施設・時間帯・曜日によって1時間あたり550〜1,000THBが目安です。LENGOLFのシミュレーターベイは1時間550THBから。最大5名まで利用できるので、グループなら1人あたり110THBの計算になります。標準のゴルフクラブレンタルは、どのご予約にも無料で付いています（2026年7月現在）。',
+      answer_body:
+        'バンコクのインドアゴルフ料金を、項目ごとに詳しく見ていきます。\n\n**LENGOLFのベイ料金**\n- 平日（月〜木）14:00まで: 1時間550THB\n- 平日14:00〜23:00: 1時間750THB\n- 週末（金〜日・祝日）14:00まで: 1時間750THB\n- 週末14:00〜23:00: 1時間950THB\n\n1ベイは最大5名まで利用でき、標準のゴルフクラブレンタルは無料。プレミアムクラブ（Callaway WarbirdまたはMajesty Shuttle）をご利用の場合は1時間150THBの追加となります。\n\n**通う方向けの月額パッケージ**\n定期的にプレーするなら、月額パッケージのほうが割安です。\n- Bronze: 5時間 3,000THB（1時間あたり600THB）\n- Silver: 15時間 8,000THB（1時間あたり約533THB）\n- Gold: 30時間 14,000THB（1時間あたり約467THB）\n- Diamond: 時間無制限で月8,000THB\n- Diamond+: 時間無制限で3か月18,000THB\n\nEarly Birdパッケージ（14:00までの利用限定）は、10時間4,800THBから。\n\n**屋外ゴルフとの比較**\nバンコク近郊のコースを1ラウンド回ると、グリーンフィーだけで1,500〜4,000THB。これにキャディーフィー（300〜400THB）、カート代、往復の交通費が加わります。インドアゴルフは費用面で大きく有利なうえ、天候に左右されず、アクセスも良好——特にグループでの利用に向いています。',
+      related_questions: [
+        { slug: 'can-i-rent-golf-clubs-in-bangkok', question: 'バンコクでゴルフクラブはレンタルできる？ — 料金と受け取り方' },
+        { slug: '/guide/round-of-golf-cost-bangkok', question: 'バンコクのゴルフラウンドの費用は？グリーンフィー・キャディー代の相場' },
+        { slug: 'best-way-to-learn-golf-in-bangkok', question: 'バンコクのゴルフレッスン、効率よく上達するには？ — 料金と選び方' },
+      ],
+    },
+  },
+
   {
     id: 'faq-3',
     page_type: 'faq',
@@ -258,6 +333,40 @@ export const faqPages: FaqSeoPage[] = [
         { slug: 'do-i-need-experience-to-play-golf-simulator', question: 'ต้องมีประสบการณ์กอล์ฟมาก่อนไหมถึงจะเล่นกอล์ฟซิมมูเลเตอร์ได้' },
         { slug: '/guide/is-indoor-golf-realistic', question: 'กอล์ฟในร่มสมจริงไหม? เจาะลึกความแม่นยำของกอล์ฟซิมมูเลเตอร์' },
         { slug: 'how-long-does-simulator-golf-take', question: 'เล่นกอล์ฟซิมมูเลเตอร์หนึ่งรอบใช้เวลานานแค่ไหน' },
+      ],
+    },
+  },
+
+  // ─── JA: how-accurate-are-golf-simulators ───
+  // Percentages, the 1〜2% measurement tolerance, Bravo, Trackman and
+  // Pebble Beach all trace to the EN entry; % and Latin course/brand names
+  // follow the shipped JA guide corpus. related_* retargeted to JA-translated
+  // pages (the EN do-i-need-experience and practice-golf-swing FAQs have no
+  // JA translation).
+  {
+    id: 'faq-6-ja',
+    page_type: 'faq',
+    slug: 'how-accurate-are-golf-simulators',
+    title: 'ゴルフシミュレーターの精度は？ — 実際のゴルフとの違いを正直に解説',
+    meta_description:
+      '最新のゴルフシミュレーターは、弾道と飛距離でおおむね85〜95%の精度。Bravoのようなプレミアムシステムは、ボールスピード、スピン量、打ち出し角を実際の条件との誤差1〜2%以内で計測します。再現できる点とできない点を解説します。',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'general',
+    locale: 'ja',
+    related_slugs: ['/faq/can-beginners-play-golf-simulators', '/guide/is-indoor-golf-realistic', '/golf'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        '最新のゴルフシミュレーターの精度は非常に高く、Bravoのようなプレミアムシステムは、ボールスピード、打ち出し角、スピン量を実際の条件との誤差1〜2%以内で計測します。弾道全体の再現精度は、屋外プレーと比べておおむね85〜95%。違いが出る主な要素は、風の体感、グリーンの読み、そしてラフやバンカーといったコースコンディションです。',
+      answer_body:
+        'ゴルフシミュレーターの精度は、使われている技術によって変わります。どこが正確で、どこがそうでないのかを正直に整理します。\n\n**シミュレーターが正確に再現できること**\n- **ボールスピードと飛距離:** プレミアムシステムなら誤差1〜2%以内。屋外で7番アイアンが150ヤード飛ぶ方なら、シミュレーターでもおよそ150ヤードと表示されます。\n- **打ち出し角とスピン量:** レーダーやカメラのシステムが高い精度で計測します。このデータは、屋外で自分の目で確認できることより実は有用です。\n- **クラブパスとフェース角:** インパクトの瞬間にクラブがどう動いているかが、そのまま表示されます。実際のコースでは見えない情報です。\n- **コースレイアウト:** プレミアムなシミュレーターは、実在のコースを距離、ハザード、高低差まで忠実に再現します。\n\n**シミュレーターが完全には再現できないこと**\n- **風や天候の体感:** 弾道計算に風を反映することはできても、体で感じることはできません。クラブ選択の勘に影響します。\n- **グリーンの読み:** シミュレーターのマット上でのパッティングは、実際のグリーンを読むのとはかなり違います。多くのゴルファーが実感しているとおりです。\n- **ライと地形:** 平らなマットから打つのは、傾斜のあるライ、深いラフ、バンカーの砂より簡単です。\n- **プレッシャーと雰囲気:** 同伴者やキャディーがいて、勝負がかかった実際のコースでのプレーは、やはり別物の体験です。\n\n**練習用途では: 非常に有用**\nスイングの動きづくり、各クラブの飛距離の把握、再現性の向上には、シミュレーターが最適です。ツアープロにも、コース外の練習でTrackmanを使う人が少なくありません。LENGOLFでも、データのフィードバックがあることで、広い場所にただ球を打つより早く上達できます。\n\n**楽しむ用途では: さらに好相性**\n仲間との集まり、デート、グループでのアクティビティでは、精度より楽しさが優先されます。友人とカクテル片手にPebble Beachを回るのは、物理演算の精度が90%でも95%でも変わらず楽しいものです。',
+      related_questions: [
+        { slug: 'can-beginners-play-golf-simulators', question: 'ゴルフシミュレーターは初心者でも楽しめる？ — 未経験から始める手順' },
+        { slug: '/guide/is-indoor-golf-realistic', question: 'インドアゴルフはどこまでリアル？ — ゴルフシミュレーターの精度を解説' },
+        { slug: '/guide/what-is-a-golf-simulator', question: 'ゴルフシミュレーターとは？仕組みをわかりやすく解説' },
       ],
     },
   },
@@ -460,6 +569,42 @@ export const faqPages: FaqSeoPage[] = [
     },
   },
 
+  // ─── JA: can-beginners-play-golf-simulators ───
+  // HONESTY: the EN "contact us on LINE @lengolf to book" line is rendered with
+  // the required LENGOLF-scoped construction — 日本人コーチ／日本語でのレッスン
+  // negated for LENGOLF only, paired with the LINE @lengolf Japanese booking
+  // allowance. No city-wide negative about Bangkok, no claim of JA lessons.
+  // Coach count (3), 1,800THB/hour, free 1-hour trial, 550THB bay rate, 5
+  // players and the Chidlom address all trace to the EN entry; place names use
+  // the settled JA transliterations (ザ・マーキュリービル / BTSチットロム駅).
+  {
+    id: 'faq-10-ja',
+    page_type: 'faq',
+    slug: 'can-beginners-play-golf-simulators',
+    title: 'ゴルフシミュレーターは初心者でも楽しめる？ — 未経験から始める手順',
+    meta_description:
+      'ゴルフシミュレーターは初心者に最適です。経験も道具もドレスコードも必要なく、スタッフが数分で始め方をご案内します。LENGOLFでは標準クラブのレンタルが無料、ベイ料金は1時間550THB程度から（2026年7月現在）。',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'general',
+    locale: 'ja',
+    related_slugs: ['/faq/best-way-to-learn-golf-in-bangkok', '/guide/golf-thailand-beginners', '/golf'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        'もちろん楽しめます——ゴルフシミュレーターは、初心者がゴルフを試す場所として最適です。経験も道具も、ルールの知識も必要ありません。スコアはシミュレーターが管理し、打った球がどこへ飛んだかを表示し、スイングのデータをリアルタイムで教えてくれます。LENGOLFではスタッフが2分ほどで始め方をご案内し、クラブは無料でお使いいただけます。',
+      answer_body:
+        'ゴルフシミュレーターは、初心者が実際のゴルフに感じるハードルを、ほとんど取り払ってくれます。\n\n**初心者にシミュレーターが向いている理由**\n- **道具が不要:** LENGOLFでは標準クラブを無料でご用意。手ぶらでお越しいただけます。\n- **ルールを覚えなくてよい:** ルールはシミュレーターが自動で適用します。あなたは球を打つだけ。\n- **恥ずかしくない:** ベイは半個室のような空間なので、隣のフェアウェイから誰かにスイングを見られることもありません。\n- **すぐに上達を実感:** リアルタイムのデータが、スイングごとに何が変わったかを示します。初心者でも1回のセッションではっきり違いを感じられることがよくあります。\n- **時間に追われない:** 後ろの組を待たせるコースと違い、シミュレーターなら好きなだけ時間をかけられます。\n\n**初心者のセッションの流れ**\n1. スタッフがクラブを渡し、基本のグリップとスタンスをご案内（2分）\n2. 何球か打ってみると、画面に弾道と飛距離が表示されます\n3. ゲームモードを開始（初心者にはニアピンが人気）\n4. ドリンクを注文し、友人と競い、雰囲気を楽しむ\n5. 30分もすれば、多くの初心者が安定して芯に当たるようになります\n\n**本格的にゴルフを習いたい場合**\nLENGOLFには、初心者の指導を得意とするPGA認定コーチが3名在籍しています。レッスンは1時間1,800THB程度から、スイング分析データ付きのシミュレーター利用込みです。1時間の無料体験レッスンもご用意しています。なお、LENGOLFには日本人コーチや日本語でのレッスンはありませんが、ご予約や事前のご相談はLINE @lengolfにて日本語で承っています。\n\n**初心者へのひとこと**\n最初は7番アイアン（中間の長さのクラブ）から始めてみてください。最も打ちやすく、手応えのある結果がすぐ出ます。適したクラブはスタッフがご用意します。\n\nLENGOLFのベイ料金は、最大5名まで1時間550THB程度（2026年7月現在）。ザ・マーキュリービル、BTSチットロム駅（4番出口）にあります。',
+      related_questions: [
+        { slug: 'best-way-to-learn-golf-in-bangkok', question: 'バンコクのゴルフレッスン、効率よく上達するには？ — 料金と選び方' },
+        { slug: 'how-accurate-are-golf-simulators', question: 'ゴルフシミュレーターの精度は？ — 実際のゴルフとの違いを正直に解説' },
+        { slug: '/guide/golf-simulator-for-non-golfers-guide', question: 'ゴルフシミュレーターは未経験でも楽しめる？ — 初心者のための完全ガイド' },
+      ],
+    },
+  },
+
   {
     id: 'faq-11',
     page_type: 'faq',
@@ -518,6 +663,45 @@ export const faqPages: FaqSeoPage[] = [
         { slug: 'can-beginners-play-golf-simulators', question: 'มือใหม่เล่นกอล์ฟซิมมูเลเตอร์ได้ไหม' },
         { slug: '/guide/golf-thailand-beginners', question: 'กอล์ฟในไทยสำหรับมือใหม่ — ทุกสิ่งที่คุณต้องรู้' },
         { slug: 'how-accurate-are-golf-simulators', question: 'กอล์ฟซิมมูเลเตอร์แม่นยำแค่ไหนเมื่อเทียบกับกอล์ฟจริง' },
+      ],
+    },
+  },
+
+  // ─── JA: best-way-to-learn-golf-in-bangkok ───
+  // Static content mirroring the EN entry's literal prices — this is what the
+  // FAQ renderer actually serves. NOTE: the EN sibling has an (unwired)
+  // getBestWayToLearnContent() dynamic-pricing function that no renderer
+  // calls; do not add a JA twin unless that family is actually wired up
+  // (same caution as the faq-11-th precedent above).
+  // HONESTY: language support uses the required LENGOLF-scoped construction —
+  // 日本人コーチ／日本語でのレッスン negated for LENGOLF only, paired with the
+  // LINE @lengolf Japanese booking allowance and the on-screen-numbers point.
+  // No city-wide negative about Bangkok. Title/meta front-load the JA lesson
+  // cluster (バンコク ゴルフレッスン / 料金).
+  {
+    id: 'faq-11-ja',
+    page_type: 'faq',
+    slug: 'best-way-to-learn-golf-in-bangkok',
+    title: 'バンコクのゴルフレッスン、効率よく上達するには？ — 料金と選び方',
+    meta_description:
+      'バンコクでゴルフを学ぶなら、PGA認定コーチによるシミュレーターレッスンが最短ルートです。LENGOLFは1時間1,800THBから、スイングデータとリアルタイムのフィードバック付き。1時間の無料体験もご用意しています（2026年7月現在）。',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'lessons',
+    locale: 'ja',
+    related_slugs: ['/faq/can-beginners-play-golf-simulators', '/lessons', '/guide/golf-lessons-bangkok-coaches'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        'バンコクでゴルフを学ぶ最も効率的な方法は、PGA認定コーチのもとでゴルフシミュレーターを使うことです。シミュレーターレッスンなら、ドライビングレンジでは得られないリアルタイムのスイングデータ（ボールスピード、打ち出し角、スピン量）に加え、動画分析と即時のフィードバックが得られます。LENGOLFでは、PGA認定コーチによるレッスンを1時間1,800THBから、シミュレーター利用込みでご提供しています（2026年7月現在）。',
+      answer_body:
+        'バンコクでゴルフを学ぶ方法はいくつかあり、それぞれに一長一短があります。\n\n**1. コーチによるシミュレーターレッスン（おすすめ）**\nゴルフシミュレーターは数値にもとづいた指導を可能にし、上達のスピードを引き上げてくれます。LENGOLFでは、タイPGA認定コーチ3名（PRO Boss、PRO Ratchavin、PRO Min）がBravoのシミュレーター技術を使い、あらゆるレベルの方を指導しています。インパクトの瞬間にクラブがどう動いているか——クラブパス、フェース角、ボールスピード、スピン量——が正確に見えるため、レンジで感覚を頼りに試行錯誤するより早く上達できます。\n\nなお、LENGOLFには日本人コーチや日本語でのレッスンはありませんが、ご予約や事前のご相談はLINE @lengolfにて日本語で承っています。レッスン中は画面にヘッドスピードや打ち出し角といった数値が表示されるため、言葉の壁があっても改善点を目で確認しやすいのが特長です。\n\nレッスン料金:\n- 1時間: 1,800THB（1名）\n- 5時間: 8,500THB（有効期限6か月）\n- 10時間: 16,000THB（有効期限12か月）\n- スターターパッケージ: 11,000THB（レッスン5時間 + 練習5時間 + ゴルフグローブ付き）\n- 1時間の無料体験レッスンあり——ご連絡はLINE @lengolfまで\n\n**2. ドライビングレンジでのプロレッスン**\nバンコクには、コーチが常駐するドライビングレンジがいくつもあります。球数を打ちたい方には向きますが、シミュレーターのようなデータフィードバックはありません。暑さや騒音もあり、球がどこに落ちたか正確には見えにくいという難点もあります。\n\n**3. オンコースレッスン**\n実際のコースで指導を受けられる施設もあります。スイングの基礎を固めたい初心者より、コースマネジメントを学びたい上級者に向いた形式です。\n\n**4. YouTubeでの独学**\n無料ですが、リスクもあります。フィードバックがないため、初心者は後から直しにくい悪い癖を身につけてしまいがちです。\n\n**初心者の方へのおすすめ**\nまずはLENGOLFのスターターパッケージ（レッスン5時間 + 練習5時間で11,000THB）から。シミュレーターのデータフィードバックで基礎を固め、実際のコースに出る準備が整ったらSim to Fairwayパッケージ（13,499THB）へ進む、という流れがおすすめです。',
+      related_questions: [
+        { slug: 'can-beginners-play-golf-simulators', question: 'ゴルフシミュレーターは初心者でも楽しめる？ — 未経験から始める手順' },
+        { slug: '/guide/golf-lessons-bangkok-coaches', question: 'バンコクのゴルフレッスン — 費用とコーチの選び方' },
+        { slug: '/guide/golf-thailand-beginners', question: 'タイでゴルフを始める初心者ガイド — 知っておきたいことすべて' },
       ],
     },
   },
@@ -1032,6 +1216,40 @@ export const faqPages: FaqSeoPage[] = [
         { slug: 'can-i-rent-golf-clubs-in-bangkok', question: 'เช่าไม้กอล์ฟในกรุงเทพฯ ได้ไหม' },
         { slug: '/guide/golf-club-rental-bangkok-guide', question: 'บริการเช่าไม้กอล์ฟในกรุงเทพฯ — เช่าได้ที่ไหนและราคาเท่าไหร่' },
         { slug: 'can-beginners-play-golf-simulators', question: 'มือใหม่เล่นกอล์ฟซิมมูเลเตอร์ได้ไหม' },
+      ],
+    },
+  },
+
+  // ─── JA: are-rental-golf-clubs-good-enough ───
+  // Title front-loads レンタルクラブ (JA rental cluster). Brand and area names
+  // trace to the EN entry; Nichada / Bangna are glossed with katakana on first
+  // use per the JA transliteration style. related_* retargeted to JA-translated
+  // pages — the EN entry's /golf-in-thailand-guide and the
+  // what-golf-clubs-available-rent-bangkok FAQ have no JA translation.
+  {
+    id: 'faq-23-ja',
+    page_type: 'faq',
+    slug: 'are-rental-golf-clubs-good-enough',
+    title: 'レンタルクラブでも十分？ — 本格派ゴルファーのための品質の見極め方',
+    meta_description:
+      'バンコクの上位コースやLENGOLFのようなシミュレーター施設なら、CallawayやTaylorMadeのレンタルセットは本格派ゴルファーにも十分。品質を左右する条件と、自分のクラブを持参すべき場面の見極め方を解説します。',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'clubs-rental',
+    locale: 'ja',
+    related_slugs: ['/faq/can-i-rent-golf-clubs-in-bangkok', '/golf-club-rental', '/guide/golf-club-rental-bangkok-guide'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        '上位クラスの施設であれば、答えはイエス。低価格帯のコースでは、そうとは限りません。バンコクのトップクラスのコースや、LENGOLFのようなシミュレーター施設なら、本格派ゴルファーが実戦で使えるCallaway、TaylorMade、Titleistの現行世代に近いレンタルセットが見つかります。',
+      answer_body:
+        '**レンタルクラブの品質を左右する条件**\n\n1. **ブランドとモデルの年式** — 現行または近い世代のCallaway RogueやTaylorMade Stealthのアイアンは、ミスに強く安定しています。10年前のノーブランドのアイアンでは、そうはいきません。\n2. **シャフトフレックス** — レンタルセットの多くはスタンダード（レギュラー）フレックスです。ヘッドスピードが速い方はコントロールを失いやすく、遅い方は飛距離を損ないます。上位施設では複数のフレックスを用意している場合もあるので、必ず事前に確認しましょう。\n3. **セットのコンディション** — 溝は摩耗し、グリップは滑るようになります。手入れの行き届いたプレミアムセットは、放置された中級セットを常に上回ります。\n\n**バンコクで質の高いレンタルクラブが見つかる場所**\n\nバンコクの上位コース——特にニチャダ（Nichada）、バンナー（Bangna）、市東部の一帯——では、メンズ、レディース、ときに左利き用のCallawayやTaylorMadeのセットを揃えているのが一般的です。低価格帯やリゾート系のコースは読みにくいので、どのブランドのどのモデルを置いているか、事前に電話で確認しておくと安心です。\n\nLENGOLFのインドアシミュレーター施設では、メンズ、レディース、左利き用のいずれもCallawayのレンタルクラブを使用しています。質の高いレンタル用具が実際どのようなものかを知る、ひとつの目安になるはずです。\n\n**プレミアムなレンタルでも埋まらない差**\n\n質の高いレンタルセットを借りても、本格派ゴルファーが手放すものが2つあります。\n1. **慣れ** — 自分のクラブのことは知り尽くしています。その内的な基準は、レンタルでは完全に失われます。\n2. **カスタムフィッティング** — レンタルクラブは平均的な体格に合わせて組まれています。背が高い方、ライ角の好みが標準と違う方、グリップサイズが標準外の方には、自分のクラブほどフィットしません。\n\n**結論**\n\n- ゴルフが数ある予定のひとつという気軽な旅行なら、プレミアムのレンタルクラブで十分すぎるほど\n- 競技としてのラウンド、ハンディキャップのかかったコンペ、ベストスコアを狙って渡航したコースなら、自分のクラブを持参\n\n**ハイブリッドという選択**\n\n経験豊富なゴルフ旅行者の多くは、大事なコースには自分のクラブを持参し、そうでない場面——予定になかった初めてのコースでの1ラウンド、シミュレーターでのセッション、気軽なトワイライトラウンドなど——ではレンタルを使い分けています。バッグを常に持ち歩かずに済むうえ、ここぞという場面では自分の道具を使えます。',
+      related_questions: [
+        { slug: 'can-i-rent-golf-clubs-in-bangkok', question: 'バンコクでゴルフクラブはレンタルできる？ — 料金と受け取り方' },
+        { slug: '/guide/golf-club-rental-bangkok-guide', question: 'バンコクのゴルフクラブレンタル — 借りられる場所と費用の目安' },
+        { slug: '/guide/bring-golf-clubs-thailand-or-rent', question: 'タイゴルフ旅行、クラブは持参？現地レンタル？判断ガイド' },
       ],
     },
   },
