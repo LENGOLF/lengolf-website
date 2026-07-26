@@ -98,7 +98,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         {
           feature: "Equipment needed",
           simulator: "None — clubs provided free",
-          real_golf: "Full set or rental (500–1,500 THB)",
+          real_golf: "Full set or rental (1,000–2,500 THB)",
         },
         {
           feature: "Swing data & analytics",
@@ -1499,7 +1499,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "Cost Overview",
-          body: "Rental set prices at Bangkok golf courses generally fall in the range of 300–800 THB per round, depending on course tier and what's included. Some courses bundle the rental fee into caddie and green fee packages; others charge separately.\n\nDedicated simulator venues typically include club rental in the per-bay or per-hour session rate rather than as a standalone charge.\n\nAlways verify rental pricing directly with the venue before your visit.",
+          body: "Rental set prices at Bangkok golf courses generally fall in the range of 1,000–2,500 THB per round, with around 1,500 THB being typical, depending on course tier and what's included. Some courses bundle the rental fee into caddie and green fee packages; others charge separately.\n\nDedicated simulator venues typically include club rental in the per-bay or per-hour session rate rather than as a standalone charge.\n\nAlways verify rental pricing directly with the venue before your visit.",
         },
         {
           heading: "What to Check When Renting",
@@ -1513,7 +1513,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       key_takeaways: [
         "Rental clubs are available at virtually every Bangkok course pro shop and at indoor simulator venues like LENGOLF",
         "Quality ranges from older mixed sets at budget courses to current-model Callaway/TaylorMade at premium venues — call ahead if it matters",
-        "Course rentals typically cost 300–800 THB per round; simulator venue rental is usually included in the bay booking",
+        "Course rentals typically cost 1,000–2,500 THB per round; simulator venue rental is usually included in the bay booking",
         "Left-handed golfers should call ahead — left-handed sets are less common at standard courses but available at LENGOLF",
       ],
       comparison_table: [],
@@ -2769,7 +2769,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       sections: [
         {
           heading: "The Rental Process at a Thai Course",
-          body: "Renting clubs in Thailand is straightforward. When you arrive at the pro shop, inform staff that you need a rental set. You'll typically be asked: your preferred hand (right or left), whether you want a full or partial set, and sometimes your height or skill level.\n\nOnce selected, the set is tagged to your name and brought to the bag drop area. Your assigned caddie takes over and carries it exactly as they would a personal set.\n\nRental fees are usually settled at checkout alongside your green fee and caddie fee. Expect to pay 300–800 THB for a rental set — verify the current rate directly with the course before your round.",
+          body: "Renting clubs in Thailand is straightforward. When you arrive at the pro shop, inform staff that you need a rental set. You'll typically be asked: your preferred hand (right or left), whether you want a full or partial set, and sometimes your height or skill level.\n\nOnce selected, the set is tagged to your name and brought to the bag drop area. Your assigned caddie takes over and carries it exactly as they would a personal set.\n\nRental fees are usually settled at checkout alongside your green fee and caddie fee. Expect to pay 1,000–2,500 THB per round for a rental set, with around 1,500 THB being typical — verify the current rate directly with the course before your round.",
         },
         {
           heading: "The Quality Spectrum",
@@ -2801,7 +2801,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     slug: "renting-golf-clubs-thai-golf-courses",
     title: "タイのゴルフ場でクラブレンタル — 料金・品質・チェックポイント",
     meta_description:
-      "タイのゴルフ場ではほぼ必ずクラブをレンタルできますが、品質は様々。プロショップでのレンタルの流れ、料金相場（1ラウンド300〜800バーツ）、ティーオフ前に確認すべきポイントを解説します。",
+      "タイのゴルフ場ではほぼ必ずクラブをレンタルできますが、品質は様々。プロショップでのレンタルの流れ、料金相場（1ラウンド1,000〜2,500バーツ）、ティーオフ前に確認すべきポイントを解説します。",
     featured_image: null,
     schema_markup: null,
     status: "published",
@@ -2820,7 +2820,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       sections: [
         {
           heading: "タイのゴルフ場でのレンタルの流れ",
-          body: "タイでのクラブレンタルはシンプルです。プロショップに着いたら、レンタルセットが必要な旨をスタッフに伝えます。聞かれるのは通常、利き手（右・左）、フルセットかハーフセットか、場合によっては身長やレベルです。\n\nセットが決まるとあなたの名前でタグ付けされ、バッグドロップへ運ばれます。あとは担当キャディーが、持参クラブと同じように扱ってくれます。\n\nレンタル料金は通常、グリーンフィーやキャディーフィーと一緒にチェックアウト時に精算します。相場は1ラウンドあたり300〜800バーツ。最新料金はラウンド前にゴルフ場へ直接ご確認ください。",
+          body: "タイでのクラブレンタルはシンプルです。プロショップに着いたら、レンタルセットが必要な旨をスタッフに伝えます。聞かれるのは通常、利き手（右・左）、フルセットかハーフセットか、場合によっては身長やレベルです。\n\nセットが決まるとあなたの名前でタグ付けされ、バッグドロップへ運ばれます。あとは担当キャディーが、持参クラブと同じように扱ってくれます。\n\nレンタル料金は通常、グリーンフィーやキャディーフィーと一緒にチェックアウト時に精算します。相場は1ラウンドあたり1,000〜2,500バーツで、1,500バーツ前後が目安です。最新料金はラウンド前にゴルフ場へ直接ご確認ください。",
         },
         {
           heading: "レンタルクラブの品質はピンキリ",
@@ -2853,7 +2853,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     slug: "renting-golf-clubs-thai-golf-courses",
     title: "태국 골프장 클럽 렌탈 — 요금·품질·체크리스트",
     meta_description:
-      "태국 골프장은 어디서나 클럽 렌탈이 가능하지만 품질은 천차만별. 프로샵 렌탈 절차, 요금 시세(라운드당 300~800바트), 티오프 전에 확인해야 할 체크포인트를 정리했습니다.",
+      "태국 골프장은 어디서나 클럽 렌탈이 가능하지만 품질은 천차만별. 프로샵 렌탈 절차, 요금 시세(라운드당 1,000~2,500바트), 티오프 전에 확인해야 할 체크포인트를 정리했습니다.",
     featured_image: null,
     schema_markup: null,
     status: "published",
@@ -2872,7 +2872,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       sections: [
         {
           heading: "태국 골프장 렌탈 절차",
-          body: "태국에서의 클럽 렌탈은 간단합니다. 프로샵에 도착하면 렌탈 세트가 필요하다고 직원에게 말하세요. 보통 묻는 것은 사용하는 손(오른손·왼손), 풀세트 또는 하프세트 여부, 경우에 따라 키나 실력 수준입니다.\n\n세트가 정해지면 이름표가 붙어 백드롭으로 옮겨지고, 이후에는 담당 캐디가 본인 클럽과 똑같이 관리해 줍니다.\n\n렌탈 요금은 보통 그린피·캐디피와 함께 체크아웃 때 정산합니다. 시세는 라운드당 300~800바트. 최신 요금은 라운드 전에 골프장에 직접 확인하세요.",
+          body: "태국에서의 클럽 렌탈은 간단합니다. 프로샵에 도착하면 렌탈 세트가 필요하다고 직원에게 말하세요. 보통 묻는 것은 사용하는 손(오른손·왼손), 풀세트 또는 하프세트 여부, 경우에 따라 키나 실력 수준입니다.\n\n세트가 정해지면 이름표가 붙어 백드롭으로 옮겨지고, 이후에는 담당 캐디가 본인 클럽과 똑같이 관리해 줍니다.\n\n렌탈 요금은 보통 그린피·캐디피와 함께 체크아웃 때 정산합니다. 시세는 라운드당 1,000~2,500바트로, 1,500바트 안팎이 일반적입니다. 최신 요금은 라운드 전에 골프장에 직접 확인하세요.",
         },
         {
           heading: "렌탈 클럽 품질은 천차만별",
@@ -2905,7 +2905,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     slug: "renting-golf-clubs-thai-golf-courses",
     title: "在泰国球场租借球杆 — 费用、品质与检查要点",
     meta_description:
-      "泰国的球场几乎处处都能租借球杆，但品质参差不齐。本文说明职业球具店的租借流程、价格区间（每轮300–800泰铢），以及开球前应确认的检查要点。",
+      "泰国的球场几乎处处都能租借球杆，但品质参差不齐。本文说明职业球具店的租借流程、价格区间（每轮1,000–2,500泰铢），以及开球前应确认的检查要点。",
     featured_image: null,
     schema_markup: null,
     status: "published",
@@ -2924,7 +2924,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       sections: [
         {
           heading: "泰国球场的租借流程",
-          body: "在泰国租借球杆很简单。到达职业球具店后，告诉工作人员你需要一套租借球具。通常会被问到：惯用手（左手或右手）、要全套还是半套，有时还会问身高或水平。\n\n选定之后，这套球具会挂上你的名牌并送到寄包处，之后由你的专属球童接手，像对待私人球具一样帮你搬运。\n\n租借费用通常在结账时与果岭费、球童费一起结算。租借一套的费用大约在300–800泰铢之间——请在开球前直接向球场确认最新价格。",
+          body: "在泰国租借球杆很简单。到达职业球具店后，告诉工作人员你需要一套租借球具。通常会被问到：惯用手（左手或右手）、要全套还是半套，有时还会问身高或水平。\n\n选定之后，这套球具会挂上你的名牌并送到寄包处，之后由你的专属球童接手，像对待私人球具一样帮你搬运。\n\n租借费用通常在结账时与果岭费、球童费一起结算。租借一套的费用大约在1,000–2,500泰铢之间，多在1,500泰铢上下——请在开球前直接向球场确认最新价格。",
         },
         {
           heading: "品质参差不齐",
@@ -4730,7 +4730,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         {
           feature: "必要な道具",
           simulator: "なし（クラブは無料で貸し出し）",
-          real_golf: "フルセットまたはレンタル（500〜1,500THB）",
+          real_golf: "フルセットまたはレンタル（1,000〜2,500THB）",
         },
         {
           feature: "スイングデータ&分析",
@@ -4835,7 +4835,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         {
           feature: "필요 장비",
           simulator: "없음 — 클럽 무료 제공",
-          real_golf: "풀세트 또는 대여(500~1,500바트)",
+          real_golf: "풀세트 또는 대여(1,000~2,500바트)",
         },
         {
           feature: "스윙 데이터 & 분석",
@@ -4940,7 +4940,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         {
           feature: "所需装备",
           simulator: "无——免费提供球杆",
-          real_golf: "整套球杆或租借（500–1,500泰铢）",
+          real_golf: "整套球杆或租借（1,000–2,500泰铢）",
         },
         {
           feature: "挥杆数据 & 分析",
@@ -5045,7 +5045,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         {
           feature: "อุปกรณ์ที่ต้องใช้",
           simulator: "ไม่ต้องมี เพราะมีไม้กอล์ฟให้ฟรี",
-          real_golf: "ชุดไม้ครบเซ็ตหรือเช่า (500-1,500 บาท)",
+          real_golf: "ชุดไม้ครบเซ็ตหรือเช่า (1,000-2,500 บาท)",
         },
         {
           feature: "ข้อมูลสวิง & การวิเคราะห์",
@@ -9700,7 +9700,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "費用の目安",
-          body: "バンコクのゴルフ場でのレンタルセットの料金は、コースのグレードや含まれる内容にもよりますが、おおむね1ラウンド300〜800THBの範囲に収まります。レンタル料をキャディーフィーやグリーンフィーのパッケージに含めているコースもあれば、別料金として請求するコースもあります。\n\nシミュレーター専門の施設では、クラブレンタルを単独の料金としてではなく、ベイ単位または時間単位のセッション料金に含めているのが一般的です。\n\n来場前には必ず、施設に直接レンタル料金を確認しておきましょう。",
+          body: "バンコクのゴルフ場でのレンタルセットの料金は、コースのグレードや含まれる内容にもよりますが、おおむね1ラウンド1,000〜2,500THBの範囲に収まり、1,500THB前後が目安です。レンタル料をキャディーフィーやグリーンフィーのパッケージに含めているコースもあれば、別料金として請求するコースもあります。\n\nシミュレーター専門の施設では、クラブレンタルを単独の料金としてではなく、ベイ単位または時間単位のセッション料金に含めているのが一般的です。\n\n来場前には必ず、施設に直接レンタル料金を確認しておきましょう。",
         },
         {
           heading: "レンタル時に確認したいポイント",
@@ -9714,7 +9714,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       key_takeaways: [
         "レンタルクラブは、バンコクのほぼすべてのコースのプロショップと、LENGOLFのようなインドアシミュレーター施設で借りられます",
         "品質は、低価格帯コースの古い混成セットから、プレミアム施設の現行モデルのCallaway/TaylorMadeまで幅があります — こだわるなら事前に電話で確認を",
-        "コースでのレンタルは1ラウンド300〜800THBが目安。シミュレーター施設のレンタルは通常、ベイのご予約に含まれています",
+        "コースでのレンタルは1ラウンド1,000〜2,500THBが目安。シミュレーター施設のレンタルは通常、ベイのご予約に含まれています",
         "左利きのゴルファーは事前に問い合わせを — 左利き用セットは一般的なコースでは少ないですが、LENGOLFでは利用できます",
       ],
       comparison_table: [],
@@ -9749,7 +9749,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "비용 개요",
-          body: "방콕 골프장의 대여 세트 요금은 코스 등급과 포함 내역에 따라 대체로 라운드당 300~800바트 범위예요. 어떤 코스는 대여료를 캐디피·그린피 패키지에 포함하고, 어떤 곳은 따로 청구합니다.\n\n전문 시뮬레이터 시설은 보통 클럽 대여를 별도 요금이 아니라 베이당 또는 시간당 세션 요금에 포함해요.\n\n방문 전에는 항상 시설에 대여 요금을 직접 확인하세요.",
+          body: "방콕 골프장의 대여 세트 요금은 코스 등급과 포함 내역에 따라 대체로 라운드당 1,000~2,500바트 범위이고, 1,500바트 안팎이 일반적이에요. 어떤 코스는 대여료를 캐디피·그린피 패키지에 포함하고, 어떤 곳은 따로 청구합니다.\n\n전문 시뮬레이터 시설은 보통 클럽 대여를 별도 요금이 아니라 베이당 또는 시간당 세션 요금에 포함해요.\n\n방문 전에는 항상 시설에 대여 요금을 직접 확인하세요.",
         },
         {
           heading: "대여할 때 확인할 점",
@@ -9763,7 +9763,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       key_takeaways: [
         "대여 클럽은 방콕의 거의 모든 골프장 프로샵과 LENGOLF 같은 실내 시뮬레이터 시설에서 구할 수 있어요",
         "품질은 저가 코스의 오래된 혼합 세트부터 프리미엄 시설의 최신 모델 Callaway·TaylorMade까지 다양해요 — 중요하다면 미리 전화해 확인하세요",
-        "골프장 대여는 보통 라운드당 300~800바트이고, 시뮬레이터 시설 대여는 대개 베이 예약에 포함돼요",
+        "골프장 대여는 보통 라운드당 1,000~2,500바트이고, 시뮬레이터 시설 대여는 대개 베이 예약에 포함돼요",
         "왼손잡이 골퍼는 미리 전화해 두는 게 좋아요 — 왼손잡이용 세트는 일반 골프장에서는 흔치 않지만 LENGOLF에는 준비되어 있어요",
       ],
       comparison_table: [],
@@ -9798,7 +9798,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "费用概览",
-          body: "曼谷各高尔夫球场的租杆价格，通常在每场300–800泰铢之间，具体取决于球场档次和所含内容。有些球场会把租杆费打包进球童费和果岭费套餐；有些则单独收费。\n\n专门的模拟器场馆通常把球杆租借计入按球位或按小时的时段费用中，而不是单独收费。\n\n到访前，请务必直接向场馆核实租借价格。",
+          body: "曼谷各高尔夫球场的租杆价格，通常在每场1,000–2,500泰铢之间（多在1,500泰铢上下），具体取决于球场档次和所含内容。有些球场会把租杆费打包进球童费和果岭费套餐；有些则单独收费。\n\n专门的模拟器场馆通常把球杆租借计入按球位或按小时的时段费用中，而不是单独收费。\n\n到访前，请务必直接向场馆核实租借价格。",
         },
         {
           heading: "租借时要检查什么",
@@ -9812,7 +9812,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       key_takeaways: [
         "曼谷几乎每一座球场的专卖店，以及像LENGOLF这样的室内模拟器场馆，都能租到球杆",
         "品质从平价球场较旧的混搭球杆，到高端场馆当季款的Callaway/TaylorMade不等——在意的话，出发前先打电话确认",
-        "球场租杆通常每场300–800泰铢；模拟器场馆的租借一般已包含在球位预订中",
+        "球场租杆通常每场1,000–2,500泰铢；模拟器场馆的租借一般已包含在球位预订中",
         "左手球友最好提前打电话——左手球杆在普通球场较少见，但LENGOLF有提供",
       ],
       comparison_table: [],
@@ -9847,7 +9847,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "ภาพรวมค่าใช้จ่าย",
-          body: "ราคาชุดไม้กอล์ฟให้เช่าตามสนามกอล์ฟในกรุงเทพฯ โดยทั่วไปอยู่ในช่วง 300-800 บาทต่อรอบ (ข้อมูล ณ กรกฎาคม 2026) ขึ้นอยู่กับระดับของสนามและสิ่งที่รวมอยู่ในบริการ บางสนามรวมค่าเช่าไว้ในแพ็กเกจค่าแคดดี้และค่ากรีนฟีแล้ว ขณะที่บางแห่งคิดค่าบริการแยกต่างหาก\n\nส่วนสถานที่ซิมูเลเตอร์โดยเฉพาะมักรวมค่าเช่าไม้กอล์ฟไว้ในอัตราค่าบริการต่อเบย์หรือต่อชั่วโมงอยู่แล้ว แทนที่จะคิดเป็นค่าบริการแยกต่างหาก\n\nควรตรวจสอบราคาค่าเช่ากับทางสถานที่โดยตรงทุกครั้งก่อนเข้าใช้บริการ",
+          body: "ราคาชุดไม้กอล์ฟให้เช่าตามสนามกอล์ฟในกรุงเทพฯ โดยทั่วไปอยู่ในช่วง 1,000-2,500 บาทต่อรอบ โดยส่วนใหญ่อยู่ที่ราว 1,500 บาท (ข้อมูล ณ กรกฎาคม 2026) ขึ้นอยู่กับระดับของสนามและสิ่งที่รวมอยู่ในบริการ บางสนามรวมค่าเช่าไว้ในแพ็กเกจค่าแคดดี้และค่ากรีนฟีแล้ว ขณะที่บางแห่งคิดค่าบริการแยกต่างหาก\n\nส่วนสถานที่ซิมูเลเตอร์โดยเฉพาะมักรวมค่าเช่าไม้กอล์ฟไว้ในอัตราค่าบริการต่อเบย์หรือต่อชั่วโมงอยู่แล้ว แทนที่จะคิดเป็นค่าบริการแยกต่างหาก\n\nควรตรวจสอบราคาค่าเช่ากับทางสถานที่โดยตรงทุกครั้งก่อนเข้าใช้บริการ",
         },
         {
           heading: "สิ่งที่ควรตรวจสอบเมื่อเช่าไม้กอล์ฟ",
@@ -9861,7 +9861,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       key_takeaways: [
         "มีไม้กอล์ฟให้เช่าที่โปรช็อปของสนามกอล์ฟแทบทุกแห่งในกรุงเทพฯ และที่สถานที่ให้บริการกอล์ฟซิมูเลเตอร์ในร่มอย่าง LENGOLF",
         "คุณภาพมีตั้งแต่ชุดไม้เก่าที่คละรุ่นกันตามสนามระดับประหยัด ไปจนถึง Callaway/TaylorMade รุ่นปัจจุบันตามสถานที่ระดับพรีเมียม — หากเป็นเรื่องสำคัญสำหรับคุณ ควรโทรสอบถามล่วงหน้า",
-        "การเช่าตามสนามโดยทั่วไปมีค่าใช้จ่าย 300-800 บาทต่อรอบ ส่วนการเช่าที่สถานที่ซิมูเลเตอร์มักรวมอยู่ในค่าจองเบย์แล้ว",
+        "การเช่าตามสนามโดยทั่วไปมีค่าใช้จ่าย 1,000-2,500 บาทต่อรอบ ส่วนการเช่าที่สถานที่ซิมูเลเตอร์มักรวมอยู่ในค่าจองเบย์แล้ว",
         "นักกอล์ฟถนัดซ้ายควรโทรสอบถามล่วงหน้า — ชุดสำหรับคนถนัดซ้ายพบได้น้อยตามสนามทั่วไป แต่มีให้บริการที่ LENGOLF",
       ],
       comparison_table: [],
