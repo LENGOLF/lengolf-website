@@ -351,6 +351,130 @@ export const faqPages: FaqSeoPage[] = [
       ],
     },
   },
+
+  // ─── JA: can-you-play-golf-in-bangkok-when-it-rains ───
+  // Title/meta front-load the rainy-day query (バンコク 雨 ゴルフ) and keep the
+  // インドアゴルフ hook. Every figure traces to the EN entry (1,500mm, 5〜10月,
+  // 9:00〜23:00, 約550THB, 4番出口) and is rendered per the JA conventions
+  // (THB abbreviation, half-width digits, 〜 ranges); the LENGOLF bay price
+  // carries the as-of marker （2026年7月現在）. Chidlom / The Mercury Ville are
+  // transliterated per the JA prose style. related_* retargeted to
+  // JA-translated pages only — the EN entry's /activities/rainy-day-activities-bangkok
+  // and the where-to-play-golf-at-night FAQ have no JA translation, so they are
+  // replaced with the JA rainy-season guide and the JA simulator-accuracy FAQ.
+  // No dynamic-pricing twin exists for this slug (the get…Content() family
+  // covers only indoor-golf-cost / best-way-to-learn / corporate-event).
+  {
+    id: 'faq-3-ja',
+    page_type: 'faq',
+    slug: 'can-you-play-golf-in-bangkok-when-it-rains',
+    title: 'バンコクで雨の日にゴルフはできる？ — 雨季でも遊べるインドアゴルフ',
+    meta_description:
+      'バンコクは雨の日でもゴルフができます。インドアゴルフシミュレーターなら天候に関係なく空調の効いた環境で18ホールをプレー可能。LENGOLFはBTSチットロム駅すぐ、毎日9:00〜23:00営業、ベイは1時間約550THBから（2026年7月現在）。',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'general',
+    locale: 'ja',
+    related_slugs: ['/faq/how-much-does-indoor-golf-cost-in-bangkok', '/guide/golf-bangkok-rainy-season', '/golf'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        '雨の日でも、インドアゴルフシミュレーターならバンコクで1ラウンドをまるごとプレーできます。バンコクの雨季（5〜10月）は毎日のように激しい雨が降りますが、LENGOLFのようなインドア施設は一年を通して空調の効いた環境で営業しています。雨も暑さも落雷による中断も気にせず、世界的に知られたコースで18ホールを回れます。',
+      answer_body:
+        'バンコクの年間降水量は平均1,500mmで、5月から10月にかけて最も激しい雨が降ります。雨季を外れた時期でも、午後の雷雨は珍しくありません。そのため屋外ゴルフの予定は読みにくく、落雷でコースがクローズしたり、フェアウェイが冠水したり、ティータイムがキャンセルになったりします。\n\n**天候の問題を解決するインドアゴルフ**\nゴルフシミュレーターなら、天候の問題は完全になくなります。LENGOLFではBravoのシミュレーターでプレーでき、実在のコースを忠実に再現——弾道も風の条件もコースレイアウトもすべてシミュレートされます。完全屋内で空調が効いており、毎日9:00〜23:00にご利用いただけます。\n\n**雨の日にLENGOLFでできること**\n- Pebble BeachやSt Andrewsといったコースで18ホールをフルラウンド\n- リアルタイムのデータ（ボールスピード、打ち出し角、スピン量）を見ながらスイング練習\n- ニアピンやドラコンのチャレンジで仲間と勝負\n- バーのカクテルや料理を楽しみながらプレー\n\nベイのご利用料金は最大5名で1時間約550THBから（2026年7月現在）。場所はザ・マーキュリービル、BTSチットロム駅（4番出口）です。標準のゴルフクラブは無料で付いています。\n\n**旅行者の方へ**\n雨で屋外ゴルフの予定が流れてしまったときの代替案としても使いやすい施設です。BTSでチットロムまで来るだけ。ご予約なしのご来店でも空きがあればご利用いただけますが、booking.len.golfでご予約いただければ確実に枠を押さえられます。',
+      related_questions: [
+        { slug: 'how-much-does-indoor-golf-cost-in-bangkok', question: 'バンコクのインドアゴルフ料金は？ — 1時間550〜1,000THBの相場と内訳' },
+        { slug: 'how-accurate-are-golf-simulators', question: 'ゴルフシミュレーターの精度は？ — 実際のゴルフとの違いを正直に解説' },
+        { slug: '/guide/golf-bangkok-rainy-season', question: 'バンコクの雨季ゴルフ — 知っておきたいこと' },
+      ],
+    },
+  },
+
+  // ─── KO: can-you-play-golf-in-bangkok-when-it-rains ───
+  // Title/meta front-load the rainy-day query (방콕 비 골프) and keep the
+  // 실내 골프 hook. Every figure traces to the EN entry (1,500mm, 5~10월,
+  // 9:00~23:00, 550바트, 4번 출구, 최대 5명) and is rendered per the KO
+  // conventions (바트 spelled out, half-width digits, ~ ranges); the LENGOLF
+  // bay price carries the as-of marker (2026년 7월 기준). KO transliterates the
+  // station (BTS 칫롬역) but keeps The Mercury Ville and the course/brand names
+  // (Bravo, Pebble Beach, St Andrews) in Latin. related_* retargeted to
+  // KO-translated pages only — the EN entry's /activities/rainy-day-activities-bangkok
+  // and the where-to-play-golf-at-night FAQ have no KO translation, so they are
+  // replaced with the KO rainy-season guide and the KO simulator-accuracy FAQ.
+  // No dynamic-pricing twin exists for this slug (the get…Content() family
+  // covers only indoor-golf-cost / best-way-to-learn / corporate-event).
+  {
+    id: 'faq-3-ko',
+    page_type: 'faq',
+    slug: 'can-you-play-golf-in-bangkok-when-it-rains',
+    title: '방콕에서 비 오는 날 골프 칠 수 있나요? — 우기에도 즐기는 실내 골프',
+    meta_description:
+      '방콕은 비가 와도 골프를 칠 수 있어요. 실내 골프 시뮬레이터라면 날씨와 상관없이 냉방된 환경에서 18홀을 돌 수 있어요. LENGOLF는 BTS 칫롬역 바로 옆, 매일 9:00~23:00 영업하고 베이는 시간당 550바트 정도부터예요 (2026년 7월 기준).',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'general',
+    locale: 'ko',
+    related_slugs: ['/faq/how-much-does-indoor-golf-cost-in-bangkok', '/guide/golf-bangkok-rainy-season', '/golf'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        '비가 와도 실내 골프 시뮬레이터라면 방콕에서 한 라운드를 통째로 즐길 수 있어요. 방콕의 우기(5~10월)에는 거의 매일 거센 비가 내리지만, LENGOLF 같은 실내 시설은 일 년 내내 냉방이 되는 환경에서 문을 열어요. 비도 더위도 낙뢰로 인한 중단도 신경 쓰지 않고, 세계적으로 이름난 코스에서 18홀을 돌 수 있어요.',
+      answer_body:
+        '방콕의 연간 강수량은 평균 1,500mm이고, 5월부터 10월까지 가장 거센 비가 내려요. 우기가 아닌 시기에도 오후 뇌우는 드물지 않고요. 그래서 실외 골프 일정은 예측하기 어려워요. 낙뢰로 코스가 문을 닫기도 하고, 페어웨이가 물에 잠기기도 하고, 티타임이 취소되기도 해요.\n\n**날씨 문제를 해결하는 실내 골프**\n골프 시뮬레이터라면 날씨 문제는 완전히 사라져요. LENGOLF에서는 Bravo 기반 시뮬레이터로 플레이하는데, 실재하는 코스를 정확하게 재현해요 — 탄도도, 바람 조건도, 코스 레이아웃도 모두 시뮬레이션돼요. 완전히 실내이고 냉방이 되며, 매일 9:00~23:00에 이용하실 수 있어요.\n\n**비 오는 날 LENGOLF에서 할 수 있는 것**\n- Pebble Beach나 St Andrews 같은 코스에서 18홀 풀라운딩\n- 실시간 데이터(볼 스피드, 발사각, 스핀량)를 보며 스윙 연습\n- 니어핀이나 롱기스트 드라이브 챌린지로 친구들과 겨루기\n- 바의 칵테일과 음식을 즐기며 플레이\n\n베이 이용료는 최대 5명까지 시간당 550바트 정도부터예요. 위치는 The Mercury Ville, BTS 칫롬역(4번 출구)이고, 기본 골프 클럽은 무료로 포함돼요 (2026년 7월 기준).\n\n**여행 오신 분께**\n비 때문에 실외 골프 계획이 어그러졌을 때 대안으로 쓰기 좋은 곳이에요. BTS를 타고 칫롬까지 오시면 돼요. 예약 없이 오셔도 자리가 있으면 이용하실 수 있지만, booking.len.golf에서 예약하시면 확실하게 자리를 잡을 수 있어요.',
+      related_questions: [
+        { slug: 'how-much-does-indoor-golf-cost-in-bangkok', question: '방콕 스크린골프 요금 — 시간당 550~1,000바트 실내 골프 비용' },
+        { slug: 'how-accurate-are-golf-simulators', question: '골프 시뮬레이터 정확도는? — 실제 골프와 무엇이 다를까' },
+        { slug: '/guide/golf-bangkok-rainy-season', question: '방콕 우기 골프 — 무엇을 예상할까요' },
+      ],
+    },
+  },
+
+  // ─── ZH: can-you-play-golf-in-bangkok-when-it-rains ───
+  // Title/meta front-load the rainy-day query (曼谷 下雨 高尔夫) and keep the
+  // 室内高尔夫 hook. Every figure traces to the EN entry (1,500毫米, 5–10月,
+  // 9:00–23:00, 约550泰铢, 最多5人, 4号出口) and is rendered per the ZH
+  // conventions (泰铢 spelled out, half-width digits, – ranges, —— for asides);
+  // the LENGOLF bay price carries the as-of marker 截至2026年7月. Place and
+  // brand names stay in Latin per the ZH transliteration note (BTS Chidlom,
+  // The Mercury Ville, Bravo, Pebble Beach, St Andrews). related_* retargeted
+  // to ZH-translated pages only — the EN entry's
+  // /activities/rainy-day-activities-bangkok and the
+  // where-to-play-golf-at-night-in-bangkok FAQ have no ZH translation, so they
+  // are replaced with the ZH rainy-season guide and the ZH simulator-accuracy
+  // FAQ. No dynamic-pricing twin exists for this slug (the get…Content() family
+  // covers only indoor-golf-cost / best-way-to-learn / corporate-event).
+  {
+    id: 'faq-3-zh',
+    page_type: 'faq',
+    slug: 'can-you-play-golf-in-bangkok-when-it-rains',
+    title: '曼谷下雨天还能打高尔夫吗？ — 雨季照样能玩的室内高尔夫',
+    meta_description:
+      '曼谷下雨天照样能打高尔夫。室内高尔夫模拟器不受天气影响，在空调环境里打完18洞。LENGOLF位于BTS Chidlom，9:00–23:00营业，球位每小时约550泰铢起，截至2026年7月。',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'general',
+    locale: 'zh',
+    related_slugs: ['/faq/how-much-does-indoor-golf-cost-in-bangkok', '/guide/golf-bangkok-rainy-season', '/golf'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        '下雨天照样可以打——有室内高尔夫模拟器，在曼谷把一整轮球打完完全不成问题。曼谷的雨季（5–10月）几乎天天下大雨，但像LENGOLF这样的室内场馆全年在有空调的环境里营业。你不必操心下雨、酷热或打雷停打，就能在世界知名的球场上走完18洞。',
+      answer_body:
+        '曼谷年平均降雨量约1,500毫米，其中5月到10月雨势最猛。就算不在雨季，午后雷阵雨也很常见。这让室外高尔夫变得难以预料——打雷时球场会关闭，球道会积水，开球时间也可能被取消。\n\n**室内高尔夫就是解法**\n高尔夫模拟器把天气这个变数彻底拿掉了。在LENGOLF，你用的是由Bravo驱动的模拟器，能忠实还原真实球场——弹道、风况、球场布局都在模拟之列。全程室内、有空调，每天9:00–23:00都能打。\n\n**下雨天在LENGOLF可以做什么**\n- 在Pebble Beach、St Andrews这类球场打完整18洞\n- 看着实时数据练挥杆（球速、发射角、旋转速率）\n- 用最接近旗杆或最远开球的比赛跟朋友较量\n- 一边打球，一边享用吧台的鸡尾酒和餐食\n\n球位收费每小时约550泰铢起，最多可容纳5人，地点在The Mercury Ville，BTS Chidlom站4号出口。标准球杆免费提供，截至2026年7月。\n\n**给旅客的提示**\n如果下雨打乱了你的室外高尔夫计划，LENGOLF是个顺手的备选——坐BTS到Chidlom就到。不预约直接过来也行，有空位就能打；不过在booking.len.golf上预订能稳稳留住时段。',
+      related_questions: [
+        { slug: 'how-much-does-indoor-golf-cost-in-bangkok', question: '曼谷室内高尔夫收费 — 每小时550–1,000泰铢的价格全解析' },
+        { slug: 'how-accurate-are-golf-simulators', question: '高尔夫模拟器的精度如何？ — 和真实球场差在哪里' },
+        { slug: '/guide/golf-bangkok-rainy-season', question: '曼谷雨季打高尔夫 — 你需要了解的天气规律与开球时间' },
+      ],
+    },
+  },
+
   {
     id: 'faq-4',
     page_type: 'faq',
@@ -404,6 +528,121 @@ export const faqPages: FaqSeoPage[] = [
         { slug: 'can-beginners-play-golf-simulators', question: 'มือใหม่เล่นกอล์ฟซิมมูเลเตอร์ได้ไหม' },
         { slug: 'best-way-to-learn-golf-in-bangkok', question: 'วิธีที่ดีที่สุดในการเรียนกอล์ฟในกรุงเทพฯ คืออะไร' },
         { slug: 'how-long-does-simulator-golf-take', question: 'เล่นกอล์ฟซิมมูเลเตอร์หนึ่งรอบใช้เวลานานแค่ไหน' },
+      ],
+    },
+  },
+
+  // ─── JA: do-i-need-experience-to-play-golf-simulator ───
+  // Placed after the TH twin. Title is deliberately distinct from the shipped
+  // faq-10-ja (初心者でも楽しめる？) and the JA guide
+  // golf-simulator-for-non-golfers-guide — it leads with ゴルフ経験がなくても.
+  // Every figure traces to the EN entry (2分, 約半数, 最大5名, 約550THB,
+  // 4番出口); the bay price carries （2026年7月現在）. related_* retargeted to
+  // JA-translated pages — the EN entry's what-to-wear-to-indoor-golf-bar and
+  // how-long-does-simulator-golf-take FAQs have no JA translation, so they are
+  // replaced with the JA non-golfers guide and the JA simulator-accuracy FAQ.
+  {
+    id: 'faq-4-ja',
+    page_type: 'faq',
+    slug: 'do-i-need-experience-to-play-golf-simulator',
+    title: 'ゴルフ経験がなくてもシミュレーターで遊べる？ — 必要な準備と当日の流れ',
+    meta_description:
+      'ゴルフ経験がなくてもゴルフシミュレーターは楽しめます。スイング計測もスコア計算も機械が行い、スタッフが数分で使い方をご案内。クラブは無料、LENGOLFのベイは最大5名で1時間約550THBから（2026年7月現在）。',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'general',
+    locale: 'ja',
+    related_slugs: ['/faq/can-beginners-play-golf-simulators', '/guide/golf-simulator-for-non-golfers-guide', '/golf'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        'ゴルフシミュレーターを楽しむのに、ゴルフの経験は必要ありません。今どきのシミュレーターは、まったく初めての方でも楽しめるように作られています。スイングは自動で計測され、弾道はアニメーションで表示され、スコアの計算もすべて任せられます。LENGOLFのような施設なら、スタッフが2分ほどで始め方をご案内し、ゴルフクラブは無料でお貸ししています。',
+      answer_body:
+        'ゴルフシミュレーターは、初心者にやさしいアクティビティの代表格です。経験が要らない理由を挙げてみます。\n\n**機械が仕事をしてくれる**\nシミュレーターはセンサーとカメラでスイングを計測します。あなたはボールを打つだけ——どこへ飛んだか、どのくらい飛んだか、何が起きたかは画面が教えてくれます。ゴルフのルールもマナーもスコアの数え方も、覚える必要はありません。すべてシステムが処理します。\n\n**うまく打てなくても面白い**\n実際のコースでは、ミスショットのたびにボールを探して長い距離を歩くことになります。シミュレーターゴルフなら、そうした間延びがありません。横に飛んでも画面がリセットされ、すぐ次の1球へ。多くの初心者の方が、この即時フィードバックのおもしろさに引き込まれます。1球ごとに自分の変化が見えるからです。\n\n**LENGOLFでの流れ**\n- クラブの握り方と基本のスイングは、スタッフがご案内します\n- 標準クラブは無料で貸し出し（手ぶらでお越しいただけます）\n- ベイは個室感覚——他のお客様の視線を気にせずに済みます\n- ニアピンやドラコンといったゲームに技術は不要。必要なのは盛り上がる気持ちだけ\n- バーのような雰囲気なので、堅苦しくならず社交の場として楽しめます\n\n**実際にどんな人が来ている？**\nLENGOLFでは、ご来店の約半数がゴルフ経験のほとんどない方です。友人同士のグループ、デートのカップル、ご家族連れが、クラブを握ったことのないまま日常的に来店されています。ご希望でなければ、レッスンではなく、あくまでアクティビティとして楽しめます。\n\nベイのご利用料金は最大5名で1時間約550THB（2026年7月現在）。場所はザ・マーキュリービル、BTSチットロム駅（4番出口）です。',
+      related_questions: [
+        { slug: 'can-beginners-play-golf-simulators', question: 'ゴルフシミュレーターは初心者でも楽しめる？ — 未経験から始める手順' },
+        { slug: '/guide/golf-simulator-for-non-golfers-guide', question: 'ゴルフシミュレーターは未経験でも楽しめる？ — 初心者のための完全ガイド' },
+        { slug: 'how-accurate-are-golf-simulators', question: 'ゴルフシミュレーターの精度は？ — 実際のゴルフとの違いを正直に解説' },
+      ],
+    },
+  },
+
+  // ─── KO: do-i-need-experience-to-play-golf-simulator ───
+  // Placed after the JA twin. Title is deliberately distinct from the shipped
+  // faq-10-ko (초보자도 즐길 수 있을까) and from the KO guide
+  // golf-simulator-for-non-golfers-guide — it leads with 골프 경험이 없어도.
+  // Every figure traces to the EN entry (2분, 절반 정도, 최대 5명, 550바트,
+  // 4번 출구); the bay price carries the as-of marker (2026년 7월 기준). KO
+  // transliterates the station (BTS 칫롬역) but keeps The Mercury Ville in
+  // Latin. related_* retargeted to KO-translated pages — the EN entry's
+  // what-to-wear-to-indoor-golf-bar and how-long-does-simulator-golf-take FAQs
+  // have no KO translation, so they are replaced with the KO non-golfers guide
+  // and the KO simulator-accuracy FAQ.
+  {
+    id: 'faq-4-ko',
+    page_type: 'faq',
+    slug: 'do-i-need-experience-to-play-golf-simulator',
+    title: '골프 경험이 없어도 시뮬레이터를 즐길 수 있나요? — 준비물과 이용 흐름',
+    meta_description:
+      '골프 경험이 없어도 골프 시뮬레이터는 즐길 수 있어요. 스윙 측정도 점수 계산도 기계가 맡고, 스태프가 몇 분이면 사용법을 알려드려요. 클럽은 무료, LENGOLF 베이는 최대 5명까지 시간당 550바트 정도부터예요 (2026년 7월 기준).',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'general',
+    locale: 'ko',
+    related_slugs: ['/faq/can-beginners-play-golf-simulators', '/guide/golf-simulator-for-non-golfers-guide', '/golf'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        '골프 시뮬레이터를 즐기는 데 골프 경험은 필요 없어요. 요즘 시뮬레이터는 처음 잡아 보는 분도 재미있게 칠 수 있도록 만들어져 있어요. 스윙은 자동으로 측정되고, 탄도는 화면에 그려지며, 점수 계산도 전부 맡길 수 있어요. LENGOLF 같은 시설이라면 스태프가 2분 정도면 시작하는 법을 안내해 드리고, 골프 클럽은 무료로 빌려드려요.',
+      answer_body:
+        '골프 시뮬레이터는 초보자에게 가장 친절한 활동 중 하나예요. 경험이 필요 없는 이유를 정리해 볼게요.\n\n**기계가 일을 대신해요**\n시뮬레이터는 센서와 카메라로 스윙을 측정해요. 여러분은 공을 치기만 하면 되고, 어디로 갔는지, 얼마나 날아갔는지, 무슨 일이 있었는지는 화면이 알려줘요. 골프 규칙도 매너도 점수 세는 법도 몰라도 괜찮아요. 시스템이 전부 처리해요.\n\n**잘 못 쳐도 재미있어요**\n실제 코스에서는 한 번 빗맞을 때마다 공을 찾아 한참을 걸어야 해요. 시뮬레이터 골프에는 그런 늘어짐이 없어요. 옆으로 날아가도 화면이 초기화되고 바로 다음 한 구를 칠 수 있어요. 많은 초보자가 이 즉각적인 피드백에 빠져들어요. 한 구마다 자신이 나아지는 게 보이니까요.\n\n**LENGOLF에서는 이렇게 진행돼요**\n- 클럽 잡는 법과 기본 스윙은 스태프가 알려드려요\n- 기본 클럽은 무료로 대여해 드려요 (빈손으로 오셔도 돼요)\n- 베이는 독립된 공간이라, 다른 손님의 시선을 신경 쓸 일이 없어요\n- 니어핀이나 롱기스트 드라이브 같은 게임에는 실력이 필요 없어요. 필요한 건 즐기려는 마음뿐이에요\n- 바 같은 분위기라 딱딱하지 않고, 어울려 노는 자리로 즐길 수 있어요\n\n**실제로 어떤 분들이 오시나요**\nLENGOLF를 찾아 주시는 분의 절반 정도는 골프 경험이 거의 없는 분들이에요. 친구들끼리, 데이트하는 커플, 가족 단위 손님이 클럽을 한 번도 잡아 본 적 없이 일상적으로 오세요. 원하지 않으신다면 레슨이 아니라, 그냥 놀거리로 즐기시면 돼요.\n\n베이 이용료는 최대 5명까지 시간당 550바트 정도예요. 위치는 The Mercury Ville, BTS 칫롬역(4번 출구)이에요 (2026년 7월 기준).',
+      related_questions: [
+        { slug: 'can-beginners-play-golf-simulators', question: '스크린골프, 초보자도 즐길 수 있을까? — 처음 시작하는 방법' },
+        { slug: '/guide/golf-simulator-for-non-golfers-guide', question: '골프를 안 쳐도 골프 시뮬레이터를 즐길 수 있을까? — 완벽 가이드' },
+        { slug: 'how-accurate-are-golf-simulators', question: '골프 시뮬레이터 정확도는? — 실제 골프와 무엇이 다를까' },
+      ],
+    },
+  },
+
+  // ─── ZH: do-i-need-experience-to-play-golf-simulator ───
+  // Placed after the KO twin. Title is deliberately distinct from the shipped
+  // faq-10-zh (零基础也能玩高尔夫模拟器吗？) and from the ZH guide
+  // golf-simulator-for-non-golfers-guide (非球友能享受高尔夫模拟器吗) — it leads
+  // with 没打过高尔夫. Every figure traces to the EN entry (2分钟, 大约一半,
+  // 最多5人, 约550泰铢, 4号出口); the bay price carries the as-of marker
+  // 截至2026年7月. Rendered per the ZH conventions (泰铢, half-width digits,
+  // —— for asides, 你 register). related_* retargeted to ZH-translated pages —
+  // the EN entry's what-to-wear-to-indoor-golf-bar and
+  // how-long-does-simulator-golf-take FAQs have no ZH translation, so they are
+  // replaced with the ZH non-golfers guide and the ZH simulator-accuracy FAQ.
+  {
+    id: 'faq-4-zh',
+    page_type: 'faq',
+    slug: 'do-i-need-experience-to-play-golf-simulator',
+    title: '没打过高尔夫也能玩模拟器吗？ — 要准备什么、当天怎么进行',
+    meta_description:
+      '没有高尔夫经验也能玩高尔夫模拟器。挥杆测量和计分都交给机器，工作人员几分钟就能教会你上手。球杆免费提供，LENGOLF球位最多5人、每小时约550泰铢，截至2026年7月。',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'general',
+    locale: 'zh',
+    related_slugs: ['/faq/can-beginners-play-golf-simulators', '/guide/golf-simulator-for-non-golfers-guide', '/golf'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        '不需要，玩高尔夫模拟器完全不用任何高尔夫经验。如今的模拟器就是为从没打过的人设计的——挥杆自动记录，弹道用动画呈现，计分也全部代劳。在LENGOLF这样的场馆，工作人员大约2分钟就能教你上手，高尔夫球杆免费提供。',
+      answer_body:
+        '高尔夫模拟器是最照顾新手的活动之一。为什么不需要经验，理由如下。\n\n**机器帮你把活儿干了**\n模拟器用传感器和摄像头记录你的挥杆。你只要把球打出去，球飞去哪里、飞了多远、发生了什么，屏幕都会告诉你。高尔夫的规则、礼仪、计分方式统统不用懂，系统全部替你处理。\n\n**打得不好也一样有意思**\n在真实球场上打歪一杆，就得走很远去找球；模拟器高尔夫没有这种空档。球飞到旁边去了，画面一重置，马上打下一颗。多数初学者会迷上这种即时反馈——因为一杆一杆都能看见自己的变化。\n\n**在LENGOLF会是什么样**\n- 怎么握杆、怎么做基本挥杆，工作人员会带你上手\n- 标准球杆免费提供（空手来就行）\n- 球位是独立空间，不必担心被旁人盯着看\n- 最接近旗杆、最远开球这类小游戏不看技术，只看兴致\n- 吧台式的氛围让它更像聚会，而不是一堂正经的运动课\n\n**实际上都是些什么人在打**\n在LENGOLF，大约一半的客人几乎没有或完全没有高尔夫经验。朋友组队、约会的情侣、家庭出游，经常有人是从没握过球杆就来了。除非你自己想要，它就是一项娱乐活动，而不是运动课。\n\n球位收费每小时约550泰铢，最多可容纳5人，地点在The Mercury Ville，BTS Chidlom站4号出口，截至2026年7月。',
+      related_questions: [
+        { slug: 'can-beginners-play-golf-simulators', question: '零基础也能玩高尔夫模拟器吗？ — 初学者上手指南' },
+        { slug: '/guide/golf-simulator-for-non-golfers-guide', question: '非球友能享受高尔夫模拟器吗 — 零基础完整入门指南' },
+        { slug: 'how-accurate-are-golf-simulators', question: '高尔夫模拟器的精度如何？ — 和真实球场差在哪里' },
       ],
     },
   },
@@ -1118,6 +1357,124 @@ export const faqPages: FaqSeoPage[] = [
       ],
     },
   },
+
+  // ─── JA: should-i-bring-golf-clubs-to-thailand-or-rent ───
+  // Title front-loads the JA rental cluster (ゴルフクラブレンタル) and is kept
+  // distinct from the shipped JA guide /guide/bring-golf-clubs-thailand-or-rent.
+  // All figures trace to the EN entry (片道2,000〜6,000THB以上, 約150THB/時,
+  // 約400THB/4時間, 約1,200THB/日, 約500THB配送, 500〜1,500THB/ラウンド) and are
+  // rendered per the JA currency ruling (THB, half-width digits, 〜 ranges);
+  // the LENGOLF prices carry （2026年7月現在）. Majesty is glossed once with
+  // katakana on first use. related_* are all JA-translated targets — the two
+  // FAQ twins are the batch-1 can-i-rent… / indoor-golf-cost entries plus the
+  // in-batch cost-to-fly entry below.
+  {
+    id: 'faq-12-ja',
+    page_type: 'faq',
+    slug: 'should-i-bring-golf-clubs-to-thailand-or-rent',
+    title: 'ゴルフクラブレンタルか持参か — タイ旅行で得なのはどちら？',
+    meta_description:
+      'タイでのゴルフクラブレンタルは、持参より安く手軽です。ゴルフバッグの航空手数料は片道2,000〜6,000THB以上。LENGOLFのレンタルは1時間約150THB、1日約1,200THBから（2026年7月現在）。',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'rental',
+    locale: 'ja',
+    related_slugs: ['/faq/can-i-rent-golf-clubs-in-bangkok', '/faq/cost-to-fly-with-golf-clubs-to-thailand', '/golf-club-rental'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        '多くの旅行者にとって、タイでゴルフクラブをレンタルするほうが、自分のクラブを持ち込むより安く、手間もかかりません。ゴルフバッグにかかる航空会社の手数料は片道2,000〜6,000THB以上、これに大型手荷物を運ぶ煩わしさが加わります。バンコクではレンタルクラブが広く手配でき、LENGOLFならCallawayやMajesty（マジェスティ）のプレミアムセットが1時間約150THB、1日約1,200THBからご利用いただけます（2026年7月現在）。',
+      answer_body:
+        '判断の材料になるよう、実際的な比較を挙げてみます。\n\n**レンタルが向いている理由**\n- 航空会社の受託手荷物料金がかからない（片道2,000〜6,000THB以上の節約）\n- 輸送中の破損リスクがない（ハードケースは重量もコストも増やします）\n- 空港、タクシー、ホテルとゴルフバッグを引きずって回らずに済む\n- バンコクではどこでも質の良いレンタルクラブが手配できる\n- 気になる道具を、購入せずに試せる\n\n**自分のクラブを持参したほうがよい場合**\n- すでに自分のセッティングが仕上がっている（距離感も打感も一定）\n- 1週間以上の滞在で何ラウンドもプレーする\n- 利用する航空会社の手荷物許容量にスポーツ用具が含まれている\n- レンタルでは代えのきかない上級モデルを使っている\n\n**バンコクのレンタルの選択肢**\n\n*LENGOLF（シミュレーター利用なら最もお得）:*\n- ベイのご予約すべてに標準クラブが無料で付属\n- プレミアムのCallaway Warbird（メンズ）／Majesty Shuttle（レディース）: 1時間約150THB、4時間約400THB、1日約1,200THB\n- バンコク市内どこへでも当日配送: 約500THB\n\n*ゴルフ場:*\n- 多くのコースが1ラウンド500〜1,500THBでセットを貸し出し\n- 品質の幅は大きく、年式の古いセットや傷んだセットしか置いていないコースもあります\n\n**おすすめの判断基準**\n- 気軽なラウンドが1〜2回なら、レンタル。節約と身軽さのメリットが、自分のクラブで打つ利点を上回ります。\n- 1週間で4ラウンド以上を本気で回るなら、持参も検討。ただし航空会社の手数料は計算に入れてください。\n- シミュレーターだけなら、迷わずレンタル。LENGOLFでは標準クラブが無料で付いています。\n\nLENGOLFはザ・マーキュリービル、BTSチットロム駅（4番出口）にあります。クラブとベイのご予約はbooking.len.golfから。',
+      related_questions: [
+        { slug: 'cost-to-fly-with-golf-clubs-to-thailand', question: 'ゴルフクラブを飛行機で運ぶ費用は？ — タイ旅行はレンタルとどちらが安いか' },
+        { slug: 'can-i-rent-golf-clubs-in-bangkok', question: 'バンコクでゴルフクラブはレンタルできる？ — 料金と受け取り方' },
+        { slug: 'how-much-does-indoor-golf-cost-in-bangkok', question: 'バンコクのインドアゴルフ料金は？ — 1時間550〜1,000THBの相場と内訳' },
+      ],
+    },
+  },
+
+  // ─── KO: should-i-bring-golf-clubs-to-thailand-or-rent ───
+  // Title front-loads the KO rental cluster (골프 클럽 대여) and is kept distinct
+  // from the shipped KO guide /guide/bring-golf-clubs-thailand-or-rent
+  // (클럽 가져갈까 현지 렌탈할까). All figures trace to the EN entry (편도
+  // 2,000~6,000바트 이상, 시간당 약 150바트, 4시간 약 400바트, 하루 약 1,200바트,
+  // 약 500바트 배송, 1라운드 500~1,500바트) and are rendered per the KO currency
+  // ruling (바트, half-width digits, ~ ranges); the LENGOLF prices carry the
+  // as-of marker (2026년 7월 기준). KO transliterates the station (BTS 칫롬역)
+  // but keeps The Mercury Ville and the brand names in Latin. related_* are all
+  // KO-translated targets — the batch-1 can-i-rent… / indoor-golf-cost entries
+  // plus the in-batch cost-to-fly entry below.
+  {
+    id: 'faq-12-ko',
+    page_type: 'faq',
+    slug: 'should-i-bring-golf-clubs-to-thailand-or-rent',
+    title: '골프 클럽 대여할까 가져갈까 — 태국 여행에서 이득인 쪽은?',
+    meta_description:
+      '태국에서는 골프 클럽 대여가 가져오는 것보다 저렴하고 편해요. 골프백 항공 수수료는 편도 2,000~6,000바트 이상. LENGOLF 대여는 시간당 약 150바트, 하루 약 1,200바트부터예요 (2026년 7월 기준).',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'rental',
+    locale: 'ko',
+    related_slugs: ['/faq/can-i-rent-golf-clubs-in-bangkok', '/faq/cost-to-fly-with-golf-clubs-to-thailand', '/golf-club-rental'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        '대부분의 여행자에게는 태국에서 골프 클럽을 대여하는 편이 내 클럽을 가져오는 것보다 저렴하고 편해요. 골프백에 붙는 항공사 수수료는 편도 2,000~6,000바트 이상이고, 여기에 대형 수하물을 끌고 다니는 번거로움까지 더해져요. 방콕에서는 대여 클럽을 어렵지 않게 구할 수 있고, LENGOLF라면 Callaway나 Majesty 프리미엄 세트를 시간당 약 150바트, 하루 약 1,200바트부터 이용하실 수 있어요 (2026년 7월 기준).',
+      answer_body:
+        '판단에 도움이 되도록 현실적인 비교를 정리해 볼게요.\n\n**대여가 나은 이유**\n- 항공사 수하물 요금이 들지 않아요 (편도 2,000~6,000바트 이상 절약)\n- 운송 중 파손 위험이 없어요 (하드케이스는 무게도 비용도 늘려요)\n- 공항, 택시, 호텔로 골프백을 끌고 다니지 않아도 돼요\n- 방콕에서는 어디서나 품질 좋은 대여 클럽을 구할 수 있어요\n- 마음에 두고 있던 장비를 구입 없이 시험해 볼 수 있어요\n\n**내 클럽을 가져오는 편이 나은 경우**\n- 이미 자기 세팅이 잡혀 있는 경우 (거리감도 타감도 일정해요)\n- 일주일 이상 머물며 여러 라운드를 치는 경우\n- 이용하는 항공사의 수하물 허용량에 스포츠 장비가 포함되는 경우\n- 대여로는 대체하기 어려운 상급 모델을 쓰는 경우\n\n**방콕의 대여 선택지**\n\n*LENGOLF (시뮬레이터 이용이라면 가장 알뜰):*\n- 베이 예약마다 기본 클럽이 무료로 포함돼요\n- 프리미엄 Callaway Warbird(남성용) / Majesty Shuttle(여성용): 시간당 약 150바트, 4시간 약 400바트, 하루 약 1,200바트\n- 방콕 시내 어디든 당일 배송: 약 500바트\n\n*골프장:*\n- 대부분의 코스가 1라운드에 500~1,500바트로 세트를 빌려줘요\n- 품질 편차가 커서, 연식이 오래됐거나 상한 세트만 갖춘 코스도 있어요\n\n**추천하는 판단 기준**\n- 가벼운 라운딩이 1~2회라면 대여하세요. 절약과 홀가분함이 내 클럽으로 치는 이점을 넘어서요.\n- 일주일에 4라운드 이상을 진지하게 도신다면 가져오는 것도 고려해 보세요. 다만 항공사 수수료는 계산에 넣으셔야 해요.\n- 시뮬레이터만 이용하신다면 망설이지 말고 대여하세요. LENGOLF에서는 기본 클럽이 무료로 포함돼요.\n\nLENGOLF는 The Mercury Ville, BTS 칫롬역(4번 출구)에 있어요. 클럽과 베이 예약은 booking.len.golf에서 하실 수 있어요.',
+      related_questions: [
+        { slug: 'cost-to-fly-with-golf-clubs-to-thailand', question: '골프 클럽 항공 운송 비용은? — 태국 여행, 대여와 비교하면' },
+        { slug: 'can-i-rent-golf-clubs-in-bangkok', question: '방콕에서 골프 클럽 대여되나요? — 요금과 수령 방법' },
+        { slug: 'how-much-does-indoor-golf-cost-in-bangkok', question: '방콕 스크린골프 요금 — 시간당 550~1,000바트 실내 골프 비용' },
+      ],
+    },
+  },
+
+  // ─── ZH: should-i-bring-golf-clubs-to-thailand-or-rent ───
+  // Title front-loads the ZH rental cluster (高尔夫球杆租借) and stays distinct
+  // from the shipped ZH guide /guide/bring-golf-clubs-thailand-or-rent
+  // (泰国高尔夫之旅，自带球杆还是当地租借？判断指南). All figures trace to the EN
+  // entry (单程2,000–6,000泰铢以上, 每小时约150泰铢, 4小时约400泰铢,
+  // 整日约1,200泰铢, 约500泰铢配送, 一轮500–1,500泰铢) and follow the ZH currency
+  // ruling (泰铢, half-width digits, – ranges); the LENGOLF prices carry the
+  // as-of marker 截至2026年7月 in the intro, mirroring the JA/KO placement.
+  // Place/brand names stay in Latin (The Mercury Ville, BTS Chidlom, Callaway,
+  // Majesty). related_* are all ZH-translated targets — the batch-1
+  // can-i-rent… / indoor-golf-cost entries plus the in-batch cost-to-fly entry
+  // below.
+  {
+    id: 'faq-12-zh',
+    page_type: 'faq',
+    slug: 'should-i-bring-golf-clubs-to-thailand-or-rent',
+    title: '高尔夫球杆租借还是自带？ — 泰国旅行哪种更省钱省事',
+    meta_description:
+      '对多数旅客来说，在泰国租高尔夫球杆比自带更便宜也更省事。球包的航空费用单程2,000–6,000泰铢以上，LENGOLF租借每小时约150泰铢、整日约1,200泰铢起，截至2026年7月。',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'rental',
+    locale: 'zh',
+    related_slugs: ['/faq/can-i-rent-golf-clubs-in-bangkok', '/faq/cost-to-fly-with-golf-clubs-to-thailand', '/golf-club-rental'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        '对大多数旅客来说，在泰国租高尔夫球杆比带自己的更便宜，也更方便。球包要付的航空公司费用单程就是2,000–6,000泰铢以上，还得额外应付超大件行李的麻烦。曼谷各处都能租到球杆——在LENGOLF，Callaway或Majesty的高级套装每小时约150泰铢起，整日约1,200泰铢，截至2026年7月。',
+      answer_body:
+        '给你一份实用的对比，方便自己做判断。\n\n**租借更划算的理由**\n- 省下航空公司的行李费（单程能省2,000–6,000泰铢以上）\n- 不必担心运输途中的损坏（硬壳箱本身既加重量又加成本）\n- 不用拖着球包穿过机场、出租车和酒店\n- 曼谷各处都能租到品质不错的球杆\n- 想试的装备可以先用用看，不必先买下来\n\n**自带球杆更合适的情况**\n- 你的配置已经调顺了，距离和手感都很稳定\n- 你要在一周或更长的时间里打好几场\n- 你搭的航空公司把运动器材算进了行李额度里\n- 你手上那套是租借替代不了的高阶球杆\n\n**曼谷的租借选择**\n\n*LENGOLF（打模拟器最划算）：*\n- 每次球位预订都免费附带标准球杆\n- 高级Callaway Warbird（男士）／Majesty Shuttle（女士）：每小时约150泰铢，4小时约400泰铢，整日约1,200泰铢\n- 曼谷市内当日配送：约500泰铢\n\n*高尔夫球场：*\n- 多数球场一轮500–1,500泰铢出租整套球杆\n- 品质差异很大，有些球场只有过时或磨损严重的套装\n\n**我们的建议**\n- 只打1–2场轻松的球？租。省下的钱和省下的麻烦，比用自己球杆的好处更实在。\n- 一周里要认真打4场以上？可以考虑自带，但记得把航空公司的费用算进去。\n- 只玩模拟器？一律租借。LENGOLF的标准球杆本来就免费包含。\n\nLENGOLF位于The Mercury Ville，BTS Chidlom站4号出口。球杆和球位都可以在booking.len.golf上预订。',
+      related_questions: [
+        { slug: 'cost-to-fly-with-golf-clubs-to-thailand', question: '把高尔夫球杆带上飞机要花多少钱？ — 飞泰国自带与租借对比' },
+        { slug: 'can-i-rent-golf-clubs-in-bangkok', question: '曼谷能租到高尔夫球杆吗？ — 收费、球杆套装与配送方式' },
+        { slug: 'how-much-does-indoor-golf-cost-in-bangkok', question: '曼谷室内高尔夫收费 — 每小时550–1,000泰铢的价格全解析' },
+      ],
+    },
+  },
+
   {
     id: 'faq-13',
     page_type: 'faq',
@@ -1145,6 +1502,123 @@ export const faqPages: FaqSeoPage[] = [
       ],
     },
   },
+
+  // ─── JA: cost-to-fly-with-golf-clubs-to-thailand ───
+  // The head of the title matches the real intent of this page (ゴルフクラブ 飛行機
+  // 費用) rather than forcing the レンタル cluster into first position; レンタル
+  // is carried in the descriptive tail, which is where the comparison actually
+  // lives. Airline names, allowances and fees all trace to the EN entry
+  // (30kg/40kg, 約350THB/kg, 12〜18kg, 4,200〜6,300THB … ) and USD is rendered
+  // 米ドル per the glossary. LENGOLF's 約1,200THB/日 and 約500THB delivery carry
+  // （2026年7月現在）. related_* are all JA-translated targets.
+  {
+    id: 'faq-13-ja',
+    page_type: 'faq',
+    slug: 'cost-to-fly-with-golf-clubs-to-thailand',
+    title: 'ゴルフクラブを飛行機で運ぶ費用は？ — タイ旅行はレンタルとどちらが安いか',
+    meta_description:
+      'ゴルフクラブを飛行機でタイへ運ぶ費用は、航空会社により片道2,000〜6,000THB以上。LCCが最も高くつきます。バンコクでのレンタルなら1日約1,200THBからで、往復の手数料より安く済むことも（2026年7月現在）。',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'rental',
+    locale: 'ja',
+    related_slugs: ['/faq/should-i-bring-golf-clubs-to-thailand-or-rent', '/faq/can-i-rent-golf-clubs-in-bangkok', '/golf-club-rental'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        'ゴルフクラブを飛行機でタイへ運ぶ費用は、航空会社と座席クラスにもよりますが、片道2,000〜6,000THB以上（55〜170米ドル）が目安です。フルサービス系の航空会社にはスポーツ用具を受託手荷物に含めるところがある一方、LCCは高額な大型手荷物料金を課します。短期の旅行なら、バンコクでクラブをレンタルするほうが往復の航空手数料より安く済むことも少なくありません。',
+      answer_body:
+        'タイ路線でゴルフバッグにかかる料金の目安を、航空会社のタイプ別にまとめます。\n\n**フルサービス系航空会社**\n- **Thai Airways:** 標準の重量許容範囲内（エコノミーで通常30kg）であれば、ゴルフバッグを受託手荷物として預けられます。重量内なら追加料金はなし。超過分は1kgごとに課金されます。\n- **Singapore Airlines／Cathay Pacific／Emirates:** 方針はおおむね同様で、スポーツ用具は受託手荷物の総重量に算入されます。一般にエコノミー30kg、ビジネス40kgです。\n- **Japan Airlines／ANA:** 国際線では、ゴルフバッグは受託手荷物の許容量に含まれるのが一般的です。\n\n**LCC（料金は高め）**\n- **AirAsia:** スポーツ用具の料金は1kgあたり約350THB。ゴルフバッグは12〜18kgが一般的なので、片道4,200〜6,300THBを見込んでおきましょう。\n- **Thai VietJet:** 大型手荷物料金は条件により幅がありますが、ゴルフバッグで片道3,000〜5,000THBが目安です。\n- **Scoot／Nok Air:** 同程度の水準で、片道2,500〜5,000THBです。\n\n**見落としがちな追加コスト**\n- クラブ用のハードケース: 購入に5,000〜15,000THB（破損を防ぐためおすすめ）\n- 空港からの移動: 大型の荷物には、大きめのタクシーやミニバンが必要になることがあります\n- 破損のリスク: 航空会社がクラブを破損させることは時折あり、補償の請求は簡単ではありません\n\n**持参とレンタルの費用比較**\n5日間の旅行で2ラウンドする場合:\n- 持参: 航空手数料が往復4,000〜12,000THB、これにハードケース代が加わります\n- ゴルフ場でレンタル: 2ラウンド合計で1,000〜3,000THB\n- LENGOLFでプレミアムクラブをレンタル: 1日約1,200THB（CallawayまたはMajesty（マジェスティ）のフルセット）、バンコク市内の当日配送は約500THB（2026年7月現在）\n\n多くの旅行者にとって、費用の面ではレンタルに軍配が上がります。',
+      related_questions: [
+        { slug: 'should-i-bring-golf-clubs-to-thailand-or-rent', question: 'ゴルフクラブレンタルか持参か — タイ旅行で得なのはどちら？' },
+        { slug: 'can-i-rent-golf-clubs-in-bangkok', question: 'バンコクでゴルフクラブはレンタルできる？ — 料金と受け取り方' },
+        { slug: 'how-much-does-indoor-golf-cost-in-bangkok', question: 'バンコクのインドアゴルフ料金は？ — 1時間550〜1,000THBの相場と内訳' },
+      ],
+    },
+  },
+
+  // ─── KO: cost-to-fly-with-golf-clubs-to-thailand ───
+  // The head of the title matches the real intent of this page (골프 클럽 항공
+  // 운송 비용) rather than forcing the 대여 cluster into first position; 대여 is
+  // carried in the descriptive tail, which is where the comparison actually
+  // lives. It also stays distinct from the shipped KO guide
+  // /guide/golf-club-baggage-fees-airlines-bangkok (골프백 수하물 요금). Airline
+  // names, allowances and fees all trace to the EN entry (30kg/40kg, kg당 약
+  // 350바트, 12~18kg, 4,200~6,300바트 …) and USD is rendered 달러 per the
+  // glossary. LENGOLF's 하루 약 1,200바트 and 약 500바트 delivery carry the as-of
+  // marker (2026년 7월 기준). related_* are all KO-translated targets.
+  {
+    id: 'faq-13-ko',
+    page_type: 'faq',
+    slug: 'cost-to-fly-with-golf-clubs-to-thailand',
+    title: '골프 클럽 항공 운송 비용은? — 태국 여행, 대여와 비교하면',
+    meta_description:
+      '골프 클럽을 비행기로 태국까지 옮기는 비용은 항공사에 따라 편도 2,000~6,000바트 이상이에요. 저비용 항공사가 가장 비싸요. 방콕에서 빌리면 하루 약 1,200바트부터라 왕복 수수료보다 저렴할 수 있어요 (2026년 7월 기준).',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'rental',
+    locale: 'ko',
+    related_slugs: ['/faq/should-i-bring-golf-clubs-to-thailand-or-rent', '/faq/can-i-rent-golf-clubs-in-bangkok', '/golf-club-rental'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        '골프 클럽을 비행기로 태국까지 옮기는 비용은 항공사와 좌석 등급에 따라 다르지만, 편도 2,000~6,000바트 이상(55~170달러)이 기준이에요. 풀서비스 항공사 중에는 스포츠 장비를 위탁 수하물에 포함해 주는 곳이 있는 반면, 저비용 항공사는 대형 수하물 요금을 비싸게 받아요. 짧은 여행이라면 방콕에서 클럽을 빌리는 편이 왕복 항공 수수료보다 저렴한 경우가 많아요.',
+      answer_body:
+        '태국 노선에서 골프백에 드는 요금을 항공사 유형별로 정리해 볼게요.\n\n**풀서비스 항공사**\n- **Thai Airways:** 표준 무게 허용 범위(이코노미는 보통 30kg) 안이라면 골프백을 위탁 수하물로 부칠 수 있어요. 무게 안이면 추가 요금은 없고, 초과분은 kg당 부과돼요.\n- **Singapore Airlines / Cathay Pacific / Emirates:** 방침은 대체로 같아서, 스포츠 장비가 위탁 수하물 총중량에 포함돼요. 보통 이코노미 30kg, 비즈니스 40kg이에요.\n- **Japan Airlines / ANA:** 국제선에서는 골프백이 위탁 수하물 허용량에 포함되는 것이 일반적이에요.\n\n**저비용 항공사 (요금이 더 높아요)**\n- **AirAsia:** 스포츠 장비 요금이 kg당 약 350바트예요. 골프백은 보통 12~18kg이니 편도 4,200~6,300바트를 예상하시면 돼요.\n- **Thai VietJet:** 대형 수하물 요금은 조건에 따라 다르지만, 골프백 기준 편도 3,000~5,000바트가 일반적이에요.\n- **Scoot / Nok Air:** 비슷한 수준으로 편도 2,500~5,000바트예요.\n\n**놓치기 쉬운 추가 비용**\n- 클럽용 하드케이스: 구입에 5,000~15,000바트 (파손을 막기 위해 권해 드려요)\n- 공항 이동: 큰 짐 때문에 넉넉한 택시나 밴이 필요할 수 있어요\n- 파손 위험: 항공사가 클럽을 손상시키는 일은 가끔 있고, 보상 청구는 간단하지 않아요\n\n**가져가기와 대여, 비용 비교**\n5일 일정에 2라운드를 치는 경우를 계산해 보면 다음과 같아요.\n- 가져가기: 항공 수수료가 왕복 4,000~12,000바트, 여기에 하드케이스 값이 더해져요\n- 골프장에서 대여: 2라운드 합쳐 1,000~3,000바트\n- LENGOLF에서 프리미엄 클럽 대여: 하루 약 1,200바트 (Callaway 또는 Majesty 풀세트), 방콕 시내 당일 배송은 약 500바트 (2026년 7월 기준)\n\n대부분의 여행자에게는 비용 면에서 대여가 확실히 유리해요.',
+      related_questions: [
+        { slug: 'should-i-bring-golf-clubs-to-thailand-or-rent', question: '골프 클럽 대여할까 가져갈까 — 태국 여행에서 이득인 쪽은?' },
+        { slug: 'can-i-rent-golf-clubs-in-bangkok', question: '방콕에서 골프 클럽 대여되나요? — 요금과 수령 방법' },
+        { slug: 'how-much-does-indoor-golf-cost-in-bangkok', question: '방콕 스크린골프 요금 — 시간당 550~1,000바트 실내 골프 비용' },
+      ],
+    },
+  },
+
+  // ─── ZH: cost-to-fly-with-golf-clubs-to-thailand ───
+  // The head of the title matches the real intent of this page (球杆 飞机 费用)
+  // rather than forcing the 租借 cluster into first position; 租借 is carried in
+  // the descriptive tail, where the comparison actually lives. It also stays
+  // clear of the shipped ZH guides /guide/golf-club-baggage-fees-airlines-bangkok
+  // (高尔夫球杆托运行李费用) and /guide/best-airlines-fly-golf-clubs-bangkok
+  // (带高尔夫球杆飞曼谷). Airline names, allowances and fees all trace to the EN
+  // entry (30公斤/40公斤, 每公斤约350泰铢, 12–18公斤, 4,200–6,300泰铢 …); USD is
+  // rendered 美元 and kg 公斤 per the ZH conventions. Only Thai Airways has a
+  // glossary transliteration (泰国国际航空（Thai Airways）) so it is glossed once;
+  // the other carriers stay in Latin verbatim rather than inventing Chinese
+  // names, matching the shipped JA/KO halves. 廉价航空（LCC） is glossed once in
+  // the intro. LENGOLF's 整日约1,200泰铢 and 约500泰铢 delivery carry the as-of
+  // marker 截至2026年7月. related_* are all ZH-translated targets.
+  {
+    id: 'faq-13-zh',
+    page_type: 'faq',
+    slug: 'cost-to-fly-with-golf-clubs-to-thailand',
+    title: '把高尔夫球杆带上飞机要花多少钱？ — 飞泰国自带与租借对比',
+    meta_description:
+      '把高尔夫球杆带上飞机飞往泰国，单程约2,000–6,000泰铢以上，视航空公司而定，廉价航空最贵。在曼谷租借整日约1,200泰铢起，往往比来回的航空费用还便宜，截至2026年7月。',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'rental',
+    locale: 'zh',
+    related_slugs: ['/faq/should-i-bring-golf-clubs-to-thailand-or-rent', '/faq/can-i-rent-golf-clubs-in-bangkok', '/golf-club-rental'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        '把高尔夫球杆带上飞机飞往泰国，单程通常要2,000到6,000泰铢以上（55–170美元），具体取决于航空公司和你的舱位等级。有些全服务航空会把运动器材算进托运行李额度里，廉价航空（LCC）则会收取高昂的超大件行李费。行程较短的话，在曼谷租借球杆往往比来回的航空费用还便宜。',
+      answer_body:
+        '下面按航空公司类型，列出泰国航线上球包大致的收费情况。\n\n**全服务航空**\n- **泰国国际航空（Thai Airways）：** 只要在标准重量额度内（经济舱通常30公斤），球包可以当作托运行李交运。没超重就不另外收费，超出部分按公斤计价。\n- **新加坡航空（Singapore Airlines）／国泰航空（Cathay Pacific）／阿联酋航空（Emirates）：** 政策大致相同——运动器材计入托运行李的总重量，一般是经济舱30公斤、商务舱40公斤。\n- **Japan Airlines／ANA：** 在国际航线上，球包通常包含在托运行李额度之内。\n\n**廉价航空（费用更高）**\n- **亚洲航空（AirAsia）：** 运动器材每公斤约350泰铢。球包一般12–18公斤，所以单程要准备4,200–6,300泰铢。\n- **Thai VietJet：** 超大件行李的收费视条件而定，球包单程一般3,000–5,000泰铢。\n- **酷航（Scoot）／皇雀航空（Nok Air）：** 水平相近，单程2,500–5,000泰铢。\n\n**容易被忽略的额外开销**\n- 球杆硬壳箱：购买要5,000–15,000泰铢（为防损坏，建议备一个）\n- 机场接送：大件行李可能得叫大一点的出租车或商务车\n- 损坏风险：航空公司偶尔确实会弄坏球杆，而索赔并不容易\n\n**自带与租借的费用对比**\n以5天行程、打2场球来算：\n- 自带：来回航空费用4,000–12,000泰铢，再加上硬壳箱的钱\n- 在球场租：2场合计1,000–3,000泰铢\n- 在LENGOLF租高级球杆：整日约1,200泰铢（Callaway或Majesty全套），曼谷市内当日配送约500泰铢，截至2026年7月\n\n对大多数旅客来说，单看费用，租借明显更胜一筹。',
+      related_questions: [
+        { slug: 'should-i-bring-golf-clubs-to-thailand-or-rent', question: '高尔夫球杆租借还是自带？ — 泰国旅行哪种更省钱省事' },
+        { slug: 'can-i-rent-golf-clubs-in-bangkok', question: '曼谷能租到高尔夫球杆吗？ — 收费、球杆套装与配送方式' },
+        { slug: 'how-much-does-indoor-golf-cost-in-bangkok', question: '曼谷室内高尔夫收费 — 每小时550–1,000泰铢的价格全解析' },
+      ],
+    },
+  },
+
   {
     id: 'faq-14',
     page_type: 'faq',
@@ -1550,6 +2024,133 @@ export const faqPages: FaqSeoPage[] = [
     },
   },
 
+  // ─── JA: worth-taking-golf-lessons-bangkok-holiday ───
+  // Title front-loads the site's strongest JA cluster (バンコク ゴルフレッスン)
+  // and stays distinct from the shipped faq-11-ja (料金と選び方).
+  // HONESTY: uses the required LENGOLF-scoped construction verbatim —
+  // 日本人コーチ／日本語でのレッスン negated for LENGOLF only, paired with the
+  // LINE @lengolf Japanese booking allowance and the on-screen-numbers point
+  // (same paragraph slot as faq-11-ja). No city-wide negative about Bangkok,
+  // and no claim of Japanese-language lessons or Japanese coaches. That
+  // disclosure paragraph is the only sanctioned addition to the EN structure.
+  // No LENGOLF price is quoted, so no as-of marker is needed. The 16/20度
+  // launch-angle example and every other figure trace to the EN entry.
+  // related_* retargeted to JA-translated pages — the EN entry's
+  // /golf-in-thailand-guide has no JA translation and is replaced with /lessons.
+  {
+    id: 'faq-22-ja',
+    page_type: 'faq',
+    slug: 'worth-taking-golf-lessons-bangkok-holiday',
+    title: 'バンコクのゴルフレッスン、旅行中に受ける価値は？ — 1回で得られること',
+    meta_description:
+      'バンコクで旅行中にゴルフレッスンを受ける価値はあるのか。1回のレッスンで現実的にできること、向いている人、予約時に伝えておきたいことを正直に解説します。シミュレーターの数値が出るぶん、感覚頼りの指摘より具体的です。',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'golf-lessons',
+    locale: 'ja',
+    related_slugs: ['/lessons', '/guide/golf-lessons-bangkok-coaches', '/guide/best-golf-simulators-bangkok'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        '結論から言えば、価値はあります。ただし正直な但し書き付きです。1回のレッスンでスイングを作り直すことはできませんが、旅の残りを通して使える具体的なポイントを1つか2つ持ち帰ることはできます。バンコクのシミュレーター施設なら、この形式は一般的なドライビングレンジより有効です。感覚頼りの指摘ではなく、具体的な数値が出るからです。',
+      answer_body:
+        '**旅行中の1回のレッスンで現実的にできること**\n\n1時間で筋肉の記憶が変わることはありません。それには数週間の反復が必要です。それでも、できることはあります。\n1. スコアを最も損なっている1〜2点を特定する\n2. 旅行中ずっと使える感覚のヒントを得る\n3. 繰り返し出ているミスを、癖として固まる前に修正する\n4. 距離を較正する——シミュレーターのデータで、各クラブのキャリーと総距離がわかります\n\n一方で、できないこともあります。アドレスの作り直し、グリップの基礎からの組み替え、その後の練習を伴わずに技術的な変化を定着させること。この前提は、コーチにも率直に伝えておきましょう。\n\n**バンコクのレッスンが一般的なレンジより有効な理由**\n\nLENGOLFのようなシミュレーター施設では、レッスンから感想ではなくデータが得られます。\n1. クラブごとのボールスピードとキャリー距離\n2. 打ち出し角とスピン量——弾道だけでなく、当たりの質までわかります\n3. 球筋を推測ではなく正確に計測\n4. ボール位置が一定なので、コーチはスイングの変数だけを切り分けられます\n\nつまりバンコクでのレッスンからは、具体的で検証可能なフィードバックが得られます。7番アイアンの打ち出し角が20度あるべきところ16度なら、それは原因を特定できる、測定可能な問題です。\n\nなお、LENGOLFには日本人コーチや日本語でのレッスンはありませんが、ご予約や事前のご相談はLINE @lengolfにて日本語で承っています。レッスン中は画面にヘッドスピードや打ち出し角といった数値が表示されるため、言葉の壁があっても改善点を目で確認しやすいのが特長です。\n\n**旅行中のレッスンが特に向いている人**\n\n1. ひとつの癖が抜けない中級ハンディキャップの方——データを備えた第三者の目が助けになります\n2. 旅先でリラックスしている方——日常から離れると、指導を受け入れやすくなる方が多いものです\n3. 長めの旅程の初心者の方——1週間のゴルフ予定があり、レッスン未経験なら、初ラウンド前の1回は有意義です\n4. 道具を替えたばかりの方——その変更が機能しているかは、シミュレーターのデータで確認できます\n\n複数の領域で根本的な修正が必要なハイハンディキャップの方には、旅行中のレッスンの効果は限定的です。\n\n**予約時に伝えておきたいこと**\n\n1. データ分析をセッションに含めてほしいと依頼する——すべての指導者が標準で行うわけではありません\n2. ハンディキャップ、いつも出るミスの傾向、この先の予定ラウンド数をコーチに伝える\n3. 持ち帰りは最大2つまでとお願いする——スイング中の意識を1つ、感覚づくりのドリルを1つ\n4. セッションの長さを確認する——あれこれ詰め込んだ90分より、集中した45分のほうが実りが多いのが普通です\n\n**バンコクのゴルフ旅行にレッスンを組み込む**\n\n1週間の旅程なら、実際的な組み方はこうなります。\n1. 1日目か2日目: レッスンを受け、意識すべき点を洗い出す\n2. 2〜5日目: コースを回り、レッスンで得た1つか2つを実践する\n3. 5日目か6日目（任意）: 30分のフォローアップで、変化が定着しているか確認する\n\n大事にしているラウンドの当日朝にレッスンを入れるのは避けましょう。レッスンと本番のラウンドの間には、1日空けておきたいところです。',
+      related_questions: [
+        { slug: '/guide/golf-lessons-bangkok-coaches', question: 'バンコクのゴルフレッスン — 費用とコーチの選び方' },
+        { slug: '/guide/best-golf-simulators-bangkok', question: 'バンコクのゴルフシミュレーター — おすすめ施設を徹底比較' },
+        { slug: '/guide/golf-thailand-beginners', question: 'タイでゴルフを始める初心者ガイド — 知っておきたいことすべて' },
+      ],
+    },
+  },
+
+  // ─── KO: worth-taking-golf-lessons-bangkok-holiday ───
+  // Title front-loads the site's strongest KO lesson cluster (방콕 골프레슨) and
+  // stays distinct from the shipped faq-11-ko (레슨 요금과 선택 기준) and the KO
+  // guide /guide/golf-lessons-bangkok-coaches.
+  // HONESTY: uses the required LENGOLF-scoped construction verbatim —
+  // 한국인 코치／한국어 레슨 negated for LENGOLF only, paired with the LINE
+  // @lengolf Korean booking allowance and the on-screen-numbers point (same
+  // paragraph slot as faq-22-ja / faq-11-ko). No city-wide negative about
+  // Bangkok, and no claim of Korean-language lessons or Korean coaches. That
+  // disclosure paragraph is the only sanctioned addition to the EN structure.
+  // No LENGOLF price is quoted, so no as-of marker is needed. The 16/20도
+  // launch-angle example and every other figure trace to the EN entry.
+  // related_* retargeted to KO-translated pages — the EN entry's
+  // /golf-in-thailand-guide has no KO translation and is replaced with /lessons.
+  {
+    id: 'faq-22-ko',
+    page_type: 'faq',
+    slug: 'worth-taking-golf-lessons-bangkok-holiday',
+    title: '방콕 골프레슨, 여행 중에 받을 만할까? — 1회 레슨으로 얻는 것',
+    meta_description:
+      '방콕에서 여행 중에 골프레슨을 받을 가치가 있을까요. 한 번의 레슨으로 현실적으로 가능한 것, 어떤 골퍼에게 잘 맞는지, 예약할 때 무엇을 요청해야 하는지 솔직하게 정리했어요.',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'golf-lessons',
+    locale: 'ko',
+    related_slugs: ['/lessons', '/guide/golf-lessons-bangkok-coaches', '/guide/best-golf-simulators-bangkok'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        '결론부터 말하면 가치는 있어요. 다만 솔직한 단서가 붙어요. 한 번의 레슨으로 스윙을 다시 만들 수는 없지만, 남은 여행 내내 쓸 수 있는 구체적인 포인트를 한두 가지 가져갈 수는 있어요. 방콕의 시뮬레이터 시설이라면 이 형식이 일반적인 드라이빙 레인지보다 유용해요. 감으로 하는 지적이 아니라 구체적인 숫자가 나오니까요.',
+      answer_body:
+        '**여행 중 한 번의 레슨으로 현실적으로 가능한 것**\n\n한 시간으로 근육 기억이 바뀌지는 않아요. 그건 몇 주간의 반복이 필요해요. 그래도 할 수 있는 일은 다음과 같아요.\n1. 스코어를 가장 많이 깎아먹는 한두 가지를 찾아내기\n2. 여행 내내 쓸 수 있는 감각의 힌트 얻기\n3. 반복되는 실수를 습관으로 굳기 전에 고치기\n4. 거리 보정하기 — 시뮬레이터 데이터로 클럽별 캐리와 총거리를 확인할 수 있어요\n\n반대로 할 수 없는 일도 있어요. 어드레스를 다시 만드는 것, 그립 기초부터 뜯어고치는 것, 이후 연습 없이 기술적인 변화를 정착시키는 것. 이 전제는 코치에게도 솔직하게 말해 두시는 게 좋아요.\n\n**방콕의 레슨이 일반 레인지보다 유용한 이유**\n\nLENGOLF 같은 시뮬레이터 시설에서는 레슨에서 감상이 아니라 데이터가 나와요.\n1. 클럽별 볼 스피드와 캐리 거리\n2. 발사각과 스핀량 — 탄도뿐 아니라 타격의 질까지 보여줘요\n3. 구질을 어림짐작이 아니라 정확하게 측정\n4. 볼 위치가 일정해서, 코치가 스윙 변수만 따로 떼어 볼 수 있어요\n\n그래서 방콕에서의 레슨은 구체적이고 검증 가능한 피드백을 만들어 내요. 7번 아이언의 발사각이 20도여야 하는데 16도라면, 그건 원인을 짚어낼 수 있는 측정 가능한 문제예요.\n\n참고로 LENGOLF에 한국인 코치나 한국어 레슨은 없지만, 예약과 사전 상담은 LINE @lengolf에서 한국어로 도와드려요. 레슨 중에는 헤드 스피드나 발사각 같은 수치가 화면에 표시돼서, 언어의 장벽이 있어도 고쳐야 할 부분을 눈으로 확인하기 쉬워요.\n\n**여행 중 레슨이 특히 잘 맞는 분**\n\n1. 한 가지 버릇이 안 빠지는 중급 핸디캡 골퍼 — 좋은 데이터를 갖춘 제3자의 눈이 도움이 돼요\n2. 여행지에서 여유로워진 분 — 일상에서 벗어나면 지도를 받아들이기 쉬워지는 분이 많아요\n3. 일정이 긴 초보자 — 일주일치 골프 일정이 있고 레슨 경험이 없다면, 첫 라운드 전 한 번은 값진 시간이에요\n4. 장비를 막 바꾼 분 — 그 변경이 잘 맞는지는 시뮬레이터 데이터로 확인할 수 있어요\n\n여러 부분에서 근본적인 수정이 필요한 하이 핸디캡 골퍼에게는 여행 중 레슨의 효과가 제한적이에요.\n\n**예약할 때 요청해 두면 좋은 것**\n\n1. 데이터 분석을 세션에 포함해 달라고 요청하세요 — 모든 지도자가 기본으로 하는 건 아니에요\n2. 핸디캡, 자주 나오는 미스 경향, 앞으로 예정된 라운드 수를 코치에게 알려주세요\n3. 가져갈 포인트는 최대 두 가지로 부탁하세요 — 스윙 중 생각 하나, 감각을 잡는 드릴 하나\n4. 세션 길이를 확인하세요 — 이것저것 담은 90분보다, 집중한 45분이 대체로 더 알차요\n\n**방콕 골프 여행에 레슨 끼워 넣기**\n\n일주일 일정이라면 실질적인 구성은 다음과 같아요.\n1. 1일차나 2일차: 레슨을 받고 의식할 점을 찾아내요\n2. 2~5일차: 코스를 돌며 레슨에서 얻은 한두 가지를 실천해요\n3. 5일차나 6일차(선택): 30분 후속 세션으로 변화가 유지되는지 확인해요\n\n소중하게 생각하는 라운딩 당일 아침에 레슨을 넣는 건 피하세요. 레슨과 본 라운딩 사이에는 하루를 비워 두는 게 좋아요.',
+      related_questions: [
+        { slug: '/guide/golf-lessons-bangkok-coaches', question: '방콕 골프레슨 — 요금·코치 선택 가이드' },
+        { slug: '/guide/best-golf-simulators-bangkok', question: '방콕 골프 시뮬레이터 추천 — 비교 가이드' },
+        { slug: '/guide/golf-thailand-beginners', question: '태국 골프 초보자 가이드 — 시작 전 알아야 할 모든 것' },
+      ],
+    },
+  },
+
+  // ─── ZH: worth-taking-golf-lessons-bangkok-holiday ───
+  // Title leads with the holiday-lesson intent (旅行途中在曼谷上高尔夫课) and stays
+  // distinct from the shipped faq-11-zh (在曼谷学高尔夫的最佳方式) and the ZH guide
+  // /guide/golf-lessons-bangkok-coaches (曼谷高尔夫课程 — 费用、教练选择与预约指南).
+  // HONESTY: uses the required LENGOLF-scoped construction verbatim —
+  // 中国人教练／中文课程 negated for LENGOLF only, paired with the LINE @lengolf
+  // Chinese booking allowance and the on-screen-numbers point (the same wording
+  // shipped in exp-32-zh / faq-11-zh, and the same paragraph slot as
+  // faq-22-ja / faq-22-ko: right after the "why Bangkok lessons beat a range"
+  // section). No city-wide negative about Bangkok, and no claim of
+  // Chinese-language lessons or Chinese coaches. That disclosure paragraph is
+  // the only sanctioned addition to the EN structure. No LENGOLF price is
+  // quoted anywhere in this entry, so no as-of marker is used. The 16/20度
+  // launch-angle example and every other figure trace to the EN entry.
+  // related_* retargeted to ZH-translated pages — the EN entry's
+  // /golf-in-thailand-guide has no ZH translation and is replaced with /lessons.
+  {
+    id: 'faq-22-zh',
+    page_type: 'faq',
+    slug: 'worth-taking-golf-lessons-bangkok-holiday',
+    title: '旅行途中在曼谷上高尔夫课值得吗？ — 一堂课能带走什么',
+    meta_description:
+      '旅行途中在曼谷上一堂高尔夫课值不值得？一堂课现实中能做到什么、哪些球友最受用、预订时该提出什么要求，这里如实说清楚。',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'golf-lessons',
+    locale: 'zh',
+    related_slugs: ['/lessons', '/guide/golf-lessons-bangkok-coaches', '/guide/best-golf-simulators-bangkok'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        '值得，但要带上诚实的但书。一堂课不可能把你的挥杆重建一遍，却能让你带走一两个具体可用的要点，撑过接下来的整趟旅程。在曼谷，模拟器场馆让这种形式比一般练习场更管用，因为给出的是具体数据，而不是凭印象的评语。',
+      answer_body:
+        '**旅行途中的一堂课，现实中能做到什么**\n\n一个小时改变不了肌肉记忆，那需要几周的反复练习。但它能做到这些：\n1. 找出最拖累你成绩的那一两个问题\n2. 给你一个能撑过整趟旅程的手感提示\n3. 在反复出现的毛病固化之前把它纠正过来\n4. 校准距离——模拟器数据会显示每支球杆的飞行距离和总距离\n\n它做不到的是：重建你的击球准备姿势、从头改造握杆基础，或者在没有后续练习的情况下让技术改变留存下来。这个前提，最好一开始就跟教练讲清楚。\n\n**为什么曼谷的课程比一般练习场更有用**\n\n在LENGOLF这样的模拟器场馆，一堂课产出的是数据，而不只是感受：\n1. 每支球杆的球速与飞行距离\n2. 发射角与旋转速率——反映的是击球质量，不只是弹道\n3. 球路是精确测出来的，不是估出来的\n4. 球位固定，教练因此能把挥杆变量单独拆出来看\n\n这意味着，在曼谷上课能得到具体、可验证的反馈。如果你的7号铁发射角本该是20度，实测却只有16度，那就是一个可测量、也能找到具体成因的问题。\n\n需要说明的是，LENGOLF没有中国人教练，也没有中文课程，但预订和事前咨询可以通过LINE @lengolf用中文办理；而且上课时，杆头速度、发射角这些模拟器数据会显示在屏幕上，即使有语言隔阂，你也能用眼睛看懂该改哪里。\n\n**哪些人最能从旅行中的一堂课里获益**\n\n1. 有一个顽固毛病的中差点球友——一双带着好数据的新眼睛会很有帮助\n2. 旅途中更放松的球友——离开日常节奏后，很多人更容易听得进指导\n3. 行程较长的初学者——如果你安排了一周的高尔夫，又从没上过课，第一次下场前的这一堂很值\n4. 刚换过装备的人——这次更换是否奏效，模拟器数据能给你答案\n\n对于需要在多个方面做根本性调整的高差点球友，旅行中的一堂课作用有限。\n\n**预订时该提出什么要求**\n\n1. 要求把数据分析纳入课程——不是每位教练都会默认这么做\n2. 告诉教练你的差点、常犯的失误方向，以及接下来还要打几场\n3. 请对方最多给你两个要点——一个挥杆意识，一个手感练习\n4. 确认课程时长——集中的45分钟，通常比内容混杂的90分钟更有收获\n\n**把一堂课排进曼谷的高尔夫行程**\n\n一周的行程，实际可以这样安排：\n1. 第1或第2天：上课，找出自己要留意的要点\n2. 第2–5天：下场打球，把课上得到的那一两点用出来\n3. 第5或第6天（可选）：回来做30分钟的复盘，看看改变有没有留住\n\n不要把课排在你很在意的那场球的当天早上——上课和正式下场之间，最好隔上一天。',
+      related_questions: [
+        { slug: '/guide/golf-lessons-bangkok-coaches', question: '曼谷高尔夫课程 — 费用、教练选择与预约指南' },
+        { slug: '/guide/best-golf-simulators-bangkok', question: '曼谷最佳室内高尔夫模拟器 — 场馆对比与挑选指南' },
+        { slug: '/guide/golf-thailand-beginners', question: '泰国高尔夫初学者指南 — 你需要知道的一切' },
+      ],
+    },
+  },
+
   // ─── GG-029: Are Rental Golf Clubs Good Enough for Serious Golfers? ────────
   {
     id: 'faq-23',
@@ -1785,6 +2386,120 @@ export const faqPages: FaqSeoPage[] = [
         { slug: '/guide/golf-club-rental-bangkok-guide', question: 'Golf club rental in Bangkok — complete guide' },
         { slug: '/guide/renting-golf-clubs-thai-golf-courses', question: 'Renting golf clubs at Thai golf courses' },
         { slug: '/guide/bring-golf-clubs-thailand-or-rent', question: 'Should you bring golf clubs to Thailand or rent?' },
+      ],
+    },
+  },
+
+  // ─── JA: what-golf-clubs-available-rent-bangkok ───
+  // Title front-loads the JA rental cluster (バンコク レンタルクラブ) and keeps
+  // the left-handed / ladies angle in the tail, which is the EN entry's real
+  // differentiator. Brands (Callaway, TaylorMade, Titleist) and the set
+  // contents trace to the EN entry; no prices are quoted anywhere in this
+  // entry, so no as-of marker is required. "Golf bag" is rendered ゴルフバッグ
+  // (not キャディバッグ) to keep clear of the キャディー terminology entry.
+  // related_* are all JA-translated guides — the EN entry's
+  // /golf-in-thailand-guide has no JA translation and is replaced with
+  // /golf-club-rental.
+  {
+    id: 'gg-what-golf-clubs-available-rent-bangkok-ja',
+    page_type: 'faq',
+    slug: 'what-golf-clubs-available-rent-bangkok',
+    title: 'バンコクのレンタルクラブはどのブランド？ — セット内容と左利き・レディース事情',
+    meta_description:
+      'バンコクのレンタルクラブはCallaway、TaylorMade、Titleistが中心。フルセットに何が含まれるか、左利き用・レディース用の在庫事情、予約前に確認しておきたいポイントまで解説します。',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'clubs-rental',
+    locale: 'ja',
+    related_slugs: ['/golf-club-rental', '/guide/golf-club-rental-bangkok-guide', '/guide/renting-golf-clubs-thai-golf-courses', '/guide/bring-golf-clubs-thailand-or-rent'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        'バンコクの質の高いゴルフ施設でレンタルできるクラブは、Callaway、TaylorMade、Titleistが中心です。LENGOLFのレンタルセットはすべてCallawayで、メンズ、レディース、左利き用をご用意しています。低価格帯のコースでは年式の古いセットやブランドの混在したセットが一般的で、状態のばらつきもかなり大きくなります。',
+      answer_body:
+        '**施設のタイプで変わるレンタルの質**\n\nバンコクの上位クラスのゴルフ場やインドアシミュレーター施設は、名の通ったブランドのレンタル用具を揃えています。最も広く置かれているのはCallawayとTaylorMadeで、Titleistのセットは質の高い一部の施設で見かけます。おおむね、年式が数年以内でグリップも清潔な、ドライバーからパターまで揃った一式が期待できます。\n\nLENGOLFはすべてのカテゴリーでCallawayのレンタルセットを使用しています。多くの中級ハンディキャップの方にも初心者の方にも合う、一貫した選択です。\n\nバンコク周辺の低価格帯のコースでは、年式の古いセットやブランドの混在したセットが標準です。何世代も前のクラブが混じっていることもあり、グリップが摩耗している場合もあり、全体の状態は施設ごとに差があります。\n\n**フルセットに含まれるもの**\n\nバンコクのレンタルクラブはひとまとめの一式で貸し出されるのが一般的で、内容はおおむね次のとおりです。\n1. ドライバー\n2. フェアウェイウッド（多くは3番または5番）\n3. ユーティリティまたはロングアイアン（セットにより異なります）\n4. アイアン——5番から9番\n5. ピッチングウェッジとサンドウェッジ\n6. パター\n7. ゴルフバッグ\n\nスタンドバッグを付ける施設もあれば、カートバッグの施設もあります。特定のロフトのウェッジ（たとえば60度）が必要なら、その1本はご自身で持参するのが確実です。\n\n**左利き用とレディース用のセット**\n\n左利き用とレディース用のレンタルセットは、バンコクの一般的なゴルフ場では在庫が少なめです。標準の右利きメンズセットしか置いていない施設も少なくありません。LENGOLFはその例外で、左利き用とレディース用のCallawayセットをレンタル用にご用意しています。\n\n**予約前に押さえておきたいこと**\n\n1. **事前に電話かメッセージで確認する** — 左利きの方、レディースセットが必要な方、シャフトフレックスに希望がある方は特に。\n2. **ブランドと年式を尋ねる** — 用具の質がスコアに響くタイプの方は、確認しておきましょう。\n3. **レンタル料金を事前に確かめる** — 上位施設と低価格帯とで、料金の幅はかなり大きくなります。\n4. **グローブとボールは持参する** — レンタル一式に含まれることは、ほとんどありません。\n5. **シューズのレンタルも確認する** — 別料金で用意があるのが普通です。クラブの確認と同じタイミングで問い合わせておくと安心です。',
+      related_questions: [
+        { slug: '/guide/golf-club-rental-bangkok-guide', question: 'バンコクのゴルフクラブレンタル — 借りられる場所と費用の目安' },
+        { slug: '/guide/renting-golf-clubs-thai-golf-courses', question: 'タイのゴルフ場でクラブレンタル — 料金・品質・チェックポイント' },
+        { slug: '/guide/bring-golf-clubs-thailand-or-rent', question: 'タイゴルフ旅行、クラブは持参？現地レンタル？判断ガイド' },
+      ],
+    },
+  },
+
+  // ─── KO: what-golf-clubs-available-rent-bangkok ───
+  // Title front-loads the KO rental cluster (방콕 대여 골프 클럽) and keeps the
+  // left-handed / ladies angle in the tail, which is the EN entry's real
+  // differentiator; it stays distinct from the shipped KO guide
+  // /guide/golf-club-rental-bangkok-guide. Brands (Callaway, TaylorMade,
+  // Titleist) and the set contents trace to the EN entry; no prices are quoted
+  // anywhere in this entry, so no as-of marker is required. related_* are all
+  // KO-translated guides — the EN entry's /golf-in-thailand-guide has no KO
+  // translation and is replaced with /golf-club-rental.
+  {
+    id: 'gg-what-golf-clubs-available-rent-bangkok-ko',
+    page_type: 'faq',
+    slug: 'what-golf-clubs-available-rent-bangkok',
+    title: '방콕 골프 클럽 대여, 어떤 브랜드? — 세트 구성과 왼손·여성용 재고',
+    meta_description:
+      '방콕에서 빌릴 수 있는 골프 클럽은 Callaway, TaylorMade, Titleist가 중심이에요. 풀세트에 무엇이 들어 있는지, 왼손잡이용·여성용 재고 사정은 어떤지, 예약 전에 확인할 점까지 정리했어요.',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'clubs-rental',
+    locale: 'ko',
+    related_slugs: ['/golf-club-rental', '/guide/golf-club-rental-bangkok-guide', '/guide/renting-golf-clubs-thai-golf-courses', '/guide/bring-golf-clubs-thailand-or-rent'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        '방콕의 괜찮은 골프 시설에서 빌릴 수 있는 클럽은 Callaway, TaylorMade, Titleist가 중심이에요. LENGOLF의 대여 세트는 전부 Callaway이고, 남성용·여성용·왼손잡이용을 갖추고 있어요. 저가 코스에서는 연식이 오래됐거나 브랜드가 섞인 세트가 일반적이고, 상태 편차도 꽤 커요.',
+      answer_body:
+        '**시설 유형에 따라 달라지는 대여 품질**\n\n방콕의 상위권 골프장과 실내 시뮬레이터 시설은 이름 있는 브랜드의 대여 장비를 갖춰 둬요. 가장 널리 보이는 건 Callaway와 TaylorMade이고, Titleist 세트는 품질이 좋은 일부 시설에서 볼 수 있어요. 대체로 나온 지 몇 년 이내이고 그립도 깨끗한, 드라이버부터 퍼터까지 갖춰진 한 벌을 기대하실 수 있어요.\n\nLENGOLF는 모든 카테고리에서 Callaway 대여 세트를 사용해요. 대부분의 중급 핸디캡 골퍼에게도 초보자에게도 잘 맞는, 일관된 선택이에요.\n\n방콕 주변의 저가 코스에서는 연식이 오래됐거나 브랜드가 섞인 세트가 표준이에요. 몇 세대 전 클럽이 섞여 있기도 하고, 그립이 닳아 있을 수도 있으며, 전반적인 상태는 시설마다 차이가 나요.\n\n**풀세트에 들어 있는 것**\n\n방콕의 대여 클럽은 한 벌 통째로 빌려주는 것이 일반적이고, 구성은 대체로 다음과 같아요.\n1. 드라이버\n2. 페어웨이 우드 (보통 3번 또는 5번)\n3. 유틸리티 또는 롱아이언 (세트에 따라 달라요)\n4. 아이언 — 5번부터 9번까지\n5. 피칭 웨지와 샌드 웨지\n6. 퍼터\n7. 골프백\n\n스탠드백을 주는 시설도 있고 카트백을 쓰는 시설도 있어요. 특정 로프트의 웨지(예를 들어 60도)가 필요하다면, 그 한 자루는 직접 챙겨 오시는 편이 확실해요.\n\n**왼손잡이용과 여성용 세트**\n\n왼손잡이용과 여성용 대여 세트는 방콕의 일반적인 골프장에서는 재고가 적은 편이에요. 표준 오른손 남성용 세트만 두는 곳도 적지 않아요. LENGOLF는 그 예외로, 왼손잡이용과 여성용 Callaway 세트를 대여용으로 갖추고 있어요.\n\n**예약 전에 챙겨 둘 것**\n\n1. **미리 전화나 메시지로 확인하기** — 왼손잡이시거나, 여성용 세트가 필요하거나, 샤프트 플렉스에 선호가 있다면 특히요.\n2. **브랜드와 연식 물어보기** — 장비 품질이 스코어에 영향을 준다고 느끼신다면 확인해 두세요.\n3. **대여 요금 미리 확인하기** — 상위 시설과 저가 시설 사이의 요금 폭이 꽤 커요.\n4. **장갑과 볼은 직접 챙기기** — 대여 세트에 포함되는 경우는 거의 없어요.\n5. **신발 대여도 확인하기** — 보통 별도 요금으로 준비돼 있어요. 클럽을 확인하실 때 같이 문의해 두시면 좋아요.',
+      related_questions: [
+        { slug: '/guide/golf-club-rental-bangkok-guide', question: '방콕 골프 클럽 대여 — 어디서 빌리고 비용은 얼마일까' },
+        { slug: '/guide/renting-golf-clubs-thai-golf-courses', question: '태국 골프장 클럽 렌탈 — 요금·품질·체크리스트' },
+        { slug: '/guide/bring-golf-clubs-thailand-or-rent', question: '태국 골프여행, 클럽 가져갈까 현지 렌탈할까? 판단 가이드' },
+      ],
+    },
+  },
+
+  // ─── ZH: what-golf-clubs-available-rent-bangkok ───
+  // Title front-loads the ZH rental-brand query (曼谷 租借 高尔夫球杆 品牌) and
+  // keeps the left-handed / ladies angle in the tail, which is the EN entry's
+  // real differentiator; it stays distinct from the shipped ZH guide
+  // /guide/golf-club-rental-bangkok-guide (曼谷高尔夫球杆租借 — 去哪里租…).
+  // Brands (Callaway, TaylorMade, Titleist) stay in Latin and the set contents
+  // trace to the EN entry; no prices are quoted anywhere in this entry, so no
+  // as-of marker is used. Terminology per the ZH glossary: 球包 for golf bag,
+  // 挖起杆 for wedge, 球杆 throughout. related_* are all ZH-translated guides —
+  // the EN entry's /golf-in-thailand-guide has no ZH translation and is
+  // replaced with /golf-club-rental.
+  {
+    id: 'gg-what-golf-clubs-available-rent-bangkok-zh',
+    page_type: 'faq',
+    slug: 'what-golf-clubs-available-rent-bangkok',
+    title: '曼谷租借的高尔夫球杆有哪些品牌？ — 套装内容与左手、女士杆',
+    meta_description:
+      '在曼谷能租到的高尔夫球杆以Callaway、TaylorMade、Titleist为主。一整套里包含什么、左手用和女士用球杆的供应情况，以及预订前要确认的事项，这里一次说清。',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'clubs-rental',
+    locale: 'zh',
+    related_slugs: ['/golf-club-rental', '/guide/golf-club-rental-bangkok-guide', '/guide/renting-golf-clubs-thai-golf-courses', '/guide/bring-golf-clubs-thailand-or-rent'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        '在曼谷品质较好的高尔夫场馆里，最常见的租借品牌是Callaway、TaylorMade和Titleist。在LENGOLF，所有租借套装都是Callaway，男士、女士和左手用配置都有。平价球场通常备的是年代较久或品牌混杂的套装，成色差异也相当大。',
+      answer_body:
+        '**场馆类型决定租借品质**\n\n曼谷较高端的高尔夫球场和室内模拟器场馆，会在租借用具上投入知名品牌。备货最广的是Callaway和TaylorMade，Titleist套装则出现在少数品质较好的场馆。一般来说，你可以期待球杆用了不过几年、握把干净，而且从一号木到推杆一应俱全。\n\nLENGOLF在所有类别上都使用Callaway租借套装——一个统一的选择，多数中差点球友和初学者都用得顺手。\n\n在曼谷周边的平价球场，年代较久或品牌混杂的套装才是常态。球杆可能是好几代之前的产品，握把可能已经磨损，整体状况也是一家一个样。\n\n**一整套通常包含什么**\n\n曼谷的租借球杆多半是整套一起出租，内容大致如下：\n1. 一号木\n2. 球道木（通常是3号木或5号木）\n3. 铁木杆或长铁杆（视套装而定）\n4. 铁杆——5号到9号\n5. 劈起杆和沙坑杆\n6. 推杆\n7. 球包\n\n有的场馆配的是支架包，有的用球车包。如果你需要某个特定角度的挖起杆（比如60度），最好自己带一支来。\n\n**左手用与女士用套装**\n\n左手用和女士用的租借套装，在曼谷一般球场里备货较少——不少场馆只有标准的右手男士套装。LENGOLF是个例外：专门的左手用和女士用Callaway套装都可以租借。\n\n**预订前的实用提醒**\n\n1. **先打电话或发消息确认**——如果你是左手球友、需要女士套装，或者对杆身硬度有要求。\n2. **问清楚品牌和年份**——装备品质会影响你打球状态的话，值得先问一声。\n3. **提前确认租借费用**——高端场馆与平价场馆之间的价差相当大。\n4. **自备手套和球**——这两样很少包含在租借套装里。\n5. **球鞋租借**通常是另外计费的，确认球杆的同时一起问清楚。',
+      related_questions: [
+        { slug: '/guide/golf-club-rental-bangkok-guide', question: '曼谷高尔夫球杆租借 — 去哪里租、费用多少、如何挑选' },
+        { slug: '/guide/renting-golf-clubs-thai-golf-courses', question: '在泰国球场租借球杆 — 费用、品质与检查要点' },
+        { slug: '/guide/bring-golf-clubs-thailand-or-rent', question: '泰国高尔夫之旅，自带球杆还是当地租借？判断指南' },
       ],
     },
   },

@@ -607,15 +607,24 @@ export function getActivityPageJsonLd(page: {
   }
 }
 
-export function getSeoFaqPageJsonLd(page: {
-  title: string
-  slug: string
-  content: {
-    answer_intro: string
-    answer_body: string
-    related_questions: { slug: string; question: string }[]
-  }
-}) {
+export function getSeoFaqPageJsonLd(
+  page: {
+    title: string
+    slug: string
+    content: {
+      answer_intro: string
+      answer_body: string
+      related_questions: { slug: string; question: string }[]
+    }
+  },
+  locale: string = 'en'
+) {
+  // url/inLanguage must match the page's canonical, and the related-question
+  // pointers must stay inside the reader's locale — a /ja/ FAQ that declares
+  // the EN URL (and links EN answers) sends Google contradictory language
+  // signals against its own canonical + hreflang. Mirrors the locale handling
+  // in getExplainerPageJsonLd below.
+  const localePrefix = locale === 'en' ? '' : `/${locale}`
   // Main question + related questions as FAQPage schema
   const mainQuestion = {
     '@type': 'Question' as const,
@@ -633,13 +642,16 @@ export function getSeoFaqPageJsonLd(page: {
       '@type': 'Answer' as const,
       // related_questions may point at other sections (/guide/...) — resolve
       // via the shared helper so this never drifts from FaqPage's hrefs again.
-      text: `See our full answer at ${SITE_URL}${relatedQuestionPath(rq.slug)}/`,
+      text: `See our full answer at ${SITE_URL}${localePrefix}${relatedQuestionPath(rq.slug)}/`,
     },
   }))
 
   return {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
+    '@id': `${SITE_URL}${localePrefix}/faq/${page.slug}/`,
+    url: `${SITE_URL}${localePrefix}/faq/${page.slug}/`,
+    inLanguage: locale,
     mainEntity: [mainQuestion, ...relatedQuestions],
   }
 }

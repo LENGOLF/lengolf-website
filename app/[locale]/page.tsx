@@ -9,6 +9,7 @@ import ServicesCarousel from '@/components/home/ServicesCarousel'
 import HeroVideo from '@/components/home/HeroVideo'
 import { services } from '@/data/pricing'
 import { BUSINESS_INFO, SITE_URL, SOCIAL_LINKS, storageUrl, storageImageUrl } from '@/lib/constants'
+import { getSiteFacts } from '@/lib/site-facts'
 import { getAlternates, getCanonical, OG_LOCALES, type Locale } from '@/lib/translated-routes'
 import { getFaqPageJsonLd, getAggregateRatingJsonLd, getBreadcrumbJsonLd, getHomePricingJsonLd } from '@/lib/jsonld'
 import { getGoogleReviews } from '@/lib/google-reviews'
@@ -80,6 +81,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   if (locale === 'zh') return <ChinaLandingPage />
 
   const t = await getTranslations('Home')
+  const facts = await getSiteFacts()
   const tCommon = await getTranslations('Common')
   const tFaq = await getTranslations('HomeFaq')
 
@@ -476,7 +478,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             </div>
             <div>
               <p className="mb-1 text-sm font-bold uppercase tracking-wide text-foreground">{t('openingHoursLabel')}</p>
-              <p className="text-sm text-muted-foreground">{BUSINESS_INFO.hours}</p>
+              <p className="text-sm text-muted-foreground">{facts.openingHours}</p>
             </div>
             <div>
               <p className="mb-1 text-sm font-bold uppercase tracking-wide text-foreground">{t('phoneLabel')}</p>

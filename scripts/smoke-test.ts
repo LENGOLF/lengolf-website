@@ -1898,6 +1898,98 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  // Batch 2: the rental/lessons FAQ cluster (JA/KO/ZH). The three rental-
+  // category entries also render the course-rental CTA banner.
+  {
+    path: "/ja/faq/can-you-play-golf-in-bangkok-when-it-rains/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/faq/do-i-need-experience-to-play-golf-simulator/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/faq/should-i-bring-golf-clubs-to-thailand-or-rent/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/faq/cost-to-fly-with-golf-clubs-to-thailand/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/faq/worth-taking-golf-lessons-bangkok-holiday/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/faq/what-golf-clubs-available-rent-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/faq/can-you-play-golf-in-bangkok-when-it-rains/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/faq/do-i-need-experience-to-play-golf-simulator/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/faq/should-i-bring-golf-clubs-to-thailand-or-rent/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/faq/cost-to-fly-with-golf-clubs-to-thailand/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/faq/worth-taking-golf-lessons-bangkok-holiday/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/faq/what-golf-clubs-available-rent-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/faq/can-you-play-golf-in-bangkok-when-it-rains/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/faq/do-i-need-experience-to-play-golf-simulator/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/faq/should-i-bring-golf-clubs-to-thailand-or-rent/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/faq/cost-to-fly-with-golf-clubs-to-thailand/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/faq/worth-taking-golf-lessons-bangkok-holiday/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/faq/what-golf-clubs-available-rent-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
   // Golf course detail pages — spot-check one Bangkok + two Pattaya + two Hua Hin + two Phuket
   {
     path: "/golf-courses/bangkok/nikanti-golf-club/",
@@ -2629,6 +2721,27 @@ const thaiRedirectTests: ThaiRedirectTest[] = [
   // purpose — every locale (th/ja/ko/zh) now has PRICE_TIER_I18N rows, so no
   // untranslated locale remains to probe. The price-tier registry-consistency
   // section still guards the allowlist ⇄ data-file sync in both directions.
+  // Untranslated FAQ slugs must still 301 in the CJK locales. The registry
+  // sections only compare allowlist ⇄ data; nothing else exercises the
+  // middleware for /faq, so without these the allowlist could widen to an
+  // untranslated slug and ship English content under a locale URL unnoticed.
+  // (Replaces the price-tier negative probe removed above — every locale now
+  // has price tiers, so no untranslated tier remains to test.)
+  {
+    path: "/ja/faq/what-to-wear-to-indoor-golf-bar/",
+    expectedLocation: "/faq/what-to-wear-to-indoor-golf-bar/",
+    label: "Untranslated JA FAQ (only translated slugs may 200)",
+  },
+  {
+    path: "/ko/faq/how-long-does-simulator-golf-take/",
+    expectedLocation: "/faq/how-long-does-simulator-golf-take/",
+    label: "Untranslated KO FAQ (only translated slugs may 200)",
+  },
+  {
+    path: "/zh/faq/can-kids-play-golf-simulators/",
+    expectedLocation: "/faq/can-kids-play-golf-simulators/",
+    label: "Untranslated ZH FAQ (only translated slugs may 200)",
+  },
   // EN-only golf-course routes (near/best-for/compare) build no locale copies
   // (generateStaticParams emits locale: 'en' only) and have dynamicParams:false,
   // so the middleware 301 is the ONLY thing keeping their locale URLs from a

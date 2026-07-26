@@ -3,7 +3,7 @@ import { Link } from '@/i18n/navigation'
 import { ArrowRight, Check, HelpCircle } from 'lucide-react'
 import { getSiteFacts, getFactTokens } from '@/lib/site-facts'
 import { BOOKING_URL, BUSINESS_INFO, SOCIAL_LINKS } from '@/lib/constants'
-import { relatedQuestionPath } from '@/lib/seo-links'
+import { relatedQuestionPath, buildRelatedLabels } from '@/lib/seo-links'
 import BoldText from '@/components/shared/BoldText'
 import MarkdownTable, { isMarkdownTableBlock } from '@/components/shared/MarkdownTable'
 import CourseRentalCrossLink from '@/components/shared/CourseRentalCrossLink'
@@ -25,10 +25,12 @@ export default async function FaqPageComponent({ data }: Props) {
   const showRentalCta = RENTAL_CTA_CATEGORIES.includes(data.category ?? '')
 
   const locale = await getLocale()
-  const [t, facts, tokens] = await Promise.all([
+  const [t, tContact, facts, tokens, relatedLabels] = await Promise.all([
     getTranslations('FaqPage'),
+    getTranslations('ContactInfo'),
     getSiteFacts(),
     getFactTokens(locale),
+    buildRelatedLabels(data.related_slugs, locale),
   ])
 
   return (
@@ -168,8 +170,14 @@ export default async function FaqPageComponent({ data }: Props) {
           <h2 className="text-2xl font-bold md:text-3xl mb-4">{t('ctaTitle')}</h2>
           <p className="text-white/80 mb-8 max-w-lg mx-auto">
             {t('ctaText', {
-              address: BUSINESS_INFO.addressShort,
-              hours: BUSINESS_INFO.hours,
+              // ContactInfo.address is the localized form of
+              // BUSINESS_INFO.addressShort (ja 「…4階、バンコク」), so the CTA no
+              // longer mixes an English address into translated copy.
+              address: tContact('address'),
+              // facts.openingHours ("09:00–23:00") is locale-neutral;
+              // BUSINESS_INFO.hours is the English "9am – 11pm, Monday – Sunday"
+              // and left an English fragment inside the translated sentence.
+              hours: facts.openingHours,
             })}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
@@ -243,12 +251,16 @@ export default async function FaqPageComponent({ data }: Props) {
             </h2>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
               {data.related_slugs.map((path) => {
-                const label = path
-                  .split('/')
-                  .filter(Boolean)
-                  .pop()!
-                  .replace(/-/g, ' ')
-                  .replace(/\b\w/g, (c) => c.toUpperCase())
+                // Prefer the target page's own localized title; the
+                // slug-derived title-case is an English-only last resort.
+                const label =
+                  relatedLabels[path] ??
+                  path
+                    .split('/')
+                    .filter(Boolean)
+                    .pop()!
+                    .replace(/-/g, ' ')
+                    .replace(/\b\w/g, (c) => c.toUpperCase())
                 return (
                   <Link
                     key={path}

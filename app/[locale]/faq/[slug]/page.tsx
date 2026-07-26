@@ -57,7 +57,7 @@ export default async function FaqPage({ params }: Props) {
     notFound()
   }
 
-  const jsonLd = getSeoFaqPageJsonLd(page)
+  const jsonLd = getSeoFaqPageJsonLd(page, locale)
 
   return (
     <>
