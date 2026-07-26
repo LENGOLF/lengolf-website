@@ -161,7 +161,14 @@ const CURRENCY_BY_LOCALE: Record<string, CurrencyStyle> = {
   ja: { word: 'THB', space: '' },
   ko: { word: '바트', space: '' },
   zh: { word: '泰铢', space: '' },
-  th: { word: 'THB', space: '' },
+  // Thai spells the currency (data/i18n-glossary/th.json conventions.currency:
+  // "108 uses vs 0 'THB' in messages/th.json"), with a space before the word per
+  // normal Thai spacing. This entry read 'THB' until the FAQ template started
+  // consuming it — which also meant the three shipped TH guides that use
+  // {{bayHourlyFrom}} (exp-1-th, exp-3-th, gg-thailand-golf-trip-cost-th) were
+  // rendering "550THB ต่อชั่วโมง" in Thai prose. All TH usages are bare tokens
+  // with no adjacent currency word, so carrying บาท here cannot double it.
+  th: { word: 'บาท', space: ' ' },
 }
 
 /** Shared numeric format: Arabic digits with thousands separators. */

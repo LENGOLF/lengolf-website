@@ -1172,5 +1172,21 @@
       "golf-in-thailand-guide": "Golf in Thailand Guide",
       "corporate-golf-packages": "Corporate Golf Packages"
     }
+  },
+  "FaqPage": {
+    "eyebrow": "Frequently Asked Question",
+    "bookABay": "Book a Bay",
+    "lineUs": "LINE Us",
+    "aboutHeading": "About LENGOLF",
+    "pillRate": "{rate}/hour for up to {n} people",
+    "pillLocation": "Mercury Ville, BTS Chidlom (Exit 4)",
+    "pillComfort": "Air-conditioned, rain-proof, open until late",
+    "ctaTitle": "Ready to Try It?",
+    "ctaText": "Book a bay at LENGOLF, {address}. Open {hours}.",
+    "bookNow": "Book Now",
+    "call": "Call {phone}",
+    "relatedQuestions": "Related Questions",
+    "browseAllFaqs": "Browse all FAQs",
+    "exploreMore": "Explore More"
   }
 }
