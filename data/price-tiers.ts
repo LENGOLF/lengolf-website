@@ -88,7 +88,7 @@ export const PRICE_TIER_SLUGS = PRICE_TIERS.map((t) => t.slug)
  * the 5000 tier) are documented in the batch commit/PR notes — the reframed
  * clause is always a viewpoint, never a fact, and the fact itself survives.
  *
- * `th` and `ja` are populated; `ko`/`zh` land in this same batch — add their
+ * `th`, `ja` and `ko` are populated; `zh` lands in this same batch — add its
  * rows the same way (mirrors `RegionHubTranslation` in golf-courses-i18n.ts).
  */
 export interface PriceTierTranslation {
@@ -125,6 +125,20 @@ export const PRICE_TIER_I18N: Partial<
       catch:
         'クラブハウスの設備は必要最低限と考えてください。ほとんどのコースにドライビングレンジはなく、コースコンディションは降雨量によって大きく変わります。ゴルフカートがない場合もあり、歩きでのラウンドのみのコースも少なくありません。',
     },
+    // KO localization decision — same as JA, opposite of TH: the EN
+    // English-language-specific caveats ("limited English on the line",
+    // "book-able online in English") are KEPT — Korean readers ARE
+    // international visitors. Latin course/designer names (Nikanti,
+    // Schmidt-Curley, Nicklaus, EGAT, Asian Tour) stay verbatim without
+    // hangul glosses, matching the shipped KO guide corpus in
+    // data/explainer-pages.ts ("Nikanti는 …", "Nikanti·Alpine은 …").
+    ko: {
+      title: '방콕 근교 저렴한 골프장 ฿1,500 이하 — 추천 코스와 주의할 점',
+      framing:
+        '태국 그린피 시장에서 가장 낮은 가격대예요. 이 가격대의 라운딩은 주로 오래된 시영·정부 계열 코스(EGAT 발전소 부설 코스, 군 소속 클럽 등)에서 이루어지며, 외국인 방문객도 뷔페 브런치 한 끼 가격으로 18홀을 플레이할 수 있어요.',
+      catch:
+        '클럽하우스 시설은 기본적인 수준이라고 생각해 두세요. 대부분의 코스에 드라이빙 레인지가 없고, 코스 상태는 강우량에 따라 크게 달라져요. 골프 카트가 없는 경우도 있으며, 걸어서만 라운딩해야 하는 코스도 많아요.',
+    },
   },
   '2500-baht': {
     th: {
@@ -140,6 +154,13 @@ export const PRICE_TIER_I18N: Partial<
         'バンコク中心部から90分圏内で楽しめる、堅実な中価格帯のゴルフです。この価格帯のコースの多くは開場から15年以上が経ち、建設時と同じオーナーグループが今も運営しています。平日料金は訪タイ観光客よりも、タイ国内の一般ゴルファー向けに設定されています。',
       catch:
         '予約は電話のみというコースが多く、電話口では英語が通じにくいことがあります。コンディションは乾季には良好ですが、グリーンの速さはコースごとに差が出ます。キャディーとカートは原則として利用必須で、料金に含まれているのが一般的です。',
+    },
+    ko: {
+      title: '방콕 근교 저렴한 골프장 ฿2,500 이하 — 추천 코스와 주의할 점',
+      framing:
+        '방콕 중심부에서 90분 이내에 즐길 수 있는, 실속 있는 중저가 골프예요. 이 가격대 코스 대부분은 개장한 지 15년이 넘었고, 처음 코스를 지은 오너 그룹이 지금도 운영하고 있어요. 평일 요금은 외국인 관광객보다는 태국 현지 일반 골퍼를 겨냥해 책정되어 있어요.',
+      catch:
+        '예약이 전화로만 가능한 코스가 많고, 전화 응대에서 영어가 잘 통하지 않을 수 있어요. 건기에는 코스 상태가 좋은 편이지만 그린 스피드는 코스마다 차이가 나요. 캐디와 카트는 대개 이용이 필수이며 요금에 포함되어 있어요.',
     },
   },
   '3500-baht': {
@@ -157,6 +178,13 @@ export const PRICE_TIER_I18N: Partial<
       catch:
         '週末料金は30〜40%上がることが多く、この価格帯が真価を発揮するのは平日プレーです。価格帯上位の一部のコースにはキャディーへのチップの慣習があり、公表されているグリーンフィーに300〜500THBがひそかに上乗せされます。',
     },
+    ko: {
+      title: '방콕 근교 저렴한 골프장 ฿3,500 이하 — 추천 코스와 주의할 점',
+      framing:
+        '예산을 생각하며 여행하는 골퍼에게 가장 균형 잡힌 가격대예요. 방콕에서 1시간 이내의 현대적인 코스를, 캐디와 카트가 포함된 18홀 라운딩치고는 해외 대부분의 시장에서 믿기 어려울 만큼 낮은 가격에 즐길 수 있어요.',
+      catch:
+        '주말 요금은 30~40% 오르는 경우가 많아서, 이 가격대는 평일 플레이에 가장 유용해요. 가격대 상단의 일부 코스에는 캐디 팁 관행이 있어서, 공시된 그린피에 300~500바트가 조용히 더해지기도 해요.',
+    },
   },
   '5000-baht': {
     th: {
@@ -173,6 +201,13 @@ export const PRICE_TIER_I18N: Partial<
       catch:
         'この価格帯には人気の高いコースが複数あり、そうしたコースでは平日のティータイムでも3〜7日前の事前予約が必要です。キャディーに関するマナーはより格式があり、制服姿のキャディーと、ラウンド終了時の決まった形のチップを想定しておきましょう。',
     },
+    ko: {
+      title: '방콕 근교 저렴한 골프장 ฿5,000 이하 — 추천 코스와 주의할 점',
+      framing:
+        '최고급 명문 코스 영역까지는 가지 않는, 프리미엄 데일리피 골프예요. 이 가격대에는 해외 골프 투어 그룹이 정기적으로 이용하는 방콕 지역 상위권 코스들이 들어 있어요. 코스 상태가 좋고, 토너먼트 개최가 가능한 수준이며, 영어로 온라인 예약도 할 수 있어요.',
+      catch:
+        '이 가격대에는 인기가 많은 코스가 여럿 있어서, 평일 티타임도 3~7일 전에 미리 예약해야 해요. 캐디 관련 에티켓은 좀 더 격식을 갖춘 편이라, 유니폼을 입은 캐디와 라운딩이 끝난 뒤의 정해진 형식의 팁 문화를 예상해 두는 게 좋아요.',
+    },
   },
   '7500-baht': {
     th: {
@@ -188,6 +223,13 @@ export const PRICE_TIER_I18N: Partial<
         '観光で訪れるゴルファー向け市場の最上位帯です。この価格帯の名門コースには、オールインクルーシブのプレミアム体験を提供するNikanti（ニカンティ）、Asian Tourの開催実績を持つコース、そしてタイを世界のゴルフ地図に載せたSchmidt-Curley（シュミット・カーリー）やNicklaus（ニクラウス）設計の代表的コースが含まれます。',
       catch:
         'この価格帯のコースでは、週末料金が見出しの上限額を上回ることも珍しくありません。旅行日程に融通が利くなら、平日プレーのほうがはるかに割安です。ドレスコードは厳格に運用されており、コース公式サイトからのオンライン予約が最も安く済むのが一般的です。',
+    },
+    ko: {
+      title: '방콕 근교 저렴한 골프장 ฿7,500 이하 — 추천 코스와 주의할 점',
+      framing:
+        '방문 관광객 시장의 최상위 가격대예요. 이 가격대의 명문 코스에는 올인클루시브 프리미엄 경험을 제공하는 Nikanti, Asian Tour 대회를 개최했던 코스, 그리고 태국을 세계 골프 지도에 올려놓은 Schmidt-Curley와 Nicklaus 설계의 대표 코스들이 포함돼요.',
+      catch:
+        '이 가격대 코스들은 주말 요금이 표시된 상한 금액을 넘어서는 경우가 많아요. 여행 날짜에 여유가 있다면 평일 플레이가 훨씬 더 큰 가치를 제공해요. 드레스 코드가 엄격히 적용되며, 코스 공식 사이트를 통한 온라인 예약이 보통 가장 저렴해요.',
     },
   },
 }
