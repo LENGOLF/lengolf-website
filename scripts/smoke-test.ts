@@ -1898,6 +1898,98 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  // Batch 2: the rental/lessons FAQ cluster (JA/KO/ZH). The three rental-
+  // category entries also render the course-rental CTA banner.
+  {
+    path: "/ja/faq/can-you-play-golf-in-bangkok-when-it-rains/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/faq/do-i-need-experience-to-play-golf-simulator/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/faq/should-i-bring-golf-clubs-to-thailand-or-rent/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/faq/cost-to-fly-with-golf-clubs-to-thailand/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/faq/worth-taking-golf-lessons-bangkok-holiday/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/faq/what-golf-clubs-available-rent-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/faq/can-you-play-golf-in-bangkok-when-it-rains/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/faq/do-i-need-experience-to-play-golf-simulator/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/faq/should-i-bring-golf-clubs-to-thailand-or-rent/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/faq/cost-to-fly-with-golf-clubs-to-thailand/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/faq/worth-taking-golf-lessons-bangkok-holiday/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/faq/what-golf-clubs-available-rent-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/faq/can-you-play-golf-in-bangkok-when-it-rains/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/faq/do-i-need-experience-to-play-golf-simulator/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/faq/should-i-bring-golf-clubs-to-thailand-or-rent/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/faq/cost-to-fly-with-golf-clubs-to-thailand/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/faq/worth-taking-golf-lessons-bangkok-holiday/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/faq/what-golf-clubs-available-rent-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
   // Golf course detail pages — spot-check one Bangkok + two Pattaya + two Hua Hin + two Phuket
   {
     path: "/golf-courses/bangkok/nikanti-golf-club/",
