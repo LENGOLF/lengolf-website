@@ -257,10 +257,10 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: 'Golf cart (outdoor courses)', price: '600–800 THB', notes: 'Optional at most courses. Shared between 2 players.' },
         { item: 'Driving range', price: '100–300 THB', notes: 'Per bucket of balls (50–100 balls). No club rental usually.' },
         { item: 'Golf lessons (indoor)', price: '1,800 THB/hr', notes: 'Private lesson with a pro. LENGOLF offers a free 1-hour trial.' },
-        { item: 'Golf club rental (outdoor courses)', price: '500–1,500 THB', notes: 'Per round. Quality varies significantly.' },
+        { item: 'Golf club rental (outdoor courses)', price: '1,000–2,500 THB', notes: 'Per round. Quality varies significantly.' },
       ],
       comparison_with_alternatives:
-        'The cost difference between indoor and outdoor golf in Bangkok is significant. An outdoor round at a mid-range course costs approximately 2,500 THB (green fee) + 400 THB (caddie) + 700 THB (cart) + 500 THB (club rental if needed) = 4,100 THB minimum per person, plus 1–2 hours of transport each way. At LENGOLF, a group of 5 can play for 550 THB total per hour — 110 THB per person — in air-conditioned comfort at BTS Chidlom. For practice, social outings, or anyone who wants to experience golf without the full-day commitment, indoor simulators are dramatically more accessible.',
+        'The cost difference between indoor and outdoor golf in Bangkok is significant. An outdoor round at a mid-range course costs approximately 2,500 THB (green fee) + 400 THB (caddie) + 700 THB (cart) + 1,500 THB (club rental if needed) = 5,100 THB minimum per person, plus 1–2 hours of transport each way. At LENGOLF, a group of 5 can play for 550 THB total per hour — 110 THB per person — in air-conditioned comfort at BTS Chidlom. For practice, social outings, or anyone who wants to experience golf without the full-day commitment, indoor simulators are dramatically more accessible.',
       value_proposition:
         'At 110 THB per person per hour (group of 5), LENGOLF is the most affordable way to play golf in Bangkok. No caddie fees, no transport costs, no dress code. Just show up at BTS Chidlom and play.',
       last_verified: '2026-02-19',
@@ -277,7 +277,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
       sections: [
         {
           heading: 'Outdoor Golf: Full Cost Breakdown',
-          body: 'A typical outdoor golf day in Bangkok includes: green fees (1,500–4,000 THB), caddie fee (300–400 THB + 300–500 THB tip), golf cart (600–800 THB, often shared), club rental if you don\'t have your own (500–1,500 THB), and transport (taxi to most courses is 400–800 THB each way, or join a van service for 200–400 THB). The total for a solo player renting clubs comes to 4,000–7,000 THB for a single round. Outdoor courses are generally 45–90 minutes from central Bangkok, which means a full golf day is a 6–8 hour commitment.',
+          body: 'A typical outdoor golf day in Bangkok includes: green fees (1,500–4,000 THB), caddie fee (300–400 THB + 300–500 THB tip), golf cart (600–800 THB, often shared), club rental if you don\'t have your own (1,000–2,500 THB), and transport (taxi to most courses is 400–800 THB each way, or join a van service for 200–400 THB). The total for a solo player renting clubs comes to 4,500–8,000 THB for a single round. Outdoor courses are generally 45–90 minutes from central Bangkok, which means a full golf day is a 6–8 hour commitment.',
         },
         {
           heading: 'Indoor Simulator Golf: What You Get',

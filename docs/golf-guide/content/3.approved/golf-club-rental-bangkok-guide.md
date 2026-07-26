@@ -55,7 +55,7 @@ If you're particular about equipment, it's always worth calling ahead to ask wha
 
 ## Cost Overview
 
-Rental set prices at Bangkok golf courses generally fall in the range of 300–800 THB per round, though this varies depending on the course tier and what's included. Some courses bundle the rental fee into caddie and green fee packages; others charge separately.
+Rental set prices at Bangkok golf courses generally fall in the range of 1,000–2,500 THB per round, with around 1,500 THB being typical, though this varies depending on the course tier and what's included. Some courses bundle the rental fee into caddie and green fee packages; others charge separately.
 
 Dedicated simulator venues price club rental differently — typically it's included in the per-bay or per-hour session rate rather than charged as a standalone item.
 
