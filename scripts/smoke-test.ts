@@ -1805,6 +1805,99 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  // Translated JA/KO/ZH FAQ pages (data/faq-pages.ts entries with those
+  // locales + per-locale allowlist entries) — the cost/rental/lessons/
+  // simulator cluster; section I enforces registry <-> data sync.
+  {
+    path: "/ja/faq/how-much-does-indoor-golf-cost-in-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/faq/can-i-rent-golf-clubs-in-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/faq/are-rental-golf-clubs-good-enough/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/faq/best-way-to-learn-golf-in-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/faq/how-accurate-are-golf-simulators/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/faq/can-beginners-play-golf-simulators/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/faq/how-much-does-indoor-golf-cost-in-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/faq/can-i-rent-golf-clubs-in-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/faq/are-rental-golf-clubs-good-enough/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/faq/best-way-to-learn-golf-in-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/faq/how-accurate-are-golf-simulators/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/faq/can-beginners-play-golf-simulators/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/faq/how-much-does-indoor-golf-cost-in-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/faq/can-i-rent-golf-clubs-in-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/faq/are-rental-golf-clubs-good-enough/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/faq/best-way-to-learn-golf-in-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/faq/how-accurate-are-golf-simulators/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/faq/can-beginners-play-golf-simulators/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
   // Golf course detail pages — spot-check one Bangkok + two Pattaya + two Hua Hin + two Phuket
   {
     path: "/golf-courses/bangkok/nikanti-golf-club/",
