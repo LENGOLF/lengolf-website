@@ -1232,6 +1232,13 @@
     "roundupReason": "平日{price}泰铢起",
     "otherPriceBands": "其他价格区间"
   },
+  "GolfCourseShared": {
+    "feeFrom": "{price}泰铢起",
+    "bookNow": "立即预订",
+    "learnMore": "了解更多",
+    "rentalEyebrow": "没有球杆？没问题。",
+    "rentalBody": "高级球杆租借，直接送达您在曼谷的酒店——Callaway Paradym、Warbird、Majesty。<price>每日1,200泰铢</price>起。无需支付行李托运费，也免去机场的麻烦。"
+  },
   "ExplainerPage": {
     "guideLabel": "LENGOLF指南",
     "bookABay": "预订球位",

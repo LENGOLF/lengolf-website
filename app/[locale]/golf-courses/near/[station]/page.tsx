@@ -34,7 +34,7 @@ export async function generateStaticParams() {
   // dynamicParams:false serves exactly these paths and 404s everything else.
   // EN-only: omitting `locale` would cross-product with every locale from the
   // root layout, statically rendering ja/ko/zh copies that the middleware 301s
-  // to English anyway (and whose GolfCourseShared messages don't exist there).
+  // to English anyway.
   return [...getStationSlugs(), ...getAirportSlugs()].map((station) => ({
     locale: 'en',
     station,
