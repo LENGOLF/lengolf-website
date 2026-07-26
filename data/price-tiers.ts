@@ -97,7 +97,7 @@ export interface PriceTierTranslation {
   catch: string
 }
 
-type PriceTierLocale = 'th'
+type PriceTierLocale = 'th' | 'ja' | 'ko' | 'zh'
 
 export const PRICE_TIER_I18N: Partial<
   Record<string, Partial<Record<PriceTierLocale, PriceTierTranslation>>>
