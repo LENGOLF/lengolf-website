@@ -1728,6 +1728,83 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  // Translated JA/KO/ZH price-tier pages (data/price-tiers.ts PRICE_TIER_I18N
+  // + per-locale allowlist entries) — all 5 tiers per locale in this batch.
+  {
+    path: "/ja/golf-courses/under/1500-baht/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/golf-courses/under/2500-baht/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/golf-courses/under/3500-baht/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/golf-courses/under/5000-baht/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/golf-courses/under/7500-baht/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/golf-courses/under/1500-baht/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/golf-courses/under/2500-baht/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/golf-courses/under/3500-baht/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/golf-courses/under/5000-baht/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/golf-courses/under/7500-baht/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/golf-courses/under/1500-baht/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/golf-courses/under/2500-baht/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/golf-courses/under/3500-baht/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/golf-courses/under/5000-baht/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/golf-courses/under/7500-baht/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
   // Golf course detail pages — spot-check one Bangkok + two Pattaya + two Hua Hin + two Phuket
   {
     path: "/golf-courses/bangkok/nikanti-golf-club/",
@@ -2455,14 +2532,10 @@ const thaiRedirectTests: ThaiRedirectTest[] = [
     expectedLocation: "/golf-courses/koh-samui/",
     label: "Untranslated TH region hub (only translated regions may 200)",
   },
-  // Untranslated price-tier locale must still 301 to English — ja has no
-  // PRICE_TIER_I18N entries (only th is translated as of this batch). Guards
-  // the price-tier allowlist; pick another locale here if ja ever gains one.
-  {
-    path: "/ja/golf-courses/under/3500-baht/",
-    expectedLocation: "/golf-courses/under/3500-baht/",
-    label: "Untranslated JA price tier (only translated locales may 200)",
-  },
+  // NOTE: the former "untranslated JA price tier must 301" test is gone on
+  // purpose — every locale (th/ja/ko/zh) now has PRICE_TIER_I18N rows, so no
+  // untranslated locale remains to probe. The price-tier registry-consistency
+  // section still guards the allowlist ⇄ data-file sync in both directions.
   // EN-only golf-course routes (near/best-for/compare) build no locale copies
   // (generateStaticParams emits locale: 'en' only) and have dynamicParams:false,
   // so the middleware 301 is the ONLY thing keeping their locale URLs from a

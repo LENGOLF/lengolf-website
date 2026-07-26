@@ -123,6 +123,13 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/pattaya",
       "/golf-courses/hua-hin",
       "/golf-courses/chiang-mai",
+      // Translated price-tier pages (data/price-tiers.ts PRICE_TIER_I18N) —
+      // kept in sync by the smoke-test price-tier registry consistency check.
+      "/golf-courses/under/1500-baht",
+      "/golf-courses/under/2500-baht",
+      "/golf-courses/under/3500-baht",
+      "/golf-courses/under/5000-baht",
+      "/golf-courses/under/7500-baht",
       "/guide/corporate-golf-events-bangkok",
       "/guide/best-time-play-golf-thailand",
       "/guide/nikanti-golf-club-bangkok",
@@ -193,6 +200,13 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/pattaya",
       "/golf-courses/hua-hin",
       "/golf-courses/chiang-mai",
+      // Translated price-tier pages (data/price-tiers.ts PRICE_TIER_I18N) —
+      // kept in sync by the smoke-test price-tier registry consistency check.
+      "/golf-courses/under/1500-baht",
+      "/golf-courses/under/2500-baht",
+      "/golf-courses/under/3500-baht",
+      "/golf-courses/under/5000-baht",
+      "/golf-courses/under/7500-baht",
       "/guide/corporate-golf-events-bangkok",
       "/guide/best-time-play-golf-thailand",
       "/guide/nikanti-golf-club-bangkok",
@@ -263,6 +277,13 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/pattaya",
       "/golf-courses/hua-hin",
       "/golf-courses/chiang-mai",
+      // Translated price-tier pages (data/price-tiers.ts PRICE_TIER_I18N) —
+      // kept in sync by the smoke-test price-tier registry consistency check.
+      "/golf-courses/under/1500-baht",
+      "/golf-courses/under/2500-baht",
+      "/golf-courses/under/3500-baht",
+      "/golf-courses/under/5000-baht",
+      "/golf-courses/under/7500-baht",
       "/guide/corporate-golf-events-bangkok",
       "/guide/best-time-play-golf-thailand",
       "/guide/nikanti-golf-club-bangkok",
