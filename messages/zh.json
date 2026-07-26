@@ -1222,6 +1222,16 @@
     "openGuide": "打开指南",
     "close": "关闭"
   },
+  "GolfCoursePriceTier": {
+    "metaDescription": "汇总平日果岭费不超过฿{amount}的曼谷周边优质高尔夫球场，并介绍这个价位段的注意事项。",
+    "breadcrumbGolfCourses": "高尔夫球场",
+    "breadcrumbCurrent": "฿{amount}以下",
+    "eyebrowBadge": "平日果岭费 · ฿{amount}以下",
+    "catchHeading": "有什么要注意的？",
+    "topCoursesHeading": "平日价格฿{amount}以下的{count}座精选球场",
+    "roundupReason": "平日{price}泰铢起",
+    "otherPriceBands": "其他价格区间"
+  },
   "ExplainerPage": {
     "guideLabel": "LENGOLF指南",
     "bookABay": "预订球位",

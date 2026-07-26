@@ -88,8 +88,8 @@ export const PRICE_TIER_SLUGS = PRICE_TIERS.map((t) => t.slug)
  * the 5000 tier) are documented in the batch commit/PR notes — the reframed
  * clause is always a viewpoint, never a fact, and the fact itself survives.
  *
- * `th`, `ja` and `ko` are populated; `zh` lands in this same batch — add its
- * rows the same way (mirrors `RegionHubTranslation` in golf-courses-i18n.ts).
+ * All four locales — `th`, `ja`, `ko` and `zh` — are populated
+ * (mirrors `RegionHubTranslation` in golf-courses-i18n.ts).
  */
 export interface PriceTierTranslation {
   title: string
@@ -139,6 +139,26 @@ export const PRICE_TIER_I18N: Partial<
       catch:
         '클럽하우스 시설은 기본적인 수준이라고 생각해 두세요. 대부분의 코스에 드라이빙 레인지가 없고, 코스 상태는 강우량에 따라 크게 달라져요. 골프 카트가 없는 경우도 있으며, 걸어서만 라운딩해야 하는 코스도 많아요.',
     },
+    // ZH GSC context (2026-07): a ZH searcher typed 室内高尔夫球练习场 收费 —
+    // fee/price intent — so titles front-load 曼谷周边便宜高尔夫球场 plus the
+    // ฿X,XXX ceiling (kept verbatim, matching the page's UI badges).
+    // Localization decision — same as JA/KO, opposite of TH: the EN
+    // English-language-specific caveats ("limited English on the line",
+    // "book-able online in English") are KEPT — Chinese readers ARE
+    // international visitors. Latin names follow the shipped ZH corpus in
+    // data/explainer-pages.ts (the ZH green-fees entry is the reference):
+    // course names stay Latin verbatim ("Nikanti的全包定价最透明"), Asian Tour
+    // is glossed 亚洲巡回赛（Asian Tour） (ZH Phuket guide), designer person
+    // names get transliteration + Latin parens (尼克劳斯（Nicklaus）, per
+    // 杰克·尼克劳斯（Jack Nicklaus） in the same corpus); Schmidt-Curley has no
+    // shipped transliteration and stays Latin verbatim.
+    zh: {
+      title: '曼谷周边便宜高尔夫球场 ฿1,500以下 — 推荐球场与注意事项',
+      framing:
+        '处于泰国果岭费市场的最低价位。这个价位的球一般在开业多年的市政或政府系球场（EGAT电厂附属球场、军方俱乐部等）进行，外国访客花一顿自助早午餐的钱就能打完18洞。',
+      catch:
+        '会所设施请按基础水平预期：大多数球场没有练习场，场地状态也会随降雨量明显起伏。球车未必有得租，这类球场不少只能步行打球。',
+    },
   },
   '2500-baht': {
     th: {
@@ -161,6 +181,13 @@ export const PRICE_TIER_I18N: Partial<
         '방콕 중심부에서 90분 이내에 즐길 수 있는, 실속 있는 중저가 골프예요. 이 가격대 코스 대부분은 개장한 지 15년이 넘었고, 처음 코스를 지은 오너 그룹이 지금도 운영하고 있어요. 평일 요금은 외국인 관광객보다는 태국 현지 일반 골퍼를 겨냥해 책정되어 있어요.',
       catch:
         '예약이 전화로만 가능한 코스가 많고, 전화 응대에서 영어가 잘 통하지 않을 수 있어요. 건기에는 코스 상태가 좋은 편이지만 그린 스피드는 코스마다 차이가 나요. 캐디와 카트는 대개 이용이 필수이며 요금에 포함되어 있어요.',
+    },
+    zh: {
+      title: '曼谷周边便宜高尔夫球场 ฿2,500以下 — 推荐球场与注意事项',
+      framing:
+        '从曼谷市中心出发90分钟以内、实实在在的中等预算高尔夫。这个价位段的球场大多已开业15年以上，至今仍由当年建场的同一业主集团经营，平日价格主要面向泰国本地球友，而非入境游客。',
+      catch:
+        '预订往往只能打电话，而且电话里英语未必说得通。旱季场地状态扎实，但果岭速度各场不一。球童和球车通常为强制使用，费用已包含在价格里。',
     },
   },
   '3500-baht': {
@@ -185,6 +212,13 @@ export const PRICE_TIER_I18N: Partial<
       catch:
         '주말 요금은 30~40% 오르는 경우가 많아서, 이 가격대는 평일 플레이에 가장 유용해요. 가격대 상단의 일부 코스에는 캐디 팁 관행이 있어서, 공시된 그린피에 300~500바트가 조용히 더해지기도 해요.',
     },
+    zh: {
+      title: '曼谷周边便宜高尔夫球场 ฿3,500以下 — 推荐球场与注意事项',
+      framing:
+        '对精打细算的到访球友来说，这是最划算的价位段——曼谷1小时以内的现代球场，18洞含球童和球车的价格，在大多数国际市场看来低得难以置信。',
+      catch:
+        '周末价格常上涨30–40%，所以这个价位段最适合平日打球。价位段上端的部分球场有球童小费惯例，会在公示的果岭费之外悄悄多出300–500泰铢。',
+    },
   },
   '5000-baht': {
     th: {
@@ -208,6 +242,13 @@ export const PRICE_TIER_I18N: Partial<
       catch:
         '이 가격대에는 인기가 많은 코스가 여럿 있어서, 평일 티타임도 3~7일 전에 미리 예약해야 해요. 캐디 관련 에티켓은 좀 더 격식을 갖춘 편이라, 유니폼을 입은 캐디와 라운딩이 끝난 뒤의 정해진 형식의 팁 문화를 예상해 두는 게 좋아요.',
     },
+    zh: {
+      title: '曼谷周边便宜高尔夫球场 ฿5,000以下 — 推荐球场与注意事项',
+      framing:
+        '尚未跨入顶级名场领域的高端日常收费球场。这个价位段涵盖国际高尔夫旅行团常年使用的曼谷地区较好球场——场地养护到位、具备办赛水准，还能用英语在线预订。',
+      catch:
+        '这个价位段有好几座球场热门到平日开球时间也要提前3–7天预订。球童礼仪更为正式：球童统一着装，并在打完一轮后按既定惯例给小费。',
+    },
   },
   '7500-baht': {
     th: {
@@ -230,6 +271,13 @@ export const PRICE_TIER_I18N: Partial<
         '방문 관광객 시장의 최상위 가격대예요. 이 가격대의 명문 코스에는 올인클루시브 프리미엄 경험을 제공하는 Nikanti, Asian Tour 대회를 개최했던 코스, 그리고 태국을 세계 골프 지도에 올려놓은 Schmidt-Curley와 Nicklaus 설계의 대표 코스들이 포함돼요.',
       catch:
         '이 가격대 코스들은 주말 요금이 표시된 상한 금액을 넘어서는 경우가 많아요. 여행 날짜에 여유가 있다면 평일 플레이가 훨씬 더 큰 가치를 제공해요. 드레스 코드가 엄격히 적용되며, 코스 공식 사이트를 통한 온라인 예약이 보통 가장 저렴해요.',
+    },
+    zh: {
+      title: '曼谷周边便宜高尔夫球场 ฿7,500以下 — 推荐球场与注意事项',
+      framing:
+        '到访游客市场的最高价位段。这里的名场包括全包式高端体验（Nikanti）、曾承办亚洲巡回赛（Asian Tour）赛事的球场，以及把泰国推上世界高尔夫版图的Schmidt-Curley与尼克劳斯（Nicklaus）设计名作。',
+      catch:
+        '这些球场的周末价格经常超出本页标示的上限；如果你的行程日期灵活，平日打球划算得多。着装要求会被严格执行，而通过球场官网在线预订通常最便宜。',
     },
   },
 }
