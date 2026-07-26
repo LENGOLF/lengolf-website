@@ -58,7 +58,7 @@ const studentImages = [
   { src: storageUrl('lessons/student-kids-03.jpg'), alt: 'Junior coaching session focused on building proper swing mechanics', width: 1200, height: 800 },
 ]
 
-const FAQ_COUNT = 9
+const FAQ_COUNT = 14
 
 export default async function LessonsPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
