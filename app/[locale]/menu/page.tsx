@@ -7,6 +7,7 @@ import BookingCTA from '@/components/shared/BookingCTA'
 import FaqSection from '@/components/shared/FaqSection'
 import MenuImageCard from '@/components/shared/MenuImageCard'
 import { storageUrl, SITE_URL, BUSINESS_INFO } from '@/lib/constants'
+import { getSiteFacts } from '@/lib/site-facts'
 import { getAlternates, getCanonical, OG_LOCALES, type Locale } from '@/lib/translated-routes'
 import { getFoodMenuJsonLd, getFaqPageJsonLd, getBreadcrumbJsonLd } from '@/lib/jsonld'
 import { menuGroups, menuImages, type MenuSection } from '@/data/food-menu'
@@ -95,6 +96,8 @@ export default async function MenuPage({ params }: { params: Promise<{ locale: s
   setRequestLocale(locale)
 
   const t = await getTranslations('Menu')
+  const tContact = await getTranslations('ContactInfo')
+  const facts = await getSiteFacts()
   const tFaq = await getTranslations('MenuFaq')
 
   // Build FAQ items from translations
@@ -212,7 +215,7 @@ export default async function MenuPage({ params }: { params: Promise<{ locale: s
       <SectionWrapper>
         <div className="mx-auto max-w-4xl text-center">
           <p className="text-base leading-relaxed text-muted-foreground md:text-lg">
-            {t('introText', { address: BUSINESS_INFO.addressShort, hours: BUSINESS_INFO.hours })}
+            {t('introText', { address: tContact('address'), hours: facts.openingHours })}
           </p>
 
           <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
