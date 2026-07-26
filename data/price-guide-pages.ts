@@ -154,7 +154,7 @@ const VALUE_REVIEWS = {
 // Shared venue comparison data
 // All competitor rates re-verified 2026-07-26 against each venue's own
 // published rate card + Google Maps open status. RAK Screen Golf (Asoke)
-// was removed: Google Maps marks it permanently closed.
+// is deliberately not included: Google Maps marks it permanently closed.
 const SIMULATOR_VENUES = {
   lengolf: {
     name: 'LENGOLF',
@@ -236,7 +236,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     slug: 'how-much-does-golf-cost-bangkok',
     title: 'How Much Does Golf Cost in Bangkok? (2026 Complete Guide)',
     meta_description:
-      'Golf in Bangkok costs 550–4,000 THB depending on format. Compare indoor simulator rates (from 550 THB/hr for 5 people) vs outdoor course green fees, driving ranges, and lessons.',
+      'Golf in Bangkok costs 400–4,000 THB depending on format. Compare indoor simulator rates (from 550 THB/hr for 5 people in central Bangkok) vs outdoor green fees, ranges, and lessons.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -247,7 +247,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     updated_at: now,
     content: {
       intro:
-        'Golf in Bangkok typically costs between 550 and 4,000 THB, depending on whether you play indoors on a simulator or outdoors on a course. Indoor golf simulators start at 550 THB per hour for up to 5 people — just 110 THB per person. Outdoor courses range from 1,500 to 4,000 THB per round, plus caddie fees and transport.',
+        'Golf in Bangkok typically costs between 400 and 4,000 THB, depending on whether you play indoors on a simulator or outdoors on a course. Indoor golf simulators in central Bangkok start at 550 THB per hour for up to 5 people — just 110 THB per person — while suburban screen-golf venues start around 400 THB. Outdoor courses range from 1,500 to 4,000 THB per round, plus caddie fees and transport.',
       price_breakdown: [
         { item: 'Indoor golf simulator (LENGOLF)', price: '550–950 THB/hr', notes: 'Per bay, up to 5 players. Free club rental included. BTS Chidlom.' },
         { item: 'Indoor golf simulator (other venues)', price: '400–1,400 THB/hr', notes: 'Varies by venue, time, and day. Some exclude tax; the cheapest rates are at car-access venues outside the centre.' },
@@ -303,7 +303,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     slug: 'golf-simulator-prices-bangkok',
     title: 'Golf Simulator Prices in Bangkok Compared (2026)',
     meta_description:
-      'Compare golf simulator prices in Bangkok (verified July 2026): LENGOLF from 550 THB/hr, Front 9, Fairway, Groove & Grit, Golfzon, Phothalai, and Topgolf Megacity. Full rate cards and per-person costs.',
+      'Compare golf simulator prices in Bangkok, verified July 2026: LENGOLF from 550 THB/hr vs Front 9, Fairway, Groove & Grit, Golfzon, Phothalai & Topgolf.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
