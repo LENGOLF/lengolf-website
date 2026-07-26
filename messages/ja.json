@@ -1219,6 +1219,16 @@
     "openGuide": "ガイドを開く",
     "close": "閉じる"
   },
+  "GolfCoursePriceTier": {
+    "metaDescription": "平日グリーンフィー฿{amount}以下で回れるバンコク近郊の上位ゴルフ場と、この価格帯で知っておきたいポイントをご紹介します。",
+    "breadcrumbGolfCourses": "ゴルフ場",
+    "breadcrumbCurrent": "฿{amount}以下",
+    "eyebrowBadge": "平日グリーンフィー · ฿{amount}以下",
+    "catchHeading": "注意しておきたい点",
+    "topCoursesHeading": "平日料金฿{amount}以下の上位{count}コース",
+    "roundupReason": "平日{price}THB〜",
+    "otherPriceBands": "その他の価格帯"
+  },
   "ExplainerPage": {
     "guideLabel": "LENGOLFガイド",
     "bookABay": "ベイを予約",
