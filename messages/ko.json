@@ -1279,6 +1279,7 @@
     "call": "전화 {phone}",
     "relatedQuestions": "관련 질문",
     "browseAllFaqs": "자주 묻는 질문 전체 보기",
-    "exploreMore": "더 알아보기"
+    "exploreMore": "더 알아보기",
+    "schemaSeeFullAnswer": "자세한 답변은 {url}에서 확인하세요"
   }
 }

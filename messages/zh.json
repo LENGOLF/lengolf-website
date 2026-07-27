@@ -1280,6 +1280,7 @@
     "call": "致电 {phone}",
     "relatedQuestions": "相关问题",
     "browseAllFaqs": "浏览全部常见问题",
-    "exploreMore": "更多内容"
+    "exploreMore": "更多内容",
+    "schemaSeeFullAnswer": "完整答案请见 {url}"
   }
 }

@@ -1197,6 +1197,7 @@
     "call": "Call {phone}",
     "relatedQuestions": "Related Questions",
     "browseAllFaqs": "Browse all FAQs",
-    "exploreMore": "Explore More"
+    "exploreMore": "Explore More",
+    "schemaSeeFullAnswer": "See our full answer at {url}"
   }
 }

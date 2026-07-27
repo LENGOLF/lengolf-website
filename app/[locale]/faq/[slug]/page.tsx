@@ -1,4 +1,4 @@
-import { setRequestLocale } from 'next-intl/server'
+import { setRequestLocale, getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getAllSeoPageParams, getSeoPageBySlug } from '@/lib/seo-pages'
@@ -57,7 +57,10 @@ export default async function FaqPage({ params }: Props) {
     notFound()
   }
 
-  const jsonLd = getSeoFaqPageJsonLd(page, locale)
+  const tFaq = await getTranslations('FaqPage')
+  const jsonLd = getSeoFaqPageJsonLd(page, locale, (url) =>
+    tFaq('schemaSeeFullAnswer', { url })
+  )
 
   return (
     <>

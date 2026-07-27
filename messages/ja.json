@@ -1277,6 +1277,7 @@
     "call": "電話 {phone}",
     "relatedQuestions": "関連する質問",
     "browseAllFaqs": "よくあるご質問をすべて見る",
-    "exploreMore": "もっと見る"
+    "exploreMore": "もっと見る",
+    "schemaSeeFullAnswer": "詳しい回答は {url} をご覧ください"
   }
 }

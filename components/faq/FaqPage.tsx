@@ -1,9 +1,11 @@
 import { getLocale, getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
+import NextLink from 'next/link'
 import { ArrowRight, Check, HelpCircle } from 'lucide-react'
 import { getSiteFacts, getFactTokens } from '@/lib/site-facts'
 import { BOOKING_URL, BUSINESS_INFO, SOCIAL_LINKS } from '@/lib/constants'
 import { relatedQuestionPath, buildRelatedLabels } from '@/lib/seo-links'
+import { hasTranslationForLocale } from '@/lib/translated-routes'
 import BoldText from '@/components/shared/BoldText'
 import MarkdownTable, { isMarkdownTableBlock } from '@/components/shared/MarkdownTable'
 import CourseRentalCrossLink from '@/components/shared/CourseRentalCrossLink'
@@ -19,6 +21,9 @@ interface Props {
  * Both spellings exist in data/faq-pages.ts ('rental' and 'clubs-rental').
  */
 const RENTAL_CTA_CATEGORIES = ['rental', 'clubs-rental']
+
+const FAQ_HUB_LINK_CLASS =
+  'text-sm font-semibold text-[#2d6a4f] underline underline-offset-2 hover:text-[#1a472a]'
 
 export default async function FaqPageComponent({ data }: Props) {
   const { content } = data
@@ -215,12 +220,21 @@ export default async function FaqPageComponent({ data }: Props) {
               <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl">
                 {t('relatedQuestions')}
               </h2>
-              <Link
-                href="/faq/"
-                className="text-sm font-semibold text-[#2d6a4f] underline underline-offset-2 hover:text-[#1a472a]"
-              >
-                {t('browseAllFaqs')}
-              </Link>
+              {/* The /faq hub is only translated for th. The locale-aware Link
+                  would emit /<locale>/faq/ for the others and the middleware
+                  would 301 it to the EN hub; forcing locale="en" is no better,
+                  since localePrefix is 'as-needed' and /en/faq/ 307s. So use a
+                  plain unprefixed link to the EN hub, and the locale-aware one
+                  only where a translated hub actually exists. */}
+              {hasTranslationForLocale(locale, '/faq') ? (
+                <Link href="/faq/" className={FAQ_HUB_LINK_CLASS}>
+                  {t('browseAllFaqs')}
+                </Link>
+              ) : (
+                <NextLink href="/faq/" className={FAQ_HUB_LINK_CLASS}>
+                  {t('browseAllFaqs')}
+                </NextLink>
+              )}
             </div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
               {content.related_questions.map((rq) => (

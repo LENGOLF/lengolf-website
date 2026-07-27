@@ -1197,6 +1197,7 @@
     "call": "โทร {phone}",
     "relatedQuestions": "คำถามที่เกี่ยวข้อง",
     "browseAllFaqs": "ดูคำถามที่พบบ่อยทั้งหมด",
-    "exploreMore": "อ่านเพิ่มเติม"
+    "exploreMore": "อ่านเพิ่มเติม",
+    "schemaSeeFullAnswer": "ดูคำตอบฉบับเต็มได้ที่ {url}"
   }
 }
