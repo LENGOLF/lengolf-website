@@ -324,6 +324,51 @@ export const faqPages: FaqSeoPage[] = [
     },
   },
 
+  // ─── TH: how-much-does-indoor-golf-cost-in-bangkok ───
+  // Static content mirroring the EN entry's literal prices — this is what the
+  // FAQ renderer actually serves. NOTE: the EN sibling has an (unwired)
+  // getIndoorGolfCostContent() dynamic-pricing function that no renderer
+  // calls; do NOT add a TH twin inside that function unless the family is
+  // actually wired up (same caution as the faq-11-th / faq-2-ja / faq-2-ko /
+  // faq-2-zh precedents).
+  // Prices rendered per the TH currency ruling (บาท spelled out, half-width
+  // digits, ASCII - ranges) and stamped with the as-of marker
+  // (ข้อมูล ณ กรกฎาคม 2026) — every figure traces to the EN entry.
+  // Title/meta front-load the TH pricing query (ราคากอล์ฟในร่ม กรุงเทพ) and stay
+  // distinct from the shipped TH guides /guide/screen-golf-bangkok and
+  // /guide/round-of-golf-cost-bangkok. "ซิมมูเลเตอร์" follows the spelling used
+  // by all eight shipped TH FAQ entries in this file (the guide corpus uses
+  // ซิมูเลเตอร์; guide titles quoted in related_questions are kept verbatim).
+  // related_* retargeted to TH-translated pages — the EN corporate-event and
+  // how-long-does-simulator-golf-take FAQs have no TH translation.
+  {
+    id: 'faq-2-th',
+    page_type: 'faq',
+    slug: 'how-much-does-indoor-golf-cost-in-bangkok',
+    title: 'ราคากอล์ฟในร่มในกรุงเทพฯ เท่าไหร่ — ชั่วโมงละ 550-1,000 บาท',
+    meta_description:
+      'กอล์ฟในร่มในกรุงเทพฯ ราคาชั่วโมงละ 550-1,000 บาท ขึ้นอยู่กับสถานที่ วัน และช่วงเวลา ที่ LENGOLF ค่าเช่าเบย์เริ่มต้น 550 บาท/ชั่วโมง สำหรับผู้เล่นสูงสุด 5 คน พร้อมไม้กอล์ฟมาตรฐานให้ใช้ฟรี (ข้อมูล ณ กรกฎาคม 2026)',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'pricing',
+    locale: 'th',
+    related_slugs: ['/faq/can-i-rent-golf-clubs-in-bangkok', '/guide/round-of-golf-cost-bangkok', '/golf'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        'กอล์ฟในร่มในกรุงเทพฯ โดยทั่วไปมีราคาชั่วโมงละ 550-1,000 บาท ขึ้นอยู่กับสถานที่ ช่วงเวลาของวัน และวันในสัปดาห์ ที่ LENGOLF ค่าเช่าเบย์ซิมมูเลเตอร์เริ่มต้นที่ 550 บาทต่อชั่วโมง สำหรับผู้เล่นสูงสุด 5 คน ซึ่งเท่ากับเพียง 110 บาทต่อคนหากมากันเป็นกลุ่ม และมีไม้กอล์ฟมาตรฐานให้ใช้ฟรีในทุกการจอง (ข้อมูล ณ กรกฎาคม 2026)',
+      answer_body:
+        'นี่คือการแจกแจงราคากอล์ฟในร่มในกรุงเทพฯ อย่างครบถ้วน\n\n**อัตราค่าเบย์ของ LENGOLF**\n- วันธรรมดา (จันทร์-พฤหัสบดี) ก่อน 14:00 น.: 550 บาท/ชั่วโมง\n- วันธรรมดา 14:00-23:00 น.: 750 บาท/ชั่วโมง\n- วันหยุด (ศุกร์-อาทิตย์ และวันนักขัตฤกษ์) ก่อน 14:00 น.: 750 บาท/ชั่วโมง\n- วันหยุด 14:00-23:00 น.: 950 บาท/ชั่วโมง\n\nแต่ละเบย์รองรับผู้เล่นได้สูงสุด 5 คน และรวมบริการเช่าไม้กอล์ฟมาตรฐานฟรี หากต้องการไม้ระดับพรีเมียม (Callaway Warbird หรือ Majesty Shuttle) มีค่าใช้จ่ายเพิ่ม 150 บาท/ชั่วโมง\n\n**แพ็กเกจรายเดือนสำหรับผู้เล่นประจำ**\nหากคุณเล่นเป็นประจำ แพ็กเกจรายเดือนคุ้มค่ากว่า\n- Bronze: 5 ชั่วโมง 3,000 บาท (600 บาท/ชั่วโมง)\n- Silver: 15 ชั่วโมง 8,000 บาท (ประมาณ 533 บาท/ชั่วโมง)\n- Gold: 30 ชั่วโมง 14,000 บาท (ประมาณ 467 บาท/ชั่วโมง)\n- Diamond: ไม่จำกัดชั่วโมง 8,000 บาท/เดือน\n- Diamond+: ไม่จำกัดชั่วโมง 18,000 บาท/3 เดือน\n\nแพ็กเกจ Early Bird (ใช้ได้ก่อน 14:00 น. เท่านั้น) เริ่มต้นที่ 4,800 บาท สำหรับ 10 ชั่วโมง\n\n**เทียบกับกอล์ฟกลางแจ้งแล้วเป็นอย่างไร**\nการออกรอบที่สนามในย่านกรุงเทพฯ โดยทั่วไปมีค่ากรีนฟีอย่างเดียว 1,500-4,000 บาท บวกค่าแคดดี้ (300-400 บาท) ค่าเช่ารถกอล์ฟ และค่าเดินทาง กอล์ฟในร่มจึงถูกกว่าอย่างชัดเจน ไม่ขึ้นกับสภาพอากาศ และเข้าถึงได้ง่ายกว่า โดยเฉพาะเมื่อมากันเป็นกลุ่ม',
+      related_questions: [
+        { slug: 'can-i-rent-golf-clubs-in-bangkok', question: 'เช่าไม้กอล์ฟในกรุงเทพฯ ได้ไหม' },
+        { slug: '/guide/round-of-golf-cost-bangkok', question: 'ออกรอบกอล์ฟในกรุงเทพฯ ค่าใช้จ่ายเท่าไหร่ — ค่ากรีนฟีและค่าแคดดี้' },
+        { slug: 'best-way-to-learn-golf-in-bangkok', question: 'วิธีที่ดีที่สุดในการเรียนกอล์ฟในกรุงเทพฯ คืออะไร' },
+      ],
+    },
+  },
+
   {
     id: 'faq-3',
     page_type: 'faq',
@@ -471,6 +516,49 @@ export const faqPages: FaqSeoPage[] = [
         { slug: 'how-much-does-indoor-golf-cost-in-bangkok', question: '曼谷室内高尔夫收费 — 每小时550–1,000泰铢的价格全解析' },
         { slug: 'how-accurate-are-golf-simulators', question: '高尔夫模拟器的精度如何？ — 和真实球场差在哪里' },
         { slug: '/guide/golf-bangkok-rainy-season', question: '曼谷雨季打高尔夫 — 你需要了解的天气规律与开球时间' },
+      ],
+    },
+  },
+
+  // ─── TH: can-you-play-golf-in-bangkok-when-it-rains ───
+  // Title/meta front-load the rainy-day query (ฝนตก เล่นกอล์ฟ กรุงเทพ) and keep
+  // the กอล์ฟในร่ม hook. Every figure traces to the EN entry (1,500 มิลลิเมตร,
+  // พฤษภาคม-ตุลาคม, 9:00-23:00, ประมาณ 550 บาท, สูงสุด 5 คน, ทางออก 4) and is
+  // rendered per the TH conventions (บาท spelled out, half-width digits,
+  // ASCII - ranges); the LENGOLF bay price carries the as-of marker
+  // (ข้อมูล ณ กรกฎาคม 2026). Chidlom follows the shipped TH form (BTS ชิดลม)
+  // while Mercury Ville and the course/brand names (Bravo, Pebble Beach,
+  // St Andrews) stay in Latin, matching the other TH FAQ entries.
+  // related_* retargeted to TH-translated pages only — the EN entry's
+  // /activities/rainy-day-activities-bangkok and the
+  // where-to-play-golf-at-night-in-bangkok FAQ have no TH translation, so they
+  // are replaced with the TH rainy-season guide and the TH simulator-accuracy
+  // FAQ. No dynamic-pricing twin exists for this slug (the get…Content() family
+  // covers only indoor-golf-cost / best-way-to-learn / corporate-event).
+  {
+    id: 'faq-3-th',
+    page_type: 'faq',
+    slug: 'can-you-play-golf-in-bangkok-when-it-rains',
+    title: 'ฝนตกในกรุงเทพฯ ยังเล่นกอล์ฟได้ไหม — กอล์ฟในร่มเล่นได้ทุกฤดู',
+    meta_description:
+      'ฝนตกก็ยังเล่นกอล์ฟได้ กอล์ฟซิมมูเลเตอร์ในร่มให้คุณเล่นครบ 18 หลุมในห้องปรับอากาศไม่ว่าอากาศจะเป็นอย่างไร LENGOLF เปิดทุกวัน 9:00-23:00 น. ที่ BTS ชิดลม ค่าเช่าเบย์เริ่มต้นประมาณ 550 บาท/ชั่วโมง (ข้อมูล ณ กรกฎาคม 2026)',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'general',
+    locale: 'th',
+    related_slugs: ['/faq/how-much-does-indoor-golf-cost-in-bangkok', '/guide/golf-bangkok-rainy-season', '/golf'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        'ฝนตกก็ยังเล่นได้ กอล์ฟซิมมูเลเตอร์ในร่มทำให้คุณเล่นกอล์ฟครบรอบในกรุงเทพฯ ได้ไม่ว่าสภาพอากาศจะเป็นอย่างไร ฤดูฝนของกรุงเทพฯ (พฤษภาคม-ตุลาคม) มีฝนตกหนักแทบทุกวัน แต่สถานที่ในร่มอย่าง LENGOLF เปิดให้บริการตลอดทั้งปีในห้องปรับอากาศ คุณเล่นครบ 18 หลุมบนสนามที่มีชื่อเสียงระดับโลกได้โดยไม่ต้องกังวลเรื่องฝน ความร้อน หรือการหยุดเล่นเพราะฟ้าผ่า',
+      answer_body:
+        'กรุงเทพฯ มีปริมาณน้ำฝนเฉลี่ยปีละประมาณ 1,500 มิลลิเมตร โดยฝนตกหนักที่สุดในช่วงเดือนพฤษภาคมถึงตุลาคม แม้อยู่นอกฤดูฝน พายุฝนฟ้าคะนองช่วงบ่ายก็เกิดขึ้นบ่อย ทำให้แผนเล่นกอล์ฟกลางแจ้งคาดเดาได้ยาก สนามปิดเมื่อมีฟ้าผ่า แฟร์เวย์มีน้ำท่วมขัง และทีไทม์ถูกยกเลิก\n\n**กอล์ฟในร่มคือทางออก**\nกอล์ฟซิมมูเลเตอร์แก้ปัญหาเรื่องสภาพอากาศได้ทั้งหมด ที่ LENGOLF คุณเล่นบนซิมมูเลเตอร์ที่ขับเคลื่อนด้วยระบบ Bravo ซึ่งจำลองสนามจริงได้อย่างแม่นยำ ทั้งวิถีลูก สภาพลม และรูปแบบสนามล้วนถูกจำลองไว้ ประสบการณ์ทั้งหมดอยู่ในร่ม มีเครื่องปรับอากาศ และเปิดให้บริการทุกวันเวลา 9:00-23:00 น.\n\n**สิ่งที่ทำได้ในวันฝนตกที่ LENGOLF**\n- เล่นครบ 18 หลุมบนสนามอย่าง Pebble Beach หรือ St Andrews\n- ฝึกสวิงพร้อมข้อมูลแบบเรียลไทม์ (ความเร็วลูก มุมปล่อยลูก อัตราการหมุน)\n- แข่งกับเพื่อนด้วยเกมตีเข้าใกล้ธงหรือไดรฟ์ไกล\n- สั่งค็อกเทลและอาหารจากบาร์มาเพลิดเพลินระหว่างเล่น\n\nค่าเช่าเบย์เริ่มต้นที่ประมาณ 550 บาท/ชั่วโมง สำหรับผู้เล่นสูงสุด 5 คน ที่ Mercury Ville, BTS ชิดลม (ทางออก 4) พร้อมไม้กอล์ฟมาตรฐานให้ใช้ฟรี (ข้อมูล ณ กรกฎาคม 2026)\n\n**สำหรับนักท่องเที่ยว**\nหากฝนทำให้แผนเล่นกอล์ฟกลางแจ้งของคุณต้องยกเลิก LENGOLF เป็นตัวเลือกสำรองที่สะดวก เพียงนั่ง BTS มาลงที่สถานีชิดลม เดินเข้ามาใช้บริการได้โดยไม่ต้องจองล่วงหน้าหากมีเบย์ว่าง แต่การจองที่ booking.len.golf จะช่วยการันตีช่วงเวลาของคุณ',
+      related_questions: [
+        { slug: 'how-much-does-indoor-golf-cost-in-bangkok', question: 'ราคากอล์ฟในร่มในกรุงเทพฯ เท่าไหร่ — ชั่วโมงละ 550-1,000 บาท' },
+        { slug: 'how-accurate-are-golf-simulators', question: 'กอล์ฟซิมมูเลเตอร์แม่นยำแค่ไหนเมื่อเทียบกับกอล์ฟจริง' },
+        { slug: '/guide/golf-bangkok-rainy-season', question: 'เล่นกอล์ฟในกรุงเทพฯ ช่วงหน้าฝน — สิ่งที่ควรรู้ก่อนออกรอบ' },
       ],
     },
   },
@@ -1475,6 +1563,46 @@ export const faqPages: FaqSeoPage[] = [
     },
   },
 
+  // ─── TH: should-i-bring-golf-clubs-to-thailand-or-rent ───
+  // Title front-loads the TH rental cluster (เช่าไม้กอล์ฟ) and is kept distinct
+  // from the shipped TH guide /guide/bring-golf-clubs-thailand-or-rent
+  // (พาไม้กอล์ฟมาเมืองไทย หรือเช่าที่นี่ดีกว่า). All figures trace to the EN entry
+  // (2,000 ถึงกว่า 6,000 บาทต่อเที่ยว, ประมาณ 150 บาท/ชั่วโมง, ประมาณ 400 บาท/4 ชั่วโมง,
+  // ประมาณ 1,200 บาท/วัน, ประมาณ 500 บาท จัดส่ง, 1,000-2,500 บาทต่อรอบ) and are
+  // rendered per the TH currency ruling (บาท spelled out, half-width digits,
+  // ASCII - ranges); the LENGOLF prices carry the as-of marker
+  // (ข้อมูล ณ กรกฎาคม 2026). Chidlom uses the shipped TH form (BTS ชิดลม);
+  // Mercury Ville and the brand names stay in Latin. related_* are all
+  // TH-translated targets — the shipped can-i-rent… FAQ plus the two in-batch
+  // entries (cost-to-fly below, indoor-golf-cost above).
+  {
+    id: 'faq-12-th',
+    page_type: 'faq',
+    slug: 'should-i-bring-golf-clubs-to-thailand-or-rent',
+    title: 'เช่าไม้กอล์ฟในไทยหรือขนมาเอง — แบบไหนคุ้มกว่าสำหรับนักเดินทาง',
+    meta_description:
+      'สำหรับนักเดินทางส่วนใหญ่ การเช่าไม้กอล์ฟในไทยถูกและสะดวกกว่าการขนไม้ของตัวเองมา ค่าธรรมเนียมสายการบินอยู่ที่ 2,000-6,000 บาทต่อเที่ยว ส่วนค่าเช่าที่ LENGOLF เริ่มต้นประมาณ 150 บาท/ชั่วโมง (ข้อมูล ณ กรกฎาคม 2026)',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'rental',
+    locale: 'th',
+    related_slugs: ['/faq/can-i-rent-golf-clubs-in-bangkok', '/faq/cost-to-fly-with-golf-clubs-to-thailand', '/golf-club-rental'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        'สำหรับนักเดินทางส่วนใหญ่ การเช่าไม้กอล์ฟในประเทศไทยถูกกว่าและสะดวกกว่าการนำไม้ของตัวเองมา ค่าธรรมเนียมสายการบินสำหรับถุงกอล์ฟอยู่ที่ 2,000 ถึงกว่า 6,000 บาทต่อเที่ยว บวกกับความยุ่งยากของสัมภาระขนาดใหญ่ ไม้กอล์ฟให้เช่าในกรุงเทพฯ หาได้ทั่วไป ที่ LENGOLF ชุดพรีเมียม Callaway หรือ Majesty ให้เช่าเริ่มต้นเพียงประมาณ 150 บาทต่อชั่วโมง หรือประมาณ 1,200 บาทต่อวันเต็ม (ข้อมูล ณ กรกฎาคม 2026)',
+      answer_body:
+        'นี่คือการเปรียบเทียบเชิงปฏิบัติเพื่อช่วยให้คุณตัดสินใจ\n\n**เหตุผลที่ควรเช่า**\n- ไม่ต้องเสียค่าสัมภาระของสายการบิน (ประหยัด 2,000 ถึงกว่า 6,000 บาทต่อเที่ยว)\n- ไม่มีความเสี่ยงที่ไม้จะเสียหายระหว่างขนส่ง (กล่องแข็งยังเพิ่มทั้งน้ำหนักและค่าใช้จ่าย)\n- ไม่ต้องลากถุงกอล์ฟผ่านสนามบิน แท็กซี่ และโรงแรม\n- ไม้กอล์ฟให้เช่าคุณภาพดีหาได้ทั่วกรุงเทพฯ\n- ได้ลองอุปกรณ์หลายแบบโดยไม่ต้องผูกมัด\n\n**เหตุผลที่ควรนำไม้ของตัวเองมา**\n- คุณคุ้นเคยกับชุดของตัวเองอยู่แล้ว ทั้งระยะและสัมผัสสม่ำเสมอ\n- คุณจะออกรอบหลายครั้งตลอดหนึ่งสัปดาห์หรือมากกว่านั้น\n- สายการบินของคุณรวมอุปกรณ์กีฬาไว้ในน้ำหนักสัมภาระที่ได้รับอยู่แล้ว\n- คุณมีชุดไม้ระดับพรีเมียมที่หาไม้เช่ามาแทนได้ยาก\n\n**ตัวเลือกการเช่าในกรุงเทพฯ**\n\n*ที่ LENGOLF (คุ้มค่าที่สุดสำหรับซิมมูเลเตอร์):*\n- ไม้มาตรฐานฟรีในทุกการจองเบย์\n- ชุดพรีเมียม Callaway Warbird (ผู้ชาย) / Majesty Shuttle (ผู้หญิง): ประมาณ 150 บาท/ชั่วโมง ประมาณ 400 บาท/4 ชั่วโมง หรือประมาณ 1,200 บาท/วันเต็ม\n- จัดส่งภายในวันเดียวกันทั่วกรุงเทพฯ: ประมาณ 500 บาท\n\n*ที่สนามกอล์ฟ:*\n- สนามส่วนใหญ่ให้เช่าชุดไม้ในราคา 1,000-2,500 บาทต่อรอบ\n- คุณภาพแตกต่างกันมาก บางสนามมีเฉพาะชุดที่เก่าหรือผ่านการใช้งานหนัก\n\n**คำแนะนำของเรา**\n- ออกรอบสบายๆ 1-2 ครั้ง: เช่าเลย เพราะเงินที่ประหยัดได้และความสะดวกคุ้มกว่าข้อดีของการใช้ไม้ตัวเอง\n- ออกรอบจริงจัง 4 ครั้งขึ้นไปในหนึ่งสัปดาห์: พิจารณานำไม้มาเอง แต่ต้องคำนวณค่าธรรมเนียมสายการบินเข้าไปด้วย\n- เล่นเฉพาะซิมมูเลเตอร์: เช่าเสมอ เพราะที่ LENGOLF มีไม้มาตรฐานให้ใช้ฟรีอยู่แล้ว\n\nLENGOLF ตั้งอยู่ที่ Mercury Ville, BTS ชิดลม (ทางออก 4) จองไม้กอล์ฟและเบย์ได้ที่ booking.len.golf',
+      related_questions: [
+        { slug: 'cost-to-fly-with-golf-clubs-to-thailand', question: 'พาไม้กอล์ฟขึ้นเครื่องมาไทยเสียเท่าไหร่ — ค่าธรรมเนียมสายการบินและทางเลือกเช่า' },
+        { slug: 'can-i-rent-golf-clubs-in-bangkok', question: 'เช่าไม้กอล์ฟในกรุงเทพฯ ได้ไหม' },
+        { slug: 'how-much-does-indoor-golf-cost-in-bangkok', question: 'ราคากอล์ฟในร่มในกรุงเทพฯ เท่าไหร่ — ชั่วโมงละ 550-1,000 บาท' },
+      ],
+    },
+  },
+
   {
     id: 'faq-13',
     page_type: 'faq',
@@ -1615,6 +1743,48 @@ export const faqPages: FaqSeoPage[] = [
         { slug: 'should-i-bring-golf-clubs-to-thailand-or-rent', question: '高尔夫球杆租借还是自带？ — 泰国旅行哪种更省钱省事' },
         { slug: 'can-i-rent-golf-clubs-in-bangkok', question: '曼谷能租到高尔夫球杆吗？ — 收费、球杆套装与配送方式' },
         { slug: 'how-much-does-indoor-golf-cost-in-bangkok', question: '曼谷室内高尔夫收费 — 每小时550–1,000泰铢的价格全解析' },
+      ],
+    },
+  },
+
+  // ─── TH: cost-to-fly-with-golf-clubs-to-thailand ───
+  // The head of the title matches the real intent of this page (ไม้กอล์ฟ
+  // ขึ้นเครื่อง ค่าใช้จ่าย) rather than forcing the เช่า cluster into first
+  // position; เช่า is carried in the descriptive tail, where the comparison
+  // actually lives. It also stays clear of the shipped TH guides
+  // /guide/golf-club-baggage-fees-airlines-bangkok (ค่าสัมภาระถุงกอล์ฟ),
+  // /guide/best-airlines-fly-golf-clubs-bangkok and
+  // /guide/how-to-pack-golf-clubs-flight-thailand. Airline names, allowances and
+  // fees all trace to the EN entry (30/40 กิโลกรัม, ประมาณ 350 บาทต่อกิโลกรัม,
+  // 12-18 กิโลกรัม, 4,200-6,300 บาท …); USD is rendered ดอลลาร์สหรัฐ per the
+  // glossary and carrier names stay in Latin rather than inventing Thai names,
+  // matching the shipped JA/KO halves. LENGOLF's ประมาณ 1,200 บาทต่อวัน and
+  // ประมาณ 500 บาท delivery carry the as-of marker (ข้อมูล ณ กรกฎาคม 2026).
+  // related_* are all TH-translated targets.
+  {
+    id: 'faq-13-th',
+    page_type: 'faq',
+    slug: 'cost-to-fly-with-golf-clubs-to-thailand',
+    title: 'พาไม้กอล์ฟขึ้นเครื่องมาไทยเสียเท่าไหร่ — ค่าธรรมเนียมสายการบินและทางเลือกเช่า',
+    meta_description:
+      'การพาไม้กอล์ฟขึ้นเครื่องมาประเทศไทยมีค่าใช้จ่าย 2,000 ถึงกว่า 6,000 บาทต่อเที่ยว ขึ้นอยู่กับสายการบิน โดยสายการบินราคาประหยัดคิดแพงที่สุด ส่วนการเช่าในกรุงเทพฯ เริ่มต้นประมาณ 1,200 บาทต่อวัน (ข้อมูล ณ กรกฎาคม 2026)',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'rental',
+    locale: 'th',
+    related_slugs: ['/faq/should-i-bring-golf-clubs-to-thailand-or-rent', '/faq/can-i-rent-golf-clubs-in-bangkok', '/golf-club-rental'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        'การพาไม้กอล์ฟขึ้นเครื่องมาประเทศไทยโดยทั่วไปมีค่าใช้จ่าย 2,000 ถึงกว่า 6,000 บาทต่อเที่ยว (ประมาณ 55-170 ดอลลาร์สหรัฐ) ขึ้นอยู่กับสายการบินและชั้นโดยสารของคุณ สายการบินแบบเต็มรูปแบบบางแห่งรวมอุปกรณ์กีฬาไว้ในสัมภาระใต้ท้องเครื่องอยู่แล้ว ขณะที่สายการบินราคาประหยัดคิดค่าสัมภาระขนาดใหญ่ในอัตราสูง สำหรับทริปสั้น การเช่าไม้กอล์ฟในกรุงเทพฯ มักถูกกว่าค่าธรรมเนียมสายการบินไปกลับ',
+      answer_body:
+        'นี่คือค่าใช้จ่ายโดยทั่วไปที่สายการบินคิดสำหรับถุงกอล์ฟในเส้นทางมาประเทศไทย\n\n**สายการบินแบบเต็มรูปแบบ**\n- **Thai Airways:** รับถุงกอล์ฟเป็นสัมภาระใต้ท้องเครื่องภายในน้ำหนักมาตรฐานที่ได้รับ (ปกติ 30 กิโลกรัมสำหรับชั้นประหยัด) หากไม่เกินน้ำหนักที่กำหนดจะไม่มีค่าใช้จ่ายเพิ่ม ส่วนน้ำหนักส่วนเกินคิดเป็นรายกิโลกรัม\n- **Singapore Airlines / Cathay Pacific / Emirates:** นโยบายใกล้เคียงกัน อุปกรณ์กีฬานับรวมอยู่ในน้ำหนักสัมภาระใต้ท้องเครื่องทั้งหมด โดยทั่วไปชั้นประหยัด 30 กิโลกรัม และชั้นธุรกิจ 40 กิโลกรัม\n- **Japan Airlines / ANA:** โดยทั่วไปรวมถุงกอล์ฟไว้ในน้ำหนักสัมภาระใต้ท้องเครื่องที่ได้รับสำหรับเที่ยวบินระหว่างประเทศ\n\n**สายการบินราคาประหยัด (ค่าธรรมเนียมสูงกว่า)**\n- **AirAsia:** ค่าอุปกรณ์กีฬาประมาณ 350 บาทต่อกิโลกรัม ถุงกอล์ฟทั่วไปหนัก 12-18 กิโลกรัม จึงควรเตรียมงบ 4,200-6,300 บาทต่อเที่ยว\n- **Thai VietJet:** ค่าสัมภาระขนาดใหญ่แตกต่างกันไป โดยทั่วไปอยู่ที่ 3,000-5,000 บาทต่อเที่ยวสำหรับถุงกอล์ฟ\n- **Scoot / Nok Air:** อยู่ในช่วงใกล้เคียงกันที่ 2,500-5,000 บาทต่อเที่ยว\n\n**ค่าใช้จ่ายอื่นที่ควรคำนึงถึง**\n- กล่องแข็งสำหรับเดินทาง: ราคาซื้อ 5,000-15,000 บาท (แนะนำให้มีไว้เพื่อป้องกันความเสียหาย)\n- การเดินทางจากสนามบิน: สัมภาระขนาดใหญ่อาจต้องใช้แท็กซี่คันใหญ่หรือรถตู้\n- ความเสี่ยงที่ไม้จะเสียหาย: สายการบินทำไม้กอล์ฟเสียหายได้เป็นครั้งคราว และการเรียกร้องค่าเสียหายก็ทำได้ยาก\n\n**เปรียบเทียบค่าใช้จ่าย: นำมาเอง หรือเช่า**\nสำหรับทริป 5 วันที่ออกรอบ 2 ครั้ง\n- นำไม้มาเอง: ค่าธรรมเนียมสายการบินไปกลับ 4,000-12,000 บาท บวกค่ากล่องแข็ง\n- เช่าที่สนามกอล์ฟ: รวม 1,000-3,000 บาทสำหรับ 2 รอบ\n- เช่าไม้พรีเมียมที่ LENGOLF: ประมาณ 1,200 บาทต่อวัน (ชุดเต็ม Callaway หรือ Majesty) พร้อมจัดส่งภายในวันเดียวกันในกรุงเทพฯ ประมาณ 500 บาท (ข้อมูล ณ กรกฎาคม 2026)\n\nสำหรับนักเดินทางส่วนใหญ่ การเช่าชนะขาดในแง่ของค่าใช้จ่าย',
+      related_questions: [
+        { slug: 'should-i-bring-golf-clubs-to-thailand-or-rent', question: 'เช่าไม้กอล์ฟในไทยหรือขนมาเอง — แบบไหนคุ้มกว่าสำหรับนักเดินทาง' },
+        { slug: 'can-i-rent-golf-clubs-in-bangkok', question: 'เช่าไม้กอล์ฟในกรุงเทพฯ ได้ไหม' },
+        { slug: 'how-much-does-indoor-golf-cost-in-bangkok', question: 'ราคากอล์ฟในร่มในกรุงเทพฯ เท่าไหร่ — ชั่วโมงละ 550-1,000 บาท' },
       ],
     },
   },
@@ -2151,6 +2321,49 @@ export const faqPages: FaqSeoPage[] = [
     },
   },
 
+  // ─── TH: worth-taking-golf-lessons-bangkok-holiday ───
+  // Title leads with the holiday-lesson intent (เรียนกอล์ฟ ระหว่างเที่ยว กรุงเทพ)
+  // and stays distinct from the shipped faq-11-th (วิธีที่ดีที่สุดในการเรียนกอล์ฟ…)
+  // and the TH guide /guide/golf-lessons-bangkok-coaches (เรียนกอล์ฟกรุงเทพฯ:
+  // คอร์สเรียนกับครูสอนกอล์ฟ PGA และราคา).
+  // HONESTY: unlike the JA/KO/ZH siblings, this entry adds NO language
+  // disclosure paragraph. LENGOLF's coaches are Thailand PGA professionals who
+  // teach in Thai, so there is no language gap to disclose to a Thai reader —
+  // and no positive language claim is invented either. The section count
+  // therefore matches the EN source exactly, with no added paragraph. No
+  // negative claim of any kind is made about Bangkok. No LENGOLF price is
+  // quoted anywhere in this entry, so no as-of marker is used. The 16/20 องศา
+  // launch-angle example and every other figure trace to the EN entry.
+  // related_* retargeted to TH-translated pages — the EN entry's
+  // /golf-in-thailand-guide has no TH translation and is replaced with /lessons.
+  {
+    id: 'faq-22-th',
+    page_type: 'faq',
+    slug: 'worth-taking-golf-lessons-bangkok-holiday',
+    title: 'เรียนกอล์ฟระหว่างเที่ยวกรุงเทพฯ คุ้มไหม — หนึ่งคอร์สเรียนได้อะไรบ้าง',
+    meta_description:
+      'เรียนกอล์ฟระหว่างมาเที่ยวกรุงเทพฯ คุ้มค่าหรือไม่ คอร์สเรียนครั้งเดียวทำอะไรได้จริงบ้าง เหมาะกับนักกอล์ฟแบบไหน และควรขออะไรตอนจอง อธิบายอย่างตรงไปตรงมา',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'golf-lessons',
+    locale: 'th',
+    related_slugs: ['/lessons', '/guide/golf-lessons-bangkok-coaches', '/guide/best-golf-simulators-bangkok'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        'คุ้มค่า แต่มีข้อแม้ที่ควรพูดกันตรงไปตรงมา คอร์สเรียนครั้งเดียวไม่สามารถสร้างวงสวิงของคุณขึ้นใหม่ได้ แต่ช่วยให้คุณเห็นจุดที่แก้ไขได้จริงหนึ่งถึงสองข้อ ซึ่งใช้ต่อได้ตลอดทริปที่เหลือ สถานที่ซิมมูเลเตอร์ในกรุงเทพฯ ทำให้รูปแบบนี้มีประโยชน์มากกว่าสนามไดรฟ์ทั่วไป เพราะข้อมูลที่ได้เจาะจงเป็นตัวเลข ไม่ใช่ความรู้สึกคร่าวๆ',
+      answer_body:
+        '**คอร์สเรียนครั้งเดียวระหว่างเที่ยวทำอะไรได้จริงบ้าง**\n\nหนึ่งชั่วโมงเปลี่ยนความจำของกล้ามเนื้อไม่ได้ เรื่องนั้นต้องใช้การฝึกซ้ำหลายสัปดาห์ แต่สิ่งที่ทำได้คือ\n1. ระบุหนึ่งถึงสองเรื่องที่ทำให้คุณเสียสโตรกมากที่สุด\n2. ให้จุดสังเกตด้านความรู้สึกที่ใช้ได้ตลอดทริป\n3. แก้ข้อผิดพลาดที่เกิดซ้ำก่อนที่จะกลายเป็นความเคยชิน\n4. ปรับเทียบระยะของคุณ เพราะข้อมูลจากซิมมูเลเตอร์แสดงระยะลอยและระยะรวมของไม้ทุกอัน\n\nสิ่งที่ทำไม่ได้คือ การสร้างท่าจรดลูกขึ้นใหม่ทั้งหมด การรื้อพื้นฐานการจับไม้ หรือการทำให้เทคนิคเปลี่ยนอย่างถาวรโดยไม่มีการฝึกต่อเนื่อง ควรบอกโค้ชตรงไปตรงมาถึงบริบทนี้ตั้งแต่แรก\n\n**ทำไมคอร์สเรียนในกรุงเทพฯ ถึงมีประโยชน์กว่าสนามไดรฟ์ทั่วไป**\n\nที่สถานที่ซิมมูเลเตอร์อย่าง LENGOLF คอร์สเรียนให้ผลลัพธ์ออกมาเป็นข้อมูล ไม่ใช่แค่คำแนะนำ\n1. ความเร็วลูกและระยะลอยของไม้แต่ละอัน\n2. มุมปล่อยลูกและอัตราการหมุน ซึ่งบอกคุณภาพการปะทะลูก ไม่ใช่แค่วิถีลูก\n3. รูปทรงของวิถีลูกที่วัดได้อย่างแม่นยำ ไม่ใช่การประมาณเอา\n4. ตำแหน่งวางลูกที่สม่ำเสมอ ทำให้โค้ชแยกตัวแปรของวงสวิงออกมาดูได้\n\nนั่นหมายความว่าคอร์สเรียนในกรุงเทพฯ ให้ข้อมูลป้อนกลับที่เจาะจงและตรวจสอบได้ หากเหล็ก 7 ของคุณมีมุมปล่อยลูก 16 องศาทั้งที่ควรอยู่ที่ 20 องศา นั่นคือปัญหาที่วัดได้และชี้สาเหตุได้ชัดเจน\n\n**ใครได้ประโยชน์มากที่สุดจากคอร์สเรียนระหว่างเที่ยว**\n\n1. นักกอล์ฟแฮนดิแคปกลางที่มีข้อผิดพลาดติดตัวอยู่หนึ่งอย่าง สายตาใหม่ที่มีข้อมูลดีช่วยได้มาก\n2. นักกอล์ฟที่ผ่อนคลายกว่าปกติเพราะอยู่ระหว่างเที่ยว เมื่อห่างจากกิจวัตร หลายคนเปิดรับคำแนะนำได้ดีขึ้น\n3. มือใหม่ที่มาทริปยาว หากคุณวางแผนเล่นกอล์ฟทั้งสัปดาห์และไม่เคยเรียนมาก่อน หนึ่งเซสชันก่อนออกรอบแรกคือเวลาที่ใช้อย่างคุ้มค่า\n4. คนที่เพิ่งเปลี่ยนอุปกรณ์ เพราะข้อมูลจากซิมมูเลเตอร์ยืนยันได้ว่าไม้ชุดใหม่ทำงานเข้ากับคุณหรือไม่\n\nคอร์สเรียนระหว่างเที่ยวมีประโยชน์น้อยกว่าสำหรับนักกอล์ฟแฮนดิแคปสูงที่ต้องแก้พื้นฐานหลายด้านพร้อมกัน\n\n**ควรขออะไรตอนจอง**\n\n1. ขอให้มีการวิเคราะห์ข้อมูลเป็นส่วนหนึ่งของเซสชัน เพราะผู้สอนไม่ได้ทำเรื่องนี้เป็นค่าเริ่มต้นทุกคน\n2. บอกโค้ชถึงแฮนดิแคปของคุณ ลักษณะการตีพลาดที่เกิดเป็นประจำ และจำนวนรอบที่จะเล่นในทริปนี้\n3. ขอสิ่งที่นำกลับไปใช้ไม่เกินสองข้อ คือความคิดเรื่องวงสวิงหนึ่งข้อ และแบบฝึกด้านความรู้สึกหนึ่งข้อ\n4. ตกลงเรื่องความยาวของเซสชันให้ชัดเจน การฝึกแบบมีสมาธิ 45 นาทีมักได้ผลมากกว่า 90 นาทีที่ผสมหลายเรื่องเข้าด้วยกัน\n\n**จัดคอร์สเรียนให้เข้ากับทริปกอล์ฟในกรุงเทพฯ**\n\nโครงสร้างที่ใช้ได้จริงสำหรับทริปหนึ่งสัปดาห์\n1. วันที่ 1 หรือ 2: เข้าเรียนเพื่อหาจุดที่ต้องโฟกัส\n2. วันที่ 2-5: ออกรอบในสนามจริง แล้วนำหนึ่งถึงสองข้อจากคอร์สเรียนไปใช้\n3. วันที่ 5 หรือ 6 (ถ้าต้องการ): กลับมาเรียนต่ออีก 30 นาทีเพื่อดูว่าสิ่งที่ปรับยังอยู่ตัวหรือไม่\n\nหลีกเลี่ยงการจองคอร์สเรียนในเช้าวันเดียวกับรอบที่คุณให้ความสำคัญ ควรเว้นระยะหนึ่งวันระหว่างคอร์สเรียนกับรอบจริง',
+      related_questions: [
+        { slug: '/guide/golf-lessons-bangkok-coaches', question: 'เรียนกอล์ฟกรุงเทพฯ: คอร์สเรียนกับครูสอนกอล์ฟ PGA และราคา' },
+        { slug: '/guide/best-golf-simulators-bangkok', question: 'กอล์ฟซิมูเลเตอร์ที่ดีที่สุดในกรุงเทพฯ — เปรียบเทียบ' },
+        { slug: '/guide/golf-thailand-beginners', question: 'กอล์ฟในไทยสำหรับมือใหม่ — ทุกสิ่งที่คุณต้องรู้' },
+      ],
+    },
+  },
+
   // ─── GG-029: Are Rental Golf Clubs Good Enough for Serious Golfers? ────────
   {
     id: 'faq-23',
@@ -2500,6 +2713,45 @@ export const faqPages: FaqSeoPage[] = [
         { slug: '/guide/golf-club-rental-bangkok-guide', question: '曼谷高尔夫球杆租借 — 去哪里租、费用多少、如何挑选' },
         { slug: '/guide/renting-golf-clubs-thai-golf-courses', question: '在泰国球场租借球杆 — 费用、品质与检查要点' },
         { slug: '/guide/bring-golf-clubs-thailand-or-rent', question: '泰国高尔夫之旅，自带球杆还是当地租借？判断指南' },
+      ],
+    },
+  },
+
+  // ─── TH: what-golf-clubs-available-rent-bangkok ───
+  // Title front-loads the TH rental-brand query (ไม้กอล์ฟให้เช่า กรุงเทพ แบรนด์)
+  // and keeps the left-handed / ladies angle in the tail, which is the EN
+  // entry's real differentiator; it stays distinct from the shipped TH guide
+  // /guide/golf-club-rental-bangkok-guide (บริการเช่าไม้กอล์ฟในกรุงเทพฯ — เช่าได้
+  // ที่ไหนและราคาเท่าไหร่). Brands (Callaway, TaylorMade, Titleist) stay in Latin
+  // and the set contents trace to the EN entry; no prices are quoted anywhere in
+  // this entry, so no as-of marker is used. Terminology per the TH glossary:
+  // บริการเช่าไม้กอล์ฟ / ถุงกอล์ฟ for golf bag / เวดจ์ for wedge. related_* are all
+  // TH-translated guides — the EN entry's /golf-in-thailand-guide has no TH
+  // translation and is replaced with /golf-club-rental.
+  {
+    id: 'gg-what-golf-clubs-available-rent-bangkok-th',
+    page_type: 'faq',
+    slug: 'what-golf-clubs-available-rent-bangkok',
+    title: 'ไม้กอล์ฟให้เช่าในกรุงเทพฯ มีแบรนด์อะไรบ้าง — ชุดไม้ ชุดถนัดซ้าย และชุดผู้หญิง',
+    meta_description:
+      'ไม้กอล์ฟให้เช่าในกรุงเทพฯ ส่วนใหญ่เป็น Callaway, TaylorMade และ Titleist ดูว่าในหนึ่งชุดเต็มมีอะไรบ้าง ชุดสำหรับคนถนัดซ้ายและชุดผู้หญิงหาได้แค่ไหน และควรตรวจสอบอะไรก่อนจอง',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'clubs-rental',
+    locale: 'th',
+    related_slugs: ['/golf-club-rental', '/guide/golf-club-rental-bangkok-guide', '/guide/renting-golf-clubs-thai-golf-courses', '/guide/bring-golf-clubs-thailand-or-rent'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        'แบรนด์ไม้กอล์ฟให้เช่าที่พบบ่อยที่สุดตามสถานที่กอล์ฟคุณภาพดีในกรุงเทพฯ คือ Callaway, TaylorMade และ Titleist ที่ LENGOLF ชุดไม้ให้เช่าทั้งหมดเป็น Callaway โดยมีทั้งชุดผู้ชาย ชุดผู้หญิง และชุดสำหรับคนถนัดซ้าย ส่วนสนามราคาประหยัดมักมีเพียงชุดที่เก่ากว่าหรือคละแบรนด์ และสภาพก็แตกต่างกันได้มาก',
+      answer_body:
+        '**คุณภาพของไม้ให้เช่าตามประเภทของสถานที่**\n\nสนามกอล์ฟระดับบนและสถานที่ซิมมูเลเตอร์ในร่มของกรุงเทพฯ ลงทุนกับไม้ให้เช่าที่เป็นแบรนด์ชั้นนำ Callaway และ TaylorMade เป็นแบรนด์ที่มีให้เช่ามากที่สุด ส่วนชุด Titleist พบได้ในสถานที่คุณภาพดีจำนวนไม่มากนัก โดยทั่วไปคุณคาดหวังได้ว่าจะได้ไม้ที่มีอายุไม่กี่ปี กริปสะอาด และเป็นชุดครบตั้งแต่ไดรเวอร์จนถึงพัตเตอร์\n\nLENGOLF ใช้ชุดไม้ให้เช่า Callaway ในทุกหมวด เป็นการเลือกที่สม่ำเสมอซึ่งเหมาะกับทั้งผู้เล่นแฮนดิแคปกลางส่วนใหญ่และมือใหม่\n\nชุดที่เก่ากว่าหรือคละแบรนด์ถือเป็นมาตรฐานของสนามราคาประหยัดรอบกรุงเทพฯ ไม้อาจเป็นรุ่นเก่าหลายเจเนอเรชัน กริปอาจสึก และสภาพโดยรวมแตกต่างกันไปในแต่ละแห่ง\n\n**ชุดเต็มโดยทั่วไปมีอะไรบ้าง**\n\nไม้ให้เช่าส่วนใหญ่ในกรุงเทพฯ ให้เช่าเป็นชุดครบ และมักประกอบด้วย\n1. ไดรเวอร์\n2. หัวไม้แฟร์เวย์ (ปกติเบอร์ 3 หรือเบอร์ 5)\n3. ไฮบริดหรือเหล็กยาว (แตกต่างกันไปตามชุด)\n4. เหล็ก เบอร์ 5 ถึง 9\n5. พิตชิ่งเวดจ์และแซนด์เวดจ์\n6. พัตเตอร์\n7. ถุงกอล์ฟ\n\nบางแห่งให้ถุงแบบมีขาตั้ง บางแห่งใช้ถุงสำหรับรถกอล์ฟ หากคุณต้องการเวดจ์ที่มีองศาเฉพาะ (เช่น 60 องศา) การนำของตัวเองมาเองจะแน่นอนกว่า\n\n**ชุดสำหรับคนถนัดซ้ายและชุดผู้หญิง**\n\nชุดให้เช่าสำหรับคนถนัดซ้ายและชุดผู้หญิงมีให้เลือกน้อยกว่าตามสนามทั่วไปในกรุงเทพฯ หลายแห่งมีเพียงชุดมาตรฐานสำหรับผู้ชายถนัดขวาเท่านั้น LENGOLF เป็นข้อยกเว้น เพราะมีชุด Callaway สำหรับคนถนัดซ้ายและสำหรับผู้หญิงไว้ให้เช่าโดยเฉพาะ\n\n**ข้อควรรู้ก่อนจอง**\n\n1. **โทรหรือส่งข้อความสอบถามล่วงหน้า** หากคุณถนัดซ้าย ต้องการชุดผู้หญิง หรือมีความต้องการเรื่องความอ่อนแข็งของก้าน\n2. **ถามถึงแบรนด์และอายุการใช้งาน** ของชุดให้เช่า หากคุณภาพอุปกรณ์มีผลต่อเกมของคุณ\n3. **ตรวจสอบค่าเช่าล่วงหน้า** เพราะราคาต่างกันมากระหว่างสถานที่ระดับพรีเมียมกับสถานที่ราคาประหยัด\n4. **นำถุงมือและลูกกอล์ฟมาเอง** เพราะสองอย่างนี้แทบไม่รวมอยู่ในชุดให้เช่า\n5. **บริการเช่ารองเท้า** มักแยกคิดต่างหาก ควรยืนยันไปพร้อมกันตอนที่ยืนยันเรื่องไม้กอล์ฟ',
+      related_questions: [
+        { slug: '/guide/golf-club-rental-bangkok-guide', question: 'บริการเช่าไม้กอล์ฟในกรุงเทพฯ — เช่าได้ที่ไหนและราคาเท่าไหร่' },
+        { slug: '/guide/renting-golf-clubs-thai-golf-courses', question: 'เช่าไม้กอล์ฟที่สนามกอล์ฟในไทย — ขั้นตอน ราคา และสิ่งที่ต้องตรวจสอบ' },
+        { slug: '/guide/bring-golf-clubs-thailand-or-rent', question: 'พาไม้กอล์ฟมาเมืองไทย หรือเช่าที่นี่ดีกว่า — คู่มือช่วยตัดสินใจ' },
       ],
     },
   },

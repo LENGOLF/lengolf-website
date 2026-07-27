@@ -496,7 +496,17 @@
     "q8": "Where is LENGOLF located?",
     "a8": "We're located on the 4th floor of The Mercury Ville at BTS Chidlom, 540 Ploenchit Road, Lumpini, Pathumwan, Bangkok 10330. We're directly accessible from the BTS Chidlom Skytrain station. See us on Google Maps.",
     "q9": "What are the Starter Package and Sim to Fairway packages?",
-    "a9": "The Starter Package (11,000 THB) includes 5 hours of coaching plus 5 hours of practice time and a free golf glove — ideal for beginners building a foundation. The Sim to Fairway package (13,499 THB) includes 5 hours of coaching plus 1 on-course lesson, so you can take your simulator skills to a real golf course. On-course fees for both student and coach must be covered by the customer."
+    "a9": "The Starter Package (11,000 THB) includes 5 hours of coaching plus 5 hours of practice time and a free golf glove — ideal for beginners building a foundation. The Sim to Fairway package (13,499 THB) includes 5 hours of coaching plus 1 on-course lesson, so you can take your simulator skills to a real golf course. On-course fees for both student and coach must be covered by the customer.",
+    "q10": "Am I too old to start learning golf?",
+    "a10": "No. Our coaches work with complete beginners of any age, and the simulator makes starting easier than a driving range: every swing shows your club speed, launch angle and carry distance on screen, so progress is visible from the first session. The free 1-hour trial lesson is the simplest way to find out whether it suits you, with no commitment.",
+    "q11": "How many lessons do I need before I can play on a real course?",
+    "a11": "It depends on your starting point, and we would rather not promise a number. A single lesson realistically surfaces one or two things to work on rather than rebuilding your swing. If your goal is specifically to get onto a course, the Sim to Fairway package (13,499 THB) is built for that transition: 5 hours of coaching plus one on-course lesson with your coach.",
+    "q12": "How is a lesson different from just practising at a driving range?",
+    "a12": "At a range you repeat swings without knowing what changed. In a lesson, the simulator measures club speed, launch angle, spin and carry for every shot, and your coach uses video analysis alongside that data — so the feedback is specific and measurable rather than impressionistic. You leave with one or two concrete things to work on.",
+    "q13": "What do I need to bring to my first golf lesson?",
+    "a13": "Nothing but comfortable clothes and flat shoes. Standard golf club rental is included in every lesson, so you do not need your own set to start. If you have your own clubs you are welcome to bring them, and your coach can check whether they suit you.",
+    "q14": "Can I take a golf lesson with a friend or as a group?",
+    "a14": "Yes. Lesson packages have rates for 1 golfer, 2 golfers, and 3–5 golfers, so you can learn alongside friends or family in the same bay with the same coach. Group sessions work well for beginners who prefer not to be the only one starting out."
   },
   "AboutUs": {
     "metaTitle": "About Us — Indoor Golf Simulator & Bar",
@@ -1187,6 +1197,7 @@
     "call": "Call {phone}",
     "relatedQuestions": "Related Questions",
     "browseAllFaqs": "Browse all FAQs",
-    "exploreMore": "Explore More"
+    "exploreMore": "Explore More",
+    "schemaSeeFullAnswer": "See our full answer at {url}"
   }
 }

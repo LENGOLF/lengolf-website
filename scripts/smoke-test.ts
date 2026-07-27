@@ -1556,6 +1556,37 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  // TH FAQ catch-up — brings TH from 8 to 14 translated FAQ pages.
+  {
+    path: "/th/faq/how-much-does-indoor-golf-cost-in-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/faq/can-you-play-golf-in-bangkok-when-it-rains/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/faq/should-i-bring-golf-clubs-to-thailand-or-rent/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/faq/cost-to-fly-with-golf-clubs-to-thailand/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/faq/worth-taking-golf-lessons-bangkok-holiday/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/faq/what-golf-clubs-available-rent-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
   // Hotel concierge pages — spot-check a few slugs
   {
     path: "/hotels/things-to-do-near-grand-hyatt-erawan/",
@@ -1727,6 +1758,44 @@ const routeTests: RouteTest[] = [
     path: "/th/golf-courses/under/7500-baht/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+  },
+  // TH guide catch-up batch — brings TH to parity with ja/ko/zh at 46 guides.
+  // contentAbsent guards unresolved {{fact tokens}} (4 of these entries use them).
+  {
+    path: "/th/guide/golf-club-baggage-fees-airlines-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
+  },
+  {
+    path: "/th/guide/bring-golf-clubs-thailand-or-rent/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
+  },
+  {
+    path: "/th/guide/how-to-book-golf-tee-times-thailand/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
+  },
+  {
+    path: "/th/guide/renting-golf-clubs-thai-golf-courses/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
+  },
+  {
+    path: "/th/guide/screen-golf-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
+  },
+  {
+    path: "/th/guide/round-of-golf-cost-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
   },
   // Translated JA/KO/ZH price-tier pages (data/price-tiers.ts PRICE_TIER_I18N
   // + per-locale allowlist entries) — all 5 tiers per locale in this batch.
@@ -2671,25 +2740,21 @@ const thaiRedirectTests: ThaiRedirectTest[] = [
   // translated in ja/ko/zh but NOT th — if th ever gains them, pick others.
   // (golf-lessons-bangkok-coaches gained a th version, so this now uses
   // screen-golf-bangkok, still ja/ko/zh-only.)
-  {
-    path: "/th/guide/screen-golf-bangkok/",
-    expectedLocation: "/guide/screen-golf-bangkok/",
-    label: "Untranslated TH guide (only translated guide slugs may 200)",
-  },
-  {
-    path: "/th/guide/round-of-golf-cost-bangkok/",
-    expectedLocation: "/guide/round-of-golf-cost-bangkok/",
-    label:
-      "Untranslated TH guide — round-of-golf-cost (only translated guide slugs may 200)",
-  },
+  // NOTE: the former "untranslated TH guide must 301" probes are gone on
+  // purpose — the TH catch-up batch translated the last 6 guides, so every
+  // locale now has all 46 and no untranslated guide slug exists to probe.
+  // The registry-consistency section (I) still guards allowlist ⇄ data in
+  // both directions. (Same reasoning as the removed JA price-tier probe.)
   // Untranslated FAQ must still 301 to English. Only the 8 FAQ slugs in the
   // th.staticRoutes allowlist (lib/translated-routes.ts) may 200 under /th/faq/.
   // This canary is deliberately NOT one of those 8 — if it ever gains a TH
   // translation, pick another untranslated FAQ slug here instead of deleting
   // the guard (a previous batch went stale exactly this way).
   {
-    path: "/th/faq/can-you-play-golf-in-bangkok-when-it-rains/",
-    expectedLocation: "/faq/can-you-play-golf-in-bangkok-when-it-rains/",
+    // when-it-rains gained a TH translation in the catch-up batch; night-golf
+    // is untranslated in every locale, so this guard stays valid for all four.
+    path: "/th/faq/where-to-play-golf-at-night-in-bangkok/",
+    expectedLocation: "/faq/where-to-play-golf-at-night-in-bangkok/",
     label:
       "Untranslated TH FAQ (only translated FAQ slugs may 200)",
   },
@@ -2839,21 +2904,16 @@ const thaiCookieTests: ThaiCookieTest[] = [
     path: "/golf-in-thailand-guide/",
     label: "Golf in Thailand guide with Thai cookie",
   },
-  {
-    // Must be a guide with NO th translation, so it stays English under a th
-    // cookie (a th-translated guide correctly 307s to /th/ per next-intl cookie
-    // behavior). golf-lessons-bangkok-coaches gained a th version, so use a
-    // guide that was never translated to Thai.
-    path: "/guide/screen-golf-bangkok/",
-    label: "Guide page (th-less) with Thai cookie",
-  },
+  // NOTE: the former "guide (th-less) with Thai cookie" canary is gone on
+  // purpose — every guide now has a TH translation, so no guide can stay
+  // English under a th cookie. The FAQ canary below exercises the same
+  // middleware path with a slug that remains untranslated everywhere.
   {
     // Must be an FAQ slug with NO th translation, so it stays English under a
     // th cookie (a th-translated FAQ correctly 307s to /th/ per next-intl
-    // cookie behavior — same rule as the guide-page canary above).
-    // can-i-rent-golf-clubs-in-bangkok gained a th version, so use one that
-    // was not part of that batch.
-    path: "/faq/can-you-play-golf-in-bangkok-when-it-rains/",
+    // cookie behavior). when-it-rains gained a th version in the catch-up
+    // batch; night-golf is untranslated in every locale.
+    path: "/faq/where-to-play-golf-at-night-in-bangkok/",
     label: "FAQ page (th-less) with Thai cookie",
   },
   { path: "/hotels/", label: "Hotels hub with Thai cookie" },

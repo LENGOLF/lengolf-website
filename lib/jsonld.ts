@@ -617,7 +617,13 @@ export function getSeoFaqPageJsonLd(
       related_questions: { slug: string; question: string }[]
     }
   },
-  locale: string = 'en'
+  locale: string = 'en',
+  // Formats the related-question pointer text. Injected by the caller (which
+  // has next-intl available) so this module stays free of i18n plumbing; the
+  // default keeps EN output byte-identical. Without it the schema declared
+  // inLanguage: <locale> while its answer text stayed English.
+  formatSeeFullAnswer: (url: string) => string = (url) =>
+    `See our full answer at ${url}`
 ) {
   // url/inLanguage must match the page's canonical, and the related-question
   // pointers must stay inside the reader's locale — a /ja/ FAQ that declares
@@ -642,7 +648,9 @@ export function getSeoFaqPageJsonLd(
       '@type': 'Answer' as const,
       // related_questions may point at other sections (/guide/...) — resolve
       // via the shared helper so this never drifts from FaqPage's hrefs again.
-      text: `See our full answer at ${SITE_URL}${localePrefix}${relatedQuestionPath(rq.slug)}/`,
+      text: formatSeeFullAnswer(
+        `${SITE_URL}${localePrefix}${relatedQuestionPath(rq.slug)}/`
+      ),
     },
   }))
 
