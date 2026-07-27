@@ -1239,6 +1239,13 @@
     "roundupReason": "平日{price}THB〜",
     "otherPriceBands": "その他の価格帯"
   },
+  "GolfCourseShared": {
+    "feeFrom": "{price}THB〜",
+    "bookNow": "今すぐ予約",
+    "learnMore": "詳しく見る",
+    "rentalEyebrow": "クラブがなくても大丈夫",
+    "rentalBody": "プレミアムクラブをバンコクのホテルまでお届けします — Callaway Paradym、Warbird、Majesty。<price>1日1,200THB</price>から。受託手荷物の料金も空港での手間もかかりません。"
+  },
   "ExplainerPage": {
     "guideLabel": "LENGOLFガイド",
     "bookABay": "ベイを予約",

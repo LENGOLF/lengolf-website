@@ -27,7 +27,7 @@ Renting clubs in Thailand is straightforward. When you arrive at the pro shop to
 
 Once selected, the set is tagged to your name and brought to the first tee or the bag drop area. From there, your assigned caddie takes over and carries it exactly as they would a personal set.
 
-Rental fees are usually settled at checkout alongside your green fee, caddie fee, and caddie tip. Expect to pay in the range of 300–800 THB for a rental set, though prices vary by venue — always verify the current rate directly with the course before your round.
+Rental fees are usually settled at checkout alongside your green fee, caddie fee, and caddie tip. Expect to pay in the range of 1,000–2,500 THB per round for a rental set (typically around 1,500 THB), though prices vary by venue — always verify the current rate directly with the course before your round.
 
 ---
 

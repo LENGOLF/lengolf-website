@@ -117,10 +117,10 @@ export interface PriceGuideContent {
       name: string
       location: string
       tech: string
-      players_per_bay: number
+      players_per_bay: number | null // null = not published by the venue
       cheapest_rate: string
       peak_rate: string
-      price_includes_tax: boolean
+      price_includes_tax: boolean | null // null = venue does not state tax treatment
       notes: string
     }[]
     summary: string

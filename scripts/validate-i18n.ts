@@ -12,12 +12,15 @@
  * (terminology / conventions / honesty_constraints / transliterations).
  *
  * Corpus (server-free, imported directly like validate-internal-links.ts):
- *   - data/explainer-pages.ts  — every entry with locale ja/ko/zh/th
+ *   - data/explainer-pages.ts   — every entry with locale ja/ko/zh/th
  *   - data/golf-courses-i18n.ts — REGION_HUB_I18N (ja/ko/zh hub strings)
- * Both are plain data modules (type-only imports), so importing them here does
- * NOT pull lib/pricing.ts / server-only into the script (data/faq-pages.ts is
- * intentionally NOT imported — it runtime-imports lib/pricing and carries no
- * localized content anyway).
+ *   - data/faq-pages.ts         — faqPages entries with locale ja/ko/zh/th
+ *   - data/price-tiers.ts       — PRICE_TIER_I18N (th/ja/ko/zh tier strings)
+ * data/faq-pages.ts imports lib/pricing at module level, but that module is
+ * tsx-safe by design: its React `cache` call falls back to identity outside
+ * the RSC runtime (see the comment in lib/pricing.ts), and the live pricing
+ * fetch only runs inside the exported async helpers, never at import time.
+ * The other three are plain data modules.
  *
  * ERROR-level (exit 1) — a hard defect that must never ship:
  *   1. Emoji in ja/ko/zh content.
@@ -26,12 +29,24 @@
  *   4. A terminology `avoid` variant used instead of the settled `use` form.
  *   5. Brand-immutable corruption (case-mangled LENGOLF / len.golf / BTS / ...).
  *   6. Unbalanced markdown bold (**) or a broken '{{' placeholder.
+ *  10. UI-message namespace parity: a next-intl namespace consumed by
+ *      translated SSG routes (SSG_UI_NAMESPACES below) is entirely missing
+ *      from a locale's messages/<locale>.json. next-intl does NOT fail the
+ *      build on this — it logs MISSING_MESSAGE per render and silently falls
+ *      back to English (precedent: GolfCourseShared absent from ja/ko/zh,
+ *      ~480 warnings/build, fixed in PR #78). The locales each namespace must
+ *      cover are derived from the translated-route registry
+ *      (lib/translated-routes.ts) — a mirror of the generateStaticParams
+ *      data sources, kept in sync by smoke-test sections I/J.
  *
  * WARN-level (reported, exit 0) — expected to fire on legacy entries:
  *   7. Currency-convention drift vs conventions.currency.primary.
  *   8. honesty_constraints.forbidden_claims used WITHOUT LENGOLF-scoping
  *      (flag_mode: 'review' → printed as '⚠ review', a human confirms scoping).
  *   9. Price figures in an entry that carries no 'as of' marker anywhere.
+ *  11. UI-message key gaps: the namespace exists in the locale catalog but
+ *      individual keys present in messages/en.json are missing (each one is a
+ *      MISSING_MESSAGE + English fallback at render time).
  *
  * Usage: npx tsx scripts/validate-i18n.ts
  */
@@ -40,7 +55,15 @@ import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { explainerPages } from '@/data/explainer-pages'
 import { REGION_HUB_I18N } from '@/data/golf-courses-i18n'
-import type { ExplainerContent } from '@/types/seo-pages'
+import { faqPages } from '@/data/faq-pages'
+import { PRICE_TIER_I18N } from '@/data/price-tiers'
+import {
+  getRegisteredGuidePaths,
+  getRegisteredFaqPaths,
+  getRegisteredRegionHubPaths,
+  getRegisteredPriceTierPaths,
+} from '@/lib/translated-routes'
+import type { ExplainerContent, FaqContent } from '@/types/seo-pages'
 
 type Locale = 'ja' | 'ko' | 'zh' | 'th'
 const LOCALES: Locale[] = ['ja', 'ko', 'zh', 'th']
@@ -80,13 +103,19 @@ const glossaries: Record<Locale, Glossary> = Object.fromEntries(
 
 // 'As of' marker that satisfies conventions.as_of_format, per locale. Derived
 // from each glossary's as_of_format example (JA 現在 majority form + 時点; KO
-// 기준; ZH 截至; TH ณ). Presence of any of these ANYWHERE in an entry means the
-// entry is date-scoped, so its price figures are not flagged by check 9.
+// 기준; ZH 截至; TH ข้อมูล ณ). Presence of any of these ANYWHERE in an entry
+// means the entry is date-scoped, so its price figures are not flagged by
+// check 9.
+//
+// TH must match the full 'ข้อมูล ณ' phrase, not bare 'ณ ': the letter ณ ends
+// the everyday word ประมาณ ("approximately", which precedes prices constantly)
+// and also stands alone as the preposition "at" (ณ จังหวะปะทะลูก) — a bare-ณ
+// marker silently shielded 7 of the 8 TH FAQ entries from this check.
 const AS_OF_MARKERS: Record<Locale, string[]> = {
   ja: ['現在', '時点'],
   ko: ['기준'],
   zh: ['截至'],
-  th: ['ณ '],
+  th: ['ข้อมูล ณ'],
 }
 
 // Locales whose tone forbids emoji + exclamation marks. Derived from the
@@ -150,6 +179,20 @@ function explainerUnits(locale: Locale, entryId: string, title: string, meta: st
   return u
 }
 
+/** Flatten a FaqContent into its lintable strings (slugs are not linted). */
+function faqUnits(locale: Locale, entryId: string, title: string, meta: string | null, c: FaqContent): Unit[] {
+  const u: Unit[] = []
+  const push = (field: string, value: string | null | undefined) => {
+    if (typeof value === 'string' && value.length > 0) u.push({ locale, entryId, field, value })
+  }
+  push('title', title)
+  push('meta_description', meta)
+  push('answer_intro', c.answer_intro)
+  push('answer_body', c.answer_body)
+  c.related_questions?.forEach((q, i) => push(`related_questions[${i}].question`, q.question))
+  return u
+}
+
 // Build the corpus, grouped by entry (as-of scoping is an entry-level fact).
 const entries: { entryId: string; locale: Locale; units: Unit[] }[] = []
 
@@ -161,6 +204,34 @@ for (const page of explainerPages) {
     locale,
     units: explainerUnits(locale, page.id, page.title, page.meta_description, page.content),
   })
+}
+
+for (const page of faqPages) {
+  if (!LOCALES.includes(page.locale as Locale)) continue
+  const locale = page.locale as Locale
+  entries.push({
+    entryId: page.id,
+    locale,
+    units: faqUnits(locale, page.id, page.title, page.meta_description, page.content),
+  })
+}
+
+for (const [tier, byLocale] of Object.entries(PRICE_TIER_I18N)) {
+  if (!byLocale) continue
+  for (const [loc, t] of Object.entries(byLocale)) {
+    if (!t || !LOCALES.includes(loc as Locale)) continue
+    const locale = loc as Locale
+    const entryId = `tier:${tier}:${locale}`
+    entries.push({
+      entryId,
+      locale,
+      units: [
+        { locale, entryId, field: 'title', value: t.title },
+        { locale, entryId, field: 'framing', value: t.framing },
+        { locale, entryId, field: 'catch', value: t.catch },
+      ],
+    })
+  }
 }
 
 for (const [region, byLocale] of Object.entries(REGION_HUB_I18N)) {
@@ -395,6 +466,96 @@ for (const entry of entries) {
   }
 }
 
+// ── Checks 10/11: UI-message namespace parity (messages/<locale>.json) ───────
+// Content-data parity (guides/FAQs/hubs/tiers) is covered by the corpus checks
+// above; this covers the OTHER half of a translated page: the UI chrome strings
+// next-intl serves from messages/*.json. A namespace absent from a locale that
+// SSGs pages consuming it doesn't fail the build — every render logs
+// MISSING_MESSAGE and silently falls back to English.
+//
+// Allowlist of namespaces consumed by translated SSG routes, each mapped to
+// the registry helper whose registered paths prove a locale SSGs pages that
+// consume it. New namespace/consumer pairs get added here when a translated
+// route starts consuming them. Known-unchecked: the layout-chrome namespaces
+// (Nav, Common, Footer, LanguageSwitcher) render on every locale page — a
+// scoping decision, since they aren't tied to any one registry helper.
+type MessageCatalog = Record<string, unknown>
+
+const uiCatalogs = Object.fromEntries(
+  (['en', ...LOCALES] as const).map((l) => [
+    l,
+    JSON.parse(
+      readFileSync(fileURLToPath(new URL(`../messages/${l}.json`, import.meta.url)), 'utf8')
+    ) as MessageCatalog,
+  ])
+) as Record<'en' | Locale, MessageCatalog>
+
+const localesWithPaths = (registered: (locale: string) => string[]): Locale[] =>
+  LOCALES.filter((l) => registered(l).length > 0)
+
+const SSG_UI_NAMESPACES: Record<string, Locale[]> = (() => {
+  const regionHub = localesWithPaths(getRegisteredRegionHubPaths)
+  const priceTier = localesWithPaths(getRegisteredPriceTierPaths)
+  const faq = localesWithPaths(getRegisteredFaqPaths)
+  return {
+    GolfCourseRegion: regionHub,
+    GolfCoursePriceTier: priceTier,
+    // Shared components (RoundupList, RentalCtaBanner) render on both page types.
+    GolfCourseShared: LOCALES.filter((l) => regionHub.includes(l) || priceTier.includes(l)),
+    ExplainerPage: localesWithPaths(getRegisteredGuidePaths),
+    FaqPage: faq,
+    // components/faq/FaqPage.tsx also getTranslations('ContactInfo') on every FAQ page.
+    ContactInfo: faq,
+  }
+})()
+
+/** Leaf message keys of a namespace object as dot paths (next-intl nests). */
+function flattenKeys(node: unknown, prefix = ''): string[] {
+  if (node === null || typeof node !== 'object' || Array.isArray(node)) return [prefix]
+  return Object.entries(node as Record<string, unknown>).flatMap(([k, v]) =>
+    flattenKeys(v, prefix ? `${prefix}.${k}` : k)
+  )
+}
+
+function checkNamespaceParity(
+  catalogs: Record<'en' | Locale, MessageCatalog>,
+  nsLocales: Record<string, Locale[]>
+) {
+  for (const [ns, locales] of Object.entries(nsLocales)) {
+    if (locales.length === 0) {
+      // A registry-helper regression (e.g. a changed path prefix) would make
+      // this check silently cover nothing — fail loudly instead.
+      add('error', 'th', `lib/translated-routes.ts`, ns, 'ui-namespace',
+        `allowlisted namespace "${ns}" resolved 0 SSG locales — registry helper regression or stale SSG_UI_NAMESPACES entry`)
+      continue
+    }
+    if (!(ns in catalogs.en)) {
+      // Allowlist typo or a namespace renamed in en.json — surface loudly.
+      add('error', locales[0] ?? 'th', `messages/en.json`, ns, 'ui-namespace',
+        `allowlisted namespace "${ns}" not found in messages/en.json — fix SSG_UI_NAMESPACES or the catalog`)
+      continue
+    }
+    const enKeys = flattenKeys(catalogs.en[ns])
+    for (const locale of locales) {
+      const entryId = `messages/${locale}.json`
+      if (!(ns in catalogs[locale])) {
+        add('error', locale, entryId, ns, 'ui-namespace',
+          `namespace "${ns}" missing entirely — ${locale} SSG pages consuming it fall back to English (${enKeys.length} MISSING_MESSAGE per render)`)
+        continue
+      }
+      const locKeys = new Set(flattenKeys(catalogs[locale][ns]))
+      const gaps = enKeys.filter((k) => !locKeys.has(k))
+      if (gaps.length > 0) {
+        const shown = gaps.slice(0, 5).join(', ')
+        add('warn', locale, entryId, ns, 'ui-key-gap',
+          `${gaps.length} key(s) in en.json missing here (English fallback at render): ${shown}${gaps.length > 5 ? ', …' : ''}`)
+      }
+    }
+  }
+}
+
+checkNamespaceParity(uiCatalogs, SSG_UI_NAMESPACES)
+
 // ── Optional self-test: drives every ERROR check through the real functions on
 // synthetic inputs, proving each detector fires (and that correct forms don't).
 // Run: npx tsx scripts/validate-i18n.ts --self-test
@@ -434,6 +595,79 @@ if (process.argv.includes('--self-test')) {
   assert('markup: lone {{ → 1', errsFrom('ja', '{{price のみ', checkMarkup) === 1)
   assert('markup: complete {{token}} → 0', errsFrom('ja', '{{price}} は有効', checkMarkup) === 0)
 
+  // TH as-of marker must not match the tail of ประมาณ ("approximately") or a
+  // bare prepositional ณ — only the glossary's dated ข้อมูล ณ form counts.
+  assert('as-of th: ประมาณ 500 บาท does not shield', !AS_OF_MARKERS.th.some((m) => 'ราคาโดยทั่วไปเริ่มต้นประมาณ 500 บาท'.includes(m)))
+  assert('as-of th: bare ณ จังหวะ does not shield', !AS_OF_MARKERS.th.some((m) => 'ทำอะไรบ้าง ณ จังหวะปะทะลูก'.includes(m)))
+  assert('as-of th: (ข้อมูล ณ กรกฎาคม 2026) shields', AS_OF_MARKERS.th.some((m) => '(ข้อมูล ณ กรกฎาคม 2026)'.includes(m)))
+
+  // Corpus coverage — each source file actually contributes entries, so a
+  // future filter/import regression can't silently shrink the lint surface.
+  // 'exp-' only: data/faq-pages.ts also carries gg-prefixed ids, which would
+  // keep a gg- check green even if the explainer import/loop regressed.
+  assert('corpus: explainer entries present', entries.some((e) => e.entryId.startsWith('exp-')))
+  assert('corpus: region-hub entries present', entries.some((e) => e.entryId.startsWith('hub:')))
+  assert('corpus: FAQ entries present', entries.some((e) => e.entryId.startsWith('faq-')))
+  assert('corpus: price-tier entries present', entries.some((e) => e.entryId.startsWith('tier:')))
+
+  // Checks 10/11 — UI-message namespace parity, on synthetic catalogs
+  const parityIssues = (
+    cats: Record<'en' | Locale, MessageCatalog>,
+    ns: Record<string, Locale[]>
+  ): Issue[] => {
+    const before = issues.length
+    checkNamespaceParity(cats, ns)
+    return issues.splice(before)
+  }
+  const synth = (ja: MessageCatalog): Record<'en' | Locale, MessageCatalog> => ({
+    en: { NS: { a: 'x', nested: { b: 'y' } } },
+    ja,
+    ko: { NS: { a: 'x', nested: { b: 'y' } } },
+    zh: { NS: { a: 'x', nested: { b: 'y' } } },
+    th: { NS: { a: 'x', nested: { b: 'y' } } },
+  })
+  assert(
+    'ui-ns: flattenKeys nests to dot paths',
+    JSON.stringify(flattenKeys({ a: 'x', nested: { b: 'y' } })) === '["a","nested.b"]'
+  )
+  assert(
+    'ui-ns: namespace missing entirely → 1 error',
+    parityIssues(synth({}), { NS: ['ja'] }).filter((i) => i.level === 'error').length === 1
+  )
+  {
+    const got = parityIssues(synth({ NS: { a: 'x', nested: {} } }), { NS: ['ja'] })
+    assert('ui-ns: key gap → 1 warn, 0 errors',
+      got.filter((i) => i.level === 'warn').length === 1 &&
+      got.filter((i) => i.level === 'error').length === 0)
+  }
+  assert(
+    'ui-ns: full parity → 0 issues',
+    parityIssues(synth({ NS: { a: 'x', nested: { b: 'y' } } }), { NS: ['ja'] }).length === 0
+  )
+  assert(
+    'ui-ns: allowlist typo (ns absent from en) → 1 error',
+    parityIssues(synth({}), { Typo: ['ja'] }).filter((i) => i.level === 'error').length === 1
+  )
+  assert(
+    'ui-ns: registry resolves 0 locales → 1 error',
+    parityIssues(synth({ NS: { a: 'x', nested: { b: 'y' } } }), { NS: [] })
+      .filter((i) => i.level === 'error').length === 1
+  )
+  // Config guards — the allowlist stays real and the registry keeps feeding it.
+  assert(
+    'ui-ns: every allowlisted namespace exists in messages/en.json',
+    Object.keys(SSG_UI_NAMESPACES).every((ns) => ns in uiCatalogs.en)
+  )
+  assert(
+    'ui-ns: every allowlisted namespace resolves ≥1 SSG locale',
+    Object.values(SSG_UI_NAMESPACES).every((ls) => ls.length > 0)
+  )
+  // The PR #78 regression class: GolfCourseShared must be checked for ja/ko/zh.
+  assert(
+    'ui-ns: GolfCourseShared covers ja/ko/zh',
+    (['ja', 'ko', 'zh'] as Locale[]).every((l) => SSG_UI_NAMESPACES.GolfCourseShared.includes(l))
+  )
+
   // Checks 1–3 — regex-level detectors
   assert('emoji: ⛳ matches', EMOJI_RE.test('⛳'))
   assert('emoji: ○×—〜– ignored', !EMOJI_RE.test('○×—〜–'))
@@ -460,7 +694,8 @@ if (warns.length > 0) {
 
 if (errors.length === 0) {
   console.log(
-    `✅ validate-i18n: ${entries.length} localized entries pass all house-style/honesty ERROR checks` +
+    `✅ validate-i18n: ${entries.length} localized entries pass all house-style/honesty ERROR checks, ` +
+      `${Object.keys(SSG_UI_NAMESPACES).length} UI namespaces at parity` +
       (warns.length ? ` (${warns.length} warning(s) above are non-blocking)` : '')
   )
   process.exit(0)
@@ -473,6 +708,8 @@ for (const e of errors) {
 console.error(
   '\nFix: align the content with data/i18n-glossary/' +
     '<locale>.json (terminology.use forms, brand_immutable casing, no emoji/！,' +
-    ' half-width digits) — see docs/i18n-review-checklist.md.'
+    ' half-width digits) — see docs/i18n-review-checklist.md.' +
+    ' For ui-namespace errors, translate the namespace into messages/<locale>.json' +
+    ' (key set mirrors messages/en.json).'
 )
 process.exit(1)

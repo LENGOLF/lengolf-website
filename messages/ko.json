@@ -1241,6 +1241,13 @@
     "roundupReason": "평일 {price}바트부터",
     "otherPriceBands": "다른 가격대"
   },
+  "GolfCourseShared": {
+    "feeFrom": "{price}바트부터",
+    "bookNow": "예약하기",
+    "learnMore": "자세히 보기",
+    "rentalEyebrow": "클럽이 없어도 괜찮아요",
+    "rentalBody": "프리미엄 클럽 대여 — 방콕 호텔까지 배송해 드려요. Callaway Paradym, Warbird, Majesty. <price>하루 1,200바트</price>부터. 수하물 요금도, 공항에서의 번거로움도 없어요."
+  },
   "ExplainerPage": {
     "guideLabel": "LENGOLF 가이드",
     "bookABay": "베이 예약",

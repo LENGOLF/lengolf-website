@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import Link from 'next/link'
 import { ArrowRight, Check, Calendar } from 'lucide-react'
 import { BOOKING_URL, BUSINESS_INFO, SOCIAL_LINKS } from '@/lib/constants'
@@ -8,8 +9,36 @@ interface Props {
   data: PriceGuideSeoPage
 }
 
+interface PriceGroup {
+  venue: string | null
+  rows: { label: string; price: string; notes: string }[]
+}
+
+// Rows named "Venue — Item" collapse into venue-titled groups so the table
+// reads as one block per venue instead of repeating the venue in every row.
+// Consecutive rows sharing the same prefix join the same group; rows without
+// the separator stay ungrouped. Pages where no row carries a venue prefix
+// render as a flat table.
+function groupPriceRows(rows: { item: string; price: string; notes: string }[]): PriceGroup[] {
+  const groups: PriceGroup[] = []
+  for (const row of rows) {
+    const sep = row.item.indexOf(' — ')
+    const venue = sep > 0 ? row.item.slice(0, sep) : null
+    const label = sep > 0 ? row.item.slice(sep + 3) : row.item
+    const prev = groups[groups.length - 1]
+    if (prev && venue !== null && prev.venue === venue) {
+      prev.rows.push({ label, price: row.price, notes: row.notes })
+    } else {
+      groups.push({ venue, rows: [{ label, price: row.price, notes: row.notes }] })
+    }
+  }
+  return groups
+}
+
 export default function PriceGuidePageComponent({ data }: Props) {
   const { content } = data
+  const priceGroups = groupPriceRows(content.price_breakdown)
+  const hasVenueGroups = priceGroups.some((g) => g.venue !== null)
 
   return (
     <div className="price-guide-page">
@@ -67,13 +96,38 @@ export default function PriceGuidePageComponent({ data }: Props) {
                 </tr>
               </thead>
               <tbody>
-                {content.price_breakdown.map((row) => (
-                  <tr key={row.item} className="border-b border-border">
-                    <td className="py-3 pr-4 font-medium text-[#1a472a]">{row.item}</td>
-                    <td className="py-3 px-4 text-[#2d6a4f] font-semibold whitespace-nowrap">{row.price}</td>
-                    <td className="py-3 pl-4 text-muted-foreground">{row.notes}</td>
-                  </tr>
-                ))}
+                {hasVenueGroups
+                  ? priceGroups.map((group, gi) => {
+                      const isLengolf = group.venue === 'LENGOLF'
+                      const tint = isLengolf ? 'bg-[#f0f7f2]' : ''
+                      return (
+                        <Fragment key={`${group.venue ?? 'other'}-${gi}`}>
+                          {group.venue && (
+                            <tr className={tint}>
+                              <td colSpan={3} className={`${gi === 0 ? 'pt-3' : 'pt-6'} pb-2 pr-4 ${isLengolf ? 'pl-4' : ''}`}>
+                                <span className="text-xs font-bold uppercase tracking-wider text-[#1a472a]">
+                                  {group.venue}
+                                </span>
+                              </td>
+                            </tr>
+                          )}
+                          {group.rows.map((row) => (
+                            <tr key={`${group.venue ?? 'other'}-${row.label}`} className={`border-b border-border ${tint}`}>
+                              <td className={`py-3 pr-4 font-medium text-[#1a472a] ${group.venue ? 'pl-4' : ''}`}>{row.label}</td>
+                              <td className="py-3 px-4 text-[#2d6a4f] font-semibold whitespace-nowrap">{row.price}</td>
+                              <td className="py-3 pl-4 text-muted-foreground">{row.notes}</td>
+                            </tr>
+                          ))}
+                        </Fragment>
+                      )
+                    })
+                  : content.price_breakdown.map((row) => (
+                      <tr key={row.item} className="border-b border-border">
+                        <td className="py-3 pr-4 font-medium text-[#1a472a]">{row.item}</td>
+                        <td className="py-3 px-4 text-[#2d6a4f] font-semibold whitespace-nowrap">{row.price}</td>
+                        <td className="py-3 pl-4 text-muted-foreground">{row.notes}</td>
+                      </tr>
+                    ))}
               </tbody>
             </table>
           </div>
@@ -115,9 +169,9 @@ export default function PriceGuidePageComponent({ data }: Props) {
                           {venue.cheapest_rate}
                         </td>
                         <td className="py-3 px-3 whitespace-nowrap">{venue.peak_rate}</td>
-                        <td className="py-3 px-3 text-center">{venue.players_per_bay}</td>
+                        <td className="py-3 px-3 text-center">{venue.players_per_bay ?? '—'}</td>
                         <td className="py-3 px-3">{venue.tech}</td>
-                        <td className="py-3 px-3 text-center">{venue.price_includes_tax ? 'Yes' : 'No'}</td>
+                        <td className="py-3 px-3 text-center">{venue.price_includes_tax === null ? '—' : venue.price_includes_tax ? 'Yes' : 'No'}</td>
                         <td className="py-3 pl-3 text-muted-foreground">{venue.location}</td>
                       </tr>
                     )
