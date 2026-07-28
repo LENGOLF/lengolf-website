@@ -25,6 +25,11 @@ export function pushDataLayerEvent(payload: DataLayerEvent): void {
 // rental landing page itself (location templates, /golf, /lessons, rental-intent
 // FAQs) — kept as its own source so that off-page demand is measurable
 // separately from the on-page hero/section/footer CTAs.
+// 'course_page' is the rental CTA banner on the ~150 golf-course detail
+// pages; 'course_sticky' is the mobile sticky rental bar shown on
+// /golf-courses/* routes; 'seo_page' is the shared RentalCtaBanner on the
+// programmatic near/compare/under/best-for pages. Kept separate so the
+// course-content cluster's contribution to rental demand is measurable.
 export type RentalIntentSource =
   | 'hero'
   | 'section'
@@ -32,6 +37,9 @@ export type RentalIntentSource =
   | 'sticky_cta'
   | 'why_rent'
   | 'cross_link'
+  | 'course_page'
+  | 'course_sticky'
+  | 'seo_page'
 
 export function pushRentalIntent(source: RentalIntentSource): void {
   pushDataLayerEvent({ event: 'rental_intent', source })

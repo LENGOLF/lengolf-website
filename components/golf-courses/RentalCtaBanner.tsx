@@ -1,12 +1,16 @@
 import { ArrowRight } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
+import type { RentalIntentSource } from '@/lib/analytics'
+import TrackedRentalLink from '@/components/golf-courses/TrackedRentalLink'
 
 interface Props {
   /** Override the eyebrow text (default: GolfCourseShared.rentalEyebrow). */
   eyebrow?: string
   /** Override the body line (default: GolfCourseShared.rentalBody). */
   body?: React.ReactNode
+  /** rental_intent source fired when the Book CTA is clicked. */
+  source?: RentalIntentSource
 }
 
 /**
@@ -20,7 +24,7 @@ interface Props {
  * under/*) — the rental pitch lives in ONE message key per locale instead of
  * a hardcoded EN fallback plus per-page copies.
  */
-export default function RentalCtaBanner({ eyebrow, body }: Props) {
+export default function RentalCtaBanner({ eyebrow, body, source = 'seo_page' }: Props) {
   const t = useTranslations('GolfCourseShared')
   return (
     <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#003d22] to-[#005a32] p-6 sm:p-8">
@@ -36,14 +40,13 @@ export default function RentalCtaBanner({ eyebrow, body }: Props) {
           })}
       </p>
       <div className="relative flex flex-wrap gap-3">
-        <a
+        <TrackedRentalLink
           href="https://booking.len.golf/course-rental"
-          target="_blank"
-          rel="noopener noreferrer"
+          source={source}
           className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-bold text-[#1a1a1a] transition-all hover:bg-accent/90 hover:shadow-lg"
         >
           {t('bookNow')}
-        </a>
+        </TrackedRentalLink>
         <Link
           href="/golf-course-club-rental"
           className="inline-flex items-center gap-2 rounded-lg border border-white/30 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/10"

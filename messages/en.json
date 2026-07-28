@@ -26,6 +26,7 @@
     "rentalAgreement": "Rental Agreement",
     "address": "The Mercury Ville @ BTS Chidlom\nFloor 4",
     "planningLink": "Plan Your Golf Trip to Thailand",
+    "golfCoursesLink": "Thailand Golf Course Guides",
     "discoverMore": "Discover More",
     "thingsToDoLink": "Things To Do in Bangkok",
     "hotelsLink": "Near Your Hotel",
@@ -35,6 +36,7 @@
   "Common": {
     "bookNow": "BOOK NOW",
     "bookYourBay": "BOOK YOUR BAY",
+    "rentClubsCta": "Rent Clubs for Your Round",
     "lineAtLengolf": "LINE @lengolf",
     "learnMore": "Learn more",
     "readyToPlay": "Ready to play?",

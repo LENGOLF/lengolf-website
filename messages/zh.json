@@ -26,6 +26,7 @@
     "rentalAgreement": "租赁协议",
     "address": "The Mercury Ville @ BTS Chidlom\n4楼",
     "planningLink": "规划您的泰国高尔夫之旅",
+    "golfCoursesLink": "泰国高尔夫球场指南",
     "discoverMore": "探索更多",
     "thingsToDoLink": "曼谷活动推荐",
     "hotelsLink": "酒店周边",
@@ -35,6 +36,7 @@
   "Common": {
     "bookNow": "立即预订",
     "bookYourBay": "预订球位",
+    "rentClubsCta": "租借球杆下场打球",
     "lineAtLengolf": "LINE @lengolf",
     "learnMore": "了解更多",
     "readyToPlay": "准备好开始了吗？",

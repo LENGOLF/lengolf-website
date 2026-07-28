@@ -399,7 +399,9 @@ async function StationPage({ station }: { station: string }) {
             items={[
               {
                 label: `${meta.name} area guide`,
-                href: `/location/${meta.areaSlug}` as `/${string}`,
+                // Location slugs are `{template}-{area}` — there is no bare
+                // `/location/asok`; the bare form hard-404s (dynamicParams=false).
+                href: `/location/indoor-golf-${meta.areaSlug}` as `/${string}`,
                 description: 'Hotels, restaurants, and golf-friendly transit options in the area.',
               },
             ]}

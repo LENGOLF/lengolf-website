@@ -26,6 +26,7 @@
     "rentalAgreement": "レンタル規約",
     "address": "The Mercury Ville @ BTS Chidlom\n4階",
     "planningLink": "タイゴルフ旅行を計画する",
+    "golfCoursesLink": "タイのゴルフ場ガイド",
     "discoverMore": "もっと探す",
     "thingsToDoLink": "バンコクでできること",
     "hotelsLink": "ホテル周辺",
@@ -35,6 +36,7 @@
   "Common": {
     "bookNow": "今すぐ予約",
     "bookYourBay": "ベイを予約する",
+    "rentClubsCta": "ラウンド用クラブをレンタル",
     "lineAtLengolf": "LINE @lengolf",
     "learnMore": "詳しく見る",
     "readyToPlay": "プレーの準備はできていますか？",

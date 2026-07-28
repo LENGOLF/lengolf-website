@@ -19,6 +19,7 @@ const FOOTER_MENU_KEYS = [
 const DISCOVER_LINKS = [
   { key: 'thingsToDoLink', href: '/activities/' as const },
   { key: 'planningLink', href: '/golf-in-thailand-guide/' as const },
+  { key: 'golfCoursesLink', href: '/golf-courses/' as const },
   { key: 'hotelsLink', href: '/hotels/' as const },
   { key: 'faqLink', href: '/faq/' as const },
 ] as const

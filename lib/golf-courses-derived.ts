@@ -57,6 +57,56 @@ export async function getTopCoursesByRegion(
 }
 
 /**
+ * Sibling courses for the detail page's "More in region" block: nearest by
+ * straight-line distance when the course has coordinates, topped up (or fully
+ * replaced) by popularity when coordinates are missing.
+ *
+ * Replaces the old `.slice(0, 3)` on raw index order, which sent every
+ * course page's sibling links to the same three alphabetically-first courses
+ * per region — 54 of Bangkok's 58 courses had zero sibling inbound links.
+ * Nearest-neighbour selection spreads inbound links across the whole
+ * roster (every course is *someone's* nearest neighbour) and is genuinely
+ * more useful to a reader planning rounds in one area.
+ */
+export async function getRelatedCourses(
+  course: GolfCourse,
+  n = 3
+): Promise<GolfCourse[]> {
+  const siblings = (await getCoursesByRegion(course.region)).filter(
+    (c) => c.slug !== course.slug && c.status === 'published'
+  )
+  const picked: GolfCourse[] = []
+
+  if (course.latitude !== null && course.longitude !== null) {
+    picked.push(
+      ...siblings
+        .filter((c) => c.latitude !== null && c.longitude !== null)
+        .map((c) => ({
+          c,
+          km: haversineKm(
+            { lat: course.latitude!, lng: course.longitude! },
+            { lat: c.latitude!, lng: c.longitude! }
+          ),
+        }))
+        .sort((a, b) => a.km - b.km || a.c.slug.localeCompare(b.c.slug))
+        .slice(0, n)
+        .map((x) => x.c)
+    )
+  }
+
+  if (picked.length < n) {
+    picked.push(
+      ...siblings
+        .filter((c) => !picked.includes(c))
+        .sort(byPopularity)
+        .slice(0, n - picked.length)
+    )
+  }
+
+  return picked
+}
+
+/**
  * Comparison pair list. For each region with ≥2 courses, takes the top 3
  * by popularity and emits all C(3,2) pairs canonicalised as slugA < slugB.
  * Used by both `generateStaticParams` and the sitemap loop.

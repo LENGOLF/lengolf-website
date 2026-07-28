@@ -4,17 +4,26 @@ import { notFound } from 'next/navigation'
 import { getCourseBySlug, getAllCourseParams, getCoursesByRegion, REGION_META } from '@/lib/golf-courses'
 import type { Region } from '@/lib/golf-courses'
 import { SITE_URL } from '@/lib/constants'
-import { getBreadcrumbJsonLd } from '@/lib/jsonld'
+import { getBreadcrumbJsonLd, getFaqPageJsonLd } from '@/lib/jsonld'
+import { getCourseDetailJsonLd } from '@/lib/jsonld-courses'
+import { getCourseTitle, getCourseDescription, getCourseFaqs } from '@/lib/course-seo'
 import CoursePage from '@/components/golf-courses/CoursePage'
-import { getComparisonPairs, pairSlug } from '@/lib/golf-courses-derived'
+import { getComparisonPairs, getRelatedCourses, pairSlug } from '@/lib/golf-courses-derived'
 import { BTS_STATIONS } from '@/data/bts-stations'
-import { USE_CASE_RULES, USE_CASES } from '@/data/golf-courses-use-cases'
+import { USE_CASE_RULES, type UseCase } from '@/data/golf-courses-use-cases'
+import { PRICE_TIERS } from '@/data/price-tiers'
 import { haversineKm } from '@/lib/geo'
 import type { CrossLink } from '@/components/golf-courses/CrossLinkBlock'
 
 interface Props {
   params: Promise<{ locale: string; region: string; slug: string }>
 }
+
+// Match the sibling programmatic routes (near/compare/under/best-for):
+// unknown slugs 404 at the routing layer instead of rendering on demand,
+// and pages revalidate daily.
+export const revalidate = 86400
+export const dynamicParams = false
 
 export async function generateStaticParams() {
   // EN-only: omitting `locale` would cross-product with every locale from the
@@ -29,23 +38,42 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!course) return { title: 'Course Not Found' }
 
-  const { title, meta_description } = course.locales.en
+  // Titles/descriptions are generated from structured fields (lib/course-seo)
+  // instead of the per-file locales.en strings: 134/149 of those shared one
+  // boilerplate suffix long enough to guarantee SERP truncation, and 77/149
+  // descriptions were verbatim identical modulo the course name.
+  const title = getCourseTitle(course)
+  const description = getCourseDescription(course)
   const canonicalUrl = `${SITE_URL}/golf-courses/${region}/${slug}/`
 
   return {
     title,
-    description: meta_description,
+    description,
     alternates: {
       canonical: canonicalUrl,
     },
     openGraph: {
       title,
-      description: meta_description,
+      description,
       url: canonicalUrl,
       type: 'website',
     },
   }
 }
+
+// When a course matches several use-case pages, link the one whose page has
+// the fewest members — rarity order, thinnest first. The old
+// `USE_CASES.find(...)` array order made `beginners` (88 matches) and
+// `groups` (111) absorb nearly every link while `high-handicappers`
+// (7 members) and `families` got none.
+const USE_CASE_LINK_PRIORITY: UseCase[] = [
+  'high-handicappers',
+  'tournaments',
+  'weekday-play',
+  'families',
+  'beginners',
+  'groups',
+]
 
 export default async function CoursePageRoute({ params }: Props) {
   const { locale, region, slug } = await params
@@ -56,15 +84,13 @@ export default async function CoursePageRoute({ params }: Props) {
 
   const regionLabel = REGION_META[region as Region]?.label ?? (region.charAt(0).toUpperCase() + region.slice(1))
 
-  // Fetch up to 3 sibling courses in the same region for the "More in Region" section
-  const allRegionCourses = await getCoursesByRegion(region)
-  const relatedCourses = allRegionCourses
-    .filter((c) => c.slug !== slug)
-    .slice(0, 3)
+  // Nearest-neighbour siblings (falls back to popularity when coords missing)
+  const relatedCourses = await getRelatedCourses(course, 3)
   const canonicalUrl = `${SITE_URL}/golf-courses/${region}/${slug}/`
 
   // ── Cross-links into the workstream-A programmatic-SEO pages ─────────────
   // 1) Comparisons featuring this course (max 2)
+  const allRegionCourses = await getCoursesByRegion(region)
   const comparisonPairs = await getComparisonPairs()
   const courseComparisons = comparisonPairs
     .filter((p) => p.region === region && (p.slugA === slug || p.slugB === slug))
@@ -73,9 +99,12 @@ export default async function CoursePageRoute({ params }: Props) {
     allRegionCourses.map((c) => [c.slug, c.name])
   )
 
-  // 2) Nearest BTS station (only if the course has lat/lng)
+  // 2) Nearest BTS station — Bangkok-region courses only. BTS_STATIONS holds
+  // Bangkok stations exclusively, so for any other region the "nearest" match
+  // produced absurd copy ("688.5 km from Silom — same district as …") linking
+  // to a page that doesn't even list the course.
   let nearestStationLink: CrossLink | null = null
-  if (course.latitude !== null && course.longitude !== null) {
+  if (region === 'bangkok' && course.latitude !== null && course.longitude !== null) {
     const stations = Object.values(BTS_STATIONS)
     const nearest = stations.reduce(
       (best, s) => {
@@ -90,16 +119,32 @@ export default async function CoursePageRoute({ params }: Props) {
     nearestStationLink = {
       label: `Best courses near ${nearest.station.name} BTS`,
       href: `/golf-courses/near/${nearest.station.slug}`,
-      description: `${nearest.km.toFixed(1)} km from ${nearest.station.name} — same district as ${course.name}.`,
+      description: `${nearest.km.toFixed(1)} km from ${nearest.station.name} — closest station to ${course.name}.`,
     }
   }
 
-  // 3) First use-case this course matches
-  const matchedUseCase = USE_CASES.find((u) => USE_CASE_RULES[u].predicate(course))
+  // 3) Rarest use-case page this course belongs to
+  const matchedUseCase = USE_CASE_LINK_PRIORITY.find((u) => USE_CASE_RULES[u].predicate(course))
   const useCaseLink: CrossLink | null = matchedUseCase
     ? {
         label: USE_CASE_RULES[matchedUseCase].title.replace('Best Bangkok-Area Golf Courses ', ''),
         href: `/golf-courses/best-for/${matchedUseCase}`,
+      }
+    : null
+
+  // 4) The course's own price tier (smallest tier its weekday fee fits).
+  // Tier pages are framed "Bangkok-Area", so only link from courses actually
+  // within day-trip range of Bangkok.
+  const tier =
+    course.green_fee_weekday_thb !== null &&
+    course.distance_from_bangkok_km !== null &&
+    course.distance_from_bangkok_km <= 150
+      ? PRICE_TIERS.find((t) => course.green_fee_weekday_thb! <= t.thb)
+      : undefined
+  const tierLink: CrossLink | null = tier
+    ? {
+        label: `Best courses under ฿${tier.thb.toLocaleString('en-US')}`,
+        href: `/golf-courses/under/${tier.slug}`,
       }
     : null
 
@@ -110,6 +155,7 @@ export default async function CoursePageRoute({ params }: Props) {
     })),
     ...(nearestStationLink ? [nearestStationLink] : []),
     ...(useCaseLink ? [useCaseLink] : []),
+    ...(tierLink ? [tierLink] : []),
   ]
 
   const breadcrumbJsonLd = getBreadcrumbJsonLd([
@@ -119,18 +165,14 @@ export default async function CoursePageRoute({ params }: Props) {
     { name: course.name, url: canonicalUrl },
   ])
 
-  // Wrap JSON.parse in try/catch: a malformed schema_markup in one data file
-  // must not crash the entire detail page with a 500.
-  let schemaMarkup: Record<string, unknown> | null = null
-  try {
-    schemaMarkup = JSON.parse(course.schema_markup) as Record<string, unknown>
-    // Fill in the description and canonical URL at render time
-    schemaMarkup.description = course.prose.overview
-    schemaMarkup.url = canonicalUrl   // bug_022: use www canonical, not apex domain from static data
-  } catch {
-    // Log server-side so we can detect bad data files without crashing the page
-    console.error(`[CoursePage] Failed to parse schema_markup for ${region}/${slug}`)
-  }
+  // GolfCourse schema derived from typed fields (replaces the hand-serialised
+  // course.schema_markup string, which needed render-time patching for its
+  // null description and apex-domain URL, and drifted on any field edit).
+  const courseJsonLd = getCourseDetailJsonLd(course, canonicalUrl)
+
+  // FAQPage schema mirrors the visible CourseFaq block — same source array.
+  const faqs = getCourseFaqs(course)
+  const faqJsonLd = faqs.length > 0 ? getFaqPageJsonLd(faqs) : null
 
   return (
     <>
@@ -138,10 +180,14 @@ export default async function CoursePageRoute({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      {schemaMarkup && (
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(courseJsonLd) }}
+      />
+      {faqJsonLd && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMarkup) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
         />
       )}
       <CoursePage

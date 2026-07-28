@@ -304,16 +304,26 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
           const weekend  = course.green_fee_weekend_thb
 
           return (
-            <button
+            // Anchor, not <button>: the roster is the region hub's only full
+            // course listing, so these must be crawlable links to the 149
+            // detail pages (buttons left the hub with zero indexable course
+            // links). Plain click still toggles the map panel; modified
+            // clicks (cmd/ctrl/shift/middle) fall through to real navigation.
+            <Link
               key={course.slug}
-              onClick={() => handleListRow(course.slug)}
+              href={`/golf-courses/${region}/${course.slug}`}
+              onClick={(e) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+                e.preventDefault()
+                handleListRow(course.slug)
+              }}
               className={[
                 'grid w-full grid-cols-[32px_1fr_auto] items-center gap-3 px-5 py-4 text-left transition-all',
                 'sm:grid-cols-[32px_1fr_140px_100px]',
                 'border-b border-[#003d22]/5 last:border-0',
                 isActive ? 'bg-[#f0f7f2]' : 'hover:bg-[#f9fcfa]',
               ].join(' ')}
-              aria-pressed={isActive}
+              aria-current={isActive ? 'true' : undefined}
             >
               <span className={[
                 'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-black transition-all',
@@ -362,7 +372,7 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
                   <span className="text-muted-foreground/40">—</span>
                 )}
               </div>
-            </button>
+            </Link>
           )
         })}
       </div>
