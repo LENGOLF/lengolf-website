@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { ExternalLink, MapPin } from 'lucide-react'
 import { loadMapsApi } from '@/lib/maps-loader'
+import { pushDataLayerEvent } from '@/lib/analytics'
 
 interface Props {
   /** Course name — marker title and aria-label. */
@@ -11,6 +12,14 @@ interface Props {
   lng: number
   /** External Google Maps link (course's own URL or synthesized from coords). */
   mapsUrl: string
+  /**
+   * Decided server-side from the build-time presence of
+   * NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY. When false, the map frame is never
+   * rendered at all — only the link row — so a missing key produces no
+   * empty-box layout shift. Runtime failures (script load) still collapse
+   * the frame client-side; that path is unavoidable.
+   */
+  enabled?: boolean
 }
 
 /**
@@ -21,16 +30,19 @@ interface Props {
  *
  * Initialisation is gated on an IntersectionObserver: the map sits below the
  * fold on every course page, so the Maps script must not compete with LCP.
- * Missing API key or script failure degrades to the external link only.
+ * Missing API key or script failure degrades to the external link only, and
+ * runtime failures emit a `map_unavailable` dataLayer event so a broken
+ * Maps integration is visible in analytics rather than silent.
  */
-export default function CourseSatelliteMap({ name, lat, lng, mapsUrl }: Props) {
+export default function CourseSatelliteMap({ name, lat, lng, mapsUrl, enabled = true }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const mapDivRef = useRef<HTMLDivElement>(null)
   const [inView, setInView] = useState(false)
-  const [mapsUnavailable, setMapsUnavailable] = useState(false)
+  const [mapsUnavailable, setMapsUnavailable] = useState(!enabled)
 
   // Arm the observer once; disconnect after first intersection.
   useEffect(() => {
+    if (!enabled) return
     if (!containerRef.current) return
     if (typeof IntersectionObserver === 'undefined') {
       setInView(true)
@@ -47,13 +59,20 @@ export default function CourseSatelliteMap({ name, lat, lng, mapsUrl }: Props) {
     )
     observer.observe(containerRef.current)
     return () => observer.disconnect()
-  }, [])
+  }, [enabled])
 
   useEffect(() => {
-    if (!inView) return
+    if (!enabled || !inView) return
+
+    const fail = (reason: 'no_key' | 'load_failed') => {
+      setMapsUnavailable(true)
+      pushDataLayerEvent({ event: 'map_unavailable', source: 'course_satellite', reason })
+    }
+
+    // Belt-and-braces: `enabled` already encodes build-time key presence.
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY
     if (!apiKey) {
-      setMapsUnavailable(true)
+      fail('no_key')
       return
     }
     if (!mapDivRef.current) return
@@ -81,12 +100,14 @@ export default function CourseSatelliteMap({ name, lat, lng, mapsUrl }: Props) {
           title: name,
         })
       })
-      .catch(() => setMapsUnavailable(true))
+      .catch(() => {
+        if (!cancelled) fail('load_failed')
+      })
 
     return () => {
       cancelled = true
     }
-  }, [inView, lat, lng, name])
+  }, [enabled, inView, lat, lng, name])
 
   return (
     <div ref={containerRef} className="overflow-hidden rounded-2xl border border-border shadow-sm">

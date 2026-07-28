@@ -3,6 +3,18 @@ const { LEGACY_BLOG_SLUGS } = require('./lib/blog-slugs.js')
 
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
 
+// NEXT_PUBLIC_* vars are inlined at build time, so a key dropped from the
+// Vercel env fails SILENTLY: every map (course satellite maps, region/hub
+// explorers) degrades to its link/unavailable fallback with no error
+// anywhere. Make that visible in the build log instead.
+if (!process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY) {
+  console.warn(
+    '[next.config] NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY is not set — all Google Maps ' +
+      'sections (course satellite maps, region/hub explorers) will render their ' +
+      'link-only fallbacks in this build.'
+  )
+}
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,

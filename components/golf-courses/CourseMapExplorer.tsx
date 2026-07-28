@@ -7,6 +7,7 @@ import { ArrowRight, Clock, Flag, X, ExternalLink, MapPinOff } from 'lucide-reac
 import type { GolfCourse } from '@/types/golf-courses'
 import { formatFee, driveTimeLabel } from '@/lib/format'
 import { loadMapsApi } from '@/lib/maps-loader'
+import { pushDataLayerEvent } from '@/lib/analytics'
 
 interface RegionCenter {
   lat: number
@@ -62,9 +63,13 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
 
   // ── Load map + place markers ──────────────────────────────────────────────
   useEffect(() => {
+    const fail = (reason: 'no_key' | 'load_failed') => {
+      setMapsUnavailable(true)
+      pushDataLayerEvent({ event: 'map_unavailable', source: 'region_explorer', reason })
+    }
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY
     if (!apiKey) {
-      setMapsUnavailable(true)
+      fail('no_key')
       return
     }
     if (!mapDivRef.current) return
@@ -112,7 +117,7 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
         .filter(Boolean) as { marker: any; pin: HTMLDivElement; slug: string }[]
 
       if (!bounds.isEmpty()) map.fitBounds(bounds, 48)
-    }).catch(() => setMapsUnavailable(true))
+    }).catch(() => fail('load_failed'))
 
     return () => {
       cancelled = true

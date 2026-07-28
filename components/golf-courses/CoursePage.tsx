@@ -173,6 +173,7 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
                     course.google_maps_url ??
                     `https://www.google.com/maps/search/?api=1&query=${course.latitude},${course.longitude}`
                   }
+                  enabled={Boolean(process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY)}
                 />
               </div>
             )}

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { MapPinOff } from 'lucide-react'
 import type { GolfCourse } from '@/types/golf-courses'
 import { loadMapsApi } from '@/lib/maps-loader'
+import { pushDataLayerEvent } from '@/lib/analytics'
 
 interface RegionCourses {
   region: string
@@ -29,8 +30,12 @@ export default function HubMapExplorer({ regions, locale = 'en' }: Props) {
   const [mapsUnavailable, setMapsUnavailable] = useState(false)
 
   useEffect(() => {
+    const fail = (reason: 'no_key' | 'load_failed') => {
+      setMapsUnavailable(true)
+      pushDataLayerEvent({ event: 'map_unavailable', source: 'hub_explorer', reason })
+    }
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY
-    if (!apiKey) { setMapsUnavailable(true); return }
+    if (!apiKey) { fail('no_key'); return }
     if (!mapDivRef.current) return
     let cancelled = false
 
@@ -108,7 +113,7 @@ export default function HubMapExplorer({ regions, locale = 'en' }: Props) {
       }
 
       if (!bounds.isEmpty()) map.fitBounds(bounds, 40)
-    }).catch(console.error)
+    }).catch(() => fail('load_failed'))  // was console.error only, leaving a blank map box
 
     return () => { cancelled = true }
   }, [regions, locale])
