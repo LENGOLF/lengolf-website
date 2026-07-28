@@ -98,11 +98,11 @@ of Search Console data.
 
 ## Backlog — highest ROI next (in order)
 
-1. **Per-course OG images** (high impact, medium effort): no image exists
-   anywhere in the cluster — every share card is the venue default. A single
-   `opengraph-image.tsx` under `[slug]` using `next/og` (course name, fee,
-   region on brand colors) upgrades 149 share cards with zero per-course
-   assets. Add a real `image` field later for Google rich results.
+1. ~~**Per-course OG images**~~ **DONE** — `lib/og-card.tsx` + file-convention
+   `opengraph-image.tsx` routes for course detail, region hubs, and the main
+   hub; generated card also fills the GolfCourse schema `image` slot. Real
+   photos remain a follow-up (embed official YouTube/Instagram on top pages;
+   permission outreach for owned photos — see tiered plan discussed 2026-07-28).
 2. **Localize course detail pages** (high impact, high effort): JA/KO/ZH rental
    pages already out-convert EN 3–4×. The `locales` slots exist and are empty;
    `CoursePage.tsx` needs `useTranslations` plumbing first. Follow the

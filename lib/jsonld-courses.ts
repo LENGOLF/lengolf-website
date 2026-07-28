@@ -50,7 +50,11 @@ function golfCourseItem(c: GolfCourse): Record<string, unknown> {
  * what they were all missing: description, green-fee Offers, hasMap,
  * additionalProperty (holes/par), and a stable @id.
  */
-export function getCourseDetailJsonLd(c: GolfCourse, canonicalUrl: string) {
+export function getCourseDetailJsonLd(
+  c: GolfCourse,
+  canonicalUrl: string,
+  imageUrl?: string
+) {
   const schema: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'GolfCourse',
@@ -64,6 +68,7 @@ export function getCourseDetailJsonLd(c: GolfCourse, canonicalUrl: string) {
       addressCountry: 'TH',
     },
   }
+  if (imageUrl) schema.image = imageUrl
 
   if (c.latitude !== null && c.longitude !== null) {
     schema.geo = {

@@ -168,7 +168,9 @@ export default async function CoursePageRoute({ params }: Props) {
   // GolfCourse schema derived from typed fields (replaces the hand-serialised
   // course.schema_markup string, which needed render-time patching for its
   // null description and apex-domain URL, and drifted on any field edit).
-  const courseJsonLd = getCourseDetailJsonLd(course, canonicalUrl)
+  // `opengraph-image` is the file-convention branded card generated for this
+  // route — an image we own, so it can legitimately fill the schema slot.
+  const courseJsonLd = getCourseDetailJsonLd(course, canonicalUrl, `${canonicalUrl}opengraph-image/`)
 
   // FAQPage schema mirrors the visible CourseFaq block — same source array.
   const faqs = getCourseFaqs(course)
