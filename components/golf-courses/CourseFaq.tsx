@@ -1,13 +1,12 @@
-import type { GolfCourse } from '@/types/golf-courses'
-import { getCourseFaqs } from '@/lib/course-seo'
+import type { CourseFaqItem } from '@/lib/course-seo'
 
 /**
- * Data-derived FAQ block for course detail pages. The same getCourseFaqs()
- * array is emitted as FAQPage JSON-LD by the route, so the visible content
- * and the structured data can never drift apart.
+ * Data-derived FAQ block for course detail pages. The route computes the
+ * items once (lib/course-seo getCourseFaqs) and passes the same array here
+ * and to the FAQPage JSON-LD, so visible content and structured data cannot
+ * drift apart.
  */
-export default function CourseFaq({ course }: { course: GolfCourse }) {
-  const faqs = getCourseFaqs(course)
+export default function CourseFaq({ faqs }: { faqs: CourseFaqItem[] }) {
   if (faqs.length === 0) return null
 
   return (

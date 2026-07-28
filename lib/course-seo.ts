@@ -1,4 +1,5 @@
 import type { GolfCourse } from '@/types/golf-courses'
+import { formatBaht, formatHours } from '@/lib/format'
 
 /**
  * Centralized SEO text generators for the ~150 golf-course detail pages.
@@ -9,18 +10,24 @@ import type { GolfCourse } from '@/types/golf-courses'
  * import from both route files and server components.
  */
 
-const thb = (n: number) => `฿${n.toLocaleString('en-US')}`
+const thb = formatBaht
+
+// The two boilerplate suffixes shared by 134/149 hand-written titles.
+const BOILERPLATE_TITLE = /—\s*Green Fees, Course Guide & (?:Golf )?Club Rentals\s*$/
 
 /**
  * Short, uniform title: "<Course Name> — Green Fees & Guide".
  *
- * Replaces the per-file `locales.en.title` strings, 134/149 of which shared a
- * 45-char boilerplate suffix that pushed the rendered <title> (plus the
- * " | LENGOLF" layout template) past ~80 chars and guaranteed SERP
- * truncation. Name-first keeps the entity keyword visible even when Google
- * truncates the tail.
+ * Replaces the boilerplate per-file `locales.en.title` strings (the 45-char
+ * shared suffix pushed the rendered <title> plus " | LENGOLF" past ~80 chars
+ * and guaranteed SERP truncation). Hand-tuned titles that DON'T match the
+ * boilerplate pattern are kept verbatim — the per-course escape hatch, so a
+ * deliberately differentiated title (e.g. one carrying "Membership") is
+ * never silently overwritten by the generator.
  */
 export function getCourseTitle(course: GolfCourse): string {
+  const handWritten = course.locales.en.title
+  if (handWritten && !BOILERPLATE_TITLE.test(handWritten)) return handWritten
   return `${course.name} — Green Fees & Guide`
 }
 
@@ -83,7 +90,7 @@ export function getCourseFaqs(course: GolfCourse): CourseFaqItem[] {
       const min = course.drive_time_from_bangkok_min
       answer +=
         min >= 120
-          ? `, roughly ${Math.round(min / 60)} hours by car`
+          ? `, roughly ${formatHours(min)} hours by car`
           : `, roughly ${min} minutes by car`
     }
     answer += `. The course is in ${course.province}.`

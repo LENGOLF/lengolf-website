@@ -44,3 +44,16 @@ export type RentalIntentSource =
 export function pushRentalIntent(source: RentalIntentSource): void {
   pushDataLayerEvent({ event: 'rental_intent', source })
 }
+
+// One source per map component so a broken Maps integration is attributable:
+// 'course_satellite' = CourseSatelliteMap on course detail pages,
+// 'region_explorer' = CourseMapExplorer on region hubs,
+// 'hub_explorer' = HubMapExplorer on the main hub.
+export type MapUnavailableSource = 'course_satellite' | 'region_explorer' | 'hub_explorer'
+
+export function pushMapUnavailable(
+  source: MapUnavailableSource,
+  reason: 'no_key' | 'load_failed'
+): void {
+  pushDataLayerEvent({ event: 'map_unavailable', source, reason })
+}

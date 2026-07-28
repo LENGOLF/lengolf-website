@@ -6,6 +6,8 @@ import CrossLinkBlock, { type CrossLink } from '@/components/golf-courses/CrossL
 import CourseFaq from '@/components/golf-courses/CourseFaq'
 import CourseSatelliteMap from '@/components/golf-courses/CourseSatelliteMap'
 import RentalCtaBanner from '@/components/golf-courses/RentalCtaBanner'
+import { courseMapsUrl } from '@/lib/geo'
+import type { CourseFaqItem } from '@/lib/course-seo'
 
 interface Props {
   course: GolfCourse
@@ -13,9 +15,11 @@ interface Props {
   relatedCourses?: GolfCourse[]
   /** Cross-links into programmatic-SEO pages (comparisons, BTS proximity, use-cases). */
   crossLinks?: CrossLink[]
+  /** FAQ items — the route computes these once and also emits them as FAQPage JSON-LD. */
+  faqs?: CourseFaqItem[]
 }
 
-export default function CoursePage({ course, regionLabel, relatedCourses = [], crossLinks = [] }: Props) {
+export default function CoursePage({ course, regionLabel, relatedCourses = [], crossLinks = [], faqs = [] }: Props) {
   // Quick-fact chips shown in the hero
   const chips = [
     course.holes ? `${course.holes} holes · Par ${course.par}` : null,
@@ -169,10 +173,7 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
                   name={course.name}
                   lat={course.latitude}
                   lng={course.longitude}
-                  mapsUrl={
-                    course.google_maps_url ??
-                    `https://www.google.com/maps/search/?api=1&query=${course.latitude},${course.longitude}`
-                  }
+                  mapsUrl={courseMapsUrl(course)!}
                   enabled={Boolean(process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY)}
                 />
               </div>
@@ -227,8 +228,9 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
               </div>
             )}
 
-            {/* FAQ — visible twin of the FAQPage JSON-LD emitted by the route */}
-            <CourseFaq course={course} />
+            {/* FAQ — visible twin of the FAQPage JSON-LD emitted by the route
+                (same array instance, so they cannot drift) */}
+            <CourseFaq faqs={faqs} />
 
             {/* Cross-links into programmatic-SEO pages */}
             {crossLinks.length > 0 && (

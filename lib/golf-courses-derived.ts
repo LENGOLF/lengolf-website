@@ -4,7 +4,7 @@ import { getCoursesByRegion, REGION_META, type Region } from '@/lib/golf-courses
 import { BTS_STATIONS, type BtsStation } from '@/data/bts-stations'
 import { AIRPORTS } from '@/data/airports'
 import { PRICE_TIERS } from '@/data/price-tiers'
-import { USE_CASE_RULES, type UseCase } from '@/data/golf-courses-use-cases'
+import { USE_CASE_RULES, USE_CASES, type UseCase } from '@/data/golf-courses-use-cases'
 import { haversineKm } from '@/lib/geo'
 
 /**
@@ -68,11 +68,14 @@ export async function getTopCoursesByRegion(
  * roster (every course is *someone's* nearest neighbour) and is genuinely
  * more useful to a reader planning rounds in one area.
  */
-export async function getRelatedCourses(
+export function getRelatedCourses(
   course: GolfCourse,
+  allRegionCourses: GolfCourse[],
   n = 3
-): Promise<GolfCourse[]> {
-  const siblings = (await getCoursesByRegion(course.region)).filter(
+): GolfCourse[] {
+  // Caller passes the region roster it already loaded — avoids a second
+  // getCoursesByRegion fan-out of up to 58 dynamic imports per page build.
+  const siblings = allRegionCourses.filter(
     (c) => c.slug !== course.slug && c.status === 'published'
   )
   const picked: GolfCourse[] = []
@@ -111,9 +114,36 @@ export async function getRelatedCourses(
  * by popularity and emits all C(3,2) pairs canonicalised as slugA < slugB.
  * Used by both `generateStaticParams` and the sitemap loop.
  */
-export async function getComparisonPairs(): Promise<
-  { region: Region; slugA: string; slugB: string }[]
-> {
+export interface ComparisonPair {
+  region: Region
+  slugA: string
+  slugB: string
+}
+
+// Pure function of static data, but called from generateStaticParams,
+// generateMetadata, page bodies (course detail + region hub + compare), and
+// the sitemap — memoize at module level so the 14-region top-3 sort runs
+// once per server process instead of ~230+ times per build.
+let comparisonPairsCache: Promise<ComparisonPair[]> | null = null
+
+export function getComparisonPairs(): Promise<ComparisonPair[]> {
+  return (comparisonPairsCache ??= computeComparisonPairs())
+}
+
+/** "A vs B" cross-link for a comparison pair — single source for the label
+ *  format and URL shape used by the course detail, region hub, and compare
+ *  routes. */
+export function comparisonCrossLink(
+  pair: ComparisonPair,
+  nameBySlug: Record<string, string>
+): { label: string; href: string } {
+  return {
+    label: `${nameBySlug[pair.slugA] ?? pair.slugA} vs ${nameBySlug[pair.slugB] ?? pair.slugB}`,
+    href: `/golf-courses/compare/${pair.region}/${pairSlug(pair.slugA, pair.slugB)}`,
+  }
+}
+
+async function computeComparisonPairs(): Promise<ComparisonPair[]> {
   const regions = Object.keys(REGION_META) as Region[]
   const tops = await Promise.all(regions.map((r) => getTopCoursesByRegion(r, 3)))
   const out: { region: Region; slugA: string; slugB: string }[] = []
@@ -248,6 +278,20 @@ export async function getCoursesForUseCase(
     .filter(meta.predicate)
     .sort(byPopularity)
     .slice(0, n)
+}
+
+// Rarest-first use-case ordering, computed from the actual member counts so
+// it can never drift from the data (a hardcoded ranking would silently revert
+// to link-starving the thinnest pages as course data evolves, and wouldn't
+// know about a newly added use case). Memoized: pure function of static data.
+let useCaseRarityCache: Promise<UseCase[]> | null = null
+
+export function getUseCasesByRarity(): Promise<UseCase[]> {
+  return (useCaseRarityCache ??= (async () => {
+    const all = await getAllPublishedCourses()
+    const count = (u: UseCase) => all.filter(USE_CASE_RULES[u].predicate).length
+    return [...USE_CASES].sort((a, b) => count(a) - count(b) || a.localeCompare(b))
+  })())
 }
 
 /** Static-params slug list for `/golf-courses/under-[price]-baht/`. */

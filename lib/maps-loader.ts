@@ -1,3 +1,15 @@
+// Shared Map constructor options for all three map components. DEMO_MAP_ID
+// enables AdvancedMarkerElement — swap for a real Cloud Map ID here (one
+// place) when one is registered. Per-component overrides (zoom, mapTypeId,
+// fullscreenControl) spread on top.
+export const BASE_MAP_OPTIONS = {
+  mapId:             'DEMO_MAP_ID',
+  zoomControl:       true,
+  streetViewControl: false,
+  mapTypeControl:    false,
+  fullscreenControl: false,
+} as const
+
 // Client-side Google Maps JS API loader. Window-level promise so the script
 // loads exactly once regardless of how many map components mount across the
 // page or client-side navigations (CourseMapExplorer, HubMapExplorer,

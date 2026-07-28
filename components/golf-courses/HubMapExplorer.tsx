@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { MapPinOff } from 'lucide-react'
 import type { GolfCourse } from '@/types/golf-courses'
-import { loadMapsApi } from '@/lib/maps-loader'
-import { pushDataLayerEvent } from '@/lib/analytics'
+import { loadMapsApi, BASE_MAP_OPTIONS } from '@/lib/maps-loader'
+import { pushMapUnavailable } from '@/lib/analytics'
 
 interface RegionCourses {
   region: string
@@ -32,7 +32,7 @@ export default function HubMapExplorer({ regions, locale = 'en' }: Props) {
   useEffect(() => {
     const fail = (reason: 'no_key' | 'load_failed') => {
       setMapsUnavailable(true)
-      pushDataLayerEvent({ event: 'map_unavailable', source: 'hub_explorer', reason })
+      pushMapUnavailable('hub_explorer', reason)
     }
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY
     if (!apiKey) { fail('no_key'); return }
@@ -47,15 +47,9 @@ export default function HubMapExplorer({ regions, locale = 'en' }: Props) {
       const gmaps = (window as any).google.maps
 
       const map = new gmaps.Map(mapDivRef.current, {
-        zoom:              9,
-        center:            { lat: 13.2, lng: 100.7 },
-        // DEMO_MAP_ID enables AdvancedMarkerElement — replace with a real Map ID
-        // from Google Cloud Console for production styling.
-        mapId:             'DEMO_MAP_ID',
-        zoomControl:       true,
-        streetViewControl: false,
-        mapTypeControl:    false,
-        fullscreenControl: false,
+        ...BASE_MAP_OPTIONS,
+        zoom:   9,
+        center: { lat: 13.2, lng: 100.7 },
       })
 
       const infoWindow = new gmaps.InfoWindow()
@@ -113,7 +107,9 @@ export default function HubMapExplorer({ regions, locale = 'en' }: Props) {
       }
 
       if (!bounds.isEmpty()) map.fitBounds(bounds, 40)
-    }).catch(() => fail('load_failed'))  // was console.error only, leaving a blank map box
+    // Log the real error for diagnosis (key restriction vs CSP vs network),
+    // then degrade visibly — console.error alone left a blank map box.
+    }).catch((err) => { console.error(err); fail('load_failed') })
 
     return () => { cancelled = true }
   }, [regions, locale])

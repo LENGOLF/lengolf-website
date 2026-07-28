@@ -7,6 +7,7 @@ import { REGION_META, getCourseBySlug, type Region } from '@/lib/golf-courses'
 import { getBreadcrumbJsonLd } from '@/lib/jsonld'
 import { getCourseComparisonJsonLd } from '@/lib/jsonld-courses'
 import {
+  comparisonCrossLink,
   getComparisonPairs,
   parsePairSlug,
   pairSlug,
@@ -279,14 +280,7 @@ export default async function CompareCoursesPage({ params }: Props) {
         {regionPairs.length > 0 && (
           <CrossLinkBlock
             heading={`More ${regionLabel} comparisons`}
-            items={regionPairs.map((p) => {
-              const aName = siblingNames[p.slugA] ?? p.slugA
-              const bName = siblingNames[p.slugB] ?? p.slugB
-              return {
-                label: `${aName} vs ${bName}`,
-                href: `/golf-courses/compare/${p.region}/${pairSlug(p.slugA, p.slugB)}`,
-              }
-            })}
+            items={regionPairs.map((p) => comparisonCrossLink(p, siblingNames))}
           />
         )}
       </div>

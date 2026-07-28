@@ -11,7 +11,7 @@ import { getBreadcrumbJsonLd } from '@/lib/jsonld'
 import { ArrowRight } from 'lucide-react'
 import CourseMapExplorer from '@/components/golf-courses/CourseMapExplorer'
 import CrossLinkBlock from '@/components/golf-courses/CrossLinkBlock'
-import { getComparisonPairs, pairSlug } from '@/lib/golf-courses-derived'
+import { comparisonCrossLink, getComparisonPairs } from '@/lib/golf-courses-derived'
 
 interface Props {
   params: Promise<{ locale: string; region: string }>
@@ -101,13 +101,18 @@ export default async function RegionIndexPage({ params }: Props) {
   // inbound links were from the two top-3 course pages in each pair.
   // EN-only like the trip-planning block below (compare pages have no
   // translations; a localized hub linking them would 301 and mix languages).
-  const regionComparisons =
+  // Built inside the EN gate: the 20 translated hub variants render no
+  // comparison block, so they shouldn't pay for the lookup map either.
+  const comparisonItems =
     locale === 'en'
-      ? (await getComparisonPairs()).filter((p) => p.region === region)
+      ? await (async () => {
+          const pairs = (await getComparisonPairs()).filter((p) => p.region === region)
+          const nameBySlug: Record<string, string> = Object.fromEntries(
+            courses.map((c) => [c.slug, c.name])
+          )
+          return pairs.map((p) => comparisonCrossLink(p, nameBySlug))
+        })()
       : []
-  const nameBySlug: Record<string, string> = Object.fromEntries(
-    courses.map((c) => [c.slug, c.name])
-  )
 
   const breadcrumbJsonLd = getBreadcrumbJsonLd([
     // The /golf-courses/ hub is English-only (301s for other locales), so its
@@ -255,14 +260,11 @@ export default async function RegionIndexPage({ params }: Props) {
         </div>
 
         {/* ── Head-to-head comparisons for this region ── */}
-        {regionComparisons.length > 0 && (
+        {comparisonItems.length > 0 && (
           <div className="mx-auto mt-8 max-w-6xl px-4 sm:px-6 lg:px-8">
             <CrossLinkBlock
               heading={`Compare top ${label} courses`}
-              items={regionComparisons.map((p) => ({
-                label: `${nameBySlug[p.slugA] ?? p.slugA} vs ${nameBySlug[p.slugB] ?? p.slugB}`,
-                href: `/golf-courses/compare/${p.region}/${pairSlug(p.slugA, p.slugB)}`,
-              }))}
+              items={comparisonItems}
             />
           </div>
         )}

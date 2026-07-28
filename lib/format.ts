@@ -9,6 +9,11 @@ export function formatFee(n: number | null): string | null {
   return n.toLocaleString('en-US') + ' THB'
 }
 
+/** Symbol-style THB amount: "฿1,500". For meta/inline text; formatFee for UI rows. */
+export function formatBaht(n: number): string {
+  return `฿${n.toLocaleString('en-US')}`
+}
+
 /**
  * Format a drive time (in minutes) from Bangkok in a human-readable way.
  * Converts ≥120 min to hours to avoid displaying "~660 min" for distant courses.
@@ -19,6 +24,14 @@ export function formatFee(n: number | null): string | null {
  */
 export function driveTimeLabel(min: number | null, withSuffix = true): string | null {
   if (!min) return null
-  const val = min >= 120 ? `~${Math.round(min / 60)}h` : `~${min} min`
+  // Keep half hours exact: 150 min is "~2.5h", not "~3h" (Math.round would
+  // overstate a factual figure by up to 30 minutes).
+  const val = min >= 120 ? `~${formatHours(min)}h` : `~${min} min`
   return withSuffix ? `${val} from Bangkok` : val
+}
+
+/** Hours from minutes, keeping .5 precision: 150 → "2.5", 180 → "3". */
+export function formatHours(min: number): string {
+  const h = min / 60
+  return h % 1 === 0.5 ? h.toFixed(1) : String(Math.round(h))
 }

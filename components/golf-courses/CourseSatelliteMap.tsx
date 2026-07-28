@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { ExternalLink, MapPin } from 'lucide-react'
-import { loadMapsApi } from '@/lib/maps-loader'
-import { pushDataLayerEvent } from '@/lib/analytics'
+import { loadMapsApi, BASE_MAP_OPTIONS } from '@/lib/maps-loader'
+import { pushMapUnavailable } from '@/lib/analytics'
 
 interface Props {
   /** Course name — marker title and aria-label. */
@@ -16,8 +16,8 @@ interface Props {
    * Decided server-side from the build-time presence of
    * NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY. When false, the map frame is never
    * rendered at all — only the link row — so a missing key produces no
-   * empty-box layout shift. Runtime failures (script load) still collapse
-   * the frame client-side; that path is unavoidable.
+   * empty-box layout shift. (No runtime re-check: the client env var is
+   * inlined from the same build, so it can't disagree with this flag.)
    */
   enabled?: boolean
 }
@@ -30,13 +30,15 @@ interface Props {
  *
  * Initialisation is gated on an IntersectionObserver: the map sits below the
  * fold on every course page, so the Maps script must not compete with LCP.
- * Missing API key or script failure degrades to the external link only, and
- * runtime failures emit a `map_unavailable` dataLayer event so a broken
- * Maps integration is visible in analytics rather than silent.
+ * Script failure degrades to the external link only and emits a
+ * `map_unavailable` dataLayer event so a broken Maps integration is visible
+ * in analytics rather than silent.
  */
 export default function CourseSatelliteMap({ name, lat, lng, mapsUrl, enabled = true }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const mapDivRef = useRef<HTMLDivElement>(null)
+  const mapRef = useRef<any>(null)
+  const markerRef = useRef<any>(null)
   const [inView, setInView] = useState(false)
   const [mapsUnavailable, setMapsUnavailable] = useState(!enabled)
 
@@ -64,18 +66,20 @@ export default function CourseSatelliteMap({ name, lat, lng, mapsUrl, enabled = 
   useEffect(() => {
     if (!enabled || !inView) return
 
-    const fail = (reason: 'no_key' | 'load_failed') => {
-      setMapsUnavailable(true)
-      pushDataLayerEvent({ event: 'map_unavailable', source: 'course_satellite', reason })
-    }
-
-    // Belt-and-braces: `enabled` already encodes build-time key presence.
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY
-    if (!apiKey) {
-      fail('no_key')
+    // Soft navigation between course pages keeps this component mounted:
+    // reuse the existing Map (Google Maps has no destroy API — constructing
+    // a new one per navigation would leak instances and bill extra loads).
+    if (mapRef.current) {
+      mapRef.current.setCenter({ lat, lng })
+      if (markerRef.current) {
+        markerRef.current.position = { lat, lng }
+        markerRef.current.title = name
+      }
       return
     }
-    if (!mapDivRef.current) return
+
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY
+    if (!apiKey || !mapDivRef.current) return
     let cancelled = false
 
     loadMapsApi(apiKey)
@@ -84,24 +88,24 @@ export default function CourseSatelliteMap({ name, lat, lng, mapsUrl, enabled = 
         const gmaps = (window as any).google.maps
 
         const map = new gmaps.Map(mapDivRef.current, {
+          ...BASE_MAP_OPTIONS,
           center:            { lat, lng },
           zoom:              15,
           mapTypeId:         'satellite',
-          // DEMO_MAP_ID enables AdvancedMarkerElement (matches the explorers)
-          mapId:             'DEMO_MAP_ID',
-          zoomControl:       true,
-          streetViewControl: false,
-          mapTypeControl:    false,
           fullscreenControl: true,
         })
-        new gmaps.marker.AdvancedMarkerElement({
+        mapRef.current = map
+        markerRef.current = new gmaps.marker.AdvancedMarkerElement({
           map,
           position: { lat, lng },
           title: name,
         })
       })
-      .catch(() => {
-        if (!cancelled) fail('load_failed')
+      .catch((err) => {
+        if (cancelled) return
+        console.error(err)
+        setMapsUnavailable(true)
+        pushMapUnavailable('course_satellite', 'load_failed')
       })
 
     return () => {

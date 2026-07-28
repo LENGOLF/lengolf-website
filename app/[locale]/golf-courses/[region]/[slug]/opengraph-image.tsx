@@ -1,4 +1,5 @@
-import { getCourseBySlug, REGION_META } from '@/lib/golf-courses'
+import { notFound } from 'next/navigation'
+import { getCourseBySlug, getAllCourseParams, REGION_META } from '@/lib/golf-courses'
 import type { Region } from '@/lib/golf-courses'
 import { driveTimeLabel } from '@/lib/format'
 import { ogCard, OG_SIZE } from '@/lib/og-card'
@@ -7,6 +8,16 @@ export const size = OG_SIZE
 export const contentType = 'image/png'
 export const alt = 'Golf course guide — green fees, tips and club rental'
 
+// Mirror the page's segment config: without these, the image route renders
+// on demand for ANY probed slug — an unbounded space of billable satori
+// renders returning soft-200 PNGs where the page itself 404s.
+export const revalidate = 86400
+export const dynamicParams = false
+
+export async function generateStaticParams() {
+  return (await getAllCourseParams()).map((p) => ({ locale: 'en', ...p }))
+}
+
 interface Props {
   params: Promise<{ locale: string; region: string; slug: string }>
 }
@@ -14,11 +25,9 @@ interface Props {
 export default async function Image({ params }: Props) {
   const { region, slug } = await params
   const course = await getCourseBySlug(region, slug)
-  const regionLabel = REGION_META[region as Region]?.label ?? region
+  if (!course) notFound()
 
-  if (!course) {
-    return ogCard({ eyebrow: 'Thailand Golf Courses', title: 'LENGOLF Course Guides' })
-  }
+  const regionLabel = REGION_META[region as Region]?.label ?? region
 
   const chips = [
     `${course.holes} holes · Par ${course.par}`,

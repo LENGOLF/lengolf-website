@@ -2059,6 +2059,21 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  // Generated OG cards (lib/og-card.tsx) — the course JSON-LD references the
+  // detail-page card as its schema image, so a broken OG route silently
+  // breaks structured data on all 149 pages without these checks.
+  {
+    path: "/golf-courses/opengraph-image/",
+    expectedStatus: [200],
+  },
+  {
+    path: "/golf-courses/bangkok/opengraph-image/",
+    expectedStatus: [200],
+  },
+  {
+    path: "/golf-courses/bangkok/alpine-golf-club/opengraph-image/",
+    expectedStatus: [200],
+  },
   // Golf course detail pages — spot-check one Bangkok + two Pattaya + two Hua Hin + two Phuket
   {
     path: "/golf-courses/bangkok/nikanti-golf-club/",

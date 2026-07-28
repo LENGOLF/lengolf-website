@@ -1,5 +1,6 @@
 import type { GolfCourse } from '@/types/golf-courses'
 import { SITE_URL } from '@/lib/constants'
+import { courseMapsUrl } from '@/lib/geo'
 
 /**
  * Schema.org GolfCourse representation for a course summary card on a list
@@ -55,6 +56,23 @@ export function getCourseDetailJsonLd(
   canonicalUrl: string,
   imageUrl?: string
 ) {
+  // The legacy hand-serialised schema_markup blobs are otherwise retired, but
+  // ~27 of them carry street-level address data (streetAddress, addressRegion,
+  // postalCode, city-level locality) that exists nowhere in the typed fields.
+  // Reuse that address sub-object when present so the derived schema doesn't
+  // lose local-entity signal; everything else comes from typed fields.
+  let legacyAddress: Record<string, unknown> | null = null
+  if (c.schema_markup) {
+    try {
+      const parsed = JSON.parse(c.schema_markup) as Record<string, unknown>
+      if (parsed.address && typeof parsed.address === 'object') {
+        legacyAddress = parsed.address as Record<string, unknown>
+      }
+    } catch {
+      // Malformed blob — fall through to the derived address
+    }
+  }
+
   const schema: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'GolfCourse',
@@ -62,7 +80,7 @@ export function getCourseDetailJsonLd(
     name: c.name,
     url: canonicalUrl,
     description: c.prose.overview,
-    address: {
+    address: legacyAddress ?? {
       '@type': 'PostalAddress',
       addressLocality: c.province,
       addressCountry: 'TH',
@@ -76,12 +94,9 @@ export function getCourseDetailJsonLd(
       latitude: c.latitude,
       longitude: c.longitude,
     }
-    schema.hasMap =
-      c.google_maps_url ??
-      `https://www.google.com/maps/search/?api=1&query=${c.latitude},${c.longitude}`
-  } else if (c.google_maps_url) {
-    schema.hasMap = c.google_maps_url
   }
+  const mapsUrl = courseMapsUrl(c)
+  if (mapsUrl) schema.hasMap = mapsUrl
 
   if (c.phone) schema.telephone = c.phone
   if (c.website) schema.sameAs = [c.website]
@@ -118,9 +133,12 @@ export function getCourseDetailJsonLd(
     name,
     value,
   })
+  // Both flags are REQUIREMENT booleans, and the names must say so: emitting
+  // "Golf Cart": false would assert the course has no carts, when 61 of the
+  // 96 cart-optional courses rent them (cart_fee_thb present).
   const amenities = [
     amenity('Caddie Required', c.caddie_required),
-    amenity('Golf Cart', c.cart_required),
+    amenity('Golf Cart Required', c.cart_required),
   ]
   if (c.driving_range !== null) amenities.push(amenity('Driving Range', c.driving_range))
   if (c.club_rental_available !== null && c.club_rental_available !== undefined) {

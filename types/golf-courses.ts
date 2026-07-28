@@ -38,8 +38,14 @@ export interface GolfCourse {
   club_rental_fee_thb?: number | null
   /** Club brands available for rental, e.g. "TaylorMade, Callaway" */
   club_rental_brands?: string | null
-  /** Serialised JSON-LD string (Schema.org GolfCourse) */
-  schema_markup: string
+  /**
+   * @deprecated Legacy hand-serialised JSON-LD string. The detail-page schema
+   * is now derived from typed fields (lib/jsonld-courses.ts
+   * getCourseDetailJsonLd); the ONLY part still read is the `address`
+   * sub-object, whose street-level data has no typed equivalent yet. New
+   * course files should omit this field (or provide just the address).
+   */
+  schema_markup?: string
   prose: GolfCourseProse
   locales: {
     en: GolfCourseLocale
