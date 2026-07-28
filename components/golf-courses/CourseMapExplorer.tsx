@@ -6,6 +6,7 @@ import { Link } from '@/i18n/navigation'
 import { ArrowRight, Clock, Flag, X, ExternalLink, MapPinOff } from 'lucide-react'
 import type { GolfCourse } from '@/types/golf-courses'
 import { formatFee, driveTimeLabel } from '@/lib/format'
+import { loadMapsApi } from '@/lib/maps-loader'
 
 interface RegionCenter {
   lat: number
@@ -21,24 +22,6 @@ interface Props {
   regionLabel: string
   /** Default map centre / zoom, derived from REGION_META on the server side. */
   center: RegionCenter
-}
-
-// Window-level promise so the Maps JS script loads exactly once across all
-// components and page navigations (matches HubMapExplorer strategy).
-function loadMapsApi(apiKey: string): Promise<void> {
-  if (typeof window === 'undefined') return Promise.resolve()
-  const w = window as any
-  if (w.google?.maps?.Map) return Promise.resolve()
-  if (w.__mapsApiPromise) return w.__mapsApiPromise
-  w.__mapsApiPromise = new Promise<void>((resolve, reject) => {
-    const script = document.createElement('script')
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=marker&v=weekly`
-    script.async = true
-    script.onload = () => resolve()
-    script.onerror = () => { delete w.__mapsApiPromise; reject(new Error('Maps JS API failed to load')) }
-    document.head.appendChild(script)
-  })
-  return w.__mapsApiPromise
 }
 
 function makePin(index: number, active: boolean, courseName: string): HTMLDivElement {

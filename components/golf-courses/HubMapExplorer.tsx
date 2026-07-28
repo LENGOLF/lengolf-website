@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { MapPinOff } from 'lucide-react'
 import type { GolfCourse } from '@/types/golf-courses'
+import { loadMapsApi } from '@/lib/maps-loader'
 
 interface RegionCourses {
   region: string
@@ -22,23 +23,6 @@ function escHtml(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 }
 
-// Shared window-level promise so the script loads exactly once even when both
-// CourseMapExplorer and HubMapExplorer are mounted on the same page.
-function loadMapsApi(apiKey: string): Promise<void> {
-  if (typeof window === 'undefined') return Promise.resolve()
-  const w = window as any
-  if (w.google?.maps?.Map) return Promise.resolve()
-  if (w.__mapsApiPromise) return w.__mapsApiPromise
-  w.__mapsApiPromise = new Promise<void>((resolve, reject) => {
-    const script = document.createElement('script')
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=marker&v=weekly`
-    script.async = true
-    script.onload = () => resolve()
-    script.onerror = () => { delete w.__mapsApiPromise; reject(new Error('Maps JS API failed to load')) }
-    document.head.appendChild(script)
-  })
-  return w.__mapsApiPromise
-}
 
 export default function HubMapExplorer({ regions, locale = 'en' }: Props) {
   const mapDivRef = useRef<HTMLDivElement>(null)

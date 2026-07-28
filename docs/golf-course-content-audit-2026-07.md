@@ -82,7 +82,19 @@ of Search Console data.
    - Detail route now sets `revalidate = 86400` + `dynamicParams = false`,
      matching the sibling programmatic routes.
 
-3. **Conversion & measurement**
+3. **Visuals without photo licensing**
+   - Generated branded OG cards (`lib/og-card.tsx` + `opengraph-image.tsx`
+     routes) for course detail, region hubs, and the main hub; also fills the
+     GolfCourse schema `image` slot.
+   - Satellite-view course map (`CourseSatelliteMap`) on every course page
+     with coordinates (145/149) — live Maps JS API display (within Google
+     ToS), lazy-initialised via IntersectionObserver so it can't hurt LCP,
+     degrading to an external Google Maps link. The link is synthesized from
+     coords when `google_maps_url` is null (previously absent on half the
+     pages). Maps script loader deduplicated into `lib/maps-loader.ts`
+     (was copy-pasted in both explorers).
+
+4. **Conversion & measurement**
    - `CoursePage` now uses the shared `RentalCtaBanner` (deleted the inline
      duplicate) with the per-course `rental_cta_context` as body.
    - `rental_intent` tracking added to the cluster: new sources `course_page`

@@ -4,6 +4,7 @@ import type { GolfCourse } from '@/types/golf-courses'
 import { driveTimeLabel } from '@/lib/format'
 import CrossLinkBlock, { type CrossLink } from '@/components/golf-courses/CrossLinkBlock'
 import CourseFaq from '@/components/golf-courses/CourseFaq'
+import CourseSatelliteMap from '@/components/golf-courses/CourseSatelliteMap'
 import RentalCtaBanner from '@/components/golf-courses/RentalCtaBanner'
 
 interface Props {
@@ -156,6 +157,25 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
                 </div>
               ))}
             </div>
+
+            {/* Satellite map — live Maps JS view of the actual layout
+                (lazy-initialised below the fold; degrades to the link) */}
+            {course.latitude !== null && course.longitude !== null && (
+              <div>
+                <h2 className="mb-3 text-xs font-bold uppercase tracking-widest text-primary">
+                  Course location
+                </h2>
+                <CourseSatelliteMap
+                  name={course.name}
+                  lat={course.latitude}
+                  lng={course.longitude}
+                  mapsUrl={
+                    course.google_maps_url ??
+                    `https://www.google.com/maps/search/?api=1&query=${course.latitude},${course.longitude}`
+                  }
+                />
+              </div>
+            )}
 
             {/* Rental CTA banner — shared component (tracked, localizable),
                 with this course's hand-written contextual pitch as the body */}
