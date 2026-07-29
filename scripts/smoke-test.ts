@@ -3621,6 +3621,21 @@ async function runBlogRegistryLivenessTests() {
 // Each check is a matched pair — the right string must be present AND the
 // wrong-exit shape must be absent — so a page that silently drops the
 // wayfinding line fails instead of passing vacuously.
+//
+// Both halves run against RENDERED markup, with <script> blocks stripped
+// first. app/[locale]/layout.tsx hands NextIntlClientProvider the ENTIRE
+// locale catalog, so next-intl serializes every namespace into the RSC flight
+// payload verbatim. On /ja/ that payload alone carries FaqPage.pillLocation's
+// "（4番出口）" — a string rendered only on /faq/* pages. Matching the raw body
+// would let it satisfy `expect` even if accessBts stopped rendering, which is
+// exactly the vacuous pass this pair exists to prevent.
+
+/** Rendered markup only: drops <script> blocks so the serialized next-intl
+ *  catalog in the RSC flight payload cannot satisfy a match. */
+function renderedMarkup(html: string): string {
+  return html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "");
+}
+
 const wayfindingTests: {
   path: string;
   expect: RegExp;
@@ -3679,7 +3694,7 @@ async function runWayfindingTests() {
         fail(label, `expected 200, got ${res.status}`);
         continue;
       }
-      const body = await res.text();
+      const body = renderedMarkup(await res.text());
       const wrong = body.match(t.forbid);
       if (wrong) {
         fail(
