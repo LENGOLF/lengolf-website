@@ -26,7 +26,7 @@ LENGOLF website — a Next.js 15 (App Router) site for an indoor golf simulator 
 GitHub Actions workflow (`.github/workflows/ci.yml`) runs on every PR to `main`:
 
 - **`lint`** — `npm run lint` with ESLint flat config (`eslint.config.mjs`), then `npm run validate:links` (internal SEO cross-link validator), then `npm run validate:i18n` (i18n house-style/honesty linter — mechanical subset of the native-QA rubric; a red "lint" check can be any of the three)
-- **`build-and-smoke`** — builds the app, starts the production server, runs smoke tests across 11 categories (per-category test counts live in `scripts/smoke-test.ts`):
+- **`build-and-smoke`** — builds the app, starts the production server, runs smoke tests across 12 categories (per-category test counts live in `scripts/smoke-test.ts`):
   - **A) Route tests** — pages across all locales return 200 with `<main id="main-content">`
   - **B) Redirect tests** — WordPress legacy URLs, GSC 404 fixes, and location redirects
   - **C) Link checks** — booking.len.golf, LINE, Supabase Storage assets are reachable
@@ -38,6 +38,7 @@ GitHub Actions workflow (`.github/workflows/ci.yml`) runs on every PR to `main`:
   - **I) Translated-guide registry consistency** — the `/guide/...` allowlist in `lib/translated-routes.ts` must match the locale-tagged entries in `data/explainer-pages.ts` (pure import check, no server)
   - **J) Translated region-hub registry consistency** — the `/golf-courses/<region>` allowlist in `lib/translated-routes.ts` must match the translations in `data/golf-courses-i18n.ts` (pure import check, no server)
   - **K) Data-driven internal-link liveness** — every `related_slugs` path outside the statically-validated SEO prefixes (`/location`, `/golf-courses`, core routes) is fetched live and must not 404 (complements `npm run validate:links`)
+  - **M) Wayfinding copy** — BTS Chidlom is **Exit 4** (The Mercury Ville). Asserted on the six DB-driven `/location/*-chidlom` pages (`location_pages.bts_route`, unreachable by any static lint) and on the repo-owned strings: `HomeJa/HomeKo/HomeZh.accessBts` in `messages/*.json` and the hardcoded EN line in `app/[locale]/golf-in-thailand-guide/page.tsx`. Each check is a matched pair — correct string present *and* wrong-exit shape absent — so dropped copy fails rather than passing vacuously.
 
 Both jobs are **required checks** via branch protection — PRs cannot merge if either fails.
 
