@@ -383,7 +383,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
         { feature: 'Afternoon-friendly', lengolf: 'Perfect 2-5pm (escape the heat)', alternative: 'Chatuchak best before noon' },
         { feature: 'Group-friendly', lengolf: 'Great for weekend catch-ups', alternative: 'Markets/parks are go-at-your-pace' },
         { feature: 'Weekend pricing', lengolf: '~750 THB/hour (up to 5 people)', alternative: 'Free-2,000 THB depending on activity' },
-        { feature: 'Easy to reach', lengolf: 'BTS Chidlom (1 min walk)', alternative: 'Chatuchak is 30 min by BTS' },
+        { feature: 'Easy to reach', lengolf: 'BTS Chidlom (2 min walk)', alternative: 'Chatuchak is 30 min by BTS' },
       ],
     },
   },
