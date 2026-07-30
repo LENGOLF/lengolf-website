@@ -9,8 +9,9 @@ export const course: GolfCourse = {
   holes: 18,
   par: 72,
   year_opened: 2004,
-  green_fee_weekday_thb: 400,
-  green_fee_weekend_thb: 800,
+  green_fee_weekday_thb: null,
+  green_fee_weekend_thb: null,
+  fees_verified_at: '2026-07-30',
   caddie_fee_thb: null,
   cart_fee_thb: null,
   caddie_required: false,
@@ -37,7 +38,7 @@ export const course: GolfCourse = {
   locales: {
     en: {
       title: `Seoul Siam Resort & Country Club — Green Fees, Course Guide & Golf Club Rentals`,
-      meta_description: `Seoul Siam Resort & Country Club (Pakchong Highland CC) Khao Yai: 18-hole course guide, green fees from ฿400, visitor tips, and golf club rentals delivered to your Bangkok hotel.`,
+      meta_description: `Seoul Siam Resort & Country Club (Pakchong Highland CC) Khao Yai: 18-hole course guide, visitor tips, and golf club rentals delivered to your Bangkok hotel. Contact the course for current rates.`,
     },
     ko: null,
     zh: null,

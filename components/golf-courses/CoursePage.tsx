@@ -113,6 +113,18 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
           {/* ── Left column ── */}
           <div className="min-w-0 space-y-8">
 
+            {/* Closure notice — leads the page when the course isn't open */}
+            {course.operational_status && course.operational_status !== 'open' && (
+              <div className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm leading-relaxed text-amber-900">
+                <strong>
+                  {course.operational_status === 'permanently_closed'
+                    ? 'This course is permanently closed.'
+                    : 'This course has been reported temporarily closed.'}
+                </strong>{' '}
+                {course.operational_note}
+              </div>
+            )}
+
             {/* Overview prose */}
             <p className="text-base leading-relaxed text-foreground/85">
               {course.prose.overview}

@@ -45,6 +45,15 @@ export interface GolfCourse {
    * mistake) FAIL validation unless this field attests they were checked.
    */
   fees_verified_at?: string | null
+  /**
+   * Omit / null = open (the default). Set when research shows otherwise:
+   * closed courses must have null green fees (validate:courses enforces
+   * this), render a closure banner, and lead their FAQ with "Is X still
+   * open?" instead of green-fee/caddie answers that imply bookable golf.
+   */
+  operational_status?: 'open' | 'temporarily_closed' | 'permanently_closed' | null
+  /** 1-2 sentences shown in the closure banner and the "Is X still open?" FAQ. */
+  operational_note?: string | null
   /** Club brands available for rental, e.g. "TaylorMade, Callaway" */
   club_rental_brands?: string | null
   /**

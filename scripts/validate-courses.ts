@@ -72,6 +72,19 @@ async function main() {
       continue
     }
 
+    // Closed courses must not advertise green fees, and must explain
+    // themselves — the banner/FAQ copy comes from operational_note.
+    const status = c.operational_status ?? 'open'
+    if (status !== 'open') {
+      if (wd != null || we != null) {
+        errors.push(`${file}: operational_status "${status}" but green fees are set — null the fees, a closed course must not advertise rates`)
+      }
+      if (!c.operational_note) {
+        errors.push(`${file}: operational_status "${status}" requires an operational_note (closure banner + FAQ copy)`)
+      }
+      continue
+    }
+
     for (const [label, fee] of [['weekday', wd], ['weekend', we]] as const) {
       if (fee !== null && fee !== undefined && (fee < ABS_FLOOR || fee > ABS_CEILING)) {
         errors.push(`${file}: ${label} green fee ฿${fee} outside sane bounds [${ABS_FLOOR}, ${ABS_CEILING}]`)

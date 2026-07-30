@@ -72,6 +72,32 @@ export interface CourseFaqItem {
 export function getCourseFaqs(course: GolfCourse): CourseFaqItem[] {
   const faqs: CourseFaqItem[] = []
 
+  // Closure status leads — and a permanently closed course gets ONLY the
+  // closure + location answers (green-fee/caddie/rental FAQs would imply
+  // bookable golf at a course that no longer exists).
+  const closed =
+    course.operational_status === 'permanently_closed' ||
+    course.operational_status === 'temporarily_closed'
+  if (closed) {
+    const fallback =
+      course.operational_status === 'permanently_closed'
+        ? `No — ${course.name} is permanently closed.`
+        : `${course.name} has been reported temporarily closed. Call ahead before planning a round.`
+    faqs.push({
+      question: `Is ${course.name} still open?`,
+      answer: course.operational_note ?? fallback,
+    })
+  }
+  if (course.operational_status === 'permanently_closed') {
+    if (course.distance_from_bangkok_km) {
+      faqs.push({
+        question: `Where was ${course.name} located?`,
+        answer: `${course.name} was in ${course.province}, about ${course.distance_from_bangkok_km} km from central Bangkok.`,
+      })
+    }
+    return faqs
+  }
+
   if (course.green_fee_weekday_thb) {
     let answer = `The weekday green fee at ${course.name} is around ${thb(course.green_fee_weekday_thb)}`
     if (course.green_fee_weekend_thb) {

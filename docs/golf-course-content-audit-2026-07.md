@@ -122,9 +122,17 @@ of Search Console data.
    courses by impressions, not all 149.
 3. **Region-hub ItemList/CollectionPage schema** (quick win): reuse
    `getCourseRoundupJsonLd` on region hubs and the main hub.
-4. **Fee freshness system** (medium): fees are point-in-time with no
-   `as-of`/source field. Add `fees_verified_at` to `GolfCourse`, render a
-   "rates checked <month year>" line, feed sitemap `lastModified` from it.
+4. ~~**Fee freshness system**~~ **DONE** (2026-07-30, after the Artitaya ฿400
+   incident): `fees_verified_at` + `operational_status`/`operational_note`
+   fields, `validate:courses` CI gate, "rates checked" rendering, closure
+   banner + closure-first FAQ. 17 suspect courses researched against live
+   sources: 5 repriced (Artitaya 1,200/1,400 all-in; Royal Lakeside
+   2,900/3,900; Forest Hills 1,350/1,600; Dragon Hills foreigner 1,560/1,750;
+   Suvarnabhumi/Phoenix Gold 999/1,199), 3 minor corrections (Ubolratana
+   520/720, Muang Ake 700 wd, Korea GC 800 all-in), 4 verified correct, 3
+   marked closed (Royal Dusit permanently — site is King Rama IX Memorial
+   Park; Rangsit + Star temporarily), 2 nulled as unverifiable (Seoul Siam,
+   Kumlung-Ake). Remaining: feed sitemap lastModified from fees_verified_at.
 5. **Popularity score** currently ≈ green fee (`popularityScore`), so "top
    courses" ≈ "most expensive" and the 7 fee-less courses never surface.
    Blend in GSC impressions (static snapshot file) or editorial rank.
@@ -132,8 +140,14 @@ of Search Console data.
    (`getAlternates` in lib/translated-routes.ts).
 7. **Titles of `under/*` and `best-for/*`** say "Bangkok-Area" but lists pull
    from all 14 regions — either filter by distance or retitle.
-8. **Phoenix Gold duplicate** — same club exists in both `bangkok/` and
-   `pattaya/` data with identical meta; pick one canonical entry.
+8. **Phoenix Gold / Suvarnabhumi merge** — web research (2026-07-30) confirmed
+   `bangkok/suvarnabhumi-golf-country-club` and
+   `bangkok/phoenix-gold-golf-country-club` are the SAME 36-hole RTJ Jr.
+   course in Nong Chok (ex-President CC, renamed Phoenix Gold Golf Bangkok).
+   Both pages' fees/prose are now aligned and truthful, but one slug should
+   301 to the other (needs a next.config redirect + index/sitemap removal +
+   GSC awareness — the suvarnabhumi slug carries the search traffic).
+   `pattaya/phoenix-gold-golf-club-pattaya` is the genuine Pattaya sister.
 9. **llms.txt**: list region hubs for EN (currently non-EN only) and consider
    listing course pages for AI-crawler discovery.
 10. **Airport pages** (`near/suvarnabhumi-airport`, `near/don-mueang-airport`)

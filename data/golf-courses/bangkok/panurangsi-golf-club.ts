@@ -11,6 +11,7 @@ export const course: GolfCourse = {
   year_opened: 1988,
   green_fee_weekday_thb: 450,
   green_fee_weekend_thb: 550,
+  fees_verified_at: '2026-07-30',
   caddie_fee_thb: null,
   cart_fee_thb: 600,
   caddie_required: true,
