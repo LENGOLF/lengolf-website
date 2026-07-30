@@ -337,7 +337,9 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
                   )}
                 </div>
                 <p className="bg-muted/50 px-5 py-2.5 text-[11px] text-muted-foreground">
-                  Verify with the course before booking.
+                  {course.fees_verified_at
+                    ? `Rates checked ${new Date(`${course.fees_verified_at}T00:00:00Z`).toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })} — verify with the course before booking.`
+                    : 'Verify with the course before booking.'}
                 </p>
               </div>
             )}

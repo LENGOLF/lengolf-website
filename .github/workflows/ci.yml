@@ -31,6 +31,11 @@ jobs:
       # markdown/placeholder integrity, per the data/i18n-glossary/*.json house
       # style. No server needed.
       - run: npm run validate:i18n
+      # Green-fee plausibility: implausible fees (sub-฿600 weekday, weekend
+      # cheaper than weekday, huge weekend jumps) fail unless the course file
+      # carries a fees_verified_at attestation. Born from the Artitaya ฿400
+      # incident — a scraped Thai-national rate shipping as the visitor rate.
+      - run: npm run validate:courses
 
   build-and-smoke:
     runs-on: ubuntu-latest

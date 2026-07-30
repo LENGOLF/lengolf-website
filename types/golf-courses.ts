@@ -36,6 +36,15 @@ export interface GolfCourse {
   google_maps_url: string | null
   club_rental_available?: boolean | null
   club_rental_fee_thb?: number | null
+  /**
+   * ISO date (YYYY-MM-DD) when the green-fee figures were last verified
+   * against a live source (official site, booking platform, or the course
+   * directly). Rendered as a "rates checked" line and used by
+   * `npm run validate:courses`: implausible fees (e.g. a sub-฿600 weekday
+   * rate, which is usually a Thai-national/9-hole/promo rate scraped by
+   * mistake) FAIL validation unless this field attests they were checked.
+   */
+  fees_verified_at?: string | null
   /** Club brands available for rental, e.g. "TaylorMade, Callaway" */
   club_rental_brands?: string | null
   /**

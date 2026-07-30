@@ -77,6 +77,14 @@ export function getCourseFaqs(course: GolfCourse): CourseFaqItem[] {
     if (course.green_fee_weekend_thb) {
       answer += `, and the weekend rate is around ${thb(course.green_fee_weekend_thb)}`
     }
+    if (course.fees_verified_at) {
+      const asOf = new Date(`${course.fees_verified_at}T00:00:00Z`).toLocaleDateString('en-US', {
+        month: 'long',
+        year: 'numeric',
+        timeZone: 'UTC',
+      })
+      answer += ` (as of ${asOf})`
+    }
     answer += '. Rates change seasonally, so confirm with the course when booking.'
     faqs.push({
       question: `How much is the green fee at ${course.name}?`,
