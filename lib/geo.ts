@@ -15,3 +15,26 @@ export function haversineKm(
     Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLng / 2) ** 2
   return 2 * R * Math.asin(Math.sqrt(sa))
 }
+
+/** Google Maps search URL for a lat/lng point. */
+export function googleMapsSearchUrl(lat: number, lng: number): string {
+  return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`
+}
+
+/**
+ * External Google Maps URL for a course: its own maps URL when the data has
+ * one, else synthesized from coordinates. Single source for the sidebar row,
+ * the satellite-map link row, and the JSON-LD hasMap so UI and schema can't
+ * point at different URLs.
+ */
+export function courseMapsUrl(c: {
+  google_maps_url: string | null
+  latitude: number | null
+  longitude: number | null
+}): string | null {
+  if (c.google_maps_url) return c.google_maps_url
+  if (c.latitude !== null && c.longitude !== null) {
+    return googleMapsSearchUrl(c.latitude, c.longitude)
+  }
+  return null
+}

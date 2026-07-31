@@ -9,8 +9,10 @@ export const course: GolfCourse = {
   holes: 27,
   par: 108,
   year_opened: 1974,
+  // 1,350 = green fee + caddie bundle, flat all week; ~1,750 with cart
   green_fee_weekday_thb: 1350,
   green_fee_weekend_thb: 1350,
+  fees_verified_at: '2026-07-30',
   caddie_fee_thb: null,
   cart_fee_thb: null,
   caddie_required: false,
@@ -30,7 +32,7 @@ export const course: GolfCourse = {
   prose: {
     overview: `Lanna Golf Course is a 27-hole, in-city course operated by the Royal Thai Army within the Lanna Sports Center complex, located on Chotana Road in Mueang Chiang Mai district — approximately 10 minutes from the city centre. Opened in 1974, it is the oldest and most centrally located golf facility in Chiang Mai. The 27 holes are divided into three nine-hole loops, with two tree-lined longer sections and a third shorter loop that runs partly through the Chiang Mai racing track area. The course is flat and walking is permitted, making it one of the few Chiang Mai courses where carrying or pulling a bag is practical. Green fees are among the most affordable in Northern Thailand.`,
     layout_and_experience: `The two primary nine-hole loops share a tree-lined parkland character, with mature trees framing most fairways. The routing is flat throughout the 27-hole complex. The third nine incorporates the racing circuit area — shorter holes with a different strategic rhythm. Caddie and cart use is optional. The course draws primarily local Chiang Mai golfers and is best approached as a quality local facility rather than a destination course.`,
-    tips: `Confirm current green fees directly with the club at +66 53 221 911 or via golflannachiangmai.com — the 1,350 THB rate with cart is from a 2022 source. Walking is permitted and recommended on this flat course. Weekdays are quieter than weekends. The course is 10 minutes from the Night Bazaar and Nimman areas, making it a practical early-morning round before city sightseeing.`,
+    tips: `The flat 1,350 THB rate includes your caddie (add roughly 400 THB for a cart) and was re-confirmed against 2026 listings; confirm directly with the club at +66 53 221 911 or via golflannachiangmai.com before travelling. Walking is permitted and recommended on this flat course. Weekdays are quieter than weekends. The course is 10 minutes from the Night Bazaar and Nimman areas, making it a practical early-morning round before city sightseeing.`,
     location_and_access: `Lanna Golf Course is located on Chotana Road (Route 107) in Mueang Chiang Mai district, approximately 10 minutes from Chiang Mai city centre and 15–20 minutes from Chiang Mai International Airport (CNX). Visitors from Bangkok fly to CNX (approximately 1 hour 10 minutes from Suvarnabhumi or Don Mueang) — driving the 700 kilometres from Bangkok is not practical. The course is easily reached by Grab taxi from anywhere in Chiang Mai city.`,
     rental_cta_context: `Fitting in a round at Lanna Golf Course during your Chiang Mai visit? Rent premium clubs in Bangkok — delivered to your hotel before you fly — so you can enjoy this classic in-city layout without the cost of airline baggage fees.`,
   },

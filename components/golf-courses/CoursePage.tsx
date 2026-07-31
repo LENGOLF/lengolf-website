@@ -3,6 +3,11 @@ import { Link } from '@/i18n/navigation'
 import type { GolfCourse } from '@/types/golf-courses'
 import { driveTimeLabel } from '@/lib/format'
 import CrossLinkBlock, { type CrossLink } from '@/components/golf-courses/CrossLinkBlock'
+import CourseFaq from '@/components/golf-courses/CourseFaq'
+import CourseSatelliteMap from '@/components/golf-courses/CourseSatelliteMap'
+import RentalCtaBanner from '@/components/golf-courses/RentalCtaBanner'
+import { courseMapsUrl } from '@/lib/geo'
+import type { CourseFaqItem } from '@/lib/course-seo'
 
 interface Props {
   course: GolfCourse
@@ -10,9 +15,11 @@ interface Props {
   relatedCourses?: GolfCourse[]
   /** Cross-links into programmatic-SEO pages (comparisons, BTS proximity, use-cases). */
   crossLinks?: CrossLink[]
+  /** FAQ items — the route computes these once and also emits them as FAQPage JSON-LD. */
+  faqs?: CourseFaqItem[]
 }
 
-export default function CoursePage({ course, regionLabel, relatedCourses = [], crossLinks = [] }: Props) {
+export default function CoursePage({ course, regionLabel, relatedCourses = [], crossLinks = [], faqs = [] }: Props) {
   // Quick-fact chips shown in the hero
   const chips = [
     course.holes ? `${course.holes} holes · Par ${course.par}` : null,
@@ -106,6 +113,18 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
           {/* ── Left column ── */}
           <div className="min-w-0 space-y-8">
 
+            {/* Closure notice — leads the page when the course isn't open */}
+            {course.operational_status && course.operational_status !== 'open' && (
+              <div className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm leading-relaxed text-amber-900">
+                <strong>
+                  {course.operational_status === 'permanently_closed'
+                    ? 'This course is permanently closed.'
+                    : 'This course has been reported temporarily closed.'}
+                </strong>{' '}
+                {course.operational_note}
+              </div>
+            )}
+
             {/* Overview prose */}
             <p className="text-base leading-relaxed text-foreground/85">
               {course.prose.overview}
@@ -155,34 +174,26 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
               ))}
             </div>
 
-            {/* Rental CTA banner */}
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#003d22] to-[#005a32] p-6 sm:p-8">
-              <div className="pointer-events-none absolute -right-8 -top-8 h-40 w-40 rounded-full bg-white/5" />
-              <div className="pointer-events-none absolute -bottom-6 left-1/3 h-28 w-28 rounded-full bg-accent/10" />
-              <p className="relative mb-1 text-xs font-semibold uppercase tracking-widest text-accent">
-                No clubs? No problem.
-              </p>
-              <p className="relative mb-5 text-base font-medium leading-snug text-white sm:text-lg">
-                {course.prose.rental_cta_context}
-              </p>
-              <div className="relative flex flex-wrap gap-3">
-                <a
-                  href="https://booking.len.golf/course-rental"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-bold text-[#1a1a1a] transition-all hover:bg-accent/90 hover:shadow-lg"
-                >
-                  Book now
-                </a>
-                <Link
-                  href="/golf-course-club-rental"
-                  className="inline-flex items-center gap-2 rounded-lg border border-white/30 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/10"
-                >
-                  Learn more
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
+            {/* Satellite map — live Maps JS view of the actual layout
+                (lazy-initialised below the fold; degrades to the link) */}
+            {course.latitude !== null && course.longitude !== null && (
+              <div>
+                <h2 className="mb-3 text-xs font-bold uppercase tracking-widest text-primary">
+                  Course location
+                </h2>
+                <CourseSatelliteMap
+                  name={course.name}
+                  lat={course.latitude}
+                  lng={course.longitude}
+                  mapsUrl={courseMapsUrl(course)!}
+                  enabled={Boolean(process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY)}
+                />
               </div>
-            </div>
+            )}
+
+            {/* Rental CTA banner — shared component (tracked, localizable),
+                with this course's hand-written contextual pitch as the body */}
+            <RentalCtaBanner body={course.prose.rental_cta_context} source="course_page" />
 
             {/* More courses in this region */}
             {relatedCourses.length > 0 && (
@@ -228,6 +239,10 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
                 </div>
               </div>
             )}
+
+            {/* FAQ — visible twin of the FAQPage JSON-LD emitted by the route
+                (same array instance, so they cannot drift) */}
+            <CourseFaq faqs={faqs} />
 
             {/* Cross-links into programmatic-SEO pages */}
             {crossLinks.length > 0 && (
@@ -334,7 +349,9 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
                   )}
                 </div>
                 <p className="bg-muted/50 px-5 py-2.5 text-[11px] text-muted-foreground">
-                  Verify with the course before booking.
+                  {course.fees_verified_at
+                    ? `Rates checked ${new Date(`${course.fees_verified_at}T00:00:00Z`).toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })} — verify with the course before booking.`
+                    : 'Verify with the course before booking.'}
                 </p>
               </div>
             )}
@@ -443,9 +460,9 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
               </p>
               <p className="mb-3 text-sm leading-relaxed text-foreground">
                 {course.club_rental_available === false
-                  ? "This course doesn't offer club rental — but LENGOLF does. Premium Callaway Paradym, Warbird & Majesty sets from our Bangkok simulator — "
-                  : 'Premium clubs from our Bangkok simulator — Callaway Paradym, Warbird, Majesty. From '}
-                <strong>1,200 THB/day</strong>.
+                  ? "This course doesn't offer club rental — but LENGOLF does. Current-generation Callaway Paradym, Warbird & Majesty sets from "
+                  : 'Current-generation Callaway Paradym, Warbird & Majesty sets — not house clubs. From '}
+                <strong>1,200 THB/day</strong> with multi-day discounts and Bangkok hotel delivery.
               </p>
               <Link
                 href="/golf-course-club-rental"

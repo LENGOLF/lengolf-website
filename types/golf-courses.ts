@@ -36,10 +36,34 @@ export interface GolfCourse {
   google_maps_url: string | null
   club_rental_available?: boolean | null
   club_rental_fee_thb?: number | null
+  /**
+   * ISO date (YYYY-MM-DD) when the green-fee figures were last verified
+   * against a live source (official site, booking platform, or the course
+   * directly). Rendered as a "rates checked" line and used by
+   * `npm run validate:courses`: implausible fees (e.g. a sub-฿600 weekday
+   * rate, which is usually a Thai-national/9-hole/promo rate scraped by
+   * mistake) FAIL validation unless this field attests they were checked.
+   */
+  fees_verified_at?: string | null
+  /**
+   * Omit / null = open (the default). Set when research shows otherwise:
+   * closed courses must have null green fees (validate:courses enforces
+   * this), render a closure banner, and lead their FAQ with "Is X still
+   * open?" instead of green-fee/caddie answers that imply bookable golf.
+   */
+  operational_status?: 'open' | 'temporarily_closed' | 'permanently_closed' | null
+  /** 1-2 sentences shown in the closure banner and the "Is X still open?" FAQ. */
+  operational_note?: string | null
   /** Club brands available for rental, e.g. "TaylorMade, Callaway" */
   club_rental_brands?: string | null
-  /** Serialised JSON-LD string (Schema.org GolfCourse) */
-  schema_markup: string
+  /**
+   * @deprecated Legacy hand-serialised JSON-LD string. The detail-page schema
+   * is now derived from typed fields (lib/jsonld-courses.ts
+   * getCourseDetailJsonLd); the ONLY part still read is the `address`
+   * sub-object, whose street-level data has no typed equivalent yet. New
+   * course files should omit this field (or provide just the address).
+   */
+  schema_markup?: string
   prose: GolfCourseProse
   locales: {
     en: GolfCourseLocale

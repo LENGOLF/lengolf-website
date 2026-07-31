@@ -26,6 +26,7 @@
     "rentalAgreement": "대여 약관",
     "address": "The Mercury Ville @ BTS Chidlom\n4층",
     "planningLink": "태국 골프 여행 계획",
+    "golfCoursesLink": "태국 골프장 가이드",
     "discoverMore": "더 알아보기",
     "thingsToDoLink": "방콕에서 할 일",
     "hotelsLink": "호텔 근처",
@@ -35,6 +36,7 @@
   "Common": {
     "bookNow": "지금 예약",
     "bookYourBay": "베이 예약하기",
+    "rentClubsCta": "라운드용 클럽 렌탈",
     "lineAtLengolf": "LINE @lengolf",
     "learnMore": "자세히 보기",
     "readyToPlay": "플레이할 준비가 되셨나요?",

@@ -2,10 +2,16 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
-import { Link } from '@/i18n/navigation'
+// next/link, NOT the locale-aware i18n Link: course detail pages are EN-only,
+// so on the 20 translated hubs a locale-prefixed href (/ja/golf-courses/...)
+// would 301 to English on every one of up to 58 roster links.
+import Link from 'next/link'
 import { ArrowRight, Clock, Flag, X, ExternalLink, MapPinOff } from 'lucide-react'
 import type { GolfCourse } from '@/types/golf-courses'
 import { formatFee, driveTimeLabel } from '@/lib/format'
+import { courseMapsUrl } from '@/lib/geo'
+import { loadMapsApi, BASE_MAP_OPTIONS } from '@/lib/maps-loader'
+import { pushMapUnavailable } from '@/lib/analytics'
 
 interface RegionCenter {
   lat: number
@@ -21,24 +27,6 @@ interface Props {
   regionLabel: string
   /** Default map centre / zoom, derived from REGION_META on the server side. */
   center: RegionCenter
-}
-
-// Window-level promise so the Maps JS script loads exactly once across all
-// components and page navigations (matches HubMapExplorer strategy).
-function loadMapsApi(apiKey: string): Promise<void> {
-  if (typeof window === 'undefined') return Promise.resolve()
-  const w = window as any
-  if (w.google?.maps?.Map) return Promise.resolve()
-  if (w.__mapsApiPromise) return w.__mapsApiPromise
-  w.__mapsApiPromise = new Promise<void>((resolve, reject) => {
-    const script = document.createElement('script')
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=marker&v=weekly`
-    script.async = true
-    script.onload = () => resolve()
-    script.onerror = () => { delete w.__mapsApiPromise; reject(new Error('Maps JS API failed to load')) }
-    document.head.appendChild(script)
-  })
-  return w.__mapsApiPromise
 }
 
 function makePin(index: number, active: boolean, courseName: string): HTMLDivElement {
@@ -79,9 +67,13 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
 
   // ── Load map + place markers ──────────────────────────────────────────────
   useEffect(() => {
+    const fail = (reason: 'no_key' | 'load_failed') => {
+      setMapsUnavailable(true)
+      pushMapUnavailable('region_explorer', reason)
+    }
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY
     if (!apiKey) {
-      setMapsUnavailable(true)
+      fail('no_key')
       return
     }
     if (!mapDivRef.current) return
@@ -92,15 +84,9 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
       const gmaps = (window as any).google.maps
 
       const map = new gmaps.Map(mapDivRef.current, {
-        center:            { lat: center.lat, lng: center.lng },
-        zoom:              center.zoom,
-        // 'DEMO_MAP_ID' is Google's placeholder — styled maps require a real
-        // cloud Map ID registered in Google Cloud Console.
-        mapId:             'DEMO_MAP_ID',
-        zoomControl:       true,
-        streetViewControl: false,
-        mapTypeControl:    false,
-        fullscreenControl: false,
+        ...BASE_MAP_OPTIONS,
+        center: { lat: center.lat, lng: center.lng },
+        zoom:   center.zoom,
       })
       mapRef.current = map
 
@@ -129,7 +115,7 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
         .filter(Boolean) as { marker: any; pin: HTMLDivElement; slug: string }[]
 
       if (!bounds.isEmpty()) map.fitBounds(bounds, 48)
-    }).catch(() => setMapsUnavailable(true))
+    }).catch((err) => { console.error(err); fail('load_failed') })
 
     return () => {
       cancelled = true
@@ -165,12 +151,10 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeSlug, center]) // `courses` intentionally excluded: changes are handled by the first effect; including it would cause redundant re-pans on every render
 
-  const activeMapsUrl = activeCourse?.google_maps_url
-    ?? (activeCourse?.latitude && activeCourse?.longitude
-      ? `https://www.google.com/maps/search/?api=1&query=${activeCourse.latitude},${activeCourse.longitude}`
-      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-          [activeCourse?.name, activeCourse?.province].filter(Boolean).join(' ')
-        )}`)
+  const activeMapsUrl = (activeCourse && courseMapsUrl(activeCourse))
+    ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+        [activeCourse?.name, activeCourse?.province].filter(Boolean).join(' ')
+      )}`
 
   return (
     <div className="mx-auto max-w-6xl px-4 pb-6 sm:px-6 lg:px-8">
@@ -304,16 +288,33 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
           const weekend  = course.green_fee_weekend_thb
 
           return (
-            <button
+            // Anchor, not <button>: the roster is the region hub's only full
+            // course listing, so these must be crawlable links to the 149
+            // detail pages (buttons left the hub with zero indexable course
+            // links). Plain click still toggles the map panel; modified
+            // clicks (cmd/ctrl/shift/middle) fall through to real navigation.
+            <Link
               key={course.slug}
-              onClick={() => handleListRow(course.slug)}
+              href={`/golf-courses/${region}/${course.slug}`}
+              // 58 rows would otherwise each viewport-prefetch a full course
+              // page payload the user rarely navigates to
+              prefetch={false}
+              onClick={(e) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+                // Keyboard activation (click with detail 0) navigates like a
+                // real link — screen readers announce these rows as links, so
+                // Enter must not be hijacked into a silent panel toggle.
+                if (e.detail === 0) return
+                e.preventDefault()
+                handleListRow(course.slug)
+              }}
               className={[
                 'grid w-full grid-cols-[32px_1fr_auto] items-center gap-3 px-5 py-4 text-left transition-all',
                 'sm:grid-cols-[32px_1fr_140px_100px]',
                 'border-b border-[#003d22]/5 last:border-0',
                 isActive ? 'bg-[#f0f7f2]' : 'hover:bg-[#f9fcfa]',
               ].join(' ')}
-              aria-pressed={isActive}
+              aria-current={isActive ? 'true' : undefined}
             >
               <span className={[
                 'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-black transition-all',
@@ -362,7 +363,7 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
                   <span className="text-muted-foreground/40">—</span>
                 )}
               </div>
-            </button>
+            </Link>
           )
         })}
       </div>

@@ -9,8 +9,11 @@ export const course: GolfCourse = {
   holes: 18,
   par: 72,
   year_opened: 1994,
-  green_fee_weekday_thb: 560,
-  green_fee_weekend_thb: 750,
+  // Official foreigner all-in rate (green fee + caddie + cart), dragonhillsgolf.com
+  // promotion page updated Mar 2026. Thai nationals pay less (dual pricing).
+  green_fee_weekday_thb: 1560,
+  green_fee_weekend_thb: 1750,
+  fees_verified_at: '2026-07-30',
   caddie_fee_thb: 300,
   cart_fee_thb: 700,
   caddie_required: false,
@@ -28,16 +31,16 @@ export const course: GolfCourse = {
   club_rental_brands: null,
   schema_markup: "{\"@context\":\"https://schema.org\",\"@type\":\"GolfCourse\",\"name\":\"Dragon Hills Golf & Country Club\",\"url\":\"https://len.golf/golf-courses/kanchanaburi/dragon-hills-golf-country-club\",\"description\":null,\"address\":{\"@type\":\"PostalAddress\",\"addressLocality\":\"Pak Tho\",\"addressRegion\":\"Ratchaburi\",\"addressCountry\":\"TH\"},\"geo\":{\"@type\":\"GeoCoordinates\",\"latitude\":null,\"longitude\":null},\"telephone\":\"+66 32 917698\",\"priceRange\":\"฿\",\"sameAs\":[\"https://www.dragonhillsgolf.com\"],\"amenityFeature\":[{\"@type\":\"LocationFeatureSpecification\",\"name\":\"Driving Range\",\"value\":true},{\"@type\":\"LocationFeatureSpecification\",\"name\":\"Caddie Required\",\"value\":false},{\"@type\":\"LocationFeatureSpecification\",\"name\":\"Golf Cart\",\"value\":true}]}",
   prose: {
-    overview: `Dragon Hills Golf & Country Club is a Jim Engh design built across 1,500 acres of jungle-clad mountainside in Pak Tho District, Ratchaburi Province — though it is consistently grouped with Kanchanaburi and River Kwai courses on booking platforms due to its location and character. The course opened in 1994 and remains one of the most geographically dramatic layouts within 90 minutes of Bangkok, where green fees of 560 THB on weekdays and 750 THB on weekends place it among the best-value serious golf experiences in the region. The site's elevation and forested terrain produce a playing experience far removed from the flat parkland courses that dominate Bangkok's closer suburbs, making it a frequent destination for golfers who want meaningful terrain without a long drive.`,
+    overview: `Dragon Hills Golf & Country Club is a Jim Engh design built across 1,500 acres of jungle-clad mountainside in Pak Tho District, Ratchaburi Province — though it is consistently grouped with Kanchanaburi and River Kwai courses on booking platforms due to its location and character. The course opened in 1994 and remains one of the most geographically dramatic layouts within 90 minutes of Bangkok, where the official visitor package of 1,560 THB on weekdays and 1,750 THB on weekends — including caddie and cart — places it among the best-value serious golf experiences in the region. (Thai nationals pay lower dual-pricing rates.) The site's elevation and forested terrain produce a playing experience far removed from the flat parkland courses that dominate Bangkok's closer suburbs, making it a frequent destination for golfers who want meaningful terrain without a long drive.`,
     layout_and_experience: `Engh's routing across the mountainside creates significant changes in elevation throughout the round. The signature hole is the 12th, a downhill par-3 of approximately 170 yards played to an island green — one of the more demanding short holes in the region, where club selection must account for the drop in elevation and any crosswind. The 1,500-acre site gives the layout a sense of space and separation between holes that is rare for a course this accessible from the capital. A driving range supports warm-up. Club rental is available at 500 THB per round, keeping the total cost per player well below what equivalent terrain would command at a resort course. The course appeals particularly to golfers who prefer course character over manicured uniformity.`,
-    tips: `Hole 12 is the one to prepare for: the downhill approach to the island green rewards conservative club selection and punishes anything long or left. The significant elevation changes across the course make a cart worthwhile at 700 THB, particularly in the afternoon heat. At 560 THB weekday green fees, Dragon Hills offers serious value — but confirm current pricing with the club directly, as fees can change between seasons. The 90-minute drive from Bangkok makes it feasible as an early-departure day trip without requiring an overnight stay.`,
+    tips: `Hole 12 is the one to prepare for: the downhill approach to the island green rewards conservative club selection and punishes anything long or left. The significant elevation changes make the cart included in the visitor package genuinely useful, particularly in the afternoon heat. At 1,560 THB weekday all-in for Jim Engh mountain terrain, Dragon Hills offers serious value — but confirm current pricing with the club directly, as fees change between seasons. The 90-minute drive from Bangkok makes it feasible as an early-departure day trip without requiring an overnight stay.`,
     location_and_access: `Dragon Hills is located in Pak Tho District, Ratchaburi Province, administratively distinct from Kanchanaburi but commonly grouped with the River Kwai region. From Bangkok, the drive takes approximately 90 minutes — notably shorter than courses in Saiyoke or Bo Phloi Districts. The route south and west from Bangkok via Highway 35 or Highway 4 connects to Pak Tho; private car is the practical option. Ratchaburi province borders Kanchanaburi to the south, and the mountainous terrain in this part of the province produces the elevated course character that distinguishes Dragon Hills from lowland alternatives closer to the city.`,
     rental_cta_context: `Dragon Hills Golf & Country Club offers on-site club rental at 500 THB, and golfers coming from Bangkok can also arrange rental sets through LENGOLF near BTS Chidlom before making the 90-minute drive to Dragon Hills.`,
   },
   locales: {
     en: {
       title: `Dragon Hills Golf & Country Club — Green Fees, Course Guide & Golf Club Rentals`,
-      meta_description: `Dragon Hills Golf Club: Jim Engh design on 1,500 acres of mountainside in Ratchaburi. Green fees from 560 THB. Island green par-3 signature hole. 90 mins from Bangkok.`,
+      meta_description: `Dragon Hills Golf Club: Jim Engh design on 1,500 acres of mountainside in Ratchaburi. Visitor packages from 1,560 THB incl caddie & cart. Island-green par-3 signature hole. 90 mins from Bangkok.`,
     },
     ko: null,
     zh: null,

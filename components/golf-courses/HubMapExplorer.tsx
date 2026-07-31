@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { MapPinOff } from 'lucide-react'
 import type { GolfCourse } from '@/types/golf-courses'
+import { loadMapsApi, BASE_MAP_OPTIONS } from '@/lib/maps-loader'
+import { pushMapUnavailable } from '@/lib/analytics'
 
 interface RegionCourses {
   region: string
@@ -22,31 +24,18 @@ function escHtml(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 }
 
-// Shared window-level promise so the script loads exactly once even when both
-// CourseMapExplorer and HubMapExplorer are mounted on the same page.
-function loadMapsApi(apiKey: string): Promise<void> {
-  if (typeof window === 'undefined') return Promise.resolve()
-  const w = window as any
-  if (w.google?.maps?.Map) return Promise.resolve()
-  if (w.__mapsApiPromise) return w.__mapsApiPromise
-  w.__mapsApiPromise = new Promise<void>((resolve, reject) => {
-    const script = document.createElement('script')
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=marker&v=weekly`
-    script.async = true
-    script.onload = () => resolve()
-    script.onerror = () => { delete w.__mapsApiPromise; reject(new Error('Maps JS API failed to load')) }
-    document.head.appendChild(script)
-  })
-  return w.__mapsApiPromise
-}
 
 export default function HubMapExplorer({ regions, locale = 'en' }: Props) {
   const mapDivRef = useRef<HTMLDivElement>(null)
   const [mapsUnavailable, setMapsUnavailable] = useState(false)
 
   useEffect(() => {
+    const fail = (reason: 'no_key' | 'load_failed') => {
+      setMapsUnavailable(true)
+      pushMapUnavailable('hub_explorer', reason)
+    }
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY
-    if (!apiKey) { setMapsUnavailable(true); return }
+    if (!apiKey) { fail('no_key'); return }
     if (!mapDivRef.current) return
     let cancelled = false
 
@@ -58,15 +47,9 @@ export default function HubMapExplorer({ regions, locale = 'en' }: Props) {
       const gmaps = (window as any).google.maps
 
       const map = new gmaps.Map(mapDivRef.current, {
-        zoom:              9,
-        center:            { lat: 13.2, lng: 100.7 },
-        // DEMO_MAP_ID enables AdvancedMarkerElement — replace with a real Map ID
-        // from Google Cloud Console for production styling.
-        mapId:             'DEMO_MAP_ID',
-        zoomControl:       true,
-        streetViewControl: false,
-        mapTypeControl:    false,
-        fullscreenControl: false,
+        ...BASE_MAP_OPTIONS,
+        zoom:   9,
+        center: { lat: 13.2, lng: 100.7 },
       })
 
       const infoWindow = new gmaps.InfoWindow()
@@ -124,7 +107,9 @@ export default function HubMapExplorer({ regions, locale = 'en' }: Props) {
       }
 
       if (!bounds.isEmpty()) map.fitBounds(bounds, 40)
-    }).catch(console.error)
+    // Log the real error for diagnosis (key restriction vs CSP vs network),
+    // then degrade visibly — console.error alone left a blank map box.
+    }).catch((err) => { console.error(err); fail('load_failed') })
 
     return () => { cancelled = true }
   }, [regions, locale])

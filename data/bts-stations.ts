@@ -15,7 +15,9 @@ export interface BtsStation {
   name: string
   lat: number
   lng: number
-  /** Matching `/location/[slug]/` page slug, if any. */
+  /** Full `/location/[slug]/` page slug (template-prefixed, e.g.
+   *  `indoor-golf-asok`), if a matching location page exists. Stored complete
+   *  so consumers never need to know the location template naming scheme. */
   areaSlug?: string
   /** 1–2 sentences describing the district context (hotels, business, nightlife). */
   description: string
@@ -27,7 +29,7 @@ export const BTS_STATIONS: Record<string, BtsStation> = {
     name: 'Asok',
     lat: 13.7370,
     lng: 100.5602,
-    areaSlug: 'asok',
+    areaSlug: 'indoor-golf-asok',
     description:
       'Asok is the Sukhumvit business hub — interchange between BTS Asok and MRT Sukhumvit, dense with five-star hotels (Grand Sheraton, Hyatt, Westin) and serviced apartments used by long-stay corporate travellers.',
   },
@@ -36,7 +38,7 @@ export const BTS_STATIONS: Record<string, BtsStation> = {
     name: 'Chidlom',
     lat: 13.7437,
     lng: 100.5430,
-    areaSlug: 'chidlom',
+    areaSlug: 'indoor-golf-chidlom',
     description:
       'Chidlom sits in the upmarket Ploenchit shopping district between Central Embassy and Central Chidlom. LENGOLF is in The Mercury Ville above the BTS exit — pre-round practice on the indoor simulator is a 30-second walk from the station.',
   },
@@ -45,7 +47,7 @@ export const BTS_STATIONS: Record<string, BtsStation> = {
     name: 'Phrom Phong',
     lat: 13.7300,
     lng: 100.5697,
-    areaSlug: 'phrom-phong',
+    areaSlug: 'indoor-golf-phrom-phong',
     description:
       'Phrom Phong is the Japanese-expat heart of Bangkok, anchored by the EmQuartier and Emporium malls. A common base for golfers on multi-week stays who want a residential rather than business-hotel feel.',
   },
@@ -54,7 +56,7 @@ export const BTS_STATIONS: Record<string, BtsStation> = {
     name: 'Thong Lo',
     lat: 13.7242,
     lng: 100.5783,
-    areaSlug: 'thong-lo',
+    areaSlug: 'indoor-golf-thong-lo',
     description:
       'Thong Lo is the dining-and-nightlife stretch of Sukhumvit, popular with younger international visitors and a growing pool of golf-trip itineraries that pair early tee times with late evenings on Soi 55.',
   },
