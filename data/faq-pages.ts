@@ -1009,6 +1009,47 @@ export const faqPages: FaqSeoPage[] = [
       ],
     },
   },
+
+  // ─── TH: what-to-wear-to-indoor-golf-bar ───
+  // Part of the TH indoor-practice cluster. Title/meta front-load the TH
+  // indoor-venue query set (ตีกอล์ฟในร่ม / บาร์กอล์ฟในร่ม) that currently lands
+  // on the EN homepage. Every figure traces to the EN entry faq-8: premium club
+  // rental ~150 บาท/ชั่วโมง and the on-site glove at ~600 บาท — both carry the
+  // as-of marker. No LENGOLF price is tokenized here: the FAQ route
+  // (app/[locale]/faq/[slug]/page.tsx → components/faq/FaqPage.tsx) renders
+  // answer_intro/answer_body verbatim and never calls interpolateFacts, so a
+  // {{token}} would ship literally to the reader (only /guide/ and llms.txt
+  // interpolate). Matches all 14 shipped TH FAQ entries, which carry literals.
+  // related_* point only at th.staticRoutes targets (lib/translated-routes.ts):
+  // the two FAQ siblings, the TH dress-code guide, and /golf.
+  {
+    id: 'faq-8-th',
+    page_type: 'faq',
+    slug: 'what-to-wear-to-indoor-golf-bar',
+    title: 'แต่งตัวยังไงไปบาร์กอล์ฟในร่ม — ตีกอล์ฟในร่มไม่มีกฎการแต่งกาย',
+    meta_description:
+      'บาร์กอล์ฟในร่มส่วนใหญ่ไม่มีกฎการแต่งกาย ใส่ชุดที่สบายและสวิงได้ถนัด เสื้อยืด กางเกงยีนส์ และรองเท้าผ้าใบใช้ได้ ไม่ต้องมีชุดกอล์ฟหรือรองเท้ากอล์ฟโดยเฉพาะ',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'general',
+    locale: 'th',
+    related_slugs: ['/faq/do-i-need-experience-to-play-golf-simulator', '/faq/can-i-rent-golf-clubs-in-bangkok', '/guide/what-to-wear-golf-thailand', '/golf'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        'บาร์กอล์ฟในร่มส่วนใหญ่ไม่มีกฎการแต่งกาย ใส่อะไรก็ได้ที่สบายและสวิงได้ถนัด เสื้อยืด กางเกงยีนส์ กางเกงขาสั้น รองเท้าผ้าใบ หรือรองเท้าแตะ ใช้ได้ทั้งหมด ต่างจากสนามกอล์ฟแบบดั้งเดิม บาร์กอล์ฟในร่มไม่ได้บังคับเสื้อคอปก รองเท้ากอล์ฟ หรือชุดแบบใดเป็นพิเศษ ที่ LENGOLF คุณจะเห็นตั้งแต่ชุดทำงานไปจนถึงชุดลำลองแบบสตรีทแวร์',
+      answer_body:
+        'บาร์กอล์ฟในร่มเป็นสถานที่สังสรรค์แบบสบายๆ ไม่ใช่สโมสรกอล์ฟแบบดั้งเดิม นี่คือสิ่งที่ควรรู้เกี่ยวกับการแต่งตัว\n\n**ชุดที่เหมาะที่สุด**\n- **เสื้อ:** เสื้อยืด เสื้อโปโล เสื้อเชิ้ตลำลอง อะไรก็ได้ที่ขยับแขนสวิงได้สะดวก\n- **กางเกงและกระโปรง:** กางเกงยีนส์ กางเกงขาสั้น กางเกงชิโน กางเกงลำลอง กระโปรง ใช้ได้ทั้งหมด\n- **รองเท้า:** รองเท้าผ้าใบ รองเท้าโลฟเฟอร์ รองเท้าแตะ รองเท้าพื้นแบนที่มีดอกยางจะช่วยให้ยืนสวิงได้มั่นคงกว่า แต่ไม่ใช่เรื่องจำเป็นสำหรับการเล่นแบบสบายๆ\n- **มาจากที่ทำงาน:** ชุดทำงานใส่ได้สบายมาก ผู้มาใช้บริการหลายคนแวะมาจากออฟฟิศใกล้เคียงโดยตรง\n\n**สิ่งที่ควรเลี่ยง**\n- เสื้อผ้าที่รัดรูปหรือคับจนขยับแขนได้ไม่สะดวก\n- แขนเสื้อที่หลวมหรือพลิ้วมากจนอาจเกี่ยวกับจังหวะสวิง\n- รองเท้าส้นสูง (ยืนทรงตัวได้ยาก แม้บางคนจะเล่นได้ก็ตาม)\n\n**ไม่ต้องมีอุปกรณ์กอล์ฟ**\nคุณไม่จำเป็นต้องมีรองเท้ากอล์ฟ ถุงมือกอล์ฟ หมวกกอล์ฟ หรืออุปกรณ์ใดๆ ทั้งสิ้น LENGOLF มีชุดไม้มาตรฐานให้ใช้ฟรีในทุกการจองเบย์ และมีไม้พรีเมียมให้เช่าเริ่มต้นประมาณ 150 บาท/ชั่วโมง ส่วนถุงมือกอล์ฟหาซื้อได้ที่ร้านในราคาประมาณ 600 บาท หากต้องการ (ข้อมูล ณ กรกฎาคม 2026)\n\n**บรรยากาศ**\nLENGOLF มีบรรยากาศแบบบาร์ ไฟสลัว และมีค็อกเทล ให้นึกถึงลานโบว์ลิ่งหรือสปอร์ตบาร์มากกว่าสนามกอล์ฟ แต่งตัวแบบออกไปเที่ยวสบายๆ ตอนเย็น ไม่ใช่แบบไปออกรอบที่คันทรีคลับ',
+      related_questions: [
+        { slug: 'do-i-need-experience-to-play-golf-simulator', question: 'ต้องมีประสบการณ์กอล์ฟมาก่อนไหมถึงจะเล่นกอล์ฟซิมมูเลเตอร์ได้' },
+        { slug: 'how-long-does-simulator-golf-take', question: 'ตีกอล์ฟ 18 หลุมใช้เวลากี่ชั่วโมง — เทียบซิมมูเลเตอร์กับสนามจริง' },
+        { slug: 'can-beginners-play-golf-simulators', question: 'มือใหม่เล่นกอล์ฟซิมมูเลเตอร์ได้ไหม' },
+      ],
+    },
+  },
+
   {
     id: 'faq-9',
     page_type: 'faq',
@@ -1816,6 +1857,50 @@ export const faqPages: FaqSeoPage[] = [
       ],
     },
   },
+
+  // ─── TH: practice-golf-swing-without-driving-range-bangkok ───
+  // Head of the TH indoor-practice cluster: the TH driving-range queries
+  // (สนามไดร์ฟกอล์ฟ ใกล้ฉัน / สนามไดร์ฟกอล์ฟ) currently land on the EN homepage.
+  // Spelling follows the glossary terminology ruling (use: สนามไดรฟ์), so the
+  // page reads consistently rather than mixing the two Thai spellings.
+  // Every figure traces to the EN entry faq-14: ~550 บาท/ชั่วโมง, สูงสุด 5 คน,
+  // 35 องศาเซลเซียสขึ้นไป, 30-45 นาที, 9:00-23:00 น., ทางออก 4. "PGA-certified"
+  // is rendered as "ได้รับการรับรองจาก PGA" WITHOUT "Thailand" — other TH FAQ
+  // entries say PGA Thailand, but this slug's EN source does not, and per-source
+  // fidelity wins over cross-page harmonization. The EN "Ramindra/Ratchaphruek"
+  // and "no ranges in the Lumphini area" notes are third-party geography and
+  // stay static. LENGOLF prices are literals, not {{tokens}}: the FAQ route
+  // never calls interpolateFacts (only /guide/ and llms.txt do), so a token
+  // would ship as literal "{{…}}" — matches all shipped TH FAQ entries.
+  // related_* are all in th.staticRoutes (lib/translated-routes.ts).
+  {
+    id: 'faq-14-th',
+    page_type: 'faq',
+    slug: 'practice-golf-swing-without-driving-range-bangkok',
+    title: 'ฝึกสวิงกอล์ฟโดยไม่ต้องไปสนามไดรฟ์ในกรุงเทพฯ ได้ไหม',
+    meta_description:
+      'ได้ กอล์ฟซิมมูเลเตอร์ให้คุณฝึกสวิงเต็มวงในร่มพร้อมข้อมูลทุกช็อต ช่วยพัฒนาความแม่นยำได้ดีกว่าสนามไดรฟ์กอล์ฟทั่วไป ที่ LENGOLF เริ่มต้น 550 บาท/ชั่วโมง (ข้อมูล ณ กรกฎาคม 2026)',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'general',
+    locale: 'th',
+    related_slugs: ['/faq/how-accurate-are-golf-simulators', '/faq/best-way-to-learn-golf-in-bangkok', '/golf'],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        'ได้ และกอล์ฟซิมมูเลเตอร์ให้ผลดีกว่าสนามไดรฟ์สำหรับการฝึกสวิงด้วยซ้ำ คุณตีลูกจริงด้วยไม้จริงเข้าไปที่จอ แล้วซิมมูเลเตอร์จะติดตามทุกรายละเอียด ทั้งความเร็วลูก มุมปล่อยลูก อัตราการหมุน วิถีการเหวี่ยงไม้ และมุมหน้าไม้ ข้อมูลป้อนกลับแบบนี้ช่วยให้พัฒนาได้เร็วกว่าการตีลูกลงในสนามโล่ง ที่ LENGOLF ฝึกสวิงเต็มวงได้ในราคาเริ่มต้นประมาณ 550 บาท/ชั่วโมง สำหรับผู้เล่นสูงสุด 5 คน (ข้อมูล ณ กรกฎาคม 2026)',
+      answer_body:
+        'กรุงเทพฯ มีตัวเลือกสนามไดรฟ์ไม่มากนัก และส่วนใหญ่ยังมีข้อจำกัดเมื่อเทียบกับการซ้อมบนซิมมูเลเตอร์\n\n**ทำไมซิมมูเลเตอร์จึงเหนือกว่าสนามไดรฟ์ในการซ้อม**\n- **มีข้อมูลครบทุกช็อต:** เห็นชัดเจนว่าไม้และลูกของคุณทำอะไรอยู่ ขณะที่สนามไดรฟ์บอกได้เพียงจุดตกโดยประมาณ\n- **ระยะที่แม่นยำ:** ซิมมูเลเตอร์วัดระยะได้อย่างแม่นยำ ส่วนที่สนามไดรฟ์คุณต้องกะเอาจากป้ายบอกระยะ\n- **ซ้อมบนสนามจริงได้:** ฝึกหลุมและสถานการณ์ที่ต้องการได้ ไม่ใช่แค่ตีลูกออกไปในพื้นที่โล่ง\n- **ไม่ต้องกังวลเรื่องอากาศ:** ความร้อนของกรุงเทพฯ (35 องศาเซลเซียสขึ้นไป) และฝนทำให้การซ้อมกลางแจ้งเป็นเรื่องทรมานเกือบครึ่งปี ส่วนซิมมูเลเตอร์อยู่ในห้องปรับอากาศ\n- **ประหยัดเวลา:** เดินเข้ามา วอร์มอัพ แล้วซ้อมได้เลย ไม่ต้องเดินทางไปสนามไดรฟ์ชานเมือง\n\n**ตัวเลือกสนามไดรฟ์กอล์ฟในกรุงเทพฯ**\nกรุงเทพฯ มีสนามไดรฟ์อยู่บ้าง แต่ส่วนใหญ่อยู่นอกใจกลางเมือง\n- สนามไดรฟ์ตามแนวถนนรามอินทราและถนนราชพฤกษ์ (ห่างจากใจกลางกรุงเทพฯ ประมาณ 30-45 นาที)\n- สถานที่ฝึกซ้อมในโรงแรมบางแห่ง (มีจำกัดและมักมีขนาดเล็ก)\n- ย่านสวนลุมพินีไม่มีสนามไดรฟ์\n\n**โหมดการซ้อมที่ LENGOLF**\n- **โหมดสนามไดรฟ์:** ตีลูกแล้วเห็นระยะจริงและข้อมูลวิถีลูกทันที\n- **เล่นสนามจริง:** เลือกเล่นหลุมที่ต้องการเพื่อซ้อมช็อตเข้ากรีน หลุมพาร์ 3 หรือการวางแผนการเล่น\n- **ทดสอบทักษะ:** โหมดตีเข้าใกล้ธงและไดรฟ์ไกล\n- **โหมดคอร์สเรียน:** จองคอร์สเรียนกับโค้ชที่ได้รับการรับรองจาก PGA เพื่อซ้อมอย่างเป็นระบบพร้อมการวิเคราะห์สวิง\n\nLENGOLF อยู่ที่ Mercury Ville, BTS ชิดลม (ทางออก 4) เปิดทุกวัน 9:00-23:00 น. ค่าเช่าเบย์เริ่มต้นประมาณ 550 บาท/ชั่วโมง พร้อมชุดไม้มาตรฐานให้ใช้ฟรี (ข้อมูล ณ กรกฎาคม 2026)',
+      related_questions: [
+        { slug: 'how-accurate-are-golf-simulators', question: 'กอล์ฟซิมมูเลเตอร์แม่นยำแค่ไหนเมื่อเทียบกับกอล์ฟจริง' },
+        { slug: 'best-way-to-learn-golf-in-bangkok', question: 'วิธีที่ดีที่สุดในการเรียนกอล์ฟในกรุงเทพฯ คืออะไร' },
+        { slug: 'how-much-does-indoor-golf-cost-in-bangkok', question: 'ราคากอล์ฟในร่มในกรุงเทพฯ เท่าไหร่ — ชั่วโมงละ 550-1,000 บาท' },
+      ],
+    },
+  },
+
   {
     id: 'faq-15',
     page_type: 'faq',
@@ -1949,6 +2034,53 @@ export const faqPages: FaqSeoPage[] = [
       related_questions: [
         { slug: '/guide/best-time-play-golf-thailand', question: 'What is the best time of year to play golf in Thailand?' },
         { slug: '/guide/golf-weather-bangkok-by-month', question: 'What is the weather like for golf in Bangkok each month?' },
+      ],
+    },
+  },
+
+  // ─── TH: best-time-of-day-golf-bangkok ───
+  // Completes the TH indoor-practice funnel (ซ้อม → สถานที่ → ไปตอนไหน).
+  // Every temperature, time window and discount traces to the EN entry faq-30
+  // (13 องศาเหนือเส้นศูนย์สูตร; 25-30/32-36/37-39 องศาเซลเซียส; 6:00-7:00,
+  // 7:00-9:00, 9:00-11:00, หลัง 13:00; 6:30-8:30 น.; ทไวไลท์ 30-50 เปอร์เซ็นต์
+  // จาก 13:00-14:00 น.; พายุฝน 14:00-16:00 น.). The twilight discount is a
+  // third-party price claim, so it stays static and carries the as-of marker.
+  // The EN numbered list is rendered as a "- " bullet list because
+  // components/faq/FaqPage.tsx only detects "- " lines as a list — a numbered
+  // list would collapse into one run-on paragraph. No LENGOLF price is quoted
+  // (the EN source quotes none), so none is invented and no token is used.
+  // The EN related_slug /golf-in-thailand-guide is NOT in th.staticRoutes and
+  // would 301 the reader to English, so it is replaced with the TH rainy-season
+  // guide; all four targets are verified TH entries in lib/translated-routes.ts.
+  {
+    id: 'faq-30-th',
+    page_type: 'faq',
+    slug: 'best-time-of-day-golf-bangkok',
+    title: 'เล่นกอล์ฟในกรุงเทพฯ ช่วงเวลาไหนของวันดีที่สุด — ทีไทม์ 6:00-9:00 น.',
+    meta_description:
+      'ทีไทม์ช่วงเช้าช่วยเลี่ยงทั้งความร้อนและรถติดในกรุงเทพฯ ทำไมช่วง 6:00-9:00 น. จึงลงตัวที่สุด ทไวไลท์กอล์ฟเหมาะกับใคร และฤดูกาลเปลี่ยนคำตอบอย่างไร',
+    featured_image: null,
+    schema_markup: null,
+    status: 'published',
+    category: 'on-the-ground',
+    locale: 'th',
+    related_slugs: [
+      '/guide/best-time-play-golf-thailand',
+      '/guide/golf-weather-bangkok-by-month',
+      '/guide/first-time-golf-thailand',
+      '/guide/golf-bangkok-rainy-season',
+    ],
+    created_at: now,
+    updated_at: now,
+    content: {
+      answer_intro:
+        'ออกรอบระหว่าง 6:00 ถึง 9:00 น. ช่วงเวลานี้ให้อุณหภูมิที่เย็นกว่า ความชื้นที่รับมือได้ จังหวะการเล่นที่ลื่นไหลกว่า และมีเวลาพอที่จะจบรอบก่อนความร้อนช่วงกลางวันจะขึ้นถึงจุดสูงสุด',
+      answer_body:
+        'กรุงเทพฯ อยู่เหนือเส้นศูนย์สูตรราว 13 องศา ความร้อนจึงเป็นค่าคงที่ ไม่ใช่ตัวแปร ระยะห่างระหว่างทีไทม์ 7:00 น. กับทีไทม์ 13:00 น. คือความต่างระหว่างรอบที่เล่นสบายกับรอบที่เล่นแล้วทรมาน\n\n**ทำไมช่วงเช้าจึงเป็นคำตอบที่ถูกต้อง**\n- **อุณหภูมิ:** ตอนเช้าในกรุงเทพฯ อยู่ที่ 25-30 องศาเซลเซียสตลอดทั้งปี พอถึงเที่ยงจะขึ้นเป็น 32-36 องศาเซลเซียส และในเดือนที่ร้อนที่สุด (มีนาคมถึงพฤษภาคม) แฟร์เวย์ช่วงบ่ายกลางแดดจัดอาจแตะ 37-39 องศาเซลเซียส\n- **ความชื้น:** ความชื้นสัมพัทธ์ต่ำกว่าในตอนเช้า ก่อนที่ความร้อนจากแสงอาทิตย์จะขึ้นถึงจุดสูงสุด\n- **สภาพสนาม:** หญ้าและกรีนอยู่ในสภาพดีที่สุดในตอนเช้า\n- **เวลาจบรอบ:** เริ่ม 7:00 น. จะจบรอบราวเที่ยงหรือ 12:30 น. ก่อนช่วงที่ร้อนที่สุด\n- **การจราจร:** ทีไทม์ 7:00 น. หมายถึงออกจากที่พักราว 5:30-6:00 น. ซึ่งเลี่ยงช่วงรถติดหนักที่สุดของกรุงเทพฯ ได้\n\n**เทียบช่วงเวลาในแต่ละวัน**\n- 6:00-7:00 น.: 25-28 องศาเซลเซียส ดีที่สุดโดยรวม จังหวะการเล่นเร็ว\n- 7:00-9:00 น.: 27-30 องศาเซลเซียส เป็นช่วงที่ลงตัวที่สุดสำหรับผู้มาเยือนส่วนใหญ่\n- 9:00-11:00 น.: 30-33 องศาเซลเซียส ยังพอไหวหากเตรียมน้ำดื่มเพิ่ม\n- หลัง 13:00 น. (ทไวไลท์): 34-39 องศาเซลเซียส มีส่วนลด แต่ความร้อนหนักหนาสาหัส\n\n**วันหยุดกับวันธรรมดา**\nสนามในกรุงเทพฯ เต็มเร็วมากในเช้าวันเสาร์และอาทิตย์ ช่วง 6:30-8:30 น. ของสนามยอดนิยมมักถูกจองหมดล่วงหน้าหลายวัน ส่วนเช้าวันธรรมดายืดหยุ่นกว่าและจังหวะการเล่นเร็วกว่า\n\n**ทไวไลท์กอล์ฟ**\nอัตราค่าบริการช่วงบ่ายที่ลดราคา (โดยทั่วไปถูกกว่าราว 30-50 เปอร์เซ็นต์) เริ่มมีให้ตั้งแต่ประมาณ 13:00-14:00 น. (ข้อมูล ณ กรกฎาคม 2026) เหมาะหากคุณทนความร้อนได้ดี มีงบจำกัด หรืออยากเล่นแค่ 9 หลุม แต่ไม่แนะนำสำหรับผู้ที่มาจากประเทศเขตอากาศเย็นกว่า หรือผู้ที่มีไฟลต์ในช่วงเย็น\n\n**ความแตกต่างตามฤดูกาล**\n- พฤศจิกายนถึงกุมภาพันธ์ (ฤดูหนาว): ทีไทม์ 7:00-9:00 น. เล่นสบาย และรอบช่วงบ่ายก็ยังพอรับไหว\n- มีนาคมถึงพฤษภาคม (ฤดูร้อน): ยึดช่วง 6:00-8:00 น. อย่างเคร่งครัด การเล่นช่วงบ่ายทรมานจริง\n- มิถุนายนถึงตุลาคม (ฤดูฝน): การออกรอบเช้ายังช่วยเลี่ยงพายุฝนช่วงบ่ายที่มักเกิดระหว่าง 14:00-16:00 น. ได้ด้วย\n\nหากการตื่นเช้าไม่ใช่ทางของคุณ LENGOLF มีกอล์ฟซิมมูเลเตอร์ในร่มใจกลางกรุงเทพฯ ที่ไม่มีข้อจำกัดเรื่องช่วงทีไทม์และไม่ขึ้นกับสภาพอากาศ เบย์ปรับอากาศจองได้ตลอดทั้งวันและช่วงค่ำ',
+      related_questions: [
+        { slug: '/guide/best-time-play-golf-thailand', question: 'ช่วงเวลาที่ดีที่สุดของปีในการเล่นกอล์ฟในประเทศไทย' },
+        { slug: '/guide/golf-weather-bangkok-by-month', question: 'สภาพอากาศสำหรับเล่นกอล์ฟในกรุงเทพฯ รายเดือน' },
+        { slug: 'can-you-play-golf-in-bangkok-when-it-rains', question: 'ฝนตกในกรุงเทพฯ ยังเล่นกอล์ฟได้ไหม — กอล์ฟในร่มเล่นได้ทุกฤดู' },
       ],
     },
   },

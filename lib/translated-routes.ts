@@ -98,6 +98,10 @@ const TRANSLATED_ROUTES: Record<
       "/faq/cost-to-fly-with-golf-clubs-to-thailand",
       "/faq/worth-taking-golf-lessons-bangkok-holiday",
       "/faq/what-golf-clubs-available-rent-bangkok",
+      // TH indoor-practice cluster (สนามไดร์ฟกอล์ฟ / ตีกอล์ฟในร่ม queries).
+      "/faq/practice-golf-swing-without-driving-range-bangkok",
+      "/faq/what-to-wear-to-indoor-golf-bar",
+      "/faq/best-time-of-day-golf-bangkok",
     ],
     dynamicRoutePatterns: [],
   },

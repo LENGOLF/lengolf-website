@@ -1597,6 +1597,22 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  // TH indoor-practice cluster (driving-range / indoor-venue query clusters)
+  {
+    path: "/th/faq/practice-golf-swing-without-driving-range-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/faq/what-to-wear-to-indoor-golf-bar/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/faq/best-time-of-day-golf-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
   // Hotel concierge pages — spot-check a few slugs
   {
     path: "/hotels/things-to-do-near-grand-hyatt-erawan/",
