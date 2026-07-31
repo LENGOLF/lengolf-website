@@ -1,9 +1,11 @@
-// Shared Map constructor options for all three map components. DEMO_MAP_ID
-// enables AdvancedMarkerElement — swap for a real Cloud Map ID here (one
-// place) when one is registered. Per-component overrides (zoom, mapTypeId,
+// Shared Map constructor options for all three map components. The map ID
+// enables AdvancedMarkerElement; DEMO_MAP_ID is Google's documented
+// development-only placeholder. Register a Cloud Map ID in Google Cloud
+// Console and set NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID in Vercel — config-only
+// swap, no code change. Per-component overrides (zoom, mapTypeId,
 // fullscreenControl) spread on top.
 export const BASE_MAP_OPTIONS = {
-  mapId:             'DEMO_MAP_ID',
+  mapId:             process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID || 'DEMO_MAP_ID',
   zoomControl:       true,
   streetViewControl: false,
   mapTypeControl:    false,

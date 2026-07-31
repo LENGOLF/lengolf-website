@@ -2069,6 +2069,31 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  // BTS_STATIONS.areaSlug targets — the near/[station] pages link
+  // `/location/${areaSlug}` and nothing else validates those slugs against
+  // the DB-driven location pages (validate:links excludes /location; CI
+  // section K only scans data/*.ts related_slugs). A renamed or unpublished
+  // location page would otherwise ship as a hard 404 from 4 station pages.
+  {
+    path: "/location/indoor-golf-asok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/location/indoor-golf-chidlom/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/location/indoor-golf-phrom-phong/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/location/indoor-golf-thong-lo/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
   // Generated OG cards (lib/og-card.tsx) — the course JSON-LD references the
   // detail-page card as its schema image, so a broken OG route silently
   // breaks structured data on all 149 pages without these checks.

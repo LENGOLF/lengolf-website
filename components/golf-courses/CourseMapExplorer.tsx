@@ -307,6 +307,15 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
                 if (e.detail === 0) return
                 e.preventDefault()
                 handleListRow(course.slug)
+                // Selecting from deep in a 58-row roster must produce visible
+                // feedback: the map + info panel sit above the list, so on
+                // mobile a tap otherwise appears to do nothing.
+                if (!isActive) {
+                  document.getElementById('course-map')?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                  })
+                }
               }}
               className={[
                 'grid w-full grid-cols-[32px_1fr_auto] items-center gap-3 px-5 py-4 text-left transition-all',

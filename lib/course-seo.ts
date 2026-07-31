@@ -39,9 +39,10 @@ export function getCourseTitle(course: GolfCourse): string {
 }
 
 /**
- * Data-driven meta description, unique per course. Falls back to the
- * hand-written `locales.en.meta_description` if the assembled string runs
- * long (e.g. very long designer names).
+ * Data-driven meta description, unique per course. When the assembled string
+ * runs long it degrades by dropping clauses (drive time, then designer) —
+ * never by falling back to `locales.en.meta_description`, 77/149 of which
+ * are the identical boilerplate this generator exists to replace.
  */
 export function getCourseDescription(course: GolfCourse): string {
   // Closure leads, and is DERIVED rather than taken from
@@ -68,20 +69,23 @@ export function getCourseDescription(course: GolfCourse): string {
     return withTail.length <= 165 ? withTail : lead
   }
 
-  const designer = course.designer ? `${course.designer}-designed ` : ''
-  const parts = [`${course.holes}-hole ${designer}golf course in ${course.province}.`]
-  if (course.green_fee_weekday_thb) {
-    parts.push(`Weekday green fee ~${thb(course.green_fee_weekday_thb)}.`)
-  }
-  if (
-    course.drive_time_from_bangkok_min &&
-    course.drive_time_from_bangkok_min <= 240
-  ) {
-    parts.push(`${course.drive_time_from_bangkok_min} min from central Bangkok.`)
-  }
-  parts.push('Fees, tips, caddie info & club rental options.')
-  const out = parts.join(' ')
-  return out.length <= 165 ? out : course.locales.en.meta_description
+  const designerLead = `${course.holes}-hole ${course.designer ? `${course.designer}-designed ` : ''}golf course in ${course.province}.`
+  const plainLead = `${course.holes}-hole golf course in ${course.province}.`
+  const fee = course.green_fee_weekday_thb
+    ? ` Weekday green fee ~${thb(course.green_fee_weekday_thb)}.`
+    : ''
+  const drive =
+    course.drive_time_from_bangkok_min && course.drive_time_from_bangkok_min <= 240
+      ? ` ${course.drive_time_from_bangkok_min} min from central Bangkok.`
+      : ''
+  const tail = ' Fees, tips, caddie info & club rental options.'
+
+  const full = designerLead + fee + drive + tail
+  if (full.length <= 165) return full
+  const noDrive = designerLead + fee + tail
+  if (noDrive.length <= 165) return noDrive
+  // Base form always fits (~120 chars worst case) and stays unique per course.
+  return plainLead + fee + tail
 }
 
 export interface CourseFaqItem {
