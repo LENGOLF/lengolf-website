@@ -238,9 +238,20 @@ export function getCourseFaqs(course: GolfCourse, locale: CourseSeoLocale = 'en'
  * honesty posture. `operational_note` is EN-authored free text, so the Thai
  * closure answers use the derived fallbacks rather than mixing languages.
  */
+// course.province is stored in English; interpolating it raw into the Thai
+// FAQ templates ships mixed-script sentences ("ตั้งอยู่ใน Bangkok"). Extend this
+// map as courses join the TH registry — unmapped provinces drop the locality
+// clause instead of falling back to Latin text mid-sentence.
+const PROVINCE_TH: Record<string, string> = {
+  Bangkok: 'กรุงเทพฯ',
+  'Chiang Mai': 'จังหวัดเชียงใหม่',
+  'Phra Nakhon Si Ayutthaya': 'จังหวัดพระนครศรีอยุธยา',
+}
+
 function getCourseFaqsTh(course: GolfCourse): CourseFaqItem[] {
   const faqs: CourseFaqItem[] = []
   const n = (v: number) => v.toLocaleString('en-US')
+  const provinceTh = PROVINCE_TH[course.province]
 
   const closed =
     course.operational_status === 'permanently_closed' ||
@@ -258,7 +269,9 @@ function getCourseFaqsTh(course: GolfCourse): CourseFaqItem[] {
     if (course.distance_from_bangkok_km) {
       faqs.push({
         question: `${course.name} เคยตั้งอยู่ที่ไหน`,
-        answer: `${course.name} เคยตั้งอยู่ใน ${course.province} ห่างจากใจกลางกรุงเทพฯ ประมาณ ${course.distance_from_bangkok_km} กม.`,
+        answer: provinceTh
+          ? `${course.name} เคยตั้งอยู่ใน${provinceTh} ห่างจากใจกลางกรุงเทพฯ ประมาณ ${course.distance_from_bangkok_km} กม.`
+          : `${course.name} เคยตั้งอยู่ห่างจากใจกลางกรุงเทพฯ ประมาณ ${course.distance_from_bangkok_km} กม.`,
       })
     }
     return faqs
@@ -288,7 +301,7 @@ function getCourseFaqsTh(course: GolfCourse): CourseFaqItem[] {
           ? ` ใช้เวลาขับรถราว ${formatHours(min)} ชั่วโมง`
           : ` ใช้เวลาขับรถราว ${min} นาที`
     }
-    answer += ` โดยสนามตั้งอยู่ใน ${course.province}`
+    if (provinceTh) answer += ` โดยสนามตั้งอยู่ใน${provinceTh}`
     faqs.push({
       question: `${course.name} อยู่ห่างจากกรุงเทพฯ แค่ไหน`,
       answer,
