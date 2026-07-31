@@ -1,6 +1,6 @@
 import type { GolfCourse } from '@/types/golf-courses'
 import { SITE_URL } from '@/lib/constants'
-import { courseMapsUrl } from '@/lib/geo'
+import { courseMapsUrl, hasTrustedCoordinates } from '@/lib/geo'
 
 /**
  * Schema.org GolfCourse representation for a course summary card on a list
@@ -96,7 +96,7 @@ export function getCourseDetailJsonLd(
   if (c.operational_status === 'permanently_closed') {
     schema['@type'] = 'Place'
     schema['@id'] = `${canonicalUrl}#place`
-    if (c.latitude !== null && c.longitude !== null) {
+    if (hasTrustedCoordinates(c)) {
       schema.geo = {
         '@type': 'GeoCoordinates',
         latitude: c.latitude,
@@ -108,15 +108,17 @@ export function getCourseDetailJsonLd(
     return schema
   }
 
-  if (c.latitude !== null && c.longitude !== null) {
+  // Only publish GeoCoordinates we trust: a district-centroid coordinate
+  // tells Google the course is up to a kilometre from where it actually is,
+  // which is worse for local matching than omitting the property.
+  if (hasTrustedCoordinates(c)) {
     schema.geo = {
       '@type': 'GeoCoordinates',
       latitude: c.latitude,
       longitude: c.longitude,
     }
   }
-  const mapsUrl = courseMapsUrl(c)
-  if (mapsUrl) schema.hasMap = mapsUrl
+  schema.hasMap = courseMapsUrl(c)
 
   if (c.phone) schema.telephone = c.phone
   if (c.website) schema.sameAs = [c.website]

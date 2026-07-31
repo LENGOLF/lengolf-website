@@ -6,7 +6,7 @@ import CrossLinkBlock, { type CrossLink } from '@/components/golf-courses/CrossL
 import CourseFaq from '@/components/golf-courses/CourseFaq'
 import CourseSatelliteMap from '@/components/golf-courses/CourseSatelliteMap'
 import RentalCtaBanner from '@/components/golf-courses/RentalCtaBanner'
-import { courseMapsUrl } from '@/lib/geo'
+import { courseMapsUrl, hasTrustedCoordinates } from '@/lib/geo'
 import type { CourseFaqItem } from '@/lib/course-seo'
 
 interface Props {
@@ -175,21 +175,22 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
             </div>
 
             {/* Satellite map — live Maps JS view of the actual layout
-                (lazy-initialised below the fold; degrades to the link) */}
-            {course.latitude !== null && course.longitude !== null && (
-              <div>
-                <h2 className="mb-3 text-xs font-bold uppercase tracking-widest text-primary">
-                  Course location
-                </h2>
-                <CourseSatelliteMap
-                  name={course.name}
-                  lat={course.latitude}
-                  lng={course.longitude}
-                  mapsUrl={courseMapsUrl(course)!}
-                  enabled={Boolean(process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY)}
-                />
-              </div>
-            )}
+                (lazy-initialised below the fold). The frame is suppressed
+                when coordinates aren't trustworthy; the Google Maps link
+                always renders and falls back to a name search. */}
+            <div>
+              <h2 className="mb-3 text-xs font-bold uppercase tracking-widest text-primary">
+                Course location
+              </h2>
+              <CourseSatelliteMap
+                name={course.name}
+                lat={course.latitude}
+                lng={course.longitude}
+                mapsUrl={courseMapsUrl(course)}
+                enabled={Boolean(process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY)}
+                coordinatesTrusted={hasTrustedCoordinates(course)}
+              />
+            </div>
 
             {/* Rental CTA banner — shared component (tracked, localizable),
                 with this course's hand-written contextual pitch as the body */}

@@ -151,10 +151,9 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeSlug, center]) // `courses` intentionally excluded: changes are handled by the first effect; including it would cause redundant re-pans on every render
 
-  const activeMapsUrl = (activeCourse && courseMapsUrl(activeCourse))
-    ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-        [activeCourse?.name, activeCourse?.province].filter(Boolean).join(' ')
-      )}`
+  // courseMapsUrl already falls back to a name+province search when the
+  // coordinates aren't verified, so no local fallback is needed.
+  const activeMapsUrl = activeCourse ? courseMapsUrl(activeCourse) : '#'
 
   return (
     <div className="mx-auto max-w-6xl px-4 pb-6 sm:px-6 lg:px-8">

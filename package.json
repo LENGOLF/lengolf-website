@@ -13,6 +13,7 @@
     "validate:blog-slugs": "tsx scripts/sync-blog-translated-slugs.ts --check",
     "validate:i18n": "tsx scripts/validate-i18n.ts",
     "validate:courses": "tsx scripts/validate-courses.ts",
+    "verify:coordinates": "tsx scripts/verify-course-coordinates.ts",
     "inventory": "tsx scripts/page-inventory.ts",
     "translate:seed": "tsx --env-file=.env.local scripts/translation-seed.ts",
     "translate:run": "tsx --env-file=.env.local scripts/translation-runner.ts",

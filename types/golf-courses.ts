@@ -46,6 +46,15 @@ export interface GolfCourse {
    */
   fees_verified_at?: string | null
   /**
+   * ISO date (YYYY-MM-DD) when `latitude`/`longitude` were checked against an
+   * authoritative source (official site, Google Maps place, OSM). Without it,
+   * coordinates are trusted only if precise enough to be a real fix rather
+   * than a district centroid (see `hasTrustedCoordinates` in lib/geo.ts):
+   * the satellite map and schema.org GeoCoordinates are both gated on it.
+   * `npm run verify:coordinates` batch-checks these against the Places API.
+   */
+  coordinates_verified_at?: string | null
+  /**
    * Omit / null = open (the default). Set when research shows otherwise:
    * closed courses must have null green fees (validate:courses enforces
    * this), render a closure banner, and lead their FAQ with "Is X still
