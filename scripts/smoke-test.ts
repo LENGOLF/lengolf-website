@@ -22,6 +22,16 @@
  *      the locale-tagged entries in data/explainer-pages.ts and
  *      data/faq-pages.ts respectively (drift ships unreachable translations
  *      or hreflang links to 404s) — pure import check, no server needed
+ *   J) Translated region-hub registry consistency (same idea, for
+ *      '/golf-courses/<region>' vs data/golf-courses-i18n.ts)
+ *  J2) Translated price-tier registry consistency
+ *   K) Data-driven internal-link liveness: every related_slugs path outside
+ *      the statically-validated SEO prefixes is fetched and must not 404
+ *   L) Blog translated-slug registry liveness: every path registered in
+ *      data/blog-translated-slugs.ts must serve 200 (catches the data file
+ *      running ahead of the DB, which dynamicParams=false turns into a 404)
+ *   M) Wayfinding copy: BTS Chidlom is Exit 4, across both the DB-driven
+ *      /location/* pages and the repo's JA/KO/ZH + EN wayfinding strings
  *
  * Usage: tsx scripts/smoke-test.ts [base-url]
  * Default: http://localhost:3000
@@ -3612,6 +3622,114 @@ async function runBlogRegistryLivenessTests() {
   }
 }
 
+// ── M) Wayfinding copy consistency (BTS Chidlom exit number) ────────
+// The correct exit for The Mercury Ville is Exit 4 — confirmed with the owner
+// (2026-07-28) and by the on-screen Thai text in LENGOLF's own POV wayfinding
+// video ("และออกทางออกที่ 4"). "Exit 1" shipped for a long time across the
+// whole /location/* section and the JA/KO/ZH landing pages.
+//
+// Two sources feed this copy and only one of them lives in the repo:
+//   - location_pages.bts_route (Supabase) — six template pages share
+//     location_slug='chidlom'; a bad UPDATE there can never be caught by a
+//     static lint, so it has to be a live fetch.
+//   - messages/{ja,ko,zh}.json `HomeXx.accessBts` + hardcoded EN guide copy.
+// Each check is a matched pair — the right string must be present AND the
+// wrong-exit shape must be absent — so a page that silently drops the
+// wayfinding line fails instead of passing vacuously.
+//
+// Both halves run against RENDERED markup, with <script> blocks stripped
+// first. app/[locale]/layout.tsx hands NextIntlClientProvider the ENTIRE
+// locale catalog, so next-intl serializes every namespace into the RSC flight
+// payload verbatim. On /ja/ that payload alone carries FaqPage.pillLocation's
+// "（4番出口）" — a string rendered only on /faq/* pages. Matching the raw body
+// would let it satisfy `expect` even if accessBts stopped rendering, which is
+// exactly the vacuous pass this pair exists to prevent.
+
+/** Rendered markup only: drops <script> blocks so the serialized next-intl
+ *  catalog in the RSC flight payload cannot satisfy a match. */
+function renderedMarkup(html: string): string {
+  return html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "");
+}
+
+const wayfindingTests: {
+  path: string;
+  expect: RegExp;
+  forbid: RegExp;
+  what: string;
+}[] = [
+  // DB-driven: location_pages.bts_route, rendered on all six chidlom templates.
+  ...[
+    "corporate-events-chidlom",
+    "golf-club-rental-chidlom",
+    "golf-lessons-chidlom",
+    "golf-near-chidlom",
+    "indoor-golf-chidlom",
+    "things-to-do-chidlom",
+  ].map((slug) => ({
+    path: `/location/${slug}/`,
+    expect: /Take Exit 4 and/,
+    forbid: /Take Exit [0-35-9] and/,
+    what: "bts_route exit number",
+  })),
+  // Repo-driven: messages/*.json HomeXx.accessBts on the locale landing pages.
+  {
+    path: "/ja/",
+    expect: /4番出口/,
+    forbid: /[0-35-9]番出口/,
+    what: "HomeJa.accessBts exit number",
+  },
+  {
+    path: "/ko/",
+    expect: /4번\s*출구/,
+    forbid: /[0-35-9]번\s*출구/,
+    what: "HomeKo.accessBts exit number",
+  },
+  {
+    path: "/zh/",
+    expect: /4号出口/,
+    forbid: /[0-35-9]号出口/,
+    what: "HomeZh.accessBts exit number",
+  },
+  // Repo-driven: hardcoded EN copy in the Thailand golf guide.
+  {
+    path: "/golf-in-thailand-guide/",
+    expect: /BTS Chidlom Exit 4/,
+    forbid: /BTS Chidlom Exit [0-35-9]/,
+    what: "guide 'Getting around Bangkok' exit number",
+  },
+];
+
+async function runWayfindingTests() {
+  console.log("\n\x1b[1mM) Wayfinding copy (BTS Chidlom = Exit 4)\x1b[0m");
+  for (const t of wayfindingTests) {
+    const label = `${t.path} ${t.what}`;
+    try {
+      const res = await fetch(`${BASE}${t.path}`, { redirect: "follow" });
+      if (res.status !== 200) {
+        fail(label, `expected 200, got ${res.status}`);
+        continue;
+      }
+      const body = renderedMarkup(await res.text());
+      const wrong = body.match(t.forbid);
+      if (wrong) {
+        fail(
+          label,
+          `serves the wrong BTS Chidlom exit (found "${wrong[0]}") — the correct exit is 4`,
+        );
+      } else if (!t.expect.test(body)) {
+        fail(
+          label,
+          `wayfinding copy missing — expected ${t.expect} on the page. If the copy moved, update this test rather than dropping it.`,
+        );
+      } else {
+        pass(label);
+      }
+    } catch (err) {
+      fail(`${label} fetch error`, String(err));
+    }
+  }
+}
+
 // ── Main ────────────────────────────────────────────────────────────
 
 async function main() {
@@ -3641,6 +3759,7 @@ async function main() {
   await runPriceTierRegistryConsistencyTests();
   await runDataLinkLivenessTests();
   await runBlogRegistryLivenessTests();
+  await runWayfindingTests();
 
   console.log(`\n\x1b[1m${passed} passed, ${failed} failed\x1b[0m`);
   if (failures.length > 0) {
