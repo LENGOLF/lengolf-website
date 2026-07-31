@@ -21,8 +21,10 @@ export const course: GolfCourse = {
   club_rental_brands: null,
   website: 'https://www.laemchabanggolf.com/',
   phone: '+66 82 222 3031',
-  latitude: 13.17,
-  longitude: 100.99,
+  latitude: 13.0291,
+  longitude: 101.0401,
+  // Was 13.17,100.99 — 16.6km off, near the port rather than the inland club.
+  coordinates_verified_at: '2026-07-31',
   distance_from_bangkok_km: 100,
   drive_time_from_bangkok_min: 80,
   google_maps_url: null,

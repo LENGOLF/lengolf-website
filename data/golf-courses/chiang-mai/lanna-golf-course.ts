@@ -20,8 +20,10 @@ export const course: GolfCourse = {
   driving_range: true,
   website: 'https://www.golflannachiangmai.com/',
   phone: '+66 53 221 911',
-  latitude: 18.7961,
-  longitude: 98.9747,
+  latitude: 18.82846,
+  longitude: 98.97182,
+  // Was 18.7961,98.9747 (~3.6km south). OSM golf-course polygon centroid, Chang Phueak.
+  coordinates_verified_at: '2026-07-31',
   distance_from_bangkok_km: 700,
   drive_time_from_bangkok_min: null,
   google_maps_url: null,

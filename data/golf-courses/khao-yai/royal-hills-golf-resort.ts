@@ -22,7 +22,7 @@ export const course: GolfCourse = {
   longitude: 101.2751,
   distance_from_bangkok_km: 100,
   drive_time_from_bangkok_min: 90,
-  google_maps_url: 'https://maps.google.com/?q=14.3184,101.2751',
+  google_maps_url: null,
   club_rental_available: true,
   club_rental_fee_thb: 1500,
   club_rental_brands: null,

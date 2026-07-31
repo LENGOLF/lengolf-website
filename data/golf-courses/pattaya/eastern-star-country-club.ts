@@ -18,8 +18,10 @@ export const course: GolfCourse = {
   driving_range: null,
   website: 'https://www.easternstargolfcourse.com/',
   phone: '+66 38 630 4103',
-  latitude: 12.8,
-  longitude: 101.36,
+  latitude: 12.7027,
+  longitude: 101.041,
+  // Was 12.8,101.36 — 36km off. All Rayong courses shared a generic ~101.36-101.39 longitude; they actually sit in Ban Chang at ~101.03-101.08.
+  coordinates_verified_at: '2026-07-31',
   distance_from_bangkok_km: 185,
   drive_time_from_bangkok_min: 130,
   google_maps_url: null,
