@@ -25,11 +25,17 @@
  *   J) Translated region-hub registry consistency (same idea, for
  *      '/golf-courses/<region>' vs data/golf-courses-i18n.ts)
  *  J2) Translated price-tier registry consistency
+ *  J3) Translated course-detail registry consistency (same idea, for
+ *      '/golf-courses/<region>/<slug>' vs COURSE_DETAIL_I18N in
+ *      data/golf-courses-i18n.ts)
  *   K) Data-driven internal-link liveness: every related_slugs path outside
  *      the statically-validated SEO prefixes is fetched and must not 404
  *   L) Blog translated-slug registry liveness: every path registered in
  *      data/blog-translated-slugs.ts must serve 200 (catches the data file
  *      running ahead of the DB, which dynamicParams=false turns into a 404)
+ *  L2) Course-detail translated registry liveness: every registered
+ *      '/golf-courses/<region>/<slug>' translation must serve 200 (the
+ *      dynamicParams=false hard-404 guard, like L)
  *   M) Wayfinding copy: BTS Chidlom is Exit 4, across both the DB-driven
  *      /location/* pages and the repo's JA/KO/ZH + EN wayfinding strings
  *
@@ -1793,6 +1799,24 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  // Translated TH course-detail pages (data/golf-courses-i18n.ts
+  // COURSE_DETAIL_I18N + th allowlist entries) — the 3-course pilot. All
+  // other course details must keep 301ing (alpine canary in redirectTests).
+  {
+    path: "/th/golf-courses/bangkok/sai-golf-club/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/golf-courses/bangkok/the-legacy-golf-club/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/golf-courses/chiang-mai/lanna-golf-course/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
   // TH guide catch-up batch — brings TH to parity with ja/ko/zh at 46 guides.
   // contentAbsent guards unresolved {{fact tokens}} (4 of these entries use them).
   {
@@ -2894,10 +2918,13 @@ const thaiRedirectTests: ThaiRedirectTest[] = [
     expectedLocation: "/golf-courses/near/asok/",
     label: "Untranslated TH near-station page (EN-only route must 301)",
   },
-  // Course DETAIL pages build only EN copies (generateStaticParams emits
-  // locale: 'en' only) even though their region HUB may be translated —
-  // /th/golf-courses/bangkok/ 200s, but the 3-segment detail below it must
-  // still 301. Canary for the [region]/[slug] locale restriction.
+  // Course DETAIL pages build locale copies only for the triples in
+  // COURSE_DETAIL_I18N (currently the 3-course TH pilot; those 200 and are
+  // covered by their own route tests). Every OTHER course detail must still
+  // 301 — /th/golf-courses/bangkok/ 200s, but an untranslated 3-segment
+  // detail below it may not. Canary for the [region]/[slug] locale
+  // restriction; alpine is deliberately NOT a pilot course so this keeps
+  // exercising the middleware.
   {
     path: "/th/golf-courses/bangkok/alpine-golf-club/",
     expectedLocation: "/golf-courses/bangkok/alpine-golf-club/",
@@ -3585,6 +3612,62 @@ async function runPriceTierRegistryConsistencyTests() {
   }
 }
 
+// ── J3) Translated course-detail registry consistency ───────────────
+// Same drift guard as sections J/J2, for the golf-course DETAIL pages
+// ([region]/[slug]). The middleware allowlist (lib/translated-routes.ts)
+// cannot import data/golf-courses-i18n.ts (edge-bundled), so nothing at
+// build time ties the two lists together. Fails CI in both directions: a
+// COURSE_DETAIL_I18N triple missing from the registry is built but 301'd
+// away (translation unreachable); a registry entry without a triple never
+// gets generateStaticParams output, which dynamicParams=false turns into a
+// HARD 404 that hreflang/sitemap advertise (worse than the hub case's
+// EN-fallback 200 — see also the liveness check in section L2).
+
+async function runCourseDetailRegistryConsistencyTests() {
+  console.log(
+    "\n\x1b[1mJ3) Translated course-detail registry consistency\x1b[0m",
+  );
+  const { getTranslatedCourseDetailParams } =
+    await import("../data/golf-courses-i18n");
+  const { getRegisteredCourseDetailPaths, ALL_LOCALES } =
+    await import("../lib/translated-routes");
+
+  // Per-locale sets of '/golf-courses/<region>/<slug>' paths from the data file.
+  const dataByLocale: Record<string, Set<string>> = {};
+  for (const { locale, region, slug } of getTranslatedCourseDetailParams()) {
+    (dataByLocale[locale] ??= new Set<string>()).add(
+      `/golf-courses/${region}/${slug}`,
+    );
+  }
+
+  for (const locale of ALL_LOCALES) {
+    if (locale === "en") continue;
+    const fromData = dataByLocale[locale] ?? new Set<string>();
+    const fromRegistry = new Set(getRegisteredCourseDetailPaths(locale));
+    const missingInRegistry = [...fromData].filter((p) => !fromRegistry.has(p));
+    const missingInData = [...fromRegistry].filter((p) => !fromData.has(p));
+
+    if (missingInRegistry.length === 0 && missingInData.length === 0) {
+      pass(
+        `Course-detail registry ⇄ data in sync for '${locale}' (${fromData.size} translated course details)`,
+      );
+    } else {
+      if (missingInRegistry.length > 0) {
+        fail(
+          `Registry missing '${locale}' course detail(s)`,
+          `${missingInRegistry.join(", ")} — add to ${locale}.staticRoutes in lib/translated-routes.ts or the translation is unreachable (middleware 301s it)`,
+        );
+      }
+      if (missingInData.length > 0) {
+        fail(
+          `Registry lists '${locale}' course detail(s) with no data`,
+          `${missingInData.join(", ")} — remove from lib/translated-routes.ts or add the triple to COURSE_DETAIL_I18N in data/golf-courses-i18n.ts (dynamicParams=false makes this a HARD 404 while advertised in hreflang)`,
+        );
+      }
+    }
+  }
+}
+
 // ── K) Data-driven internal-link liveness ───────────────────────────
 // Complement to scripts/validate-internal-links.ts: the static validator
 // covers the six SEO sections (/faq, /guide, /cost, /best, /activities,
@@ -3670,6 +3753,52 @@ async function runBlogRegistryLivenessTests() {
     }
     if (ok === paths.length) {
       pass(`All ${ok} registered '${locale}' blog translations serve 200`);
+    }
+  }
+}
+
+// ── L2) Course-detail translated registry liveness ──────────────────
+// Section L's shape, for the course-detail allowlist entries in
+// lib/translated-routes.ts. The dangerous drift direction is
+// registry-AHEAD-of-params: the middleware lets /<locale>/golf-courses/
+// <region>/<slug> through, but if generateStaticParams (COURSE_DETAIL_I18N-
+// driven) never prebuilt that triple, dynamicParams=false turns it into a
+// hard 404 that hreflang advertises. Section J3 catches registry ⇄ data
+// drift statically; this fetch additionally proves the BUILD actually
+// emitted each page (e.g. a data file renaming a slug after the build, or a
+// generateStaticParams regression that drops the translated spread).
+async function runCourseDetailRegistryLivenessTests() {
+  console.log(
+    "\n\x1b[1mL2) Course-detail translated registry liveness\x1b[0m",
+  );
+  const { getRegisteredCourseDetailPaths, ALL_LOCALES } =
+    await import("../lib/translated-routes");
+
+  for (const locale of ALL_LOCALES) {
+    if (locale === "en") continue;
+    const paths = getRegisteredCourseDetailPaths(locale);
+    if (paths.length === 0) continue; // only th has course-detail translations
+    let ok = 0;
+    for (const path of paths) {
+      const target = `/${locale}${path}/`;
+      try {
+        const res = await fetch(`${BASE}${target}`, { redirect: "manual" });
+        if (res.status === 200) {
+          ok++;
+        } else {
+          fail(
+            `Registered course-detail translation not live: ${target}`,
+            `expected 200, got ${res.status} — lib/translated-routes.ts lists a '${locale}' course detail the build didn't prebuild (COURSE_DETAIL_I18N missing the triple? dynamicParams=false hard-404s it).`,
+          );
+        }
+      } catch (err) {
+        fail(`${target} fetch error`, String(err));
+      }
+    }
+    if (ok === paths.length) {
+      pass(
+        `All ${ok} registered '${locale}' course-detail translations serve 200`,
+      );
     }
   }
 }
@@ -3809,8 +3938,10 @@ async function main() {
   await runRegistryConsistencyTests();
   await runRegionHubRegistryConsistencyTests();
   await runPriceTierRegistryConsistencyTests();
+  await runCourseDetailRegistryConsistencyTests();
   await runDataLinkLivenessTests();
   await runBlogRegistryLivenessTests();
+  await runCourseDetailRegistryLivenessTests();
   await runWayfindingTests();
 
   console.log(`\n\x1b[1m${passed} passed, ${failed} failed\x1b[0m`);

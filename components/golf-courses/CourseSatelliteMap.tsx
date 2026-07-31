@@ -27,6 +27,17 @@ interface Props {
    * name-search link still gets the reader to the right place.
    */
   coordinatesTrusted?: boolean
+  /**
+   * Localized map-frame aria-label and link-row text, passed as PROPS from
+   * the server-side CoursePage instead of a client-side
+   * useTranslations('GolfCourseDetail'): that namespace exists only in the
+   * en/th catalogs (the course-detail pilot locales), and a client-side hook
+   * here would make every route bundling this component request it — a
+   * MISSING_MESSAGE on ja/ko/zh pages. Defaults reproduce the pre-i18n EN
+   * strings.
+   */
+  ariaLabel?: string
+  linkLabel?: string
 }
 
 /**
@@ -48,6 +59,8 @@ export default function CourseSatelliteMap({
   mapsUrl,
   enabled = true,
   coordinatesTrusted = true,
+  ariaLabel,
+  linkLabel,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const mapDivRef = useRef<HTMLDivElement>(null)
@@ -147,7 +160,7 @@ export default function CourseSatelliteMap({
           ref={mapDivRef}
           style={{ width: '100%', height: 380 }}
           role="application"
-          aria-label={`Satellite view of ${name}`}
+          aria-label={ariaLabel ?? `Satellite view of ${name}`}
         />
       )}
       <a
@@ -158,7 +171,7 @@ export default function CourseSatelliteMap({
       >
         <span className="flex items-center gap-2">
           <MapPin className="h-4 w-4 shrink-0" aria-hidden="true" />
-          Open {name} in Google Maps
+          {linkLabel ?? `Open ${name} in Google Maps`}
         </span>
         <ExternalLink className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
       </a>

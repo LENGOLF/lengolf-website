@@ -1,7 +1,8 @@
 import { MapPin, Clock, Phone, Globe, Check, X, ArrowRight } from 'lucide-react'
+import { useLocale, useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import type { GolfCourse } from '@/types/golf-courses'
-import { driveTimeLabel } from '@/lib/format'
+import { driveTimeLabel, thaiMonthYear } from '@/lib/format'
 import CrossLinkBlock, { type CrossLink } from '@/components/golf-courses/CrossLinkBlock'
 import CourseFaq from '@/components/golf-courses/CourseFaq'
 import CourseSatelliteMap from '@/components/golf-courses/CourseSatelliteMap'
@@ -20,19 +21,51 @@ interface Props {
 }
 
 export default function CoursePage({ course, regionLabel, relatedCourses = [], crossLinks = [], faqs = [] }: Props) {
+  // UI chrome comes from the GolfCourseDetail namespace (en + th only — the
+  // course-detail pilot locales; ja/ko/zh never SSG this component). Number
+  // args are pre-stringified/pre-formatted before hitting ICU so EN output
+  // stays byte-identical (ICU number formatting would group "Est. 2,021").
+  const t = useTranslations('GolfCourseDetail')
+  const tShared = useTranslations('GolfCourseShared')
+  const rawLocale = useLocale()
+  const locale: 'en' | 'th' = rawLocale === 'th' ? 'th' : 'en'
+
+  // Localized prose with per-field EN fallback: a pilot course may ship
+  // title/meta only (locales.th.prose absent) — render EN prose under the
+  // Thai chrome rather than blanking sections.
+  const L = locale === 'th' ? course.locales.th : undefined
+  const prose = {
+    overview: L?.prose?.overview ?? course.prose.overview,
+    layout_and_experience: L?.prose?.layout_and_experience ?? course.prose.layout_and_experience,
+    tips: L?.prose?.tips ?? course.prose.tips,
+    location_and_access: L?.prose?.location_and_access ?? course.prose.location_and_access,
+  }
+
   // Quick-fact chips shown in the hero
   const chips = [
-    course.holes ? `${course.holes} holes · Par ${course.par}` : null,
-    course.designer ? `Designed by ${course.designer}` : null,
-    course.year_opened ? `Est. ${course.year_opened}` : null,
-    driveTimeLabel(course.drive_time_from_bangkok_min),
+    course.holes ? t('chipHolesPar', { holes: String(course.holes), par: String(course.par) }) : null,
+    course.designer ? t('chipDesigner', { designer: course.designer }) : null,
+    course.year_opened ? t('chipEst', { year: String(course.year_opened) }) : null,
+    driveTimeLabel(course.drive_time_from_bangkok_min, true, locale),
   ].filter(Boolean) as string[]
 
   const proseSections = [
-    { label: 'Layout & playing experience', content: course.prose.layout_and_experience },
-    { label: 'Tips & what to know before you go', content: course.prose.tips },
-    { label: 'Location & getting there', content: course.prose.location_and_access },
+    { label: t('sectionLayout'), content: prose.layout_and_experience },
+    { label: t('sectionTips'), content: prose.tips },
+    { label: t('sectionLocation'), content: prose.location_and_access },
   ]
+
+  // "Rates checked <month year>" — EN keeps the short en-US month; TH uses the
+  // Thai month name with the Gregorian year (matches the FAQ as-of format).
+  const ratesCheckedDate = course.fees_verified_at
+    ? locale === 'th'
+      ? thaiMonthYear(course.fees_verified_at)
+      : new Date(`${course.fees_verified_at}T00:00:00Z`).toLocaleDateString('en-US', {
+          month: 'short',
+          year: 'numeric',
+          timeZone: 'UTC',
+        })
+    : null
 
   return (
     <>
@@ -48,7 +81,7 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
         <div className="relative mx-auto max-w-5xl px-4 pb-16 pt-10 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
           <nav className="mb-6 flex items-center gap-1.5 text-xs text-white/50">
-            <Link href="/golf-courses" className="transition-colors hover:text-white/80">Golf Courses</Link>
+            <Link href="/golf-courses" className="transition-colors hover:text-white/80">{t('breadcrumbGolfCourses')}</Link>
             <span>/</span>
             <Link href={`/golf-courses/${course.region}`} className="capitalize transition-colors hover:text-white/80">{regionLabel}</Link>
             <span>/</span>
@@ -83,14 +116,14 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
             {/* Green fee highlight — shown when data is available */}
             {course.green_fee_weekday_thb && (
               <div className="shrink-0 rounded-2xl border border-white/15 bg-white/10 px-6 py-4 text-right backdrop-blur-sm">
-                <p className="text-xs font-semibold uppercase tracking-widest text-white/60">Weekday green fee</p>
+                <p className="text-xs font-semibold uppercase tracking-widest text-white/60">{t('weekdayGreenFee')}</p>
                 <p className="mt-0.5 text-3xl font-black text-white">
                   {course.green_fee_weekday_thb.toLocaleString('en-US')}
-                  <span className="ml-1 text-base font-semibold text-white/70">THB</span>
+                  <span className="ml-1 text-base font-semibold text-white/70">{t('thb')}</span>
                 </p>
                 {course.green_fee_weekend_thb && (
                   <p className="mt-1 text-xs text-white/50">
-                    Weekend: {course.green_fee_weekend_thb.toLocaleString('en-US')} THB
+                    {t('weekendFee', { price: course.green_fee_weekend_thb.toLocaleString('en-US') })}
                   </p>
                 )}
               </div>
@@ -118,8 +151,8 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
               <div className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm leading-relaxed text-amber-900">
                 <strong>
                   {course.operational_status === 'permanently_closed'
-                    ? 'This course is permanently closed.'
-                    : 'This course has been reported temporarily closed.'}
+                    ? t('closedPermanently')
+                    : t('closedTemporarily')}
                 </strong>{' '}
                 {course.operational_note}
               </div>
@@ -127,23 +160,23 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
 
             {/* Overview prose */}
             <p className="text-base leading-relaxed text-foreground/85">
-              {course.prose.overview}
+              {prose.overview}
             </p>
 
             {/* Stat strip */}
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               {[
-                { label: 'Holes', value: course.holes ? String(course.holes) : null },
-                { label: 'Par', value: course.par ? String(course.par) : null },
+                { label: t('statHoles'), value: course.holes ? String(course.holes) : null },
+                { label: t('statPar'), value: course.par ? String(course.par) : null },
                 {
-                  label: 'From Bangkok',
+                  label: t('statFromBangkok'),
                   value: course.distance_from_bangkok_km
-                    ? `${course.distance_from_bangkok_km} km`
+                    ? t('kmValue', { km: String(course.distance_from_bangkok_km) })
                     : null,
                 },
                 {
-                  label: 'Drive time',
-                  value: driveTimeLabel(course.drive_time_from_bangkok_min, false),
+                  label: t('statDriveTime'),
+                  value: driveTimeLabel(course.drive_time_from_bangkok_min, false, locale),
                 },
               ]
                 .filter((s) => s.value)
@@ -177,10 +210,14 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
             {/* Satellite map — live Maps JS view of the actual layout
                 (lazy-initialised below the fold). The frame is suppressed
                 when coordinates aren't trustworthy; the Google Maps link
-                always renders and falls back to a name search. */}
+                always renders and falls back to a name search. The two
+                user-facing strings are passed as PROPS: the component is
+                'use client', and a client-side useTranslations('GolfCourseDetail')
+                would let OTHER routes' client bundles request a namespace
+                that ja/ko/zh catalogs deliberately don't carry. */}
             <div>
               <h2 className="mb-3 text-xs font-bold uppercase tracking-widest text-primary">
-                Course location
+                {t('sectionCourseLocation')}
               </h2>
               <CourseSatelliteMap
                 name={course.name}
@@ -189,25 +226,34 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
                 mapsUrl={courseMapsUrl(course)}
                 enabled={Boolean(process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY)}
                 coordinatesTrusted={hasTrustedCoordinates(course)}
+                ariaLabel={t('mapAriaLabel', { name: course.name })}
+                linkLabel={t('openInGoogleMaps', { name: course.name })}
               />
             </div>
 
-            {/* Rental CTA banner — shared component (tracked, localizable),
-                with this course's hand-written contextual pitch as the body */}
-            <RentalCtaBanner body={course.prose.rental_cta_context} source="course_page" />
+            {/* Rental CTA banner — shared component (tracked, localizable).
+                EN keeps this course's hand-written contextual pitch; other
+                locales prefer the localized override in locales.<locale>.prose
+                and otherwise fall back to the banner's own localized default
+                copy (GolfCourseShared.rentalBody) — NOT the EN prose, which
+                would ship a mixed-language banner. */}
+            <RentalCtaBanner
+              body={locale === 'en' ? course.prose.rental_cta_context : L?.prose?.rental_cta_context}
+              source="course_page"
+            />
 
             {/* More courses in this region */}
             {relatedCourses.length > 0 && (
               <div>
                 <div className="mb-4 flex items-center justify-between">
                   <h2 className="text-sm font-bold uppercase tracking-widest text-primary">
-                    More {regionLabel} courses
+                    {t('moreCoursesHeading', { region: regionLabel })}
                   </h2>
                   <Link
                     href={`/golf-courses/${course.region}`}
                     className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
                   >
-                    View all <ArrowRight className="h-3 w-3" />
+                    {t('viewAll')} <ArrowRight className="h-3 w-3" />
                   </Link>
                 </div>
                 <div className="grid gap-3 sm:grid-cols-3">
@@ -228,10 +274,10 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
                       <div className="flex items-center justify-between">
                         {c.green_fee_weekday_thb ? (
                           <span className="text-xs font-semibold text-primary">
-                            from {c.green_fee_weekday_thb.toLocaleString('en-US')} THB
+                            {tShared('feeFrom', { price: c.green_fee_weekday_thb.toLocaleString('en-US') })}
                           </span>
                         ) : (
-                          <span className="text-xs text-muted-foreground">Contact for rates</span>
+                          <span className="text-xs text-muted-foreground">{t('contactForRates')}</span>
                         )}
                         <ArrowRight className="h-3.5 w-3.5 text-primary/40 group-hover:text-primary transition-colors" />
                       </div>
@@ -248,7 +294,7 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
             {/* Cross-links into programmatic-SEO pages */}
             {crossLinks.length > 0 && (
               <CrossLinkBlock
-                heading="Also explore"
+                heading={t('alsoExplore')}
                 items={crossLinks}
               />
             )}
@@ -262,7 +308,7 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
               <div className="overflow-hidden rounded-2xl border shadow-sm">
                 <div className="bg-[#f6fffa] px-5 py-3">
                   <h2 className="text-xs font-bold uppercase tracking-widest text-primary">
-                    Contact & Links
+                    {t('contactLinks')}
                   </h2>
                 </div>
                 <div className="divide-y bg-white">
@@ -283,7 +329,7 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
                       className="flex items-center gap-3 px-5 py-3.5 text-sm transition-colors hover:bg-muted/40"
                     >
                       <Globe className="h-4 w-4 shrink-0 text-primary" />
-                      <span>Official website</span>
+                      <span>{t('officialWebsite')}</span>
                     </a>
                   )}
                   {course.google_maps_url && (
@@ -294,13 +340,13 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
                       className="flex items-center gap-3 px-5 py-3.5 text-sm transition-colors hover:bg-muted/40"
                     >
                       <MapPin className="h-4 w-4 shrink-0 text-primary" />
-                      <span>Google Maps</span>
+                      <span>{t('googleMaps')}</span>
                     </a>
                   )}
                   {course.drive_time_from_bangkok_min && (
                     <div className="flex items-center gap-3 px-5 py-3.5 text-sm text-muted-foreground">
                       <Clock className="h-4 w-4 shrink-0" />
-                      <span>{driveTimeLabel(course.drive_time_from_bangkok_min)}</span>
+                      <span>{driveTimeLabel(course.drive_time_from_bangkok_min, true, locale)}</span>
                     </div>
                   )}
                 </div>
@@ -312,47 +358,47 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
               <div className="overflow-hidden rounded-2xl border shadow-sm">
                 <div className="bg-primary px-5 py-3">
                   <h2 className="text-xs font-bold uppercase tracking-widest text-white/80">
-                    Green Fees
+                    {t('greenFees')}
                   </h2>
                 </div>
                 <div className="divide-y bg-white">
                   {course.green_fee_weekday_thb && (
                     <div className="flex items-center justify-between px-5 py-3.5">
-                      <span className="text-sm text-muted-foreground">Weekday</span>
+                      <span className="text-sm text-muted-foreground">{t('weekday')}</span>
                       <span className="font-bold text-foreground">
-                        {course.green_fee_weekday_thb.toLocaleString('en-US')} THB
+                        {t('feeThb', { price: course.green_fee_weekday_thb.toLocaleString('en-US') })}
                       </span>
                     </div>
                   )}
                   {course.green_fee_weekend_thb && (
                     <div className="flex items-center justify-between px-5 py-3.5">
-                      <span className="text-sm text-muted-foreground">Weekend</span>
+                      <span className="text-sm text-muted-foreground">{t('weekend')}</span>
                       <span className="font-bold text-foreground">
-                        {course.green_fee_weekend_thb.toLocaleString('en-US')} THB
+                        {t('feeThb', { price: course.green_fee_weekend_thb.toLocaleString('en-US') })}
                       </span>
                     </div>
                   )}
                   {course.caddie_fee_thb !== null && course.caddie_fee_thb > 0 && (
                     <div className="flex items-center justify-between px-5 py-3.5">
-                      <span className="text-sm text-muted-foreground">Caddie</span>
+                      <span className="text-sm text-muted-foreground">{t('caddie')}</span>
                       <span className="font-bold text-foreground">
-                        {course.caddie_fee_thb.toLocaleString('en-US')} THB
+                        {t('feeThb', { price: course.caddie_fee_thb.toLocaleString('en-US') })}
                       </span>
                     </div>
                   )}
                   {course.cart_fee_thb !== null && course.cart_fee_thb > 0 && (
                     <div className="flex items-center justify-between px-5 py-3.5">
-                      <span className="text-sm text-muted-foreground">Cart</span>
+                      <span className="text-sm text-muted-foreground">{t('cart')}</span>
                       <span className="font-bold text-foreground">
-                        {course.cart_fee_thb.toLocaleString('en-US')} THB
+                        {t('feeThb', { price: course.cart_fee_thb.toLocaleString('en-US') })}
                       </span>
                     </div>
                   )}
                 </div>
                 <p className="bg-muted/50 px-5 py-2.5 text-[11px] text-muted-foreground">
-                  {course.fees_verified_at
-                    ? `Rates checked ${new Date(`${course.fees_verified_at}T00:00:00Z`).toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })} — verify with the course before booking.`
-                    : 'Verify with the course before booking.'}
+                  {ratesCheckedDate
+                    ? t('ratesChecked', { date: ratesCheckedDate })
+                    : t('ratesVerify')}
                 </p>
               </div>
             )}
@@ -361,14 +407,14 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
             <div className="overflow-hidden rounded-2xl border shadow-sm">
               <div className="bg-[#f6fffa] px-5 py-3">
                 <h2 className="text-xs font-bold uppercase tracking-widest text-primary">
-                  Facilities
+                  {t('facilities')}
                 </h2>
               </div>
               <div className="divide-y bg-white">
                 {[
-                  { label: 'Caddie required', value: course.caddie_required },
-                  { label: 'Cart required', value: course.cart_required },
-                  { label: 'Driving range', value: course.driving_range },
+                  { label: t('caddieRequired'), value: course.caddie_required },
+                  { label: t('cartRequired'), value: course.cart_required },
+                  { label: t('drivingRange'), value: course.driving_range },
                 ]
                   .filter((f) => f.value !== null)
                   .map((f) => (
@@ -376,11 +422,11 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
                       <span className="text-sm text-muted-foreground">{f.label}</span>
                       {f.value ? (
                         <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
-                          <Check className="h-3 w-3" /> Yes
+                          <Check className="h-3 w-3" /> {t('yes')}
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-0.5 text-xs font-semibold text-muted-foreground">
-                          <X className="h-3 w-3" /> No
+                          <X className="h-3 w-3" /> {t('no')}
                         </span>
                       )}
                     </div>
@@ -389,14 +435,14 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
                 {/* Club rental row — always shown, drives into LENGOLF nudge below */}
                 {course.club_rental_available === true ? (
                   <div className="flex items-start justify-between px-5 py-3">
-                    <span className="text-sm text-muted-foreground">Club rental</span>
+                    <span className="text-sm text-muted-foreground">{t('clubRental')}</span>
                     <div className="text-right">
                       <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
-                        <Check className="h-3 w-3" /> Available
+                        <Check className="h-3 w-3" /> {t('available')}
                       </span>
                       {course.club_rental_fee_thb && (
                         <p className="mt-1 text-xs text-muted-foreground">
-                          {course.club_rental_fee_thb.toLocaleString('en-US')} THB / round
+                          {t('feePerRound', { price: course.club_rental_fee_thb.toLocaleString('en-US') })}
                           {course.club_rental_brands && ` · ${course.club_rental_brands}`}
                         </p>
                       )}
@@ -404,9 +450,9 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
                   </div>
                 ) : course.club_rental_available === false ? (
                   <div className="flex items-center justify-between px-5 py-3">
-                    <span className="text-sm text-muted-foreground">Club rental</span>
+                    <span className="text-sm text-muted-foreground">{t('clubRental')}</span>
                     <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-0.5 text-xs font-semibold text-muted-foreground">
-                      <X className="h-3 w-3" /> Not offered
+                      <X className="h-3 w-3" /> {t('notOffered')}
                     </span>
                   </div>
                 ) : null}
@@ -417,7 +463,7 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
             <div className="overflow-hidden rounded-2xl border shadow-sm">
               <div className="bg-[#f6fffa] px-5 py-3">
                 <h2 className="text-xs font-bold uppercase tracking-widest text-primary">
-                  Plan Your Trip
+                  {t('planYourTrip')}
                 </h2>
               </div>
               <div className="divide-y bg-white">
@@ -426,28 +472,28 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
                   className="flex items-center gap-3 px-5 py-3.5 text-sm transition-colors hover:bg-muted/40"
                 >
                   <ArrowRight className="h-4 w-4 shrink-0 text-primary" />
-                  <span>Thailand golf planning guide</span>
+                  <span>{t('planGuide')}</span>
                 </Link>
                 <Link
                   href="/guide/best-time-play-golf-thailand"
                   className="flex items-center gap-3 px-5 py-3.5 text-sm transition-colors hover:bg-muted/40"
                 >
                   <ArrowRight className="h-4 w-4 shrink-0 text-primary" />
-                  <span>Best time of year to play golf in Thailand</span>
+                  <span>{t('planBestTime')}</span>
                 </Link>
                 <Link
                   href="/cost/how-much-does-golf-cost-bangkok"
                   className="flex items-center gap-3 px-5 py-3.5 text-sm transition-colors hover:bg-muted/40"
                 >
                   <ArrowRight className="h-4 w-4 shrink-0 text-primary" />
-                  <span>Green fee &amp; cost guide</span>
+                  <span>{t('planCost')}</span>
                 </Link>
                 <Link
                   href="/lessons"
                   className="flex items-center gap-3 px-5 py-3.5 text-sm transition-colors hover:bg-muted/40"
                 >
                   <ArrowRight className="h-4 w-4 shrink-0 text-primary" />
-                  <span>Golf lessons in Bangkok</span>
+                  <span>{t('planLessons')}</span>
                 </Link>
               </div>
             </div>
@@ -456,20 +502,20 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
             <div className="rounded-2xl border border-accent/40 bg-gradient-to-br from-accent/10 to-accent/5 p-5">
               <p className="mb-1 text-xs font-bold uppercase tracking-widest" style={{ color: '#b8892e' }}>
                 {course.club_rental_available === false
-                  ? 'No rentals at this course?'
-                  : 'LENGOLF Club Rental'}
+                  ? t('nudgeEyebrowNoRental')
+                  : t('nudgeEyebrow')}
               </p>
               <p className="mb-3 text-sm leading-relaxed text-foreground">
-                {course.club_rental_available === false
-                  ? "This course doesn't offer club rental — but LENGOLF does. Current-generation Callaway Paradym, Warbird & Majesty sets from "
-                  : 'Current-generation Callaway Paradym, Warbird & Majesty sets — not house clubs. From '}
-                <strong>1,200 THB/day</strong> with multi-day discounts and Bangkok hotel delivery.
+                {t.rich(
+                  course.club_rental_available === false ? 'nudgeBodyNoRental' : 'nudgeBody',
+                  { price: (chunks) => <strong>{chunks}</strong> }
+                )}
               </p>
               <Link
                 href="/golf-course-club-rental"
                 className="inline-flex items-center gap-1.5 text-sm font-bold text-primary hover:underline"
               >
-                See packages <ArrowRight className="h-3.5 w-3.5" />
+                {t('seePackages')} <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
           </aside>

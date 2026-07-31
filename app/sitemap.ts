@@ -195,12 +195,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   })
 
-  const golfCoursePages: MetadataRoute.Sitemap = courseParams.map(({ region, slug }) => ({
-    url: `${SITE_URL}/golf-courses/${region}/${slug}/`,
-    lastModified: reviewed,
-    changeFrequency: 'monthly' as const,
-    priority: 0.6,
-  }))
+  const golfCoursePages: MetadataRoute.Sitemap = courseParams.map(({ region, slug }) => {
+    // Emit hreflang alternates only for course details with translations
+    // (registered in lib/translated-routes.ts — the 3-course TH pilot);
+    // EN-only courses stay plain. Mirrors the region-hub loop above and the
+    // on-page getAlternates condition in
+    // app/[locale]/golf-courses/[region]/[slug]/page.tsx, so sitemap and
+    // on-page hreflang cannot contradict each other.
+    const languages = getAlternates(`/golf-courses/${region}/${slug}/`)
+    return {
+      url: `${SITE_URL}/golf-courses/${region}/${slug}/`,
+      lastModified: reviewed,
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+      ...(Object.keys(languages).length > 1 ? { alternates: { languages } } : {}),
+    }
+  })
 
   // ── Programmatic-SEO course pages (workstream A) ────────────────────────────
   const golfComparisonPages: MetadataRoute.Sitemap = comparisonPairs.map((p) => ({

@@ -62,6 +62,7 @@ import {
   getRegisteredFaqPaths,
   getRegisteredRegionHubPaths,
   getRegisteredPriceTierPaths,
+  getRegisteredCourseDetailPaths,
   hasTranslationForLocale,
 } from '@/lib/translated-routes'
 import type { ExplainerContent, FaqContent } from '@/types/seo-pages'
@@ -497,6 +498,7 @@ const localesWithPaths = (registered: (locale: string) => string[]): Locale[] =>
 const SSG_UI_NAMESPACES: Record<string, Locale[]> = (() => {
   const regionHub = localesWithPaths(getRegisteredRegionHubPaths)
   const priceTier = localesWithPaths(getRegisteredPriceTierPaths)
+  const courseDetail = localesWithPaths(getRegisteredCourseDetailPaths)
   const faq = localesWithPaths(getRegisteredFaqPaths)
   // The /golf-courses/ hub page + HubMapExplorer. No dedicated registry
   // helper exists for a single static path, so derive its SSG locales
@@ -506,8 +508,13 @@ const SSG_UI_NAMESPACES: Record<string, Locale[]> = (() => {
     GolfCourseHub: hub,
     GolfCourseRegion: regionHub,
     GolfCoursePriceTier: priceTier,
-    // Shared components (RoundupList, RentalCtaBanner) render on both page types.
-    GolfCourseShared: LOCALES.filter((l) => regionHub.includes(l) || priceTier.includes(l)),
+    // Course-detail pages (CoursePage/CourseFaq + the [slug] route).
+    GolfCourseDetail: courseDetail,
+    // Shared components (RoundupList, RentalCtaBanner) render on hub, tier
+    // AND course-detail pages (CoursePage reuses feeFrom + the CTA banner).
+    GolfCourseShared: LOCALES.filter(
+      (l) => regionHub.includes(l) || priceTier.includes(l) || courseDetail.includes(l)
+    ),
     ExplainerPage: localesWithPaths(getRegisteredGuidePaths),
     FaqPage: faq,
     // components/faq/FaqPage.tsx also getTranslations('ContactInfo') on every FAQ page.

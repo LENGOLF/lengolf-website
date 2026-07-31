@@ -85,6 +85,13 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/under/3500-baht",
       "/golf-courses/under/5000-baht",
       "/golf-courses/under/7500-baht",
+      // Translated course-detail pages (data/golf-courses-i18n.ts
+      // COURSE_DETAIL_I18N — 3-course TH pilot) — kept in sync by the
+      // smoke-test course-detail registry consistency check (section J3);
+      // liveness of each built page is asserted by section L2.
+      "/golf-courses/bangkok/sai-golf-club",
+      "/golf-courses/bangkok/the-legacy-golf-club",
+      "/golf-courses/chiang-mai/lanna-golf-course",
       // Translated FAQ pages (data/faq-pages.ts entries with locale: 'th') —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -531,6 +538,27 @@ export function getRegisteredPriceTierPaths(locale: string): string[] {
       r.startsWith("/golf-courses/under/") &&
       r.split("/").filter(Boolean).length === 3,
   );
+}
+
+/**
+ * Course-detail paths registered as translated for `locale` (the
+ * '/golf-courses/<region>/<slug>' entries in staticRoutes). Like the sibling
+ * helpers, this registry cannot import data/golf-courses-i18n.ts (it is
+ * bundled into the edge middleware), so the smoke tests assert this list
+ * stays in sync with COURSE_DETAIL_I18N — see scripts/smoke-test.ts
+ * course-detail registry consistency check (section J3). A naive
+ * three-segment filter would also swallow the programmatic
+ * near/under/best-for/compare families (e.g. '/golf-courses/under/1500-baht'
+ * is three segments), so those sub-prefixes are excluded explicitly.
+ */
+const NON_DETAIL_COURSE_SEGMENTS = new Set(["under", "near", "best-for", "compare"]);
+
+export function getRegisteredCourseDetailPaths(locale: string): string[] {
+  return (TRANSLATED_ROUTES[locale]?.staticRoutes ?? []).filter((r) => {
+    if (!r.startsWith("/golf-courses/")) return false;
+    const segments = r.split("/").filter(Boolean);
+    return segments.length === 3 && !NON_DETAIL_COURSE_SEGMENTS.has(segments[1]);
+  });
 }
 
 /**

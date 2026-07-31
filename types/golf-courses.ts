@@ -1,6 +1,12 @@
 export interface GolfCourseLocale {
   title: string
   meta_description: string
+  /**
+   * Optional localized prose. A locale may ship title + meta_description only
+   * (SERP presence first, body later) — the page falls back to the EN
+   * `course.prose` per-field while translation is in flight.
+   */
+  prose?: GolfCourseProse
 }
 
 export interface GolfCourseProse {
@@ -79,6 +85,14 @@ export interface GolfCourse {
     ko: GolfCourseLocale | null
     zh: GolfCourseLocale | null
     ja: GolfCourseLocale | null
+    /**
+     * Optional (`?`) unlike the legacy keys above so the 146 non-pilot course
+     * files need no edits. A course only renders a Thai variant when it is
+     * ALSO registered in COURSE_DETAIL_I18N (data/golf-courses-i18n.ts) and
+     * th.staticRoutes (lib/translated-routes.ts) — this field alone changes
+     * nothing.
+     */
+    th?: GolfCourseLocale | null
   }
   status: 'published' | 'draft'
   published_at: string
