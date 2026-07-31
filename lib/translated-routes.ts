@@ -67,9 +67,9 @@ const TRANSLATED_ROUTES: Record<
       "/guide/renting-golf-clubs-thai-golf-courses",
       "/guide/screen-golf-bangkok",
       "/guide/round-of-golf-cost-bangkok",
-      // Translated /golf-courses/ hub page (GolfCourseHub namespace) — th only;
-      // the entry point for Thai-script สนามกอล์ฟ queries. ja/ko/zh hub URLs
-      // still 301 to English.
+      // Translated /golf-courses/ hub page (GolfCourseHub namespace) — the
+      // entry point for Thai-script สนามกอล์ฟ queries. ko/zh hub URLs still
+      // 301 to English.
       "/golf-courses",
       // Translated region hubs (data/golf-courses-i18n.ts) — kept in sync by the
       // smoke-test region-hub consistency check.
@@ -327,6 +327,10 @@ const TRANSLATED_ROUTES: Record<
       "/guide/renting-golf-clubs-thai-golf-courses",
       "/guide/round-of-golf-cost-bangkok",
       "/guide/screen-golf-bangkok",
+      // Translated /golf-courses/ hub page (GolfCourseHub namespace) — the
+      // entry point for バンコク ゴルフ場 queries. ko/zh hub URLs still 301 to
+      // English.
+      "/golf-courses",
       // Translated region hubs (data/golf-courses-i18n.ts) — kept in sync by the
       // smoke-test region-hub consistency check.
       "/golf-courses/bangkok",
@@ -341,6 +345,13 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/under/3500-baht",
       "/golf-courses/under/5000-baht",
       "/golf-courses/under/7500-baht",
+      // Translated course-detail pages (data/golf-courses-i18n.ts
+      // COURSE_DETAIL_I18N — 3-course JA pilot) — kept in sync by the
+      // smoke-test course-detail registry consistency check (section J3);
+      // liveness of each built page is asserted by section L2.
+      "/golf-courses/bangkok/sai-golf-club",
+      "/golf-courses/bangkok/the-legacy-golf-club",
+      "/golf-courses/chiang-mai/lanna-golf-course",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.

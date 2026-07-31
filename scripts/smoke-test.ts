@@ -1746,6 +1746,15 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  // Translated JA golf-courses hub (GolfCourseHub ja namespace +
+  // '/golf-courses' ja allowlist entry) — was a 301-to-EN until the hub
+  // gained a Japanese translation. ko/zh hub URLs must keep 301ing (canary
+  // in thaiRedirectTests).
+  {
+    path: "/ja/golf-courses/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
   // Translated TH region hubs (data/golf-courses-i18n.ts + th allowlist entries)
   {
     path: "/th/golf-courses/bangkok/",
@@ -1814,6 +1823,24 @@ const routeTests: RouteTest[] = [
   },
   {
     path: "/th/golf-courses/chiang-mai/lanna-golf-course/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  // Translated JA course-detail pages (same 3-course pilot, ja locales in
+  // COURSE_DETAIL_I18N + ja allowlist entries). All other JA course details
+  // must keep 301ing (ja alpine canary in redirectTests).
+  {
+    path: "/ja/golf-courses/bangkok/sai-golf-club/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/golf-courses/bangkok/the-legacy-golf-club/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/golf-courses/chiang-mai/lanna-golf-course/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
@@ -2818,13 +2845,14 @@ const thaiRedirectTests: ThaiRedirectTest[] = [
     expectedLocation: "/terms-of-service/",
     label: "Untranslated terms of service",
   },
-  // The /golf-courses/ hub is translated for th only (GolfCourseHub batch) —
-  // /th/golf-courses/ now 200s (see routeTests); ja/ko/zh hub URLs must keep
-  // 301ing to the English hub. Canary for the hub allowlist staying th-only.
+  // The /golf-courses/ hub is translated for th + ja (GolfCourseHub batches) —
+  // /th/golf-courses/ and /ja/golf-courses/ now 200 (see routeTests); ko/zh
+  // hub URLs must keep 301ing to the English hub. Canary for the hub
+  // allowlist staying th/ja-only.
   {
-    path: "/ja/golf-courses/",
+    path: "/ko/golf-courses/",
     expectedLocation: "/golf-courses/",
-    label: "Untranslated JA golf-courses hub (only th may 200)",
+    label: "Untranslated KO golf-courses hub (only th/ja may 200)",
   },
   // Regression guard — non-whitelisted /ja/, /ko/, /zh/ paths must still 301 to EN so the
   // middleware allowlist (lib/translated-routes.ts) continues to work. Particularly
@@ -2919,16 +2947,21 @@ const thaiRedirectTests: ThaiRedirectTest[] = [
     label: "Untranslated TH near-station page (EN-only route must 301)",
   },
   // Course DETAIL pages build locale copies only for the triples in
-  // COURSE_DETAIL_I18N (currently the 3-course TH pilot; those 200 and are
-  // covered by their own route tests). Every OTHER course detail must still
-  // 301 — /th/golf-courses/bangkok/ 200s, but an untranslated 3-segment
-  // detail below it may not. Canary for the [region]/[slug] locale
+  // COURSE_DETAIL_I18N (currently the 3-course th + ja pilot; those 200 and
+  // are covered by their own route tests). Every OTHER course detail must
+  // still 301 — /th/golf-courses/bangkok/ 200s, but an untranslated
+  // 3-segment detail below it may not. Canary for the [region]/[slug] locale
   // restriction; alpine is deliberately NOT a pilot course so this keeps
   // exercising the middleware.
   {
     path: "/th/golf-courses/bangkok/alpine-golf-club/",
     expectedLocation: "/golf-courses/bangkok/alpine-golf-club/",
     label: "Untranslated TH course detail (EN-only route must 301)",
+  },
+  {
+    path: "/ja/golf-courses/bangkok/alpine-golf-club/",
+    expectedLocation: "/golf-courses/bangkok/alpine-golf-club/",
+    label: "Untranslated JA course detail (EN-only route must 301)",
   },
   // The EN-only SEO-page families (/hotels, /cost, /activities, /best) build
   // no locale copies either; this canary covers the mechanism for all four —

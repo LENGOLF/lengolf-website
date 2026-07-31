@@ -1,5 +1,5 @@
 import type { GolfCourse } from '@/types/golf-courses'
-import { formatBaht, formatHours, thaiMonthYear } from '@/lib/format'
+import { asOfMonthYear, formatBaht, formatHours } from '@/lib/format'
 
 /**
  * Centralized SEO text generators for the ~150 golf-course detail pages.
@@ -9,14 +9,21 @@ import { formatBaht, formatHours, thaiMonthYear } from '@/lib/format'
  * on-page FAQ, and FAQPage JSON-LD in one place. Pure functions, safe to
  * import from both route files and server components.
  *
- * Locale support: every generator takes `locale: 'en' | 'th' = 'en'`. All EN
- * outputs are byte-identical to the pre-locale version — 'th' either reads
- * the course's hand-written `locales.th` strings or renders a Thai template
- * set mirroring the EN fragments, and falls back to the EN behavior when no
- * Thai data exists.
+ * Locale support: every generator takes a `CourseSeoLocale` (default 'en').
+ * All EN outputs are byte-identical to the pre-locale version — a non-EN
+ * locale either reads the course's hand-written `locales.<locale>` strings or
+ * renders that locale's template set mirroring the EN fragments, and falls
+ * back to the EN behavior when no localized data exists.
  */
 
-type CourseSeoLocale = 'en' | 'th'
+/** Locales the course-detail SEO generators carry templates for. */
+export const COURSE_SEO_LOCALES = ['en', 'th', 'ja'] as const
+export type CourseSeoLocale = (typeof COURSE_SEO_LOCALES)[number]
+
+/** Narrow an arbitrary locale string to a supported CourseSeoLocale ('en' fallback). */
+export function toCourseSeoLocale(l: string): CourseSeoLocale {
+  return (COURSE_SEO_LOCALES as readonly string[]).includes(l) ? (l as CourseSeoLocale) : 'en'
+}
 
 const thb = formatBaht
 
@@ -34,10 +41,10 @@ const BOILERPLATE_TITLE = /—\s*Green Fees, Course Guide & (?:Golf )?Club Renta
  * never silently overwritten by the generator.
  */
 export function getCourseTitle(course: GolfCourse, locale: CourseSeoLocale = 'en'): string {
-  // Thai titles are hand-written per course (no boilerplate corpus exists to
+  // Non-EN titles are hand-written per course (no boilerplate corpus exists to
   // strip); fall through to the EN logic when the pilot course hasn't had its
-  // locales.th filled in yet.
-  if (locale === 'th' && course.locales.th?.title) return course.locales.th.title
+  // locales.<locale> filled in yet.
+  if (locale !== 'en' && course.locales[locale]?.title) return course.locales[locale]!.title
   // A closed course must not advertise green fees in the SERP. Checked before
   // the hand-written escape hatch: the existing titles all carry the "Green
   // Fees, Course Guide & Club Rentals" boilerplate, so honouring them here
@@ -57,14 +64,14 @@ export function getCourseTitle(course: GolfCourse, locale: CourseSeoLocale = 'en
  * are the identical boilerplate this generator exists to replace.
  */
 export function getCourseDescription(course: GolfCourse, locale: CourseSeoLocale = 'en'): string {
-  // Thai descriptions are hand-written data, not generated — so the 165-char
+  // Non-EN descriptions are hand-written data, not generated — so the 165-char
   // degradation ladder below is deliberately skipped for them. That threshold
-  // is calibrated for Latin-script SERP pixel widths; Thai glyph metrics
+  // is calibrated for Latin-script SERP pixel widths; Thai/CJK glyph metrics
   // differ enough that clamping a native-written description to it would cut
   // good copy for no ranking benefit. Untranslated courses fall through to
   // the generated EN description.
-  if (locale === 'th' && course.locales.th?.meta_description) {
-    return course.locales.th.meta_description
+  if (locale !== 'en' && course.locales[locale]?.meta_description) {
+    return course.locales[locale]!.meta_description
   }
   // Closure leads, and is DERIVED rather than taken from
   // `locales.en.meta_description`: only some closed courses have had that
@@ -125,14 +132,20 @@ export interface CourseFaqItem {
  * club-rental answer mentions LENGOLF without quoting a price so a Supabase
  * pricing change can't silently desync 149 static pages.
  *
- * locale === 'th' renders the Thai template set below (same question order,
- * same data fragments, house style per data/i18n-glossary/th.json); 'en' is
+ * Non-EN locales render their template set below (same question order, same
+ * data fragments, house style per data/i18n-glossary/<locale>.json); 'en' is
  * byte-identical to the pre-locale version. Both the visible block and the
  * FAQPage JSON-LD receive the SAME array from the route, so they cannot
  * diverge across locales either.
  */
+const FAQ_GENERATORS: Partial<Record<CourseSeoLocale, (course: GolfCourse) => CourseFaqItem[]>> = {
+  th: getCourseFaqsTh,
+  ja: getCourseFaqsJa,
+}
+
 export function getCourseFaqs(course: GolfCourse, locale: CourseSeoLocale = 'en'): CourseFaqItem[] {
-  if (locale === 'th') return getCourseFaqsTh(course)
+  const generator = FAQ_GENERATORS[locale]
+  if (generator) return generator(course)
   const faqs: CourseFaqItem[] = []
 
   // Closure status leads — and a permanently closed course gets ONLY the
@@ -283,7 +296,7 @@ function getCourseFaqsTh(course: GolfCourse): CourseFaqItem[] {
       answer += ` ส่วนวันหยุดสุดสัปดาห์อยู่ที่ประมาณ ${n(course.green_fee_weekend_thb)} บาท`
     }
     if (course.fees_verified_at) {
-      answer += ` (ข้อมูล ณ ${thaiMonthYear(course.fees_verified_at)})`
+      answer += ` (ข้อมูล ณ ${asOfMonthYear(course.fees_verified_at, 'th')})`
     }
     answer += ' อัตราค่าบริการเปลี่ยนแปลงตามฤดูกาล ควรยืนยันกับทางสนามอีกครั้งเมื่อจอง'
     faqs.push({
@@ -333,6 +346,120 @@ function getCourseFaqsTh(course: GolfCourse): CourseFaqItem[] {
     }
     faqs.push({
       question: `เช่าไม้กอล์ฟเพื่อออกรอบที่ ${course.name} ได้หรือไม่`,
+      answer,
+    })
+  }
+
+  return faqs
+}
+
+/**
+ * Japanese twin of the EN/TH FAQ generators: same questions in the same
+ * order, derived from the same data fragments, written to the JA glossary
+ * rules (丁寧語 です/ます, prices as digits+THB with no space and never バーツ,
+ * 〜 (U+301C) for ranges, half-width digits, no exclamation marks,
+ * キャディー/グリーンフィー spellings, （<年>年<月>月現在） as-of built from
+ * asOfMonthYear). Prices hedge with 約 and point back to the course,
+ * mirroring the EN honesty posture. `operational_note` is EN-authored free
+ * text, so the Japanese closure answers use the derived fallbacks rather
+ * than mixing languages.
+ */
+// course.province is stored in English; interpolating it raw into the JA FAQ
+// templates ships mixed-script sentences（「コースはBangkokにあります」）. Extend
+// this map as courses join the JA registry — unmapped provinces drop the
+// locality clause instead of falling back to Latin text mid-sentence.
+const PROVINCE_JA: Record<string, string> = {
+  Bangkok: 'バンコク',
+  'Chiang Mai': 'チェンマイ県',
+  'Phra Nakhon Si Ayutthaya': 'アユタヤ県',
+}
+
+function getCourseFaqsJa(course: GolfCourse): CourseFaqItem[] {
+  const faqs: CourseFaqItem[] = []
+  const n = (v: number) => v.toLocaleString('en-US')
+  const provinceJa = PROVINCE_JA[course.province]
+
+  const closed =
+    course.operational_status === 'permanently_closed' ||
+    course.operational_status === 'temporarily_closed'
+  if (closed) {
+    faqs.push({
+      question: `${course.name}は現在も営業していますか？`,
+      answer:
+        course.operational_status === 'permanently_closed'
+          ? `いいえ — ${course.name}はすでに閉業しています。`
+          : `${course.name}は一時休業中と報告されています。ラウンドを計画する前に、コースへ電話でご確認ください。`,
+    })
+  }
+  if (course.operational_status === 'permanently_closed') {
+    if (course.distance_from_bangkok_km) {
+      faqs.push({
+        question: `${course.name}はどこにありましたか？`,
+        answer: provinceJa
+          ? `${course.name}は${provinceJa}の、バンコク中心部から約${course.distance_from_bangkok_km}kmの場所にありました。`
+          : `${course.name}はバンコク中心部から約${course.distance_from_bangkok_km}kmの場所にありました。`,
+      })
+    }
+    return faqs
+  }
+
+  if (course.green_fee_weekday_thb) {
+    let answer = `${course.name}の平日グリーンフィーは約${n(course.green_fee_weekday_thb)}THB`
+    if (course.green_fee_weekend_thb) {
+      answer += `、週末は約${n(course.green_fee_weekend_thb)}THB`
+    }
+    answer += 'です'
+    if (course.fees_verified_at) {
+      answer += `（${asOfMonthYear(course.fees_verified_at, 'ja')}現在）`
+    }
+    answer += '。料金は季節によって変動するため、ご予約の際にコースへ直接ご確認ください。'
+    faqs.push({
+      question: `${course.name}のグリーンフィーはいくらですか？`,
+      answer,
+    })
+  }
+
+  if (course.distance_from_bangkok_km) {
+    let answer = `${course.name}はバンコク中心部から約${course.distance_from_bangkok_km}kmの距離にあります。`
+    if (course.drive_time_from_bangkok_min) {
+      const min = course.drive_time_from_bangkok_min
+      answer +=
+        min >= 120
+          ? `車での所要時間は約${formatHours(min)}時間です。`
+          : `車での所要時間は約${min}分です。`
+    }
+    if (provinceJa) answer += `コースは${provinceJa}にあります。`
+    faqs.push({
+      question: `${course.name}はバンコクからどのくらいの距離ですか？`,
+      answer,
+    })
+  }
+
+  {
+    const fee = course.caddie_fee_thb
+    const feeNote = fee ? `（キャディーフィーは1ラウンド約${n(fee)}THB）` : ''
+    faqs.push({
+      question: `${course.name}ではキャディーは必要ですか？`,
+      answer: course.caddie_required
+        ? `はい — ${course.name}ではキャディーの同伴が必須です${feeNote}。慣習として、これとは別にキャディーへのチップ（通常300〜500THB）を渡します。`
+        : `${course.name}ではキャディーの利用は任意です${feeNote}。`,
+    })
+  }
+
+  {
+    const lengolf =
+      '現行モデルのセットをご希望なら、バンコク中心部（BTSチットロム駅）のLENGOLFがプレミアムなCallawayクラブをホテル配送付きでレンタルしているので、旅行前に道具を手配できます。'
+    let answer: string
+    if (course.club_rental_available === true) {
+      const fee = course.club_rental_fee_thb
+      answer = `${course.name}ではコース内でレンタルクラブを利用できます${fee ? `（1ラウンド約${n(fee)}THB）` : ''}。${lengolf}`
+    } else if (course.club_rental_available === false) {
+      answer = `${course.name}にはコース内のクラブレンタルがありません。${lengolf}`
+    } else {
+      answer = `${course.name}でコース内のクラブレンタルが利用できるかは確認できていません。${lengolf}`
+    }
+    faqs.push({
+      question: `${course.name}でプレーする際にゴルフクラブをレンタルできますか？`,
       answer,
     })
   }

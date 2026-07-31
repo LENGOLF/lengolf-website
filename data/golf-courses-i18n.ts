@@ -210,16 +210,16 @@ export function getTranslatedRegionHubParams(): { locale: string; region: string
  * that locale's staticRoutes in lib/translated-routes.ts — the smoke-test
  * course-detail consistency check fails CI in both directions if they drift.
  */
-type CourseDetailLocale = 'th'
+type CourseDetailLocale = 'th' | 'ja'
 
 export const COURSE_DETAIL_I18N: {
   region: string
   slug: string
   locales: readonly CourseDetailLocale[]
 }[] = [
-  { region: 'bangkok', slug: 'sai-golf-club', locales: ['th'] },
-  { region: 'bangkok', slug: 'the-legacy-golf-club', locales: ['th'] },
-  { region: 'chiang-mai', slug: 'lanna-golf-course', locales: ['th'] },
+  { region: 'bangkok', slug: 'sai-golf-club', locales: ['th', 'ja'] },
+  { region: 'bangkok', slug: 'the-legacy-golf-club', locales: ['th', 'ja'] },
+  { region: 'chiang-mai', slug: 'lanna-golf-course', locales: ['th', 'ja'] },
 ]
 
 /**

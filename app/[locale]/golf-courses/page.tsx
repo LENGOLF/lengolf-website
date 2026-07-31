@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
 import { SITE_URL } from '@/lib/constants'
 import { REGION_META, getCoursesByRegion } from '@/lib/golf-courses'
-import { getAlternates, getCanonical } from '@/lib/translated-routes'
+import { getAlternates, getCanonical, hasTranslationForLocale, ALL_LOCALES } from '@/lib/translated-routes'
 import { getRegionHubTranslation } from '@/data/golf-courses-i18n'
 import { getBreadcrumbJsonLd } from '@/lib/jsonld'
 import { MapPin, ArrowRight, Flag, Scale, Train, Wallet, Target } from 'lucide-react'
@@ -17,11 +17,18 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  // EN always builds; th is the only other locale with a published hub
-  // translation (GolfCourseHub namespace + '/golf-courses' in th.staticRoutes).
-  // ja/ko/zh /golf-courses/ URLs 301 to English via the middleware allowlist
-  // (lib/translated-routes.ts), mirroring the [region] sibling.
-  return [{ locale: 'en' }, { locale: 'th' }]
+  // EN always builds; every other locale builds if and only if it has a
+  // published hub translation (GolfCourseHub namespace + '/golf-courses' in
+  // that locale's staticRoutes) — derived from the registry so the two lists
+  // cannot drift. Unregistered locales' /golf-courses/ URLs 301 to English
+  // via the middleware allowlist (lib/translated-routes.ts), mirroring the
+  // [region] sibling.
+  return [
+    { locale: 'en' },
+    ...ALL_LOCALES.filter(
+      (locale) => locale !== 'en' && hasTranslationForLocale(locale, '/golf-courses')
+    ).map((locale) => ({ locale })),
+  ]
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

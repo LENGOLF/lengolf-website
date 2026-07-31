@@ -8,7 +8,7 @@ import { getAlternates, getCanonical, hasTranslationForLocale } from '@/lib/tran
 import { getRegionHubTranslation, getTranslatedCourseDetailParams } from '@/data/golf-courses-i18n'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd } from '@/lib/jsonld'
 import { getCourseDetailJsonLd } from '@/lib/jsonld-courses'
-import { getCourseTitle, getCourseDescription, getCourseFaqs } from '@/lib/course-seo'
+import { getCourseTitle, getCourseDescription, getCourseFaqs, toCourseSeoLocale } from '@/lib/course-seo'
 import CoursePage from '@/components/golf-courses/CoursePage'
 import {
   comparisonCrossLink,
@@ -36,8 +36,8 @@ export const dynamicParams = false
 
 export async function generateStaticParams() {
   // EN builds every course; other locales build ONLY the (locale, region,
-  // slug) triples registered in COURSE_DETAIL_I18N (currently the 3-course TH
-  // pilot). Untranslated locale URLs 301 to English via the middleware — and
+  // slug) triples registered in COURSE_DETAIL_I18N (currently the 3-course
+  // th + ja pilot). Untranslated locale URLs 301 to English via the middleware — and
   // because dynamicParams=false, a lib/translated-routes.ts allowlist entry
   // with no matching triple here would be a hard 404, so the two lists MUST
   // move together (smoke-test course-detail registry consistency + liveness
@@ -54,14 +54,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!course) return { title: 'Course Not Found' }
 
-  const seoLocale = locale === 'th' ? 'th' : 'en'
+  const seoLocale = toCourseSeoLocale(locale)
 
   // Titles/descriptions are generated from structured fields (lib/course-seo)
   // instead of the per-file locales.en strings: 134/149 of those shared one
   // boilerplate suffix long enough to guarantee SERP truncation, and 77/149
-  // descriptions were verbatim identical modulo the course name. For 'th' the
-  // generators prefer the hand-written course.locales.th strings and fall
-  // back to the EN behavior while translation is in flight.
+  // descriptions were verbatim identical modulo the course name. For non-EN
+  // locales the generators prefer the hand-written course.locales.<locale>
+  // strings and fall back to the EN behavior while translation is in flight.
   const title = getCourseTitle(course, seoLocale)
   const description = getCourseDescription(course, seoLocale)
   const path = `/golf-courses/${region}/${slug}/`
@@ -222,7 +222,7 @@ export default async function CoursePageRoute({ params }: Props) {
 
   // FAQPage schema mirrors the visible CourseFaq block — same source array,
   // localized once here for both.
-  const faqs = getCourseFaqs(course, locale === 'th' ? 'th' : 'en')
+  const faqs = getCourseFaqs(course, toCourseSeoLocale(locale))
   const faqJsonLd = faqs.length > 0 ? getFaqPageJsonLd(faqs) : null
 
   return (

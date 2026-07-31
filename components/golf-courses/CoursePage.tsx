@@ -2,13 +2,13 @@ import { MapPin, Clock, Phone, Globe, Check, X, ArrowRight } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import type { GolfCourse } from '@/types/golf-courses'
-import { driveTimeLabel, thaiMonthYear } from '@/lib/format'
+import { asOfMonthYear, driveTimeLabel } from '@/lib/format'
 import CrossLinkBlock, { type CrossLink } from '@/components/golf-courses/CrossLinkBlock'
 import CourseFaq from '@/components/golf-courses/CourseFaq'
 import CourseSatelliteMap from '@/components/golf-courses/CourseSatelliteMap'
 import RentalCtaBanner from '@/components/golf-courses/RentalCtaBanner'
 import { courseMapsUrl, hasTrustedCoordinates } from '@/lib/geo'
-import type { CourseFaqItem } from '@/lib/course-seo'
+import { toCourseSeoLocale, type CourseFaqItem } from '@/lib/course-seo'
 
 interface Props {
   course: GolfCourse
@@ -21,19 +21,18 @@ interface Props {
 }
 
 export default function CoursePage({ course, regionLabel, relatedCourses = [], crossLinks = [], faqs = [] }: Props) {
-  // UI chrome comes from the GolfCourseDetail namespace (en + th only — the
-  // course-detail pilot locales; ja/ko/zh never SSG this component). Number
+  // UI chrome comes from the GolfCourseDetail namespace (en + th + ja — the
+  // course-detail pilot locales; ko/zh never SSG this component). Number
   // args are pre-stringified/pre-formatted before hitting ICU so EN output
   // stays byte-identical (ICU number formatting would group "Est. 2,021").
   const t = useTranslations('GolfCourseDetail')
   const tShared = useTranslations('GolfCourseShared')
-  const rawLocale = useLocale()
-  const locale: 'en' | 'th' = rawLocale === 'th' ? 'th' : 'en'
+  const locale = toCourseSeoLocale(useLocale())
 
   // Localized prose with per-field EN fallback: a pilot course may ship
-  // title/meta only (locales.th.prose absent) — render EN prose under the
-  // Thai chrome rather than blanking sections.
-  const L = locale === 'th' ? course.locales.th : undefined
+  // title/meta only (locales.<locale>.prose absent) — render EN prose under
+  // the localized chrome rather than blanking sections.
+  const L = locale === 'en' ? undefined : course.locales[locale]
   const prose = {
     overview: L?.prose?.overview ?? course.prose.overview,
     layout_and_experience: L?.prose?.layout_and_experience ?? course.prose.layout_and_experience,
@@ -56,15 +55,10 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
   ]
 
   // "Rates checked <month year>" — EN keeps the short en-US month; TH uses the
-  // Thai month name with the Gregorian year (matches the FAQ as-of format).
+  // Thai month name with the Gregorian year, JA uses 2026年7月 (each matching
+  // its locale's FAQ as-of format).
   const ratesCheckedDate = course.fees_verified_at
-    ? locale === 'th'
-      ? thaiMonthYear(course.fees_verified_at)
-      : new Date(`${course.fees_verified_at}T00:00:00Z`).toLocaleDateString('en-US', {
-          month: 'short',
-          year: 'numeric',
-          timeZone: 'UTC',
-        })
+    ? asOfMonthYear(course.fees_verified_at, locale)
     : null
 
   return (
