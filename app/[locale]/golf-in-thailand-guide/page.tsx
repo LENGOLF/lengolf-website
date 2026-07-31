@@ -1105,7 +1105,7 @@ export default async function GolfInThailandGuidePage({
                 {[
                   {
                     head: 'BTS Skytrain for daily movement',
-                    body: 'Fast, air-conditioned, no traffic. Buy a Rabbit card for faster payments. LENGOLF is at BTS Chidlom Exit 1 — Sukhumvit and Silom lines both connect here.',
+                    body: 'Fast, air-conditioned, no traffic. Buy a Rabbit card for faster payments. LENGOLF is at BTS Chidlom Exit 4 — Sukhumvit and Silom lines both connect here.',
                   },
                   {
                     head: 'Grab for golf course trips',
