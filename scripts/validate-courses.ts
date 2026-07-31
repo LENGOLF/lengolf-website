@@ -27,6 +27,7 @@
 
 import * as fs from 'fs'
 import * as path from 'path'
+import { pathToFileURL } from 'url'
 import type { GolfCourse } from '../types/golf-courses'
 
 const ROOT = path.join(__dirname, '..', 'data', 'golf-courses')
@@ -47,7 +48,10 @@ async function loadCourses(): Promise<{ file: string; course: GolfCourse }[]> {
     if (!fs.statSync(dir).isDirectory()) continue
     for (const f of fs.readdirSync(dir)) {
       if (!f.endsWith('.ts') || f === 'index.ts') continue
-      const mod = await import(path.join(dir, f))
+      // pathToFileURL, not the raw path: the ESM loader rejects a Windows
+      // absolute path ("protocol 'c:'"), so a bare path.join made this gate
+      // Linux-only and unrunnable in the pre-commit sweep on Windows.
+      const mod = await import(pathToFileURL(path.join(dir, f)).href)
       if (mod.course) out.push({ file: `${region}/${f}`, course: mod.course as GolfCourse })
     }
   }

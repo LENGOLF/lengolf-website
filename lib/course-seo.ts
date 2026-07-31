@@ -26,6 +26,13 @@ const BOILERPLATE_TITLE = /—\s*Green Fees, Course Guide & (?:Golf )?Club Renta
  * never silently overwritten by the generator.
  */
 export function getCourseTitle(course: GolfCourse): string {
+  // A closed course must not advertise green fees in the SERP. Checked before
+  // the hand-written escape hatch: the existing titles all carry the "Green
+  // Fees, Course Guide & Club Rentals" boilerplate, so honouring them here
+  // would reintroduce exactly the claim we're removing.
+  if (course.operational_status === 'permanently_closed') {
+    return `${course.name} — Permanently Closed`
+  }
   const handWritten = course.locales.en.title
   if (handWritten && !BOILERPLATE_TITLE.test(handWritten)) return handWritten
   return `${course.name} — Green Fees & Guide`
@@ -37,6 +44,30 @@ export function getCourseTitle(course: GolfCourse): string {
  * long (e.g. very long designer names).
  */
 export function getCourseDescription(course: GolfCourse): string {
+  // Closure leads, and is DERIVED rather than taken from
+  // `locales.en.meta_description`: only some closed courses have had that
+  // string rewritten (Rangsit and Star still advertise "green fees ... and
+  // golf club rentals"), so trusting it would ship a bookable-sounding
+  // snippet for a course nobody can play.
+  const closedStatus = course.operational_status
+  if (closedStatus === 'permanently_closed' || closedStatus === 'temporarily_closed') {
+    const lead =
+      closedStatus === 'permanently_closed'
+        ? `${course.name} in ${course.province} is permanently closed.`
+        : `${course.name} in ${course.province} has been reported temporarily closed.`
+    const tail =
+      closedStatus === 'permanently_closed'
+        ? `Course history and alternatives for golf near ${course.province}.`
+        : `Call ahead before planning a round, and see alternatives near ${course.province}.`
+    // The editor's note is the most useful tail when it fits; otherwise the
+    // generic one, which always does.
+    const note = course.operational_note?.trim()
+    const withNote = note ? `${lead} ${note}` : ''
+    if (withNote && withNote.length <= 165) return withNote
+    const withTail = `${lead} ${tail}`
+    return withTail.length <= 165 ? withTail : lead
+  }
+
   const designer = course.designer ? `${course.designer}-designed ` : ''
   const parts = [`${course.holes}-hole ${designer}golf course in ${course.province}.`]
   if (course.green_fee_weekday_thb) {

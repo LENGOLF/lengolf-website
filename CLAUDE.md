@@ -26,7 +26,7 @@ LENGOLF website — a Next.js 15 (App Router) site for an indoor golf simulator 
 
 GitHub Actions workflow (`.github/workflows/ci.yml`) runs on every PR to `main`:
 
-- **`lint`** — `npm run lint` with ESLint flat config (`eslint.config.mjs`), then `npm run validate:links` (internal SEO cross-link validator), then `npm run validate:i18n` (i18n house-style/honesty linter — mechanical subset of the native-QA rubric; a red "lint" check can be any of the three)
+- **`lint`** — `npm run lint` with ESLint flat config (`eslint.config.mjs`), then `npm run validate:links` (internal SEO cross-link validator), then `npm run validate:i18n` (i18n house-style/honesty linter — mechanical subset of the native-QA rubric), then `npm run validate:courses` (green-fee plausibility gate; a red "lint" check can be any of the four)
 - **`build-and-smoke`** — builds the app, starts the production server, runs smoke tests across 11 categories (per-category test counts live in `scripts/smoke-test.ts`):
   - **A) Route tests** — pages across all locales return 200 with `<main id="main-content">`
   - **B) Redirect tests** — WordPress legacy URLs, GSC 404 fixes, and location redirects

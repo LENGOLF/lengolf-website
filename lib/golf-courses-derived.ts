@@ -38,10 +38,33 @@ function byPopularity(a: GolfCourse, b: GolfCourse): number {
   return popularityScore(b) - popularityScore(a) || a.slug.localeCompare(b.slug)
 }
 
+/**
+ * Can a reader actually go and play here today?
+ *
+ * `status` is the EDITORIAL gate (is the page published); `operational_status`
+ * is the WORLD gate (does the course still exist). Every derivation that
+ * *recommends* a course — proximity, siblings, price tiers, use cases, region
+ * top-N — must check both, or a closed course wins on the merits of stale
+ * data. Royal Dusit closed in 2018 and the site is now King Rama IX Memorial
+ * Park, yet it is the only course inside Bangkok, so straight-line distance
+ * ranked it #1 on six of the eight BTS proximity pages.
+ *
+ * Deliberately NOT applied to the region-hub roster (`getCoursesByRegion`):
+ * that is a directory, and listing a closed course with its closure banner is
+ * accurate and keeps the page's crawlable link graph intact. The distinction
+ * is recommend vs. catalogue.
+ */
+export function isPlayable(c: GolfCourse): boolean {
+  return (
+    c.status === 'published' &&
+    (!c.operational_status || c.operational_status === 'open')
+  )
+}
+
 async function getAllPublishedCourses(): Promise<GolfCourse[]> {
   const regions = Object.keys(REGION_META) as Region[]
   const arrays = await Promise.all(regions.map((r) => getCoursesByRegion(r)))
-  return arrays.flat().filter((c) => c.status === 'published')
+  return arrays.flat().filter(isPlayable)
 }
 
 /** Top N courses in a region by composite popularity score. */
@@ -51,7 +74,7 @@ export async function getTopCoursesByRegion(
 ): Promise<GolfCourse[]> {
   const courses = await getCoursesByRegion(region)
   return courses
-    .filter((c) => c.status === 'published')
+    .filter(isPlayable)
     .sort(byPopularity)
     .slice(0, n)
 }
@@ -75,8 +98,10 @@ export function getRelatedCourses(
 ): GolfCourse[] {
   // Caller passes the region roster it already loaded — avoids a second
   // getCoursesByRegion fan-out of up to 58 dynamic imports per page build.
+  // isPlayable, not just `status`: nearest-neighbour selection would otherwise
+  // hand 7 Bangkok pages a closed course as a suggested alternative.
   const siblings = allRegionCourses.filter(
-    (c) => c.slug !== course.slug && c.status === 'published'
+    (c) => c.slug !== course.slug && isPlayable(c)
   )
   const picked: GolfCourse[] = []
 

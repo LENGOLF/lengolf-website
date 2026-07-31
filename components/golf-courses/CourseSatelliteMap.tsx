@@ -42,6 +42,14 @@ export default function CourseSatelliteMap({ name, lat, lng, mapsUrl, enabled = 
   const [inView, setInView] = useState(false)
   const [mapsUnavailable, setMapsUnavailable] = useState(!enabled)
 
+  // Report the keyless case exactly once, like the two explorer maps do.
+  // Without this, a dropped Maps key silently blanks the LARGEST surface
+  // (~145 course pages) while the 15 hub pages fire `map_unavailable` — the
+  // dashboard would read as a minor partial outage instead of a total one.
+  useEffect(() => {
+    if (!enabled) pushMapUnavailable('course_satellite', 'no_key')
+  }, [enabled])
+
   // Arm the observer once; disconnect after first intersection.
   useEffect(() => {
     if (!enabled) return

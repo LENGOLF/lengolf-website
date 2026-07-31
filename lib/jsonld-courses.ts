@@ -88,6 +88,26 @@ export function getCourseDetailJsonLd(
   }
   if (imageUrl) schema.image = imageUrl
 
+  // A permanently closed course is a Place, not a bookable GolfCourse. Emit
+  // location facts only: no telephone (Royal Dusit's number has been dead
+  // since 2018), no green-fee offers, no amenityFeature (its "Driving Range:
+  // true" has been parkland for eight years), no priceRange. Google reads
+  // this as a live local entity otherwise, and LLM crawlers repeat it.
+  if (c.operational_status === 'permanently_closed') {
+    schema['@type'] = 'Place'
+    schema['@id'] = `${canonicalUrl}#place`
+    if (c.latitude !== null && c.longitude !== null) {
+      schema.geo = {
+        '@type': 'GeoCoordinates',
+        latitude: c.latitude,
+        longitude: c.longitude,
+      }
+    }
+    const closedMapsUrl = courseMapsUrl(c)
+    if (closedMapsUrl) schema.hasMap = closedMapsUrl
+    return schema
+  }
+
   if (c.latitude !== null && c.longitude !== null) {
     schema.geo = {
       '@type': 'GeoCoordinates',
