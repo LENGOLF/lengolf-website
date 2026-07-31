@@ -62,6 +62,7 @@ import {
   getRegisteredFaqPaths,
   getRegisteredRegionHubPaths,
   getRegisteredPriceTierPaths,
+  hasTranslationForLocale,
 } from '@/lib/translated-routes'
 import type { ExplainerContent, FaqContent } from '@/types/seo-pages'
 
@@ -497,7 +498,12 @@ const SSG_UI_NAMESPACES: Record<string, Locale[]> = (() => {
   const regionHub = localesWithPaths(getRegisteredRegionHubPaths)
   const priceTier = localesWithPaths(getRegisteredPriceTierPaths)
   const faq = localesWithPaths(getRegisteredFaqPaths)
+  // The /golf-courses/ hub page + HubMapExplorer. No dedicated registry
+  // helper exists for a single static path, so derive its SSG locales
+  // directly from the registry (currently th only).
+  const hub = LOCALES.filter((l) => hasTranslationForLocale(l, '/golf-courses'))
   return {
+    GolfCourseHub: hub,
     GolfCourseRegion: regionHub,
     GolfCoursePriceTier: priceTier,
     // Shared components (RoundupList, RentalCtaBanner) render on both page types.

@@ -1732,6 +1732,14 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  // Translated TH golf-courses hub (GolfCourseHub namespace + '/golf-courses'
+  // th allowlist entry in lib/translated-routes.ts) — was a 301-to-EN until
+  // the hub gained a Thai translation.
+  {
+    path: "/th/golf-courses/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
   // Translated TH region hubs (data/golf-courses-i18n.ts + th allowlist entries)
   {
     path: "/th/golf-courses/bangkok/",
@@ -2786,10 +2794,13 @@ const thaiRedirectTests: ThaiRedirectTest[] = [
     expectedLocation: "/terms-of-service/",
     label: "Untranslated terms of service",
   },
+  // The /golf-courses/ hub is translated for th only (GolfCourseHub batch) —
+  // /th/golf-courses/ now 200s (see routeTests); ja/ko/zh hub URLs must keep
+  // 301ing to the English hub. Canary for the hub allowlist staying th-only.
   {
-    path: "/th/golf-courses/",
+    path: "/ja/golf-courses/",
     expectedLocation: "/golf-courses/",
-    label: "Golf courses hub (untranslated Thai → EN)",
+    label: "Untranslated JA golf-courses hub (only th may 200)",
   },
   // Regression guard — non-whitelisted /ja/, /ko/, /zh/ paths must still 301 to EN so the
   // middleware allowlist (lib/translated-routes.ts) continues to work. Particularly

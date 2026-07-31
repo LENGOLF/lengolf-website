@@ -1114,6 +1114,27 @@
   "FloorPlan": {
     "floorPlan": "FLOOR PLAN"
   },
+  "GolfCourseHub": {
+    "metaTitle": "Golf Courses in Thailand — Green Fees, Course Guides & Club Rental",
+    "metaDescription": "Browse golf courses across Thailand by region. Compare green fees, read course guides, and arrange premium club rental for your round.",
+    "heroEyebrow": "Thailand Golf Guide",
+    "heroHeading": "Golf Courses in Thailand",
+    "heroIntro": "Comprehensive guides for every tourist-facing golf course in Thailand — green fees, course layouts, tips, and how to get there. Currently covering {courseCount} courses across {regionCount, plural, one {# region} other {# regions}}.",
+    "breadcrumbHome": "Home",
+    "breadcrumbGolfCourses": "Golf Courses",
+    "coursesWord": "courses",
+    "viewAll": "View all",
+    "budgetHeading": "Filter by green fee budget",
+    "budgetIntro": "From low-budget EGAT-municipal layouts up to trophy-course territory.",
+    "underPrice": "Under ฿{price}",
+    "rentalEyebrow": "No clubs? No problem.",
+    "rentalPitch": "Rent premium clubs from our Bangkok simulator — Callaway Paradym, Warbird, Majesty. From <price>1,200 THB/day</price>.",
+    "bookNow": "Book now",
+    "learnMore": "Learn more",
+    "viewGuide": "View guide →",
+    "mapUnavailable": "Map unavailable",
+    "mapAriaLabel": "Interactive map showing golf courses across Thailand"
+  },
   "GolfCourseRegion": {
     "metaTitle": "{label} Golf Courses — Green Fees, Map & Full Directory",
     "metaDescription": "The full directory of all {count} golf courses in {label} — compare green fees, distances and details on one map, plus club rental delivered to your hotel.",

@@ -67,6 +67,10 @@ const TRANSLATED_ROUTES: Record<
       "/guide/renting-golf-clubs-thai-golf-courses",
       "/guide/screen-golf-bangkok",
       "/guide/round-of-golf-cost-bangkok",
+      // Translated /golf-courses/ hub page (GolfCourseHub namespace) — th only;
+      // the entry point for Thai-script สนามกอล์ฟ queries. ja/ko/zh hub URLs
+      // still 301 to English.
+      "/golf-courses",
       // Translated region hubs (data/golf-courses-i18n.ts) — kept in sync by the
       // smoke-test region-hub consistency check.
       "/golf-courses/bangkok",

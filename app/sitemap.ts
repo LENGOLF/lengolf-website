@@ -165,8 +165,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   // ── Golf course section ──────────────────────────────────────────────────────
+  // Emit hreflang alternates only when the hub has translations
+  // (registered in lib/translated-routes.ts) — mirrors the region-hub loop
+  // below and the on-page getAlternates condition in
+  // app/[locale]/golf-courses/page.tsx.
+  const golfCoursesHubLanguages = getAlternates('/golf-courses/')
   const golfCoursesHub: MetadataRoute.Sitemap = [
-    { url: `${SITE_URL}/golf-courses/`, lastModified: reviewed, changeFrequency: 'weekly', priority: 0.8 },
+    {
+      url: `${SITE_URL}/golf-courses/`,
+      lastModified: reviewed,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+      ...(Object.keys(golfCoursesHubLanguages).length > 1
+        ? { alternates: { languages: golfCoursesHubLanguages } }
+        : {}),
+    },
   ]
 
   const golfRegionPages: MetadataRoute.Sitemap = Object.keys(REGION_META).map((region) => {
