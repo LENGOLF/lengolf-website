@@ -259,6 +259,12 @@ const PROVINCE_TH: Record<string, string> = {
   Bangkok: 'กรุงเทพฯ',
   'Chiang Mai': 'จังหวัดเชียงใหม่',
   'Phra Nakhon Si Ayutthaya': 'จังหวัดพระนครศรีอยุธยา',
+  // Some course files use the short form of the same province.
+  Ayutthaya: 'จังหวัดพระนครศรีอยุธยา',
+  'Pathum Thani': 'จังหวัดปทุมธานี',
+  'Samut Prakan': 'จังหวัดสมุทรปราการ',
+  Phuket: 'จังหวัดภูเก็ต',
+  Rayong: 'จังหวัดระยอง',
 }
 
 function getCourseFaqsTh(course: GolfCourse): CourseFaqItem[] {
@@ -372,6 +378,12 @@ const PROVINCE_JA: Record<string, string> = {
   Bangkok: 'バンコク',
   'Chiang Mai': 'チェンマイ県',
   'Phra Nakhon Si Ayutthaya': 'アユタヤ県',
+  // Some course files use the short form of the same province.
+  Ayutthaya: 'アユタヤ県',
+  'Pathum Thani': 'パトゥムターニー県',
+  'Samut Prakan': 'サムットプラーカーン県',
+  Phuket: 'プーケット県',
+  Rayong: 'ラヨーン県',
 }
 
 function getCourseFaqsJa(course: GolfCourse): CourseFaqItem[] {

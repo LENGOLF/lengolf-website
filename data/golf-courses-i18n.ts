@@ -220,6 +220,16 @@ export const COURSE_DETAIL_I18N: {
   { region: 'bangkok', slug: 'sai-golf-club', locales: ['th', 'ja'] },
   { region: 'bangkok', slug: 'the-legacy-golf-club', locales: ['th', 'ja'] },
   { region: 'chiang-mai', slug: 'lanna-golf-course', locales: ['th', 'ja'] },
+  // Batch 2 (2026-08) — top course pages by GSC impressions (90d) within
+  // regions whose hubs are translated for both locales. Suvarnabhumi (1,319
+  // imp) deliberately excluded pending the Phoenix Gold slug merge.
+  { region: 'bangkok', slug: 'pinehurst-golf-country-club', locales: ['th', 'ja'] },
+  { region: 'bangkok', slug: 'siam-country-club-bangkok', locales: ['th', 'ja'] },
+  { region: 'bangkok', slug: 'ayutthaya-golf-club', locales: ['th', 'ja'] },
+  { region: 'bangkok', slug: 'muang-ake-golf-course', locales: ['th', 'ja'] },
+  { region: 'phuket', slug: 'blue-canyon-lakes-course', locales: ['th', 'ja'] },
+  { region: 'phuket', slug: 'phuket-country-club', locales: ['th', 'ja'] },
+  { region: 'pattaya', slug: 'wangjuntr-golf-park', locales: ['th', 'ja'] },
 ]
 
 /**

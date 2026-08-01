@@ -92,6 +92,13 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/bangkok/sai-golf-club",
       "/golf-courses/bangkok/the-legacy-golf-club",
       "/golf-courses/chiang-mai/lanna-golf-course",
+      "/golf-courses/bangkok/pinehurst-golf-country-club",
+      "/golf-courses/bangkok/siam-country-club-bangkok",
+      "/golf-courses/bangkok/ayutthaya-golf-club",
+      "/golf-courses/bangkok/muang-ake-golf-course",
+      "/golf-courses/phuket/blue-canyon-lakes-course",
+      "/golf-courses/phuket/phuket-country-club",
+      "/golf-courses/pattaya/wangjuntr-golf-park",
       // Translated FAQ pages (data/faq-pages.ts entries with locale: 'th') —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -352,6 +359,13 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/bangkok/sai-golf-club",
       "/golf-courses/bangkok/the-legacy-golf-club",
       "/golf-courses/chiang-mai/lanna-golf-course",
+      "/golf-courses/bangkok/pinehurst-golf-country-club",
+      "/golf-courses/bangkok/siam-country-club-bangkok",
+      "/golf-courses/bangkok/ayutthaya-golf-club",
+      "/golf-courses/bangkok/muang-ake-golf-course",
+      "/golf-courses/phuket/blue-canyon-lakes-course",
+      "/golf-courses/phuket/phuket-country-club",
+      "/golf-courses/pattaya/wangjuntr-golf-park",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.

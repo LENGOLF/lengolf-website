@@ -1826,6 +1826,42 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  // Batch 2 (2026-08): top GSC-impression courses in hub-translated regions.
+  {
+    path: "/th/golf-courses/bangkok/pinehurst-golf-country-club/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/golf-courses/bangkok/siam-country-club-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/golf-courses/bangkok/ayutthaya-golf-club/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/golf-courses/bangkok/muang-ake-golf-course/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/golf-courses/phuket/blue-canyon-lakes-course/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/golf-courses/phuket/phuket-country-club/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/golf-courses/pattaya/wangjuntr-golf-park/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
   // Translated JA course-detail pages (same 3-course pilot, ja locales in
   // COURSE_DETAIL_I18N + ja allowlist entries). All other JA course details
   // must keep 301ing (ja alpine canary in redirectTests).
@@ -1841,6 +1877,42 @@ const routeTests: RouteTest[] = [
   },
   {
     path: "/ja/golf-courses/chiang-mai/lanna-golf-course/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  // Batch 2 (2026-08): top GSC-impression courses in hub-translated regions.
+  {
+    path: "/ja/golf-courses/bangkok/pinehurst-golf-country-club/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/golf-courses/bangkok/siam-country-club-bangkok/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/golf-courses/bangkok/ayutthaya-golf-club/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/golf-courses/bangkok/muang-ake-golf-course/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/golf-courses/phuket/blue-canyon-lakes-course/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/golf-courses/phuket/phuket-country-club/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ja/golf-courses/pattaya/wangjuntr-golf-park/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
