@@ -35,12 +35,9 @@
  * No server needed. Zero deps beyond tsx.
  */
 
-import * as fs from 'fs'
-import * as path from 'path'
-import { pathToFileURL } from 'url'
 import type { GolfCourse } from '../types/golf-courses'
-
-const ROOT = path.join(__dirname, '..', 'data', 'golf-courses')
+import { decimalPlaces, MIN_COORD_DECIMALS } from '../lib/geo'
+import { loadCourseFiles } from './course-files'
 
 const LOW_FEE_THRESHOLD = 600
 const ABS_FLOOR = 150
@@ -54,33 +51,12 @@ const TH_BOUNDS = { latMin: 5.5, latMax: 20.6, lngMin: 97.2, lngMax: 105.7 }
 const errors: string[] = []
 const warnings: string[] = []
 
-async function loadCourses(): Promise<{ file: string; course: GolfCourse }[]> {
-  const out: { file: string; course: GolfCourse }[] = []
-  for (const region of fs.readdirSync(ROOT)) {
-    const dir = path.join(ROOT, region)
-    if (!fs.statSync(dir).isDirectory()) continue
-    for (const f of fs.readdirSync(dir)) {
-      if (!f.endsWith('.ts') || f === 'index.ts') continue
-      // pathToFileURL, not the raw path: the ESM loader rejects a Windows
-      // absolute path ("protocol 'c:'"), so a bare path.join made this gate
-      // Linux-only and unrunnable in the pre-commit sweep on Windows.
-      const mod = await import(pathToFileURL(path.join(dir, f)).href)
-      if (mod.course) out.push({ file: `${region}/${f}`, course: mod.course as GolfCourse })
-    }
-  }
-  return out
-}
 
 function monthsSince(iso: string): number {
   const then = new Date(`${iso}T00:00:00Z`).getTime()
   return (Date.now() - then) / (1000 * 60 * 60 * 24 * 30.44)
 }
 
-function decimalPlaces(n: number): number {
-  const s = String(n)
-  const dot = s.indexOf('.')
-  return dot === -1 ? 0 : s.length - dot - 1
-}
 
 /** Coordinates drive the satellite pin, schema GeoCoordinates and the maps link. */
 function checkCoordinates(file: string, c: GolfCourse) {
@@ -106,7 +82,9 @@ function checkCoordinates(file: string, c: GolfCourse) {
   }
 
   const dp = Math.min(decimalPlaces(lat), decimalPlaces(lng))
-  if (dp < 3 && attested === null) {
+  // Same threshold hasTrustedCoordinates enforces at render time (lib/geo.ts),
+  // so this warning always describes what the site actually publishes.
+  if (dp < MIN_COORD_DECIMALS && attested === null) {
     // WARN, not ERROR: `hasTrustedCoordinates` already withholds these from
     // the satellite pin and from schema.org GeoCoordinates, so nothing wrong
     // reaches a reader. They remain usable for proximity ranking, where a
@@ -123,7 +101,7 @@ function checkCoordinates(file: string, c: GolfCourse) {
 }
 
 async function main() {
-  const courses = await loadCourses()
+  const courses = await loadCourseFiles()
 
   for (const { file, course: c } of courses) {
     const wd = c.green_fee_weekday_thb

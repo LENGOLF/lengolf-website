@@ -34,7 +34,9 @@ export function googleMapsQueryUrl(query: string): string {
  */
 export const MIN_COORD_DECIMALS = 3
 
-function decimalPlaces(n: number): number {
+// Exported so scripts/validate-courses.ts warns on exactly the rule this
+// module enforces at render time, instead of keeping a private copy.
+export function decimalPlaces(n: number): number {
   const s = String(n)
   const dot = s.indexOf('.')
   return dot === -1 ? 0 : s.length - dot - 1

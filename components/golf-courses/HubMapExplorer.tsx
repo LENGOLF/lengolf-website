@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { MapPinOff } from 'lucide-react'
 import type { GolfCourse } from '@/types/golf-courses'
 import { loadMapsApi, BASE_MAP_OPTIONS } from '@/lib/maps-loader'
+import { hasTrustedCoordinates } from '@/lib/geo'
 import { pushMapUnavailable } from '@/lib/analytics'
 
 interface RegionCourses {
@@ -65,7 +66,10 @@ export default function HubMapExplorer({ regions, locale = 'en' }: Props) {
         const href = `${localePrefix}/golf-courses/${region}/`
 
         for (const course of courses) {
-          if (!course.latitude || !course.longitude) continue
+          // Same trust gate as the detail page's satellite map and the schema
+          // GeoCoordinates: a confident pin from centroid-precision or
+          // unverified coordinates is worse than no pin.
+          if (!course.latitude || !course.longitude || !hasTrustedCoordinates(course)) continue
 
           const position = { lat: course.latitude, lng: course.longitude }
           bounds.extend(position)

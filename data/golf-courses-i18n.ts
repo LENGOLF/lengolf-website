@@ -254,8 +254,9 @@ export function getTranslatedCourseDetailParams(): {
 
 /**
  * '/golf-courses/<region>/<slug>' paths with a published translation for
- * `locale`. Mirrors the shape of getRegisteredCourseDetailPaths in
- * lib/translated-routes.ts for easy set-diffing in the smoke test.
+ * `locale`. Consumed by the smoke test's course-detail registry consistency
+ * check (section J3), which set-diffs it against
+ * getRegisteredCourseDetailPaths from lib/translated-routes.ts.
  */
 export function getTranslatedCourseDetailPaths(locale: string): string[] {
   return COURSE_DETAIL_I18N.filter((e) =>

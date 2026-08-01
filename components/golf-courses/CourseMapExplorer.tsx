@@ -9,7 +9,7 @@ import Link from 'next/link'
 import { ArrowRight, Clock, Flag, X, ExternalLink, MapPinOff } from 'lucide-react'
 import type { GolfCourse } from '@/types/golf-courses'
 import { formatFee, driveTimeLabel } from '@/lib/format'
-import { courseMapsUrl } from '@/lib/geo'
+import { courseMapsUrl, hasTrustedCoordinates } from '@/lib/geo'
 import { loadMapsApi, BASE_MAP_OPTIONS } from '@/lib/maps-loader'
 import { pushMapUnavailable } from '@/lib/analytics'
 
@@ -94,7 +94,10 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
 
       markersRef.current = courses
         .map((course, i) => {
-          if (!course.latitude || !course.longitude) return null
+          // Same trust gate as the detail page's satellite map and the schema
+          // GeoCoordinates: a confident pin from centroid-precision or
+          // unverified coordinates is worse than no pin.
+          if (!course.latitude || !course.longitude || !hasTrustedCoordinates(course)) return null
           const pin = makePin(i, false, course.name)
           const position = { lat: course.latitude, lng: course.longitude }
           const marker = new gmaps.marker.AdvancedMarkerElement({

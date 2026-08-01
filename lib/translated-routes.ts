@@ -637,3 +637,17 @@ export function getCanonical(locale: string, pathname: string): string {
     : "en";
   return `${SITE_URL}${localePrefix(l)}${suffix}`;
 }
+
+/**
+ * Canonical URL for `pathname` in `locale` — but only when the locale
+ * actually has that route; otherwise the EN canonical. For JSON-LD
+ * (breadcrumbs etc.): an untranslated locale URL 301s through the middleware,
+ * and redirecting URLs don't belong in structured data. Shared by the
+ * /golf-courses hub-crumb builders on both the [region] and [region]/[slug]
+ * pages.
+ */
+export function getResolvedCanonical(locale: string, pathname: string): string {
+  return hasTranslationForLocale(locale, pathname.replace(/\/$/, ""))
+    ? getCanonical(locale, pathname)
+    : getCanonical("en", pathname);
+}

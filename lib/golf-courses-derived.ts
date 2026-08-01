@@ -61,10 +61,19 @@ export function isPlayable(c: GolfCourse): boolean {
   )
 }
 
-async function getAllPublishedCourses(): Promise<GolfCourse[]> {
-  const regions = Object.keys(REGION_META) as Region[]
-  const arrays = await Promise.all(regions.map((r) => getCoursesByRegion(r)))
-  return arrays.flat().filter(isPlayable)
+// Module-memoized like comparisonPairsCache/useCaseRarityCache below: the
+// tier-link block on every course-detail render calls this, so without the
+// cache each of the ~170 page builds repeats the same 14-region fan-out.
+let allPublishedCache: Promise<GolfCourse[]> | null = null
+
+function getAllPublishedCourses(): Promise<GolfCourse[]> {
+  if (!allPublishedCache) {
+    const regions = Object.keys(REGION_META) as Region[]
+    allPublishedCache = Promise.all(regions.map((r) => getCoursesByRegion(r))).then((arrays) =>
+      arrays.flat().filter(isPlayable)
+    )
+  }
+  return allPublishedCache
 }
 
 /** Top N courses in a region by composite popularity score. */

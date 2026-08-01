@@ -14,8 +14,14 @@ export function formatBaht(n: number): string {
   return `฿${n.toLocaleString('en-US')}`
 }
 
-/** Locales the course-page formatters below carry templates for. */
-type FormatLocale = 'en' | 'th' | 'ja'
+/**
+ * Locales the course-page content system carries templates for — the single
+ * source of truth. lib/course-seo.ts derives its CourseSeoLocale from this,
+ * so adding the next pilot locale (ko/zh) here extends driveTimeLabel,
+ * asOfMonthYear, and the SEO/FAQ generators with one edit.
+ */
+export const COURSE_CONTENT_LOCALES = ['en', 'th', 'ja'] as const
+export type FormatLocale = (typeof COURSE_CONTENT_LOCALES)[number]
 
 // Per-locale drive-time fragments. EN templates are byte-identical to the
 // pre-i18n hardcoded strings; TH follows the glossary-settled "จากกรุงเทพฯ"
@@ -90,14 +96,6 @@ export function asOfMonthYear(isoDate: string, locale: FormatLocale): string {
     default:
       return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })
   }
-}
-
-/**
- * Thai "Month YYYY" for an ISO date, with the Gregorian year.
- * @deprecated Alias for `asOfMonthYear(isoDate, 'th')` — use that directly.
- */
-export function thaiMonthYear(isoDate: string): string {
-  return asOfMonthYear(isoDate, 'th')
 }
 
 /** Hours from minutes, keeping .5 precision: 150 → "2.5", 180 → "3". */

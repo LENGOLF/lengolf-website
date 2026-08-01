@@ -25,34 +25,15 @@
  */
 
 import * as fs from 'fs'
-import * as path from 'path'
-import { pathToFileURL } from 'url'
 import type { GolfCourse } from '../types/golf-courses'
 import { haversineKm } from '../lib/geo'
-
-const ROOT = path.join(__dirname, '..', 'data', 'golf-courses')
+import { loadCourseFiles } from './course-files'
 const API_KEY = process.env.GOOGLE_MAPS_SERVER_API_KEY ?? ''
 const WRITE = process.argv.includes('--write')
 /** Courses are 1–2 km across, so a hit within 1.5 km is the same property. */
 const MATCH_KM = 1.5
 const TODAY = new Date().toISOString().slice(0, 10)
 
-interface Entry { file: string; abs: string; course: GolfCourse }
-
-async function loadCourses(): Promise<Entry[]> {
-  const out: Entry[] = []
-  for (const region of fs.readdirSync(ROOT)) {
-    const dir = path.join(ROOT, region)
-    if (!fs.statSync(dir).isDirectory()) continue
-    for (const f of fs.readdirSync(dir)) {
-      if (!f.endsWith('.ts') || f === 'index.ts') continue
-      const abs = path.join(dir, f)
-      const mod = await import(pathToFileURL(abs).href)
-      if (mod.course) out.push({ file: `${region}/${f}`, abs, course: mod.course as GolfCourse })
-    }
-  }
-  return out
-}
 
 interface PlacesHit { lat: number; lng: number; name: string; address: string }
 
@@ -110,17 +91,35 @@ async function main() {
     process.exit(1)
   }
 
-  const courses = await loadCourses()
+  const courses = await loadCourseFiles()
   const agreed: string[] = []
   const drifted: string[] = []
   const unresolved: string[] = []
 
-  for (const { file, abs, course } of courses) {
-    let hit: PlacesHit | null
-    try {
-      hit = await lookup(course)
-    } catch (err) {
-      unresolved.push(`${file}: lookup failed — ${(err as Error).message}`)
+  // Places lookups run through a bounded pool: ~149 serial round-trips cost
+  // 1-1.5 min of wall time and a single hung response stalls the batch, while
+  // 8 in flight stays far below Places QPS quotas. File writes stay in the
+  // sequential loop below.
+  const CONCURRENCY = 8
+  const results = new Array<{ hit: PlacesHit | null; error: Error | null }>(courses.length)
+  let next = 0
+  await Promise.all(
+    Array.from({ length: Math.min(CONCURRENCY, courses.length) }, async () => {
+      while (next < courses.length) {
+        const i = next++
+        try {
+          results[i] = { hit: await lookup(courses[i].course), error: null }
+        } catch (err) {
+          results[i] = { hit: null, error: err as Error }
+        }
+      }
+    })
+  )
+
+  for (const [i, { file, abs, course }] of courses.entries()) {
+    const { hit, error } = results[i]
+    if (error) {
+      unresolved.push(`${file}: lookup failed — ${error.message}`)
       continue
     }
     if (!hit) {

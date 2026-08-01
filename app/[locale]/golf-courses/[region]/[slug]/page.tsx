@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { getCourseBySlug, getAllCourseParams, getCoursesByRegion, REGION_META } from '@/lib/golf-courses'
 import type { Region } from '@/lib/golf-courses'
 import { SITE_URL } from '@/lib/constants'
-import { getAlternates, getCanonical, hasTranslationForLocale } from '@/lib/translated-routes'
+import { getAlternates, getCanonical, getResolvedCanonical } from '@/lib/translated-routes'
 import { getRegionHubTranslation, getTranslatedCourseDetailParams } from '@/data/golf-courses-i18n'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd } from '@/lib/jsonld'
 import { getCourseDetailJsonLd } from '@/lib/jsonld-courses'
@@ -193,17 +193,15 @@ export default async function CoursePageRoute({ params }: Props) {
   ]
 
   const breadcrumbJsonLd = getBreadcrumbJsonLd([
-    // The /golf-courses/ hub is translated for some locales (th): point the
-    // crumb at the locale's own hub where a translation exists, and at the
-    // canonical EN hub otherwise (ja/ko/zh hub URLs still 301 to English —
+    // The /golf-courses/ hub is translated for some locales: point the crumb
+    // at the locale's own hub where a translation exists, and at the
+    // canonical EN hub otherwise (untranslated hub URLs 301 to English —
     // don't emit redirecting URLs in JSON-LD). Crumb display names are
     // localized either way. Mirrors the [region] hub page.
     { name: 'Home', url: `${SITE_URL}/` },
     {
       name: t('breadcrumbGolfCourses'),
-      url: hasTranslationForLocale(locale, '/golf-courses')
-        ? getCanonical(locale, '/golf-courses/')
-        : `${SITE_URL}/golf-courses/`,
+      url: getResolvedCanonical(locale, '/golf-courses/'),
     },
     { name: regionLabel, url: getCanonical(locale, `/golf-courses/${region}/`) },
     { name: course.name, url: canonicalUrl },

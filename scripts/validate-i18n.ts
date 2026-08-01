@@ -51,10 +51,13 @@
  * Usage: npx tsx scripts/validate-i18n.ts
  */
 
-import { readFileSync } from 'node:fs'
+import { readdirSync, readFileSync, statSync } from 'node:fs'
+import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { explainerPages } from '@/data/explainer-pages'
-import { REGION_HUB_I18N } from '@/data/golf-courses-i18n'
+import { COURSE_DETAIL_I18N, REGION_HUB_I18N } from '@/data/golf-courses-i18n'
+import { hasProvinceL10n } from '@/lib/course-seo'
+import type { GolfCourse } from '@/types/golf-courses'
 import { faqPages } from '@/data/faq-pages'
 import { PRICE_TIER_I18N } from '@/data/price-tiers'
 import {
@@ -251,6 +254,74 @@ for (const [region, byLocale] of Object.entries(REGION_HUB_I18N)) {
         { locale, entryId, field: 'description', value: t.description },
       ],
     })
+  }
+}
+
+// ── Course-detail locale content (course.locales.<locale> on data/golf-courses/) ──
+// Unlike the corpora above, the localized strings live on each course's own
+// data file, not in one importable module — so the files are loaded here via
+// require() (tsx patches the CJS loader to handle .ts). Three things happen:
+//   a) every registered (course, locale) tuple's strings join `entries`, so
+//      the newest localized surface goes through the same house-style/honesty
+//      checks as guides/FAQs/hubs/tiers;
+//   b) a tuple whose course file lacks locales.<locale> (or misses
+//      title/meta) is an ERROR — without this, the page builds and serves an
+//      almost-entirely-English 200 under the locale URL while hreflang and
+//      the sitemap advertise it as translated (smoke J3 only ties the route
+//      registry to COURSE_DETAIL_I18N, not to the course files);
+//   c) the inverse drift — a course file carrying locales.th/ja content with
+//      no COURSE_DETAIL_I18N tuple — is an ERROR too (the translation exists
+//      but never builds).
+// Also errors when a registered course's (English) province is missing from
+// the PROVINCE_L10N map in lib/course-seo.ts: an unmapped province silently
+// drops the locality clause from the localized FAQ answers and JSON-LD.
+function courseUnits(locale: Locale, entryId: string, l: NonNullable<GolfCourse['locales']['th']>): Unit[] {
+  const u: Unit[] = []
+  const push = (field: string, value: string | null | undefined) => {
+    if (typeof value === 'string' && value.length > 0) u.push({ locale, entryId, field, value })
+  }
+  push('title', l.title)
+  push('meta_description', l.meta_description)
+  if (l.prose) for (const [k, v] of Object.entries(l.prose)) push(`prose.${k}`, v)
+  return u
+}
+
+const COURSES_ROOT = fileURLToPath(new URL('../data/golf-courses', import.meta.url))
+const registeredCourseLocales = new Map<string, readonly string[]>(
+  COURSE_DETAIL_I18N.map((e) => [`${e.region}/${e.slug}`, e.locales])
+)
+for (const region of readdirSync(COURSES_ROOT)) {
+  const dir = join(COURSES_ROOT, region)
+  if (!statSync(dir).isDirectory()) continue
+  for (const f of readdirSync(dir)) {
+    if (!f.endsWith('.ts') || f === 'index.ts') continue
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const course = (require(join(dir, f)) as { course?: GolfCourse }).course
+    if (!course) continue
+    const key = `${region}/${f.replace(/\.ts$/, '')}`
+    const registered = registeredCourseLocales.get(key) ?? []
+
+    for (const locale of LOCALES) {
+      const l = course.locales[locale as keyof GolfCourse['locales']]
+      const hasContent = !!l && (locale as string) !== 'en'
+      const isRegistered = registered.includes(locale)
+      const entryId = `course:${key}:${locale}`
+      if (isRegistered && (!l || !l.title || !l.meta_description)) {
+        add('error', locale, entryId, 'locales', 'course-registry',
+          `COURSE_DETAIL_I18N registers '${locale}' but the course file has no locales.${locale} title/meta_description — the page would serve English content on the ${locale} URL while hreflang advertises a translation`)
+        continue
+      }
+      if (!isRegistered && hasContent) {
+        add('error', locale, entryId, 'locales', 'course-registry',
+          `course file carries locales.${locale} content but COURSE_DETAIL_I18N has no ('${locale}') tuple — the translation exists but never builds`)
+      }
+      if (isRegistered && l) entries.push({ entryId, locale, units: courseUnits(locale, entryId, l) })
+    }
+
+    if (registered.length > 0 && !hasProvinceL10n(course.province)) {
+      add('error', 'th', `course:${key}`, 'province', 'province-l10n',
+        `province "${course.province}" is missing from PROVINCE_L10N in lib/course-seo.ts — the localized FAQ answers silently drop their locality clause`)
+    }
   }
 }
 

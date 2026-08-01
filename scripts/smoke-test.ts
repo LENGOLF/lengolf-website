@@ -1808,111 +1808,19 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
-  // Translated TH course-detail pages (data/golf-courses-i18n.ts
-  // COURSE_DETAIL_I18N + th allowlist entries) — the 3-course pilot. All
-  // other course details must keep 301ing (alpine canary in redirectTests).
+  // Translated course-detail pages: one TH canary here; FULL coverage of
+  // every registered course-detail translation (status + content marker) is
+  // registry-derived in section L2, so new batches are covered with zero
+  // routeTests edits. All other course details must keep 301ing (alpine
+  // canary in redirectTests).
   {
     path: "/th/golf-courses/bangkok/sai-golf-club/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
-  {
-    path: "/th/golf-courses/bangkok/the-legacy-golf-club/",
-    expectedStatus: [200],
-    contentMarker: '<main id="main-content">',
-  },
-  {
-    path: "/th/golf-courses/chiang-mai/lanna-golf-course/",
-    expectedStatus: [200],
-    contentMarker: '<main id="main-content">',
-  },
-  // Batch 2 (2026-08): top GSC-impression courses in hub-translated regions.
-  {
-    path: "/th/golf-courses/bangkok/pinehurst-golf-country-club/",
-    expectedStatus: [200],
-    contentMarker: '<main id="main-content">',
-  },
-  {
-    path: "/th/golf-courses/bangkok/siam-country-club-bangkok/",
-    expectedStatus: [200],
-    contentMarker: '<main id="main-content">',
-  },
-  {
-    path: "/th/golf-courses/bangkok/ayutthaya-golf-club/",
-    expectedStatus: [200],
-    contentMarker: '<main id="main-content">',
-  },
-  {
-    path: "/th/golf-courses/bangkok/muang-ake-golf-course/",
-    expectedStatus: [200],
-    contentMarker: '<main id="main-content">',
-  },
-  {
-    path: "/th/golf-courses/phuket/blue-canyon-lakes-course/",
-    expectedStatus: [200],
-    contentMarker: '<main id="main-content">',
-  },
-  {
-    path: "/th/golf-courses/phuket/phuket-country-club/",
-    expectedStatus: [200],
-    contentMarker: '<main id="main-content">',
-  },
-  {
-    path: "/th/golf-courses/pattaya/wangjuntr-golf-park/",
-    expectedStatus: [200],
-    contentMarker: '<main id="main-content">',
-  },
-  // Translated JA course-detail pages (same 3-course pilot, ja locales in
-  // COURSE_DETAIL_I18N + ja allowlist entries). All other JA course details
-  // must keep 301ing (ja alpine canary in redirectTests).
+  // One JA course-detail canary (full registry-derived coverage in L2).
   {
     path: "/ja/golf-courses/bangkok/sai-golf-club/",
-    expectedStatus: [200],
-    contentMarker: '<main id="main-content">',
-  },
-  {
-    path: "/ja/golf-courses/bangkok/the-legacy-golf-club/",
-    expectedStatus: [200],
-    contentMarker: '<main id="main-content">',
-  },
-  {
-    path: "/ja/golf-courses/chiang-mai/lanna-golf-course/",
-    expectedStatus: [200],
-    contentMarker: '<main id="main-content">',
-  },
-  // Batch 2 (2026-08): top GSC-impression courses in hub-translated regions.
-  {
-    path: "/ja/golf-courses/bangkok/pinehurst-golf-country-club/",
-    expectedStatus: [200],
-    contentMarker: '<main id="main-content">',
-  },
-  {
-    path: "/ja/golf-courses/bangkok/siam-country-club-bangkok/",
-    expectedStatus: [200],
-    contentMarker: '<main id="main-content">',
-  },
-  {
-    path: "/ja/golf-courses/bangkok/ayutthaya-golf-club/",
-    expectedStatus: [200],
-    contentMarker: '<main id="main-content">',
-  },
-  {
-    path: "/ja/golf-courses/bangkok/muang-ake-golf-course/",
-    expectedStatus: [200],
-    contentMarker: '<main id="main-content">',
-  },
-  {
-    path: "/ja/golf-courses/phuket/blue-canyon-lakes-course/",
-    expectedStatus: [200],
-    contentMarker: '<main id="main-content">',
-  },
-  {
-    path: "/ja/golf-courses/phuket/phuket-country-club/",
-    expectedStatus: [200],
-    contentMarker: '<main id="main-content">',
-  },
-  {
-    path: "/ja/golf-courses/pattaya/wangjuntr-golf-park/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
@@ -3732,22 +3640,14 @@ async function runCourseDetailRegistryConsistencyTests() {
   console.log(
     "\n\x1b[1mJ3) Translated course-detail registry consistency\x1b[0m",
   );
-  const { getTranslatedCourseDetailParams } =
+  const { getTranslatedCourseDetailPaths } =
     await import("../data/golf-courses-i18n");
   const { getRegisteredCourseDetailPaths, ALL_LOCALES } =
     await import("../lib/translated-routes");
 
-  // Per-locale sets of '/golf-courses/<region>/<slug>' paths from the data file.
-  const dataByLocale: Record<string, Set<string>> = {};
-  for (const { locale, region, slug } of getTranslatedCourseDetailParams()) {
-    (dataByLocale[locale] ??= new Set<string>()).add(
-      `/golf-courses/${region}/${slug}`,
-    );
-  }
-
   for (const locale of ALL_LOCALES) {
     if (locale === "en") continue;
-    const fromData = dataByLocale[locale] ?? new Set<string>();
+    const fromData = new Set(getTranslatedCourseDetailPaths(locale));
     const fromRegistry = new Set(getRegisteredCourseDetailPaths(locale));
     const missingInRegistry = [...fromData].filter((p) => !fromRegistry.has(p));
     const missingInData = [...fromRegistry].filter((p) => !fromData.has(p));
@@ -3888,12 +3788,23 @@ async function runCourseDetailRegistryLivenessTests() {
       const target = `/${locale}${path}/`;
       try {
         const res = await fetch(`${BASE}${target}`, { redirect: "manual" });
-        if (res.status === 200) {
-          ok++;
-        } else {
+        if (res.status !== 200) {
           fail(
             `Registered course-detail translation not live: ${target}`,
             `expected 200, got ${res.status} — lib/translated-routes.ts lists a '${locale}' course detail the build didn't prebuild (COURSE_DETAIL_I18N missing the triple? dynamicParams=false hard-404s it).`,
+          );
+          continue;
+        }
+        // Content check too (not just status): these registry-derived checks
+        // replace per-page hardcoded routeTests, so they must assert the page
+        // actually rendered — a 200 error shell would otherwise pass.
+        const body = await res.text();
+        if (body.includes('<main id="main-content">')) {
+          ok++;
+        } else {
+          fail(
+            `Registered course-detail translation missing main content: ${target}`,
+            'served 200 without <main id="main-content">',
           );
         }
       } catch (err) {
