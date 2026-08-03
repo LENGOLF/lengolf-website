@@ -18,8 +18,10 @@ export const course: GolfCourse = {
   driving_range: true,
   website: 'https://www.royalchiangmai.com/',
   phone: '+66 52 081 995',
-  latitude: 18.8417,
-  longitude: 99,
+  latitude: 19.0268,
+  longitude: 98.9892,
+  // Was 18.8417,99 — 20.6km off; the broken component was the LATITUDE, not the 0dp longitude. Official site DMS + Overture POI + polygon agree within 600m.
+  coordinates_verified_at: '2026-07-31',
   distance_from_bangkok_km: 700,
   drive_time_from_bangkok_min: null,
   google_maps_url: null,

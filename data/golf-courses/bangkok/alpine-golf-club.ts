@@ -21,8 +21,10 @@ export const course: GolfCourse = {
   club_rental_brands: null,
   website: 'https://www.alpinegolfclub.com/',
   phone: '+66 2 577 3333',
-  latitude: 13.9636,
-  longitude: 100.6353,
+  latitude: 14.1085,
+  longitude: 100.712,
+  // Was 13.9636,100.6353 — ~18km off, pin landed in urban Don Mueang. where2golf + course-master dataset agree ~250m.
+  coordinates_verified_at: '2026-07-31',
   distance_from_bangkok_km: 40,
   drive_time_from_bangkok_min: 50,
   google_maps_url: null,

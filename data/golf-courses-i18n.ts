@@ -194,3 +194,72 @@ export function getTranslatedRegionHubParams(): { locale: string; region: string
   }
   return params
 }
+
+/**
+ * Registry of COURSE DETAIL pages ([region]/[slug]) with published locale
+ * variants. Same plain-module constraint as REGION_HUB_I18N above: the smoke
+ * test imports this to cross-check lib/translated-routes.ts (course-detail
+ * registry consistency check, section J3), so no `import 'server-only'` and
+ * no runtime import of lib/golf-courses.
+ *
+ * Unlike the hubs, the localized STRINGS do not live here — they live on the
+ * course file itself (`course.locales.th` in data/golf-courses/<region>/
+ * <slug>.ts). This registry only declares WHICH courses build which locales,
+ * feeding the [slug] page's generateStaticParams. Adding a (course, locale)
+ * here REQUIRES adding the matching '/golf-courses/<region>/<slug>' entry to
+ * that locale's staticRoutes in lib/translated-routes.ts — the smoke-test
+ * course-detail consistency check fails CI in both directions if they drift.
+ */
+type CourseDetailLocale = 'th' | 'ja'
+
+export const COURSE_DETAIL_I18N: {
+  region: string
+  slug: string
+  locales: readonly CourseDetailLocale[]
+}[] = [
+  { region: 'bangkok', slug: 'sai-golf-club', locales: ['th', 'ja'] },
+  { region: 'bangkok', slug: 'the-legacy-golf-club', locales: ['th', 'ja'] },
+  { region: 'chiang-mai', slug: 'lanna-golf-course', locales: ['th', 'ja'] },
+  // Batch 2 (2026-08) — top course pages by GSC impressions (90d) within
+  // regions whose hubs are translated for both locales. Suvarnabhumi (1,319
+  // imp) deliberately excluded pending the Phoenix Gold slug merge.
+  { region: 'bangkok', slug: 'pinehurst-golf-country-club', locales: ['th', 'ja'] },
+  { region: 'bangkok', slug: 'siam-country-club-bangkok', locales: ['th', 'ja'] },
+  { region: 'bangkok', slug: 'ayutthaya-golf-club', locales: ['th', 'ja'] },
+  { region: 'bangkok', slug: 'muang-ake-golf-course', locales: ['th', 'ja'] },
+  { region: 'phuket', slug: 'blue-canyon-lakes-course', locales: ['th', 'ja'] },
+  { region: 'phuket', slug: 'phuket-country-club', locales: ['th', 'ja'] },
+  { region: 'pattaya', slug: 'wangjuntr-golf-park', locales: ['th', 'ja'] },
+]
+
+/**
+ * Every (locale, region, slug) triple with a published course-detail
+ * translation. Used by the [slug] page's generateStaticParams (so only
+ * translated combos build) AND by the smoke-test course-detail consistency
+ * check.
+ */
+export function getTranslatedCourseDetailParams(): {
+  locale: string
+  region: string
+  slug: string
+}[] {
+  const params: { locale: string; region: string; slug: string }[] = []
+  for (const entry of COURSE_DETAIL_I18N) {
+    for (const locale of entry.locales) {
+      params.push({ locale, region: entry.region, slug: entry.slug })
+    }
+  }
+  return params
+}
+
+/**
+ * '/golf-courses/<region>/<slug>' paths with a published translation for
+ * `locale`. Consumed by the smoke test's course-detail registry consistency
+ * check (section J3), which set-diffs it against
+ * getRegisteredCourseDetailPaths from lib/translated-routes.ts.
+ */
+export function getTranslatedCourseDetailPaths(locale: string): string[] {
+  return COURSE_DETAIL_I18N.filter((e) =>
+    (e.locales as readonly string[]).includes(locale)
+  ).map((e) => `/golf-courses/${e.region}/${e.slug}`)
+}

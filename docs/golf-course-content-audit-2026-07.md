@@ -156,8 +156,17 @@ of Search Console data.
 ## Notes for future edits
 
 - The `schema_markup` field in `data/golf-courses/*/*.ts` is now dead weight
-  for the detail page (kept for compatibility; list pages never used it). A
-  follow-up data-file sweep can delete it (~1–2 KB × 149 files).
+  for the detail page EXCEPT its `address` sub-object, which
+  `getCourseDetailJsonLd` still reads because ~27 blobs carry street-level
+  address data with no typed equivalent. **Do not bulk-delete the field until
+  those addresses are extracted into typed fields** — deletion silently
+  downgrades those courses' schema to province-only with no warning or test
+  (PR #82 review, deferred item). The right sweep: add typed address fields,
+  migrate the 27, then delete all 149 blobs.
+- Tier/best-for pages titled "Bangkok-Area" still list courses from all 14
+  regions (`getCoursesUnderPrice`/`getCoursesForUseCase` are nationwide) —
+  pre-existing backlog item 7, now also surfaced by the tier cross-link on
+  non-Bangkok course pages (PR #82 review, deferred item).
 - `club_rental_available === false` exists in code but not in data (134 true /
   15 null / 0 false) — the strongest rental pitch never renders. If research
   confirms any course genuinely lacks rentals, set it to `false`.

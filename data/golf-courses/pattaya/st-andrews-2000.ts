@@ -18,8 +18,10 @@ export const course: GolfCourse = {
   driving_range: null,
   website: 'https://greenvalleythailand.wixsite.com/standrews2000golf',
   phone: null,
-  latitude: 12.77,
-  longitude: 101.39,
+  latitude: 12.8085,
+  longitude: 101.0783,
+  // Polygon centre, not the POI: the three sister courses (St Andrews 2000 / Rayong Green Valley / Silky Oak) share an access road and their POIs are conflated.
+  coordinates_verified_at: '2026-07-31',
   distance_from_bangkok_km: 190,
   drive_time_from_bangkok_min: 135,
   google_maps_url: null,

@@ -1,18 +1,22 @@
+import { useTranslations } from 'next-intl'
 import type { CourseFaqItem } from '@/lib/course-seo'
 
 /**
  * Data-derived FAQ block for course detail pages. The route computes the
  * items once (lib/course-seo getCourseFaqs) and passes the same array here
  * and to the FAQPage JSON-LD, so visible content and structured data cannot
- * drift apart.
+ * drift apart. The heading comes from GolfCourseDetail — a namespace present
+ * in en/th only, which is safe because this server component only renders on
+ * the locales that SSG course-detail pages.
  */
 export default function CourseFaq({ faqs }: { faqs: CourseFaqItem[] }) {
+  const t = useTranslations('GolfCourseDetail')
   if (faqs.length === 0) return null
 
   return (
     <div>
       <h2 className="mb-3 text-xs font-bold uppercase tracking-widest text-primary">
-        Frequently asked questions
+        {t('faqHeading')}
       </h2>
       <div className="space-y-3">
         {faqs.map((f) => (

@@ -22,54 +22,93 @@
  *  - weekend more than 2.2× weekday
  *  - `fees_verified_at` older than 18 months (rates drift; re-check)
  *
+ * Coordinates, after a course page shipped a satellite pin several km from
+ * the course:
+ *  - ERROR: coordinates outside Thailand's bounding box, only one of
+ *    lat/lng set, or a malformed `coordinates_verified_at`
+ *  - WARN: rounded to <3 decimal places (~1.1 km — a district centroid).
+ *    Only a warning because `hasTrustedCoordinates` (lib/geo.ts) already
+ *    withholds those from the map pin and from schema GeoCoordinates, so the
+ *    bad number never reaches a reader; it stays usable for proximity
+ *    ranking. Clear the debt with `npm run verify:coordinates`.
+ *
  * No server needed. Zero deps beyond tsx.
  */
 
-import * as fs from 'fs'
-import * as path from 'path'
-import { pathToFileURL } from 'url'
 import type { GolfCourse } from '../types/golf-courses'
-
-const ROOT = path.join(__dirname, '..', 'data', 'golf-courses')
+import { decimalPlaces, MIN_COORD_DECIMALS } from '../lib/geo'
+import { loadCourseFiles } from './course-files'
 
 const LOW_FEE_THRESHOLD = 600
 const ABS_FLOOR = 150
 const ABS_CEILING = 20000
 const WEEKEND_JUMP_RATIO = 2.2
 const STALE_MONTHS = 18
+const COORD_STALE_MONTHS = 36
+// Thailand's bounding box, generously padded.
+const TH_BOUNDS = { latMin: 5.5, latMax: 20.6, lngMin: 97.2, lngMax: 105.7 }
 
 const errors: string[] = []
 const warnings: string[] = []
 
-async function loadCourses(): Promise<{ file: string; course: GolfCourse }[]> {
-  const out: { file: string; course: GolfCourse }[] = []
-  for (const region of fs.readdirSync(ROOT)) {
-    const dir = path.join(ROOT, region)
-    if (!fs.statSync(dir).isDirectory()) continue
-    for (const f of fs.readdirSync(dir)) {
-      if (!f.endsWith('.ts') || f === 'index.ts') continue
-      // pathToFileURL, not the raw path: the ESM loader rejects a Windows
-      // absolute path ("protocol 'c:'"), so a bare path.join made this gate
-      // Linux-only and unrunnable in the pre-commit sweep on Windows.
-      const mod = await import(pathToFileURL(path.join(dir, f)).href)
-      if (mod.course) out.push({ file: `${region}/${f}`, course: mod.course as GolfCourse })
-    }
-  }
-  return out
-}
 
 function monthsSince(iso: string): number {
   const then = new Date(`${iso}T00:00:00Z`).getTime()
   return (Date.now() - then) / (1000 * 60 * 60 * 24 * 30.44)
 }
 
+
+/** Coordinates drive the satellite pin, schema GeoCoordinates and the maps link. */
+function checkCoordinates(file: string, c: GolfCourse) {
+  const { latitude: lat, longitude: lng } = c
+  const attested = c.coordinates_verified_at ?? null
+
+  if (attested !== null && !/^\d{4}-\d{2}-\d{2}$/.test(attested)) {
+    errors.push(`${file}: coordinates_verified_at "${attested}" is not YYYY-MM-DD`)
+    return
+  }
+  if (lat === null || lng === null) {
+    if (lat !== null || lng !== null) {
+      errors.push(`${file}: latitude/longitude must both be set or both be null`)
+    }
+    return
+  }
+  if (
+    lat < TH_BOUNDS.latMin || lat > TH_BOUNDS.latMax ||
+    lng < TH_BOUNDS.lngMin || lng > TH_BOUNDS.lngMax
+  ) {
+    errors.push(`${file}: coordinates ${lat},${lng} fall outside Thailand`)
+    return
+  }
+
+  const dp = Math.min(decimalPlaces(lat), decimalPlaces(lng))
+  // Same threshold hasTrustedCoordinates enforces at render time (lib/geo.ts),
+  // so this warning always describes what the site actually publishes.
+  if (dp < MIN_COORD_DECIMALS && attested === null) {
+    // WARN, not ERROR: `hasTrustedCoordinates` already withholds these from
+    // the satellite pin and from schema.org GeoCoordinates, so nothing wrong
+    // reaches a reader. They remain usable for proximity ranking, where a
+    // ±1 km error is immaterial across 20–60 km. This is tracked debt, and
+    // `npm run verify:coordinates` clears it in one pass.
+    const err = dp === 0 ? '111 km' : dp === 1 ? '11 km' : '1.1 km'
+    warnings.push(
+      `${file}: coordinates ${lat},${lng} rounded to ${dp}dp (±${err}) — map pin and schema geo suppressed; run \`npm run verify:coordinates\``
+    )
+  }
+  if (attested !== null && monthsSince(attested) > COORD_STALE_MONTHS) {
+    warnings.push(`${file}: coordinates_verified_at ${attested} is over ${COORD_STALE_MONTHS} months old`)
+  }
+}
+
 async function main() {
-  const courses = await loadCourses()
+  const courses = await loadCourseFiles()
 
   for (const { file, course: c } of courses) {
     const wd = c.green_fee_weekday_thb
     const we = c.green_fee_weekend_thb
     const verified = c.fees_verified_at ?? null
+
+    checkCoordinates(file, c)
 
     if (verified !== null && !/^\d{4}-\d{2}-\d{2}$/.test(verified)) {
       errors.push(`${file}: fees_verified_at "${verified}" is not YYYY-MM-DD`)

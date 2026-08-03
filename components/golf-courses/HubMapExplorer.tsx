@@ -1,9 +1,11 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { MapPinOff } from 'lucide-react'
 import type { GolfCourse } from '@/types/golf-courses'
 import { loadMapsApi, BASE_MAP_OPTIONS } from '@/lib/maps-loader'
+import { hasTrustedCoordinates } from '@/lib/geo'
 import { pushMapUnavailable } from '@/lib/analytics'
 
 interface RegionCourses {
@@ -26,8 +28,12 @@ function escHtml(s: string): string {
 
 
 export default function HubMapExplorer({ regions, locale = 'en' }: Props) {
+  // GolfCourseHub only exists in the locales that SSG the hub (en/th) — the
+  // same pattern as CourseMapExplorer's GolfCourseRegion usage.
+  const t = useTranslations('GolfCourseHub')
   const mapDivRef = useRef<HTMLDivElement>(null)
   const [mapsUnavailable, setMapsUnavailable] = useState(false)
+  const viewGuideLabel = t('viewGuide')
 
   useEffect(() => {
     const fail = (reason: 'no_key' | 'load_failed') => {
@@ -60,7 +66,10 @@ export default function HubMapExplorer({ regions, locale = 'en' }: Props) {
         const href = `${localePrefix}/golf-courses/${region}/`
 
         for (const course of courses) {
-          if (!course.latitude || !course.longitude) continue
+          // Same trust gate as the detail page's satellite map and the schema
+          // GeoCoordinates: a confident pin from centroid-precision or
+          // unverified coordinates is worse than no pin.
+          if (!course.latitude || !course.longitude || !hasTrustedCoordinates(course)) continue
 
           const position = { lat: course.latitude, lng: course.longitude }
           bounds.extend(position)
@@ -93,7 +102,7 @@ export default function HubMapExplorer({ regions, locale = 'en' }: Props) {
                 <p style="margin:0 0 2px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:${bg}">${escHtml(label)}</p>
                 <p style="margin:0 0 8px;font-size:13px;font-weight:700;color:#1a1a1a;line-height:1.3">${escHtml(course.name)}</p>
                 <a href="${courseHref}" style="display:inline-block;background:${bg};color:${text};padding:4px 12px;border-radius:6px;font-size:11px;font-weight:700;text-decoration:none">
-                  View guide →
+                  ${escHtml(viewGuideLabel)}
                 </a>
               </div>
             `)
@@ -112,7 +121,7 @@ export default function HubMapExplorer({ regions, locale = 'en' }: Props) {
     }).catch((err) => { console.error(err); fail('load_failed') })
 
     return () => { cancelled = true }
-  }, [regions, locale])
+  }, [regions, locale, viewGuideLabel])
 
   return (
     <div className="overflow-hidden rounded-2xl border border-[#003d22]/15 shadow-sm">
@@ -137,13 +146,13 @@ export default function HubMapExplorer({ regions, locale = 'en' }: Props) {
           style={{ height: 'clamp(260px, 40vw, 420px)' }}
         >
           <MapPinOff className="h-8 w-8" aria-hidden="true" />
-          <span className="text-sm font-medium">Map unavailable</span>
+          <span className="text-sm font-medium">{t('mapUnavailable')}</span>
         </div>
       ) : (
         <div
           ref={mapDivRef}
           role="application"
-          aria-label="Interactive map showing golf courses across Thailand"
+          aria-label={t('mapAriaLabel')}
           style={{ width: '100%', height: 'clamp(260px, 40vw, 420px)', display: 'block' }}
         />
       )}

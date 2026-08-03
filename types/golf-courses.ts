@@ -1,6 +1,12 @@
 export interface GolfCourseLocale {
   title: string
   meta_description: string
+  /**
+   * Optional localized prose. A locale may ship title + meta_description only
+   * (SERP presence first, body later) — the page falls back to the EN
+   * `course.prose` per-field while translation is in flight.
+   */
+  prose?: GolfCourseProse
 }
 
 export interface GolfCourseProse {
@@ -46,6 +52,15 @@ export interface GolfCourse {
    */
   fees_verified_at?: string | null
   /**
+   * ISO date (YYYY-MM-DD) when `latitude`/`longitude` were checked against an
+   * authoritative source (official site, Google Maps place, OSM). Without it,
+   * coordinates are trusted only if precise enough to be a real fix rather
+   * than a district centroid (see `hasTrustedCoordinates` in lib/geo.ts):
+   * the satellite map and schema.org GeoCoordinates are both gated on it.
+   * `npm run verify:coordinates` batch-checks these against the Places API.
+   */
+  coordinates_verified_at?: string | null
+  /**
    * Omit / null = open (the default). Set when research shows otherwise:
    * closed courses must have null green fees (validate:courses enforces
    * this), render a closure banner, and lead their FAQ with "Is X still
@@ -70,6 +85,14 @@ export interface GolfCourse {
     ko: GolfCourseLocale | null
     zh: GolfCourseLocale | null
     ja: GolfCourseLocale | null
+    /**
+     * Optional (`?`) unlike the legacy keys above so the 146 non-pilot course
+     * files need no edits. A course only renders a Thai variant when it is
+     * ALSO registered in COURSE_DETAIL_I18N (data/golf-courses-i18n.ts) and
+     * th.staticRoutes (lib/translated-routes.ts) — this field alone changes
+     * nothing.
+     */
+    th?: GolfCourseLocale | null
   }
   status: 'published' | 'draft'
   published_at: string

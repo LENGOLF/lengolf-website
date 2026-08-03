@@ -67,6 +67,10 @@ const TRANSLATED_ROUTES: Record<
       "/guide/renting-golf-clubs-thai-golf-courses",
       "/guide/screen-golf-bangkok",
       "/guide/round-of-golf-cost-bangkok",
+      // Translated /golf-courses/ hub page (GolfCourseHub namespace) — the
+      // entry point for Thai-script สนามกอล์ฟ queries. ko/zh hub URLs still
+      // 301 to English.
+      "/golf-courses",
       // Translated region hubs (data/golf-courses-i18n.ts) — kept in sync by the
       // smoke-test region-hub consistency check.
       "/golf-courses/bangkok",
@@ -81,6 +85,20 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/under/3500-baht",
       "/golf-courses/under/5000-baht",
       "/golf-courses/under/7500-baht",
+      // Translated course-detail pages (data/golf-courses-i18n.ts
+      // COURSE_DETAIL_I18N — 3-course TH pilot) — kept in sync by the
+      // smoke-test course-detail registry consistency check (section J3);
+      // liveness of each built page is asserted by section L2.
+      "/golf-courses/bangkok/sai-golf-club",
+      "/golf-courses/bangkok/the-legacy-golf-club",
+      "/golf-courses/chiang-mai/lanna-golf-course",
+      "/golf-courses/bangkok/pinehurst-golf-country-club",
+      "/golf-courses/bangkok/siam-country-club-bangkok",
+      "/golf-courses/bangkok/ayutthaya-golf-club",
+      "/golf-courses/bangkok/muang-ake-golf-course",
+      "/golf-courses/phuket/blue-canyon-lakes-course",
+      "/golf-courses/phuket/phuket-country-club",
+      "/golf-courses/pattaya/wangjuntr-golf-park",
       // Translated FAQ pages (data/faq-pages.ts entries with locale: 'th') —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -98,6 +116,10 @@ const TRANSLATED_ROUTES: Record<
       "/faq/cost-to-fly-with-golf-clubs-to-thailand",
       "/faq/worth-taking-golf-lessons-bangkok-holiday",
       "/faq/what-golf-clubs-available-rent-bangkok",
+      // TH indoor-practice cluster (สนามไดร์ฟกอล์ฟ / ตีกอล์ฟในร่ม queries).
+      "/faq/practice-golf-swing-without-driving-range-bangkok",
+      "/faq/what-to-wear-to-indoor-golf-bar",
+      "/faq/best-time-of-day-golf-bangkok",
     ],
     dynamicRoutePatterns: [],
   },
@@ -312,6 +334,10 @@ const TRANSLATED_ROUTES: Record<
       "/guide/renting-golf-clubs-thai-golf-courses",
       "/guide/round-of-golf-cost-bangkok",
       "/guide/screen-golf-bangkok",
+      // Translated /golf-courses/ hub page (GolfCourseHub namespace) — the
+      // entry point for バンコク ゴルフ場 queries. ko/zh hub URLs still 301 to
+      // English.
+      "/golf-courses",
       // Translated region hubs (data/golf-courses-i18n.ts) — kept in sync by the
       // smoke-test region-hub consistency check.
       "/golf-courses/bangkok",
@@ -326,6 +352,20 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/under/3500-baht",
       "/golf-courses/under/5000-baht",
       "/golf-courses/under/7500-baht",
+      // Translated course-detail pages (data/golf-courses-i18n.ts
+      // COURSE_DETAIL_I18N — 3-course JA pilot) — kept in sync by the
+      // smoke-test course-detail registry consistency check (section J3);
+      // liveness of each built page is asserted by section L2.
+      "/golf-courses/bangkok/sai-golf-club",
+      "/golf-courses/bangkok/the-legacy-golf-club",
+      "/golf-courses/chiang-mai/lanna-golf-course",
+      "/golf-courses/bangkok/pinehurst-golf-country-club",
+      "/golf-courses/bangkok/siam-country-club-bangkok",
+      "/golf-courses/bangkok/ayutthaya-golf-club",
+      "/golf-courses/bangkok/muang-ake-golf-course",
+      "/golf-courses/phuket/blue-canyon-lakes-course",
+      "/golf-courses/phuket/phuket-country-club",
+      "/golf-courses/pattaya/wangjuntr-golf-park",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -526,6 +566,27 @@ export function getRegisteredPriceTierPaths(locale: string): string[] {
 }
 
 /**
+ * Course-detail paths registered as translated for `locale` (the
+ * '/golf-courses/<region>/<slug>' entries in staticRoutes). Like the sibling
+ * helpers, this registry cannot import data/golf-courses-i18n.ts (it is
+ * bundled into the edge middleware), so the smoke tests assert this list
+ * stays in sync with COURSE_DETAIL_I18N — see scripts/smoke-test.ts
+ * course-detail registry consistency check (section J3). A naive
+ * three-segment filter would also swallow the programmatic
+ * near/under/best-for/compare families (e.g. '/golf-courses/under/1500-baht'
+ * is three segments), so those sub-prefixes are excluded explicitly.
+ */
+const NON_DETAIL_COURSE_SEGMENTS = new Set(["under", "near", "best-for", "compare"]);
+
+export function getRegisteredCourseDetailPaths(locale: string): string[] {
+  return (TRANSLATED_ROUTES[locale]?.staticRoutes ?? []).filter((r) => {
+    if (!r.startsWith("/golf-courses/")) return false;
+    const segments = r.split("/").filter(Boolean);
+    return segments.length === 3 && !NON_DETAIL_COURSE_SEGMENTS.has(segments[1]);
+  });
+}
+
+/**
  * Return the set of locales (including 'en') that have a translation for this path.
  */
 export function getLocalesForPath(pathname: string): Locale[] {
@@ -575,4 +636,18 @@ export function getCanonical(locale: string, pathname: string): string {
     ? (locale as Locale)
     : "en";
   return `${SITE_URL}${localePrefix(l)}${suffix}`;
+}
+
+/**
+ * Canonical URL for `pathname` in `locale` — but only when the locale
+ * actually has that route; otherwise the EN canonical. For JSON-LD
+ * (breadcrumbs etc.): an untranslated locale URL 301s through the middleware,
+ * and redirecting URLs don't belong in structured data. Shared by the
+ * /golf-courses hub-crumb builders on both the [region] and [region]/[slug]
+ * pages.
+ */
+export function getResolvedCanonical(locale: string, pathname: string): string {
+  return hasTranslationForLocale(locale, pathname.replace(/\/$/, ""))
+    ? getCanonical(locale, pathname)
+    : getCanonical("en", pathname);
 }

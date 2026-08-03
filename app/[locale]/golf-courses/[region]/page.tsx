@@ -5,7 +5,7 @@ import { Link } from '@/i18n/navigation'
 import { getCoursesByRegion, REGION_META } from '@/lib/golf-courses'
 import type { Region } from '@/lib/golf-courses'
 import { SITE_URL } from '@/lib/constants'
-import { getAlternates, getCanonical } from '@/lib/translated-routes'
+import { getAlternates, getCanonical, getResolvedCanonical } from '@/lib/translated-routes'
 import { getRegionHubTranslation, getTranslatedRegionHubParams } from '@/data/golf-courses-i18n'
 import { getBreadcrumbJsonLd } from '@/lib/jsonld'
 import { ArrowRight } from 'lucide-react'
@@ -115,11 +115,16 @@ export default async function RegionIndexPage({ params }: Props) {
       : []
 
   const breadcrumbJsonLd = getBreadcrumbJsonLd([
-    // The /golf-courses/ hub is English-only (301s for other locales), so its
-    // crumb keeps the canonical EN URL; the region crumb points at its localized
-    // canonical (getCanonical). Crumb display names are localized either way.
+    // The /golf-courses/ hub is translated for some locales: point the crumb
+    // at the locale's own hub where a translation exists, and at the
+    // canonical EN hub otherwise (untranslated hub URLs 301 to English —
+    // don't emit redirecting URLs in JSON-LD). Crumb display names are
+    // localized either way.
     { name: 'Home', url: `${SITE_URL}/` },
-    { name: t('breadcrumbGolfCourses'), url: `${SITE_URL}/golf-courses/` },
+    {
+      name: t('breadcrumbGolfCourses'),
+      url: getResolvedCanonical(locale, '/golf-courses/'),
+    },
     { name: label, url: getCanonical(locale, `/golf-courses/${region}/`) },
   ])
 

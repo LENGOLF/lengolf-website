@@ -8,9 +8,9 @@ import { pushMapUnavailable } from '@/lib/analytics'
 interface Props {
   /** Course name — marker title and aria-label. */
   name: string
-  lat: number
-  lng: number
-  /** External Google Maps link (course's own URL or synthesized from coords). */
+  lat: number | null
+  lng: number | null
+  /** External Google Maps link (place URL, verified coords, or name search). */
   mapsUrl: string
   /**
    * Decided server-side from the build-time presence of
@@ -20,6 +20,24 @@ interface Props {
    * inlined from the same build, so it can't disagree with this flag.)
    */
   enabled?: boolean
+  /**
+   * Whether the coordinates are accurate enough to drop a pin on
+   * (`hasTrustedCoordinates`). False suppresses the map frame but keeps the
+   * link row: a pin 1 km off the property is worse than no pin, while a
+   * name-search link still gets the reader to the right place.
+   */
+  coordinatesTrusted?: boolean
+  /**
+   * Localized map-frame aria-label and link-row text, passed as PROPS from
+   * the server-side CoursePage instead of a client-side
+   * useTranslations('GolfCourseDetail'): that namespace exists only in the
+   * en/th catalogs (the course-detail pilot locales), and a client-side hook
+   * here would make every route bundling this component request it — a
+   * MISSING_MESSAGE on ja/ko/zh pages. Defaults reproduce the pre-i18n EN
+   * strings.
+   */
+  ariaLabel?: string
+  linkLabel?: string
 }
 
 /**
@@ -34,13 +52,26 @@ interface Props {
  * `map_unavailable` dataLayer event so a broken Maps integration is visible
  * in analytics rather than silent.
  */
-export default function CourseSatelliteMap({ name, lat, lng, mapsUrl, enabled = true }: Props) {
+export default function CourseSatelliteMap({
+  name,
+  lat,
+  lng,
+  mapsUrl,
+  enabled = true,
+  coordinatesTrusted = true,
+  ariaLabel,
+  linkLabel,
+}: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const mapDivRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<any>(null)
   const markerRef = useRef<any>(null)
   const [inView, setInView] = useState(false)
-  const [mapsUnavailable, setMapsUnavailable] = useState(!enabled)
+  const [loadFailed, setLoadFailed] = useState(false)
+
+  // Pinnable only with a key, trustworthy coordinates, and no load failure.
+  const canPin = lat !== null && lng !== null && coordinatesTrusted
+  const showFrame = enabled && canPin && !loadFailed
 
   // Report the keyless case exactly once, like the two explorer maps do.
   // Without this, a dropped Maps key silently blanks the LARGEST surface
@@ -52,7 +83,7 @@ export default function CourseSatelliteMap({ name, lat, lng, mapsUrl, enabled = 
 
   // Arm the observer once; disconnect after first intersection.
   useEffect(() => {
-    if (!enabled) return
+    if (!enabled || !canPin) return
     if (!containerRef.current) return
     if (typeof IntersectionObserver === 'undefined') {
       setInView(true)
@@ -69,10 +100,10 @@ export default function CourseSatelliteMap({ name, lat, lng, mapsUrl, enabled = 
     )
     observer.observe(containerRef.current)
     return () => observer.disconnect()
-  }, [enabled])
+  }, [enabled, canPin])
 
   useEffect(() => {
-    if (!enabled || !inView) return
+    if (!enabled || !canPin || !inView) return
 
     // Soft navigation between course pages keeps this component mounted:
     // reuse the existing Map (Google Maps has no destroy API — constructing
@@ -85,6 +116,7 @@ export default function CourseSatelliteMap({ name, lat, lng, mapsUrl, enabled = 
       }
       return
     }
+
 
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY
     if (!apiKey || !mapDivRef.current) return
@@ -112,23 +144,23 @@ export default function CourseSatelliteMap({ name, lat, lng, mapsUrl, enabled = 
       .catch((err) => {
         if (cancelled) return
         console.error(err)
-        setMapsUnavailable(true)
+        setLoadFailed(true)
         pushMapUnavailable('course_satellite', 'load_failed')
       })
 
     return () => {
       cancelled = true
     }
-  }, [enabled, inView, lat, lng, name])
+  }, [enabled, canPin, inView, lat, lng, name])
 
   return (
     <div ref={containerRef} className="overflow-hidden rounded-2xl border border-border shadow-sm">
-      {!mapsUnavailable && (
+      {showFrame && (
         <div
           ref={mapDivRef}
           style={{ width: '100%', height: 380 }}
           role="application"
-          aria-label={`Satellite view of ${name}`}
+          aria-label={ariaLabel ?? `Satellite view of ${name}`}
         />
       )}
       <a
@@ -139,7 +171,7 @@ export default function CourseSatelliteMap({ name, lat, lng, mapsUrl, enabled = 
       >
         <span className="flex items-center gap-2">
           <MapPin className="h-4 w-4 shrink-0" aria-hidden="true" />
-          Open {name} in Google Maps
+          {linkLabel ?? `Open ${name} in Google Maps`}
         </span>
         <ExternalLink className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
       </a>

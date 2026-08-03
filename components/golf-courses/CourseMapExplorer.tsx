@@ -9,7 +9,7 @@ import Link from 'next/link'
 import { ArrowRight, Clock, Flag, X, ExternalLink, MapPinOff } from 'lucide-react'
 import type { GolfCourse } from '@/types/golf-courses'
 import { formatFee, driveTimeLabel } from '@/lib/format'
-import { courseMapsUrl } from '@/lib/geo'
+import { courseMapsUrl, hasTrustedCoordinates } from '@/lib/geo'
 import { loadMapsApi, BASE_MAP_OPTIONS } from '@/lib/maps-loader'
 import { pushMapUnavailable } from '@/lib/analytics'
 
@@ -94,7 +94,10 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
 
       markersRef.current = courses
         .map((course, i) => {
-          if (!course.latitude || !course.longitude) return null
+          // Same trust gate as the detail page's satellite map and the schema
+          // GeoCoordinates: a confident pin from centroid-precision or
+          // unverified coordinates is worse than no pin.
+          if (!course.latitude || !course.longitude || !hasTrustedCoordinates(course)) return null
           const pin = makePin(i, false, course.name)
           const position = { lat: course.latitude, lng: course.longitude }
           const marker = new gmaps.marker.AdvancedMarkerElement({
@@ -151,10 +154,9 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeSlug, center]) // `courses` intentionally excluded: changes are handled by the first effect; including it would cause redundant re-pans on every render
 
-  const activeMapsUrl = (activeCourse && courseMapsUrl(activeCourse))
-    ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-        [activeCourse?.name, activeCourse?.province].filter(Boolean).join(' ')
-      )}`
+  // courseMapsUrl already falls back to a name+province search when the
+  // coordinates aren't verified, so no local fallback is needed.
+  const activeMapsUrl = activeCourse ? courseMapsUrl(activeCourse) : '#'
 
   return (
     <div className="mx-auto max-w-6xl px-4 pb-6 sm:px-6 lg:px-8">
@@ -307,6 +309,15 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
                 if (e.detail === 0) return
                 e.preventDefault()
                 handleListRow(course.slug)
+                // Selecting from deep in a 58-row roster must produce visible
+                // feedback: the map + info panel sit above the list, so on
+                // mobile a tap otherwise appears to do nothing.
+                if (!isActive) {
+                  document.getElementById('course-map')?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                  })
+                }
               }}
               className={[
                 'grid w-full grid-cols-[32px_1fr_auto] items-center gap-3 px-5 py-4 text-left transition-all',
