@@ -18,7 +18,9 @@ function golfCourseItem(c: GolfCourse): Record<string, unknown> {
       addressCountry: 'TH',
     },
   }
-  if (c.latitude !== null && c.longitude !== null) {
+  // Same trust gate as the detail page's GolfCourse schema: an unverified
+  // low-precision coordinate is worse as structured data than no geo at all.
+  if (hasTrustedCoordinates(c)) {
     item.geo = {
       '@type': 'GeoCoordinates',
       latitude: c.latitude,
