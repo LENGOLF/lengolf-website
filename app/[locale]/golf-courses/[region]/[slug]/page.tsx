@@ -36,8 +36,8 @@ export const dynamicParams = false
 
 export async function generateStaticParams() {
   // EN builds every course; other locales build ONLY the (locale, region,
-  // slug) triples registered in COURSE_DETAIL_I18N (currently the 3-course
-  // th + ja pilot). Untranslated locale URLs 301 to English via the middleware — and
+  // slug) triples registered in COURSE_DETAIL_I18N (th + ja; see that file for
+  // the current set). Untranslated locale URLs 301 to English via the middleware — and
   // because dynamicParams=false, a lib/translated-routes.ts allowlist entry
   // with no matching triple here would be a hard 404, so the two lists MUST
   // move together (smoke-test course-detail registry consistency + liveness
