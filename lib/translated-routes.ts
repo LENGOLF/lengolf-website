@@ -86,9 +86,9 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/under/5000-baht",
       "/golf-courses/under/7500-baht",
       // Translated course-detail pages (data/golf-courses-i18n.ts
-      // COURSE_DETAIL_I18N — 3-course TH pilot) — kept in sync by the
-      // smoke-test course-detail registry consistency check (section J3);
-      // liveness of each built page is asserted by section L2.
+      // COURSE_DETAIL_I18N — see that file for the current set) — kept in
+      // sync by the smoke-test course-detail registry consistency check
+      // (section J3); liveness of each built page is asserted by section L2.
       "/golf-courses/bangkok/sai-golf-club",
       "/golf-courses/bangkok/the-legacy-golf-club",
       "/golf-courses/chiang-mai/lanna-golf-course",
@@ -358,9 +358,9 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/under/5000-baht",
       "/golf-courses/under/7500-baht",
       // Translated course-detail pages (data/golf-courses-i18n.ts
-      // COURSE_DETAIL_I18N — 3-course JA pilot) — kept in sync by the
-      // smoke-test course-detail registry consistency check (section J3);
-      // liveness of each built page is asserted by section L2.
+      // COURSE_DETAIL_I18N — see that file for the current set) — kept in
+      // sync by the smoke-test course-detail registry consistency check
+      // (section J3); liveness of each built page is asserted by section L2.
       "/golf-courses/bangkok/sai-golf-club",
       "/golf-courses/bangkok/the-legacy-golf-club",
       "/golf-courses/chiang-mai/lanna-golf-course",

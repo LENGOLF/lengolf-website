@@ -76,8 +76,15 @@ export async function buildRelatedLabels(
       // Proximity finders (/golf-courses/near/{airport|bts-station}): the
       // slug-derived fallback renders a bare place name ("Suvarnabhumi
       // Airport"), which on the airport guides is indistinguishable from the
-      // guide's own title and carries no golf/course tokens. Mirror the title
-      // the target page generates for itself instead.
+      // guide's own title and carries no golf/course tokens.
+      //
+      // Deliberately a SHORTENED form of the target's own <title>, not a
+      // mirror of it: the route appends ": Distances & Green Fees" (airports)
+      // and uses "Best Golf Courses Near {name} BTS — Drive Times & Green
+      // Fees" (stations), both too long for a related-link card. The leading
+      // "Golf Courses Near {place}" is what carries the topical tokens, so
+      // that is what we keep. The course-detail branch below CAN mirror
+      // exactly, because a course title is already card-length.
       if (
         segments.length === 3 &&
         segments[0] === 'golf-courses' &&
