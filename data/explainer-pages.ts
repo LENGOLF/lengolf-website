@@ -1538,6 +1538,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     category: "getting-to-bangkok",
     locale: "en",
     related_slugs: [
+      "/golf-courses/near/don-mueang-airport",
       "/guide/suvarnabhumi-airport-to-bangkok-golf",
       "/faq/grab-vs-taxi-bangkok-golf",
       "/guide/best-golf-courses-near-bangkok",
@@ -4455,6 +4456,8 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/guide/green-fees-bangkok-golf-courses",
       "/guide/how-to-book-golf-tee-times-thailand",
       "/guide/suvarnabhumi-airport-to-bangkok-golf",
+      "/golf-courses/near/suvarnabhumi-airport",
+      "/golf-courses/near/don-mueang-airport",
       "/golf-courses/bangkok/green-valley-country-club",
       "/golf-courses/bangkok/summit-windmill-golf-club",
       "/guide/best-golf-courses-phuket",
@@ -4638,6 +4641,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     category: "getting-to-bangkok",
     locale: "en",
     related_slugs: [
+      "/golf-courses/near/suvarnabhumi-airport",
       "/golf-in-thailand-guide",
       "/guide/don-mueang-airport-to-bangkok",
       "/faq/grab-vs-taxi-bangkok-golf",

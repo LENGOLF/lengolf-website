@@ -464,6 +464,24 @@ export default async function ClubRentalPage({ params }: { params: Promise<{ loc
             >
               <p className="font-semibold text-foreground group-hover:text-primary transition-colors">Weekday savings</p>
             </Link>
+            <Link
+              href="/golf-courses"
+              className="group rounded-xl border border-primary/15 bg-white px-4 py-3 text-center text-sm transition-shadow hover:shadow-md"
+            >
+              <p className="font-semibold text-foreground group-hover:text-primary transition-colors">All Thailand courses</p>
+            </Link>
+            <Link
+              href="/golf-courses/bangkok"
+              className="group rounded-xl border border-primary/15 bg-white px-4 py-3 text-center text-sm transition-shadow hover:shadow-md"
+            >
+              <p className="font-semibold text-foreground group-hover:text-primary transition-colors">Bangkok courses</p>
+            </Link>
+            <Link
+              href="/golf-courses/near/suvarnabhumi-airport"
+              className="group rounded-xl border border-primary/15 bg-white px-4 py-3 text-center text-sm transition-shadow hover:shadow-md"
+            >
+              <p className="font-semibold text-foreground group-hover:text-primary transition-colors">Near Suvarnabhumi (BKK)</p>
+            </Link>
           </div>
         </SectionWrapper>
       )}

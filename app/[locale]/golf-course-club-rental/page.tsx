@@ -668,6 +668,30 @@ export default async function GolfCourseClubRentalPage({ params }: { params: Pro
             >
               <p className="font-semibold text-foreground group-hover:text-primary transition-colors">Weekday savings</p>
             </Link>
+            <Link
+              href="/golf-courses/bangkok"
+              className="group rounded-xl border border-primary/15 bg-white px-4 py-3 text-center text-sm transition-shadow hover:shadow-md"
+            >
+              <p className="font-semibold text-foreground group-hover:text-primary transition-colors">Bangkok courses</p>
+            </Link>
+            <Link
+              href="/golf-courses/near/suvarnabhumi-airport"
+              className="group rounded-xl border border-primary/15 bg-white px-4 py-3 text-center text-sm transition-shadow hover:shadow-md"
+            >
+              <p className="font-semibold text-foreground group-hover:text-primary transition-colors">Near Suvarnabhumi (BKK)</p>
+            </Link>
+            <Link
+              href="/golf-courses/near/don-mueang-airport"
+              className="group rounded-xl border border-primary/15 bg-white px-4 py-3 text-center text-sm transition-shadow hover:shadow-md"
+            >
+              <p className="font-semibold text-foreground group-hover:text-primary transition-colors">Near Don Mueang (DMK)</p>
+            </Link>
+            <Link
+              href="/golf-courses/under/7500-baht"
+              className="group rounded-xl border border-primary/15 bg-white px-4 py-3 text-center text-sm transition-shadow hover:shadow-md"
+            >
+              <p className="font-semibold text-foreground group-hover:text-primary transition-colors">Best-value green fees</p>
+            </Link>
           </div>
         </SectionWrapper>
       )}

@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { ArrowRight } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import BookRentalLink from '@/components/clubs/BookRentalLink'
@@ -25,6 +25,7 @@ import { BOOKING_URL } from '@/lib/constants'
  */
 export default async function CourseRentalCrossLink() {
   const t = await getTranslations('Location')
+  const locale = await getLocale()
   const courseRentalUrl = `${BOOKING_URL}course-rental`
 
   return (
@@ -50,6 +51,18 @@ export default async function CourseRentalCrossLink() {
               {t('courseRentalCrossCta')}
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
+            {/* EN-only by the same rationale as the /golf-courses hub's finder
+                blocks: the programmatic course pages build no locale copies, so
+                a translated page linking them would 301 the click to English. */}
+            {locale === 'en' && (
+              <Link
+                href="/golf-courses"
+                className="group inline-flex items-center gap-1.5 text-sm font-semibold text-[#2d6a4f] underline underline-offset-2 transition-colors hover:text-[#1a472a]"
+              >
+                Browse Thailand golf courses
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            )}
           </div>
         </div>
       </div>
