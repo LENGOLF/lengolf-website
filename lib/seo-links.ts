@@ -100,11 +100,15 @@ export async function buildRelatedLabels(
       if (segments.length === 3 && segments[0] === 'golf-courses') {
         if (DERIVED_PREFIXES.has(segments[1])) return null
         const { getCourseBySlug } = await import('@/lib/golf-courses')
-        const { getCourseTitle } = await import('@/lib/course-seo')
+        const { getCourseTitle, toCourseSeoLocale } = await import('@/lib/course-seo')
         const course = await getCourseBySlug(segments[1], segments[2])
         if (!course) return null
-        const seoLocale = locale === 'th' || locale === 'ja' ? locale : 'en'
-        return [path, getCourseTitle(course, seoLocale)]
+        // Narrow via the shared helper, never a local ternary: COURSE_SEO_LOCALES
+        // is the one place the course-content locale set is declared, so adding
+        // ko/zh there must light this branch up too. A hand-rolled check here
+        // would silently keep collapsing new locales to English — the exact
+        // drift this file exists to prevent.
+        return [path, getCourseTitle(course, toCourseSeoLocale(locale))]
       }
       return null // unknown paths keep the component's slug-derived fallback
     })
