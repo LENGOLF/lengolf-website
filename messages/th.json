@@ -1110,7 +1110,8 @@
     "stayingNearby": "พักอยู่ใกล้ๆ? เข้ามาเลยไม่ต้องเตรียมอุปกรณ์กอล์ฟ",
     "courseRentalCrossTitle": "จะออกรอบที่สนามจริงระหว่างอยู่กรุงเทพฯ?",
     "courseRentalCrossText": "เช่าชุดไม้กอล์ฟพรีเมียม Callaway หรือ Majesty เริ่ม 1,200 บาท/วัน ส่งถึงโรงแรมหรือสนามกอล์ฟทั่วกรุงเทพฯ 500 บาท",
-    "courseRentalCrossCta": "เช่าไม้กอล์ฟไปสนาม"
+    "courseRentalCrossCta": "เช่าไม้กอล์ฟไปสนาม",
+    "courseHubCta": "ดูสนามกอล์ฟทั่วไทย"
   },
   "FloorPlan": {
     "floorPlan": "ผังพื้นที่"

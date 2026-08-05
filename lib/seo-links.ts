@@ -65,6 +65,24 @@ export async function buildRelatedLabels(
       if (segments.length === 1 && STATIC_LABEL_PATHS.has(segments[0])) {
         return [path, t(`pathLabels.${segments[0]}`)]
       }
+      // Proximity finders (/golf-courses/near/{airport|bts-station}): the
+      // slug-derived fallback renders a bare place name ("Suvarnabhumi
+      // Airport"), which on the airport guides is indistinguishable from the
+      // guide's own title and carries no golf/course tokens. Mirror the title
+      // the target page generates for itself instead.
+      if (
+        segments.length === 3 &&
+        segments[0] === 'golf-courses' &&
+        segments[1] === 'near'
+      ) {
+        const { AIRPORTS } = await import('@/data/airports')
+        const { BTS_STATIONS } = await import('@/data/bts-stations')
+        const airport = AIRPORTS[segments[2]]
+        if (airport) return [path, `Golf Courses Near ${airport.name} (${airport.iata})`]
+        const station = BTS_STATIONS[segments[2]]
+        if (station) return [path, `Golf Courses Near ${station.name}`]
+        return null
+      }
       return null // unknown paths keep the component's slug-derived fallback
     })
   )

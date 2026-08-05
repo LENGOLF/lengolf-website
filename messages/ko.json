@@ -1113,7 +1113,8 @@
     "stayingNearby": "근처에 머무시나요? 골프 장비 없이 맨손으로 오셔도 됩니다.",
     "courseRentalCrossTitle": "체류 중에 실제 골프장에서 라운딩하시나요?",
     "courseRentalCrossText": "Callaway·Majesty 프리미엄 클럽 세트를 하루 1,200바트부터 대여하고, 호텔이나 방콕 어느 골프장으로든 500바트에 배송받으세요.",
-    "courseRentalCrossCta": "골프장 클럽 렌탈"
+    "courseRentalCrossCta": "골프장 클럽 렌탈",
+    "courseHubCta": "태국 골프장 둘러보기"
   },
   "FloorPlan": {
     "floorPlan": "평면도"

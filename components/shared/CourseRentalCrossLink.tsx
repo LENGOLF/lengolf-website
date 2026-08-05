@@ -1,4 +1,5 @@
 import { getLocale, getTranslations } from 'next-intl/server'
+import { hasTranslationForLocale } from '@/lib/translated-routes'
 import { ArrowRight } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import BookRentalLink from '@/components/clubs/BookRentalLink'
@@ -10,18 +11,25 @@ import { BOOKING_URL } from '@/lib/constants'
  * /lessons, and by the FAQ template for rental-intent questions (see
  * RENTAL_CTA_CATEGORIES in components/faq/FaqPage.tsx).
  *
- * Two destinations, deliberately: the primary CTA goes straight to the
+ * Three destinations, deliberately: the primary CTA goes straight to the
  * course-rental booking flow (booking.len.golf/course-rental) so a reader who
- * has already decided does not have to transit the landing page, and the
- * secondary link goes to /golf-course-club-rental for those still comparing —
- * which also keeps the internal link equity this banner was built to pass.
+ * has already decided does not have to transit the landing page; the secondary
+ * link goes to /golf-course-club-rental for those still comparing — which also
+ * keeps the internal link equity this banner was built to pass; and a third
+ * link feeds the /golf-courses hub, whose 226-URL section is otherwise reached
+ * only from within itself and the footer.
+ *
+ * That third link is gated on hasTranslationForLocale(locale, '/golf-courses')
+ * rather than locale === 'en': the hub IS translated for th and ja, so an
+ * EN-only gate would withhold a natively-resolving link from those readers.
  *
  * The booking CTA uses the tracked BookRentalLink so it fires `rental_intent`
  * like every other funnel-entry click; without it, Smart Bidding would go blind
  * to a click that now appears on six page templates.
  *
- * Copy comes from the `Location` namespace, populated in all five locales —
- * safe to render on any localized page without MISSING_MESSAGE.
+ * Copy comes from the `Location` namespace, populated in all five locales
+ * (including courseHubCta) — safe to render on any localized page without
+ * MISSING_MESSAGE.
  */
 export default async function CourseRentalCrossLink() {
   const t = await getTranslations('Location')
@@ -51,15 +59,17 @@ export default async function CourseRentalCrossLink() {
               {t('courseRentalCrossCta')}
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
-            {/* EN-only by the same rationale as the /golf-courses hub's finder
-                blocks: the programmatic course pages build no locale copies, so
-                a translated page linking them would 301 the click to English. */}
-            {locale === 'en' && (
+            {/* Gated on the hub's OWN registry entry, not on locale === 'en':
+                /golf-courses is translated for th and ja, so an EN-only gate
+                would withhold a link that resolves natively for those readers.
+                Locales without a hub translation are skipped because the
+                middleware would 301 the click to English. */}
+            {hasTranslationForLocale(locale, '/golf-courses') && (
               <Link
                 href="/golf-courses"
                 className="group inline-flex items-center gap-1.5 text-sm font-semibold text-[#2d6a4f] underline underline-offset-2 transition-colors hover:text-[#1a472a]"
               >
-                Browse Thailand golf courses
+                {t('courseHubCta')}
                 <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             )}
