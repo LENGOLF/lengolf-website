@@ -59,12 +59,15 @@ export default async function CourseRentalCrossLink() {
               {t('courseRentalCrossCta')}
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
-            {/* Gated on the hub's OWN registry entry, not on locale === 'en':
-                /golf-courses is translated for th and ja, so an EN-only gate
-                would withhold a link that resolves natively for those readers.
-                Locales without a hub translation are skipped because the
+            {/* Show wherever /golf-courses resolves natively. EN is special-
+                cased because TRANSLATED_ROUTES only maps the NON-English
+                locales — it is a registry of translations OF English, so
+                hasTranslationForLocale('en', ...) is always false and using it
+                alone would hide this link on the majority locale. Same shape
+                as the alternates guard in app/[locale]/golf-courses/page.tsx.
+                th/ja have hub translations; ko/zh are skipped because the
                 middleware would 301 the click to English. */}
-            {hasTranslationForLocale(locale, '/golf-courses') && (
+            {(locale === 'en' || hasTranslationForLocale(locale, '/golf-courses')) && (
               <Link
                 href="/golf-courses"
                 className="group inline-flex items-center gap-1.5 text-sm font-semibold text-[#2d6a4f] underline underline-offset-2 transition-colors hover:text-[#1a472a]"
