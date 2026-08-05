@@ -2949,6 +2949,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     category: "golf-courses",
     locale: "en",
     related_slugs: [
+      "/golf-courses/bangkok/nikanti-golf-club",
       "/guide/best-golf-courses-near-bangkok",
       "/guide/alpine-golf-club-bangkok",
       "/guide/green-fees-bangkok-golf-courses",
@@ -4124,6 +4125,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     category: "golf-courses",
     locale: "en",
     related_slugs: [
+      "/golf-courses/bangkok/alpine-golf-club",
       "/golf-in-thailand-guide",
       "/guide/best-golf-courses-near-bangkok",
       "/guide/nikanti-golf-club-bangkok",
@@ -6904,6 +6906,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     category: "golf-courses",
     locale: "ja",
     related_slugs: [
+      "/golf-courses/bangkok/nikanti-golf-club",
       "/guide/best-golf-courses-near-bangkok",
       "/guide/alpine-golf-club-bangkok",
     ],
@@ -7048,6 +7051,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     category: "golf-courses",
     locale: "th",
     related_slugs: [
+      "/golf-courses/bangkok/nikanti-golf-club",
       "/guide/best-golf-courses-near-bangkok",
       "/guide/alpine-golf-club-bangkok",
     ],
@@ -7303,6 +7307,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     category: "golf-courses",
     locale: "ja",
     related_slugs: [
+      "/golf-courses/bangkok/alpine-golf-club",
       "/guide/best-golf-courses-near-bangkok",
       "/guide/nikanti-golf-club-bangkok",
     ],
@@ -7462,6 +7467,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     category: "golf-courses",
     locale: "th",
     related_slugs: [
+      "/golf-courses/bangkok/alpine-golf-club",
       "/guide/best-golf-courses-near-bangkok",
       "/guide/nikanti-golf-club-bangkok",
     ],
