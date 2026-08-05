@@ -99,6 +99,11 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/phuket/blue-canyon-lakes-course",
       "/golf-courses/phuket/phuket-country-club",
       "/golf-courses/pattaya/wangjuntr-golf-park",
+      "/golf-courses/bangkok/alpine-golf-club",
+      "/golf-courses/bangkok/nikanti-golf-club",
+      "/golf-courses/bangkok/royal-gems-golf-sports-club",
+      "/golf-courses/pattaya/burapha-golf-club",
+      "/golf-courses/pattaya/laem-chabang-international",
       // Translated FAQ pages (data/faq-pages.ts entries with locale: 'th') —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -366,6 +371,11 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/phuket/blue-canyon-lakes-course",
       "/golf-courses/phuket/phuket-country-club",
       "/golf-courses/pattaya/wangjuntr-golf-park",
+      "/golf-courses/bangkok/alpine-golf-club",
+      "/golf-courses/bangkok/nikanti-golf-club",
+      "/golf-courses/bangkok/royal-gems-golf-sports-club",
+      "/golf-courses/pattaya/burapha-golf-club",
+      "/golf-courses/pattaya/laem-chabang-international",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.

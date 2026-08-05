@@ -230,6 +230,17 @@ export const COURSE_DETAIL_I18N: {
   { region: 'phuket', slug: 'blue-canyon-lakes-course', locales: ['th', 'ja'] },
   { region: 'phuket', slug: 'phuket-country-club', locales: ['th', 'ja'] },
   { region: 'pattaya', slug: 'wangjuntr-golf-park', locales: ['th', 'ja'] },
+  // Batch 3 (2026-08) — GSC-demand picks within translated-hub regions:
+  // Alpine (compare-page 656 imp + TH "alpine golf club ราคา" queries),
+  // Nikanti (~1,400 imp across guide + name queries), Royal Gems ("the rg
+  // city golf club" 110 imp + TH ราคา queries), Burapha (JPN-geo demand),
+  // Laem Chabang ("laem chabang international country club prices" 70 imp).
+  // Suvarnabhumi still excluded — see the Batch 2 note above.
+  { region: 'bangkok', slug: 'alpine-golf-club', locales: ['th', 'ja'] },
+  { region: 'bangkok', slug: 'nikanti-golf-club', locales: ['th', 'ja'] },
+  { region: 'bangkok', slug: 'royal-gems-golf-sports-club', locales: ['th', 'ja'] },
+  { region: 'pattaya', slug: 'burapha-golf-club', locales: ['th', 'ja'] },
+  { region: 'pattaya', slug: 'laem-chabang-international', locales: ['th', 'ja'] },
 ]
 
 /**
