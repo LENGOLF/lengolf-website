@@ -6,9 +6,10 @@ import { REGION_META, getCoursesByRegion } from '@/lib/golf-courses'
 import { getAlternates, getCanonical, hasTranslationForLocale, ALL_LOCALES } from '@/lib/translated-routes'
 import { getRegionHubTranslation } from '@/data/golf-courses-i18n'
 import { getBreadcrumbJsonLd } from '@/lib/jsonld'
-import { MapPin, ArrowRight, Flag, Scale, Train, Wallet, Target } from 'lucide-react'
+import { MapPin, ArrowRight, Flag, Scale, Train, Wallet, Target, Plane } from 'lucide-react'
 import HubMapExplorer from '@/components/golf-courses/HubMapExplorer'
 import { BTS_STATIONS } from '@/data/bts-stations'
+import { AIRPORTS } from '@/data/airports'
 import { PRICE_TIERS } from '@/data/price-tiers'
 import { USE_CASES } from '@/data/golf-courses-use-cases'
 
@@ -200,6 +201,37 @@ export default async function GolfCoursesHubPage({ params }: Props) {
                     >
                       <span className="font-semibold text-foreground group-hover:text-primary transition-colors">
                         Near {s.name}
+                      </span>
+                      <ArrowRight className="h-3.5 w-3.5 text-primary/40 group-hover:text-primary transition-colors" />
+                    </Link>
+                  ))}
+                </div>
+              </section>
+          )}
+
+          {/* Find by arrival airport — same EN-only gate and rationale as the
+              BTS block above; the /golf-courses/near/<airport> pages build no
+              locale copies. */}
+          {locale === 'en' && (
+              <section>
+                <div className="mb-4 flex items-center gap-2">
+                  <Plane className="h-4 w-4 text-primary" aria-hidden="true" />
+                  <h2 className="text-base font-bold uppercase tracking-widest text-primary">
+                    Find courses near your arrival airport
+                  </h2>
+                </div>
+                <p className="mb-4 text-sm leading-relaxed text-muted-foreground">
+                  Landing with clubs — or renting a set on arrival? Courses ranked by distance from each Bangkok airport.
+                </p>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {Object.values(AIRPORTS).map((a) => (
+                    <Link
+                      key={a.slug}
+                      href={`/golf-courses/near/${a.slug}`}
+                      className="group flex items-center justify-between rounded-xl border border-border bg-white px-4 py-3 text-sm shadow-sm transition-all hover:-translate-y-px hover:border-primary/30 hover:shadow-md"
+                    >
+                      <span className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                        Near {a.name} ({a.iata})
                       </span>
                       <ArrowRight className="h-3.5 w-3.5 text-primary/40 group-hover:text-primary transition-colors" />
                     </Link>

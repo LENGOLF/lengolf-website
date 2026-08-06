@@ -1811,8 +1811,9 @@ const routeTests: RouteTest[] = [
   // Translated course-detail pages: one TH canary here; FULL coverage of
   // every registered course-detail translation (status + content marker) is
   // registry-derived in section L2, so new batches are covered with zero
-  // routeTests edits. All other course details must keep 301ing (alpine
-  // canary in redirectTests).
+  // routeTests edits. All other course details must keep 301ing (see the
+  // untranslated-course canary in redirectTests, which must name a slug
+  // absent from COURSE_DETAIL_I18N).
   {
     path: "/th/golf-courses/bangkok/sai-golf-club/",
     expectedStatus: [200],
@@ -2927,20 +2928,24 @@ const thaiRedirectTests: ThaiRedirectTest[] = [
     label: "Untranslated TH near-station page (EN-only route must 301)",
   },
   // Course DETAIL pages build locale copies only for the triples in
-  // COURSE_DETAIL_I18N (currently the 3-course th + ja pilot; those 200 and
-  // are covered by their own route tests). Every OTHER course detail must
-  // still 301 — /th/golf-courses/bangkok/ 200s, but an untranslated
-  // 3-segment detail below it may not. Canary for the [region]/[slug] locale
-  // restriction; alpine is deliberately NOT a pilot course so this keeps
-  // exercising the middleware.
+  // COURSE_DETAIL_I18N (those 200 and are covered by section L2, which is
+  // registry-derived). Every OTHER course detail must still 301 —
+  // /th/golf-courses/bangkok/ 200s, but an untranslated 3-segment detail
+  // below it may not. Canary for the [region]/[slug] locale restriction.
+  //
+  // INVARIANT, not a fixed slug: the canary course must be ABSENT from
+  // COURSE_DETAIL_I18N. Re-check this when adding a translation batch —
+  // alpine-golf-club was the canary until batch 3 registered it for th+ja,
+  // which silently turned these two assertions from "must 301" into a
+  // guaranteed CI failure. Do not pick a course you are about to translate.
   {
-    path: "/th/golf-courses/bangkok/alpine-golf-club/",
-    expectedLocation: "/golf-courses/bangkok/alpine-golf-club/",
+    path: "/th/golf-courses/bangkok/lakewood-country-club/",
+    expectedLocation: "/golf-courses/bangkok/lakewood-country-club/",
     label: "Untranslated TH course detail (EN-only route must 301)",
   },
   {
-    path: "/ja/golf-courses/bangkok/alpine-golf-club/",
-    expectedLocation: "/golf-courses/bangkok/alpine-golf-club/",
+    path: "/ja/golf-courses/bangkok/lakewood-country-club/",
+    expectedLocation: "/golf-courses/bangkok/lakewood-country-club/",
     label: "Untranslated JA course detail (EN-only route must 301)",
   },
   // The EN-only SEO-page families (/hotels, /cost, /activities, /best) build
@@ -3782,7 +3787,7 @@ async function runCourseDetailRegistryLivenessTests() {
   for (const locale of ALL_LOCALES) {
     if (locale === "en") continue;
     const paths = getRegisteredCourseDetailPaths(locale);
-    if (paths.length === 0) continue; // only th has course-detail translations
+    if (paths.length === 0) continue; // ko/zh have no course-detail translations yet
     let ok = 0;
     for (const path of paths) {
       const target = `/${locale}${path}/`;

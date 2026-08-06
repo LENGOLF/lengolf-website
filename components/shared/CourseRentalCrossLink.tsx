@@ -1,4 +1,5 @@
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
+import { hasTranslationForLocale } from '@/lib/translated-routes'
 import { ArrowRight } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import BookRentalLink from '@/components/clubs/BookRentalLink'
@@ -10,21 +11,29 @@ import { BOOKING_URL } from '@/lib/constants'
  * /lessons, and by the FAQ template for rental-intent questions (see
  * RENTAL_CTA_CATEGORIES in components/faq/FaqPage.tsx).
  *
- * Two destinations, deliberately: the primary CTA goes straight to the
+ * Three destinations, deliberately: the primary CTA goes straight to the
  * course-rental booking flow (booking.len.golf/course-rental) so a reader who
- * has already decided does not have to transit the landing page, and the
- * secondary link goes to /golf-course-club-rental for those still comparing —
- * which also keeps the internal link equity this banner was built to pass.
+ * has already decided does not have to transit the landing page; the secondary
+ * link goes to /golf-course-club-rental for those still comparing — which also
+ * keeps the internal link equity this banner was built to pass; and a third
+ * link feeds the /golf-courses hub, whose 226-URL section is otherwise reached
+ * only from within itself and the footer.
+ *
+ * That third link is gated on hasTranslationForLocale(locale, '/golf-courses')
+ * rather than locale === 'en': the hub IS translated for th and ja, so an
+ * EN-only gate would withhold a natively-resolving link from those readers.
  *
  * The booking CTA uses the tracked BookRentalLink so it fires `rental_intent`
  * like every other funnel-entry click; without it, Smart Bidding would go blind
  * to a click that now appears on six page templates.
  *
- * Copy comes from the `Location` namespace, populated in all five locales —
- * safe to render on any localized page without MISSING_MESSAGE.
+ * Copy comes from the `Location` namespace, populated in all five locales
+ * (including courseHubCta) — safe to render on any localized page without
+ * MISSING_MESSAGE.
  */
 export default async function CourseRentalCrossLink() {
   const t = await getTranslations('Location')
+  const locale = await getLocale()
   const courseRentalUrl = `${BOOKING_URL}course-rental`
 
   return (
@@ -50,6 +59,23 @@ export default async function CourseRentalCrossLink() {
               {t('courseRentalCrossCta')}
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
+            {/* Show wherever /golf-courses resolves natively. EN is special-
+                cased because TRANSLATED_ROUTES only maps the NON-English
+                locales — it is a registry of translations OF English, so
+                hasTranslationForLocale('en', ...) is always false and using it
+                alone would hide this link on the majority locale. Same shape
+                as the alternates guard in app/[locale]/golf-courses/page.tsx.
+                th/ja have hub translations; ko/zh are skipped because the
+                middleware would 301 the click to English. */}
+            {(locale === 'en' || hasTranslationForLocale(locale, '/golf-courses')) && (
+              <Link
+                href="/golf-courses"
+                className="group inline-flex items-center gap-1.5 text-sm font-semibold text-[#2d6a4f] underline underline-offset-2 transition-colors hover:text-[#1a472a]"
+              >
+                {t('courseHubCta')}
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            )}
           </div>
         </div>
       </div>

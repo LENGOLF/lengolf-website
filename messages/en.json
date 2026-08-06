@@ -334,6 +334,7 @@
     "exploreTitleSuffix": "MORE",
     "exploreSubtitle": "Check out everything LENGOLF has to offer",
     "exploreBayRates": "Bay Rates",
+    "exploreCorporatePackages": "Corporate Golf Packages",
     "exploreLessons": "Lessons",
     "exploreClubRental": "Club Rental",
     "exploreEvents": "Events",
@@ -1109,7 +1110,8 @@
     "stayingNearby": "Staying nearby? Walk in without packing any golf equipment.",
     "courseRentalCrossTitle": "Playing a real course while you're here?",
     "courseRentalCrossText": "Rent premium Callaway or Majesty club sets from ฿1,200/day and have them delivered to your hotel or any Bangkok golf course for ฿500.",
-    "courseRentalCrossCta": "Golf Course Club Rental"
+    "courseRentalCrossCta": "Golf Course Club Rental",
+    "courseHubCta": "Browse Thailand golf courses"
   },
   "FloorPlan": {
     "floorPlan": "FLOOR PLAN"

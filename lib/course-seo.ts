@@ -196,6 +196,8 @@ const PROVINCE_L10N: Record<string, Record<Exclude<CourseSeoLocale, 'en'>, strin
   'Samut Prakan': { th: 'จังหวัดสมุทรปราการ', ja: 'サムットプラーカーン県' },
   Phuket: { th: 'จังหวัดภูเก็ต', ja: 'プーケット県' },
   Rayong: { th: 'จังหวัดระยอง', ja: 'ラヨーン県' },
+  Chonburi: { th: 'จังหวัดชลบุรี', ja: 'チョンブリー県' },
+  'Nakhon Pathom': { th: 'จังหวัดนครปฐม', ja: 'ナコンパトム県' },
 }
 
 /** Whether a course's (English) province has localized names for the non-EN packs. */

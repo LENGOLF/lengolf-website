@@ -21,6 +21,14 @@ export function relatedQuestionPath(slug: string): string {
  * Core static pages referenced from related_slugs — labels come from the
  * ExplainerPage.pathLabels i18n namespace (messages/*.json).
  */
+/**
+ * The 3-segment /golf-courses/ families that are NOT (region, slug) course
+ * details: /near/{station}, /under/{tier}, /compare/{region} and
+ * /best-for/{useCase}. Kept beside the resolver so a new derived family is
+ * added in one place rather than being mistaken for a course slug.
+ */
+const DERIVED_PREFIXES = new Set(['near', 'under', 'compare', 'best-for'])
+
 const STATIC_LABEL_PATHS = new Set([
   'golf',
   'lessons',
@@ -64,6 +72,50 @@ export async function buildRelatedLabels(
       // Core static pages: label from the pathLabels namespace
       if (segments.length === 1 && STATIC_LABEL_PATHS.has(segments[0])) {
         return [path, t(`pathLabels.${segments[0]}`)]
+      }
+      // Proximity finders (/golf-courses/near/{airport|bts-station}): the
+      // slug-derived fallback renders a bare place name ("Suvarnabhumi
+      // Airport"), which on the airport guides is indistinguishable from the
+      // guide's own title and carries no golf/course tokens.
+      //
+      // Deliberately a SHORTENED form of the target's own <title>, not a
+      // mirror of it: the route appends ": Distances & Green Fees" (airports)
+      // and uses "Best Golf Courses Near {name} BTS — Drive Times & Green
+      // Fees" (stations), both too long for a related-link card. The leading
+      // "Golf Courses Near {place}" is what carries the topical tokens, so
+      // that is what we keep. The course-detail branch below CAN mirror
+      // exactly, because a course title is already card-length.
+      if (
+        segments.length === 3 &&
+        segments[0] === 'golf-courses' &&
+        segments[1] === 'near'
+      ) {
+        const { AIRPORTS } = await import('@/data/airports')
+        const { BTS_STATIONS } = await import('@/data/bts-stations')
+        const airport = AIRPORTS[segments[2]]
+        if (airport) return [path, `Golf Courses Near ${airport.name} (${airport.iata})`]
+        const station = BTS_STATIONS[segments[2]]
+        if (station) return [path, `Golf Courses Near ${station.name}`]
+        return null
+      }
+      // Course-detail pages (/golf-courses/{region}/{slug}). Same trap as the
+      // near/ branch above: the slug-derived fallback renders "Alpine Golf
+      // Club", which on /guide/alpine-golf-club-bangkok is indistinguishable
+      // from the guide's own title. Use the course's localized title, which is
+      // what the target page itself puts in <title>. DERIVED_PREFIXES guards
+      // the sibling 3-segment families that are not (region, slug) pairs.
+      if (segments.length === 3 && segments[0] === 'golf-courses') {
+        if (DERIVED_PREFIXES.has(segments[1])) return null
+        const { getCourseBySlug } = await import('@/lib/golf-courses')
+        const { getCourseTitle, toCourseSeoLocale } = await import('@/lib/course-seo')
+        const course = await getCourseBySlug(segments[1], segments[2])
+        if (!course) return null
+        // Narrow via the shared helper, never a local ternary: COURSE_SEO_LOCALES
+        // is the one place the course-content locale set is declared, so adding
+        // ko/zh there must light this branch up too. A hand-rolled check here
+        // would silently keep collapsing new locales to English — the exact
+        // drift this file exists to prevent.
+        return [path, getCourseTitle(course, toCourseSeoLocale(locale))]
       }
       return null // unknown paths keep the component's slug-derived fallback
     })

@@ -403,6 +403,7 @@ export default async function EventsPage({ params }: { params: Promise<{ locale:
           <div className="mx-auto max-w-xl">
             <div className="flex flex-wrap items-center justify-center gap-3">
               {[
+                { label: t('exploreCorporatePackages'), href: '/corporate-golf-packages' },
                 { label: t('exploreBayRates'), href: '/golf' },
                 { label: t('exploreLessons'), href: '/lessons' },
                 { label: t('exploreClubRental'), href: '/golf-club-rental' },
