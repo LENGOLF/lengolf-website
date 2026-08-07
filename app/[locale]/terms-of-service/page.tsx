@@ -69,8 +69,13 @@ export default async function TermsOfServicePage({ params }: { params: Promise<{
             person at LENGOLF where that option is offered for your booking type.
           </li>
           <li>
-            A booking is confirmed once payment is completed and we have sent you a confirmation. If payment is not
-            completed within the time shown at checkout, the reservation is released automatically.
+            Bookings that require online payment, including golf course club rentals, are confirmed once payment is
+            completed and we have sent you a confirmation. If payment is not completed within the time shown at
+            checkout, the reservation is released automatically.
+          </li>
+          <li>
+            Simulator bay bookings, lessons and events are confirmed when we send you a booking confirmation. Payment
+            is taken at LENGOLF unless we tell you otherwise when you book.
           </li>
           <li>We do not store your full card details. Card payments are processed by our payment provider.</li>
         </ul>

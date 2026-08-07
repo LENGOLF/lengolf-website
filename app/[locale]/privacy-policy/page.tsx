@@ -90,7 +90,7 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
         <p>
           When You pay online, Your card details are entered into and processed by our payment provider. LENGOLF does
           not receive or store Your full card number. We retain only the record of the payment, such as the amount,
-          the date, the result, the card brand, and the last four digits.
+          the date, the result, and the reference issued by our payment provider.
         </p>
 
         <h3>Use of Your Personal Data</h3>
@@ -111,8 +111,9 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
         </p>
         <ul>
           <li>
-            <strong>Booking and payment records</strong> - retained for at least 5 years, as required of Us by Thai
-            accounting and tax law.
+            <strong>Invoices, receipts and payment records</strong> - retained for 5 years from the end of the
+            accounting year in which the booking was made, as required of Us by Thai accounting and tax law, and then
+            deleted or anonymised.
           </li>
           <li>
             <strong>Contact details and booking history</strong> - retained while You remain a customer, so that We can
@@ -145,14 +146,16 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
           <li><strong>Erasure</strong> - to ask Us to delete or anonymise Your data, where We have no continuing legal reason to keep it.</li>
           <li><strong>Restriction</strong> - to ask Us to pause Our use of Your data while a request or objection is being resolved.</li>
           <li><strong>Objection</strong> - to object to Our use of Your data, including for direct marketing.</li>
-          <li><strong>Data portability</strong> - to receive the data You gave Us in a commonly used machine-readable format, or to have it sent to another provider.</li>
+          <li><strong>Data portability</strong> - to receive the data You gave Us in a commonly used machine-readable format, or to have it sent to another provider, where the law gives You that right and We hold the data in an automated form.</li>
           <li><strong>Withdrawal of consent</strong> - to withdraw consent at any time, where We rely on Your consent. Withdrawing consent does not affect anything We did lawfully before You withdrew it.</li>
           <li><strong>Complaint</strong> - to lodge a complaint with the Personal Data Protection Committee (PDPC) if You believe We have handled Your data unlawfully.</li>
         </ul>
         <p>
           To exercise any of these rights, contact Us using the details in the &quot;Contact Us&quot; section below. We
           will respond within the time required by the PDPA. We may need to verify Your identity before acting on a
-          request, so that We do not disclose Your data to someone else. Exercising these rights is free of charge.
+          request, so that We do not disclose Your data to someone else. We do not charge for exercising these rights.
+          We may charge a reasonable fee for requests that are manifestly repetitive or excessive, and will tell You
+          before We do.
         </p>
         <p>
           You can unsubscribe from marketing messages at any time using the link in any marketing email We send You,
