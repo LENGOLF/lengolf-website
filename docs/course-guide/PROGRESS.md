@@ -336,7 +336,7 @@ Pipeline run: 2026-04-20
 | 6 | Northern Rangsit Golf Club | `northern-rangsit-golf-club` | ✅ /golf-courses/bangkok/northern-rangsit-golf-club/ |
 | 7 | Rangsit Sports Club | `rangsit-sports-club` | ✅ /golf-courses/bangkok/rangsit-sports-club/ |
 | 8 | Prime City Golf Club | `prime-city-golf-club` | ✅ /golf-courses/bangkok/prime-city-golf-club/ |
-| 9 | Kumlung-Ake Golf Course | `kumlung-ake-golf-course` | ✅ /golf-courses/bangkok/kumlung-ake-golf-course/ |
+| 9 | Kumlung-Ake Golf Course | `kumlung-ake-golf-course` | ✅ /golf-courses/isan/kumlung-ake-golf-course/ |
 | 10 | Krisda City Golf Hills | `krisda-city-golf-hills` | ✅ /golf-courses/bangkok/krisda-city-golf-hills/ |
 | 11 | Ayutthaya Golf Club | `ayutthaya-golf-club` | ✅ /golf-courses/bangkok/ayutthaya-golf-club/ |
 | — | Iyara Park Golf Course | — | ⏸ HELD — permanently closed ~2012 |

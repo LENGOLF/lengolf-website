@@ -2558,6 +2558,12 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  // Re-regioned Bangkok → Isan; the old URL's 308 is asserted in redirectTests.
+  {
+    path: "/golf-courses/isan/kumlung-ake-golf-course/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
   {
     path: "/golf-courses/phuket/mission-hills-phuket/",
     expectedStatus: [200],
@@ -2770,6 +2776,14 @@ const redirectTests: RedirectTest[] = [
     path: "/golf-courses/bangkok/life-privilege-country-club/",
     expectedStatus: 308,
     expectedLocation: "/golf-courses/khao-yai/life-privilege-country-club/",
+  },
+  // Re-regioned course redirect: Bangkok → Isan (Kumlung-Ake is in Loei).
+  // The old URL was live and indexed, so this guards the SEO equity; the new
+  // URL's 200 is asserted in routeTests.
+  {
+    path: "/golf-courses/bangkok/kumlung-ake-golf-course/",
+    expectedStatus: 308,
+    expectedLocation: "/golf-courses/isan/kumlung-ake-golf-course/",
   },
   // Rental-page consolidation: rent-golf-clubs-bangkok → golf-course-club-rental
   // (was a duplicate; consolidated to fix self-cannibalisation in organic search)

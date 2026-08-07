@@ -18,7 +18,6 @@ const index = {
     'krisda-city-golf-hills',
     'krung-kavee-golf-course',
     'krungthep-kreetha-sports-club',
-    'kumlung-ake-golf-course',
     'lakewood-country-club',
     'lam-luk-ka-country-club',
     'lotus-valley-golf-resort',

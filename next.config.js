@@ -242,6 +242,14 @@ const nextConfig = {
       { source: '/golf-courses/bangkok/life-privilege-country-club', destination: '/golf-courses/khao-yai/life-privilege-country-club/', permanent: true },
       { source: '/golf-courses/bangkok/life-privilege-country-club/', destination: '/golf-courses/khao-yai/life-privilege-country-club/', permanent: true },
 
+      // Kumlung-Ake re-regioned from Bangkok → Isan (2026-08). It is in Loei
+      // province: 500km / 6.5h from Bangkok, phone area code 042, and its own
+      // meta description already said "in Loei province" — while the Bangkok
+      // hub advertises courses within 90 minutes of the city centre. The old
+      // URL was live and indexed, so it 301s rather than 404s.
+      { source: '/golf-courses/bangkok/kumlung-ake-golf-course', destination: '/golf-courses/isan/kumlung-ake-golf-course/', permanent: true },
+      { source: '/golf-courses/bangkok/kumlung-ake-golf-course/', destination: '/golf-courses/isan/kumlung-ake-golf-course/', permanent: true },
+
       // LINE shortlink — used as sitelink URL in Google Ads (lin.ee domain causes
       // "Destination mismatch" disapproval, so we redirect via our own domain)
       { source: '/line', destination: 'https://lin.ee/uxQpIXn', permanent: false },
