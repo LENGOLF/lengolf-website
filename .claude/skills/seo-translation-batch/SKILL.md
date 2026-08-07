@@ -145,6 +145,21 @@ Run in order; do not commit until green (minus the known sandbox caveats):
 2. `npm run validate:links`  (internal SEO cross-links resolve)
 3. `npm run validate:i18n`   (mechanical house-style/honesty linter; ERROR = exit 1,
    WARN = review flag — read `scripts/validate-i18n.ts` header for the rule list)
+   - **Since PR #73 this also lints `messages/{ja,ko,zh,th}.json`**, not just the
+     page-content data files. If your batch touches the next-intl catalogues, the
+     ERROR checks (emoji, exclamation marks, full-width digits, terminology
+     `avoid` variants, brand casing, markup balance) now apply to those strings
+     and will fail the build. The three WARN checks (currency, honesty,
+     price-as-of) are deliberately skipped there — microcopy has nowhere to put an
+     "as of" marker. English is excluded from this corpus by design.
+   - **A terminology hit is not automatically a defect.** `checkTerminology` is
+     plain-substring, so an `avoid` token can match inside a longer legitimate
+     word. Real case: zh `avoid: ["球场费"]` (wrong form of *green fee*) fired
+     inside `球场费用`, which was translating "on-course fee" — a broader
+     liability including caddie/cart. Blindly applying the `use` form narrowed a
+     live customer-liability line. Before rewriting, check `messages/en.json` and
+     the sibling ja/ko renderings to confirm the phrase really means the glossary
+     term; if it doesn't, reword around the token instead (there: `下场费用`).
 4. `npm run typecheck`       (`tsc --noEmit` + scripts project)
 5. `npm run build`
 6. `npm run start` then `npm run test:smoke` (server on localhost:3000)
