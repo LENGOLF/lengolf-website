@@ -69,7 +69,7 @@ export const REGION_META: Record<Region, RegionMeta> = {
   kanchanaburi: {
     label: 'Kanchanaburi',
     province: 'Kanchanaburi & Ratchaburi',
-    description: "Kanchanaburi and the River Kwai corridor offer some of Thailand's most atmospheric golf — from a remote jungle course accessible only by ferry crossing to a 36-hole resort built on flooded sapphire mines, motorsport-themed layouts in Bo Phloi, and rugged hillside courses designed by Jim Engh and Artanan Yomchinda within 90 minutes of Bangkok.",
+    description: "Kanchanaburi and the River Kwai corridor offer some of Thailand's most atmospheric golf — from a remote jungle course accessible only by ferry crossing to a 36-hole resort built on flooded sapphire mines, motorsport-themed layouts in Bo Phloi, and rugged hillside courses designed by Jim Engh and Attanan Yomchinda within 90 minutes of Bangkok.",
     courseCount: 7,
     center:   { lat: 14.100, lng:  99.20, zoom: 10 },
     pinColor: { bg: '#d97706', text: '#ffffff' },

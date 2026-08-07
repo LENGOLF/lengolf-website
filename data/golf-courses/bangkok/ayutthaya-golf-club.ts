@@ -5,6 +5,7 @@ export const course: GolfCourse = {
   region: 'bangkok',
   name: `Ayutthaya Golf Club`,
   province: `Ayutthaya`,
+  // อรรถอนันต์ ยมจินดา — contested romanisation, 4 spellings in the wild. Don't "correct" against a single source; see docs/course-guide/knowledge/course-overrides.md
   designer: `Attanan Yomchinda`,
   holes: 18,
   par: 72,
