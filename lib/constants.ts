@@ -22,6 +22,16 @@ export const SITE_DESCRIPTION = 'Premier indoor golf simulator and bar in the he
 export const BUSINESS_INFO = {
   name: 'LENGOLF',
   legalName: 'LENGOLF CO., LTD.',
+  // Thai company registration / VAT number.
+  taxId: '0105566207013',
+  // REGISTERED address as recorded at the DBD and printed on our tax invoices.
+  // Same physical building as `address` below, under its registered name rather
+  // than the mall's trading name. Payment gateways and other KYC reviewers match
+  // this string against the company affidavit, so it must stay verbatim — it is
+  // mirrored from COMPANY_INFO.addressEn in the lengolf-accounting app, which is
+  // eval-guarded as the single source of truth. Change both together or neither.
+  registeredAddress: '540 Mercury Tower, 4 Floor, Unit 407 Ploenchit Road, Lumpini, Pathumwan, Bangkok 10330',
+  // VENUE address — how a customer finds us. Marketing/SEO/JSON-LD use this.
   address: 'The Mercury Ville @ BTS Chidlom, Floor 4, 540 Ploenchit Road, Lumpini, Pathumwan, Bangkok 10330',
   addressShort: 'The Mercury Ville @ BTS Chidlom, Floor 4, Bangkok',
   phone: '096-668-2335',

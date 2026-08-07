@@ -1,7 +1,7 @@
 import { setRequestLocale } from 'next-intl/server'
 import type { Metadata } from 'next'
 import SectionWrapper from '@/components/shared/SectionWrapper'
-import { SITE_URL } from '@/lib/constants'
+import { BUSINESS_INFO, SITE_URL } from '@/lib/constants'
 import { getBreadcrumbJsonLd } from '@/lib/jsonld'
 
 export const metadata: Metadata = {
@@ -32,7 +32,7 @@ export default async function CourseRentalAgreementPage({
       <SectionWrapper>
         <div className="mx-auto max-w-3xl prose prose-headings:text-foreground prose-p:text-muted-foreground prose-li:text-muted-foreground prose-strong:text-foreground">
           <h1>Golf Course Club Rental Agreement</h1>
-          <p>Last updated: 13 July 2026</p>
+          <p>Last updated: 7 August 2026</p>
           <p>
             This Agreement governs the rental of golf club sets and related equipment (the &quot;Equipment&quot;)
             by LENGOLF CO., LTD. (&quot;LENGOLF&quot;, &quot;we&quot;, &quot;us&quot;) to you (&quot;you&quot;, the
@@ -60,9 +60,10 @@ export default async function CourseRentalAgreementPage({
           <h3>2. Fees and Payment</h3>
           <ul>
             <li>
-              Rental fees, delivery fees, and add-on prices are those shown at booking. Payment is made online at
-              booking time via ShopeePay (card or ShopeePay wallet). Delivery orders require online prepayment;
-              pickup orders may alternatively pay cash on collection.
+              Rental fees, delivery fees, and add-on prices are those shown at booking, in Thai Baht (THB) and
+              inclusive of VAT. Payment is made online at booking time using one of the payment methods offered at
+              checkout. Delivery orders require online prepayment; pickup orders may alternatively pay cash on
+              collection.
             </li>
             <li>No security deposit is required.</li>
             <li>
@@ -146,12 +147,25 @@ export default async function CourseRentalAgreementPage({
           <h3>9. Cancellation and Refunds</h3>
           <ul>
             <li>
-              You can cancel before collection or delivery by contacting us. Refunds of amounts already paid are
-              processed back to your original payment method via ShopeePay.
+              <strong>Free cancellation up to 24 hours before your rental starts.</strong> Cancel at least 24 hours
+              before the start of your rental period and we refund the full amount you paid, with no cancellation
+              fee. To cancel, contact us on LINE @lengolf, by phone on 096-668-2335, or by email at info@len.golf.
+            </li>
+            <li>
+              Cancellations made less than 24 hours before the start of the rental period are assessed case by case.
+              We will tell you what, if anything, will be refunded before we process it.
             </li>
             <li>
               If you do not collect, or are not available to receive the Equipment (no-show), the booking may be
               treated as cancelled; refunds are handled case by case.
+            </li>
+            <li>
+              Refunds are returned to the original payment method used at booking. Card refunds are typically
+              credited by your bank within 5 to 10 business days of us processing them.
+            </li>
+            <li>
+              If we cannot supply the Equipment you booked, you may choose an available alternative or a full
+              refund.
             </li>
           </ul>
 
@@ -189,10 +203,11 @@ export default async function CourseRentalAgreementPage({
 
           <h3>13. Contact</h3>
           <ul>
-            <li>LINE: @lengolf &middot; Phone: 096-668-2335 &middot; Email: info@len.golf</li>
             <li>
-              LENGOLF CO., LTD. (Tax ID 0105566207013), 540 Mercury Tower, 4th Floor, Unit 407, Ploenchit Road,
-              Lumpini, Pathumwan, Bangkok 10330.
+              LINE: @lengolf &middot; Phone: {BUSINESS_INFO.phone} &middot; Email: {BUSINESS_INFO.email}
+            </li>
+            <li>
+              {BUSINESS_INFO.legalName} (Tax ID {BUSINESS_INFO.taxId}), {BUSINESS_INFO.registeredAddress}.
             </li>
           </ul>
 

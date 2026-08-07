@@ -1,7 +1,7 @@
 import { setRequestLocale } from 'next-intl/server'
 import type { Metadata } from 'next'
 import SectionWrapper from '@/components/shared/SectionWrapper'
-import { SITE_URL } from '@/lib/constants'
+import { BUSINESS_INFO, SITE_URL } from '@/lib/constants'
 import { getBreadcrumbJsonLd } from '@/lib/jsonld'
 
 export const metadata: Metadata = {
@@ -27,7 +27,7 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
     <SectionWrapper>
       <div className="mx-auto max-w-3xl prose prose-headings:text-foreground prose-p:text-muted-foreground prose-li:text-muted-foreground prose-strong:text-foreground">
         <h1>Privacy Policy</h1>
-        <p>Last updated: October 10, 2024</p>
+        <p>Last updated: 7 August 2026</p>
         <p>
           This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.
         </p>
@@ -45,7 +45,7 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
         <p>For the purposes of this Privacy Policy:</p>
         <ul>
           <li><strong>Account</strong> means a unique account created for You to access our Service or parts of our Service.</li>
-          <li><strong>Company</strong> (referred to as either &quot;the Company&quot;, &quot;We&quot;, &quot;Us&quot; or &quot;Our&quot; in this Agreement) refers to LENGOLF CO., LTD., 540 Mercury Tower, 4 Floor, Unit 407 Ploenchit Road, Lumpini, Pathumwan, Bangkok 10330.</li>
+          <li><strong>Company</strong> (referred to as either &quot;the Company&quot;, &quot;We&quot;, &quot;Us&quot; or &quot;Our&quot; in this Agreement) refers to {BUSINESS_INFO.legalName}, {BUSINESS_INFO.registeredAddress}.</li>
           <li><strong>Cookies</strong> are small files that are placed on Your computer, mobile device or any other device by a website, containing the details of Your browsing history on that website among its many uses.</li>
           <li><strong>Country</strong> refers to: Thailand</li>
           <li><strong>Device</strong> means any device that can access the Service such as a computer, a cellphone or a digital tablet.</li>
@@ -74,7 +74,24 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
         </p>
 
         <h4>Tracking Technologies and Cookies</h4>
-        <p>We use Cookies and similar tracking technologies to track the activity on Our Service and store certain information.</p>
+        <p>We use Cookies and similar tracking technologies to track the activity on Our Service and store certain information. The third-party tools we currently use are:</p>
+        <ul>
+          <li><strong>Google Tag Manager</strong> - loads and manages the tools below.</li>
+          <li><strong>Google Analytics 4</strong> - how visitors find and use the Website, in aggregate.</li>
+          <li><strong>Google Ads</strong> - measuring which advertising leads to a booking.</li>
+          <li><strong>Meta (Facebook) Pixel</strong> - measuring the results of our Facebook and Instagram advertising.</li>
+          <li><strong>Microsoft Clarity</strong> - anonymous analysis of how pages are used, to help us improve them.</li>
+        </ul>
+        <p>
+          You can block or delete Cookies through Your browser settings. Blocking them does not stop You from booking
+          with Us, but parts of the Website may work less well.
+        </p>
+        <h4>Payment Data</h4>
+        <p>
+          When You pay online, Your card details are entered into and processed by our payment provider. LENGOLF does
+          not receive or store Your full card number. We retain only the record of the payment, such as the amount,
+          the date, the result, the card brand, and the last four digits.
+        </p>
 
         <h3>Use of Your Personal Data</h3>
         <p>The Company may use Personal Data for the following purposes:</p>
@@ -89,12 +106,58 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
 
         <h3>Retention of Your Personal Data</h3>
         <p>
-          The Company will retain Your Personal Data only for as long as is necessary for the purposes set out in this Privacy Policy.
+          The Company will retain Your Personal Data only for as long as is necessary for the purposes set out in this
+          Privacy Policy. In practice that means:
         </p>
+        <ul>
+          <li>
+            <strong>Booking and payment records</strong> - retained for at least 5 years, as required of Us by Thai
+            accounting and tax law.
+          </li>
+          <li>
+            <strong>Contact details and booking history</strong> - retained while You remain a customer, so that We can
+            service Your bookings and honour any packages You hold.
+          </li>
+          <li>
+            <strong>Marketing consent</strong> - retained until You withdraw it, together with a record of when and how
+            it was given, so that We can show We had Your permission.
+          </li>
+          <li>
+            <strong>Website analytics</strong> - retained according to the settings of the tools listed above,
+            generally no more than 14 months.
+          </li>
+        </ul>
+        <p>When Personal Data is no longer needed, We delete it or irreversibly anonymise it.</p>
 
         <h3>Security of Your Personal Data</h3>
         <p>
           The security of Your Personal Data is important to Us, but remember that no method of transmission over the Internet, or method of electronic storage is 100% secure.
+        </p>
+
+        <h2>Your Rights Over Your Personal Data</h2>
+        <p>
+          Under Thailand&apos;s Personal Data Protection Act B.E. 2562 (2019) (&quot;PDPA&quot;), You have the
+          following rights in relation to the Personal Data We hold about You:
+        </p>
+        <ul>
+          <li><strong>Access</strong> - to ask for a copy of the Personal Data We hold about You.</li>
+          <li><strong>Rectification</strong> - to have inaccurate or incomplete data corrected.</li>
+          <li><strong>Erasure</strong> - to ask Us to delete or anonymise Your data, where We have no continuing legal reason to keep it.</li>
+          <li><strong>Restriction</strong> - to ask Us to pause Our use of Your data while a request or objection is being resolved.</li>
+          <li><strong>Objection</strong> - to object to Our use of Your data, including for direct marketing.</li>
+          <li><strong>Data portability</strong> - to receive the data You gave Us in a commonly used machine-readable format, or to have it sent to another provider.</li>
+          <li><strong>Withdrawal of consent</strong> - to withdraw consent at any time, where We rely on Your consent. Withdrawing consent does not affect anything We did lawfully before You withdrew it.</li>
+          <li><strong>Complaint</strong> - to lodge a complaint with the Personal Data Protection Committee (PDPC) if You believe We have handled Your data unlawfully.</li>
+        </ul>
+        <p>
+          To exercise any of these rights, contact Us using the details in the &quot;Contact Us&quot; section below. We
+          will respond within the time required by the PDPA. We may need to verify Your identity before acting on a
+          request, so that We do not disclose Your data to someone else. Exercising these rights is free of charge.
+        </p>
+        <p>
+          You can unsubscribe from marketing messages at any time using the link in any marketing email We send You,
+          or by contacting Us. This does not stop Us from sending You service messages about a booking You have made,
+          such as a confirmation or a change of time.
         </p>
 
         <h2>Children&apos;s Privacy</h2>
@@ -108,9 +171,15 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
         </p>
 
         <h2>Contact Us</h2>
-        <p>If you have any questions about this Privacy Policy, You can contact us:</p>
+        <p>
+          {BUSINESS_INFO.legalName} is the data controller for the Personal Data described in this Privacy Policy. If
+          You have any questions about this Privacy Policy, or wish to exercise any of the rights set out above, You
+          can contact Us:
+        </p>
         <ul>
-          <li>By email: info@len.golf</li>
+          <li>By email: {BUSINESS_INFO.email}</li>
+          <li>By phone: {BUSINESS_INFO.phone}</li>
+          <li>By post: {BUSINESS_INFO.legalName}, {BUSINESS_INFO.registeredAddress}</li>
         </ul>
       </div>
     </SectionWrapper>
