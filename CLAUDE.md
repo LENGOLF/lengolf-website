@@ -124,6 +124,42 @@ Required in `.env.local` (see `.env.local.example`):
 For migration scripts only:
 - `SUPABASE_SERVICE_ROLE_KEY` — elevated access for data imports
 
+## `vercel.json` pins `regions: ["sin1"]`
+
+Supabase is in `ap-southeast-1` (Singapore). Without a pin, functions run in
+Vercel's US default (`iad1`, Washington DC) and every PostgREST call crosses the
+Pacific — ~230ms RTT, plus 2–3 more for a cold TLS handshake.
+
+**This matters far less here than it sounds**, and it's worth knowing why before
+anyone quotes a big number about it. This site is static/ISR: every page uses
+`generateStaticParams` and `revalidate`, so the Supabase reads in `lib/blog.ts`,
+`lib/clubs.ts`, `lib/promotions.ts` and friends happen at build time and during
+background revalidation, not while a visitor waits. Sampled pages come back
+`HIT` / `PRERENDER` / `STALE`, never a per-request render.
+
+The one user-facing surface that pays is `POST /api/contact`, which awaits a
+Supabase insert into `contact_submissions` before responding — roughly one round
+trip. Its SMTP is `smtp.gmail.com` (anycast), so unlike `lengolf-booking-new`'s
+Thai-hosted mail server there's no additional penalty on the email leg.
+
+Check the execution region with the response header. The **second** segment is
+where the function ran; the first is only the edge PoP that accepted the
+connection:
+
+```bash
+curl -sI https://www.len.golf/ | grep -i x-vercel-id
+```
+
+`sin1::sin1::…` is correct. `::iad1::` means the pin was lost.
+
+`preferredRegion` does NOT work for this — it's edge-runtime only and these
+routes are Node. Top-level `regions` in `vercel.json` is the mechanism.
+
+Sibling apps `lengolf-forms` and `lengolf-booking-new` pin the same region. In
+booking-new the cost was severe rather than cosmetic — ~165ms of real query work
+read as ~4s of wall clock — because its routes make five or six sequential
+queries per request and its SMTP host is in Thailand.
+
 ## Path Alias
 
 `@/*` maps to project root (e.g., `@/components/ui/button`).
