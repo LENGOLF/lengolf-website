@@ -101,7 +101,7 @@ export default async function RegionIndexPage({ params }: Props) {
   // inbound links were from the two top-3 course pages in each pair.
   // EN-only like the trip-planning block below (compare pages have no
   // translations; a localized hub linking them would 301 and mix languages).
-  // Built inside the EN gate: the 20 translated hub variants render no
+  // Built inside the EN gate: the 56 translated hub variants render no
   // comparison block, so they shouldn't pay for the lookup map either.
   const comparisonItems =
     locale === 'en'

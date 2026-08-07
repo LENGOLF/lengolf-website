@@ -177,7 +177,7 @@ export const REGION_HUB_I18N: Partial<
   //   zh — course names Latin (Thai proper nouns with no circulating Chinese
   //        form; coining one would be invention), but PERSON names Sinicised
   //        with a Latin gloss (杰克·尼克劳斯（Jack Nicklaus）), matching
-  //        彼得·汤姆森 in the shipped chiang-mai hub below.
+  //        彼得·汤姆森 in the shipped chiang-mai hub above.
   //   ko — course names Latin in THESE 9 only. This deliberately diverges
   //        from the 5 pre-2026-08 ko hubs (블랙 마운틴, 파인애플 밸리, 란나):
   //        those are globally famous courses with real KO search demand,
@@ -272,7 +272,7 @@ export const REGION_HUB_I18N: Partial<
     },
     th: {
       label: 'อีสาน',
-      province: 'ขอนแก่น อุดรธานี เลย และหนองคาย',
+      province: 'จังหวัดขอนแก่น อุดรธานี เลย และหนองคาย',
       description:
         'อีสาน — ที่ราบสูงอันกว้างใหญ่ทางภาคตะวันออกเฉียงเหนือของไทย — มอบประสบการณ์กอล์ฟที่คุ้มค่าและงดงามอย่างถึงที่สุด ทั้ง Singha Park ในขอนแก่นที่ได้มาตรฐานระดับ Asian Tour รอบกอล์ฟแบบเดินอย่างเดียวที่สนามของ กฟผ. บนเขื่อนซึ่งอยู่สูงเหนืออ่างเก็บน้ำอุบลรัตน์ คลับริมแม่น้ำโขงในหนองคายใกล้ชายแดนลาว และหนึ่งในไม่กี่สนามของไทยที่ไม่บังคับทั้งแคดดี้และรถกอล์ฟ',
     },

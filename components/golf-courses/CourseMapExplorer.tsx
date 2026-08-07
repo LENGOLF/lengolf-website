@@ -2,9 +2,11 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
-// next/link, NOT the locale-aware i18n Link: course detail pages are EN-only,
-// so on the 20 translated hubs a locale-prefixed href (/ja/golf-courses/...)
-// would 301 to English on every one of up to 58 roster links.
+// next/link, NOT the locale-aware i18n Link. Across the 56 translated hubs
+// MOST course detail pages are EN-only, so a locale-prefixed href would 301
+// on nearly every roster link. Caveat: COURSE_DETAIL_I18N now ships 15 courses
+// in th+ja, and those 15 ARE linked to English here even though a translation
+// exists — see the follow-up to make this per-course via hasTranslationForLocale.
 import Link from 'next/link'
 import { ArrowRight, Clock, Flag, X, ExternalLink, MapPinOff } from 'lucide-react'
 import type { GolfCourse } from '@/types/golf-courses'
@@ -298,7 +300,7 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
             <Link
               key={course.slug}
               href={`/golf-courses/${region}/${course.slug}`}
-              // 58 rows would otherwise each viewport-prefetch a full course
+              // 57 rows would otherwise each viewport-prefetch a full course
               // page payload the user rarely navigates to
               prefetch={false}
               onClick={(e) => {

@@ -4003,20 +4003,20 @@ const wayfindingTests: {
   },
   {
     path: "/ja/faq/",
-    expect: /4番出口/,
-    forbid: /[0-35-9]番出口/,
+    expect: /(?<!\d)4番出口/,
+    forbid: /(?<!\d)[0-35-9]番出口|\d\d番出口/,
     what: "faq-hub ja directions exit number",
   },
   {
     path: "/ko/faq/",
-    expect: /4번\s*출구/,
-    forbid: /[0-35-9]번\s*출구/,
+    expect: /(?<!\d)4번\s*출구/,
+    forbid: /(?<!\d)[0-35-9]번\s*출구|\d\d번\s*출구/,
     what: "faq-hub ko directions exit number",
   },
   {
     path: "/zh/faq/",
-    expect: /4号出口/,
-    forbid: /[0-35-9]号出口/,
+    expect: /(?<!\d)4号出口/,
+    forbid: /(?<!\d)[0-35-9]号出口|\d\d号出口/,
     what: "faq-hub zh directions exit number",
   },
 ];

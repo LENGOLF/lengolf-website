@@ -15,9 +15,10 @@
  *  - suspicious-pattern fees (see WARN rules) on a course with NO
  *    `fees_verified_at` attestation — unverified suspicious data fails CI
  *  - malformed `fees_verified_at` (not YYYY-MM-DD)
- *  - REGION_META.courseCount disagreeing with the published course files on
- *    disk for that region (it is hand-maintained, and now selects an ICU
- *    plural branch as well as printing a number — see checkRegionCounts)
+ *  - REGION_META.courseCount disagreeing with the region's index.ts slugs
+ *    (what actually renders), or an index slug with no file / a file with
+ *    no index slug. courseCount is hand-maintained and now selects an ICU
+ *    plural branch as well as printing a number — see checkRegionCounts
  *
  * WARN (non-blocking) when `fees_verified_at` IS present:
  *  - weekday fee under ฿600 (genuinely possible: EGAT dam courses, army
@@ -40,6 +41,7 @@
 
 import fs from 'fs'
 import path from 'path'
+import { pathToFileURL } from 'url'
 import type { GolfCourse } from '../types/golf-courses'
 import { decimalPlaces, MIN_COORD_DECIMALS } from '../lib/geo'
 import { loadCourseFiles } from './course-files'
@@ -106,23 +108,32 @@ function checkCoordinates(file: string, c: GolfCourse) {
 }
 
 /**
- * REGION_META.courseCount vs the course files actually on disk.
+ * REGION_META.courseCount vs what the region hub actually renders.
  *
- * courseCount is hand-maintained and drives real output: the region hub's
- * meta description, its hero card, the OG card chip — and, since the
- * count/noun work, WHICH ICU PLURAL BRANCH renders. A stale count no longer
- * just prints a wrong number; it commits the sentence to the wrong
- * grammatical form ("Our guide to 1 golf course in Krabi" above two cards).
+ * courseCount is hand-maintained and drives real output: the hub's meta
+ * description, its hero card, the OG card chip — and, since the count/noun
+ * work, WHICH ICU PLURAL BRANCH renders. A stale count no longer just prints
+ * a wrong number; it commits the sentence to the wrong grammatical form
+ * ("Our guide to 1 golf course in Krabi" above two cards).
  *
- * Nothing else guards it. The smoke suite's SINGLE_COURSE_REGIONS is a
- * hardcoded list, so it keeps asserting the =1 branch against a stale value
- * rather than catching it.
+ * THREE sources of truth exist and they must agree:
+ *   1. REGION_META.courseCount  — the advertised number.
+ *   2. data/golf-courses/<region>/index.ts `slugs` — what
+ *      getCoursesByRegion() maps over, i.e. what actually RENDERS as cards
+ *      and what generateStaticParams builds. Note it does NOT filter by
+ *      `status`, so a draft still renders.
+ *   3. The .ts files on disk — what a course author edits.
+ * Checking (1) against (3) alone is not enough: a re-region that moves the
+ * file and updates courseCount but forgets index.ts leaves 1 and 3 agreeing
+ * while the hub renders a different number of cards. That is precisely the
+ * shape of the kumlung-ake move in this PR, where both index.ts files had to
+ * be hand-edited. So compare 1↔2 (the user-visible claim) and 2↔3 (orphans).
  *
  * Parsed out of the source text rather than imported: lib/golf-courses.ts is
  * `import 'server-only'` and throws under plain tsx (same constraint that
  * forced the hardcoded list in the smoke test).
  */
-function checkRegionCounts(courses: { file: string; course: GolfCourse }[]) {
+async function checkRegionCounts(courses: { file: string; course: GolfCourse }[]) {
   // Normalise CRLF first: git checks this repo out with native line endings
   // on Windows, and fs.readFileSync does not translate them, so anchors like
   // `\n}` would silently never match and the guard would report itself blind.
@@ -137,33 +148,65 @@ function checkRegionCounts(courses: { file: string; course: GolfCourse }[]) {
 
   const declared = new Map<string, number>()
   for (const m of meta[1].matchAll(/^ {2}'?([a-z-]+)'?:\s*\{([\s\S]*?)^ {2}\},/gm)) {
-    const count = m[2].match(/courseCount:\s*(\d+)/)
+    // Strip line comments before reading the value. REGION_META blocks carry
+    // prose comments (this PR added one to `isan`), and a comment mentioning
+    // `courseCount: N` would otherwise be read as the value — the guard would
+    // then validate a number that does not render, and pass.
+    const body = m[2].replace(/^[ \t]*\/\/.*$/gm, '')
+    const count = body.match(/^ {4}courseCount:\s*(\d+),/m)
     if (count) declared.set(m[1], Number(count[1]))
   }
   if (declared.size === 0) {
     errors.push('lib/golf-courses.ts: REGION_META parsed to zero regions (courseCount guard is blind)')
     return
   }
+  // (2) index.ts slugs — the rendered set. Imported the same way
+  // lib/golf-courses.ts imports it, so this cannot drift from the runtime.
+  const rendered = new Map<string, string[]>()
+  for (const region of declared.keys()) {
+    const abs = path.join(__dirname, '..', 'data', 'golf-courses', region, 'index.ts')
+    if (!fs.existsSync(abs)) {
+      errors.push(`data/golf-courses/${region}/index.ts is missing — the hub would render zero cards`)
+      continue
+    }
+    const mod = await import(pathToFileURL(abs).href)
+    const slugs: string[] = (mod.default ?? mod).slugs ?? []
+    rendered.set(region, slugs)
+  }
 
-  // Count by DIRECTORY, not course.region: the directory index is what
-  // lib/golf-courses.ts loads and what the URL is built from, so a file in
-  // the wrong folder must not be masked by a correct `region` field.
-  const actual = new Map<string, number>()
-  for (const { file, course } of courses) {
-    if (course.status !== 'published') continue
-    const region = file.split('/')[0]
-    actual.set(region, (actual.get(region) ?? 0) + 1)
+  // (3) files on disk, keyed by DIRECTORY not course.region: the directory is
+  // what builds the URL, so a file in the wrong folder must not be masked by
+  // a correct `region` field.
+  const onDisk = new Map<string, Set<string>>()
+  for (const { file } of courses) {
+    const [region, base] = file.split('/')
+    if (!onDisk.has(region)) onDisk.set(region, new Set())
+    onDisk.get(region)!.add(base.replace(/\.ts$/, ''))
   }
 
   for (const [region, count] of declared) {
-    const onDisk = actual.get(region) ?? 0
-    if (onDisk !== count) {
+    const slugs = rendered.get(region)
+    if (!slugs) continue
+    // 1 ↔ 2: the advertised number vs the cards that render.
+    if (slugs.length !== count) {
       errors.push(
-        `lib/golf-courses.ts: REGION_META.${region}.courseCount is ${count} but ${onDisk} published course file(s) are in data/golf-courses/${region}/ — the hub would advertise the wrong count and may pick the wrong plural branch`
+        `lib/golf-courses.ts: REGION_META.${region}.courseCount is ${count} but data/golf-courses/${region}/index.ts lists ${slugs.length} slug(s) — the hub advertises a number it does not render, and may pick the wrong ICU plural branch`
       )
     }
+    // 2 ↔ 3: a slug with no file renders nothing; a file with no slug is dead.
+    const files = onDisk.get(region) ?? new Set<string>()
+    for (const slug of slugs) {
+      if (!files.has(slug)) {
+        errors.push(`data/golf-courses/${region}/index.ts lists "${slug}" but no such course file exists`)
+      }
+    }
+    for (const f of files) {
+      if (!slugs.includes(f)) {
+        errors.push(`data/golf-courses/${region}/${f}.ts exists but is not listed in that region's index.ts — it will never render`)
+      }
+    }
   }
-  for (const region of actual.keys()) {
+  for (const region of onDisk.keys()) {
     if (!declared.has(region)) {
       errors.push(`data/golf-courses/${region}/ has course files but no REGION_META entry`)
     }
@@ -172,7 +215,7 @@ function checkRegionCounts(courses: { file: string; course: GolfCourse }[]) {
 
 async function main() {
   const courses = await loadCourseFiles()
-  checkRegionCounts(courses)
+  await checkRegionCounts(courses)
 
   for (const { file, course: c } of courses) {
     const wd = c.green_fee_weekday_thb

@@ -1,4 +1,5 @@
-// Content for the /faq/ hub page (app/[locale]/faq/page.tsx) in EN + TH.
+// Content for the /faq/ hub page (app/[locale]/faq/page.tsx) in EN, TH, JA,
+// KO and ZH.
 //
 // WHY A DATA FILE (not messages/*.json): the [locale] layout statically builds
 // every locale, so a messages-driven page translated to only en+th would emit

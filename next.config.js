@@ -246,7 +246,8 @@ const nextConfig = {
       // province: 500km / 6.5h from Bangkok, phone area code 042, and its own
       // meta description already said "in Loei province" — while the Bangkok
       // hub advertises courses within 90 minutes of the city centre. The old
-      // URL was live and indexed, so it 301s rather than 404s.
+      // URL was live and indexed, so it redirects rather than 404s (Next
+      // emits 308 for `permanent: true`, which is what the smoke test asserts).
       { source: '/golf-courses/bangkok/kumlung-ake-golf-course', destination: '/golf-courses/isan/kumlung-ake-golf-course/', permanent: true },
       { source: '/golf-courses/bangkok/kumlung-ake-golf-course/', destination: '/golf-courses/isan/kumlung-ake-golf-course/', permanent: true },
 

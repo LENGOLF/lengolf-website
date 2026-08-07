@@ -71,9 +71,16 @@ export default async function FaqHubPage({ params }: Props) {
   }))
 
   const faqJsonLd = getFaqPageJsonLd(faqItems)
+  // Locale-aware URLs, mirroring the [region] hub. Emitting `${SITE_URL}/faq/`
+  // from /ja/faq/ made the BreadcrumbList's own terminal item point at a
+  // DIFFERENT page in a different language than the canonical two lines above
+  // — contradictory structured data. '/' and '/faq' are registered for every
+  // locale (lib/translated-routes.ts), so neither crumb can emit a redirecting
+  // URL. Crumb display names are still EN; localizing them needs new
+  // FaqHubContent fields in all five blocks.
   const breadcrumbJsonLd = getBreadcrumbJsonLd([
-    { name: 'Home', url: `${SITE_URL}/` },
-    { name: 'FAQ', url: `${SITE_URL}/faq/` },
+    { name: 'Home', url: getCanonical(locale, '/') },
+    { name: 'FAQ', url: getCanonical(locale, '/faq/') },
   ])
 
   return (

@@ -70,8 +70,9 @@ export default async function GolfCoursesHubPage({ params }: Props) {
 
   const hubRegions = regionSlugs.map((slug, i) => ({
     region: slug,
-    // Localized place name where a hub translation exists (5 regions for th);
-    // the rest keep their EN proper-style labels.
+    // Localized place name. All 14 regions are translated in th/ja/ko/zh as
+    // of the structural-parity batch, so the EN-label fallback never fires
+    // today; it stays for a future region added before its translations.
     label:    getRegionHubTranslation(slug, locale)?.label ?? REGION_META[slug].label,
     courses:  courseArrays[i],
     pinColor: REGION_META[slug].pinColor,
@@ -126,9 +127,10 @@ export default async function GolfCoursesHubPage({ params }: Props) {
       <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
 
         {/* Region cards — rendered for ALL locales: they are the core directory
-            of the hub. Only 5 of the 14 regions have TH translations, so on the
-            TH page the 9 untranslated region links 301 to their EN hubs —
-            acceptable (better a live EN directory page than no link at all). */}
+            of the hub. As of the structural-parity batch ALL 14 regions are
+            translated in th/ja/ko/zh, so none of these links 301 any more. A
+            future 15th region must be added to REGION_HUB_I18N (and to each
+            locale's staticRoutes) or its card will link to the EN hub. */}
         <div className="mb-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {regionSlugs.map((slug) => {
             const meta = REGION_META[slug]
@@ -158,7 +160,7 @@ export default async function GolfCoursesHubPage({ params }: Props) {
                     {/* One message, not `{n} + <coursesWord>`: three regions
                         hold a single course, and a count interpolated OUTSIDE
                         the message leaves the noun with nothing to agree with
-                        ("1 courses"). Only EN inflects — th/ja carry the same
+                        ("1 courses"). Only EN inflects — th/ja/ko/zh carry the same
                         key with no plural, which is correct for those languages. */}
                     {t.rich('coursesCount', {
                       count: meta.courseCount,

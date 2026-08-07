@@ -65,8 +65,8 @@ export default async function CourseRentalCrossLink() {
                 hasTranslationForLocale('en', ...) is always false and using it
                 alone would hide this link on the majority locale. Same shape
                 as the alternates guard in app/[locale]/golf-courses/page.tsx.
-                th/ja have hub translations; ko/zh are skipped because the
-                middleware would 301 the click to English. */}
+                All four locales now have hub translations, so the gate
+                passes for each of them and no click 301s. */}
             {(locale === 'en' || hasTranslationForLocale(locale, '/golf-courses')) && (
               <Link
                 href="/golf-courses"

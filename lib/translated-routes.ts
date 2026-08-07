@@ -68,8 +68,8 @@ const TRANSLATED_ROUTES: Record<
       "/guide/screen-golf-bangkok",
       "/guide/round-of-golf-cost-bangkok",
       // Translated /golf-courses/ hub page (GolfCourseHub namespace) — the
-      // entry point for Thai-script สนามกอล์ฟ queries. ko/zh hub URLs still
-      // 301 to English.
+      // entry point for Thai-script สนามกอล์ฟ queries. All four locales now
+      // serve this hub (ko/zh gained it in the structural-parity batch).
       "/golf-courses",
       // Translated region hubs (data/golf-courses-i18n.ts) — kept in sync by the
       // smoke-test region-hub consistency check.
@@ -399,8 +399,8 @@ const TRANSLATED_ROUTES: Record<
       "/guide/round-of-golf-cost-bangkok",
       "/guide/screen-golf-bangkok",
       // Translated /golf-courses/ hub page (GolfCourseHub namespace) — the
-      // entry point for バンコク ゴルフ場 queries. ko/zh hub URLs still 301 to
-      // English.
+      // entry point for バンコク ゴルフ場 queries. All four locales now serve
+      // this hub (ko/zh gained it in the structural-parity batch).
       "/golf-courses",
       // Translated region hubs (data/golf-courses-i18n.ts) — kept in sync by the
       // smoke-test region-hub consistency check.

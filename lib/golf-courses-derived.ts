@@ -95,7 +95,7 @@ export async function getTopCoursesByRegion(
  *
  * Replaces the old `.slice(0, 3)` on raw index order, which sent every
  * course page's sibling links to the same three alphabetically-first courses
- * per region — 54 of Bangkok's 58 courses had zero sibling inbound links.
+ * per region — most of Bangkok's courses had zero sibling inbound links.
  * Nearest-neighbour selection spreads inbound links across the whole
  * roster (every course is *someone's* nearest neighbour) and is genuinely
  * more useful to a reader planning rounds in one area.
@@ -106,7 +106,7 @@ export function getRelatedCourses(
   n = 3
 ): GolfCourse[] {
   // Caller passes the region roster it already loaded — avoids a second
-  // getCoursesByRegion fan-out of up to 58 dynamic imports per page build.
+  // getCoursesByRegion fan-out of up to 57 dynamic imports per page build.
   // isPlayable, not just `status`: nearest-neighbour selection would otherwise
   // hand 7 Bangkok pages a closed course as a suggested alternative.
   const siblings = allRegionCourses.filter(
