@@ -89,6 +89,29 @@ export default async function Footer() {
             >
               {t('hoursInline')}
             </p>
+            {/*
+              Registered entity block. Kept deliberately: card acquirers and other
+              KYC reviewers require the legal name and registered address to be
+              findable on every page, and match it against the company affidavit.
+              Do not collapse this into the venue address above — they are the same
+              building under two different names, and only this one is registered.
+            */}
+            <p
+              className="mt-3"
+              style={{
+                fontFamily: '"Poppins", sans-serif',
+                fontWeight: 400,
+                color: '#6b7280',
+                fontSize: '12px',
+                lineHeight: '18px',
+              }}
+            >
+              {BUSINESS_INFO.legalName}
+              <br />
+              {BUSINESS_INFO.registeredAddress}
+              <br />
+              {t('taxId')}: {BUSINESS_INFO.taxId}
+            </p>
           </div>
 
           {/* Col 2: Menu — 22% */}
