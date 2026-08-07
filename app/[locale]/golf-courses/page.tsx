@@ -155,7 +155,17 @@ export default async function GolfCoursesHubPage({ params }: Props) {
                 </div>
                 <div className="mt-auto flex items-center justify-between border-t border-border/60 px-5 py-3.5">
                   <p className="text-sm font-bold text-foreground">
-                    {meta.courseCount} <span className="font-medium text-muted-foreground">{t('coursesWord')}</span>
+                    {/* One message, not `{n} + <coursesWord>`: three regions
+                        hold a single course, and a count interpolated OUTSIDE
+                        the message leaves the noun with nothing to agree with
+                        ("1 courses"). Only EN inflects — th/ja carry the same
+                        key with no plural, which is correct for those languages. */}
+                    {t.rich('coursesCount', {
+                      count: meta.courseCount,
+                      muted: (chunks) => (
+                        <span className="font-medium text-muted-foreground">{chunks}</span>
+                      ),
+                    })}
                   </p>
                   <span className="inline-flex items-center gap-1 text-xs font-semibold text-primary transition-transform group-hover:translate-x-0.5">
                     {t('viewAll')} <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />

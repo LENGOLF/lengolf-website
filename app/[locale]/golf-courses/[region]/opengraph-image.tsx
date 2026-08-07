@@ -33,7 +33,13 @@ export default async function Image({ params }: Props) {
   return ogCard({
     eyebrow: meta.province,
     title: `${meta.label} Golf Courses`,
-    chips: [`${meta.courseCount} course guides`, 'Green fees & maps'],
+    // Three regions (north-misc, khao-lak, krabi) hold a single course, so the
+    // noun has to agree — this card is EN-only, hence a plain conditional
+    // rather than the ICU plural the metaDescription uses.
+    chips: [
+      `${meta.courseCount} course guide${meta.courseCount === 1 ? '' : 's'}`,
+      'Green fees & maps',
+    ],
     footer: 'Every course mapped · Green fees · Club rental',
   })
 }

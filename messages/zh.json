@@ -1130,7 +1130,7 @@
     "heroIntro": "面向游客开放的泰国高尔夫球场，我们都提供完整指南 — 果岭费、球场布局、实用贴士与前往方式。目前已收录{courseCount}座球场，覆盖{regionCount}个地区。",
     "breadcrumbHome": "首页",
     "breadcrumbGolfCourses": "高尔夫球场",
-    "coursesWord": "座球场",
+    "coursesCount": "{count} <muted>座球场</muted>",
     "viewAll": "查看全部",
     "budgetHeading": "按果岭费预算筛选",
     "budgetIntro": "从EGAT与市政的低价球场，一直到顶级名门球场。",

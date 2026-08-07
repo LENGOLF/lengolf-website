@@ -28,7 +28,9 @@
  *   3. Full-width digits ０-９ in ja content (glossary: half-width Arabic only).
  *   4. A terminology `avoid` variant used instead of the settled `use` form.
  *   5. Brand-immutable corruption (case-mangled LENGOLF / len.golf / BTS / ...).
- *   6. Unbalanced markdown bold (**) or a broken '{{' placeholder.
+ *   6. Unbalanced markdown bold (**), or unbalanced braces — a broken
+ *      '{{token}}' placeholder or a malformed ICU argument. Braces are
+ *      depth-scanned, so an ICU plural's '}}' tail is valid (see checkMarkup).
  *  10. UI-message namespace parity: a next-intl namespace consumed by
  *      translated SSG routes (SSG_UI_NAMESPACES below) is entirely missing
  *      from a locale's messages/<locale>.json. next-intl does NOT fail the
@@ -530,23 +532,74 @@ function checkBrands(unit: Unit) {
   }
 }
 
-// ── Check 6: markdown bold balance + placeholder integrity ──────────────────
-function checkMarkup(unit: Unit) {
+// ── Check 6: markdown bold balance + placeholder / ICU brace integrity ──────
+// TWO braces rules, because two templating dialects share this corpus:
+//
+//   a) Structural depth-scan, applied to everything. Catches a '}' that closes
+//      nothing and a '{' left open. Replaces the old '{{'-vs-'}}' bigram
+//      counter as the general rule, because ICU plurals legitimately END in
+//      '}}' with no '{{' anywhere — '{count, plural, =1 {…} other {# …}}' —
+//      and the counter hard-failed every one of them. That is why an ICU
+//      plural could previously only reach a non-EN catalog via a load-bearing
+//      space before the final brace, a booby trap for the next translator.
+//
+//   b) The bigram equality, kept but SCOPED to the '{{token}}' dialect (the
+//      content data — explainer/FAQ/course entries, i.e. NOT uiChrome). The
+//      depth-scan alone is *weaker* here, not stronger: '{{bayHourlyFrom} }'
+//      is brace-balanced and passes it, but lib/site-facts.ts substitutes on
+//      /\{\{\s*(\w+)\s*\}\}/g, so the split closer misses the anchor, replace()
+//      is a no-op, and the literal token text ships to visitors WITHOUT
+//      throwing (the throw at site-facts only fires for well-formed tokens
+//      with unknown names). That shape is exactly the load-bearing space above.
+//      The scoping is safe because the dialects don't mix: messages/*.json
+//      contains no '{{token}}', and the content data contains no ICU.
+//
+// So neither rule alone is sufficient, and the pair is a strict superset of
+// the old check: '{{price' fails (unclosed), '}}{{' fails (stray — the counter
+// passed it 1-for-1), '{{a} b}' fails (bigram), ICU passes.
+//
+// KNOWN GAP: ICU escapes a literal brace by quoting it ("Use '{' here"). The
+// depth-scan reads that as unclosed and errors. No message in any catalog does
+// this today; if one ever needs to, strip ICU-quoted spans before scanning
+// rather than deleting the check.
+function checkMarkup(unit: Unit, dialect: 'icu' | 'token' = 'token') {
   const boldCount = indicesOf(unit.value, '**').length
   if (boldCount % 2 !== 0) {
     add('error', unit.locale, unit.entryId, unit.field, 'markdown', `unbalanced ** (found ${boldCount})`)
   }
-  const open = indicesOf(unit.value, '{{').length
-  const close = indicesOf(unit.value, '}}').length
-  if (open !== close) {
-    add(
-      'error',
-      unit.locale,
-      unit.entryId,
-      unit.field,
-      'placeholder',
-      `broken {{...}} placeholder ('{{'×${open} vs '}}'×${close})`
-    )
+  const err = (msg: string) =>
+    add('error', unit.locale, unit.entryId, unit.field, 'placeholder', msg)
+
+  // (a) Structural. A stray '}' resets depth and the scan continues, so a
+  // second defect later in a long body reports in the same run rather than
+  // costing another CI cycle. Offsets are code-point indices — enough to find
+  // the spot in a multi-thousand-character explainer body.
+  let depth = 0
+  let strayAt: number | null = null
+  let i = 0
+  for (const ch of unit.value) {
+    if (ch === '{') depth++
+    else if (ch === '}') {
+      if (depth === 0) {
+        if (strayAt === null) strayAt = i
+      } else depth--
+    }
+    i++
+  }
+  if (strayAt !== null) {
+    err(`unbalanced braces — '}' at offset ${strayAt} closes nothing (broken {{...}} placeholder or ICU argument)`)
+  }
+  if (depth !== 0) {
+    err(`unbalanced braces — ${depth} unclosed '{' (broken {{...}} placeholder or ICU argument)`)
+  }
+
+  // (b) Dialect-specific. ICU strings are exempt by construction.
+  if (dialect === 'token') {
+    const open = indicesOf(unit.value, '{{').length
+    const close = indicesOf(unit.value, '}}').length
+    if (open !== close) {
+      err(`split '{{...}}' placeholder ('{{'×${open} vs '}}'×${close}) — lib/site-facts.ts will not substitute it and the raw token ships`)
+    }
   }
 }
 
@@ -629,7 +682,8 @@ for (const entry of entries) {
     // ERROR 4/5/6
     checkTerminology(unit)
     checkBrands(unit)
-    checkMarkup(unit)
+    // messages/*.json is the ICU dialect; the content data is '{{token}}'.
+    checkMarkup(unit, entry.uiChrome ? 'icu' : 'token')
 
     // WARN 7/8/9 are entry-shaped prose rules — see the uiChrome note above.
     if (entry.uiChrome) continue
@@ -772,8 +826,52 @@ if (process.argv.includes('--self-test')) {
   // Check 6 — markdown bold + placeholder integrity
   assert('markup: odd ** → 1', errsFrom('ja', '**太字が閉じない', checkMarkup) === 1)
   assert('markup: balanced ** → 0', errsFrom('ja', '**太字**は正常', checkMarkup) === 0)
-  assert('markup: lone {{ → 1', errsFrom('ja', '{{price のみ', checkMarkup) === 1)
-  assert('markup: complete {{token}} → 0', errsFrom('ja', '{{price}} は有効', checkMarkup) === 0)
+  // checkMarkup takes a dialect; errsFrom passes one arg, so bind each side.
+  const asToken = (u: Unit) => checkMarkup(u, 'token')
+  const asIcu = (u: Unit) => checkMarkup(u, 'icu')
+
+  // '{{token}}' dialect (content data) — BOTH the depth-scan and the bigram
+  // equality apply, so one malformed string can legitimately raise two errors
+  // (one per rule). Counts below are exact and each label says which rules fire.
+  assert('markup: complete {{token}} → 0', errsFrom('ja', '{{price}} は有効', asToken) === 0)
+  assert('markup: lone {{ → 2 (unclosed + bigram)', errsFrom('ja', '{{price のみ', asToken) === 2)
+  assert('markup: half-closed {{token} → 2 (unclosed + bigram)', errsFrom('ja', '{{price} は無効', asToken) === 2)
+  assert('markup: stray } → 1 (depth-scan)', errsFrom('ja', '閉じ括弧 } だけ', asToken) === 1)
+  // Bigram-EQUAL but structurally broken — the OLD counter passed this 1-for-1
+  // (indicesOf counts overlapping bigrams). Only the depth-scan catches it,
+  // and it reports both halves: the stray '}' and the unclosed '{'.
+  assert('markup: }}{{ → 2 (stray + unclosed; old counter passed it)', errsFrom('ja', '}}{{', asToken) === 2)
+  // Brace-BALANCED but the closer is split — the depth-scan passes these, so
+  // only the bigram rule catches them. This is the load-bearing-space shape:
+  // lib/site-facts.ts's /\{\{\s*(\w+)\s*\}\}/g misses it, replace() no-ops, and
+  // the raw token ships to visitors without throwing. Deleting rule (b)
+  // silently regresses exactly this.
+  assert('markup: split closer {{token} } → 1 (bigram only)', errsFrom('ja', '{{price} } は無効', asToken) === 1)
+  assert('markup: split closer {{a} b} → 1 (bigram only)', errsFrom('ja', '{{price} テキスト}', asToken) === 1)
+  // Two independent defects in one string report together, not one per CI run.
+  assert('markup: stray } AND unclosed {{ → 3', errsFrom('ja', '} だけ、そして {{price', asToken) === 3)
+
+  // ICU dialect (messages/*.json) — depth-scan only. The plural's tail '}}'
+  // has no matching '{{'; this is the false positive that forced the
+  // load-bearing-space workaround, and it must NOT fire.
+  assert(
+    'markup: ICU plural → 0',
+    errsFrom('ja', '{count, plural, =1 {1か所} other {# か所}}のコース', asIcu) === 0
+  )
+  assert(
+    'markup: ICU plural with nested arg → 0',
+    errsFrom('th', '{count, plural, =1 {สนาม # ใน{label}} other {ครบทั้ง # ใน{label}}}', asIcu) === 0
+  )
+  assert(
+    'markup: ICU plural missing final brace → 1',
+    errsFrom('ja', '{count, plural, =1 {1か所} other {# か所}', asIcu) === 1
+  )
+  // The same ICU string under the 'token' dialect WOULD trip the bigram rule —
+  // proving the scoping is what makes ICU legal, not a weakened depth-scan.
+  assert(
+    'markup: ICU under token dialect → 1 (scoping is load-bearing)',
+    errsFrom('ja', '{count, plural, =1 {1か所} other {# か所}}', asToken) === 1
+  )
 
   // TH as-of marker must not match the tail of ประมาณ ("approximately") or a
   // bare prepositional ณ — only the glossary's dated ข้อมูล ณ form counts.

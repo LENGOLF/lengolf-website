@@ -41,6 +41,8 @@
  *      <main id="main-content"> (L2's guard, one level up the hub tree)
  *   M) Wayfinding copy: BTS Chidlom is Exit 4, across both the DB-driven
  *      /location/* pages and the repo's JA/KO/ZH + EN wayfinding strings
+ *   N) Region-hub course-count agreement: both ICU plural branches of
+ *      GolfCourseRegion.metaDescription render with the noun agreeing
  *
  * Usage: tsx scripts/smoke-test.ts [base-url]
  * Default: http://localhost:3000
@@ -4036,6 +4038,158 @@ async function runWayfindingTests() {
   }
 }
 
+// ── N) Region-hub course-count agreement (ICU plural branches) ──────
+// GolfCourseRegion.metaDescription is one string serving regions with 58
+// courses and regions with 1, so it carries an ICU plural. Three regions sit
+// on the =1 branch (north-misc, khao-lak, krabi — courseCount: 1 in
+// REGION_META); everything else takes `other`. Before PR #88 there was no
+// plural and the three shipped "all 1 golf courses" to Google.
+//
+// SINGLE_COURSE_REGIONS is hardcoded because lib/golf-courses.ts is
+// `import 'server-only'` — this script cannot import REGION_META. If a region's
+// courseCount crosses 1 in either direction, add or remove its slug there; the
+// `other`-branch cases below are fixed and need no edit.
+//
+// Assertions are matched pairs (correct form present AND broken form absent),
+// like section M — so copy that silently vanishes fails instead of passing
+// vacuously. Both plural branches are exercised, in EN and in TH.
+//
+// Counts are matched with `\d+`, NOT `\d\d+`: nine of the fourteen regions have
+// a single-digit courseCount, so a two-digit-minimum pattern would fail the
+// moment this list grows past bangkok. The count being ≠1 in the `other` cases
+// is already guaranteed by `forbid`, which runs first.
+//
+// TH is asserted on BOTH branches, because the structural-parity batch in this
+// same PR ships th/ja/ko/zh hubs for all three single-course regions — so
+// /th/golf-courses/krabi/ is a real 200, not a 301 to English. ja/ko/zh carry
+// no plural by design (no plural morphology; か所/곳/座 read correctly at 1),
+// so there is no branch of theirs to exercise here.
+const SINGLE_COURSE_REGIONS = ["north-misc", "khao-lak", "krabi"];
+
+const regionCountTests: {
+  path: string;
+  expect: RegExp;
+  forbid: RegExp;
+  what: string;
+}[] = [
+  // =1 branch — EN. These are the whole reason the plural exists.
+  ...SINGLE_COURSE_REGIONS.map((region) => ({
+    path: `/golf-courses/${region}/`,
+    expect: /Our guide to \d+ golf course in /,
+    forbid: /\d+ golf courses in/,
+    what: "EN meta description (=1 branch)",
+  })),
+  // =1 branch — TH. Thai has no plural; the =1 branch exists only to drop
+  // ครบทั้ง ("the complete set of"), which reads wrong applied to one item.
+  ...SINGLE_COURSE_REGIONS.map((region) => ({
+    path: `/th/golf-courses/${region}/`,
+    expect: /รายชื่อสนามกอล์ฟ.* \d+ แห่ง/,
+    forbid: /ครบทั้ง/,
+    what: "TH meta description (=1 branch)",
+  })),
+  // `other` branch — EN and TH, on a region that has many courses.
+  {
+    path: "/golf-courses/bangkok/",
+    expect: /The full directory of all \d+ golf courses in /,
+    forbid: /\b1 golf courses\b/,
+    what: "EN meta description (other branch)",
+  },
+  {
+    path: "/th/golf-courses/bangkok/",
+    expect: /ครบทั้ง \d+ แห่ง/,
+    forbid: /ครบทั้ง 1 แห่ง/,
+    what: "TH meta description (other branch)",
+  },
+];
+
+/** The `content` of <meta name="description"> — the string this section is about.
+ *  Safe against og:/twitter: siblings: those are `property="og:description"` and
+ *  `name="twitter:description"`, neither of which contains the literal
+ *  `name="description"`, and `[^>]` cannot cross a tag boundary. */
+function metaDescriptionOf(html: string): string | null {
+  const m = html.match(
+    /<meta[^>]+name="description"[^>]*\scontent="([^"]*)"/i,
+  );
+  return m ? m[1] : null;
+}
+
+/** Visible text: scripts/styles dropped, then tags stripped. The hub card puts
+ *  the count and the noun in SEPARATE elements ("1 <span>course</span>"), so a
+ *  raw-markup regex can never see the disagreement — it only exists in the
+ *  rendered text. Scripts go first because NextIntlClientProvider serializes
+ *  the whole message catalog into the flight payload. */
+function visibleText(html: string): string {
+  return renderedMarkup(html)
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, "")
+    // Tags become a SPACE, not "". Dropping them outright welds neighbouring
+    // elements together — "…<span>course</span></p><span>View all" collapses to
+    // "courseView all", and a trailing \b in an assertion then never matches.
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ");
+}
+
+async function runRegionCountTests() {
+  console.log(
+    "\n\x1b[1mN) Region-hub course-count agreement (ICU plural)\x1b[0m",
+  );
+  for (const t of regionCountTests) {
+    const label = `${t.path} ${t.what}`;
+    try {
+      const res = await fetch(`${BASE}${t.path}`, { redirect: "follow" });
+      if (res.status !== 200) {
+        fail(label, `expected 200, got ${res.status}`);
+        continue;
+      }
+      const desc = metaDescriptionOf(await res.text());
+      if (desc === null) {
+        fail(label, "no <meta name=\"description\"> on the page");
+      } else if (t.forbid.test(desc)) {
+        fail(
+          label,
+          `count/noun disagreement in the meta description: "${desc}" — the ICU plural in messages/*.json GolfCourseRegion.metaDescription is missing or bypassed`,
+        );
+      } else if (!t.expect.test(desc)) {
+        fail(
+          label,
+          `expected ${t.expect} in the meta description, got "${desc}". If the copy was reworded, update this test rather than dropping it.`,
+        );
+      } else {
+        pass(label);
+      }
+    } catch (err) {
+      fail(`${label} fetch error`, String(err));
+    }
+  }
+
+  // The /golf-courses/ directory renders one card per region with the count
+  // next to the noun. Same defect class as the meta description above, but in
+  // VISIBLE body copy — it shipped "1 courses" three times in EN.
+  const hubLabel = "/golf-courses/ EN region-card course count";
+  try {
+    const res = await fetch(`${BASE}/golf-courses/`, { redirect: "follow" });
+    if (res.status !== 200) {
+      fail(hubLabel, `expected 200, got ${res.status}`);
+    } else {
+      const text = visibleText(await res.text());
+      if (/\b1 courses\b/.test(text)) {
+        fail(
+          hubLabel,
+          "region card renders '1 courses' — GolfCourseHub.coursesCount lost its ICU plural, or the count was interpolated outside the message again",
+        );
+      } else if (!/\b1 course\b/.test(text)) {
+        fail(
+          hubLabel,
+          "expected a '1 course' card (north-misc / khao-lak / krabi each hold one). If every region now has 2+, drop this assertion; otherwise the card copy moved.",
+        );
+      } else {
+        pass(hubLabel);
+      }
+    }
+  } catch (err) {
+    fail(`${hubLabel} fetch error`, String(err));
+  }
+}
+
 // ── Main ────────────────────────────────────────────────────────────
 
 async function main() {
@@ -4069,6 +4223,7 @@ async function main() {
   await runCourseDetailRegistryLivenessTests();
   await runRegionHubRegistryLivenessTests();
   await runWayfindingTests();
+  await runRegionCountTests();
 
   console.log(`\n\x1b[1m${passed} passed, ${failed} failed\x1b[0m`);
   if (failures.length > 0) {

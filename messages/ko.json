@@ -1127,7 +1127,7 @@
     "heroIntro": "태국에서 여행객이 라운딩할 수 있는 모든 골프장을 총망라한 가이드입니다. 그린피, 코스 레이아웃, 공략 팁, 오시는 길까지 담았습니다. 현재 {regionCount}개 지역의 골프장 {courseCount}곳을 다루고 있습니다.",
     "breadcrumbHome": "홈",
     "breadcrumbGolfCourses": "골프장",
-    "coursesWord": "코스",
+    "coursesCount": "{count} <muted>코스</muted>",
     "viewAll": "전체 보기",
     "budgetHeading": "그린피 예산으로 찾기",
     "budgetIntro": "저예산으로 즐기는 EGAT·시영 코스부터 태국에서 손꼽히는 명문 코스까지.",
