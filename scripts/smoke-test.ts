@@ -36,6 +36,9 @@
  *  L2) Course-detail translated registry liveness: every registered
  *      '/golf-courses/<region>/<slug>' translation must serve 200 (the
  *      dynamicParams=false hard-404 guard, like L)
+ *  L3) Region-hub translated registry liveness: every registered
+ *      '/golf-courses/<region>' translation must serve 200 with
+ *      <main id="main-content"> (L2's guard, one level up the hub tree)
  *   M) Wayfinding copy: BTS Chidlom is Exit 4, across both the DB-driven
  *      /location/* pages and the repo's JA/KO/ZH + EN wayfinding strings
  *
@@ -1748,10 +1751,42 @@ const routeTests: RouteTest[] = [
   },
   // Translated JA golf-courses hub (GolfCourseHub ja namespace +
   // '/golf-courses' ja allowlist entry) — was a 301-to-EN until the hub
-  // gained a Japanese translation. ko/zh hub URLs must keep 301ing (canary
-  // in thaiRedirectTests).
+  // gained a Japanese translation.
   {
     path: "/ja/golf-courses/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  // Translated KO + ZH golf-courses hubs (structural-parity batch: the
+  // GolfCourseHub namespace landed in messages/{ko,zh}.json and the hub was
+  // added to both allowlists). All four locales now serve the hub, so the
+  // former "ko must 301" canary in thaiRedirectTests is gone.
+  {
+    path: "/ko/golf-courses/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/golf-courses/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  // Translated JA/KO/ZH /faq/ hubs (structural-parity batch: ja/ko/zh content
+  // blocks added to data/faq-hub.ts CONTENT + '/faq' added to each allowlist).
+  // The per-question FAQ pages were already translated in these locales; the
+  // hub above them was still English.
+  {
+    path: "/ja/faq/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/faq/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/faq/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
@@ -2826,15 +2861,12 @@ const thaiRedirectTests: ThaiRedirectTest[] = [
     expectedLocation: "/terms-of-service/",
     label: "Untranslated terms of service",
   },
-  // The /golf-courses/ hub is translated for th + ja (GolfCourseHub batches) —
-  // /th/golf-courses/ and /ja/golf-courses/ now 200 (see routeTests); ko/zh
-  // hub URLs must keep 301ing to the English hub. Canary for the hub
-  // allowlist staying th/ja-only.
-  {
-    path: "/ko/golf-courses/",
-    expectedLocation: "/golf-courses/",
-    label: "Untranslated KO golf-courses hub (only th/ja may 200)",
-  },
+  // NOTE: the former "untranslated KO golf-courses hub must 301" test is gone
+  // on purpose — the structural-parity batch added the GolfCourseHub namespace
+  // to messages/{ko,zh}.json, so all four locales now serve the hub and no
+  // untranslated locale remains to probe. Same reasoning as the removed
+  // price-tier and TH-guide probes below. The hub URLs' 200s are asserted in
+  // routeTests instead.
   // Regression guard — non-whitelisted /ja/, /ko/, /zh/ paths must still 301 to EN so the
   // middleware allowlist (lib/translated-routes.ts) continues to work. Particularly
   // important for ko/zh where the message files have populated (but English-stub)
@@ -2868,30 +2900,15 @@ const thaiRedirectTests: ThaiRedirectTest[] = [
     label:
       "Untranslated TH FAQ (only translated FAQ slugs may 200)",
   },
-  // Untranslated region hubs must still 301 to English — only regions present in
-  // data/golf-courses-i18n.ts are translated (bangkok/phuket/pattaya/hua-hin/
-  // chiang-mai as of this test). Guards the region-hub allowlist with a region
-  // that has NO translation; pick a new one here if koh-samui ever gets one.
-  {
-    path: "/ja/golf-courses/koh-samui/",
-    expectedLocation: "/golf-courses/koh-samui/",
-    label: "Untranslated JA region hub (only translated regions may 200)",
-  },
-  {
-    path: "/ko/golf-courses/koh-samui/",
-    expectedLocation: "/golf-courses/koh-samui/",
-    label: "Untranslated KO region hub (only translated regions may 200)",
-  },
-  {
-    path: "/zh/golf-courses/koh-samui/",
-    expectedLocation: "/golf-courses/koh-samui/",
-    label: "Untranslated ZH region hub (only translated regions may 200)",
-  },
-  {
-    path: "/th/golf-courses/koh-samui/",
-    expectedLocation: "/golf-courses/koh-samui/",
-    label: "Untranslated TH region hub (only translated regions may 200)",
-  },
+  // NOTE: the four "untranslated region hub must 301" probes (they used
+  // koh-samui) are gone on purpose — the structural-parity batch translated
+  // the last 9 regions, so all 14 in lib/golf-courses.ts REGIONS are
+  // translated in all four locales and no untranslated region remains to
+  // probe. Same reasoning as the removed price-tier and TH-guide probes.
+  // Coverage did not shrink: section J still guards allowlist ⇄
+  // REGION_HUB_I18N in both directions, section L3 fetches every registered
+  // hub, and the near/best-for/compare canary below still proves the
+  // middleware 301 works for genuinely EN-only /golf-courses/ sub-routes.
   // NOTE: the former "untranslated JA price tier must 301" test is gone on
   // purpose — every locale (th/ja/ko/zh) now has PRICE_TIER_I18N rows, so no
   // untranslated locale remains to probe. The price-tier registry-consistency
@@ -3824,6 +3841,64 @@ async function runCourseDetailRegistryLivenessTests() {
   }
 }
 
+// ── L3) Region-hub translated registry liveness ─────────────────────
+// L2's shape, for the '/golf-courses/<region>' allowlist entries — but NOT
+// L2's failure mode. The [region] page (unlike [region]/[slug]) does not set
+// dynamicParams=false, so a registry entry with no REGION_HUB_I18N row still
+// renders: on-demand, silently falling back to the EN REGION_META label and
+// description under a locale URL. That drift is section J's job, and J
+// catches it in both directions. What this section adds is proof each hub
+// actually SERVES — a render throw, a missing GolfCourseRegion namespace, or
+// a 200 error shell would all pass J and fail here.
+//
+// Registry-derived like L2, so future region batches are covered with zero
+// routeTests edits — which is why the structural-parity batch (all 14 regions
+// × 4 locales = 56 hub URLs) added no per-hub routeTests entries.
+async function runRegionHubRegistryLivenessTests() {
+  console.log("\n\x1b[1mL3) Region-hub translated registry liveness\x1b[0m");
+  const { getRegisteredRegionHubPaths, ALL_LOCALES } = await import(
+    "../lib/translated-routes"
+  );
+
+  for (const locale of ALL_LOCALES) {
+    if (locale === "en") continue;
+    const paths = getRegisteredRegionHubPaths(locale);
+    if (paths.length === 0) continue;
+    let ok = 0;
+    for (const path of paths) {
+      const target = `/${locale}${path}/`;
+      try {
+        const res = await fetch(`${BASE}${target}`, { redirect: "manual" });
+        if (res.status !== 200) {
+          fail(
+            `Registered region-hub translation not live: ${target}`,
+            `expected 200, got ${res.status} — lib/translated-routes.ts lists a '${locale}' region hub that doesn't serve (render throw, or a middleware/allowlist regression sending it back to EN).`,
+          );
+          continue;
+        }
+        // Content check too, for the same reason as L2: a registry-derived
+        // check replaces per-page routeTests, so a 200 error shell must fail.
+        const body = await res.text();
+        if (body.includes('<main id="main-content">')) {
+          ok++;
+        } else {
+          fail(
+            `Registered region-hub translation missing main content: ${target}`,
+            'served 200 without <main id="main-content">',
+          );
+        }
+      } catch (err) {
+        fail(`${target} fetch error`, String(err));
+      }
+    }
+    if (ok === paths.length) {
+      pass(
+        `All ${ok} registered '${locale}' region-hub translations serve 200`,
+      );
+    }
+  }
+}
+
 // ── M) Wayfinding copy consistency (BTS Chidlom exit number) ────────
 // The correct exit for The Mercury Ville is Exit 4 — confirmed with the owner
 // (2026-07-28) and by the on-screen Thai text in LENGOLF's own POV wayfinding
@@ -3899,6 +3974,35 @@ const wayfindingTests: {
     forbid: /BTS Chidlom Exit [0-35-9]/,
     what: "guide 'Getting around Bangkok' exit number",
   },
+  // Repo-driven: data/faq-hub.ts `directions.steps[1]`. This is a SECOND,
+  // independent copy of the wayfinding — the landing-page checks above assert
+  // messages/*.json HomeXx.accessBts and would all still pass if this one
+  // regressed. th shipped its hub earlier and was never guarded either; the
+  // structural-parity batch added ja/ko/zh, so all four are covered here.
+  {
+    path: "/th/faq/",
+    expect: /ทางออก\s*4/,
+    forbid: /ทางออก\s*[0-35-9]/,
+    what: "faq-hub th directions exit number",
+  },
+  {
+    path: "/ja/faq/",
+    expect: /4番出口/,
+    forbid: /[0-35-9]番出口/,
+    what: "faq-hub ja directions exit number",
+  },
+  {
+    path: "/ko/faq/",
+    expect: /4번\s*출구/,
+    forbid: /[0-35-9]번\s*출구/,
+    what: "faq-hub ko directions exit number",
+  },
+  {
+    path: "/zh/faq/",
+    expect: /4号出口/,
+    forbid: /[0-35-9]号出口/,
+    what: "faq-hub zh directions exit number",
+  },
 ];
 
 async function runWayfindingTests() {
@@ -3963,6 +4067,7 @@ async function main() {
   await runDataLinkLivenessTests();
   await runBlogRegistryLivenessTests();
   await runCourseDetailRegistryLivenessTests();
+  await runRegionHubRegistryLivenessTests();
   await runWayfindingTests();
 
   console.log(`\n\x1b[1m${passed} passed, ${failed} failed\x1b[0m`);

@@ -1122,6 +1122,27 @@
   "FloorPlan": {
     "floorPlan": "平面图"
   },
+  "GolfCourseHub": {
+    "metaTitle": "泰国高尔夫球场 — 果岭费、球场指南与球杆租借",
+    "metaDescription": "按地区浏览泰国各地的高尔夫球场，从曼谷、芭提雅到普吉与清迈。比较果岭费、阅读球场指南，并为您的下一场球安排高端球杆租借。",
+    "heroEyebrow": "泰国高尔夫指南",
+    "heroHeading": "泰国高尔夫球场",
+    "heroIntro": "面向游客开放的泰国高尔夫球场，我们都提供完整指南 — 果岭费、球场布局、实用贴士与前往方式。目前已收录{courseCount}座球场，覆盖{regionCount}个地区。",
+    "breadcrumbHome": "首页",
+    "breadcrumbGolfCourses": "高尔夫球场",
+    "coursesWord": "座球场",
+    "viewAll": "查看全部",
+    "budgetHeading": "按果岭费预算筛选",
+    "budgetIntro": "从EGAT与市政的低价球场，一直到顶级名门球场。",
+    "underPrice": "฿{price}以下",
+    "rentalEyebrow": "没带球杆？没问题。",
+    "rentalPitch": "从我们的曼谷模拟器租借高端球杆 — Callaway Paradym、Warbird、Majesty。<price>每日1,200泰铢</price>起。",
+    "bookNow": "立即预订",
+    "learnMore": "了解更多",
+    "viewGuide": "查看指南 →",
+    "mapUnavailable": "地图不可用",
+    "mapAriaLabel": "显示泰国各地高尔夫球场的互动地图"
+  },
   "HomeZh": {
     "metaTitle": "曼谷打高尔夫 — 空手即可，LINE中文咨询",
     "metaDescription": "泰国曼谷旅行中打高尔夫。BTS Chidlom站旁室内模拟器&酒吧，球场用球杆可配送。LINE @lengolf咨询，1小时550泰铢起。",

@@ -1119,6 +1119,27 @@
   "FloorPlan": {
     "floorPlan": "평면도"
   },
+  "GolfCourseHub": {
+    "metaTitle": "태국 골프장 — 그린피, 코스 가이드, 클럽 대여",
+    "metaDescription": "태국 전역의 골프장을 지역별로 살펴보세요. 그린피를 비교하고 코스 가이드를 읽고, 라운딩에 쓸 프리미엄 클럽 대여까지 예약할 수 있습니다.",
+    "heroEyebrow": "태국 골프 가이드",
+    "heroHeading": "태국의 골프장",
+    "heroIntro": "태국에서 여행객이 라운딩할 수 있는 모든 골프장을 총망라한 가이드입니다. 그린피, 코스 레이아웃, 공략 팁, 오시는 길까지 담았습니다. 현재 {regionCount}개 지역의 골프장 {courseCount}곳을 다루고 있습니다.",
+    "breadcrumbHome": "홈",
+    "breadcrumbGolfCourses": "골프장",
+    "coursesWord": "코스",
+    "viewAll": "전체 보기",
+    "budgetHeading": "그린피 예산으로 찾기",
+    "budgetIntro": "저예산으로 즐기는 EGAT·시영 코스부터 태국에서 손꼽히는 명문 코스까지.",
+    "underPrice": "฿{price} 이하",
+    "rentalEyebrow": "클럽이 없어도 문제없습니다.",
+    "rentalPitch": "방콕 시뮬레이터에서 프리미엄 클럽을 대여하세요 — Callaway Paradym, Warbird, Majesty. <price>하루 1,200바트</price>부터.",
+    "bookNow": "지금 예약",
+    "learnMore": "자세히 보기",
+    "viewGuide": "가이드 보기 →",
+    "mapUnavailable": "지도를 사용할 수 없습니다",
+    "mapAriaLabel": "태국 전역의 골프장을 표시한 인터랙티브 지도"
+  },
   "HomeKo": {
     "metaTitle": "방콕 스크린골프 & 바 — 빈손 OK, 한국어 상담",
     "metaDescription": "태국 방콕 여행 중 스크린골프를. BTS 칫롬역 바로 앞 스크린골프 & 바, 필드용 클럽 배송까지. LINE @lengolf 한국어 상담 가능, 1시간 550바트부터.",

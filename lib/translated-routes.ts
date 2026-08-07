@@ -78,6 +78,18 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/pattaya",
       "/golf-courses/hua-hin",
       "/golf-courses/chiang-mai",
+      // Structural-parity batch (2026-08): the remaining 9 regions. Every
+      // region in lib/golf-courses.ts REGIONS now has a hub in every locale,
+      // so no region funnel dead-ends at an English hub.
+      "/golf-courses/khao-yai",
+      "/golf-courses/kanchanaburi",
+      "/golf-courses/isan",
+      "/golf-courses/southern-thailand",
+      "/golf-courses/koh-samui",
+      "/golf-courses/chiang-rai",
+      "/golf-courses/north-misc",
+      "/golf-courses/khao-lak",
+      "/golf-courses/krabi",
       // Translated price-tier pages (data/price-tiers.ts PRICE_TIER_I18N) —
       // kept in sync by the smoke-test price-tier registry consistency check.
       "/golf-courses/under/1500-baht",
@@ -144,6 +156,15 @@ const TRANSLATED_ROUTES: Record<
       "/golf-course-club-rental",
       "/menu",
       "/blog",
+      // Translated /faq/ hub (content in data/faq-hub.ts CONTENT, NOT a
+      // messages namespace — see the header comment in that file). Shipped in
+      // the structural-parity batch so the translated per-question FAQ pages
+      // no longer sit under an English hub.
+      "/faq",
+      // Translated /golf-courses/ hub page (GolfCourseHub namespace, added to
+      // messages/ko.json in the structural-parity batch — the namespace being
+      // absent is what kept this URL 301ing to English).
+      "/golf-courses",
       // Translated guide pages (data/explainer-pages.ts entries with
       // locale: 'ko') — must stay in sync with the data file; the
       // smoke-test registry-consistency check (section I) enforces it.
@@ -162,6 +183,18 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/pattaya",
       "/golf-courses/hua-hin",
       "/golf-courses/chiang-mai",
+      // Structural-parity batch (2026-08): the remaining 9 regions. Every
+      // region in lib/golf-courses.ts REGIONS now has a hub in every locale,
+      // so no region funnel dead-ends at an English hub.
+      "/golf-courses/khao-yai",
+      "/golf-courses/kanchanaburi",
+      "/golf-courses/isan",
+      "/golf-courses/southern-thailand",
+      "/golf-courses/koh-samui",
+      "/golf-courses/chiang-rai",
+      "/golf-courses/north-misc",
+      "/golf-courses/khao-lak",
+      "/golf-courses/krabi",
       // Translated price-tier pages (data/price-tiers.ts PRICE_TIER_I18N) —
       // kept in sync by the smoke-test price-tier registry consistency check.
       "/golf-courses/under/1500-baht",
@@ -236,6 +269,15 @@ const TRANSLATED_ROUTES: Record<
       "/golf-course-club-rental",
       "/menu",
       "/blog",
+      // Translated /faq/ hub (content in data/faq-hub.ts CONTENT, NOT a
+      // messages namespace — see the header comment in that file). Shipped in
+      // the structural-parity batch so the translated per-question FAQ pages
+      // no longer sit under an English hub.
+      "/faq",
+      // Translated /golf-courses/ hub page (GolfCourseHub namespace, added to
+      // messages/zh.json in the structural-parity batch — the namespace being
+      // absent is what kept this URL 301ing to English).
+      "/golf-courses",
       // Translated guide pages (data/explainer-pages.ts entries with
       // locale: 'zh') — must stay in sync with the data file; the
       // smoke-test registry-consistency check (section I) enforces it.
@@ -254,6 +296,18 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/pattaya",
       "/golf-courses/hua-hin",
       "/golf-courses/chiang-mai",
+      // Structural-parity batch (2026-08): the remaining 9 regions. Every
+      // region in lib/golf-courses.ts REGIONS now has a hub in every locale,
+      // so no region funnel dead-ends at an English hub.
+      "/golf-courses/khao-yai",
+      "/golf-courses/kanchanaburi",
+      "/golf-courses/isan",
+      "/golf-courses/southern-thailand",
+      "/golf-courses/koh-samui",
+      "/golf-courses/chiang-rai",
+      "/golf-courses/north-misc",
+      "/golf-courses/khao-lak",
+      "/golf-courses/krabi",
       // Translated price-tier pages (data/price-tiers.ts PRICE_TIER_I18N) —
       // kept in sync by the smoke-test price-tier registry consistency check.
       "/golf-courses/under/1500-baht",
@@ -328,6 +382,11 @@ const TRANSLATED_ROUTES: Record<
       "/golf-course-club-rental",
       "/menu",
       "/blog",
+      // Translated /faq/ hub (content in data/faq-hub.ts CONTENT, NOT a
+      // messages namespace — see the header comment in that file). Shipped in
+      // the structural-parity batch so the translated per-question FAQ pages
+      // no longer sit under an English hub.
+      "/faq",
       // Translated guide pages (data/explainer-pages.ts entries with
       // locale: 'ja'). List each translated slug explicitly — a broad
       // /guide/[slug] pattern would let untranslated guides 200 in JA.
@@ -350,6 +409,18 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/pattaya",
       "/golf-courses/hua-hin",
       "/golf-courses/chiang-mai",
+      // Structural-parity batch (2026-08): the remaining 9 regions. Every
+      // region in lib/golf-courses.ts REGIONS now has a hub in every locale,
+      // so no region funnel dead-ends at an English hub.
+      "/golf-courses/khao-yai",
+      "/golf-courses/kanchanaburi",
+      "/golf-courses/isan",
+      "/golf-courses/southern-thailand",
+      "/golf-courses/koh-samui",
+      "/golf-courses/chiang-rai",
+      "/golf-courses/north-misc",
+      "/golf-courses/khao-lak",
+      "/golf-courses/krabi",
       // Translated price-tier pages (data/price-tiers.ts PRICE_TIER_I18N) —
       // kept in sync by the smoke-test price-tier registry consistency check.
       "/golf-courses/under/1500-baht",
