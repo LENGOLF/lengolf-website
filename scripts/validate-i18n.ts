@@ -402,18 +402,30 @@ for (const locale of LOCALES) {
 }
 
 // ── Shared regexes / helpers ────────────────────────────────────────────────
-// Emoji-PRESENTATION, not Extended_Pictographic. The latter is far wider than
-// "emoji" in the sense the glossary tone means: it also covers text-presentation
-// symbols that render as ordinary glyphs in a serif font. Adding the
-// messages/*.json corpus proved the difference — Extended_Pictographic flagged
-// the © in `© {year} LENGOLF CO., LTD.` (a legal mark, identical in the English
-// source) and the ★ in `★{rating} / Googleレビュー{count}件` (a rating glyph in a
-// structured trust chip, not decoration). Neither is a defect; the regex was.
+// Emoji detection is "everything pictographic, MINUS a named allowlist", not a
+// narrowed property test.
 //
-// \p{Emoji_Presentation} is the set that defaults to colour-emoji rendering, so
-// 🎉/⛳/😀 still fail. The second alternative catches a text-presentation symbol
-// explicitly emoji-styled with VS16 (⚠️, ✔️), which IS decoration.
-const EMOJI_RE = /\p{Emoji_Presentation}|\p{Extended_Pictographic}\uFE0F/u
+// Adding the messages/*.json corpus surfaced two false positives in the original
+// \p{Extended_Pictographic} check: the (c) in "(c) {year} LENGOLF CO., LTD." (a
+// legal mark, identical in the English source) and the star in the trust-chip
+// rating string. Neither is decoration.
+//
+// The tempting fix, narrowing to \p{Emoji_Presentation}, silently disarms the
+// check for every pictograph that defaults to TEXT presentation: heart, warning,
+// arrow, check, plane and sun all stop matching. Browsers render a bare heart in
+// colour anyway, so it would ship as decoration with the linter silent. Two false
+// positives are not worth six false negatives.
+//
+// So: subtract an explicit allowlist, then test the full pictographic union.
+// \p{Emoji_Presentation} is kept as an alternative because it adds regional-
+// indicator flags, which are NOT Extended_Pictographic and which the original
+// check missed entirely.
+const EMOJI_ALLOW_RE = /[\u00A9\u00AE\u2122\u2605\u2606]/gu // (c) (r) tm star whitestar
+const EMOJI_RE = /\p{Emoji_Presentation}|\p{Extended_Pictographic}/u
+/** First disallowed emoji in `value`, or null. Allowlisted marks are ignored. */
+function emojiHit(value: string): string | null {
+  return EMOJI_RE.exec(value.replace(EMOJI_ALLOW_RE, ''))?.[0] ?? null
+}
 const EXCL_RE = /[!！]/
 const FULLWIDTH_DIGIT_RE = /[０-９]/
 const PRICE_RE = /\d{1,3}(?:,\d{3})*\s*(?:THB|บาท|바트|泰铢|バーツ)/
@@ -591,15 +603,19 @@ function checkHonesty(unit: Unit) {
 // ── Run per-unit checks + entry-level as-of (check 9) ────────────────────────
 for (const entry of entries) {
   const markers = AS_OF_MARKERS[entry.locale]
-  const hasAsOf = entry.units.some((u) => markers.some((mk) => u.value.includes(mk)))
+  // Only check 9 consumes this, and uiChrome entries skip check 9 — so don't
+  // scan every catalog string for a marker whose result is discarded.
+  const hasAsOf =
+    entry.uiChrome === true ||
+    entry.units.some((u) => markers.some((mk) => u.value.includes(mk)))
 
   for (const unit of entry.units) {
     const { locale, value } = unit
 
     // ERROR 1 — emoji
-    if (NO_EMOJI_EXCL.includes(locale) && EMOJI_RE.test(value)) {
-      const ch = value.match(EMOJI_RE)?.[0] ?? ''
-      add('error', locale, unit.entryId, unit.field, 'emoji', `emoji "${ch}" not allowed`)
+    const emoji = NO_EMOJI_EXCL.includes(locale) ? emojiHit(value) : null
+    if (emoji !== null) {
+      add('error', locale, unit.entryId, unit.field, 'emoji', `emoji "${emoji}" not allowed`)
     }
     // ERROR 2 — exclamation marks
     if (NO_EMOJI_EXCL.includes(locale) && EXCL_RE.test(value)) {
@@ -841,15 +857,26 @@ if (process.argv.includes('--self-test')) {
     LOCALES.every((l) => entries.some((e) => e.uiChrome && e.locale === l && e.units.length > 0))
   )
 
-  // Checks 1–3 — regex-level detectors
-  assert('emoji: ⛳ matches', EMOJI_RE.test('⛳'))
-  assert('emoji: ○×—〜– ignored', !EMOJI_RE.test('○×—〜–'))
-  // Text-presentation symbols are not decoration: © is a legal mark present in
-  // the English source too, ★ is a rating glyph in the trust chip. Both were
-  // false-flagged by the old \p{Extended_Pictographic} regex.
-  assert('emoji: © ® ™ ★ ignored (text presentation)', !EMOJI_RE.test('© ® ™ ★'))
-  // ...but the same symbol explicitly emoji-styled with VS16 IS decoration.
-  assert('emoji: VS16-styled ⚠️ matches', EMOJI_RE.test('⚠️'))
+  // Checks 1-3 — regex-level detectors. These run through emojiHit(), the
+  // function the check actually calls, not EMOJI_RE directly — the allowlist
+  // subtraction lives in the function, so asserting on the bare regex would
+  // prove nothing about real behaviour.
+  assert('emoji: golf pictograph matches', emojiHit('⛳') !== null)
+  assert('emoji: party pictograph matches', emojiHit('🎉') !== null)
+  assert('emoji: plain punctuation ignored', emojiHit('○×—〜–') === null)
+  // Allowlist: a legal mark identical in the English source, and the trust-chip
+  // rating glyph. Both were false-flagged before the messages corpus landed.
+  assert('emoji: (c) (r) tm star allowlisted', emojiHit('© ® ™ ★') === null)
+  // Negative space — the direction a narrowed property test would have broken.
+  // Every one of these defaults to TEXT presentation, so \p{Emoji_Presentation}
+  // alone would let them through; they are still decoration and must fail.
+  assert(
+    'emoji: bare text-presentation pictographs still match',
+    ['❤', '⚠', '➡', '✔', '✈', '☀'].every((c) => emojiHit(c) !== null)
+  )
+  // Regional-indicator flags are NOT Extended_Pictographic; the pre-existing
+  // check missed them entirely and the Emoji_Presentation alternative adds them.
+  assert('emoji: regional-indicator flag matches', emojiHit('🇯🇵') !== null)
   assert('exclamation: ！ matches', EXCL_RE.test('すごい！'))
   assert('fullwidth digit: ５ matches', FULLWIDTH_DIGIT_RE.test('料金は５00'))
   assert('fullwidth digit: half-width ignored', !FULLWIDTH_DIGIT_RE.test('料金は500'))
