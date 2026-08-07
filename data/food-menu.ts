@@ -105,7 +105,7 @@ export const foodMenuGroup: MenuGroup = {
 export const pizzaMenuGroup: MenuGroup = {
   id: 'pizza',
   title: 'Pizza',
-  subtitle: 'Wood-fired Neapolitan pizzas from Sexy Pizza x LENGOLF. All prices include 7% VAT and service charge.',
+  subtitle: 'Wood-fired Neapolitan pizzas from Sexy Pizza x LENGOLF. All prices include 7% VAT.',
   sections: [
     {
       id: 'pizzas',

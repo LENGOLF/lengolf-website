@@ -89,9 +89,11 @@ export default async function TermsOfServicePage({ params }: { params: Promise<{
             <a href={`${SITE_URL}/golf-course-club-rental-agreement/`}>Golf Course Club Rental Agreement</a>.
           </li>
           <li>
-            <strong>Simulator bay bookings, lessons and events.</strong> To change or cancel a booking, contact us on
-            LINE @lengolf, by phone on 096-668-2335, or by email at info@len.golf. Any specific cancellation terms for
-            your booking are confirmed with you at the time of booking.
+            <strong>Simulator bay bookings, lessons and events.</strong> These are paid at LENGOLF rather than online,
+            so in the normal case there is nothing to refund. To change or cancel, contact us on LINE @lengolf, by
+            phone on {BUSINESS_INFO.phone}, or by email at {BUSINESS_INFO.email}, and we will do our best to move your
+            booking to another time. Where we have taken a payment in advance, we will agree with you how that payment
+            is treated before you cancel.
           </li>
           <li>
             Refunds are returned to the original payment method used at booking. Card refunds are typically credited
