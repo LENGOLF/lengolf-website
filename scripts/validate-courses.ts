@@ -15,6 +15,9 @@
  *  - suspicious-pattern fees (see WARN rules) on a course with NO
  *    `fees_verified_at` attestation — unverified suspicious data fails CI
  *  - malformed `fees_verified_at` (not YYYY-MM-DD)
+ *  - REGION_META.courseCount disagreeing with the published course files on
+ *    disk for that region (it is hand-maintained, and now selects an ICU
+ *    plural branch as well as printing a number — see checkRegionCounts)
  *
  * WARN (non-blocking) when `fees_verified_at` IS present:
  *  - weekday fee under ฿600 (genuinely possible: EGAT dam courses, army
@@ -35,6 +38,8 @@
  * No server needed. Zero deps beyond tsx.
  */
 
+import fs from 'fs'
+import path from 'path'
 import type { GolfCourse } from '../types/golf-courses'
 import { decimalPlaces, MIN_COORD_DECIMALS } from '../lib/geo'
 import { loadCourseFiles } from './course-files'
@@ -100,8 +105,74 @@ function checkCoordinates(file: string, c: GolfCourse) {
   }
 }
 
+/**
+ * REGION_META.courseCount vs the course files actually on disk.
+ *
+ * courseCount is hand-maintained and drives real output: the region hub's
+ * meta description, its hero card, the OG card chip — and, since the
+ * count/noun work, WHICH ICU PLURAL BRANCH renders. A stale count no longer
+ * just prints a wrong number; it commits the sentence to the wrong
+ * grammatical form ("Our guide to 1 golf course in Krabi" above two cards).
+ *
+ * Nothing else guards it. The smoke suite's SINGLE_COURSE_REGIONS is a
+ * hardcoded list, so it keeps asserting the =1 branch against a stale value
+ * rather than catching it.
+ *
+ * Parsed out of the source text rather than imported: lib/golf-courses.ts is
+ * `import 'server-only'` and throws under plain tsx (same constraint that
+ * forced the hardcoded list in the smoke test).
+ */
+function checkRegionCounts(courses: { file: string; course: GolfCourse }[]) {
+  // Normalise CRLF first: git checks this repo out with native line endings
+  // on Windows, and fs.readFileSync does not translate them, so anchors like
+  // `\n}` would silently never match and the guard would report itself blind.
+  const src = fs
+    .readFileSync(path.join(__dirname, '..', 'lib', 'golf-courses.ts'), 'utf8')
+    .replace(/\r\n/g, '\n')
+  const meta = src.match(/export const REGION_META[^=]*=\s*\{([\s\S]*?)\n\}\n/)
+  if (!meta) {
+    errors.push('lib/golf-courses.ts: could not parse REGION_META (courseCount guard is blind)')
+    return
+  }
+
+  const declared = new Map<string, number>()
+  for (const m of meta[1].matchAll(/^ {2}'?([a-z-]+)'?:\s*\{([\s\S]*?)^ {2}\},/gm)) {
+    const count = m[2].match(/courseCount:\s*(\d+)/)
+    if (count) declared.set(m[1], Number(count[1]))
+  }
+  if (declared.size === 0) {
+    errors.push('lib/golf-courses.ts: REGION_META parsed to zero regions (courseCount guard is blind)')
+    return
+  }
+
+  // Count by DIRECTORY, not course.region: the directory index is what
+  // lib/golf-courses.ts loads and what the URL is built from, so a file in
+  // the wrong folder must not be masked by a correct `region` field.
+  const actual = new Map<string, number>()
+  for (const { file, course } of courses) {
+    if (course.status !== 'published') continue
+    const region = file.split('/')[0]
+    actual.set(region, (actual.get(region) ?? 0) + 1)
+  }
+
+  for (const [region, count] of declared) {
+    const onDisk = actual.get(region) ?? 0
+    if (onDisk !== count) {
+      errors.push(
+        `lib/golf-courses.ts: REGION_META.${region}.courseCount is ${count} but ${onDisk} published course file(s) are in data/golf-courses/${region}/ — the hub would advertise the wrong count and may pick the wrong plural branch`
+      )
+    }
+  }
+  for (const region of actual.keys()) {
+    if (!declared.has(region)) {
+      errors.push(`data/golf-courses/${region}/ has course files but no REGION_META entry`)
+    }
+  }
+}
+
 async function main() {
   const courses = await loadCourseFiles()
+  checkRegionCounts(courses)
 
   for (const { file, course: c } of courses) {
     const wd = c.green_fee_weekday_thb

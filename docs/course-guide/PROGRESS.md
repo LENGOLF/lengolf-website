@@ -343,7 +343,7 @@ Pipeline run: 2026-04-20
 | — | Wangjuntr Golf Park | — | ⏸ HELD — Rayong/Pattaya area, wrong region |
 | — | Prapasri Golf Course | — | ⏸ HELD — Sakon Nakhon province (~650 km), wrong region |
 
-**Notes:** Killien province corrected to Nakhon Pathom (not Chachoengsao). Northern Rangsit province corrected to Ayutthaya (Wang Noi, not Pathum Thani). Muang Ake Vista rebranded RSU Vista 2022. Kumlung-Ake is in Loei province (~500 km) — published with clear prose noting it is not a Bangkok day-trip.
+**Notes:** Killien province corrected to Nakhon Pathom (not Chachoengsao). Northern Rangsit province corrected to Ayutthaya (Wang Noi, not Pathum Thani). Muang Ake Vista rebranded RSU Vista 2022. Kumlung-Ake is in Loei province (~500 km) — originally published under Bangkok with prose noting it is not a Bangkok day-trip; that caveat was the wrong fix and it was re-regioned to isan in PR #88 (old URL 301s via next.config.js). Re-region a misfiled course rather than caveating it in prose.
 
 ### Batch 5 — pending
 

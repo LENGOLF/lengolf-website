@@ -84,7 +84,12 @@ export const REGION_META: Record<Region, RegionMeta> = {
   },
   isan: {
     label: 'Isan',
-    province: 'Khon Kaen, Udon Thani & Nong Khai',
+    // Loei added when Kumlung-Ake was re-regioned in from Bangkok. This line
+    // renders as the hub subtitle above the course cards, so an unlisted
+    // province reads as an omission. Keep it covering every province the
+    // region's courses are actually in — and mirror any change into the four
+    // REGION_HUB_I18N translations (data/golf-courses-i18n.ts).
+    province: 'Khon Kaen, Udon Thani, Loei & Nong Khai',
     description: "Isan — Thailand's vast northeastern plateau — offers golf at the extremes of value and scenery: the Asian Tour-standard Singha Park in Khon Kaen, walk-only rounds at the EGAT dam course above the Ubolratana Reservoir, a Mekong riverside club in Nong Khai near the Laos border, and one of the few courses in Thailand where neither caddie nor cart is mandatory.",
     courseCount: 6,
     center:   { lat: 16.400, lng: 102.80, zoom:  9 },
