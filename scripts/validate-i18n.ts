@@ -198,8 +198,27 @@ function faqUnits(locale: Locale, entryId: string, title: string, meta: string |
   return u
 }
 
+// The next-intl UI string catalogues. Loaded here rather than next to the
+// parity checks further down because BOTH halves of this linter need them: the
+// content corpus below lints what the strings say, checks 10/11 lint which
+// keys exist.
+type MessageCatalog = Record<string, unknown>
+
+const uiCatalogs = Object.fromEntries(
+  (['en', ...LOCALES] as const).map((l) => [
+    l,
+    JSON.parse(
+      readFileSync(fileURLToPath(new URL(`../messages/${l}.json`, import.meta.url)), 'utf8')
+    ) as MessageCatalog,
+  ])
+) as Record<'en' | Locale, MessageCatalog>
+
 // Build the corpus, grouped by entry (as-of scoping is an entry-level fact).
-const entries: { entryId: string; locale: Locale; units: Unit[] }[] = []
+//
+// `uiChrome` marks the messages/*.json corpus. Those entries run the ERROR
+// checks (1-6) but NOT the WARN checks (7/8/9) — see the corpus block below for
+// why date-scoping and currency-convention rules don't transfer to microcopy.
+const entries: { entryId: string; locale: Locale; units: Unit[]; uiChrome?: true }[] = []
 
 for (const page of explainerPages) {
   if (!LOCALES.includes(page.locale as Locale)) continue
@@ -325,8 +344,88 @@ for (const region of readdirSync(COURSES_ROOT)) {
   }
 }
 
+// ── UI chrome content (messages/<locale>.json) ──────────────────────────────
+// Until this block, the corpus was page CONTENT only — guides, FAQs, hubs,
+// tiers, course details. The next-intl catalogue went unlinted, so the strings
+// a visitor actually reads on most pages (nav, headings, hero copy, CTAs, stat
+// badges, metadata) were certified by nothing. A green run said less than it
+// looked like it said.
+//
+// English is deliberately excluded: the glossaries encode target-language
+// terminology and tone, so linting the source language against them is
+// meaningless. LOCALES is already ja/ko/zh/th, which gives that for free.
+//
+// Entry granularity is one per namespace, so a failure names something a human
+// can find (`messages:ja:HomeJa`) rather than a bare key path.
+//
+// Scoped to the ERROR checks via `uiChrome`. The three WARN checks are
+// entry-shaped rules that don't transfer to microcopy:
+//   - price-as-of (9) assumes an entry is an article that can carry a date
+//     marker somewhere in its prose. A hero subtitle reading "1時間550バーツ〜"
+//     has nowhere to put "as of July 2026" without wrecking the layout, and the
+//     live price lives in data/pricing.ts anyway.
+//   - currency (7) and honesty (8) are calibrated against long-form prose; on
+//     3-word stat badges they fire on fragments with no room for the scoping
+//     clause they demand.
+// Running them here would have added ~200 standing warnings to every CI run,
+// which is how a linter teaches people to ignore it.
+/** Recursively flatten a namespace object into dotted-path leaf strings. */
+function flattenMessages(node: unknown, prefix: string, out: Array<[string, string]>): void {
+  if (typeof node === 'string') {
+    if (node.length > 0) out.push([prefix, node])
+    return
+  }
+  if (Array.isArray(node)) {
+    node.forEach((v, i) => flattenMessages(v, `${prefix}[${i}]`, out))
+    return
+  }
+  if (node && typeof node === 'object') {
+    for (const [k, v] of Object.entries(node as Record<string, unknown>)) {
+      flattenMessages(v, prefix ? `${prefix}.${k}` : k, out)
+    }
+  }
+}
+
+for (const locale of LOCALES) {
+  for (const [namespace, body] of Object.entries(uiCatalogs[locale])) {
+    const leaves: Array<[string, string]> = []
+    flattenMessages(body, '', leaves)
+    if (leaves.length === 0) continue
+    const entryId = `messages:${locale}:${namespace}`
+    entries.push({
+      entryId,
+      locale,
+      uiChrome: true,
+      units: leaves.map(([field, value]) => ({ locale, entryId, field, value })),
+    })
+  }
+}
+
 // ── Shared regexes / helpers ────────────────────────────────────────────────
-const EMOJI_RE = /\p{Extended_Pictographic}/u
+// Emoji detection is "everything pictographic, MINUS a named allowlist", not a
+// narrowed property test.
+//
+// Adding the messages/*.json corpus surfaced two false positives in the original
+// \p{Extended_Pictographic} check: the (c) in "(c) {year} LENGOLF CO., LTD." (a
+// legal mark, identical in the English source) and the star in the trust-chip
+// rating string. Neither is decoration.
+//
+// The tempting fix, narrowing to \p{Emoji_Presentation}, silently disarms the
+// check for every pictograph that defaults to TEXT presentation: heart, warning,
+// arrow, check, plane and sun all stop matching. Browsers render a bare heart in
+// colour anyway, so it would ship as decoration with the linter silent. Two false
+// positives are not worth six false negatives.
+//
+// So: subtract an explicit allowlist, then test the full pictographic union.
+// \p{Emoji_Presentation} is kept as an alternative because it adds regional-
+// indicator flags, which are NOT Extended_Pictographic and which the original
+// check missed entirely.
+const EMOJI_ALLOW_RE = /[\u00A9\u00AE\u2122\u2605\u2606]/gu // (c) (r) tm star whitestar
+const EMOJI_RE = /\p{Emoji_Presentation}|\p{Extended_Pictographic}/u
+/** First disallowed emoji in `value`, or null. Allowlisted marks are ignored. */
+function emojiHit(value: string): string | null {
+  return EMOJI_RE.exec(value.replace(EMOJI_ALLOW_RE, ''))?.[0] ?? null
+}
 const EXCL_RE = /[!！]/
 const FULLWIDTH_DIGIT_RE = /[０-９]/
 const PRICE_RE = /\d{1,3}(?:,\d{3})*\s*(?:THB|บาท|바트|泰铢|バーツ)/
@@ -504,15 +603,19 @@ function checkHonesty(unit: Unit) {
 // ── Run per-unit checks + entry-level as-of (check 9) ────────────────────────
 for (const entry of entries) {
   const markers = AS_OF_MARKERS[entry.locale]
-  const hasAsOf = entry.units.some((u) => markers.some((mk) => u.value.includes(mk)))
+  // Only check 9 consumes this, and uiChrome entries skip check 9 — so don't
+  // scan every catalog string for a marker whose result is discarded.
+  const hasAsOf =
+    entry.uiChrome === true ||
+    entry.units.some((u) => markers.some((mk) => u.value.includes(mk)))
 
   for (const unit of entry.units) {
     const { locale, value } = unit
 
     // ERROR 1 — emoji
-    if (NO_EMOJI_EXCL.includes(locale) && EMOJI_RE.test(value)) {
-      const ch = value.match(EMOJI_RE)?.[0] ?? ''
-      add('error', locale, unit.entryId, unit.field, 'emoji', `emoji "${ch}" not allowed`)
+    const emoji = NO_EMOJI_EXCL.includes(locale) ? emojiHit(value) : null
+    if (emoji !== null) {
+      add('error', locale, unit.entryId, unit.field, 'emoji', `emoji "${emoji}" not allowed`)
     }
     // ERROR 2 — exclamation marks
     if (NO_EMOJI_EXCL.includes(locale) && EXCL_RE.test(value)) {
@@ -527,7 +630,10 @@ for (const entry of entries) {
     checkTerminology(unit)
     checkBrands(unit)
     checkMarkup(unit)
-    // WARN 7/8
+
+    // WARN 7/8/9 are entry-shaped prose rules — see the uiChrome note above.
+    if (entry.uiChrome) continue
+
     checkCurrency(unit)
     checkHonesty(unit)
 
@@ -552,17 +658,7 @@ for (const entry of entries) {
 // route starts consuming them. Known-unchecked: the layout-chrome namespaces
 // (Nav, Common, Footer, LanguageSwitcher) render on every locale page — a
 // scoping decision, since they aren't tied to any one registry helper.
-type MessageCatalog = Record<string, unknown>
-
-const uiCatalogs = Object.fromEntries(
-  (['en', ...LOCALES] as const).map((l) => [
-    l,
-    JSON.parse(
-      readFileSync(fileURLToPath(new URL(`../messages/${l}.json`, import.meta.url)), 'utf8')
-    ) as MessageCatalog,
-  ])
-) as Record<'en' | Locale, MessageCatalog>
-
+// `uiCatalogs` / `MessageCatalog` are defined above, next to the corpus build.
 const localesWithPaths = (registered: (locale: string) => string[]): Locale[] =>
   LOCALES.filter((l) => registered(l).length > 0)
 
@@ -752,9 +848,35 @@ if (process.argv.includes('--self-test')) {
     (['ja', 'ko', 'zh'] as Locale[]).every((l) => SSG_UI_NAMESPACES.GolfCourseShared.includes(l))
   )
 
-  // Checks 1–3 — regex-level detectors
-  assert('emoji: ⛳ matches', EMOJI_RE.test('⛳'))
-  assert('emoji: ○×—〜– ignored', !EMOJI_RE.test('○×—〜–'))
+  // The messages/*.json corpus must actually be loaded. Without this, a bad
+  // catalog path or an empty parse would silently shrink the corpus to zero and
+  // the run would still go green — the failure mode this whole block exists to
+  // prevent.
+  assert(
+    'ui-chrome: messages corpus non-empty for every locale',
+    LOCALES.every((l) => entries.some((e) => e.uiChrome && e.locale === l && e.units.length > 0))
+  )
+
+  // Checks 1-3 — regex-level detectors. These run through emojiHit(), the
+  // function the check actually calls, not EMOJI_RE directly — the allowlist
+  // subtraction lives in the function, so asserting on the bare regex would
+  // prove nothing about real behaviour.
+  assert('emoji: golf pictograph matches', emojiHit('⛳') !== null)
+  assert('emoji: party pictograph matches', emojiHit('🎉') !== null)
+  assert('emoji: plain punctuation ignored', emojiHit('○×—〜–') === null)
+  // Allowlist: a legal mark identical in the English source, and the trust-chip
+  // rating glyph. Both were false-flagged before the messages corpus landed.
+  assert('emoji: (c) (r) tm star allowlisted', emojiHit('© ® ™ ★') === null)
+  // Negative space — the direction a narrowed property test would have broken.
+  // Every one of these defaults to TEXT presentation, so \p{Emoji_Presentation}
+  // alone would let them through; they are still decoration and must fail.
+  assert(
+    'emoji: bare text-presentation pictographs still match',
+    ['❤', '⚠', '➡', '✔', '✈', '☀'].every((c) => emojiHit(c) !== null)
+  )
+  // Regional-indicator flags are NOT Extended_Pictographic; the pre-existing
+  // check missed them entirely and the Emoji_Presentation alternative adds them.
+  assert('emoji: regional-indicator flag matches', emojiHit('🇯🇵') !== null)
   assert('exclamation: ！ matches', EXCL_RE.test('すごい！'))
   assert('fullwidth digit: ５ matches', FULLWIDTH_DIGIT_RE.test('料金は５00'))
   assert('fullwidth digit: half-width ignored', !FULLWIDTH_DIGIT_RE.test('料金は500'))
