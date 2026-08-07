@@ -61,7 +61,7 @@ export const REGION_META: Record<Region, RegionMeta> = {
   'khao-yai': {
     label: 'Khao Yai',
     province: 'Nakhon Ratchasima & Nakhon Nayok',
-    description: "Khao Yai and the Central Highlands offer courses within two to three hours of Bangkok — from Jack Nicklaus Signature designs at Kirimaya and Khao Yai Golf Club to Seve Ballesteros's only Thailand layout at Mountain Creek, budget-friendly woodland rounds at Bonanza and Seoul Siam, and the veteran Rooks Korat course in Pak Thong Chai.",
+    description: "Khao Yai and the Central Highlands offer courses within two to three hours of Bangkok — from Jack Nicklaus designs at Kirimaya and Khao Yai Golf Club to Seve Ballesteros's only Thailand layout at Mountain Creek, budget-friendly woodland rounds at Bonanza and Seoul Siam, and the veteran Rooks Korat course in Pak Thong Chai.",
     courseCount: 11,
     center:   { lat: 14.550, lng: 101.55, zoom: 10 },
     pinColor: { bg: '#7b2fbe', text: '#ffffff' },
@@ -93,7 +93,7 @@ export const REGION_META: Record<Region, RegionMeta> = {
   'southern-thailand': {
     label: 'Southern Thailand',
     province: 'Songkhla & Trang',
-    description: "Southern Thailand's golf runs from Perry Dye's jungle valley championship layout at Southern Hills — the most acclaimed course in the lower south, with a strong cross-border crowd from Malaysia — to Hat Yai city's budget Robert McFarland layout, and the deeply off-the-beaten-track Sri Trang Golf Club in Trang province, one of the cheapest 18-hole rounds in the country.",
+    description: "Southern Thailand's golf runs from Perry Dye's jungle valley championship layout at Southern Hills — the most acclaimed course in the lower south, with a strong cross-border crowd from Malaysia — to Hat Yai city's budget Bob McFarland layout, and the deeply off-the-beaten-track Sri Trang Golf Club in Trang province, one of the cheapest 18-hole rounds in the country.",
     courseCount: 3,
     center:   { lat:  7.200, lng: 100.50, zoom: 10 },
     pinColor: { bg: '#be4b08', text: '#ffffff' },

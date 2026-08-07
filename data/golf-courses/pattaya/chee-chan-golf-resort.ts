@@ -5,7 +5,7 @@ export const course: GolfCourse = {
   region: 'pattaya',
   name: `Chee Chan Golf Resort`,
   province: `Chonburi`,
-  designer: `Golfplan — Dale & Ramsey Golf Course Architects`,
+  designer: `Golfplan (Dale & Ramsey Golf Course Architects)`,
   holes: 18,
   par: 72,
   year_opened: 2018,
