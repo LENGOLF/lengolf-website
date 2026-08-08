@@ -251,6 +251,15 @@ const nextConfig = {
       { source: '/golf-courses/bangkok/kumlung-ake-golf-course', destination: '/golf-courses/isan/kumlung-ake-golf-course/', permanent: true },
       { source: '/golf-courses/bangkok/kumlung-ake-golf-course/', destination: '/golf-courses/isan/kumlung-ake-golf-course/', permanent: true },
 
+      // Two more Bangkok-hub courses that fail the same 90-minute test
+      // (2026-08). Toscana Valley is in Nakhon Ratchasima, 150km / 2h, and its
+      // own meta description already said "Khao Yai"; Nichigo is in
+      // Kanchanaburi, 155km / 2h45m. Both URLs were live and indexed.
+      { source: '/golf-courses/bangkok/toscana-valley-country-club', destination: '/golf-courses/khao-yai/toscana-valley-country-club/', permanent: true },
+      { source: '/golf-courses/bangkok/toscana-valley-country-club/', destination: '/golf-courses/khao-yai/toscana-valley-country-club/', permanent: true },
+      { source: '/golf-courses/bangkok/nichigo-resort-country-club', destination: '/golf-courses/kanchanaburi/nichigo-resort-country-club/', permanent: true },
+      { source: '/golf-courses/bangkok/nichigo-resort-country-club/', destination: '/golf-courses/kanchanaburi/nichigo-resort-country-club/', permanent: true },
+
       // LINE shortlink — used as sitelink URL in Google Ads (lin.ee domain causes
       // "Destination mismatch" disapproval, so we redirect via our own domain)
       { source: '/line', destination: 'https://lin.ee/uxQpIXn', permanent: false },

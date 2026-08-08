@@ -2564,6 +2564,17 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  // Re-regioned Bangkok → Khao Yai / Kanchanaburi (same 90-minute test).
+  {
+    path: "/golf-courses/khao-yai/toscana-valley-country-club/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/golf-courses/kanchanaburi/nichigo-resort-country-club/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
   {
     path: "/golf-courses/phuket/mission-hills-phuket/",
     expectedStatus: [200],
@@ -2784,6 +2795,16 @@ const redirectTests: RedirectTest[] = [
     path: "/golf-courses/bangkok/kumlung-ake-golf-course/",
     expectedStatus: 308,
     expectedLocation: "/golf-courses/isan/kumlung-ake-golf-course/",
+  },
+  {
+    path: "/golf-courses/bangkok/toscana-valley-country-club/",
+    expectedStatus: 308,
+    expectedLocation: "/golf-courses/khao-yai/toscana-valley-country-club/",
+  },
+  {
+    path: "/golf-courses/bangkok/nichigo-resort-country-club/",
+    expectedStatus: 308,
+    expectedLocation: "/golf-courses/kanchanaburi/nichigo-resort-country-club/",
   },
   // Rental-page consolidation: rent-golf-clubs-bangkok → golf-course-club-rental
   // (was a duplicate; consolidated to fix self-cannibalisation in organic search)

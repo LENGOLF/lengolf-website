@@ -296,7 +296,7 @@ Pipeline run: 2026-04-20
 | 2 | The Royal Golf & Country Club | `royal-golf-country-club` | ✅ /golf-courses/bangkok/royal-golf-country-club/ |
 | 3 | Rose Garden Country Club | `rose-garden-country-club` | ✅ /golf-courses/bangkok/rose-garden-country-club/ |
 | 4 | Riverdale Golf Club | `riverdale-golf-club` | ✅ /golf-courses/bangkok/riverdale-golf-club/ |
-| 5 | Toscana Valley Country Club | `toscana-valley-country-club` | ✅ /golf-courses/bangkok/toscana-valley-country-club/ |
+| 5 | Toscana Valley Country Club | `toscana-valley-country-club` | ✅ /golf-courses/khao-yai/toscana-valley-country-club/ |
 | 6 | Bangsai Country Club | `bangsai-country-club` | ✅ /golf-courses/bangkok/bangsai-country-club/ |
 | 7 | Subhapruek Golf Club | `subhapruek-golf-course` | ✅ /golf-courses/bangkok/subhapruek-golf-course/ |
 | 8 | Pinehurst Golf & Country Club | `pinehurst-golf-country-club` | ✅ /golf-courses/bangkok/pinehurst-golf-country-club/ |
@@ -320,7 +320,7 @@ Pipeline run: 2026-04-20
 | 9 | The Legacy Golf Club | `the-legacy-golf-club` | ✅ /golf-courses/bangkok/the-legacy-golf-club/ |
 | 10 | Panurangsi Golf Club | `panurangsi-golf-club` | ✅ /golf-courses/bangkok/panurangsi-golf-club/ |
 | 11 | Rachakram Golf Club | `rachakram-golf-club` | ✅ /golf-courses/bangkok/rachakram-golf-club/ |
-| 12 | Nichigo Resort & Country Club | `nichigo-resort-country-club` | ✅ /golf-courses/bangkok/nichigo-resort-country-club/ |
+| 12 | Nichigo Resort & Country Club | `nichigo-resort-country-club` | ✅ /golf-courses/kanchanaburi/nichigo-resort-country-club/ |
 
 **Notes:** Robinswood is private (fees null). Star CC fees provisional (200/400 THB flagged suspicious). Life Privilege CC is in Nakhon Ratchasima (Pak Chong), not Ayutthaya as some directories state. GPS unconfirmed for ~10 courses — tracked in `data/data-gaps.md`.
 
