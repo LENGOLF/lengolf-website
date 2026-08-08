@@ -62,7 +62,7 @@ export default function HubMapExplorer({ regions }: Props) {
       const infoWindow = new gmaps.InfoWindow()
       const bounds = new gmaps.LatLngBounds()
 
-      for (const { region, label, courses, pinColor, hrefs } of regions) {
+      for (const { label, courses, pinColor, hrefs } of regions) {
         const { bg, text } = pinColor
         for (const course of courses) {
           // Same trust gate as the detail page's satellite map and the schema

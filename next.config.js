@@ -273,6 +273,13 @@ const nextConfig = {
       // misrepresent one comparison as another. Both displaced courses keep
       // their own detail pages, which the hub links.
       //
+      // TRAP: redirects match BEFORE the filesystem, so if one of these pairs
+      // ever re-enters its region's top 3 the regenerated page becomes
+      // unreachable behind its own redirect. The margins are thin — rancho-
+      // charnvee 3650 vs khao-yai-golf-club 3700, blue-sapphire 3000 vs
+      // nichigo 3300 — so a single fee correction or a website field can flip
+      // one back. Delete the matching entry here when that happens.
+      //
       // NOTE for future course edits: this churn is not unique to re-regioning.
       // Editing a green fee, adding a website, or lengthening prose can move a
       // course across the top-3 line and retire a compare URL just as silently.

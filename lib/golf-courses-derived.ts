@@ -106,7 +106,7 @@ export function getRelatedCourses(
   n = 3
 ): GolfCourse[] {
   // Caller passes the region roster it already loaded — avoids a second
-  // getCoursesByRegion fan-out of up to 57 dynamic imports per page build.
+  // getCoursesByRegion fan-out of one dynamic import per course per build.
   // isPlayable, not just `status`: nearest-neighbour selection would otherwise
   // hand 7 Bangkok pages a closed course as a suggested alternative.
   const siblings = allRegionCourses.filter(

@@ -2564,6 +2564,30 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  // Course-detail hrefs are resolved PER COURSE by courseDetailHref: a locale
+  // prefix only where that course is translated. This shipped wrong twice, in
+  // opposite directions, and both times invisibly — hence a pinned pair.
+  //
+  // ja HAS alpine translated, so the roster link must be prefixed. The marker
+  // is a course-detail path, not the region hub (/ja/golf-courses/bangkok/ is
+  // a legitimate hub link and would match either way).
+  {
+    path: "/ja/golf-courses/bangkok/",
+    expectedStatus: [200],
+    contentMarker: '/ja/golf-courses/bangkok/alpine-golf-club/',
+  },
+  // ko has ZERO course-detail translations, so no course link may be prefixed.
+  {
+    path: "/ko/golf-courses/bangkok/",
+    expectedStatus: [200],
+    contentAbsent: '/ko/golf-courses/bangkok/sai-golf-club',
+  },
+  // Same invariant on the RoundupList surface (price tiers SSG th/ja/ko/zh).
+  {
+    path: "/ko/golf-courses/under/1500-baht/",
+    expectedStatus: [200],
+    contentAbsent: '/ko/golf-courses/bangkok/',
+  },
   // Re-regioned Bangkok → Khao Yai / Kanchanaburi (same 90-minute test).
   {
     path: "/golf-courses/khao-yai/toscana-valley-country-club/",

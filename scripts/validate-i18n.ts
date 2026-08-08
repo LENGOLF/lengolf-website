@@ -272,9 +272,12 @@ for (const locale of LOCALES) {
   const leaves: Array<[string, string]> = []
   flattenMessages(getFaqHubContent(locale), '', leaves)
   // browseBuckets[].categories are machine slugs matched against FAQ page
-  // data, and faqLinks hrefs are URLs — neither is prose, and both are
-  // asserted byte-identical to en elsewhere. Linting them would fire the
-  // brand-immutable and terminology checks on identifiers.
+  // data, and faqLinks hrefs are URLs — neither is prose, so linting them
+  // would fire the brand-immutable and terminology checks on identifiers.
+  // NOTE: nothing asserts they stay byte-identical to en. They are today,
+  // but a translated category slug would silently resolve to an empty
+  // bucket that the page filters out, and the /faq smoke test (200 +
+  // <main>) would still pass. Worth a real parity assertion.
   const units = leaves
     .filter(([field]) => !/\.categories\[|^faqLinks\./.test(field))
     .map(([field, value]) => ({ locale, entryId, field, value }))
@@ -907,6 +910,13 @@ if (process.argv.includes('--self-test')) {
   assert('corpus: explainer entries present', entries.some((e) => e.entryId.startsWith('exp-')))
   assert('corpus: region-hub entries present', entries.some((e) => e.entryId.startsWith('hub:')))
   assert('corpus: FAQ entries present', entries.some((e) => e.entryId.startsWith('faq-')))
+  // Added with the faq-hub corpus: the filter above is a regex, and a
+  // broadened one would drop all of its units while every other check
+  // still passed. Same failure shape the sibling asserts guard.
+  assert(
+    'corpus: faq-hub entries present',
+    LOCALES.every((l) => entries.some((e) => e.entryId === `faqhub:${l}` && e.units.length > 0))
+  )
   assert('corpus: price-tier entries present', entries.some((e) => e.entryId.startsWith('tier:')))
 
   // Checks 10/11 — UI-message namespace parity, on synthetic catalogs

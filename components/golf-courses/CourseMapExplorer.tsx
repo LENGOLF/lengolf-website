@@ -304,7 +304,7 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
             <Link
               key={course.slug}
               href={hrefs[course.slug]}
-              // 57 rows would otherwise each viewport-prefetch a full course
+              // The roster would otherwise viewport-prefetch a full course
               // page payload the user rarely navigates to
               prefetch={false}
               onClick={(e) => {
@@ -315,7 +315,7 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
                 if (e.detail === 0) return
                 e.preventDefault()
                 handleListRow(course.slug)
-                // Selecting from deep in a 58-row roster must produce visible
+                // Selecting from deep in a long roster must produce visible
                 // feedback: the map + info panel sit above the list, so on
                 // mobile a tap otherwise appears to do nothing.
                 if (!isActive) {

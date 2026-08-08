@@ -1,5 +1,9 @@
 import { MapPin, Clock, Phone, Globe, Check, X, ArrowRight } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
+import { courseDetailHref } from '@/lib/translated-routes'
+// Raw next/link for pre-resolved course-detail hrefs: the i18n Link would
+// re-apply the locale prefix and undo courseDetailHref's per-course decision.
+import RawLink from 'next/link'
 import { Link } from '@/i18n/navigation'
 import type { GolfCourse } from '@/types/golf-courses'
 import { asOfMonthYear, driveTimeLabel } from '@/lib/format'
@@ -27,7 +31,8 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
   // stays byte-identical (ICU number formatting would group "Est. 2,021").
   const t = useTranslations('GolfCourseDetail')
   const tShared = useTranslations('GolfCourseShared')
-  const locale = toCourseSeoLocale(useLocale())
+  const rawLocale = useLocale()
+  const locale = toCourseSeoLocale(rawLocale)
 
   // Localized prose with per-field EN fallback: a pilot course may ship
   // title/meta only (locales.<locale>.prose absent) — render EN prose under
@@ -252,9 +257,15 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
                 </div>
                 <div className="grid gap-3 sm:grid-cols-3">
                   {relatedCourses.map((c) => (
-                    <Link
+                    <RawLink
                       key={c.slug}
-                      href={`/golf-courses/${c.region}/${c.slug}`}
+                      // Per-course, not per-locale: most siblings are
+                      // EN-only, but a th/ja reader on a translated page
+                      // must reach a translated sibling, not the EN one.
+                      href={courseDetailHref(rawLocale, c.region, c.slug)}
+                      // RawLink: the i18n Link would re-prefix this and undo
+                      // the per-course decision. Region links above keep the
+                      // i18n Link, since every region hub IS translated.
                       className="group flex flex-col justify-between gap-3 rounded-xl border border-border bg-white p-4 shadow-sm transition-all hover:-translate-y-px hover:border-primary/30 hover:shadow-md"
                     >
                       <div>
@@ -275,7 +286,7 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
                         )}
                         <ArrowRight className="h-3.5 w-3.5 text-primary/40 group-hover:text-primary transition-colors" />
                       </div>
-                    </Link>
+                    </RawLink>
                   ))}
                 </div>
               </div>
