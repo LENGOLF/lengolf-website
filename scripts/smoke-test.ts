@@ -2806,6 +2806,30 @@ const redirectTests: RedirectTest[] = [
     expectedStatus: 308,
     expectedLocation: "/golf-courses/kanchanaburi/nichigo-resort-country-club/",
   },
+
+  // Compare pairs retired by those two re-regions. The pair set is derived
+  // from each region's top 3 and the route is dynamicParams=false, so without
+  // these the URLs hard-404 — and they are in the sitemap.
+  {
+    path: "/golf-courses/compare/khao-yai/life-privilege-country-club-vs-rancho-charnvee-country-club/",
+    expectedStatus: 308,
+    expectedLocation: "/golf-courses/khao-yai/",
+  },
+  {
+    path: "/golf-courses/compare/khao-yai/khao-yai-golf-club-vs-rancho-charnvee-country-club/",
+    expectedStatus: 308,
+    expectedLocation: "/golf-courses/khao-yai/",
+  },
+  {
+    path: "/golf-courses/compare/kanchanaburi/blue-sapphire-golf-resort-vs-grand-prix-golf-club/",
+    expectedStatus: 308,
+    expectedLocation: "/golf-courses/kanchanaburi/",
+  },
+  {
+    path: "/golf-courses/compare/kanchanaburi/blue-sapphire-golf-resort-vs-dragon-hills-golf-country-club/",
+    expectedStatus: 308,
+    expectedLocation: "/golf-courses/kanchanaburi/",
+  },
   // Rental-page consolidation: rent-golf-clubs-bangkok → golf-course-club-rental
   // (was a duplicate; consolidated to fix self-cannibalisation in organic search)
   {

@@ -260,6 +260,32 @@ const nextConfig = {
       { source: '/golf-courses/bangkok/nichigo-resort-country-club', destination: '/golf-courses/kanchanaburi/nichigo-resort-country-club/', permanent: true },
       { source: '/golf-courses/bangkok/nichigo-resort-country-club/', destination: '/golf-courses/kanchanaburi/nichigo-resort-country-club/', permanent: true },
 
+      // Fallout of the two re-regions above. /golf-courses/compare/<region>/
+      // <pair> is DERIVED from each region's top 3 by popularityScore, and the
+      // route sets dynamicParams = false, so a pair that drops out of the top 3
+      // becomes a hard 404 — and these URLs are in app/sitemap.ts, i.e. already
+      // submitted to Google. Toscana (score 7800) displaces Rancho Charnvee in
+      // khao-yai; Nichigo (3300) displaces Blue Sapphire in kanchanaburi,
+      // retiring four indexed comparison pages.
+      //
+      // Target is the region hub, not a surviving pair: the hub is the canonical
+      // parent, lists both courses of the retired comparison, and does not
+      // misrepresent one comparison as another. Both displaced courses keep
+      // their own detail pages, which the hub links.
+      //
+      // NOTE for future course edits: this churn is not unique to re-regioning.
+      // Editing a green fee, adding a website, or lengthening prose can move a
+      // course across the top-3 line and retire a compare URL just as silently.
+      // There is no guard for it; see the follow-up.
+      { source: '/golf-courses/compare/khao-yai/life-privilege-country-club-vs-rancho-charnvee-country-club', destination: '/golf-courses/khao-yai/', permanent: true },
+      { source: '/golf-courses/compare/khao-yai/life-privilege-country-club-vs-rancho-charnvee-country-club/', destination: '/golf-courses/khao-yai/', permanent: true },
+      { source: '/golf-courses/compare/khao-yai/khao-yai-golf-club-vs-rancho-charnvee-country-club', destination: '/golf-courses/khao-yai/', permanent: true },
+      { source: '/golf-courses/compare/khao-yai/khao-yai-golf-club-vs-rancho-charnvee-country-club/', destination: '/golf-courses/khao-yai/', permanent: true },
+      { source: '/golf-courses/compare/kanchanaburi/blue-sapphire-golf-resort-vs-grand-prix-golf-club', destination: '/golf-courses/kanchanaburi/', permanent: true },
+      { source: '/golf-courses/compare/kanchanaburi/blue-sapphire-golf-resort-vs-grand-prix-golf-club/', destination: '/golf-courses/kanchanaburi/', permanent: true },
+      { source: '/golf-courses/compare/kanchanaburi/blue-sapphire-golf-resort-vs-dragon-hills-golf-country-club', destination: '/golf-courses/kanchanaburi/', permanent: true },
+      { source: '/golf-courses/compare/kanchanaburi/blue-sapphire-golf-resort-vs-dragon-hills-golf-country-club/', destination: '/golf-courses/kanchanaburi/', permanent: true },
+
       // LINE shortlink — used as sitelink URL in Google Ads (lin.ee domain causes
       // "Destination mismatch" disapproval, so we redirect via our own domain)
       { source: '/line', destination: 'https://lin.ee/uxQpIXn', permanent: false },
