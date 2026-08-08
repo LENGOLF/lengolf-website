@@ -12,6 +12,7 @@
     "validate:links": "tsx scripts/validate-internal-links.ts",
     "validate:blog-slugs": "tsx scripts/sync-blog-translated-slugs.ts --check",
     "validate:i18n": "tsx scripts/validate-i18n.ts",
+    "validate:i18n:self-test": "tsx scripts/validate-i18n.ts --self-test",
     "validate:courses": "tsx scripts/validate-courses.ts",
     "verify:coordinates": "tsx scripts/verify-course-coordinates.ts",
     "inventory": "tsx scripts/page-inventory.ts",

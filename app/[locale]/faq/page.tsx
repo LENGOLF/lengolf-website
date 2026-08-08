@@ -5,7 +5,7 @@ import { Link } from '@/i18n/navigation'
 import SectionWrapper from '@/components/shared/SectionWrapper'
 import BookingCTA from '@/components/shared/BookingCTA'
 import { renderFaqAnswer } from '@/components/shared/FaqSection'
-import { BUSINESS_INFO, SITE_URL, SOCIAL_LINKS } from '@/lib/constants'
+import { BUSINESS_INFO, SOCIAL_LINKS } from '@/lib/constants'
 import { getAlternates, getCanonical, OG_LOCALES, type Locale } from '@/lib/translated-routes'
 import { getFaqPageJsonLd, getBreadcrumbJsonLd } from '@/lib/jsonld'
 import { getSeoPagesByType } from '@/lib/seo-pages'
@@ -71,12 +71,14 @@ export default async function FaqHubPage({ params }: Props) {
   }))
 
   const faqJsonLd = getFaqPageJsonLd(faqItems)
-  // Locale-aware URLs, mirroring the [region] hub. Emitting `${SITE_URL}/faq/`
-  // from /ja/faq/ made the BreadcrumbList's own terminal item point at a
-  // DIFFERENT page in a different language than the canonical two lines above
-  // — contradictory structured data. '/' and '/faq' are registered for every
-  // locale (lib/translated-routes.ts), so neither crumb can emit a redirecting
-  // URL. Crumb display names are still EN; localizing them needs new
+  // Locale-aware URLs. Emitting the bare EN `/faq/` URL from /ja/faq/ made the
+  // BreadcrumbList's own terminal item point at a DIFFERENT page in a
+  // different language than the canonical two lines above — contradictory
+  // structured data. '/' and '/faq' are registered for every locale
+  // (lib/translated-routes.ts), so neither crumb can emit a redirecting URL
+  // and neither needs getResolvedCanonical (which the /golf-courses crumb
+  // builders do need, their hub being translated for only some locales).
+  // Crumb display names are still EN; localizing them needs new
   // FaqHubContent fields in all five blocks.
   const breadcrumbJsonLd = getBreadcrumbJsonLd([
     { name: 'Home', url: getCanonical(locale, '/') },

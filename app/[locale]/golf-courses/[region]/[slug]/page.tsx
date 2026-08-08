@@ -197,8 +197,9 @@ export default async function CoursePageRoute({ params }: Props) {
     // at the locale's own hub where a translation exists, and at the
     // canonical EN hub otherwise (untranslated hub URLs 301 to English —
     // don't emit redirecting URLs in JSON-LD). Crumb display names are
-    // localized either way. Mirrors the [region] hub page.
-    { name: 'Home', url: `${SITE_URL}/` },
+    // localized either way. Mirrors the [region] hub page. '/' is registered
+    // for every locale, so the home crumb can always take the locale's own URL.
+    { name: 'Home', url: getCanonical(locale, '/') },
     {
       name: t('breadcrumbGolfCourses'),
       url: getResolvedCanonical(locale, '/golf-courses/'),

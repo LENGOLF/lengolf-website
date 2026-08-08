@@ -24,9 +24,11 @@ interface RegionCenter {
 
 interface Props {
   courses: GolfCourse[]
+  /** Raw region slug. Since hrefs moved server-side this no longer builds any
+   *  URL — its only remaining job is as the map-init useEffect dependency, so
+   *  a hub-to-hub client navigation re-centres the map. */
   region: string
-  /** Localized region name for display (e.g. the map aria-label); the raw
-   *  `region` slug is still used for building course-detail hrefs. */
+  /** Localized region name, display only (the map aria-label). */
   regionLabel: string
   /** Default map centre / zoom, derived from REGION_META on the server side. */
   center: RegionCenter

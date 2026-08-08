@@ -161,9 +161,14 @@ const TRANSLATED_ROUTES: Record<
       // the structural-parity batch so the translated per-question FAQ pages
       // no longer sit under an English hub.
       "/faq",
-      // Translated /golf-courses/ hub page (GolfCourseHub namespace, added to
-      // messages/ko.json in the structural-parity batch — the namespace being
-      // absent is what kept this URL 301ing to English).
+      // Translated /golf-courses/ hub page. THIS LINE is what stops
+      // /ko/golf-courses/ 301ing to English: middleware.ts redirects on
+      // hasTranslationForLocale(), which reads staticRoutes and nothing else,
+      // and origin/main's ko block simply had no "/golf-courses" entry. The
+      // GolfCourseHub namespace was added to messages/ko.json in the same
+      // batch, but a missing namespace never redirects — next-intl logs
+      // MISSING_MESSAGE per render and silently serves the English strings
+      // under a /ko/ URL, which is the worse failure this pairing avoids.
       "/golf-courses",
       // Translated guide pages (data/explainer-pages.ts entries with
       // locale: 'ko') — must stay in sync with the data file; the
@@ -274,9 +279,14 @@ const TRANSLATED_ROUTES: Record<
       // the structural-parity batch so the translated per-question FAQ pages
       // no longer sit under an English hub.
       "/faq",
-      // Translated /golf-courses/ hub page (GolfCourseHub namespace, added to
-      // messages/zh.json in the structural-parity batch — the namespace being
-      // absent is what kept this URL 301ing to English).
+      // Translated /golf-courses/ hub page. THIS LINE is what stops
+      // /zh/golf-courses/ 301ing to English: middleware.ts redirects on
+      // hasTranslationForLocale(), which reads staticRoutes and nothing else,
+      // and origin/main's zh block simply had no "/golf-courses" entry. The
+      // GolfCourseHub namespace was added to messages/zh.json in the same
+      // batch, but a missing namespace never redirects — next-intl logs
+      // MISSING_MESSAGE per render and silently serves the English strings
+      // under a /zh/ URL, which is the worse failure this pairing avoids.
       "/golf-courses",
       // Translated guide pages (data/explainer-pages.ts entries with
       // locale: 'zh') — must stay in sync with the data file; the
@@ -675,7 +685,11 @@ export function getRegisteredCourseDetailPaths(locale: string): string[] {
  * both were invisible until the structural-parity batch took the translated
  * hubs from 20 to 56:
  *   - the hub map prefixed every href, so on /ko/ and /zh/ — which have zero
- *     course-detail translations — all 149 links 301'd to English;
+ *     course-detail translations — every rendered link 301'd to English. That
+ *     is 132 links, not 149: HubMapExplorer drops any course failing
+ *     hasTrustedCoordinates() before it ever builds a marker, and 17 of the
+ *     149 fail (4 with null coordinates, 13 with an axis below 3dp). 149 is the size
+ *     of the `hrefs` map the server hands the component, not the link count;
  *   - the region map prefixed none, so the 15 courses that DO have th/ja
  *     pages sent a Japanese reader to the English one.
  * Resolving per course on the server fixes both and keeps TRANSLATED_ROUTES

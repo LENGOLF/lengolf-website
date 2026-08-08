@@ -92,7 +92,15 @@ const nextConfig = {
     }))
 
     // Fix for GSC 404 errors: redirect root-level location pages to /location/ prefix
-    // Include both trailing-slash variants to avoid 2-hop redirects (trailingSlash: true)
+    // NOTE: the no-slash variants below are DEAD. With trailingSlash: true,
+    // Next normalises /x to /x/ BEFORE consulting this table, so only the
+    // trailing-slash `source` ever matches and the request still costs two
+    // hops. Measured on a live server for both the course re-region and the
+    // retired /compare/ redirects. They are harmless but double the surface
+    // an editor must keep in sync, and a typo in the dead half is
+    // undetectable — do not add more pairs on the belief that they help.
+    // Outcome is asserted by redirectChainTests in scripts/smoke-test.ts,
+    // which follows the no-slash form to its final landing path.
     const rootLocationRedirects = [
       { source: '/indoor-golf-ploenchit', destination: '/location/indoor-golf-ploenchit/', permanent: true },
       { source: '/indoor-golf-ploenchit/', destination: '/location/indoor-golf-ploenchit/', permanent: true },
@@ -279,6 +287,13 @@ const nextConfig = {
       // charnvee 3650 vs khao-yai-golf-club 3700, blue-sapphire 3000 vs
       // nichigo 3300 — so a single fee correction or a website field can flip
       // one back. Delete the matching entry here when that happens.
+      //
+      // Kanchanaburi is thinner than the 300-point gap suggests: blue-sapphire's
+      // 3000 is a THREE-WAY TIE with evergreen-hills-golf-club and
+      // woo-sung-castle-hill, and blue-sapphire only holds 4th place because
+      // byPopularity() breaks ties on slug.localeCompare. Editing any of those
+      // three, or renaming a slug, reshuffles 4th–6th; +300 on any of them
+      // enters the top 3 and rewrites which compare pages exist.
       //
       // NOTE for future course edits: this churn is not unique to re-regioning.
       // Editing a green fee, adding a website, or lengthening prose can move a

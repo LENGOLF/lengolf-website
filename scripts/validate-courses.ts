@@ -146,8 +146,21 @@ async function checkRegionCounts(courses: { file: string; course: GolfCourse }[]
     return
   }
 
+  // Two distinct things, kept apart on purpose:
+  //   metaRegions — every region block REGION_META declares.
+  //   declared    — those whose `courseCount` line the anchor could read.
+  // They used to be one map, so a region whose count line failed the anchor
+  // (re-indented, reformatted, trailing comma dropped) vanished from the guard
+  // ENTIRELY and the only symptom was the final loop below announcing
+  // "<region>/ has course files but no REGION_META entry" — a flatly false
+  // message pointing at the wrong file. Worse, a region with an unparseable
+  // count AND an empty directory produced no message at all. Keying the
+  // "no REGION_META entry" check off metaRegions makes that message true
+  // again, and an unreadable count is now reported as what it is.
+  const metaRegions = new Set<string>()
   const declared = new Map<string, number>()
   for (const m of meta[1].matchAll(/^ {2}'?([a-z-]+)'?:\s*\{([\s\S]*?)^ {2}\},/gm)) {
+    metaRegions.add(m[1])
     // Strip line comments before reading the value. REGION_META blocks carry
     // prose comments (this PR added one to `isan`), and a comment mentioning
     // `courseCount: N` would otherwise be read as the value — the guard would
@@ -155,15 +168,29 @@ async function checkRegionCounts(courses: { file: string; course: GolfCourse }[]
     const body = m[2].replace(/^[ \t]*\/\/.*$/gm, '')
     const count = body.match(/^ {4}courseCount:\s*(\d+),/m)
     if (count) declared.set(m[1], Number(count[1]))
+    else {
+      errors.push(
+        `lib/golf-courses.ts: REGION_META.${m[1]} parsed, but no \`courseCount: <n>,\` line matched the /^ {4}courseCount:\\s*(\\d+),/ anchor — re-indented or reformatted? Its count is currently unchecked`
+      )
+    }
   }
-  if (declared.size === 0) {
+  if (metaRegions.size === 0) {
     errors.push('lib/golf-courses.ts: REGION_META parsed to zero regions (courseCount guard is blind)')
     return
   }
+  // Belt and braces over the per-region errors above: if these two ever
+  // disagree, some region is going unchecked, whatever the reason.
+  if (declared.size !== metaRegions.size) {
+    errors.push(
+      `lib/golf-courses.ts: ${metaRegions.size} REGION_META block(s) parsed but only ${declared.size} yielded a courseCount — ${metaRegions.size - declared.size} region(s) unchecked (see the per-region error(s) above)`
+    )
+  }
   // (2) index.ts slugs — the rendered set. Imported the same way
   // lib/golf-courses.ts imports it, so this cannot drift from the runtime.
+  // Driven by metaRegions, not declared: a region with an unreadable count
+  // still gets its slug↔file orphan checks.
   const rendered = new Map<string, string[]>()
-  for (const region of declared.keys()) {
+  for (const region of metaRegions) {
     const abs = path.join(__dirname, '..', 'data', 'golf-courses', region, 'index.ts')
     if (!fs.existsSync(abs)) {
       errors.push(`data/golf-courses/${region}/index.ts is missing — the hub would render zero cards`)
@@ -184,11 +211,13 @@ async function checkRegionCounts(courses: { file: string; course: GolfCourse }[]
     onDisk.get(region)!.add(base.replace(/\.ts$/, ''))
   }
 
-  for (const [region, count] of declared) {
+  for (const region of metaRegions) {
     const slugs = rendered.get(region)
     if (!slugs) continue
-    // 1 ↔ 2: the advertised number vs the cards that render.
-    if (slugs.length !== count) {
+    // 1 ↔ 2: the advertised number vs the cards that render. Skipped (already
+    // reported above) when the count line could not be read.
+    const count = declared.get(region)
+    if (count !== undefined && slugs.length !== count) {
       errors.push(
         `lib/golf-courses.ts: REGION_META.${region}.courseCount is ${count} but data/golf-courses/${region}/index.ts lists ${slugs.length} slug(s) — the hub advertises a number it does not render, and may pick the wrong ICU plural branch`
       )
@@ -207,7 +236,7 @@ async function checkRegionCounts(courses: { file: string; course: GolfCourse }[]
     }
   }
   for (const region of onDisk.keys()) {
-    if (!declared.has(region)) {
+    if (!metaRegions.has(region)) {
       errors.push(`data/golf-courses/${region}/ has course files but no REGION_META entry`)
     }
   }

@@ -678,50 +678,64 @@ function checkHonesty(unit: Unit) {
 }
 
 // ── Run per-unit checks + entry-level as-of (check 9) ────────────────────────
-for (const entry of entries) {
-  const markers = AS_OF_MARKERS[entry.locale]
-  // Only check 9 consumes this, and uiChrome entries skip check 9 — so don't
-  // scan every catalog string for a marker whose result is discarded.
-  const hasAsOf =
-    entry.uiChrome === true ||
-    entry.units.some((u) => markers.some((mk) => u.value.includes(mk)))
+// A function, not a bare top-level loop, so --self-test can drive a synthetic
+// entry through the REAL dispatch below. That matters for one line in
+// particular: the `entry.uiChrome ? 'icu' : 'token'` choice. Self-tests that
+// call checkMarkup() with a hand-bound dialect prove the two rule sets work,
+// but prove NOTHING about which one the corpus actually receives — collapsing
+// this call to a constant 'icu' silently drops rule (b) (the `{{token} }`
+// split-closer that ships a raw token to visitors) and was invisible to both
+// `npm run validate:i18n` AND the self-test until this became callable.
+type Entry = (typeof entries)[number]
 
-  for (const unit of entry.units) {
-    const { locale, value } = unit
+function runCorpusChecks(corpus: Entry[]) {
+  for (const entry of corpus) {
+    const markers = AS_OF_MARKERS[entry.locale]
+    // Only check 9 consumes this, and uiChrome entries skip check 9 — so don't
+    // scan every catalog string for a marker whose result is discarded.
+    const hasAsOf =
+      entry.uiChrome === true ||
+      entry.units.some((u) => markers.some((mk) => u.value.includes(mk)))
 
-    // ERROR 1 — emoji
-    const emoji = NO_EMOJI_EXCL.includes(locale) ? emojiHit(value) : null
-    if (emoji !== null) {
-      add('error', locale, unit.entryId, unit.field, 'emoji', `emoji "${emoji}" not allowed`)
-    }
-    // ERROR 2 — exclamation marks
-    if (NO_EMOJI_EXCL.includes(locale) && EXCL_RE.test(value)) {
-      add('error', locale, unit.entryId, unit.field, 'exclamation', `exclamation mark not allowed (tone forbids)`)
-    }
-    // ERROR 3 — full-width digits (ja)
-    if (locale === 'ja' && FULLWIDTH_DIGIT_RE.test(value)) {
-      const ch = value.match(FULLWIDTH_DIGIT_RE)?.[0] ?? ''
-      add('error', locale, unit.entryId, unit.field, 'fullwidth-digit', `full-width digit "${ch}" — use half-width Arabic`)
-    }
-    // ERROR 4/5/6
-    checkTerminology(unit)
-    checkBrands(unit)
-    // messages/*.json is the ICU dialect; the content data is '{{token}}'.
-    checkMarkup(unit, entry.uiChrome ? 'icu' : 'token')
+    for (const unit of entry.units) {
+      const { locale, value } = unit
 
-    // WARN 7/8/9 are entry-shaped prose rules — see the uiChrome note above.
-    if (entry.uiChrome) continue
+      // ERROR 1 — emoji
+      const emoji = NO_EMOJI_EXCL.includes(locale) ? emojiHit(value) : null
+      if (emoji !== null) {
+        add('error', locale, unit.entryId, unit.field, 'emoji', `emoji "${emoji}" not allowed`)
+      }
+      // ERROR 2 — exclamation marks
+      if (NO_EMOJI_EXCL.includes(locale) && EXCL_RE.test(value)) {
+        add('error', locale, unit.entryId, unit.field, 'exclamation', `exclamation mark not allowed (tone forbids)`)
+      }
+      // ERROR 3 — full-width digits (ja)
+      if (locale === 'ja' && FULLWIDTH_DIGIT_RE.test(value)) {
+        const ch = value.match(FULLWIDTH_DIGIT_RE)?.[0] ?? ''
+        add('error', locale, unit.entryId, unit.field, 'fullwidth-digit', `full-width digit "${ch}" — use half-width Arabic`)
+      }
+      // ERROR 4/5/6
+      checkTerminology(unit)
+      checkBrands(unit)
+      // messages/*.json is the ICU dialect; the content data is '{{token}}'.
+      checkMarkup(unit, entry.uiChrome ? 'icu' : 'token')
 
-    checkCurrency(unit)
-    checkHonesty(unit)
+      // WARN 7/8/9 are entry-shaped prose rules — see the uiChrome note above.
+      if (entry.uiChrome) continue
 
-    // WARN 9 — price with no as-of marker in the entry
-    if (!hasAsOf && !value.includes('{{') && PRICE_RE.test(value)) {
-      const hit = value.match(PRICE_RE)?.[0] ?? ''
-      add('warn', locale, unit.entryId, unit.field, 'price-as-of', `price "${hit}" but entry has no 'as of' marker (${markers.join('/')})`)
+      checkCurrency(unit)
+      checkHonesty(unit)
+
+      // WARN 9 — price with no as-of marker in the entry
+      if (!hasAsOf && !value.includes('{{') && PRICE_RE.test(value)) {
+        const hit = value.match(PRICE_RE)?.[0] ?? ''
+        add('warn', locale, unit.entryId, unit.field, 'price-as-of', `price "${hit}" but entry has no 'as of' marker (${markers.join('/')})`)
+      }
     }
   }
 }
+
+runCorpusChecks(entries)
 
 // ── Checks 10/11: UI-message namespace parity (messages/<locale>.json) ───────
 // Content-data parity (guides/FAQs/hubs/tiers) is covered by the corpus checks
@@ -895,6 +909,41 @@ if (process.argv.includes('--self-test')) {
   assert(
     'markup: ICU under token dialect → 1 (scoping is load-bearing)',
     errsFrom('ja', '{count, plural, =1 {1か所} other {# か所}}', asToken) === 1
+  )
+
+  // Dialect DISPATCH — the corpus loop's `entry.uiChrome ? 'icu' : 'token'`.
+  //
+  // The checkMarkup assertions above bind the dialect by hand (asToken/asIcu),
+  // so they prove both rule sets work while proving nothing about which one a
+  // real entry receives. Collapsing that ternary to a constant 'icu' drops rule
+  // (b) for all 500 content entries — the `{{token} }` split-closer that ships
+  // a raw token to visitors — and left BOTH `npm run validate:i18n` and this
+  // self-test green until these ran through runCorpusChecks() itself.
+  const corpusErrs = (entry: Entry): number => {
+    const before = issues.length
+    runCorpusChecks([entry])
+    return issues.splice(before).filter((i) => i.level === 'error').length
+  }
+  const entryWith = (value: string, uiChrome?: true): Entry => ({
+    entryId: '__test__',
+    locale: 'ja' as Locale,
+    units: [{ locale: 'ja' as Locale, entryId: '__test__', field: '__test__', value }],
+    ...(uiChrome ? { uiChrome } : {}),
+  })
+  assert(
+    'dispatch: content entry gets the token dialect ({{price} } → 1)',
+    corpusErrs(entryWith('{{price} } は無効')) === 1
+  )
+  assert(
+    'dispatch: uiChrome entry gets the ICU dialect (plural → 0)',
+    corpusErrs(entryWith('{count, plural, =1 {1か所} other {# か所}}のコース', true)) === 0
+  )
+  // The pair is load-bearing in BOTH directions: a constant 'token' would make
+  // every messages/*.json plural a false error, which is the false positive
+  // the dialect split was introduced to avoid.
+  assert(
+    'dispatch: content entry still sees a real ICU-shaped break ({{price} → 2)',
+    corpusErrs(entryWith('{{price のみ')) === 2
   )
 
   // TH as-of marker must not match the tail of ประมาณ ("approximately") or a

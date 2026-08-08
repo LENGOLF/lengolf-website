@@ -158,7 +158,7 @@ Pipeline run: 2026-04-20
 | 5 | Life Privilege Country Club | `life-privilege-country-club` | ✅ /golf-courses/khao-yai/life-privilege-country-club/ (re-regioned from Bangkok) |
 | 4 | Rooks Korat Country Club | `rooks-korat-country-club` | ✅ /golf-courses/khao-yai/rooks-korat-country-club/ |
 
-**Notes:** Mountain Creek has 27 holes (Highlands/Creek/Valley loops); fees null (all-in bundled, no clean weekday/weekend split found). Bonanza green fees provisional (1golf.eu ฿800/1,200 vs visitor reports of ฿1,500–1,800). Seoul Siam caddie/cart status unconfirmed; fees provisional (฿400/800 GF only). Rooks Korat ~240 km from Bangkok — further than Pak Chong area. Life Privilege CC re-regioned from Bangkok to Khao Yai on 2026-04-20 — 301 redirect in place at `next.config.js`. All GPS coordinates model estimates — tracked in `data/data-gaps.md`.
+**Notes:** Mountain Creek has 27 holes (Highlands/Creek/Valley loops); fees null (all-in bundled, no clean weekday/weekend split found). Bonanza green fees provisional (1golf.eu ฿800/1,200 vs visitor reports of ฿1,500–1,800). Seoul Siam caddie/cart status unconfirmed; fees provisional (฿400/800 GF only). Rooks Korat ~240 km from Bangkok — further than Pak Chong area. Life Privilege CC re-regioned from Bangkok to Khao Yai on 2026-04-20 — permanent redirect in place at `next.config.js` (Next emits 308 for `permanent: true`). All GPS coordinates model estimates — tracked in `data/data-gaps.md`.
 
 ---
 
@@ -315,7 +315,7 @@ Pipeline run: 2026-04-20
 | 4 | Royal Lakeside Golf Club | `royal-lakeside-golf-club` | ✅ /golf-courses/bangkok/royal-lakeside-golf-club/ |
 | 5 | Krung Kavee Golf Course & Country Club | `krung-kavee-golf-course` | ✅ /golf-courses/bangkok/krung-kavee-golf-course/ |
 | 6 | Sai Golf Club | `sai-golf-club` | ✅ /golf-courses/bangkok/sai-golf-club/ |
-| 7 | Life Privilege Country Club | `life-privilege-country-club` | ➡️ Re-regioned to Khao Yai — 301 redirect from /golf-courses/bangkok/life-privilege-country-club/ |
+| 7 | Life Privilege Country Club | `life-privilege-country-club` | ➡️ Re-regioned to Khao Yai — 308 redirect from /golf-courses/bangkok/life-privilege-country-club/ |
 | 8 | Star Country Club (Aquarius CC) | `star-country-club` | ✅ /golf-courses/bangkok/star-country-club/ |
 | 9 | The Legacy Golf Club | `the-legacy-golf-club` | ✅ /golf-courses/bangkok/the-legacy-golf-club/ |
 | 10 | Panurangsi Golf Club | `panurangsi-golf-club` | ✅ /golf-courses/bangkok/panurangsi-golf-club/ |
@@ -343,7 +343,7 @@ Pipeline run: 2026-04-20
 | — | Wangjuntr Golf Park | — | ⏸ HELD — Rayong/Pattaya area, wrong region |
 | — | Prapasri Golf Course | — | ⏸ HELD — Sakon Nakhon province (~650 km), wrong region |
 
-**Notes:** Killien province corrected to Nakhon Pathom (not Chachoengsao). Northern Rangsit province corrected to Ayutthaya (Wang Noi, not Pathum Thani). Muang Ake Vista rebranded RSU Vista 2022. Kumlung-Ake is in Loei province (~500 km) — originally published under Bangkok with prose noting it is not a Bangkok day-trip; that caveat was the wrong fix and it was re-regioned to isan in PR #88 (old URL 301s via next.config.js). Re-region a misfiled course rather than caveating it in prose.
+**Notes:** Killien province corrected to Nakhon Pathom (not Chachoengsao). Northern Rangsit province corrected to Ayutthaya (Wang Noi, not Pathum Thani). Muang Ake Vista rebranded RSU Vista 2022. Kumlung-Ake is in Loei province (~500 km) — originally published under Bangkok with prose noting it is not a Bangkok day-trip; that caveat was the wrong fix and it was re-regioned to isan in PR #88 (old URL redirects via next.config.js — `permanent: true`, so Next emits a **308**, which is what the smoke test asserts). Re-region a misfiled course rather than caveating it in prose.
 
 ### Batch 5 — pending
 

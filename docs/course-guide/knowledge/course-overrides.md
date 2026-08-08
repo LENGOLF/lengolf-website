@@ -103,7 +103,7 @@ Note: Read "Bob McFarland" below.
 ### Alpine Golf Resort Chiang Mai — alpine-golf-resort-chiang-mai
 Field: designer
 Value: Ronald M. Garl (Course A+B); Pirapon Namatra (Course C)
-Source: Golfasian (Ronald M. Garl); "Namatra" is the form used by four sibling courses and five entries in data/explainer-pages.ts
+Source: Golfasian (Ronald M. Garl); "Namatra" is the form used by three sibling courses (bangkok/bangsai-country-club, hua-hin/pineapple-valley-golf-club, koh-samui/santiburi-samui-country-club) and five mentions in data/explainer-pages.ts
 Date confirmed: 2026-08-07
 Note: Was "Pirapon Nanatra" (m→n typo) and "Ron M. Garl". Garl practises as "Ron Garl"; the repo standardises on the fuller "Ronald M. Garl" because bangkok/alpine-golf-club.ts already carries it in six places including th and ja prose.
 
@@ -198,8 +198,9 @@ Two traps here:
 
 ### Bob McFarland
 
-Sources split almost evenly: "Bob" at Rancho Charnvee and Toscana Valley, "Robert" at Hat
-Yai Resort and Hua Hin Korea. Same American architect either way — 80+ courses across Asia
+Five course files name him, and they split three to two: "Bob" at Rancho Charnvee, Toscana
+Valley and Thanont Golf View, "Robert" at Hat Yai Resort and Hua Hin Korea (the same 3–2
+count cited in the tie-break worked example above). Same American architect either way — 80+ courses across Asia
 and beyond. His own LinkedIn headline reads "Bob McFarland — Golf Course Architect &
 Planning", so the repo standardises on **Bob**. Don't "correct" it back to Robert on the
 strength of one course listing.

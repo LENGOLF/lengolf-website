@@ -1,7 +1,6 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
-import { SITE_URL } from '@/lib/constants'
 import { REGION_META, getCoursesByRegion } from '@/lib/golf-courses'
 import { getAlternates, getCanonical, hasTranslationForLocale, courseDetailHref, ALL_LOCALES } from '@/lib/translated-routes'
 import { getRegionHubTranslation } from '@/data/golf-courses-i18n'
@@ -84,7 +83,10 @@ export default async function GolfCoursesHubPage({ params }: Props) {
   }))
 
   const breadcrumbJsonLd = getBreadcrumbJsonLd([
-    { name: t('breadcrumbHome'), url: `${SITE_URL}/` },
+    // '/' is registered for every locale, so the home crumb takes the locale's
+    // own URL — same shape as the [region], [region]/[slug] and under/[tier]
+    // crumb builders.
+    { name: t('breadcrumbHome'), url: getCanonical(locale, '/') },
     { name: t('breadcrumbGolfCourses'), url: getCanonical(locale, '/golf-courses/') },
   ])
 
