@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
 import { SITE_URL } from '@/lib/constants'
 import { REGION_META, getCoursesByRegion } from '@/lib/golf-courses'
-import { getAlternates, getCanonical, hasTranslationForLocale, ALL_LOCALES } from '@/lib/translated-routes'
+import { getAlternates, getCanonical, hasTranslationForLocale, courseDetailHref, ALL_LOCALES } from '@/lib/translated-routes'
 import { getRegionHubTranslation } from '@/data/golf-courses-i18n'
 import { getBreadcrumbJsonLd } from '@/lib/jsonld'
 import { MapPin, ArrowRight, Flag, Scale, Train, Wallet, Target, Plane } from 'lucide-react'
@@ -76,6 +76,11 @@ export default async function GolfCoursesHubPage({ params }: Props) {
     label:    getRegionHubTranslation(slug, locale)?.label ?? REGION_META[slug].label,
     courses:  courseArrays[i],
     pinColor: REGION_META[slug].pinColor,
+    // Resolved per course on the server: a locale prefix only where that
+    // course is translated, so no map click 301s (ko/zh have none at all).
+    hrefs: Object.fromEntries(
+      courseArrays[i].map((c) => [c.slug, courseDetailHref(locale, slug, c.slug)]),
+    ),
   }))
 
   const breadcrumbJsonLd = getBreadcrumbJsonLd([
@@ -180,7 +185,7 @@ export default async function GolfCoursesHubPage({ params }: Props) {
 
         {/* Hub map */}
         <div className="mb-12">
-          <HubMapExplorer regions={hubRegions} locale={locale} />
+          <HubMapExplorer regions={hubRegions} />
         </div>
 
         {/* ── Programmatic-SEO finders (workstream A) ────────────────────── */}

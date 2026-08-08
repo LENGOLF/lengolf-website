@@ -14,11 +14,15 @@ interface RegionCourses {
   courses: GolfCourse[]
   /** Pin colours sourced from REGION_META on the server — no client-side dictionary needed. */
   pinColor: { bg: string; text: string }
+  /** Course-detail href per slug, resolved on the server by courseDetailHref
+   *  so a locale prefix is applied only where that course is translated.
+   *  Building it here would 301 every click on /ko/ and /zh/, which have no
+   *  course-detail translations at all. */
+  hrefs: Record<string, string>
 }
 
 interface Props {
   regions: RegionCourses[]
-  locale?: string
 }
 
 /** Minimal HTML entity escaping for course names inside template literals. */
@@ -27,9 +31,9 @@ function escHtml(s: string): string {
 }
 
 
-export default function HubMapExplorer({ regions, locale = 'en' }: Props) {
-  // GolfCourseHub only exists in the locales that SSG the hub (en/th) — the
-  // same pattern as CourseMapExplorer's GolfCourseRegion usage.
+export default function HubMapExplorer({ regions }: Props) {
+  // GolfCourseHub exists in every locale that SSGs the hub — en/th/ja/ko/zh
+  // as of the structural-parity batch.
   const t = useTranslations('GolfCourseHub')
   const mapDivRef = useRef<HTMLDivElement>(null)
   const [mapsUnavailable, setMapsUnavailable] = useState(false)
@@ -45,9 +49,6 @@ export default function HubMapExplorer({ regions, locale = 'en' }: Props) {
     if (!mapDivRef.current) return
     let cancelled = false
 
-    // EN has no locale prefix (as-needed strategy); other locales get /th, /ko etc.
-    const localePrefix = locale === 'en' ? '' : `/${locale}`
-
     loadMapsApi(apiKey).then(() => {
       if (cancelled || !mapDivRef.current) return
       const gmaps = (window as any).google.maps
@@ -61,10 +62,8 @@ export default function HubMapExplorer({ regions, locale = 'en' }: Props) {
       const infoWindow = new gmaps.InfoWindow()
       const bounds = new gmaps.LatLngBounds()
 
-      for (const { region, label, courses, pinColor } of regions) {
+      for (const { region, label, courses, pinColor, hrefs } of regions) {
         const { bg, text } = pinColor
-        const href = `${localePrefix}/golf-courses/${region}/`
-
         for (const course of courses) {
           // Same trust gate as the detail page's satellite map and the schema
           // GeoCoordinates: a confident pin from centroid-precision or
@@ -95,7 +94,7 @@ export default function HubMapExplorer({ regions, locale = 'en' }: Props) {
             title:   course.name,
           })
 
-          const courseHref = `${localePrefix}/golf-courses/${region}/${course.slug}`
+          const courseHref = hrefs[course.slug]
           const openInfo = () => {
             infoWindow.setContent(`
               <div style="font-family:sans-serif;padding:2px 0;min-width:160px">
@@ -121,7 +120,7 @@ export default function HubMapExplorer({ regions, locale = 'en' }: Props) {
     }).catch((err) => { console.error(err); fail('load_failed') })
 
     return () => { cancelled = true }
-  }, [regions, locale, viewGuideLabel])
+  }, [regions, viewGuideLabel])
 
   return (
     <div className="overflow-hidden rounded-2xl border border-[#003d22]/15 shadow-sm">

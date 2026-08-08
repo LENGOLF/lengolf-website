@@ -5,7 +5,7 @@ import { Link } from '@/i18n/navigation'
 import { getCoursesByRegion, REGION_META } from '@/lib/golf-courses'
 import type { Region } from '@/lib/golf-courses'
 import { SITE_URL } from '@/lib/constants'
-import { getAlternates, getCanonical, getResolvedCanonical } from '@/lib/translated-routes'
+import { getAlternates, getCanonical, getResolvedCanonical, courseDetailHref } from '@/lib/translated-routes'
 import { getRegionHubTranslation, getTranslatedRegionHubParams } from '@/data/golf-courses-i18n'
 import { getBreadcrumbJsonLd } from '@/lib/jsonld'
 import { ArrowRight } from 'lucide-react'
@@ -213,7 +213,15 @@ export default async function RegionIndexPage({ params }: Props) {
         {/* Map card overlaps hero — negative margin pulls it up into the dark section */}
         <div className="mx-auto -mt-12 max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="overflow-hidden rounded-2xl shadow-2xl ring-1 ring-black/5">
-            <CourseMapExplorer courses={courses} region={region} regionLabel={label} center={center} />
+            <CourseMapExplorer
+              courses={courses}
+              region={region}
+              regionLabel={label}
+              center={center}
+              hrefs={Object.fromEntries(
+                courses.map((c) => [c.slug, courseDetailHref(locale, region, c.slug)]),
+              )}
+            />
           </div>
         </div>
 

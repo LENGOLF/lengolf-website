@@ -16,6 +16,7 @@
  *   - data/golf-courses-i18n.ts — REGION_HUB_I18N (ja/ko/zh hub strings)
  *   - data/faq-pages.ts         — faqPages entries with locale ja/ko/zh/th
  *   - data/price-tiers.ts       — PRICE_TIER_I18N (th/ja/ko/zh tier strings)
+ *   - data/faq-hub.ts           — the /faq/ hub content per locale
  * data/faq-pages.ts imports lib/pricing at module level, but that module is
  * tsx-safe by design: its React `cache` call falls back to identity outside
  * the RSC runtime (see the comment in lib/pricing.ts), and the live pricing
@@ -62,6 +63,7 @@ import { hasProvinceL10n } from '@/lib/course-seo'
 import type { GolfCourse } from '@/types/golf-courses'
 import { faqPages } from '@/data/faq-pages'
 import { PRICE_TIER_I18N } from '@/data/price-tiers'
+import { getFaqHubContent } from '@/data/faq-hub'
 import {
   getRegisteredGuidePaths,
   getRegisteredFaqPaths,
@@ -258,6 +260,25 @@ for (const [tier, byLocale] of Object.entries(PRICE_TIER_I18N)) {
       ],
     })
   }
+}
+
+// data/faq-hub.ts — the /faq/ hub. Registered as a translated route in all
+// four locales by the structural-parity batch, so ~420 lines of ja/ko/zh
+// prose (including the LENGOLF-scoped honesty sentences) reach readers; it
+// was outside this corpus and shipped unlinted. Flattened generically so a
+// new FaqHubContent field is covered without touching this loop.
+for (const locale of LOCALES) {
+  const entryId = `faqhub:${locale}`
+  const leaves: Array<[string, string]> = []
+  flattenMessages(getFaqHubContent(locale), '', leaves)
+  // browseBuckets[].categories are machine slugs matched against FAQ page
+  // data, and faqLinks hrefs are URLs — neither is prose, and both are
+  // asserted byte-identical to en elsewhere. Linting them would fire the
+  // brand-immutable and terminology checks on identifiers.
+  const units = leaves
+    .filter(([field]) => !/\.categories\[|^faqLinks\./.test(field))
+    .map(([field, value]) => ({ locale, entryId, field, value }))
+  if (units.length > 0) entries.push({ entryId, locale, units })
 }
 
 for (const [region, byLocale] of Object.entries(REGION_HUB_I18N)) {

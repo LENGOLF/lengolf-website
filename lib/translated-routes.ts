@@ -668,6 +668,32 @@ export function getRegisteredCourseDetailPaths(locale: string): string[] {
 }
 
 /**
+ * Href for a course-detail page from a `locale` surface, prefixed ONLY when
+ * that course actually has a translation in that locale.
+ *
+ * The two map components used to get this wrong in opposite directions, and
+ * both were invisible until the structural-parity batch took the translated
+ * hubs from 20 to 56:
+ *   - the hub map prefixed every href, so on /ko/ and /zh/ — which have zero
+ *     course-detail translations — all 149 links 301'd to English;
+ *   - the region map prefixed none, so the 15 courses that DO have th/ja
+ *     pages sent a Japanese reader to the English one.
+ * Resolving per course on the server fixes both and keeps TRANSLATED_ROUTES
+ * out of the client bundle (these components are 'use client').
+ *
+ * Trailing slash included: trailingSlash is true, and the hub map injects a
+ * raw <a href> into a Maps InfoWindow, which gets no framework normalization.
+ */
+export function courseDetailHref(
+  locale: string,
+  region: string,
+  slug: string,
+): string {
+  const path = `/golf-courses/${region}/${slug}`;
+  return hasTranslationForLocale(locale, path) ? `/${locale}${path}/` : `${path}/`;
+}
+
+/**
  * Return the set of locales (including 'en') that have a translation for this path.
  */
 export function getLocalesForPath(pathname: string): Locale[] {
