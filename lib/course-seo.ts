@@ -191,7 +191,9 @@ interface CourseFaqL10n {
 // Pathom) are the names Chinese-language sources actually use, and a coined
 // 阿育他亚/沙没巴干 would be both unidiomatic and unsearchable. KO has no such
 // exonym tradition for Thai provinces, so it transcribes per the Korean
-// standard for Thai (tense consonants: 푸껫, 빠툼타니, 사뭇쁘라깐).
+// standard for Thai (tense consonants: 빠툼타니, 사뭇쁘라깐); Phuket keeps the
+// 푸켓 spelling already shipped 50x across the KO corpus, incl. the phuket
+// REGION_HUB_I18N label — a strict 푸껫 here would contradict the hub.
 const PROVINCE_L10N: Record<string, Record<Exclude<CourseSeoLocale, 'en'>, string>> = {
   Bangkok: { th: 'กรุงเทพฯ', ja: 'バンコク', ko: '방콕', zh: '曼谷' },
   'Chiang Mai': { th: 'จังหวัดเชียงใหม่', ja: 'チェンマイ県', ko: '치앙마이주', zh: '清迈府' },
@@ -215,7 +217,7 @@ const PROVINCE_L10N: Record<string, Record<Exclude<CourseSeoLocale, 'en'>, strin
     ko: '사뭇쁘라깐주',
     zh: '北榄府',
   },
-  Phuket: { th: 'จังหวัดภูเก็ต', ja: 'プーケット県', ko: '푸껫주', zh: '普吉府' },
+  Phuket: { th: 'จังหวัดภูเก็ต', ja: 'プーケット県', ko: '푸켓주', zh: '普吉府' },
   Rayong: { th: 'จังหวัดระยอง', ja: 'ラヨーン県', ko: '라용주', zh: '罗勇府' },
   Chonburi: { th: 'จังหวัดชลบุรี', ja: 'チョンブリー県', ko: '촌부리주', zh: '春武里府' },
   'Nakhon Pathom': { th: 'จังหวัดนครปฐม', ja: 'ナコンパトム県', ko: '나콘빠톰주', zh: '佛统府' },
@@ -411,7 +413,7 @@ const FAQ_L10N: Record<CourseSeoLocale, CourseFaqL10n> = {
     closedAnswer: (name, permanent) =>
       permanent
         ? `아니요 — ${name} 코스는 영구 폐장했습니다.`
-        : `${name} 코스는 임시 휴장 중인 것으로 확인됩니다. 라운딩을 계획하기 전에 코스로 전화해 확인해 주세요.`,
+        : `${name} 코스는 임시 휴장 중인 것으로 전해집니다. 라운딩을 계획하기 전에 코스로 전화해 확인해 주세요.`,
     whereWasQuestion: (name) => `${name} 코스는 어디에 있었나요?`,
     whereWasAnswer: (name, km, province) =>
       province
@@ -433,14 +435,14 @@ const FAQ_L10N: Record<CourseSeoLocale, CourseFaqL10n> = {
           ? ` 차로 약 ${drive.text}시간 걸립니다.`
           : ` 차로 약 ${drive.text}분 걸립니다.`
       }
-      if (province) answer += ` 코스는 ${province}에 있습니다.`
+      if (province) answer += ` 이 코스는 ${province}에 있습니다.`
       return answer
     },
     caddieQuestion: (name) => `${name}에서 캐디가 필요한가요?`,
     caddieAnswer: (name, required, fee) => {
       const feeNote = fee ? ` (캐디피는 1라운드 약 ${n(fee)}바트)` : ''
       return required
-        ? `네 — ${name}에서는 캐디 동반이 필수입니다${feeNote}. 관례상 이와 별도로 캐디 팁(보통 300~500바트)을 드립니다.`
+        ? `네 — ${name}에서는 캐디 동반이 필수입니다${feeNote}. 관례상 이와 별도로 캐디 팁(보통 300~500바트)을 따로 건넵니다.`
         : `${name}에서 캐디 이용은 선택 사항입니다${feeNote}.`
     },
     rentalQuestion: (name) => `${name}에서 플레이할 때 골프 클럽을 대여할 수 있나요?`,
@@ -471,7 +473,7 @@ const FAQ_L10N: Record<CourseSeoLocale, CourseFaqL10n> = {
     closedQuestion: (name) => `${name}目前还在营业吗？`,
     closedAnswer: (name, permanent) =>
       permanent
-        ? `否 — ${name}已永久停业。`
+        ? `${name}已永久停业。`
         : `有消息称${name}暂时停业。计划下场前请先致电球场确认。`,
     whereWasQuestion: (name) => `${name}原本位于哪里？`,
     whereWasAnswer: (name, km, province) =>
@@ -499,12 +501,12 @@ const FAQ_L10N: Record<CourseSeoLocale, CourseFaqL10n> = {
       const feeNote = fee ? `（球童费每轮约${n(fee)}泰铢）` : ''
       return required
         ? `需要 — ${name}规定必须由球童陪同${feeNote}。按惯例还需另付球童小费，通常为300–500泰铢。`
-        : `在${name}，球童为可选${feeNote}。`
+        : `在${name}，是否请球童可自行选择${feeNote}。`
     },
     rentalQuestion: (name) => `在${name}打球可以租借球杆吗？`,
     rentalAnswer: (name, availability, fee) => {
       const lengolf =
-        '如果想用当季新款球杆，位于曼谷市中心（BTS Chidlom）的LENGOLF提供高端Callaway球杆租借并可送达酒店，出发前就能安排好装备。'
+        '如果想用现行款球杆，位于曼谷市中心（BTS Chidlom）的LENGOLF提供高端Callaway球杆租借并可送达酒店，出发前就能安排好装备。'
       if (availability === true) {
         return `${name}在球场内提供球杆租借${fee ? `（每轮约${n(fee)}泰铢）` : ''}。${lengolf}`
       }

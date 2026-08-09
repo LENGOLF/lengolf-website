@@ -25,8 +25,9 @@ interface Props {
 }
 
 export default function CoursePage({ course, regionLabel, relatedCourses = [], crossLinks = [], faqs = [] }: Props) {
-  // UI chrome comes from the GolfCourseDetail namespace (en + th + ja — the
-  // course-detail pilot locales; ko/zh never SSG this component). Number
+  // UI chrome comes from the GolfCourseDetail namespace, which now ships in
+  // all five locales (ko/zh joined in the ko/zh course-detail batch, so this
+  // component DOES SSG for them). Number
   // args are pre-stringified/pre-formatted before hitting ICU so EN output
   // stays byte-identical (ICU number formatting would group "Est. 2,021").
   const t = useTranslations('GolfCourseDetail')

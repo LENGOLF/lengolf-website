@@ -59,7 +59,7 @@ const DRIVE_TIME_L10N: Record<
   zh: {
     minutes: (min) => `约${min}分钟`,
     hours: (h) => `约${h}小时`,
-    suffix: (val) => `距曼谷${val}`,
+    suffix: (val) => `距曼谷${val}车程`,
   },
 }
 
