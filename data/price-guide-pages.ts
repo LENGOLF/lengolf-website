@@ -556,7 +556,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         },
         {
           heading: 'How to Book a Corporate Event',
-          body: 'Contact us via LINE (@lengolf) or call 02-658-6633 to discuss your event. We recommend booking at least 2 weeks in advance for Medium packages (full venue). Small packages can often be arranged within a few days. Custom packages are available for groups larger than 25 or with specific requirements.',
+          body: 'Contact us via LINE (@lengolf) or call 096-668-2335 to discuss your event. We recommend booking at least 2 weeks in advance for Medium packages (full venue). Small packages can often be arranged within a few days. Custom packages are available for groups larger than 25 or with specific requirements.',
         },
       ],
       curated_reviews: [
