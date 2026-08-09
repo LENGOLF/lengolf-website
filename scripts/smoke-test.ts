@@ -39,6 +39,9 @@
  *  L3) Region-hub translated registry liveness: every registered
  *      '/golf-courses/<region>' translation must serve 200 with
  *      <main id="main-content"> (L2's guard, one level up the hub tree)
+ *  L4) FAQ translated registry liveness: every registered '/faq/<slug>'
+ *      translation must serve 200 with <main id="main-content"> and no
+ *      unresolved {{token}} (the FAQ route never interpolates facts)
  *   M) Wayfinding copy: BTS Chidlom is Exit 4, across both the DB-driven
  *      /location/* pages and the repo's JA/KO/ZH + EN wayfinding strings
  *   N) Region-hub course-count agreement: both ICU plural branches of
@@ -4155,6 +4158,91 @@ async function runRegionHubRegistryLivenessTests() {
   }
 }
 
+// ── L4) FAQ translated registry liveness ────────────────────────────
+// The /faq/<slug> counterpart of L2/L3, and until the FAQ-completion batch
+// the ONLY translated section with no liveness assertion at all: section I
+// proved the registry and the data agreed, but nothing ever fetched a
+// translated FAQ page. Registry ⇄ data agreement is not liveness — both
+// sides can agree on a slug whose page throws at render, loses its
+// FaqPage namespace, or serves a 200 error shell.
+//
+// generateStaticParams() returns getAllSeoPageParams('faq'), i.e. only
+// locale×slug combos with published content, and the route does NOT set
+// dynamicParams=false — so a registry entry with no data row renders
+// on demand in English under a locale URL rather than 404ing. That drift is
+// section I's job in both directions; what this adds is proof each page
+// actually serves in its own locale.
+//
+// Registry-derived, so future FAQ batches need zero routeTests edits — which
+// is why the FAQ-completion batch (71 new entries across th/ja/ko/zh) added
+// none.
+async function runFaqRegistryLivenessTests() {
+  console.log("\n\x1b[1mL4) FAQ translated registry liveness\x1b[0m");
+  const { getRegisteredFaqPaths, ALL_LOCALES } = await import(
+    "../lib/translated-routes"
+  );
+
+  // Same anti-vacuity guard as L2/L3: every assertion is registry-derived, so
+  // an empty registry would print a header, assert nothing, and read exactly
+  // like a pass.
+  let covered = 0;
+
+  for (const locale of ALL_LOCALES) {
+    if (locale === "en") continue;
+    const paths = getRegisteredFaqPaths(locale);
+    if (paths.length === 0) continue;
+    covered += paths.length;
+    let ok = 0;
+    for (const path of paths) {
+      const target = `/${locale}${path}/`;
+      try {
+        const res = await fetch(`${BASE}${target}`, { redirect: "manual" });
+        if (res.status !== 200) {
+          fail(
+            `Registered FAQ translation not live: ${target}`,
+            `expected 200, got ${res.status} — lib/translated-routes.ts lists a '${locale}' FAQ page that doesn't serve (missing data row, render throw, or a middleware/allowlist regression sending it back to EN).`,
+          );
+          continue;
+        }
+        const body = await res.text();
+        if (!body.includes('<main id="main-content">')) {
+          fail(
+            `Registered FAQ translation missing main content: ${target}`,
+            'served 200 without <main id="main-content">',
+          );
+          continue;
+        }
+        // FAQ answers are rendered verbatim — the route never calls
+        // interpolateFacts (only /guide/ and llms.txt do). A {{token}}
+        // copied in from a guide entry would therefore ship raw to the
+        // reader with nothing throwing, so assert its absence here.
+        if (body.includes("{{")) {
+          fail(
+            `Unresolved fact token rendered on ${target}`,
+            "body contains '{{' — FAQ entries must use price LITERALS; the FAQ route never interpolates.",
+          );
+          continue;
+        }
+        ok++;
+      } catch (err) {
+        fail(`${target} fetch error`, String(err));
+      }
+    }
+    if (ok === paths.length) {
+      pass(`All ${ok} registered '${locale}' FAQ translations serve 200`);
+    }
+  }
+
+  if (covered === 0) {
+    fail(
+      "L4 covered zero FAQ pages",
+      "getRegisteredFaqPaths() returned nothing for every non-en locale — the whole section asserted nothing. Either lib/translated-routes.ts lost its /faq/ entries or the helper regressed; both would otherwise show up as a silent pass.",
+    );
+  } else {
+    pass(`L4 covered ${covered} registered FAQ path(s)`);
+  }
+}
+
 // ── M) Wayfinding copy consistency (BTS Chidlom exit number) ────────
 // The correct exit for The Mercury Ville is Exit 4 — confirmed with the owner
 // (2026-07-28) and by the on-screen Thai text in LENGOLF's own POV wayfinding
@@ -4544,6 +4632,7 @@ async function main() {
   await runBlogRegistryLivenessTests();
   await runCourseDetailRegistryLivenessTests();
   await runRegionHubRegistryLivenessTests();
+  await runFaqRegistryLivenessTests();
   await runWayfindingTests();
   await runRegionCountTests();
 
