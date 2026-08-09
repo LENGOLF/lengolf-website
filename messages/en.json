@@ -1125,7 +1125,7 @@
     "heroIntro": "Comprehensive guides for every tourist-facing golf course in Thailand — green fees, course layouts, tips, and how to get there. Currently covering {courseCount} courses across {regionCount, plural, one {# region} other {# regions}}.",
     "breadcrumbHome": "Home",
     "breadcrumbGolfCourses": "Golf Courses",
-    "coursesWord": "courses",
+    "coursesCount": "{count, plural, =1 {# <muted>course</muted>} other {# <muted>courses</muted>}}",
     "viewAll": "View all",
     "budgetHeading": "Filter by green fee budget",
     "budgetIntro": "From low-budget EGAT-municipal layouts up to trophy-course territory.",
@@ -1140,7 +1140,7 @@
   },
   "GolfCourseRegion": {
     "metaTitle": "{label} Golf Courses — Green Fees, Map & Full Directory",
-    "metaDescription": "The full directory of all {count} golf courses in {label} — compare green fees, distances and details on one map, plus club rental delivered to your hotel.",
+    "metaDescription": "{count, plural, =1 {Our guide to # golf course in {label} — green fees, course details, how to get there, plus club rental delivered to your hotel.} other {The full directory of all # golf courses in {label} — compare green fees, distances and details on one map, plus club rental delivered to your hotel.}}",
     "heroHeading": "Golf Courses<br></br><muted>in {label}</muted>",
     "breadcrumbGolfCourses": "Golf Courses",
     "rentalEyebrow": "No clubs? No problem.",

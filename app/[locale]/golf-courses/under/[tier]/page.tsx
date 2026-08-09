@@ -2,8 +2,7 @@ import { setRequestLocale, getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { Link } from '@/i18n/navigation'
-import { SITE_URL } from '@/lib/constants'
-import { getAlternates, getCanonical } from '@/lib/translated-routes'
+import { getAlternates, getCanonical, getResolvedCanonical } from '@/lib/translated-routes'
 import { getBreadcrumbJsonLd } from '@/lib/jsonld'
 import { getCourseRoundupJsonLd } from '@/lib/jsonld-courses'
 import { PRICE_TIERS, getPriceTierTranslation, getTranslatedPriceTierParams } from '@/data/price-tiers'
@@ -78,8 +77,14 @@ export default async function CoursesUnderPricePage({ params }: Props) {
 
   const canonicalUrl = getCanonical(locale, `/golf-courses/under/${tier}/`)
   const breadcrumbJsonLd = getBreadcrumbJsonLd([
-    { name: 'Home', url: `${SITE_URL}/` },
-    { name: t('breadcrumbGolfCourses'), url: `${SITE_URL}/golf-courses/` },
+    // Locale-aware, mirroring the [region] and [region]/[slug] hubs. '/' is
+    // registered for every locale, so the home crumb can always take the
+    // locale's own URL; the /golf-courses/ hub is translated for only some, so
+    // it goes through getResolvedCanonical (an untranslated locale hub URL
+    // 301s, and redirecting URLs don't belong in structured data). Emitting
+    // the bare EN URLs here contradicted this page's own localized canonical.
+    { name: 'Home', url: getCanonical(locale, '/') },
+    { name: t('breadcrumbGolfCourses'), url: getResolvedCanonical(locale, '/golf-courses/') },
     { name: title, url: canonicalUrl },
   ])
   const listJsonLd = getCourseRoundupJsonLd(courses, canonicalUrl, title)

@@ -20,8 +20,9 @@ import { BOOKING_URL } from '@/lib/constants'
  * only from within itself and the footer.
  *
  * That third link is gated on hasTranslationForLocale(locale, '/golf-courses')
- * rather than locale === 'en': the hub IS translated for th and ja, so an
- * EN-only gate would withhold a natively-resolving link from those readers.
+ * rather than locale === 'en': the hub is translated for all four non-English
+ * locales (th, ja, ko, zh), so an EN-only gate would withhold a
+ * natively-resolving link from every one of those readers.
  *
  * The booking CTA uses the tracked BookRentalLink so it fires `rental_intent`
  * like every other funnel-entry click; without it, Smart Bidding would go blind
@@ -65,8 +66,8 @@ export default async function CourseRentalCrossLink() {
                 hasTranslationForLocale('en', ...) is always false and using it
                 alone would hide this link on the majority locale. Same shape
                 as the alternates guard in app/[locale]/golf-courses/page.tsx.
-                th/ja have hub translations; ko/zh are skipped because the
-                middleware would 301 the click to English. */}
+                All four locales now have hub translations, so the gate
+                passes for each of them and no click 301s. */}
             {(locale === 'en' || hasTranslationForLocale(locale, '/golf-courses')) && (
               <Link
                 href="/golf-courses"

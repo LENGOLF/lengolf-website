@@ -15,6 +15,10 @@ const slugs = [
   'rancho-charnvee-country-club',
   // Phase 3 — Batch 2
   'friendship-meadows-country-club',
+  // Re-regioned from Bangkok (2026-08): Nakhon Ratchasima province, 150km / 2h. The bangkok
+  // hub advertises courses within 90 minutes of the city centre. Old URL
+  // redirects (308) via next.config.js.
+  'toscana-valley-country-club',
 ]
 
 export default { slugs }

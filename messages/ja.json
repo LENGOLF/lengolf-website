@@ -1212,7 +1212,7 @@
     "heroIntro": "タイで旅行者がプレーできるゴルフ場を網羅したガイドです。グリーンフィー、コースレイアウト、攻略のヒント、アクセス方法まで紹介しています。現在{regionCount}地域・{courseCount}コースを掲載中です。",
     "breadcrumbHome": "ホーム",
     "breadcrumbGolfCourses": "ゴルフ場",
-    "coursesWord": "コース",
+    "coursesCount": "{count} <muted>コース</muted>",
     "viewAll": "すべて見る",
     "budgetHeading": "グリーンフィーの予算で選ぶ",
     "budgetIntro": "低予算で回れるEGAT系・市営コースから、タイ屈指の名門コースまで。",

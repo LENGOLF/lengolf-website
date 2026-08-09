@@ -7,6 +7,7 @@ import StageNavClient from '@/components/golf-guide/StageNavClient'
 import GroundTabsClient from '@/components/golf-guide/GroundTabsClient'
 import SmoothAnchor from '@/components/golf-guide/SmoothAnchor'
 import { getSeoPagesByType } from '@/lib/seo-pages'
+import { REGION_META } from '@/lib/golf-courses'
 import { SITE_URL, BOOKING_URL } from '@/lib/constants'
 import { getBreadcrumbJsonLd } from '@/lib/jsonld'
 import type { SeoPage } from '@/types/seo-pages'
@@ -158,6 +159,14 @@ export default async function GolfInThailandGuidePage({
     ...costPages.map((p) => ({ ...p, stage: 'book' as const, urlPrefix: '/cost' })),
     ...faqPages.map((p) => ({ ...p, stage: 'plan' as const, urlPrefix: '/faq' })),
   ]
+
+  // Course counts in the directory cards below are DERIVED, never typed out:
+  // the Bangkok, Pattaya and Khao Yai cards still advertised 46 / 16 / 7 after
+  // the re-regioning batches took those regions to 55 / 25 / 12, and a card
+  // title is crawler-visible copy, not a comment. Same source the hub itself
+  // renders from (lib/golf-courses.ts REGION_META), which validate:courses
+  // holds to the region index files.
+  const totalCourses = Object.values(REGION_META).reduce((sum, r) => sum + r.courseCount, 0)
 
   const breadcrumbJsonLd = getBreadcrumbJsonLd([
     { name: 'Home', url: `${SITE_URL}/` },
@@ -505,7 +514,7 @@ export default async function GolfInThailandGuidePage({
                   href="/golf-courses"
                   className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
                 >
-                  All 149 Thailand courses <ArrowRight />
+                  All {totalCourses} Thailand courses <ArrowRight />
                 </Link>
               </div>
             </div>
@@ -1282,13 +1291,13 @@ export default async function GolfInThailandGuidePage({
                 { href: '/guide/best-golf-courses-phuket', cat: 'Courses', title: 'Phuket golf courses — the best courses for visitors', stage: 'plan' as const },
                 { href: '/guide/golf-courses-chiang-mai', cat: 'Courses', title: 'Chiang Mai golf guide — courses and tips', stage: 'plan' as const },
                 { href: '/faq/how-many-golf-courses-thailand', cat: 'FAQ · Courses', title: 'How many golf courses are there in Thailand?', stage: 'plan' as const },
-                { href: '/golf-courses', cat: 'Course Directory', title: 'Browse all Thailand golf courses — 149 courses across 14 regions', stage: 'plan' as const },
-                { href: '/golf-courses/bangkok', cat: 'Bangkok', title: 'Bangkok golf courses — 46 courses near the capital', stage: 'plan' as const },
-                { href: '/golf-courses/pattaya', cat: 'Pattaya', title: 'Pattaya & Eastern Seaboard golf courses — 16 courses', stage: 'plan' as const },
-                { href: '/golf-courses/hua-hin', cat: 'Hua Hin', title: 'Hua Hin & Cha-am golf courses — 11 courses', stage: 'plan' as const },
-                { href: '/golf-courses/phuket', cat: 'Phuket', title: 'Phuket golf courses — 8 courses on the island', stage: 'plan' as const },
-                { href: '/golf-courses/chiang-mai', cat: 'Chiang Mai', title: 'Chiang Mai golf courses — 12 courses in the north', stage: 'plan' as const },
-                { href: '/golf-courses/khao-yai', cat: 'Khao Yai', title: 'Khao Yai golf courses — 7 courses in the highlands', stage: 'plan' as const },
+                { href: '/golf-courses', cat: 'Course Directory', title: `Browse all Thailand golf courses — ${totalCourses} courses across ${Object.keys(REGION_META).length} regions`, stage: 'plan' as const },
+                { href: '/golf-courses/bangkok', cat: 'Bangkok', title: `Bangkok golf courses — ${REGION_META.bangkok.courseCount} courses near the capital`, stage: 'plan' as const },
+                { href: '/golf-courses/pattaya', cat: 'Pattaya', title: `Pattaya & Eastern Seaboard golf courses — ${REGION_META.pattaya.courseCount} courses`, stage: 'plan' as const },
+                { href: '/golf-courses/hua-hin', cat: 'Hua Hin', title: `Hua Hin & Cha-am golf courses — ${REGION_META['hua-hin'].courseCount} courses`, stage: 'plan' as const },
+                { href: '/golf-courses/phuket', cat: 'Phuket', title: `Phuket golf courses — ${REGION_META.phuket.courseCount} courses on the island`, stage: 'plan' as const },
+                { href: '/golf-courses/chiang-mai', cat: 'Chiang Mai', title: `Chiang Mai golf courses — ${REGION_META['chiang-mai'].courseCount} courses in the north`, stage: 'plan' as const },
+                { href: '/golf-courses/khao-yai', cat: 'Khao Yai', title: `Khao Yai golf courses — ${REGION_META['khao-yai'].courseCount} courses in the highlands`, stage: 'plan' as const },
               ].map((card) => (
                 <HubCard key={card.href} href={card.href} cat={card.cat} title={card.title} stage={card.stage} />
               ))}

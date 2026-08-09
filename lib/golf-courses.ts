@@ -30,7 +30,7 @@ export const REGION_META: Record<Region, RegionMeta> = {
     label: 'Bangkok',
     province: 'Bangkok & surrounding provinces',
     description: "Bangkok and its surrounding provinces are home to some of Thailand's finest golf courses — from championship-grade layouts in Pathum Thani to accessible resort courses within 90 minutes of the city centre.",
-    courseCount: 58,
+    courseCount: 55,
     center:   { lat: 13.750, lng: 100.52, zoom: 10 },
     pinColor: { bg: '#005a32', text: '#ffffff' },
   },
@@ -61,16 +61,16 @@ export const REGION_META: Record<Region, RegionMeta> = {
   'khao-yai': {
     label: 'Khao Yai',
     province: 'Nakhon Ratchasima & Nakhon Nayok',
-    description: "Khao Yai and the Central Highlands offer courses within two to three hours of Bangkok — from Jack Nicklaus Signature designs at Kirimaya and Khao Yai Golf Club to Seve Ballesteros's only Thailand layout at Mountain Creek, budget-friendly woodland rounds at Bonanza and Seoul Siam, and the veteran Rooks Korat course in Pak Thong Chai.",
-    courseCount: 11,
+    description: "Khao Yai and the Central Highlands offer courses within two to three hours of Bangkok — from Jack Nicklaus designs at Kirimaya and Khao Yai Golf Club to Seve Ballesteros's only Thailand layout at Mountain Creek, budget-friendly woodland rounds at Bonanza and Seoul Siam, and the veteran Rooks Korat course in Pak Thong Chai.",
+    courseCount: 12,
     center:   { lat: 14.550, lng: 101.55, zoom: 10 },
     pinColor: { bg: '#7b2fbe', text: '#ffffff' },
   },
   kanchanaburi: {
     label: 'Kanchanaburi',
     province: 'Kanchanaburi & Ratchaburi',
-    description: "Kanchanaburi and the River Kwai corridor offer some of Thailand's most atmospheric golf — from a remote jungle course accessible only by ferry crossing to a 36-hole resort built on flooded sapphire mines, motorsport-themed layouts in Bo Phloi, and rugged hillside courses designed by Jim Engh and Artanan Yomchinda within 90 minutes of Bangkok.",
-    courseCount: 7,
+    description: "Kanchanaburi and the River Kwai corridor offer some of Thailand's most atmospheric golf — from a remote jungle course accessible only by ferry crossing to a 36-hole resort built on flooded sapphire mines, motorsport-themed layouts in Bo Phloi, and rugged hillside courses designed by Jim Engh and Attanan Yomchinda within 90 minutes of Bangkok.",
+    courseCount: 8,
     center:   { lat: 14.100, lng:  99.20, zoom: 10 },
     pinColor: { bg: '#d97706', text: '#ffffff' },
   },
@@ -84,16 +84,21 @@ export const REGION_META: Record<Region, RegionMeta> = {
   },
   isan: {
     label: 'Isan',
-    province: 'Khon Kaen, Udon Thani & Nong Khai',
+    // Loei added when Kumlung-Ake was re-regioned in from Bangkok. This line
+    // renders as the hub subtitle above the course cards, so an unlisted
+    // province reads as an omission. Keep it covering every province the
+    // region's courses are actually in — and mirror any change into the four
+    // REGION_HUB_I18N translations (data/golf-courses-i18n.ts).
+    province: 'Khon Kaen, Udon Thani, Loei & Nong Khai',
     description: "Isan — Thailand's vast northeastern plateau — offers golf at the extremes of value and scenery: the Asian Tour-standard Singha Park in Khon Kaen, walk-only rounds at the EGAT dam course above the Ubolratana Reservoir, a Mekong riverside club in Nong Khai near the Laos border, and one of the few courses in Thailand where neither caddie nor cart is mandatory.",
-    courseCount: 5,
+    courseCount: 6,
     center:   { lat: 16.400, lng: 102.80, zoom:  9 },
     pinColor: { bg: '#6d28d9', text: '#ffffff' },
   },
   'southern-thailand': {
     label: 'Southern Thailand',
     province: 'Songkhla & Trang',
-    description: "Southern Thailand's golf runs from Perry Dye's jungle valley championship layout at Southern Hills — the most acclaimed course in the lower south, with a strong cross-border crowd from Malaysia — to Hat Yai city's budget Robert McFarland layout, and the deeply off-the-beaten-track Sri Trang Golf Club in Trang province, one of the cheapest 18-hole rounds in the country.",
+    description: "Southern Thailand's golf runs from Perry Dye's jungle valley championship layout at Southern Hills — the most acclaimed course in the lower south, with a strong cross-border crowd from Malaysia — to Hat Yai city's budget Bob McFarland layout, and the deeply off-the-beaten-track Sri Trang Golf Club in Trang province, one of the cheapest 18-hole rounds in the country.",
     courseCount: 3,
     center:   { lat:  7.200, lng: 100.50, zoom: 10 },
     pinColor: { bg: '#be4b08', text: '#ffffff' },

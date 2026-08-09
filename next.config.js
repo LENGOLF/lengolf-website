@@ -92,7 +92,15 @@ const nextConfig = {
     }))
 
     // Fix for GSC 404 errors: redirect root-level location pages to /location/ prefix
-    // Include both trailing-slash variants to avoid 2-hop redirects (trailingSlash: true)
+    // NOTE: the no-slash variants below are DEAD. With trailingSlash: true,
+    // Next normalises /x to /x/ BEFORE consulting this table, so only the
+    // trailing-slash `source` ever matches and the request still costs two
+    // hops. Measured on a live server for both the course re-region and the
+    // retired /compare/ redirects. They are harmless but double the surface
+    // an editor must keep in sync, and a typo in the dead half is
+    // undetectable — do not add more pairs on the belief that they help.
+    // Outcome is asserted by redirectChainTests in scripts/smoke-test.ts,
+    // which follows the no-slash form to its final landing path.
     const rootLocationRedirects = [
       { source: '/indoor-golf-ploenchit', destination: '/location/indoor-golf-ploenchit/', permanent: true },
       { source: '/indoor-golf-ploenchit/', destination: '/location/indoor-golf-ploenchit/', permanent: true },
@@ -241,6 +249,64 @@ const nextConfig = {
       // Life Privilege CC re-regioned from Bangkok → Khao Yai (2026-04-20)
       { source: '/golf-courses/bangkok/life-privilege-country-club', destination: '/golf-courses/khao-yai/life-privilege-country-club/', permanent: true },
       { source: '/golf-courses/bangkok/life-privilege-country-club/', destination: '/golf-courses/khao-yai/life-privilege-country-club/', permanent: true },
+
+      // Kumlung-Ake re-regioned from Bangkok → Isan (2026-08). It is in Loei
+      // province: 500km / 6.5h from Bangkok, phone area code 042, and its own
+      // meta description already said "in Loei province" — while the Bangkok
+      // hub advertises courses within 90 minutes of the city centre. The old
+      // URL was live and indexed, so it redirects rather than 404s (Next
+      // emits 308 for `permanent: true`, which is what the smoke test asserts).
+      { source: '/golf-courses/bangkok/kumlung-ake-golf-course', destination: '/golf-courses/isan/kumlung-ake-golf-course/', permanent: true },
+      { source: '/golf-courses/bangkok/kumlung-ake-golf-course/', destination: '/golf-courses/isan/kumlung-ake-golf-course/', permanent: true },
+
+      // Two more Bangkok-hub courses that fail the same 90-minute test
+      // (2026-08). Toscana Valley is in Nakhon Ratchasima, 150km / 2h, and its
+      // own meta description already said "Khao Yai"; Nichigo is in
+      // Kanchanaburi, 155km / 2h45m. Both URLs were live and indexed.
+      { source: '/golf-courses/bangkok/toscana-valley-country-club', destination: '/golf-courses/khao-yai/toscana-valley-country-club/', permanent: true },
+      { source: '/golf-courses/bangkok/toscana-valley-country-club/', destination: '/golf-courses/khao-yai/toscana-valley-country-club/', permanent: true },
+      { source: '/golf-courses/bangkok/nichigo-resort-country-club', destination: '/golf-courses/kanchanaburi/nichigo-resort-country-club/', permanent: true },
+      { source: '/golf-courses/bangkok/nichigo-resort-country-club/', destination: '/golf-courses/kanchanaburi/nichigo-resort-country-club/', permanent: true },
+
+      // Fallout of the two re-regions above. /golf-courses/compare/<region>/
+      // <pair> is DERIVED from each region's top 3 by popularityScore, and the
+      // route sets dynamicParams = false, so a pair that drops out of the top 3
+      // becomes a hard 404 — and these URLs are in app/sitemap.ts, i.e. already
+      // submitted to Google. Toscana (score 7800) displaces Rancho Charnvee in
+      // khao-yai; Nichigo (3300) displaces Blue Sapphire in kanchanaburi,
+      // retiring four indexed comparison pages.
+      //
+      // Target is the region hub, not a surviving pair: the hub is the canonical
+      // parent, lists both courses of the retired comparison, and does not
+      // misrepresent one comparison as another. Both displaced courses keep
+      // their own detail pages, which the hub links.
+      //
+      // TRAP: redirects match BEFORE the filesystem, so if one of these pairs
+      // ever re-enters its region's top 3 the regenerated page becomes
+      // unreachable behind its own redirect. The margins are thin — rancho-
+      // charnvee 3650 vs khao-yai-golf-club 3700, blue-sapphire 3000 vs
+      // nichigo 3300 — so a single fee correction or a website field can flip
+      // one back. Delete the matching entry here when that happens.
+      //
+      // Kanchanaburi is thinner than the 300-point gap suggests: blue-sapphire's
+      // 3000 is a THREE-WAY TIE with evergreen-hills-golf-club and
+      // woo-sung-castle-hill, and blue-sapphire only holds 4th place because
+      // byPopularity() breaks ties on slug.localeCompare. Editing any of those
+      // three, or renaming a slug, reshuffles 4th–6th; +300 on any of them
+      // enters the top 3 and rewrites which compare pages exist.
+      //
+      // NOTE for future course edits: this churn is not unique to re-regioning.
+      // Editing a green fee, adding a website, or lengthening prose can move a
+      // course across the top-3 line and retire a compare URL just as silently.
+      // There is no guard for it; see the follow-up.
+      { source: '/golf-courses/compare/khao-yai/life-privilege-country-club-vs-rancho-charnvee-country-club', destination: '/golf-courses/khao-yai/', permanent: true },
+      { source: '/golf-courses/compare/khao-yai/life-privilege-country-club-vs-rancho-charnvee-country-club/', destination: '/golf-courses/khao-yai/', permanent: true },
+      { source: '/golf-courses/compare/khao-yai/khao-yai-golf-club-vs-rancho-charnvee-country-club', destination: '/golf-courses/khao-yai/', permanent: true },
+      { source: '/golf-courses/compare/khao-yai/khao-yai-golf-club-vs-rancho-charnvee-country-club/', destination: '/golf-courses/khao-yai/', permanent: true },
+      { source: '/golf-courses/compare/kanchanaburi/blue-sapphire-golf-resort-vs-grand-prix-golf-club', destination: '/golf-courses/kanchanaburi/', permanent: true },
+      { source: '/golf-courses/compare/kanchanaburi/blue-sapphire-golf-resort-vs-grand-prix-golf-club/', destination: '/golf-courses/kanchanaburi/', permanent: true },
+      { source: '/golf-courses/compare/kanchanaburi/blue-sapphire-golf-resort-vs-dragon-hills-golf-country-club', destination: '/golf-courses/kanchanaburi/', permanent: true },
+      { source: '/golf-courses/compare/kanchanaburi/blue-sapphire-golf-resort-vs-dragon-hills-golf-country-club/', destination: '/golf-courses/kanchanaburi/', permanent: true },
 
       // LINE shortlink — used as sitelink URL in Google Ads (lin.ee domain causes
       // "Destination mismatch" disapproval, so we redirect via our own domain)

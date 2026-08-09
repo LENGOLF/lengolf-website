@@ -36,8 +36,13 @@
  *  L2) Course-detail translated registry liveness: every registered
  *      '/golf-courses/<region>/<slug>' translation must serve 200 (the
  *      dynamicParams=false hard-404 guard, like L)
+ *  L3) Region-hub translated registry liveness: every registered
+ *      '/golf-courses/<region>' translation must serve 200 with
+ *      <main id="main-content"> (L2's guard, one level up the hub tree)
  *   M) Wayfinding copy: BTS Chidlom is Exit 4, across both the DB-driven
  *      /location/* pages and the repo's JA/KO/ZH + EN wayfinding strings
+ *   N) Region-hub course-count agreement: both ICU plural branches of
+ *      GolfCourseRegion.metaDescription render with the noun agreeing
  *
  * Usage: tsx scripts/smoke-test.ts [base-url]
  * Default: http://localhost:3000
@@ -1748,10 +1753,42 @@ const routeTests: RouteTest[] = [
   },
   // Translated JA golf-courses hub (GolfCourseHub ja namespace +
   // '/golf-courses' ja allowlist entry) — was a 301-to-EN until the hub
-  // gained a Japanese translation. ko/zh hub URLs must keep 301ing (canary
-  // in thaiRedirectTests).
+  // gained a Japanese translation.
   {
     path: "/ja/golf-courses/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  // Translated KO + ZH golf-courses hubs (structural-parity batch: the
+  // GolfCourseHub namespace landed in messages/{ko,zh}.json and the hub was
+  // added to both allowlists). All four locales now serve the hub, so the
+  // former "ko must 301" canary in thaiRedirectTests is gone.
+  {
+    path: "/ko/golf-courses/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/golf-courses/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  // Translated JA/KO/ZH /faq/ hubs (structural-parity batch: ja/ko/zh content
+  // blocks added to data/faq-hub.ts CONTENT + '/faq' added to each allowlist).
+  // The per-question FAQ pages were already translated in these locales; the
+  // hub above them was still English.
+  {
+    path: "/ja/faq/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/ko/faq/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/faq/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
@@ -2521,6 +2558,89 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  // Re-regioned Bangkok → Isan; the old URL's 308 is asserted in redirectTests.
+  {
+    path: "/golf-courses/isan/kumlung-ake-golf-course/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  // Course-detail hrefs are resolved PER COURSE by courseDetailHref: a locale
+  // prefix only where that course is translated. This shipped wrong twice, in
+  // opposite directions, and both times invisibly — hence a pinned pair.
+  //
+  // ja HAS alpine translated, so the roster link must be prefixed. The marker
+  // is a course-detail path, not the region hub (/ja/golf-courses/bangkok/ is
+  // a legitimate hub link and would match either way).
+  {
+    path: "/ja/golf-courses/bangkok/",
+    expectedStatus: [200],
+    contentMarker: '/ja/golf-courses/bangkok/alpine-golf-club/',
+  },
+  // ko has ZERO course-detail translations, so no course link may be prefixed.
+  {
+    path: "/ko/golf-courses/bangkok/",
+    expectedStatus: [200],
+    contentAbsent: '/ko/golf-courses/bangkok/sai-golf-club',
+  },
+  // Same invariant on the top-level hub, whose map (HubMapExplorer) links
+  // every one of the 149 courses. The region-hub pair above only proves the
+  // per-region roster; an always-prefix regression puts 149 wrong hrefs on
+  // THIS page, and the four '/xx/golf-courses/' routeTests above assert only
+  // <main id="main-content">, so they all still pass. Separate entries rather
+  // than extra fields: RouteTest carries one marker each, and the <main>
+  // assertion on those entries is still worth keeping.
+  {
+    path: "/ja/golf-courses/",
+    expectedStatus: [200],
+    contentMarker: '/ja/golf-courses/bangkok/alpine-golf-club/',
+  },
+  {
+    path: "/ko/golf-courses/",
+    expectedStatus: [200],
+    contentAbsent: '/ko/golf-courses/bangkok/alpine-golf-club',
+  },
+  // Same invariant on the RoundupList surface (price tiers SSG th/ja/ko/zh).
+  // The marker is a COURSE-DETAIL path, not the region-hub prefix: this tier
+  // page renders no region-hub link at all today, so '/ko/golf-courses/bangkok/'
+  // passed vacuously and would have kept passing under an always-prefix
+  // regression that only touches course hrefs.
+  {
+    path: "/ko/golf-courses/under/1500-baht/",
+    expectedStatus: [200],
+    contentAbsent: '/ko/golf-courses/bangkok/sai-golf-club',
+  },
+  // The positive half, which the tier surface was missing entirely: ja HAS sai
+  // translated, so its link on the tier roster must be prefixed. Without this,
+  // a never-prefix regression leaves every price-tier assertion green.
+  {
+    path: "/ja/golf-courses/under/1500-baht/",
+    expectedStatus: [200],
+    contentMarker: '/ja/golf-courses/bangkok/sai-golf-club/',
+  },
+  // /golf-courses/compare/<region>/<a>-vs-<b>/ — a whole page TYPE that had no
+  // 200 assertion anywhere: the only compare paths in this file were the four
+  // 308s for pairs the re-regions retired, so a render throw or a routing break
+  // on every surviving compare page would have gone unnoticed. bangkok's top 3
+  // is the stable one to pin (the retired pairs were all khao-yai/kanchanaburi,
+  // whose top-3 moved). If a fee edit reshuffles bangkok's top 3, this pair
+  // stops being generated and dynamicParams=false 404s it — which is the same
+  // signal the redirect entries exist for, and worth failing loudly on.
+  {
+    path: "/golf-courses/compare/bangkok/alpine-golf-club-vs-royal-gems-golf-sports-club/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  // Re-regioned Bangkok → Khao Yai / Kanchanaburi (same 90-minute test).
+  {
+    path: "/golf-courses/khao-yai/toscana-valley-country-club/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/golf-courses/kanchanaburi/nichigo-resort-country-club/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
   {
     path: "/golf-courses/phuket/mission-hills-phuket/",
     expectedStatus: [200],
@@ -2734,6 +2854,48 @@ const redirectTests: RedirectTest[] = [
     expectedStatus: 308,
     expectedLocation: "/golf-courses/khao-yai/life-privilege-country-club/",
   },
+  // Re-regioned course redirect: Bangkok → Isan (Kumlung-Ake is in Loei).
+  // The old URL was live and indexed, so this guards the SEO equity; the new
+  // URL's 200 is asserted in routeTests.
+  {
+    path: "/golf-courses/bangkok/kumlung-ake-golf-course/",
+    expectedStatus: 308,
+    expectedLocation: "/golf-courses/isan/kumlung-ake-golf-course/",
+  },
+  {
+    path: "/golf-courses/bangkok/toscana-valley-country-club/",
+    expectedStatus: 308,
+    expectedLocation: "/golf-courses/khao-yai/toscana-valley-country-club/",
+  },
+  {
+    path: "/golf-courses/bangkok/nichigo-resort-country-club/",
+    expectedStatus: 308,
+    expectedLocation: "/golf-courses/kanchanaburi/nichigo-resort-country-club/",
+  },
+
+  // Compare pairs retired by those two re-regions. The pair set is derived
+  // from each region's top 3 and the route is dynamicParams=false, so without
+  // these the URLs hard-404 — and they are in the sitemap.
+  {
+    path: "/golf-courses/compare/khao-yai/life-privilege-country-club-vs-rancho-charnvee-country-club/",
+    expectedStatus: 308,
+    expectedLocation: "/golf-courses/khao-yai/",
+  },
+  {
+    path: "/golf-courses/compare/khao-yai/khao-yai-golf-club-vs-rancho-charnvee-country-club/",
+    expectedStatus: 308,
+    expectedLocation: "/golf-courses/khao-yai/",
+  },
+  {
+    path: "/golf-courses/compare/kanchanaburi/blue-sapphire-golf-resort-vs-grand-prix-golf-club/",
+    expectedStatus: 308,
+    expectedLocation: "/golf-courses/kanchanaburi/",
+  },
+  {
+    path: "/golf-courses/compare/kanchanaburi/blue-sapphire-golf-resort-vs-dragon-hills-golf-country-club/",
+    expectedStatus: 308,
+    expectedLocation: "/golf-courses/kanchanaburi/",
+  },
   // Rental-page consolidation: rent-golf-clubs-bangkok → golf-course-club-rental
   // (was a duplicate; consolidated to fix self-cannibalisation in organic search)
   {
@@ -2760,6 +2922,37 @@ const redirectTests: RedirectTest[] = [
     path: "/zh/rent-golf-clubs-bangkok/",
     expectedStatus: 308,
     expectedLocation: "/zh/golf-course-club-rental/",
+  },
+];
+
+// B2) Slash-less inbound links must still land on the destination.
+//
+// Measured, not assumed. next.config.js registers BOTH slash variants of every
+// redirect, on the stated theory that the no-slash entry avoids a 2-hop. It
+// does not: with `trailingSlash: true`, Next's slash normalisation runs BEFORE
+// the redirects table, so the no-slash SOURCE never matches. Probed against a
+// live server:
+//
+//   /golf-courses/bangkok/kumlung-ake-golf-course
+//     → 308 /golf-courses/bangkok/kumlung-ake-golf-course/   (normalisation)
+//     → 308 /golf-courses/isan/kumlung-ake-golf-course/      (the redirect)
+//
+// i.e. still two hops, and the configured destination on the no-slash entry is
+// never read. The trailing-slash entries are the live ones; the no-slash ones
+// are dead config.
+//
+// These assertions deliberately test the OUTCOME (follow to the end) rather
+// than either hop, so they hold whichever way the dead entries are cleaned up,
+// and they fail if someone deletes the trailing-slash entry believing the
+// no-slash one covers both — the exact mistake the stale comment invites.
+const redirectChainTests: { path: string; finalPath: string }[] = [
+  {
+    path: "/golf-courses/bangkok/kumlung-ake-golf-course",
+    finalPath: "/golf-courses/isan/kumlung-ake-golf-course/",
+  },
+  {
+    path: "/golf-courses/compare/khao-yai/khao-yai-golf-club-vs-rancho-charnvee-country-club",
+    finalPath: "/golf-courses/khao-yai/",
   },
 ];
 
@@ -2826,15 +3019,12 @@ const thaiRedirectTests: ThaiRedirectTest[] = [
     expectedLocation: "/terms-of-service/",
     label: "Untranslated terms of service",
   },
-  // The /golf-courses/ hub is translated for th + ja (GolfCourseHub batches) —
-  // /th/golf-courses/ and /ja/golf-courses/ now 200 (see routeTests); ko/zh
-  // hub URLs must keep 301ing to the English hub. Canary for the hub
-  // allowlist staying th/ja-only.
-  {
-    path: "/ko/golf-courses/",
-    expectedLocation: "/golf-courses/",
-    label: "Untranslated KO golf-courses hub (only th/ja may 200)",
-  },
+  // NOTE: the former "untranslated KO golf-courses hub must 301" test is gone
+  // on purpose — the structural-parity batch added the GolfCourseHub namespace
+  // to messages/{ko,zh}.json, so all four locales now serve the hub and no
+  // untranslated locale remains to probe. Same reasoning as the removed
+  // price-tier and TH-guide probes below. The hub URLs' 200s are asserted in
+  // routeTests instead.
   // Regression guard — non-whitelisted /ja/, /ko/, /zh/ paths must still 301 to EN so the
   // middleware allowlist (lib/translated-routes.ts) continues to work. Particularly
   // important for ko/zh where the message files have populated (but English-stub)
@@ -2868,30 +3058,15 @@ const thaiRedirectTests: ThaiRedirectTest[] = [
     label:
       "Untranslated TH FAQ (only translated FAQ slugs may 200)",
   },
-  // Untranslated region hubs must still 301 to English — only regions present in
-  // data/golf-courses-i18n.ts are translated (bangkok/phuket/pattaya/hua-hin/
-  // chiang-mai as of this test). Guards the region-hub allowlist with a region
-  // that has NO translation; pick a new one here if koh-samui ever gets one.
-  {
-    path: "/ja/golf-courses/koh-samui/",
-    expectedLocation: "/golf-courses/koh-samui/",
-    label: "Untranslated JA region hub (only translated regions may 200)",
-  },
-  {
-    path: "/ko/golf-courses/koh-samui/",
-    expectedLocation: "/golf-courses/koh-samui/",
-    label: "Untranslated KO region hub (only translated regions may 200)",
-  },
-  {
-    path: "/zh/golf-courses/koh-samui/",
-    expectedLocation: "/golf-courses/koh-samui/",
-    label: "Untranslated ZH region hub (only translated regions may 200)",
-  },
-  {
-    path: "/th/golf-courses/koh-samui/",
-    expectedLocation: "/golf-courses/koh-samui/",
-    label: "Untranslated TH region hub (only translated regions may 200)",
-  },
+  // NOTE: the four "untranslated region hub must 301" probes (they used
+  // koh-samui) are gone on purpose — the structural-parity batch translated
+  // the last 9 regions, so all 14 in lib/golf-courses.ts REGIONS are
+  // translated in all four locales and no untranslated region remains to
+  // probe. Same reasoning as the removed price-tier and TH-guide probes.
+  // Coverage did not shrink: section J still guards allowlist ⇄
+  // REGION_HUB_I18N in both directions, section L3 fetches every registered
+  // hub, and the near/best-for/compare canary below still proves the
+  // middleware 301 works for genuinely EN-only /golf-courses/ sub-routes.
   // NOTE: the former "untranslated JA price tier must 301" test is gone on
   // purpose — every locale (th/ja/ko/zh) now has PRICE_TIER_I18N rows, so no
   // untranslated locale remains to probe. The price-tier registry-consistency
@@ -3168,6 +3343,26 @@ async function runRedirectTests() {
         continue;
       }
       pass(label);
+    } catch (err) {
+      fail(label, `fetch error: ${(err as Error).message}`);
+    }
+  }
+
+  for (const t of redirectChainTests) {
+    const label = `${t.path} (no trailing slash) ↠ ${t.finalPath}`;
+    try {
+      const res = await fetch(`${BASE}${t.path}`, { redirect: "follow" });
+      const landed = new URL(res.url).pathname;
+      if (res.status !== 200) {
+        fail(label, `expected 200 at the end of the chain, got ${res.status}`);
+      } else if (landed !== t.finalPath) {
+        fail(
+          label,
+          `chain ended at ${landed}, expected ${t.finalPath} — a slash-less inbound link no longer reaches the destination (the TRAILING-SLASH source in next.config.js is the live one; the no-slash twin is dead config and cannot cover for it)`,
+        );
+      } else {
+        pass(label);
+      }
     } catch (err) {
       fail(label, `fetch error: ${(err as Error).message}`);
     }
@@ -3824,6 +4019,81 @@ async function runCourseDetailRegistryLivenessTests() {
   }
 }
 
+// ── L3) Region-hub translated registry liveness ─────────────────────
+// L2's shape, for the '/golf-courses/<region>' allowlist entries — but NOT
+// L2's failure mode. The [region] page (unlike [region]/[slug]) does not set
+// dynamicParams=false, so a registry entry with no REGION_HUB_I18N row still
+// renders: on-demand, silently falling back to the EN REGION_META label and
+// description under a locale URL. That drift is section J's job, and J
+// catches it in both directions. What this section adds is proof each hub
+// actually SERVES — a render throw, a missing GolfCourseRegion namespace, or
+// a 200 error shell would all pass J and fail here.
+//
+// Registry-derived like L2, so future region batches are covered with zero
+// routeTests edits — which is why the structural-parity batch (all 14 regions
+// × 4 locales = 56 hub URLs) added no per-hub routeTests entries.
+async function runRegionHubRegistryLivenessTests() {
+  console.log("\n\x1b[1mL3) Region-hub translated registry liveness\x1b[0m");
+  const { getRegisteredRegionHubPaths, ALL_LOCALES } = await import(
+    "../lib/translated-routes"
+  );
+
+  // Every assertion here is derived from the registry, so an EMPTY registry
+  // produces a section header and zero assertions — a silent no-op that reads
+  // exactly like a pass. A registry-helper regression (renamed prefix, changed
+  // return shape) is precisely how that happens, so prove the registry fed us
+  // something before trusting the run.
+  let covered = 0;
+
+  for (const locale of ALL_LOCALES) {
+    if (locale === "en") continue;
+    const paths = getRegisteredRegionHubPaths(locale);
+    if (paths.length === 0) continue;
+    covered += paths.length;
+    let ok = 0;
+    for (const path of paths) {
+      const target = `/${locale}${path}/`;
+      try {
+        const res = await fetch(`${BASE}${target}`, { redirect: "manual" });
+        if (res.status !== 200) {
+          fail(
+            `Registered region-hub translation not live: ${target}`,
+            `expected 200, got ${res.status} — lib/translated-routes.ts lists a '${locale}' region hub that doesn't serve (render throw, or a middleware/allowlist regression sending it back to EN).`,
+          );
+          continue;
+        }
+        // Content check too, for the same reason as L2: a registry-derived
+        // check replaces per-page routeTests, so a 200 error shell must fail.
+        const body = await res.text();
+        if (body.includes('<main id="main-content">')) {
+          ok++;
+        } else {
+          fail(
+            `Registered region-hub translation missing main content: ${target}`,
+            'served 200 without <main id="main-content">',
+          );
+        }
+      } catch (err) {
+        fail(`${target} fetch error`, String(err));
+      }
+    }
+    if (ok === paths.length) {
+      pass(
+        `All ${ok} registered '${locale}' region-hub translations serve 200`,
+      );
+    }
+  }
+
+  if (covered === 0) {
+    fail(
+      "L3 covered zero region hubs",
+      "getRegisteredRegionHubPaths() returned nothing for every non-en locale — the whole section asserted nothing. Either lib/translated-routes.ts lost its region-hub entries or the helper regressed; both would otherwise show up as a silent pass.",
+    );
+  } else {
+    pass(`L3 covered ${covered} registered region-hub path(s)`);
+  }
+}
+
 // ── M) Wayfinding copy consistency (BTS Chidlom exit number) ────────
 // The correct exit for The Mercury Ville is Exit 4 — confirmed with the owner
 // (2026-07-28) and by the on-screen Thai text in LENGOLF's own POV wayfinding
@@ -3874,30 +4144,77 @@ const wayfindingTests: {
     what: "bts_route exit number",
   })),
   // Repo-driven: messages/*.json HomeXx.accessBts on the locale landing pages.
+  //
+  // Anchored exactly like the faq-hub entries below, and for the same reason:
+  // an UNANCHORED pair passes on the wrong exit number. Against "14番出口",
+  // `expect: /4番出口/` matches the "4番出口" tail and `forbid: /[0-35-9]番出口/`
+  // never fires, because the digit it inspects is the one directly before 番 —
+  // which is still 4. The lookbehind kills the tail match; the `\d\d` alternative
+  // is what actually reports it. The faq-hub half of this fix shipped; these
+  // three landing-page entries were left behind.
   {
     path: "/ja/",
-    expect: /4番出口/,
-    forbid: /[0-35-9]番出口/,
+    expect: /(?<!\d)4番出口/,
+    forbid: /(?<!\d)[0-35-9]番出口|\d\d番出口/,
     what: "HomeJa.accessBts exit number",
   },
   {
     path: "/ko/",
-    expect: /4번\s*출구/,
-    forbid: /[0-35-9]번\s*출구/,
+    expect: /(?<!\d)4번\s*출구/,
+    forbid: /(?<!\d)[0-35-9]번\s*출구|\d\d번\s*출구/,
     what: "HomeKo.accessBts exit number",
   },
   {
     path: "/zh/",
-    expect: /4号出口/,
-    forbid: /[0-35-9]号出口/,
+    expect: /(?<!\d)4号出口/,
+    forbid: /(?<!\d)[0-35-9]号出口|\d\d号出口/,
     what: "HomeZh.accessBts exit number",
   },
   // Repo-driven: hardcoded EN copy in the Thailand golf guide.
+  //
+  // EN puts the digit AFTER the keyword, so the leading-digit hole above cannot
+  // occur ("Exit 14" fails `expect` outright). The TRAILING-digit one can:
+  // "Exit 41" satisfies a bare /Exit 4/ and never trips /Exit [0-35-9]/. Hence
+  // the negative lookahead on expect and the two-digit alternative on forbid.
   {
     path: "/golf-in-thailand-guide/",
-    expect: /BTS Chidlom Exit 4/,
-    forbid: /BTS Chidlom Exit [0-35-9]/,
+    expect: /BTS Chidlom Exit 4(?!\d)/,
+    forbid: /BTS Chidlom Exit (?:[0-35-9]|\d\d)/,
     what: "guide 'Getting around Bangkok' exit number",
+  },
+  // Repo-driven: data/faq-hub.ts `directions.steps[1]`. This is a SECOND,
+  // independent copy of the wayfinding — the landing-page checks above assert
+  // messages/*.json HomeXx.accessBts and would all still pass if this one
+  // regressed. th shipped its hub earlier and was never guarded either; the
+  // structural-parity batch added ja/ko/zh, so all four are covered here.
+  // th reads left-to-right like EN (digit after the keyword), so it needs EN's
+  // anchoring, not the CJK lookbehind: "ทางออก 41" satisfies a bare /ทางออก\s*4/
+  // and never trips /ทางออก\s*[0-35-9]/. The ja/ko/zh anchoring pass skipped th
+  // because th's shape made the LEADING-digit hole impossible — the trailing
+  // one was left open.
+  {
+    path: "/th/faq/",
+    expect: /ทางออก\s*4(?!\d)/,
+    forbid: /ทางออก\s*(?:[0-35-9]|\d\d)/,
+    what: "faq-hub th directions exit number",
+  },
+  {
+    path: "/ja/faq/",
+    expect: /(?<!\d)4番出口/,
+    forbid: /(?<!\d)[0-35-9]番出口|\d\d番出口/,
+    what: "faq-hub ja directions exit number",
+  },
+  {
+    path: "/ko/faq/",
+    expect: /(?<!\d)4번\s*출구/,
+    forbid: /(?<!\d)[0-35-9]번\s*출구|\d\d번\s*출구/,
+    what: "faq-hub ko directions exit number",
+  },
+  {
+    path: "/zh/faq/",
+    expect: /(?<!\d)4号出口/,
+    forbid: /(?<!\d)[0-35-9]号出口|\d\d号出口/,
+    what: "faq-hub zh directions exit number",
   },
 ];
 
@@ -3932,6 +4249,208 @@ async function runWayfindingTests() {
   }
 }
 
+// ── N) Region-hub course-count agreement (ICU plural branches) ──────
+// GolfCourseRegion.metaDescription is one string serving regions with 58
+// courses and regions with 1, so it carries an ICU plural. Three regions sit
+// on the =1 branch (north-misc, khao-lak, krabi — courseCount: 1 in
+// REGION_META); everything else takes `other`. Before PR #88 there was no
+// plural and the three shipped "all 1 golf courses" to Google.
+//
+// The =1 set is DERIVED, not hand-listed. lib/golf-courses.ts is
+// `import 'server-only'` and cannot be imported here, but REGION_META.courseCount
+// is not the authority anyway: validate-courses.ts fails CI unless courseCount
+// equals the region's index.ts slug count, so index.ts is the file that really
+// decides the plural branch — and it is a plain data module this script can
+// import. A region crossing the 1-course line now moves itself in or out of
+// these cases; the `other`-branch cases below are fixed and need no edit.
+//
+// Assertions are matched pairs (correct form present AND broken form absent),
+// like section M — so copy that silently vanishes fails instead of passing
+// vacuously. Both plural branches are exercised, in EN and in TH.
+//
+// Counts are matched with `\d+`, NOT `\d\d+`: nine of the fourteen regions have
+// a single-digit courseCount, so a two-digit-minimum pattern would fail the
+// moment this list grows past bangkok. The count being ≠1 in the `other` cases
+// is already guaranteed by `forbid`, which runs first.
+//
+// TH is asserted on BOTH branches, because the structural-parity batch in this
+// same PR ships th/ja/ko/zh hubs for all three single-course regions — so
+// /th/golf-courses/krabi/ is a real 200, not a 301 to English. The TH =1 cases
+// are additionally intersected with the TH region-hub registry: an untranslated
+// hub 301s to English, and following that redirect would fail the Thai
+// assertion for a reason that has nothing to do with the plural. ja/ko/zh carry
+// no plural by design (no plural morphology; か所/곳/座 read correctly at 1),
+// so there is no branch of theirs to exercise here.
+
+/** Regions whose index.ts lists exactly one slug — i.e. the ones REGION_META
+ *  must declare `courseCount: 1` for (validate-courses.ts enforces that
+ *  equality), and therefore the ones that render the ICU `=1` branch. */
+async function singleCourseRegions(): Promise<string[]> {
+  const fs = await import("node:fs");
+  const nodePath = await import("node:path");
+  const { pathToFileURL } = await import("node:url");
+  // Resolved from this file, not process.cwd(): CI invokes the script by path
+  // from the repo root, but a developer running it from anywhere else must not
+  // silently get an empty list (which would drop the =1 branch from the suite).
+  const root = nodePath.join(__dirname, "..", "data", "golf-courses");
+  const out: string[] = [];
+  for (const region of fs.readdirSync(root)) {
+    const abs = nodePath.join(root, region, "index.ts");
+    if (!fs.existsSync(abs)) continue;
+    const mod = await import(pathToFileURL(abs).href);
+    // Both index shapes in the tree: `export default { slugs }` (hand-written)
+    // and `const index = { slugs: [...] }; export default index` (generated).
+    const slugs: string[] = (mod.default ?? mod).slugs ?? [];
+    if (slugs.length === 1) out.push(region);
+  }
+  return out;
+}
+
+async function buildRegionCountTests(): Promise<
+  { path: string; expect: RegExp; forbid: RegExp; what: string }[]
+> {
+  const singles = await singleCourseRegions();
+  const { getRegisteredRegionHubPaths } = await import(
+    "../lib/translated-routes"
+  );
+  const thHubs = new Set(getRegisteredRegionHubPaths("th"));
+
+  return [
+    // =1 branch — EN. These are the whole reason the plural exists.
+    ...singles.map((region) => ({
+      path: `/golf-courses/${region}/`,
+      expect: /Our guide to \d+ golf course in /,
+      forbid: /\d+ golf courses in/,
+      what: "EN meta description (=1 branch)",
+    })),
+    // =1 branch — TH. Thai has no plural; the =1 branch exists only to drop
+    // ครบทั้ง ("the complete set of"), which reads wrong applied to one item.
+    ...singles
+      .filter((region) => thHubs.has(`/golf-courses/${region}`))
+      .map((region) => ({
+        path: `/th/golf-courses/${region}/`,
+        expect: /รายชื่อสนามกอล์ฟ.* \d+ แห่ง/,
+        forbid: /ครบทั้ง/,
+        what: "TH meta description (=1 branch)",
+      })),
+    // `other` branch — EN and TH, on a region that has many courses.
+    {
+      path: "/golf-courses/bangkok/",
+      expect: /The full directory of all \d+ golf courses in /,
+      forbid: /\b1 golf courses\b/,
+      what: "EN meta description (other branch)",
+    },
+    {
+      path: "/th/golf-courses/bangkok/",
+      expect: /ครบทั้ง \d+ แห่ง/,
+      forbid: /ครบทั้ง 1 แห่ง/,
+      what: "TH meta description (other branch)",
+    },
+  ];
+}
+
+/** The `content` of <meta name="description"> — the string this section is about.
+ *  Safe against og:/twitter: siblings: those are `property="og:description"` and
+ *  `name="twitter:description"`, neither of which contains the literal
+ *  `name="description"`, and `[^>]` cannot cross a tag boundary. */
+function metaDescriptionOf(html: string): string | null {
+  const m = html.match(
+    /<meta[^>]+name="description"[^>]*\scontent="([^"]*)"/i,
+  );
+  return m ? m[1] : null;
+}
+
+/** Visible text: scripts/styles dropped, then tags stripped. The hub card puts
+ *  the count and the noun in SEPARATE elements ("1 <span>course</span>"), so a
+ *  raw-markup regex can never see the disagreement — it only exists in the
+ *  rendered text. Scripts go first because NextIntlClientProvider serializes
+ *  the whole message catalog into the flight payload. */
+function visibleText(html: string): string {
+  return renderedMarkup(html)
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, "")
+    // Tags become a SPACE, not "". Dropping them outright welds neighbouring
+    // elements together — "…<span>course</span></p><span>View all" collapses to
+    // "courseView all", and a trailing \b in an assertion then never matches.
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ");
+}
+
+async function runRegionCountTests() {
+  console.log(
+    "\n\x1b[1mN) Region-hub course-count agreement (ICU plural)\x1b[0m",
+  );
+  const regionCountTests = await buildRegionCountTests();
+  // The =1 cases are the entire point of this section, and they are derived.
+  // A derivation that quietly yields nothing (moved data directory, changed
+  // index.ts export shape) would leave only the `other`-branch cases running
+  // and the section would still print green.
+  const singleBranchCases = regionCountTests.filter((t) =>
+    t.what.includes("=1"),
+  );
+  if (singleBranchCases.length === 0) {
+    fail(
+      "N derived zero =1-branch regions",
+      "no data/golf-courses/<region>/index.ts lists exactly one slug — either every region genuinely grew past 1 (then delete this section and the ICU =1 branch with it), or singleCourseRegions() stopped reading the data and the plural branch is now untested.",
+    );
+  }
+  for (const t of regionCountTests) {
+    const label = `${t.path} ${t.what}`;
+    try {
+      const res = await fetch(`${BASE}${t.path}`, { redirect: "follow" });
+      if (res.status !== 200) {
+        fail(label, `expected 200, got ${res.status}`);
+        continue;
+      }
+      const desc = metaDescriptionOf(await res.text());
+      if (desc === null) {
+        fail(label, "no <meta name=\"description\"> on the page");
+      } else if (t.forbid.test(desc)) {
+        fail(
+          label,
+          `count/noun disagreement in the meta description: "${desc}" — the ICU plural in messages/*.json GolfCourseRegion.metaDescription is missing or bypassed`,
+        );
+      } else if (!t.expect.test(desc)) {
+        fail(
+          label,
+          `expected ${t.expect} in the meta description, got "${desc}". If the copy was reworded, update this test rather than dropping it.`,
+        );
+      } else {
+        pass(label);
+      }
+    } catch (err) {
+      fail(`${label} fetch error`, String(err));
+    }
+  }
+
+  // The /golf-courses/ directory renders one card per region with the count
+  // next to the noun. Same defect class as the meta description above, but in
+  // VISIBLE body copy — it shipped "1 courses" three times in EN.
+  const hubLabel = "/golf-courses/ EN region-card course count";
+  try {
+    const res = await fetch(`${BASE}/golf-courses/`, { redirect: "follow" });
+    if (res.status !== 200) {
+      fail(hubLabel, `expected 200, got ${res.status}`);
+    } else {
+      const text = visibleText(await res.text());
+      if (/\b1 courses\b/.test(text)) {
+        fail(
+          hubLabel,
+          "region card renders '1 courses' — GolfCourseHub.coursesCount lost its ICU plural, or the count was interpolated outside the message again",
+        );
+      } else if (!/\b1 course\b/.test(text)) {
+        fail(
+          hubLabel,
+          "expected a '1 course' card (north-misc / khao-lak / krabi each hold one). If every region now has 2+, drop this assertion; otherwise the card copy moved.",
+        );
+      } else {
+        pass(hubLabel);
+      }
+    }
+  } catch (err) {
+    fail(`${hubLabel} fetch error`, String(err));
+  }
+}
+
 // ── Main ────────────────────────────────────────────────────────────
 
 async function main() {
@@ -3963,7 +4482,9 @@ async function main() {
   await runDataLinkLivenessTests();
   await runBlogRegistryLivenessTests();
   await runCourseDetailRegistryLivenessTests();
+  await runRegionHubRegistryLivenessTests();
   await runWayfindingTests();
+  await runRegionCountTests();
 
   console.log(`\n\x1b[1m${passed} passed, ${failed} failed\x1b[0m`);
   if (failures.length > 0) {

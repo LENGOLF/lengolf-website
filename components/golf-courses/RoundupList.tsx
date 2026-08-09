@@ -1,8 +1,13 @@
 import { ArrowRight, MapPin } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { Link } from '@/i18n/navigation'
+import { useLocale, useTranslations } from 'next-intl'
+// next/link, NOT the i18n Link: the i18n Link prefixes the locale
+// automatically, which is precisely the blanket behaviour that 301s every
+// link to an untranslated course. courseDetailHref decides per course, so
+// its output must be used verbatim.
+import Link from 'next/link'
 import type { GolfCourse } from '@/types/golf-courses'
 import { driveTimeLabel } from '@/lib/format'
+import { courseDetailHref } from '@/lib/translated-routes'
 
 export interface RoundupItem {
   course: GolfCourse
@@ -24,6 +29,10 @@ export default function RoundupList({ items }: Props) {
   // Localized UI labels — this component renders on translated locale routes
   // (e.g. /th/golf-courses/under/*), so chip text must not be hardcoded EN.
   const t = useTranslations('GolfCourseShared')
+  // Per-course href resolution: /under/<tier> SSGs th/ja/ko/zh, but only
+  // 15 courses have th/ja detail pages and ko/zh have none — a blanket
+  // locale prefix would 301 nearly every link in this list.
+  const locale = useLocale()
   return (
     <ol className="space-y-4">
       {items.map((item, idx) => {
@@ -31,7 +40,7 @@ export default function RoundupList({ items }: Props) {
         return (
           <li key={c.slug}>
             <Link
-              href={`/golf-courses/${c.region}/${c.slug}`}
+              href={courseDetailHref(locale, c.region, c.slug)}
               className="group flex gap-4 rounded-2xl border border-border bg-white p-4 shadow-sm transition-all hover:-translate-y-px hover:border-primary/30 hover:shadow-md sm:p-5"
             >
               {/* Rank */}

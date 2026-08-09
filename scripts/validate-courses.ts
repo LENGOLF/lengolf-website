@@ -15,6 +15,10 @@
  *  - suspicious-pattern fees (see WARN rules) on a course with NO
  *    `fees_verified_at` attestation — unverified suspicious data fails CI
  *  - malformed `fees_verified_at` (not YYYY-MM-DD)
+ *  - REGION_META.courseCount disagreeing with the region's index.ts slugs
+ *    (what actually renders), or an index slug with no file / a file with
+ *    no index slug. courseCount is hand-maintained and now selects an ICU
+ *    plural branch as well as printing a number — see checkRegionCounts
  *
  * WARN (non-blocking) when `fees_verified_at` IS present:
  *  - weekday fee under ฿600 (genuinely possible: EGAT dam courses, army
@@ -35,6 +39,9 @@
  * No server needed. Zero deps beyond tsx.
  */
 
+import fs from 'fs'
+import path from 'path'
+import { pathToFileURL } from 'url'
 import type { GolfCourse } from '../types/golf-courses'
 import { decimalPlaces, MIN_COORD_DECIMALS } from '../lib/geo'
 import { loadCourseFiles } from './course-files'
@@ -100,8 +107,144 @@ function checkCoordinates(file: string, c: GolfCourse) {
   }
 }
 
+/**
+ * REGION_META.courseCount vs what the region hub actually renders.
+ *
+ * courseCount is hand-maintained and drives real output: the hub's meta
+ * description, its hero card, the OG card chip — and, since the count/noun
+ * work, WHICH ICU PLURAL BRANCH renders. A stale count no longer just prints
+ * a wrong number; it commits the sentence to the wrong grammatical form
+ * ("Our guide to 1 golf course in Krabi" above two cards).
+ *
+ * THREE sources of truth exist and they must agree:
+ *   1. REGION_META.courseCount  — the advertised number.
+ *   2. data/golf-courses/<region>/index.ts `slugs` — what
+ *      getCoursesByRegion() maps over, i.e. what actually RENDERS as cards
+ *      and what generateStaticParams builds. Note it does NOT filter by
+ *      `status`, so a draft still renders.
+ *   3. The .ts files on disk — what a course author edits.
+ * Checking (1) against (3) alone is not enough: a re-region that moves the
+ * file and updates courseCount but forgets index.ts leaves 1 and 3 agreeing
+ * while the hub renders a different number of cards. That is precisely the
+ * shape of the kumlung-ake move in this PR, where both index.ts files had to
+ * be hand-edited. So compare 1↔2 (the user-visible claim) and 2↔3 (orphans).
+ *
+ * Parsed out of the source text rather than imported: lib/golf-courses.ts is
+ * `import 'server-only'` and throws under plain tsx (same constraint that
+ * forced the hardcoded list in the smoke test).
+ */
+async function checkRegionCounts(courses: { file: string; course: GolfCourse }[]) {
+  // Normalise CRLF first: git checks this repo out with native line endings
+  // on Windows, and fs.readFileSync does not translate them, so anchors like
+  // `\n}` would silently never match and the guard would report itself blind.
+  const src = fs
+    .readFileSync(path.join(__dirname, '..', 'lib', 'golf-courses.ts'), 'utf8')
+    .replace(/\r\n/g, '\n')
+  const meta = src.match(/export const REGION_META[^=]*=\s*\{([\s\S]*?)\n\}\n/)
+  if (!meta) {
+    errors.push('lib/golf-courses.ts: could not parse REGION_META (courseCount guard is blind)')
+    return
+  }
+
+  // Two distinct things, kept apart on purpose:
+  //   metaRegions — every region block REGION_META declares.
+  //   declared    — those whose `courseCount` line the anchor could read.
+  // They used to be one map, so a region whose count line failed the anchor
+  // (re-indented, reformatted, trailing comma dropped) vanished from the guard
+  // ENTIRELY and the only symptom was the final loop below announcing
+  // "<region>/ has course files but no REGION_META entry" — a flatly false
+  // message pointing at the wrong file. Worse, a region with an unparseable
+  // count AND an empty directory produced no message at all. Keying the
+  // "no REGION_META entry" check off metaRegions makes that message true
+  // again, and an unreadable count is now reported as what it is.
+  const metaRegions = new Set<string>()
+  const declared = new Map<string, number>()
+  for (const m of meta[1].matchAll(/^ {2}'?([a-z-]+)'?:\s*\{([\s\S]*?)^ {2}\},/gm)) {
+    metaRegions.add(m[1])
+    // Strip line comments before reading the value. REGION_META blocks carry
+    // prose comments (this PR added one to `isan`), and a comment mentioning
+    // `courseCount: N` would otherwise be read as the value — the guard would
+    // then validate a number that does not render, and pass.
+    const body = m[2].replace(/^[ \t]*\/\/.*$/gm, '')
+    const count = body.match(/^ {4}courseCount:\s*(\d+),/m)
+    if (count) declared.set(m[1], Number(count[1]))
+    else {
+      errors.push(
+        `lib/golf-courses.ts: REGION_META.${m[1]} parsed, but no \`courseCount: <n>,\` line matched the /^ {4}courseCount:\\s*(\\d+),/ anchor — re-indented or reformatted? Its count is currently unchecked`
+      )
+    }
+  }
+  if (metaRegions.size === 0) {
+    errors.push('lib/golf-courses.ts: REGION_META parsed to zero regions (courseCount guard is blind)')
+    return
+  }
+  // Belt and braces over the per-region errors above: if these two ever
+  // disagree, some region is going unchecked, whatever the reason.
+  if (declared.size !== metaRegions.size) {
+    errors.push(
+      `lib/golf-courses.ts: ${metaRegions.size} REGION_META block(s) parsed but only ${declared.size} yielded a courseCount — ${metaRegions.size - declared.size} region(s) unchecked (see the per-region error(s) above)`
+    )
+  }
+  // (2) index.ts slugs — the rendered set. Imported the same way
+  // lib/golf-courses.ts imports it, so this cannot drift from the runtime.
+  // Driven by metaRegions, not declared: a region with an unreadable count
+  // still gets its slug↔file orphan checks.
+  const rendered = new Map<string, string[]>()
+  for (const region of metaRegions) {
+    const abs = path.join(__dirname, '..', 'data', 'golf-courses', region, 'index.ts')
+    if (!fs.existsSync(abs)) {
+      errors.push(`data/golf-courses/${region}/index.ts is missing — the hub would render zero cards`)
+      continue
+    }
+    const mod = await import(pathToFileURL(abs).href)
+    const slugs: string[] = (mod.default ?? mod).slugs ?? []
+    rendered.set(region, slugs)
+  }
+
+  // (3) files on disk, keyed by DIRECTORY not course.region: the directory is
+  // what builds the URL, so a file in the wrong folder must not be masked by
+  // a correct `region` field.
+  const onDisk = new Map<string, Set<string>>()
+  for (const { file } of courses) {
+    const [region, base] = file.split('/')
+    if (!onDisk.has(region)) onDisk.set(region, new Set())
+    onDisk.get(region)!.add(base.replace(/\.ts$/, ''))
+  }
+
+  for (const region of metaRegions) {
+    const slugs = rendered.get(region)
+    if (!slugs) continue
+    // 1 ↔ 2: the advertised number vs the cards that render. Skipped (already
+    // reported above) when the count line could not be read.
+    const count = declared.get(region)
+    if (count !== undefined && slugs.length !== count) {
+      errors.push(
+        `lib/golf-courses.ts: REGION_META.${region}.courseCount is ${count} but data/golf-courses/${region}/index.ts lists ${slugs.length} slug(s) — the hub advertises a number it does not render, and may pick the wrong ICU plural branch`
+      )
+    }
+    // 2 ↔ 3: a slug with no file renders nothing; a file with no slug is dead.
+    const files = onDisk.get(region) ?? new Set<string>()
+    for (const slug of slugs) {
+      if (!files.has(slug)) {
+        errors.push(`data/golf-courses/${region}/index.ts lists "${slug}" but no such course file exists`)
+      }
+    }
+    for (const f of files) {
+      if (!slugs.includes(f)) {
+        errors.push(`data/golf-courses/${region}/${f}.ts exists but is not listed in that region's index.ts — it will never render`)
+      }
+    }
+  }
+  for (const region of onDisk.keys()) {
+    if (!metaRegions.has(region)) {
+      errors.push(`data/golf-courses/${region}/ has course files but no REGION_META entry`)
+    }
+  }
+}
+
 async function main() {
   const courses = await loadCourseFiles()
+  await checkRegionCounts(courses)
 
   for (const { file, course: c } of courses) {
     const wd = c.green_fee_weekday_thb

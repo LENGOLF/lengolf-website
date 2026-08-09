@@ -31,6 +31,18 @@ jobs:
       # markdown/placeholder integrity, per the data/i18n-glossary/*.json house
       # style. No server needed.
       - run: npm run validate:i18n
+      # The detectors above are only as good as their proof that they still
+      # fire. `--self-test` drives every ERROR check through the real functions
+      # on synthetic inputs — including the rules whose deletion is otherwise
+      # INVISIBLE to a corpus run, because a corpus that happens to be clean
+      # looks identical to a corpus that is no longer being read. Two proven
+      # regressions of exactly that shape: broadening the faq-hub filter regex
+      # empties the whole ja/ko/zh/th corpus, and dropping the `{{token} }`
+      # split-closer rule stops catching the raw token that ships to visitors.
+      # Both leave `npm run validate:i18n` green, so this step is the gate.
+      # It must stay a SEPARATE step: --self-test exits before the corpus
+      # report, so it cannot replace the run above.
+      - run: npm run validate:i18n:self-test
       # Green-fee plausibility: implausible fees (sub-฿600 weekday, weekend
       # cheaper than weekday, huge weekend jumps) fail unless the course file
       # carries a fees_verified_at attestation. Born from the Artitaya ฿400

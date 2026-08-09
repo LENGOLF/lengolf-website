@@ -2,9 +2,12 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
-// next/link, NOT the locale-aware i18n Link: course detail pages are EN-only,
-// so on the 20 translated hubs a locale-prefixed href (/ja/golf-courses/...)
-// would 301 to English on every one of up to 58 roster links.
+// next/link, NOT the locale-aware i18n Link: the prefix decision is per
+// COURSE, not per locale, so it cannot be made here. Most course detail
+// pages are EN-only and a blanket locale prefix would 301 nearly every
+// roster link, but the 15 courses in COURSE_DETAIL_I18N do have th/ja pages
+// and must not be linked to English. The server resolves each href with
+// courseDetailHref and passes them in.
 import Link from 'next/link'
 import { ArrowRight, Clock, Flag, X, ExternalLink, MapPinOff } from 'lucide-react'
 import type { GolfCourse } from '@/types/golf-courses'
@@ -21,12 +24,17 @@ interface RegionCenter {
 
 interface Props {
   courses: GolfCourse[]
+  /** Raw region slug. Since hrefs moved server-side this no longer builds any
+   *  URL — its only remaining job is as the map-init useEffect dependency, so
+   *  a hub-to-hub client navigation re-centres the map. */
   region: string
-  /** Localized region name for display (e.g. the map aria-label); the raw
-   *  `region` slug is still used for building course-detail hrefs. */
+  /** Localized region name, display only (the map aria-label). */
   regionLabel: string
   /** Default map centre / zoom, derived from REGION_META on the server side. */
   center: RegionCenter
+  /** Course-detail href per slug, resolved on the server by courseDetailHref:
+   *  locale-prefixed only where that course has a translation. */
+  hrefs: Record<string, string>
 }
 
 function makePin(index: number, active: boolean, courseName: string): HTMLDivElement {
@@ -51,7 +59,7 @@ function makePin(index: number, active: boolean, courseName: string): HTMLDivEle
   return el
 }
 
-export default function CourseMapExplorer({ courses, region, regionLabel, center }: Props) {
+export default function CourseMapExplorer({ courses, region, regionLabel, center, hrefs }: Props) {
   const t = useTranslations('GolfCourseRegion')
   const [activeSlug, setActiveSlug] = useState<string | null>(null)
   const [mapsUnavailable, setMapsUnavailable] = useState(false)
@@ -255,7 +263,7 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
 
                 <div className="mt-auto flex flex-col gap-2">
                   <Link
-                    href={`/golf-courses/${region}/${activeCourse.slug}`}
+                    href={hrefs[activeCourse.slug]}
                     className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#003d22] px-4 py-2.5 text-xs font-bold text-white transition-all hover:bg-[#005a32]"
                   >
                     {t('fullCourseGuide')} <ArrowRight className="h-3.5 w-3.5" />
@@ -297,8 +305,8 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
             // clicks (cmd/ctrl/shift/middle) fall through to real navigation.
             <Link
               key={course.slug}
-              href={`/golf-courses/${region}/${course.slug}`}
-              // 58 rows would otherwise each viewport-prefetch a full course
+              href={hrefs[course.slug]}
+              // The roster would otherwise viewport-prefetch a full course
               // page payload the user rarely navigates to
               prefetch={false}
               onClick={(e) => {
@@ -309,7 +317,7 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
                 if (e.detail === 0) return
                 e.preventDefault()
                 handleListRow(course.slug)
-                // Selecting from deep in a 58-row roster must produce visible
+                // Selecting from deep in a long roster must produce visible
                 // feedback: the map + info panel sit above the list, so on
                 // mobile a tap otherwise appears to do nothing.
                 if (!isActive) {
@@ -391,7 +399,7 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
             </div>
           </div>
           <Link
-            href={`/golf-courses/${region}/${activeCourse.slug}`}
+            href={hrefs[activeCourse.slug]}
             className="inline-flex items-center gap-1.5 rounded-xl bg-[#003d22] px-4 py-2 text-xs font-bold text-white transition-all hover:bg-[#005a32]"
           >
             {t('openGuide')} <ArrowRight className="h-3 w-3" />
