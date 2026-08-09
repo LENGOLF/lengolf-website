@@ -1,8 +1,8 @@
 import { setRequestLocale } from 'next-intl/server'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getAllSeoPageSlugs, getSeoPageBySlug } from '@/lib/seo-pages'
-import { SITE_URL } from '@/lib/constants'
+import { getAllSeoPageParams, getSeoPageBySlug } from '@/lib/seo-pages'
+import { getAlternates, getCanonical } from '@/lib/translated-routes'
 import { getHotelConciergePageJsonLd } from '@/lib/jsonld'
 import HotelConciergePage from '@/components/hotels/HotelConciergePage'
 import type { HotelConciergeSeoPage } from '@/types/seo-pages'
@@ -12,32 +12,37 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  // EN-only: these pages have no translations (not in lib/translated-routes.ts),
-  // so the middleware 301s every non-EN URL to English — building locale
-  // copies was dead weight.
-  const slugs = await getAllSeoPageSlugs('hotel_concierge')
-  return slugs.map((slug) => ({ locale: 'en', slug }))
+  // Only build locale x slug combos that have published content — untranslated
+  // locale URLs 301 to English via the middleware (lib/translated-routes.ts).
+  // Was EN-only while this section had no translations; mirrors the /faq/ and
+  // /guide/ routes now that it does.
+  return getAllSeoPageParams('hotel_concierge')
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
-  const page = await getSeoPageBySlug(slug, 'hotel_concierge')
+  const { locale, slug } = await params
+  const page = await getSeoPageBySlug(slug, 'hotel_concierge', locale)
 
   if (!page) {
     return { title: 'Page Not Found' }
   }
 
+  const languages = getAlternates(`/hotels/${slug}/`)
   return {
     title: page.title,
     description: page.meta_description || undefined,
     openGraph: {
       title: page.title,
       description: page.meta_description || undefined,
-      url: `${SITE_URL}/hotels/${slug}/`,
+      url: getCanonical(locale, `/hotels/${slug}/`),
       type: 'website',
     },
     alternates: {
-      canonical: `${SITE_URL}/hotels/${slug}/`,
+      canonical: getCanonical(locale, `/hotels/${slug}/`),
+      // Only emit hreflang once a translation actually exists — a lone
+      // self-referential en cluster is audit noise and would contradict the
+      // sitemap, which applies the same guard.
+      ...(Object.keys(languages).length > 1 ? { languages } : {}),
     },
   }
 }
@@ -45,13 +50,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function HotelConciergeSeoPage({ params }: Props) {
   const { locale, slug } = await params
   setRequestLocale(locale)
-  const page = await getSeoPageBySlug(slug, 'hotel_concierge') as HotelConciergeSeoPage | null
+  const page = await getSeoPageBySlug(slug, 'hotel_concierge', locale) as HotelConciergeSeoPage | null
 
   if (!page) {
     notFound()
   }
 
-  const jsonLd = getHotelConciergePageJsonLd(page)
+  const jsonLd = getHotelConciergePageJsonLd(page, locale)
 
   return (
     <>
