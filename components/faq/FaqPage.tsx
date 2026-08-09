@@ -299,6 +299,26 @@ export default async function FaqPageComponent({ data }: Props) {
 
 const PRICING_HEADING_RE = /rates?|packages?|pricing|costs?|lesson/i
 
+/**
+ * A list item marker: a "- " bullet OR an "N. " ordinal.
+ *
+ * Ordered items are matched because the EN FAQ corpus writes ordered steps as
+ * "1. ", "2. " … and, before this existed, such a block matched neither the
+ * bullet branch nor the mixed branch below and fell all the way through to the
+ * plain <p> renderer — where the single \n between items collapses in HTML and
+ * the whole list ships as one run-on sentence. That was live on 36 blocks
+ * across 15 EN entries, and identically on ja/ko/zh (31 blocks each), because
+ * translators faithfully carry the source's numbering.
+ *
+ * The trailing \s+ is load-bearing: it stops a decimal from being read as an
+ * ordinal, so a line opening "2.5 hours for a round" stays a paragraph.
+ */
+const LIST_ITEM_RE = /^\s*(?:-|\d+\.)\s+/
+const isListItem = (line: string) => LIST_ITEM_RE.test(line)
+const isOrdinalItem = (line: string) => /^\s*\d+\.\s+/.test(line)
+/** Strip the leading "- " or "N. " so the item text can be rendered on its own. */
+const stripListMarker = (item: string) => item.replace(LIST_ITEM_RE, '')
+
 /** Parse "Label: Value" from a bullet item. Returns null if pattern not found. */
 function parsePriceLine(item: string): { label: string; value: string } | null {
   // Use ": " (colon + space) to avoid splitting on times like "14:00"
@@ -312,7 +332,7 @@ function parsePriceLine(item: string): { label: string; value: string } | null {
 
 /** Render a bullet list as a styled price table when all items are "Label: Value" pairs */
 function renderPriceTable(items: string[], key: string | number) {
-  const parsed = items.map((item) => parsePriceLine(item.replace(/^-\s*/, '')))
+  const parsed = items.map((item) => parsePriceLine(stripListMarker(item)))
   const allParsed = parsed.every(Boolean)
 
   if (!allParsed) {
@@ -321,7 +341,7 @@ function renderPriceTable(items: string[], key: string | number) {
       <ul key={key} className="my-4 list-disc pl-6 space-y-2">
         {items.map((item, j) => (
           <li key={j} className="text-muted-foreground">
-            <BoldText text={item.replace(/^-\s*/, '')} />
+            <BoldText text={stripListMarker(item)} />
           </li>
         ))}
       </ul>
@@ -356,33 +376,44 @@ function renderParagraph(text: string, key: string | number, headingContext?: st
     return <MarkdownTable key={key} lines={lines} />
   }
 
-  // Check if it's a list (lines starting with -)
-  const isList = lines.every((line) => line.trim().startsWith('- ') || line.trim() === '')
+  // Check if it's a list (lines starting with "- " or "N. ")
+  const isList = lines.every((line) => isListItem(line) || line.trim() === '')
 
   if (isList) {
-    const items = lines.filter((line) => line.trim().startsWith('- '))
+    const items = lines.filter(isListItem)
     const isPricingContext = headingContext && PRICING_HEADING_RE.test(headingContext)
 
     if (isPricingContext) {
       return renderPriceTable(items, key)
     }
 
+    // Ordered when the items are numbered — the source's numbering is
+    // meaningful (ranked reasons, sequential steps), so it renders as <ol>
+    // rather than being flattened into bullets.
+    const ordered = items.length > 0 && isOrdinalItem(items[0])
+    const ListTag = ordered ? 'ol' : 'ul'
+
     return (
-      <ul key={key} className="my-4 list-disc pl-6 space-y-2">
+      <ListTag
+        key={key}
+        className={`my-4 ${ordered ? 'list-decimal' : 'list-disc'} pl-6 space-y-2`}
+      >
         {items.map((item, j) => (
           <li key={j} className="text-muted-foreground">
-            <BoldText text={item.replace(/^-\s*/, '')} />
+            <BoldText text={stripListMarker(item)} />
           </li>
         ))}
-      </ul>
+      </ListTag>
     )
   }
 
-  // Handle mixed content: intro text followed by bullet list
-  const firstBulletIdx = lines.findIndex((line) => line.trim().startsWith('- '))
+  // Handle mixed content: intro text followed by a bullet or numbered list
+  const firstBulletIdx = lines.findIndex(isListItem)
   if (firstBulletIdx > 0) {
     const introLines = lines.slice(0, firstBulletIdx).filter((l) => l.trim() !== '')
-    const bulletLines = lines.slice(firstBulletIdx).filter((l) => l.trim().startsWith('- '))
+    const bulletLines = lines.slice(firstBulletIdx).filter(isListItem)
+    const orderedMixed = bulletLines.length > 0 && isOrdinalItem(bulletLines[0])
+    const MixedListTag = orderedMixed ? 'ol' : 'ul'
     const isPricingContext = headingContext && PRICING_HEADING_RE.test(headingContext)
 
     return (
@@ -393,21 +424,23 @@ function renderParagraph(text: string, key: string | number, headingContext?: st
         {isPricingContext ? (
           renderPriceTable(bulletLines, `${key}-table`)
         ) : (
-          <ul className="my-4 list-disc pl-6 space-y-2">
+          <MixedListTag
+            className={`my-4 ${orderedMixed ? 'list-decimal' : 'list-disc'} pl-6 space-y-2`}
+          >
             {bulletLines.map((item, j) => (
               <li key={j} className="text-muted-foreground">
-                <BoldText text={item.replace(/^-\s*/, '')} />
+                <BoldText text={stripListMarker(item)} />
               </li>
             ))}
-          </ul>
+          </MixedListTag>
         )}
-        {/* Render any trailing text after bullets */}
-        {lines.slice(firstBulletIdx).some((l) => l.trim() !== '' && !l.trim().startsWith('- ')) && (
+        {/* Render any trailing text after the list */}
+        {lines.slice(firstBulletIdx).some((l) => l.trim() !== '' && !isListItem(l)) && (
           <p className="my-4 text-muted-foreground leading-relaxed">
             <BoldText
               text={lines
                 .slice(firstBulletIdx)
-                .filter((l) => l.trim() !== '' && !l.trim().startsWith('- '))
+                .filter((l) => l.trim() !== '' && !isListItem(l))
                 .join(' ')}
             />
           </p>
