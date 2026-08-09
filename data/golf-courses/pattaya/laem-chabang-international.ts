@@ -52,8 +52,28 @@ export const course: GolfCourse = {
         rental_cta_context: `วางแผนออกรอบที่ Laem Chabang ในทริปเมืองไทยของคุณอยู่ใช่ไหม LENGOLF มีบริการส่งไม้กอล์ฟเช่าแบรนด์ TaylorMade หรือ Callaway ถึงโรงแรมของคุณในกรุงเทพฯ ให้คุณเดินทางไปชายฝั่งทะเลตะวันออกแบบเบาสบาย`,
       },
     },
-    ko: null,
-    zh: null,
+    ko: {
+      title: `Laem Chabang International Country Club(촌부리) — 그린피·코스 소개·클럽 대여`,
+      meta_description: `Laem Chabang International Country Club은 Si Racha에 자리한 Jack Nicklaus 설계의 27홀 코스예요. 요금은 그린피·캐디·카트가 포함된 올인클루시브이고, 야간 골프도 인기예요. 방콕 호텔로 배달되는 LENGOLF 클럽 대여도 안내해 드려요.`,
+      prose: {
+        overview: `Laem Chabang International Country Club은 촌부리주 Si Racha의 변화무쌍한 700에이커 부지에 펼쳐진 27홀 Jack Nicklaus 설계 코스로, 1990년대 초 태국에서 완성된 여섯 개의 Nicklaus 설계 코스 중 하나예요. 개장은 1993년이고요. 코스 이름은 인근의 Laem Chabang 심해항에서 따왔는데, 이 항구는 동남아시아에서 가장 붐비는 컨테이너항 중 하나로 꼽혀요. 세 개의 9홀 루프는 각각이 지나가는 서로 다른 환경에 따라 Lake, Mountain, Valley로 이름 붙었고, 9홀마다 코스의 성격이 뚜렷하게 바뀌어요. 15:30 무렵부터 즐길 수 있는 야간 골프도 마련돼 있어, 한낮의 더위를 피하고 싶은 파타야 거주 골퍼에게 인기예요. 올인클루시브 요금에는 그린피·캐디·카트가 하나로 포함돼요.`,
+        layout_and_experience: `Laem Chabang의 세 개 9홀은 저마다 다른 경관과 전략성을 지니고 있어요. Lake(3,419야드)는 코스 안을 굽이치는 개울을 따라 루팅돼 있어 정확한 캐리와 차분한 어프로치가 필요해요. Mountain(3,446야드)은 구릉 지형을 오르내리는 레이아웃이라 낮게 억제한 탄도가 유리하고, 티샷의 위치 선정이 무엇보다 중요해져요. 셋 중 가장 긴 Valley(3,619야드)는 능선에 둘러싸인 트인 경관 속을 지나가 장타자에게 어울리지만, 바람의 영향을 가장 많이 받는 9홀이기도 해요. 리스크와 리워드라는 Nicklaus의 설계 철학은 코스 전체에 살아 있어요. 어느 홀에나 안전한 라인과 공격적인 라인의 선택이 분명하게 놓여 있고, 그 보상도 꼼꼼하게 계산돼 있죠. 캐디는 지식이 풍부하고 세 개 9홀의 굴곡을 모두 훤히 알고 있어요.`,
+        tips: `18홀 조합 가운데 가장 인기 있는 것은 Mountain과 Valley로, 가장 변화무쌍한 지형을 한 라운드에 담을 수 있어요. 처음 방문한다면 Lake를 나머지 둘 중 하나와 묶으면 이 코스의 성격을 두루 맛볼 수 있고요. 야간 골프도 놓치기 아까운 매력이에요. 조명이 잘 갖춰져 있고, 15:30 무렵부터는 선선해진 저녁 공기 속에서 한결 편하게 플레이할 수 있어요. 캐디 팁(약 300바트)은 라운딩이 끝난 뒤 현금으로 따로 건네요. 파타야에 머무는 골퍼라면 Burapha에서의 오전 라운딩과 Laem Chabang을 묶어도 좋아요. 두 코스는 약 15분 거리예요.`,
+        location_and_access: `Laem Chabang International Country Club은 방콕 도심에서 남동쪽으로 약 100km 떨어진 촌부리주 Sriracha의 Bueng 지역에 있어요. 방콕에서는 Bang Na-Trat 고속도로(7번 국도)를 이용해 차로 약 80분 걸려요. 파타야 도심에서는 차로 약 40분, Burapha Golf & Resort에서는 약 15분 거리예요. 이동 수단으로는 Grab 택시나, 방콕 또는 파타야 호텔에서 미리 예약하는 골프 이동 서비스를 추천해 드려요.`,
+        rental_cta_context: `태국 여행 중에 Laem Chabang에서 티오프할 예정이라면, LENGOLF가 TaylorMade나 Callaway 대여 클럽을 방콕 호텔까지 배달해 드려요. 가볍게 동부 해안 지역으로 향할 수 있어요.`,
+      },
+    },
+    zh: {
+      title: `Laem Chabang International Country Club（春武里府）— 果岭费、球场介绍与球杆租借`,
+      meta_description: `Laem Chabang International Country Club是Si Racha的Jack Nicklaus设计27洞球场，费用含果岭费、球童与球车，夜间高尔夫也很受欢迎。还可租借送至曼谷酒店的LENGOLF球杆。`,
+      prose: {
+        overview: `Laem Chabang International Country Club是一座27洞的Jack Nicklaus设计球场，铺展在春武里府Si Racha面积700英亩、地貌多变的场地上，也是1990年代初在泰国建成的六座Nicklaus球场之一。球场于1993年开放，名字取自附近的Laem Chabang深水港——东南亚最繁忙的集装箱港口之一。三组九洞按各自穿行的不同环境命名为Lake、Mountain与Valley，每打完九洞，球场的性格就会明显换一副面孔。约15:30起可以享受夜间高尔夫，很受想避开白天暑热的芭提雅本地球友欢迎。全包价格把果岭费、球童与球车统一包含在内。`,
+        layout_and_experience: `Laem Chabang的三组九洞各有各的景观与策略气质。Lake（3,419码）沿着蜿蜒穿场的小溪布线，要求精准的飞越与克制的攻果岭球。Mountain（3,446码）在丘陵地形上起伏跌宕，压低的弹道更占优势，发球台上的落点选择尤为关键。三者中最长的Valley（3,619码）穿行于被山脊环抱的开阔地貌，适合远距离击球者，同时也是最容易受风影响的九洞。Nicklaus那套风险与回报的设计哲学贯穿全场：每个洞都有稳妥路线与强攻路线的明确取舍，回报也经过细致权衡。球童经验老到，对三组九洞的坡度起伏了如指掌。`,
+        tips: `最受欢迎的18洞组合是Mountain加Valley，把最富变化的地形浓缩进一轮之中。第一次来的话，用Lake搭配其余任意一组，就能完整领略这座球场的性格。夜间高尔夫是货真价实的亮点——场地照明充足，约15:30之后凉下来的空气也让条件更舒适。球童小费（约300泰铢）在打完一轮后以现金另行支付。住在芭提雅的球友，可以把Laem Chabang与Burapha的上午一轮串在一起，两座球场相距约15分钟车程。`,
+        location_and_access: `Laem Chabang International Country Club位于春武里府Sriracha的Bueng分区，距曼谷市中心东南约100公里。从曼谷出发，经Bang Na–Trat高速公路（7号公路）驾车约80分钟。球场距芭提雅市中心约40分钟车程，距Burapha Golf & Resort约15分钟。出行方面，推荐Grab出租车，或从曼谷、芭提雅酒店事先安排的高尔夫接送。`,
+        rental_cta_context: `这趟泰国之行想在Laem Chabang开球？LENGOLF可以把TaylorMade或Callaway的租借球杆送到你曼谷的酒店，让你轻装前往东部沿海。`,
+      },
+    },
     ja: {
       title: `Laem Chabang International Country Club（チョンブリー）— グリーンフィー・コース紹介・クラブレンタル`,
       meta_description: `Laem Chabang International Country Clubは、シラチャにあるJack Nicklaus設計の27ホール。料金はグリーンフィー・キャディー・カート込み。ナイトゴルフも人気です。バンコクのホテルへ届くLENGOLFのクラブレンタルもご案内します。`,

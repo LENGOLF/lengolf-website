@@ -1862,6 +1862,20 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  // One KO and one ZH course-detail canary (full registry-derived coverage in
+  // L2). These two locales previously had ZERO course-detail translations
+  // while their 14 region hubs were live, so every course link on a ko/zh hub
+  // 301'd out of the locale; the batch that added them closed that funnel.
+  {
+    path: "/ko/golf-courses/bangkok/sai-golf-club/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/golf-courses/bangkok/sai-golf-club/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
   // TH guide catch-up batch — brings TH to parity with ja/ko/zh at 46 guides.
   // contentAbsent guards unresolved {{fact tokens}} (4 of these entries use them).
   {
@@ -2576,11 +2590,35 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '/ja/golf-courses/bangkok/alpine-golf-club/',
   },
-  // ko has ZERO course-detail translations, so no course link may be prefixed.
+  // ko/zh now have the same 15 course-detail translations as th/ja, so the
+  // NEGATIVE half of this invariant can no longer be "ko prefixes nothing" —
+  // it has to name a course that is genuinely absent from COURSE_DETAIL_I18N.
+  // Keeping only the positive half would leave an always-prefix regression
+  // (the exact bug PR #88 fixed in HubMapExplorer) completely unguarded.
+  //
+  // INVARIANT, not a fixed slug: lakewood-country-club must stay OUT of
+  // COURSE_DETAIL_I18N. If a future batch translates it, move these two
+  // assertions to another untranslated Bangkok course rather than deleting
+  // them — same rule the untranslated-course redirect canary carries.
   {
     path: "/ko/golf-courses/bangkok/",
     expectedStatus: [200],
-    contentAbsent: '/ko/golf-courses/bangkok/sai-golf-club',
+    contentMarker: '/ko/golf-courses/bangkok/sai-golf-club/',
+  },
+  {
+    path: "/ko/golf-courses/bangkok/",
+    expectedStatus: [200],
+    contentAbsent: '/ko/golf-courses/bangkok/lakewood-country-club',
+  },
+  {
+    path: "/zh/golf-courses/bangkok/",
+    expectedStatus: [200],
+    contentMarker: '/zh/golf-courses/bangkok/sai-golf-club/',
+  },
+  {
+    path: "/zh/golf-courses/bangkok/",
+    expectedStatus: [200],
+    contentAbsent: '/zh/golf-courses/bangkok/lakewood-country-club',
   },
   // Same invariant on the top-level hub, whose map (HubMapExplorer) links
   // every one of the 149 courses. The region-hub pair above only proves the
@@ -2597,17 +2635,40 @@ const routeTests: RouteTest[] = [
   {
     path: "/ko/golf-courses/",
     expectedStatus: [200],
-    contentAbsent: '/ko/golf-courses/bangkok/alpine-golf-club',
+    contentMarker: '/ko/golf-courses/bangkok/alpine-golf-club/',
+  },
+  {
+    path: "/ko/golf-courses/",
+    expectedStatus: [200],
+    contentAbsent: '/ko/golf-courses/bangkok/lakewood-country-club',
+  },
+  {
+    path: "/zh/golf-courses/",
+    expectedStatus: [200],
+    contentMarker: '/zh/golf-courses/bangkok/alpine-golf-club/',
+  },
+  {
+    path: "/zh/golf-courses/",
+    expectedStatus: [200],
+    contentAbsent: '/zh/golf-courses/bangkok/lakewood-country-club',
   },
   // Same invariant on the RoundupList surface (price tiers SSG th/ja/ko/zh).
   // The marker is a COURSE-DETAIL path, not the region-hub prefix: this tier
   // page renders no region-hub link at all today, so '/ko/golf-courses/bangkok/'
   // passed vacuously and would have kept passing under an always-prefix
   // regression that only touches course hrefs.
+  // ko now has sai translated, so this flips from negative to positive and
+  // becomes the mirror of the ja assertion below. No untranslated-course
+  // negative is pinned on THIS surface on purpose: the tier roster is a
+  // DERIVED top 12 (getCoursesUnderPrice(meta.thb, 12)), so naming a specific
+  // untranslated course here would break on any green-fee correction that
+  // reshuffles the ranking — the same fragility that retired four indexed
+  // /compare/ URLs in PR #88. The always-prefix negative is asserted on the
+  // two hub surfaces above instead, which render every course unranked.
   {
     path: "/ko/golf-courses/under/1500-baht/",
     expectedStatus: [200],
-    contentAbsent: '/ko/golf-courses/bangkok/sai-golf-club',
+    contentMarker: '/ko/golf-courses/bangkok/sai-golf-club/',
   },
   // The positive half, which the tier surface was missing entirely: ja HAS sai
   // translated, so its link on the tier roster must be prefixed. Without this,

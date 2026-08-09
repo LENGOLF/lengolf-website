@@ -186,18 +186,39 @@ interface CourseFaqL10n {
 // cannot be mapped for one locale and silently dropped in the other. Extend
 // this map as courses join the registries — validate-i18n errors when a
 // registered course's province is missing here.
+// ZH uses the established Chinese exonyms rather than a phonetic transcription
+// of the Thai — 大城府 (Ayutthaya), 北榄府 (Samut Prakan) and 佛统府 (Nakhon
+// Pathom) are the names Chinese-language sources actually use, and a coined
+// 阿育他亚/沙没巴干 would be both unidiomatic and unsearchable. KO has no such
+// exonym tradition for Thai provinces, so it transcribes per the Korean
+// standard for Thai (tense consonants: 푸껫, 빠툼타니, 사뭇쁘라깐).
 const PROVINCE_L10N: Record<string, Record<Exclude<CourseSeoLocale, 'en'>, string>> = {
-  Bangkok: { th: 'กรุงเทพฯ', ja: 'バンコク' },
-  'Chiang Mai': { th: 'จังหวัดเชียงใหม่', ja: 'チェンマイ県' },
-  'Phra Nakhon Si Ayutthaya': { th: 'จังหวัดพระนครศรีอยุธยา', ja: 'アユタヤ県' },
+  Bangkok: { th: 'กรุงเทพฯ', ja: 'バンコク', ko: '방콕', zh: '曼谷' },
+  'Chiang Mai': { th: 'จังหวัดเชียงใหม่', ja: 'チェンマイ県', ko: '치앙마이주', zh: '清迈府' },
+  'Phra Nakhon Si Ayutthaya': {
+    th: 'จังหวัดพระนครศรีอยุธยา',
+    ja: 'アユタヤ県',
+    ko: '아유타야주',
+    zh: '大城府',
+  },
   // Some course files use the short form of the same province.
-  Ayutthaya: { th: 'จังหวัดพระนครศรีอยุธยา', ja: 'アユタヤ県' },
-  'Pathum Thani': { th: 'จังหวัดปทุมธานี', ja: 'パトゥムターニー県' },
-  'Samut Prakan': { th: 'จังหวัดสมุทรปราการ', ja: 'サムットプラーカーン県' },
-  Phuket: { th: 'จังหวัดภูเก็ต', ja: 'プーケット県' },
-  Rayong: { th: 'จังหวัดระยอง', ja: 'ラヨーン県' },
-  Chonburi: { th: 'จังหวัดชลบุรี', ja: 'チョンブリー県' },
-  'Nakhon Pathom': { th: 'จังหวัดนครปฐม', ja: 'ナコンパトム県' },
+  Ayutthaya: { th: 'จังหวัดพระนครศรีอยุธยา', ja: 'アユタヤ県', ko: '아유타야주', zh: '大城府' },
+  'Pathum Thani': {
+    th: 'จังหวัดปทุมธานี',
+    ja: 'パトゥムターニー県',
+    ko: '빠툼타니주',
+    zh: '巴吞他尼府',
+  },
+  'Samut Prakan': {
+    th: 'จังหวัดสมุทรปราการ',
+    ja: 'サムットプラーカーン県',
+    ko: '사뭇쁘라깐주',
+    zh: '北榄府',
+  },
+  Phuket: { th: 'จังหวัดภูเก็ต', ja: 'プーケット県', ko: '푸껫주', zh: '普吉府' },
+  Rayong: { th: 'จังหวัดระยอง', ja: 'ラヨーン県', ko: '라용주', zh: '罗勇府' },
+  Chonburi: { th: 'จังหวัดชลบุรี', ja: 'チョンブリー県', ko: '촌부리주', zh: '春武里府' },
+  'Nakhon Pathom': { th: 'จังหวัดนครปฐม', ja: 'ナコンパトム県', ko: '나콘빠톰주', zh: '佛统府' },
 }
 
 /** Whether a course's (English) province has localized names for the non-EN packs. */
@@ -367,6 +388,128 @@ const FAQ_L10N: Record<CourseSeoLocale, CourseFaqL10n> = {
       }
       if (availability === false) return `${name}にはコース内のクラブレンタルがありません。${lengolf}`
       return `${name}でコース内のクラブレンタルが利用できるかは確認できていません。${lengolf}`
+    },
+  },
+
+  // Korean pack, written to the KO glossary rules (바트 spelled out with the
+  // digits attached, Arabic digits, ~ (U+007E) for ranges, no exclamation
+  // marks, 그린피/캐디피 written closed, 라운딩 for the act but 라운드 as a
+  // counter, "(<년>년 <월>월 기준)" as-of). Register is 합니다체, matching the
+  // GolfCourseDetail/Hub/Region UI chrome these answers render beside rather
+  // than the 해요체 of guide prose. Prices hedge with 약.
+  //
+  // PARTICLE HAZARD: `name` is a Latin course name, and Korean topic/object
+  // particles alternate on the final consonant (은/는, 을/를), which cannot be
+  // chosen for a foreign string — "Alpine Golf Club은(는)" is the failure this
+  // avoids. Every template therefore either follows `${name}` with a Korean
+  // noun that carries the particle itself (`${name} 코스는`, `${name} 그린피는`)
+  // or uses a consonant-invariant particle (에서/에는/의). Keep that invariant
+  // when editing: no bare 은/는/을/를 may ever attach directly to `${name}`.
+  ko: {
+    province: (raw) => PROVINCE_L10N[raw]?.ko,
+    closedQuestion: (name) => `${name} 코스는 지금도 운영 중인가요?`,
+    closedAnswer: (name, permanent) =>
+      permanent
+        ? `아니요 — ${name} 코스는 영구 폐장했습니다.`
+        : `${name} 코스는 임시 휴장 중인 것으로 확인됩니다. 라운딩을 계획하기 전에 코스로 전화해 확인해 주세요.`,
+    whereWasQuestion: (name) => `${name} 코스는 어디에 있었나요?`,
+    whereWasAnswer: (name, km, province) =>
+      province
+        ? `${name} 코스는 ${province}에 있었으며, 방콕 도심에서 약 ${km}km 거리였습니다.`
+        : `${name} 코스는 방콕 도심에서 약 ${km}km 거리였습니다.`,
+    feeQuestion: (name) => `${name} 그린피는 얼마인가요?`,
+    feeAnswer: (name, weekday, weekend, verifiedAt) => {
+      let answer = `${name} 평일 그린피는 약 ${n(weekday)}바트`
+      if (weekend) answer += `, 주말은 약 ${n(weekend)}바트`
+      answer += '입니다'
+      if (verifiedAt) answer += ` (${asOfMonthYear(verifiedAt, 'ko')} 기준)`
+      return answer + '. 요금은 시즌에 따라 달라지므로 예약하실 때 코스에 직접 확인해 주세요.'
+    },
+    distanceQuestion: (name) => `${name} 코스는 방콕에서 얼마나 먼가요?`,
+    distanceAnswer: (name, km, drive, province) => {
+      let answer = `${name} 코스는 방콕 도심에서 약 ${km}km 떨어져 있습니다.`
+      if (drive) {
+        answer += drive.hours
+          ? ` 차로 약 ${drive.text}시간 걸립니다.`
+          : ` 차로 약 ${drive.text}분 걸립니다.`
+      }
+      if (province) answer += ` 코스는 ${province}에 있습니다.`
+      return answer
+    },
+    caddieQuestion: (name) => `${name}에서 캐디가 필요한가요?`,
+    caddieAnswer: (name, required, fee) => {
+      const feeNote = fee ? ` (캐디피는 1라운드 약 ${n(fee)}바트)` : ''
+      return required
+        ? `네 — ${name}에서는 캐디 동반이 필수입니다${feeNote}. 관례상 이와 별도로 캐디 팁(보통 300~500바트)을 드립니다.`
+        : `${name}에서 캐디 이용은 선택 사항입니다${feeNote}.`
+    },
+    rentalQuestion: (name) => `${name}에서 플레이할 때 골프 클럽을 대여할 수 있나요?`,
+    rentalAnswer: (name, availability, fee) => {
+      const lengolf =
+        '현행 모델 세트를 원하신다면, 방콕 도심(BTS 칫롬역)의 LENGOLF에서 프리미엄 Callaway 클럽을 호텔 배송과 함께 대여할 수 있어 여행 전에 미리 장비를 준비하실 수 있습니다.'
+      if (availability === true) {
+        return `${name}에서는 코스 내 클럽 대여를 이용할 수 있습니다${fee ? ` (1라운드 약 ${n(fee)}바트)` : ''}. ${lengolf}`
+      }
+      if (availability === false) return `${name}에는 코스 내 클럽 대여가 없습니다. ${lengolf}`
+      return `${name}의 코스 내 클럽 대여 가능 여부는 확인되지 않았습니다. ${lengolf}`
+    },
+  },
+
+  // Simplified Chinese pack, written to the ZH glossary rules (泰铢 spelled
+  // out with the digits attached, half-width Arabic digits, en dash – (U+2013)
+  // for ranges, full-width punctuation, no exclamation marks, 果岭费/球童/球杆
+  // terminology, "截至<年>年<月>月" as-of placed INLINE with no parentheses —
+  // unlike JA's （…現在）, which is why asOfMonthYear's ja and zh arms return
+  // the same string but must stay separate cases). Prices hedge with 约.
+  //
+  // Register is 您-less here by construction: these strings address no one
+  // directly except in the closing advisory (请…), which is register-neutral.
+  // That keeps the pack usable from both the UI chrome (您) and the JSON-LD
+  // FAQ payload, where a second person would be odd.
+  zh: {
+    province: (raw) => PROVINCE_L10N[raw]?.zh,
+    closedQuestion: (name) => `${name}目前还在营业吗？`,
+    closedAnswer: (name, permanent) =>
+      permanent
+        ? `否 — ${name}已永久停业。`
+        : `有消息称${name}暂时停业。计划下场前请先致电球场确认。`,
+    whereWasQuestion: (name) => `${name}原本位于哪里？`,
+    whereWasAnswer: (name, km, province) =>
+      province
+        ? `${name}原本位于${province}，距曼谷市中心约${km}公里。`
+        : `${name}原本距曼谷市中心约${km}公里。`,
+    feeQuestion: (name) => `${name}的果岭费是多少？`,
+    feeAnswer: (name, weekday, weekend, verifiedAt) => {
+      let answer = `${name}的平日果岭费约${n(weekday)}泰铢`
+      if (weekend) answer += `，周末约${n(weekend)}泰铢`
+      if (verifiedAt) answer += `，截至${asOfMonthYear(verifiedAt, 'zh')}`
+      return answer + '。费用会随季节变动，预订时请向球场确认。'
+    },
+    distanceQuestion: (name) => `${name}距离曼谷有多远？`,
+    distanceAnswer: (name, km, drive, province) => {
+      let answer = `${name}距曼谷市中心约${km}公里。`
+      if (drive) {
+        answer += drive.hours ? `开车约需${drive.text}小时。` : `开车约需${drive.text}分钟。`
+      }
+      if (province) answer += `球场位于${province}。`
+      return answer
+    },
+    caddieQuestion: (name) => `在${name}打球需要球童吗？`,
+    caddieAnswer: (name, required, fee) => {
+      const feeNote = fee ? `（球童费每轮约${n(fee)}泰铢）` : ''
+      return required
+        ? `需要 — ${name}规定必须由球童陪同${feeNote}。按惯例还需另付球童小费，通常为300–500泰铢。`
+        : `在${name}，球童为可选${feeNote}。`
+    },
+    rentalQuestion: (name) => `在${name}打球可以租借球杆吗？`,
+    rentalAnswer: (name, availability, fee) => {
+      const lengolf =
+        '如果想用当季新款球杆，位于曼谷市中心（BTS Chidlom）的LENGOLF提供高端Callaway球杆租借并可送达酒店，出发前就能安排好装备。'
+      if (availability === true) {
+        return `${name}在球场内提供球杆租借${fee ? `（每轮约${n(fee)}泰铢）` : ''}。${lengolf}`
+      }
+      if (availability === false) return `${name}不提供场内球杆租借。${lengolf}`
+      return `${name}是否提供场内球杆租借尚未确认。${lengolf}`
     },
   },
 }
