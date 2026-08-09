@@ -407,7 +407,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
       intro:
         'You don\'t need to know anything about golf to have fun at a golf simulator. Modern simulators like Bravo are designed to be entertaining for complete beginners — with games, virtual courses, and instant feedback on every swing. At venues like LENGOLF, the bar atmosphere makes it social, not serious.',
       why_lengolf:
-        'LENGOLF is built for non-golfers as much as golfers. Our Bravo golf simulators show ball flight, distance, and accuracy in real-time — it\'s satisfying even on your first swing. We provide premium club rentals (included with bay rental), so you don\'t need to bring anything. The bar atmosphere means it\'s about having fun with friends, not perfecting your technique. Staff can help you get started in 2 minutes.',
+        'LENGOLF is built for non-golfers as much as golfers. Our Bravo golf simulators show ball flight, distance, and accuracy in real-time — it\'s satisfying even on your first swing. We provide club rentals — standard sets are included free with bay rental — so you don\'t need to bring anything. The bar atmosphere means it\'s about having fun with friends, not perfecting your technique. Staff can help you get started in 2 minutes.',
       other_activities: [
         { name: 'Closest to the Pin Challenge', description: 'Simple target game — whoever hits closest to the pin on a virtual par-3 wins. No experience needed.', type: 'game' },
         { name: 'Longest Drive Competition', description: 'Just swing hard. The simulator tracks exact distance. Great for competitive groups.', type: 'game' },
