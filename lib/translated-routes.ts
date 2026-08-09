@@ -137,6 +137,26 @@ const TRANSLATED_ROUTES: Record<
       "/faq/practice-golf-swing-without-driving-range-bangkok",
       "/faq/what-to-wear-to-indoor-golf-bar",
       "/faq/best-time-of-day-golf-bangkok",
+      // FAQ-completion batch: brings every locale to 31 of 32 FAQ pages.
+      // The 32nd (where-to-play-golf-at-night-in-bangkok) is deliberately
+      // untranslated — it duplicates where-play-golf-night-bangkok, which is
+      // the canonical page (2 inbound internal links vs 0). Translating both
+      // would have shipped 8 duplicate pages. The EN pair still wants
+      // consolidating with a 301.
+      "/faq/how-much-does-corporate-golf-event-cost-bangkok",
+      "/faq/can-you-bring-golf-clubs-as-checked-baggage-thailand",
+      "/faq/thailand-visa-guide-golf-tourists",
+      "/faq/thailand-entry-requirements-golfers",
+      "/faq/grab-vs-taxi-bangkok-golf",
+      "/faq/how-many-golf-courses-thailand",
+      "/faq/last-minute-golf-tee-times-thailand",
+      "/faq/golf-shoes-thailand",
+      "/faq/golf-fitness-heat-thailand",
+      "/faq/do-you-need-caddie-thailand-golf",
+      "/faq/how-much-tip-caddie-thailand",
+      "/faq/where-play-golf-night-bangkok",
+      "/faq/do-you-need-golf-travel-bag-thailand",
+      "/faq/how-far-in-advance-book-golf-bangkok",
     ],
     dynamicRoutePatterns: [],
   },
@@ -244,6 +264,31 @@ const TRANSLATED_ROUTES: Record<
       "/faq/cost-to-fly-with-golf-clubs-to-thailand",
       "/faq/worth-taking-golf-lessons-bangkok-holiday",
       "/faq/what-golf-clubs-available-rent-bangkok",
+      // FAQ-completion batch: brings every locale to 31 of 32 FAQ pages.
+      // The 32nd (where-to-play-golf-at-night-in-bangkok) is deliberately
+      // untranslated — it duplicates where-play-golf-night-bangkok, which is
+      // the canonical page (2 inbound internal links vs 0). Translating both
+      // would have shipped 8 duplicate pages. The EN pair still wants
+      // consolidating with a 301.
+      "/faq/how-long-does-simulator-golf-take",
+      "/faq/what-to-wear-to-indoor-golf-bar",
+      "/faq/can-kids-play-golf-simulators",
+      "/faq/practice-golf-swing-without-driving-range-bangkok",
+      "/faq/how-much-does-corporate-golf-event-cost-bangkok",
+      "/faq/can-you-bring-golf-clubs-as-checked-baggage-thailand",
+      "/faq/thailand-visa-guide-golf-tourists",
+      "/faq/thailand-entry-requirements-golfers",
+      "/faq/best-time-of-day-golf-bangkok",
+      "/faq/grab-vs-taxi-bangkok-golf",
+      "/faq/how-many-golf-courses-thailand",
+      "/faq/last-minute-golf-tee-times-thailand",
+      "/faq/golf-shoes-thailand",
+      "/faq/golf-fitness-heat-thailand",
+      "/faq/do-you-need-caddie-thailand-golf",
+      "/faq/how-much-tip-caddie-thailand",
+      "/faq/where-play-golf-night-bangkok",
+      "/faq/do-you-need-golf-travel-bag-thailand",
+      "/faq/how-far-in-advance-book-golf-bangkok",
       "/guide/corporate-golf-events-bangkok",
       "/guide/best-time-play-golf-thailand",
       "/guide/nikanti-golf-club-bangkok",
@@ -384,6 +429,31 @@ const TRANSLATED_ROUTES: Record<
       "/faq/cost-to-fly-with-golf-clubs-to-thailand",
       "/faq/worth-taking-golf-lessons-bangkok-holiday",
       "/faq/what-golf-clubs-available-rent-bangkok",
+      // FAQ-completion batch: brings every locale to 31 of 32 FAQ pages.
+      // The 32nd (where-to-play-golf-at-night-in-bangkok) is deliberately
+      // untranslated — it duplicates where-play-golf-night-bangkok, which is
+      // the canonical page (2 inbound internal links vs 0). Translating both
+      // would have shipped 8 duplicate pages. The EN pair still wants
+      // consolidating with a 301.
+      "/faq/how-long-does-simulator-golf-take",
+      "/faq/what-to-wear-to-indoor-golf-bar",
+      "/faq/can-kids-play-golf-simulators",
+      "/faq/practice-golf-swing-without-driving-range-bangkok",
+      "/faq/how-much-does-corporate-golf-event-cost-bangkok",
+      "/faq/can-you-bring-golf-clubs-as-checked-baggage-thailand",
+      "/faq/thailand-visa-guide-golf-tourists",
+      "/faq/thailand-entry-requirements-golfers",
+      "/faq/best-time-of-day-golf-bangkok",
+      "/faq/grab-vs-taxi-bangkok-golf",
+      "/faq/how-many-golf-courses-thailand",
+      "/faq/last-minute-golf-tee-times-thailand",
+      "/faq/golf-shoes-thailand",
+      "/faq/golf-fitness-heat-thailand",
+      "/faq/do-you-need-caddie-thailand-golf",
+      "/faq/how-much-tip-caddie-thailand",
+      "/faq/where-play-golf-night-bangkok",
+      "/faq/do-you-need-golf-travel-bag-thailand",
+      "/faq/how-far-in-advance-book-golf-bangkok",
       "/guide/corporate-golf-events-bangkok",
       "/guide/best-time-play-golf-thailand",
       "/guide/nikanti-golf-club-bangkok",
@@ -516,6 +586,31 @@ const TRANSLATED_ROUTES: Record<
       "/faq/cost-to-fly-with-golf-clubs-to-thailand",
       "/faq/worth-taking-golf-lessons-bangkok-holiday",
       "/faq/what-golf-clubs-available-rent-bangkok",
+      // FAQ-completion batch: brings every locale to 31 of 32 FAQ pages.
+      // The 32nd (where-to-play-golf-at-night-in-bangkok) is deliberately
+      // untranslated — it duplicates where-play-golf-night-bangkok, which is
+      // the canonical page (2 inbound internal links vs 0). Translating both
+      // would have shipped 8 duplicate pages. The EN pair still wants
+      // consolidating with a 301.
+      "/faq/how-long-does-simulator-golf-take",
+      "/faq/what-to-wear-to-indoor-golf-bar",
+      "/faq/can-kids-play-golf-simulators",
+      "/faq/practice-golf-swing-without-driving-range-bangkok",
+      "/faq/how-much-does-corporate-golf-event-cost-bangkok",
+      "/faq/can-you-bring-golf-clubs-as-checked-baggage-thailand",
+      "/faq/thailand-visa-guide-golf-tourists",
+      "/faq/thailand-entry-requirements-golfers",
+      "/faq/best-time-of-day-golf-bangkok",
+      "/faq/grab-vs-taxi-bangkok-golf",
+      "/faq/how-many-golf-courses-thailand",
+      "/faq/last-minute-golf-tee-times-thailand",
+      "/faq/golf-shoes-thailand",
+      "/faq/golf-fitness-heat-thailand",
+      "/faq/do-you-need-caddie-thailand-golf",
+      "/faq/how-much-tip-caddie-thailand",
+      "/faq/where-play-golf-night-bangkok",
+      "/faq/do-you-need-golf-travel-bag-thailand",
+      "/faq/how-far-in-advance-book-golf-bangkok",
       "/guide/corporate-golf-events-bangkok",
       "/guide/best-time-play-golf-thailand",
       "/guide/nikanti-golf-club-bangkok",
