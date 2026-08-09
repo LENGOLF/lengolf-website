@@ -17,6 +17,8 @@
  *   - data/faq-pages.ts         — faqPages entries with locale ja/ko/zh/th
  *   - data/price-tiers.ts       — PRICE_TIER_I18N (th/ja/ko/zh tier strings)
  *   - data/faq-hub.ts           — the /faq/ hub content per locale
+ *   - data/price-guide-pages.ts — /cost entries with locale ja/ko/zh/th
+ *   - data/activity-occasions.ts — /activities entries, same locales
  * data/faq-pages.ts imports lib/pricing at module level, but that module is
  * tsx-safe by design: its React `cache` call falls back to identity outside
  * the RSC runtime (see the comment in lib/pricing.ts), and the live pricing
@@ -64,6 +66,8 @@ import type { GolfCourse } from '@/types/golf-courses'
 import { faqPages } from '@/data/faq-pages'
 import { PRICE_TIER_I18N } from '@/data/price-tiers'
 import { getFaqHubContent } from '@/data/faq-hub'
+import { priceGuidePages } from '@/data/price-guide-pages'
+import { activityOccasionPages } from '@/data/activity-occasions'
 import {
   getRegisteredGuidePaths,
   getRegisteredFaqPaths,
@@ -282,6 +286,49 @@ for (const locale of LOCALES) {
     .filter(([field]) => !/\.categories\[|^faqLinks\./.test(field))
     .map(([field, value]) => ({ locale, entryId, field, value }))
   if (units.length > 0) entries.push({ entryId, locale, units })
+}
+
+// data/price-guide-pages.ts (/cost) and data/activity-occasions.ts
+// (/activities). Both were outside this corpus, so the moment those routes
+// became locale-capable a translated entry would have shipped with NO
+// house-style, terminology or honesty checking at all — the same gap
+// data/faq-hub.ts had before PR #88. Wired up BEFORE any translation lands so
+// the first batch is linted, not the second.
+//
+// Flattened generically (flattenMessages yields only non-empty strings, so
+// numeric/boolean fields — seasonal_relevance, show_aqi_widget,
+// players_per_bay, price_includes_tax — are excluded automatically).
+// Non-prose STRING fields still have to be named:
+//   - occasion_type is a machine key ('rainy-day', 'date-night'), not copy.
+//   - last_verified is an ISO date.
+//   - curated_reviews are VERBATIM third-party quotes from named customers
+//     ("Chidbhan T.", "Jack S."). They are deliberately NOT translated —
+//     rewording a named person's quoted words misrepresents them — so they
+//     stay English on every locale page, which also means they must not be
+//     linted: one of them legitimately contains "!!", and the exclamation
+//     check would fail an entry for faithfully reproducing a real review.
+const NON_PROSE_SEO_FIELD_RE = /^occasion_type$|^last_verified$|^curated_reviews\[/
+for (const [label, pages] of [
+  ['cost', priceGuidePages],
+  ['activity', activityOccasionPages],
+] as const) {
+  for (const page of pages) {
+    if (!LOCALES.includes(page.locale as Locale)) continue
+    const locale = page.locale as Locale
+    const entryId = `${label}:${page.id}`
+    const leaves: Array<[string, string]> = []
+    flattenMessages(page.content, '', leaves)
+    const units = [
+      { locale, entryId, field: 'title', value: page.title },
+      ...(page.meta_description
+        ? [{ locale, entryId, field: 'meta_description', value: page.meta_description }]
+        : []),
+      ...leaves
+        .filter(([field]) => !NON_PROSE_SEO_FIELD_RE.test(field))
+        .map(([field, value]) => ({ locale, entryId, field, value })),
+    ]
+    if (units.length > 0) entries.push({ entryId, locale, units })
+  }
 }
 
 for (const [region, byLocale] of Object.entries(REGION_HUB_I18N)) {
