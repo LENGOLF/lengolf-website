@@ -118,7 +118,15 @@ Adding one translated slug (locale L) touches **three files**:
 Smoke **section I** enforces registry ⇄ data sync **both directions** (a data
 entry missing from the registry, or vice-versa, fails CI). **Region hubs** are the
 same pattern via `data/golf-courses-i18n.ts` (`REGION_HUB_I18N`) + a
-`'/golf-courses/<region>'` staticRoutes entry, enforced by smoke **section J**.
+`'/golf-courses/<region>'` staticRoutes entry, enforced by smoke **section J** —
+but unlike guides they need **no routeTests entry**: section **L3** (PR #88)
+fetches every registered region-hub translation from the registry itself, so a
+new region batch touches only the two data/registry files. As of PR #88 all 14
+regions are translated in all four locales; a 15th region needs all four
+REGION_HUB_I18N blocks + staticRoutes entries or its hub-card link falls back
+to EN. If a batch changes `REGION_META.province` (e.g. a re-region adds a
+province), mirror it into the four REGION_HUB_I18N translations — nothing
+enforces that mirror.
 
 Entry frontmatter shape (verbatim fields):
 
@@ -160,9 +168,16 @@ Run in order; do not commit until green (minus the known sandbox caveats):
      live customer-liability line. Before rewriting, check `messages/en.json` and
      the sibling ja/ko renderings to confirm the phrase really means the glossary
      term; if it doesn't, reword around the token instead (there: `下场费用`).
-4. `npm run typecheck`       (`tsc --noEmit` + scripts project)
-5. `npm run build`
-6. `npm run start` then `npm run test:smoke` (server on localhost:3000)
+4. `npm run validate:i18n:self-test` (separate CI step since PR #88 — proves the
+   detectors still fire; a corpus run alone cannot). If your batch adds an ICU
+   plural to a non-EN catalogue, write it normally — the old load-bearing-space
+   workaround before the final `}}` is dead (checkMarkup depth-scans by dialect).
+5. `npm run validate:courses` (fees + region rosters: `REGION_META.courseCount`
+   ⇄ region `index.ts` ⇄ files on disk — fails a region batch that edits two of
+   the three)
+6. `npm run typecheck`       (`tsc --noEmit` + scripts project)
+7. `npm run build`
+8. `npm run start` then `npm run test:smoke` (server on localhost:3000)
 
 Manual curls to spot-check (locale L, slug S):
 - `<html lang="ja">` present · canonical is `www.len.golf/<L>/…`
