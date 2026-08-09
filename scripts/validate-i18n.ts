@@ -801,11 +801,28 @@ runCorpusChecks(entries)
 const localesWithPaths = (registered: (locale: string) => string[]): Locale[] =>
   LOCALES.filter((l) => registered(l).length > 0)
 
+// /activities/<slug> and /cost/<slug> have NO registry helper — and shouldn't.
+// Their generateStaticParams is getAllSeoPageParams(type), which enumerates the
+// published entries of the data file directly, so the data file IS the list of
+// locale x slug pairs that get built. Deriving from the same source therefore
+// tracks what actually SSGs, and starts enforcing by itself the moment the
+// first non-EN entry lands — no hand-maintained locale list to go stale, and no
+// dependency on lib/translated-routes.ts, which these routes never consult for
+// param generation.
+const localesWithSeoPages = (
+  pages: readonly { locale: string; status: string }[]
+): Locale[] =>
+  LOCALES.filter((l) =>
+    pages.some((p) => p.locale === l && p.status === 'published')
+  )
+
 const SSG_UI_NAMESPACES: Record<string, Locale[]> = (() => {
   const regionHub = localesWithPaths(getRegisteredRegionHubPaths)
   const priceTier = localesWithPaths(getRegisteredPriceTierPaths)
   const courseDetail = localesWithPaths(getRegisteredCourseDetailPaths)
   const faq = localesWithPaths(getRegisteredFaqPaths)
+  const activity = localesWithSeoPages(activityOccasionPages)
+  const priceGuide = localesWithSeoPages(priceGuidePages)
   // The /golf-courses/ hub page + HubMapExplorer. No dedicated registry
   // helper exists for a single static path, so derive its SSG locales
   // directly from the registry (currently th only).
@@ -823,8 +840,20 @@ const SSG_UI_NAMESPACES: Record<string, Locale[]> = (() => {
     ),
     ExplainerPage: localesWithPaths(getRegisteredGuidePaths),
     FaqPage: faq,
-    // components/faq/FaqPage.tsx also getTranslations('ContactInfo') on every FAQ page.
-    ContactInfo: faq,
+    // /activities/<slug> and /cost/<slug>. Spread in only once the locale set
+    // is non-empty: checkNamespaceParity treats a 0-locale entry as a registry
+    // regression and hard-errors, and today both sections are EN-only, so a
+    // bare `ActivityPage: activity` would fail CI for a namespace that is
+    // simply not translated yet. Once the content batch adds the first
+    // ja/ko/zh/th entry to either data file, the namespace enters the
+    // allowlist on its own and parity is enforced from that commit onward.
+    ...(activity.length > 0 ? { ActivityPage: activity } : {}),
+    ...(priceGuide.length > 0 ? { PriceGuidePage: priceGuide } : {}),
+    // components/faq/FaqPage.tsx getTranslations('ContactInfo') on every FAQ
+    // page; components/activities/ActivityPage.tsx and
+    // components/prices/PriceGuidePage.tsx do the same for the localized
+    // address in their CTA copy.
+    ContactInfo: [...new Set([...faq, ...activity, ...priceGuide])],
   }
 })()
 
