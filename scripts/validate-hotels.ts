@@ -25,6 +25,8 @@
  * Exit code 1 on any error so CI fails.
  */
 
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { hotelConciergePages } from '@/data/hotel-pages'
 
 // A brisk walk is ~80 m/min; the section's own entries sit at 64–83. This
@@ -92,6 +94,38 @@ for (const page of hotelConciergePages) {
           `${tag}: hotel_name '${c.hotel_name}' != EN '${e.hotel_name}' — the guest booked under the EN name`
         )
       }
+    }
+  }
+}
+
+// Every nearby_activities[].type is rendered through
+// HotelConciergePage.activityType.<token>. The component falls back to the raw
+// token when the catalog does not know it, which keeps the page from throwing
+// but puts an English category word ("cultural") back on a localized page. So
+// the fallback must never actually be reachable: assert every token in the data
+// has a message in EVERY catalog. (validate:i18n enforces cross-locale key
+// parity; this is the data -> catalog direction, which nothing else covers.)
+const LOCALES = ['en', 'th', 'ja', 'ko', 'zh']
+const dataTokens = new Set<string>()
+for (const page of hotelConciergePages) {
+  for (const a of page.content.nearby_activities) dataTokens.add(a.type)
+}
+for (const loc of LOCALES) {
+  let catalog: Record<string, unknown>
+  try {
+    const raw = readFileSync(join(process.cwd(), `messages/${loc}.json`), 'utf8')
+    const parsed = JSON.parse(raw) as Record<string, Record<string, unknown>>
+    catalog = (parsed.HotelConciergePage?.activityType ?? {}) as Record<string, unknown>
+  } catch {
+    errors.push(`messages/${loc}.json: unreadable while checking activityType`)
+    continue
+  }
+  for (const token of [...dataTokens].sort()) {
+    if (typeof catalog[token] !== 'string') {
+      errors.push(
+        `messages/${loc}.json: HotelConciergePage.activityType.${token} missing — ` +
+          `nearby_activities uses that type, so the card would render the raw English token`
+      )
     }
   }
 }

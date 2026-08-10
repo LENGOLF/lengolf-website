@@ -12,12 +12,6 @@ interface Props {
   data: HotelConciergeSeoPage
 }
 
-/** Every `nearby_activities[].type` present in data/hotel-pages.ts. */
-const ACTIVITY_TYPES = new Set([
-  'attraction', 'cultural', 'dining', 'entertainment', 'landmark',
-  'medical', 'nightlife', 'outdoor', 'shopping', 'transport',
-])
-type ActivityTypeKey = `activityType.${string}`
 
 function renderStars(count: number) {
   return Array.from({ length: count }, (_, i) => (
@@ -307,8 +301,8 @@ export default async function HotelConciergePage({ data }: Props) {
                           so a new token added to the data degrades to the raw
                           value instead of throwing on a missing message. */}
                       <p className="text-sm text-muted-foreground capitalize">
-                        {ACTIVITY_TYPES.has(activity.type)
-                          ? t(`activityType.${activity.type}` as ActivityTypeKey)
+                        {t.has(`activityType.${activity.type}` as never)
+                          ? t(`activityType.${activity.type}` as never)
                           : activity.type}
                       </p>
                       <p className="text-xs text-[#2d6a4f] font-medium mt-1">

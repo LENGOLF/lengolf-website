@@ -1,7 +1,8 @@
 import Image from 'next/image'
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import RawLink from 'next/link'
 import { Link } from '@/i18n/navigation'
+import { hasTranslationForLocale } from '@/lib/translated-routes'
 import { SOCIAL_LINKS, BUSINESS_INFO, storageUrl } from '@/lib/constants'
 import { FacebookIcon, LineIcon, InstagramIcon } from '@/components/shared/SocialIcons'
 
@@ -17,15 +18,9 @@ const FOOTER_MENU_KEYS = [
   { key: 'blog', href: '/blog' as const },
 ] as const
 
-// `raw: true` means "link to the un-prefixed path deliberately": the target is
-// registered for NO locale, so the locale-aware Link would emit /ja/... and the
-// middleware would 301 it straight back to English. That is a wasted hop for
-// the reader and for crawlers, on every translated page in the site — the
-// footer renders on all of them. Drop the flag the moment the target is
-// translated, or readers will be pinned to English instead.
 const DISCOVER_LINKS = [
   { key: 'thingsToDoLink', href: '/activities/' as const },
-  { key: 'planningLink', href: '/golf-in-thailand-guide/' as const, raw: true },
+  { key: 'planningLink', href: '/golf-in-thailand-guide/' as const },
   { key: 'golfCoursesLink', href: '/golf-courses/' as const },
   { key: 'hotelsLink', href: '/hotels/' as const },
   { key: 'faqLink', href: '/faq/' as const },
@@ -41,6 +36,7 @@ const linkStyle = {
 } as const
 
 export default async function Footer() {
+  const locale = await getLocale()
   const t = await getTranslations('Footer')
   const tNav = await getTranslations('Nav')
 
@@ -164,7 +160,19 @@ export default async function Footer() {
             </h3>
             <ul>
               {DISCOVER_LINKS.map((item) => {
-                const LinkTag = 'raw' in item && item.raw ? RawLink : Link
+                // DERIVED, not a hand-maintained flag. The locale-aware Link
+                // prefixes every href; for a target with no translation in
+                // this locale the middleware then 301s it straight back to
+                // English — a wasted hop on every page in the site, since the
+                // footer renders on all of them. Three of these five are
+                // currently untranslated in all four locales
+                // (/activities/, /golf-in-thailand-guide/, /hotels/), and a
+                // hand-kept flag had already drifted to covering only one.
+                // Deriving it means the hop disappears the moment a section
+                // IS translated, with nothing to remember.
+                const LinkTag = hasTranslationForLocale(locale, item.href)
+                  ? Link
+                  : RawLink
                 return (
                   <li key={item.href}>
                     <LinkTag

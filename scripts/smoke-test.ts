@@ -3562,6 +3562,84 @@ async function runThaiRedirectTests() {
   }
 }
 
+// ── F2) Accept-Language locale detection must not loop ──────────────
+// Section F covers the COOKIE path only. Locale detection also reads
+// Accept-Language (localeDetection defaults to true in i18n/routing.ts), and
+// that path had an INFINITE REDIRECT LOOP: intlMiddleware 307'd
+// /golf-in-thailand-guide/ to /ja/golf-in-thailand-guide/, the untranslated-
+// route rule 301'd it back, and the loop-breaker — which deleted the
+// NEXT_LOCALE cookie and re-ran detection — could not help, because the
+// locale came from the HEADER, not the cookie. Real browsers showed
+// ERR_TOO_MANY_REDIRECTS on a page the footer links from every page.
+//
+// The fix rewrites to the /en tree instead of re-running detection. Without
+// this section a revert to the cookie-delete form merges CI-green and
+// re-ships the loop, since nothing else sends an Accept-Language header.
+const acceptLanguageTests: { path: string; lang: string; label: string }[] = [
+  {
+    path: "/golf-in-thailand-guide/",
+    lang: "ja-JP,ja;q=0.9",
+    label: "JA browser, no cookie, untranslated page (loop guard)",
+  },
+  {
+    path: "/golf-in-thailand-guide/",
+    lang: "zh-CN,zh;q=0.9",
+    label: "ZH browser, no cookie, untranslated page (loop guard)",
+  },
+  {
+    path: "/faq/where-to-play-golf-at-night-in-bangkok/",
+    lang: "ko-KR,ko;q=0.9",
+    label: "KO browser, no cookie, untranslated FAQ (loop guard)",
+  },
+  {
+    path: "/hotels/",
+    lang: "th-TH,th;q=0.9",
+    label: "TH browser, no cookie, untranslated hub (loop guard)",
+  },
+];
+
+async function runAcceptLanguageTests() {
+  console.log(
+    "\n\x1b[1mF2) Accept-Language detection (no redirect loop)\x1b[0m",
+  );
+  for (const t of acceptLanguageTests) {
+    try {
+      const res = await fetch(`${BASE}${t.path}`, {
+        redirect: "manual",
+        headers: { "Accept-Language": t.lang },
+      });
+      if (res.status >= 300 && res.status < 400) {
+        fail(
+          t.label,
+          `redirected ${res.status} → ${res.headers.get("location") || ""}. The untranslated-route rule sends it straight back, so this is the ERR_TOO_MANY_REDIRECTS loop. middleware.ts must REWRITE to /en, not re-run locale detection.`,
+        );
+        continue;
+      }
+      if (res.status !== 200) {
+        fail(t.label, `expected 200, got ${res.status}`);
+        continue;
+      }
+      const body = await res.text();
+      if (!body.includes('<main id="main-content">')) {
+        fail(t.label, 'served 200 without <main id="main-content">');
+        continue;
+      }
+      // The reader asked for a locale with no translation, so they must get
+      // the English page — not a shell, and not a half-localized one.
+      if (!/<html[^>]*lang="en"/.test(body)) {
+        fail(
+          t.label,
+          `served 200 but not lang="en" — the fallback must serve the English page`,
+        );
+        continue;
+      }
+      pass(t.label);
+    } catch (err) {
+      fail(t.label, String(err));
+    }
+  }
+}
+
 async function runThaiCookieTests() {
   console.log(
     "\n\x1b[1mF) Thai cookie tests (no redirect loop / no 404)\x1b[0m",
@@ -4798,6 +4876,7 @@ async function main() {
   await runSeoTests();
   await runThaiRedirectTests();
   await runThaiCookieTests();
+  await runAcceptLanguageTests();
   await runNotFoundTests();
   await runLlmDiscoverabilityTests();
   await runRegistryConsistencyTests();
