@@ -308,7 +308,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     id: 'best-1-ja',
     page_type: 'best_of_listicle',
     slug: 'best-team-building-activities-bangkok',
-    title: 'バンコクのチームビルディング会場ランキング（2026年）',
+    title: 'バンコクのチームビルディング企画ランキング（2026年）',
     meta_description:
       'バンコクでチームビルディングの企画をお探しですか。ゴルフシミュレーターからタイ料理教室、ムエタイまで、社内イベントで実際に使われている選択肢をランキング形式で比較。それぞれの長所と短所を率直にまとめました。',
     featured_image: null,
@@ -410,7 +410,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           pros: [
             'プレッシャーが少なく、内向的なチームにも向いています',
             '作ったものは参加者が持ち帰れます',
-            '会社のコーポレートカラーやブランドに合わせたテーマ設定も可能',
+            'コーポレートカラーやブランドに合わせたテーマ設定も可能',
           ],
           cons: [
             '盛り上がりは控えめ——人数が多いと間延びして感じられることがあります',
@@ -442,7 +442,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
       ],
       conclusion:
-        'バンコクのたいていのチーム——とくに体力レベルや興味の幅がばらばらなチーム——にとっては、最初から用意された対抗形式、社交的な雰囲気、食事とドリンク、そして中心部という立地の組み合わせで、LENGOLFが最もバランスの取れた選択肢です。プレッシャーのない穏やかな時間を求めるなら、このリストのなかでは料理教室が抜けています。',
+        'バンコクのたいていのチーム——とくに体力レベルや興味の幅がばらばらなチーム——にとっては、最初から用意された対抗形式、社交的な雰囲気、食事とドリンク、そして中心部という立地の組み合わせで、LENGOLFが最もバランスの取れた選択肢です。プレッシャーのない穏やかな時間を求めるなら、このリストのなかでは料理教室が頭ひとつ抜けています。',
     },
   },
 
@@ -473,7 +473,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     content: {
       year: 2026,
       intro:
-        '방콕에는 팀빌딩 선택지가 넘칠 만큼 많지만, 그중에서 실제로 사람들이 서로 대화하게 만드는 프로그램은 많지 않아요. 좋은 팀빌딩은 몸을 움직이고, 경험이 없는 사람도 함께할 수 있고, 자연스럽게 어울릴 시간이 프로그램 안에 들어 있어요. 방콕 HR 팀들이 실제로 자주 쓰는 선택지를 하나씩 살펴본 뒤 정리한 추천 목록이에요. 각 항목마다 솔직한 평가를 함께 담았어요.',
+        '방콕에는 팀빌딩 선택지가 넘칠 만큼 많지만, 그중에서 실제로 사람들이 서로 대화하게 만드는 프로그램은 많지 않아요. 좋은 팀빌딩은 몸을 움직이게 하고, 경험이 없는 사람도 함께할 수 있고, 자연스럽게 어울릴 시간이 프로그램 안에 들어 있어요. 방콕 HR 팀들이 실제로 자주 쓰는 선택지를 하나씩 살펴본 뒤 정리한 추천 목록이에요. 각 항목마다 솔직한 평가를 함께 담았어요.',
       list_items: [
         {
           rank: 1,
@@ -519,7 +519,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           rank: 3,
           name: 'Muay Thai Team Training — Fairtex Bangkok',
           description:
-            '미트 훈련과 샌드백 훈련으로 구성된 90분짜리 단체 무에타이 클래스는 팀에 신체적인 도전과 함께 끌어올린 아드레날린을 남겨요. Fairtex Bangkok을 비롯한 체육관들이 기업 단체 예약을 받아요. 몸 쓰는 데 익숙하고 격투 종목에 거부감이 없는 팀에 가장 잘 맞고, 체력 편차가 큰 팀에는 적합하지 않아요.',
+            '미트 훈련과 샌드백 훈련으로 구성된 90분짜리 단체 무에타이 클래스는 팀이 함께 몸을 쓰고 아드레날린을 끌어올리는 시간이 돼요. Fairtex Bangkok을 비롯한 체육관들이 기업 단체 예약을 받아요. 몸 쓰는 데 익숙하고 격투 종목에 거부감이 없는 팀에 가장 잘 맞고, 체력 편차가 큰 팀에는 적합하지 않아요.',
           pros: [
             '에너지가 높고 기억에 오래 남아요',
             '몸을 함께 쓰면서 자연스럽게 유대감이 생겨요',
@@ -538,7 +538,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           rank: 4,
           name: 'Flow House Bangkok — Wakeboarding',
           description:
-            'Sukhumvit 26에 있는 Flow House에는 초보자도 탈 수 있는 케이블 웨이크보드 시설이 있어요. 서로 응원하는 분위기가 자연스럽게 만들어지는, 정말 재미있는 단체 도전 과제예요. 세션이 끝난 뒤 어울릴 수 있는 바와 식사 공간도 함께 있어요. 세션 슬롯 수가 정해져 있다는 점, 그리고 수영을 못하거나 어깨가 좋지 않은 사람에게는 체력 부담이 크다는 점이 제약이에요.',
+            'Sukhumvit 26에 있는 Flow House에는 초보자도 탈 수 있는 케이블 웨이크보드 시설이 있어요. 서로 응원하는 분위기가 자연스럽게 만들어지는, 정말 재미있는 단체 도전이에요. 세션이 끝난 뒤 어울릴 수 있는 바와 식사 공간도 함께 있어요. 세션 슬롯 수가 정해져 있다는 점, 그리고 수영을 못하거나 어깨가 좋지 않은 사람에게는 체력 부담이 크다는 점이 제약이에요.',
           pros: [
             '흔치 않은 액티비티라 함께 해냈다는 기억이 강하게 남아요',
             '끝난 뒤 어울릴 수 있는 바와 식사 공간이 현장에 있어요',
@@ -640,7 +640,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           ],
           cons: [
             '所有球位加起来最多约50人——不适合超大型会议',
-            '最适合50人以内的团队',
+            '最适合约50人以内的团队',
           ],
           is_lengolf: true,
           address: 'Mercury Ville, 540 Ploenchit Rd, Floor 4, BTS Chidlom Exit 4',
@@ -1160,7 +1160,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
             'エラワン交差点という中心部の立地',
           ],
           cons: [
-            '屋外のため、暑い時期は暑く、雨にも弱い',
+            '屋外のため、暑い時期はこたえますし、雨にも弱い',
             '路面のにぎわいで騒がしくなることがあります',
           ],
           is_lengolf: false,
@@ -1460,12 +1460,12 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
       ],
       conclusion:
-        '전통적인 칵테일 바의 완성도와 전망을 원한다면, 칫롬 일대에서 가장 앞서는 곳은 Above Eleven이에요. 좀 더 어울리고 움직이는 자리를 원한다면, 특히 4~10명 그룹이라면 앉아만 있지 않고 무언가를 한다는 점에서 LENGOLF가 눈에 띄어요. 조용한 분위기에서 좋은 술과 좋은 음식을 함께하고 싶다면 Hyde & Seek이 답이에요. 호텔 바인 Okura와 InterContinental은 비즈니스 자리나 저녁 식사 뒤 한잔에 어울려요.',
+        '전통적인 칵테일 바의 완성도와 전망을 원한다면, 칫롬 일대에서 가장 앞서는 곳은 Above Eleven이에요. 좀 더 어울리고 움직이는 자리를 원한다면, 특히 4~10명 그룹이라면 앉아만 있지 않고 무언가를 한다는 점에서 LENGOLF가 눈에 띄어요. 조용한 분위기에서 좋은 술과 좋은 음식을 함께하고 싶다면 Hyde & Seek 쪽이 답이에요. 호텔 바인 Okura와 InterContinental은 비즈니스 자리나 저녁 식사 뒤 한잔에 어울려요.',
     },
   },
 
   // ─── ZH: best-bars-near-bts-chidlom ───
-  // Title/meta glue the searchable Mainland gloss 齐隆 onto the immutable Latin
+  // Title/meta glue the searchable Mainland gloss 奇隆 onto the immutable Latin
   // "Chidlom" rather than replacing it (glossary keeps station names Latin).
   // EN meta promises "what to order", which the page never delivers — dropped
   // rather than translated (flagged). Every price carried verbatim: 450泰铢起,
@@ -1477,9 +1477,9 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     id: 'best-2-zh',
     page_type: 'best_of_listicle',
     slug: 'best-bars-near-bts-chidlom',
-    title: 'BTS Chidlom（齐隆）附近酒吧推荐2026 — 天台、隐藏酒吧与高尔夫酒吧',
+    title: 'BTS Chidlom（奇隆）附近酒吧推荐2026 — 天台、隐藏酒吧与高尔夫酒吧',
     meta_description:
-      '曼谷BTS Chidlom（齐隆）一带最值得去的酒吧：从高层天台调酒吧、隐藏式speakeasy到高尔夫模拟器酒吧，逐家排序，附实话实说的评价与价格。',
+      '曼谷BTS Chidlom（奇隆）一带最值得去的酒吧：从高层天台调酒吧、隐藏式speakeasy到高尔夫模拟器酒吧，逐家排序，附实话实说的评价与价格。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1491,7 +1491,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     content: {
       year: 2026,
       intro:
-        'Chidlom到Ploenchit这一段，是曼谷酒吧密度最高的区域之一——高档酒店天台吧、藏起来的speakeasy，还有几家真正有想法的概念店，都在BTS Chidlom（齐隆）步行范围内。下面按顺序梳理这一带最值得去的几家，从经典调酒吧到不太一样的选择。',
+        'Chidlom到Ploenchit这一段，是曼谷酒吧密度最高的区域之一——高档酒店天台吧、藏起来的speakeasy，还有几家真正有想法的概念店，都在BTS Chidlom（奇隆）步行范围内。下面按顺序梳理这一带最值得去的几家，从经典调酒吧到不太一样的选择。',
       list_items: [
         {
           rank: 1,
@@ -1537,7 +1537,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
             'LENGOLF是一家开在Mercury Ville的室内高尔夫模拟器酒吧，就在BTS Chidlom正上方。它首先是一家酒吧——冰镇Singha、手调鸡尾酒、佐酒小食——只是多了独立的模拟器球位，可以一边喝一边打虚拟高尔夫。如果一群人想要比“坐着聊天”更有记忆点的场合，这里很合适。不需要高尔夫基础，近洞挑战这类玩法，没打过球的人也能马上玩起来。',
           pros: [
             '喝酒的同时有事可做——不只是干坐着',
-            '3–10人的一行正合适',
+            '3–10人的聚会正合适',
             '有空调、不怕下雨，营业到很晚',
             '就在BTS Chidlom 4号出口——不用赶路',
             '价格有竞争力——最新收费见len.golf/golf',
@@ -1612,7 +1612,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           pros: [
             '正对Lumphini公园——视角独一份',
             '比同类天台酒吧人少',
-            '日落时段的光线最好',
+            '日落时段去正好',
           ],
           cons: [
             '离BTS Chidlom稍远（可坐到BTS Sala Daeng或步行前往）',
@@ -1642,7 +1642,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
       ],
       conclusion:
-        '论传统调酒吧的水准和景观，Chidlom一带的标杆是Above Eleven。想要更社交、更有互动的场合——尤其是4–10人的一行——LENGOLF最突出，因为你在做一件事，而不是干坐着。想安静地喝好酒、顺便吃点像样的东西，选Hyde & Seek。酒店酒吧（Okura、InterContinental）则适合商务或饭后的一杯。以上价格为各家公开信息，截至2026年，实际以门店公布为准。',
+        '论传统调酒吧的水准和景观，Chidlom一带的标杆是Above Eleven。想要更社交、更有互动的场合——尤其是4–10人的场合——LENGOLF最突出，因为你在做一件事，而不是干坐着。想安静地喝好酒、顺便吃点像样的东西，选Hyde & Seek。酒店酒吧（Okura、InterContinental）则适合商务或饭后的一杯。价格截至2026年，实际以门店公布为准。',
     },
   },
 
@@ -2025,7 +2025,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     content: {
       year: 2026,
       intro:
-        'バンコクは東南アジアでも有数の企業イベント開催地で、会場の選択はアジェンダの中身以上にイベントの空気を決めます。最初に決めるべきは形式です。カンファレンスやガラディナーならホテルの正式なボールルーム、参加者に会話を生ませたいならアクティビティ主体の会場、新商品発表会やレセプションならルーフトップ。そこから人数と予算で絞り込みます。20名のチームオフサイトと300名のカンファレンスでは、必要な部屋がまったく違います。以下では、費用対効果、立地、そして各会場が本当に得意とすることを基準にバンコクの企業イベント会場を順位づけし、それぞれの長所と短所を率直に挙げました。',
+        'バンコクは東南アジアでも有数の企業イベント開催地で、会場の選択はアジェンダの中身以上にイベントの空気を決めます。最初に決めるべきは形式です。カンファレンスやガラディナーならホテルの正式なボールルーム、参加者どうしが自然に話し出す場にしたいならアクティビティ主体の会場、新商品発表会やレセプションならルーフトップ。そこから人数と予算で絞り込みます。20名のチームオフサイトと300名のカンファレンスでは、必要な部屋がまったく違います。以下では、費用対効果、立地、そして各会場が本当に得意とすることを基準にバンコクの企業イベント会場を順位づけし、それぞれの長所と短所を率直に挙げました（料金はいずれも2026年7月現在の目安です）。',
       list_items: [
         {
           rank: 1,
@@ -2051,7 +2051,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           rank: 2,
           name: 'Grand Hyatt Erawan — Ballrooms & Function Rooms',
           description:
-            'Grand Hyatt Erawanは、BTSチットロム駅の真上、エラワン交差点に建つ、バンコクで最も中心に位置する5つ星のカンファレンスホテルです。会場はボードルーム（10〜20名）からグランドボールルーム（1,000名以上）まで揃います。AV機材のサポート、ケータリング、イベント運営も一括で対応。価格はプレミアムですが、正式な企業イベントにおける立地とサービスの質は容易には並ばれません。',
+            'Grand Hyatt Erawanは、BTSチットロム駅の真上、エラワン交差点に建つ、バンコクで最も中心に位置する5つ星のカンファレンスホテルです。会場はボードルーム（10〜20名）からグランドボールルーム（1,000名以上）まで揃います。AV機材のサポート、ケータリング、イベント運営も一括で対応。価格はプレミアムですが、正式な企業イベントにおける立地とサービスの質に容易に並ぶものはありません。',
           pros: [
             'バンコクで最も中心に近い5つ星の立地',
             'ボードルームからボールルームまで、あらゆる規模に対応',
@@ -2176,7 +2176,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
       ],
       conclusion:
-        '約50名までで、ドリンクと食事が組み込まれたアクティビティ主体のイベントを望むなら、バンコク中心部ではLENGOLFが最も費用対効果に優れた企業向け会場です。正式なディナーやガラ、規模の大きいカンファレンスなら、サービスと収容力の基準はGrand Hyatt ErawanとAnantara Siamが示しています。眺めのある新商品発表会やカクテルレセプションには、RenaissanceのAltitudeルーフトップかTribe Sky Beach Clubが場を用意してくれます。そして経営層との関係構築には、Haomaのプライベートダイニングがなかなか並ばれません。まず形式に会場を合わせ、次に人数で絞る。この順番なら候補はすぐ短くなります。',
+        '約50名までで、ドリンクと食事が組み込まれたアクティビティ主体のイベントを望むなら、バンコク中心部ではLENGOLFが最も費用対効果に優れた企業向け会場です。正式なディナーやガラ、規模の大きいカンファレンスなら、サービスと収容力の基準はGrand Hyatt ErawanとAnantara Siamが示しています。眺めのある新商品発表会やカクテルレセプションには、RenaissanceのAltitudeルーフトップかTribe Sky Beach Clubが場を用意してくれます。そして経営層との関係構築には、Haomaのプライベートダイニングに並ぶものがなかなかありません。まず形式に会場を合わせ、次に人数で絞る。この順番なら候補はすぐ短くなります。',
     },
   },
 
@@ -2387,7 +2387,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     content: {
       year: 2026,
       intro:
-        '曼谷是东南亚数一数二的企业活动目的地，而场地的选择，比议程上任何一项都更能决定整场活动的调性。真正要先定的是形式：开会或答谢晚宴用正式的酒店宴会厅，想让大家真的聊起来就选活动型场地，产品发布或酒会则适合天台。接下来才是人数和预算——20人的团队务虚会和300人的大会，需要的完全是不同的场地。下面按性价比、位置和各自真正擅长的方向，把曼谷最好的企业活动场地排了个序，每一家都附上实话实说的优缺点。',
+        '曼谷是东南亚数一数二的企业活动目的地，而场地的选择，比议程上任何一项都更能决定整场活动的调性。真正要先定的是形式：开会或答谢晚宴用正式的酒店宴会厅，想让大家真的聊起来就选活动型场地，产品发布或酒会则适合天台。接下来才是人数和预算——20人的团队外出团建和300人的大会，需要的完全是不同的场地。下面按性价比、位置和各自真正擅长的方向，把曼谷最好的企业活动场地排了个序，每一家都附上实话实说的优缺点。',
       list_items: [
         {
           rank: 1,
@@ -2467,7 +2467,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           rank: 5,
           name: 'Haoma — Private Dining Room',
           description:
-            'Haoma是曼谷第一家城市农场到餐桌的餐厅，包厢可容纳8–20人。如果一场活动最看重的是出品，比如小规模的高管晚宴或维系关系的场合，它是非常出色的选择。餐厅拥有米其林星，可持续食材的做法也很知名。',
+            'Haoma是曼谷第一家城市农场到餐桌的餐厅，包厢可容纳8–20人。如果一场活动最看重的是出品，比如小规模的高管晚宴或维系关系的场合，它是非常出色的选择。这是一家米其林星级餐厅，可持续食材的做法也很知名。',
           pros: [
             '米其林星级水准——客人会记住',
             '规模小而私密，很适合关系型晚宴',
@@ -2538,7 +2538,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
       ],
       conclusion:
-        '如果人数在50人以内、想办一场自带活动内容并含酒水餐点的企业活动，LENGOLF是曼谷市中心性价比最好的场地。正式晚宴、颁奖晚会和更大规模的会议，Grand Hyatt Erawan和Anantara Siam在服务和容量上是标杆。想要带景观的产品发布或酒会，Renaissance的Altitude天台或Tribe Sky Beach Club都能撑起场面。而要和高层客户建立关系，Haoma的包厢很难被取代。先按形式选场地，再看人数，候选名单很快就会收窄。以上价格为各场地公开信息，截至2026年，实际以场地报价为准。',
+        '如果人数在50人以内、想办一场自带活动内容并含酒水餐点的企业活动，LENGOLF是曼谷市中心性价比最好的场地。正式晚宴、庆典晚宴和更大规模的会议，Grand Hyatt Erawan和Anantara Siam在服务和容量上是标杆。想要带景观的产品发布或酒会，Renaissance的Altitude天台或Tribe Sky Beach Club都能撑起场面。而要和高层客户建立关系，Haoma的包厢很难被取代。先按形式选场地，再看人数，候选名单很快就会收窄。价格截至2026年，实际以场地报价为准。',
     },
   },
 
@@ -2854,7 +2854,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     content: {
       year: 2026,
       intro:
-        'バンコクは屋内エンターテインメントにおいて世界でも屈指の街です。暑さとスコールがあるため、冷房の効いた過ごし方は旅行者にも在住者にも一年を通して欠かせません。上質なボウリング場やVRアーケードから、カラオケルーム、ゴルフシミュレーターまで。市内の屋内エンタメの選択肢を、それぞれが何を得意とするかという率直な評価とともに紹介します。',
+        'バンコクは屋内エンターテインメントにおいて世界でも屈指の街です。暑さとスコールがあるため、冷房の効いた過ごし方は旅行者にも在住者にも一年を通して欠かせません。上質なボウリング場やVRアーケードから、カラオケルーム、ゴルフシミュレーターまで。市内の屋内エンタメの選択肢を、それぞれが何を得意とするかという率直な評価とともに紹介します（料金は2026年7月現在の目安です）。',
       list_items: [
         {
           rank: 1,
@@ -2972,7 +2972,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
       ],
       conclusion:
-        'ドリンクを片手に、みんなで同じことをして本当に社交的に過ごしたいグループには、バンコクの屋内エンタメのなかでLENGOLFが最有力です。ひとつの施設で複数のアクティビティを行き来したいなら、サイアムパラゴンのBlu-Oが最も選択肢を用意しています。そして純粋に予算を重視するなら、Timezoneのアーケードが支払った額に対して最も長く遊べます。',
+        'ドリンクを片手に、みんなで同じことをして本当に社交的に過ごしたいグループには、バンコクの屋内エンタメのなかでLENGOLFが最有力です。ひとつの施設で複数のアクティビティを行き来したいなら、サイアムパラゴンのBlu-Oが最も選択肢を用意しています。そして純粋に予算を重視するなら、Timezoneのアーケードが支払った額に対して最も多くの楽しみを返してくれます。',
     },
   },
 
@@ -3026,7 +3026,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           rank: 2,
           name: 'Blu-O Rhythm & Bowl — Siam Paragon',
           description:
-            '어느 잣대로 봐도 방콕에서 가장 좋은 볼링장이에요. 16개 레인과 야광 볼링, 노래방, 당구, 아케이드가 한 건물에 모여 있어요. Siam Paragon 지하 2층에 있어요. 4~20명 그룹에 무난하고, 여러 액티비티를 오갈 수 있는 몇 안 되는 공간이에요. 방콕 중심가치고 가격도 합리적이에요.',
+            '대부분의 잣대로 보면 방콕에서 가장 좋은 볼링장이에요. 16개 레인과 야광 볼링, 노래방, 당구, 아케이드가 한 건물에 모여 있어요. Siam Paragon 지하 2층에 있어요. 4~20명 그룹에 무난하고, 여러 액티비티를 오갈 수 있는 몇 안 되는 공간이에요. 방콕 중심가치고 가격도 합리적이에요.',
           pros: [
             '볼링과 노래방, 당구를 한 곳에서 즐길 수 있어요',
             'Siam 중심 입지',
@@ -3232,7 +3232,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           rank: 5,
           name: 'Timezone Arcade — Major Cineplex',
           description:
-            '开在Major Cineplex里的Timezone是大型电玩城，有兑奖机台、赛车模拟器和音乐节奏游戏。花费友好，适合单纯想玩各种机台的一群人。形式随意，年轻人组队或者跨年龄的家庭最合适。',
+            '开在Major Cineplex里的Timezone是大型电玩城，有兑奖机台、赛车模拟器和音乐节奏游戏。花不了多少钱，适合单纯想玩各种机台的一群人。形式随意，年轻人组队或者跨年龄的家庭最合适。',
           pros: [
             '机台种类丰富',
             '花费可控（储值卡制）',
@@ -3266,7 +3266,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
       ],
       conclusion:
-        '如果你想要的是有酒水、有共同活动、社交感真正到位的一晚，曼谷室内娱乐里首选LENGOLF。想在一个场馆里换着玩，Siam Paragon的Blu-O选择最多。而单论花小钱玩得久，Timezone电玩城每一泰铢换来的娱乐时间最多。以上价格为各场馆公开信息，截至2026年，实际以门店公布为准。',
+        '如果你想要的是有酒水、有共同活动、社交感真正到位的一晚，曼谷室内娱乐里首选LENGOLF。想在一个场馆里换着玩，Siam Paragon的Blu-O选择最多。而单论花小钱玩得久，Timezone电玩城每一泰铢换来的娱乐最多。价格截至2026年，实际以门店公布为准。',
     },
   },
 
@@ -3543,7 +3543,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     content: {
       year: 2026,
       intro:
-        'バンコクは大人の誕生日パーティーにうってつけの街です。ルーフトップの会場、プライベートダイニングルーム、カラオケの個室、そして個性的なアクティビティ会場が、この機会をめぐって競い合っています。最適な選択は、人数、その夜をどれだけ社交寄りにするか活動寄りにするか、そして予算で決まります。大人向けの有力な選択肢を、総合的な適性の順に並べました。',
+        'バンコクは大人の誕生日パーティーにうってつけの街です。ルーフトップの会場、プライベートダイニングルーム、カラオケの個室、そして個性的なアクティビティ会場が、この機会をめぐって競い合っています。最適な選択は、人数、その夜をどれだけ社交寄りにするか活動寄りにするか、そして予算で決まります。大人向けの有力な選択肢を、総合的な適性の順に並べました（料金はいずれも2026年7月現在の目安です）。',
       list_items: [
         {
           rank: 1,
@@ -3670,7 +3670,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     content: {
       year: 2026,
       intro:
-        '방콕은 성인 생일 파티를 열기에 아주 좋은 도시예요. 루프톱 공간과 프라이빗 다이닝룸, 노래방 스위트, 개성 있는 액티비티 공간이 저마다 이 자리를 노려요. 어디가 맞을지는 인원과, 어울리는 쪽인지 움직이는 쪽인지, 그리고 예산에 따라 갈려요. 성인 모임에 얼마나 잘 맞는지를 놓고 순위를 매겨 정리했어요. 본문에 적힌 가격은 2026년 7월 기준이에요.',
+        '방콕은 성인 생일 파티를 열기에 아주 좋은 도시예요. 루프톱 공간과 프라이빗 다이닝룸, 노래방 스위트, 개성 있는 액티비티 공간까지 선택지가 다양해요. 어디가 맞을지는 인원과, 어울리는 쪽인지 움직이는 쪽인지, 그리고 예산에 따라 갈려요. 성인 모임에 얼마나 잘 맞는지를 놓고 순위를 매겨 정리했어요. 본문에 적힌 가격은 2026년 7월 기준이에요.',
       list_items: [
         {
           rank: 1,
@@ -3696,7 +3696,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           rank: 2,
           name: 'Above Eleven Rooftop — Fraser Suites Sukhumvit 11',
           description:
-            '25~40대에게 방콕에서 가장 인기 있는 루프톱 생일 장소예요. 10~30명 그룹은 프라이빗 파티 예약이 가능하고, 칵테일 패키지와 생일 케이크 서비스를 미리 요청할 수 있어요. 도심 전망 덕분에 생일 사진이 모두 잘 남아요. 일본·페루 퓨전 주방에서 나오는 음식 수준도 정말 좋아요.',
+            '방콕에서 25~40세 사이에 가장 인기 있는 루프톱 생일 장소예요. 10~30명 그룹은 프라이빗 파티 예약이 가능하고, 칵테일 패키지와 생일 케이크 서비스를 미리 요청할 수 있어요. 도심 전망 덕분에 생일 사진이 모두 잘 남아요. 일본·페루 퓨전 주방에서 나오는 음식 수준도 정말 좋아요.',
           pros: [
             '상징적인 루프톱 전망 — 생일 사진에 좋아요',
             '칵테일 메뉴와 음식 수준이 탄탄해요',
@@ -3797,7 +3797,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     content: {
       year: 2026,
       intro:
-        '曼谷很适合办成人生日派对——天台场地、餐厅包厢、KTV套房和各种特色活动场地都在抢这个场合。具体选哪一种，取决于你们有多少人、这一晚你想偏社交还是偏活动，以及预算。以下是按整体适合度排序的成人生日场地。',
+        '曼谷很适合办成人生日派对——天台场地、餐厅包厢、KTV包厢和各种特色活动场地都在抢这个场合。具体选哪一种，取决于你们有多少人、这一晚你想偏社交还是偏活动，以及预算。以下是按整体适合度排序的成人生日场地。',
       list_items: [
         {
           rank: 1,
@@ -3861,7 +3861,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           rank: 4,
           name: 'Haoma Restaurant — Private Dining Room',
           description:
-            '如果生日是一场小而私密、最看重出品的晚餐，Haoma的包厢是曼谷的首选。这家餐厅有米其林星，讲可持续，水准出众。最适合8–14人、想要奢华体验而不是派对气氛的一桌。',
+            '如果生日是一场小而私密、最看重出品的晚餐，Haoma的包厢是曼谷的首选。这是一家米其林星级餐厅，讲可持续，水准出众。最适合8–14人、想要奢华体验而不是派对气氛的一桌。',
           pros: [
             '米其林星级的出品水准',
             '私密的环境，很适合关系近的朋友',
@@ -3896,7 +3896,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
       ],
       conclusion:
-        '想办一场真正好玩又不落俗套、既不用盛装也不用花大钱的生日，LENGOLF的私人套餐是曼谷市中心最省心的一体化方案。要氛围和照片，Above Eleven是天台里的标杆。要私密和顶级出品，Haoma的包厢无可替代。想稳妥地热闹一整晚，The Vocal的KTV是常规答案。以上价格为各场地公开信息，截至2026年，实际以场地报价为准。',
+        '想办一场真正好玩又不落俗套、既不用盛装也不用花大钱的生日，LENGOLF的私人套餐是曼谷市中心最省心的一体化方案。要氛围和照片，Above Eleven是天台里的标杆。要私密和顶级出品，Haoma的包厢无可替代。想稳妥地热闹一整晚，The Vocal的KTV是常规答案。价格截至2026年，实际以场地报价为准。',
     },
   },
 
@@ -4245,7 +4245,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     content: {
       year: 2026,
       intro:
-        'バンコクは本格的なゴルフの目的地です。市内中心部から30分圏内に世界水準のコースがあり、ドライビングレンジの競争も激しく、暑さやスケジュールの都合で屋外が難しいときのためのインドアシミュレーターも年々充実しています。バンコクとその周辺の主なゴルフ体験を比較してみましょう。',
+        'バンコクは本格的なゴルフの目的地です。市内中心部から30分圏内に世界水準のコースがあり、ドライビングレンジの競争も激しく、暑さやスケジュールの都合で屋外が難しいときのためのインドアシミュレーターも年々充実しています。バンコクとその周辺の主なゴルフ体験を比較してみましょう（グリーンフィーはいずれも2026年7月現在の目安です）。',
       list_items: [
         {
           rank: 1,
@@ -4411,7 +4411,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     content: {
       year: 2026,
       intro:
-        '방콕은 진지한 골프 여행지예요. 도심에서 차로 닿는 거리에 세계적인 수준의 코스가 있고, 드라이빙 레인지 경쟁도 치열하며, 더위나 일정 때문에 야외 라운딩이 어려울 때를 위한 실내 시뮬레이터 선택지도 점점 좋아지고 있어요. 방콕과 그 주변에서 골프를 즐기는 주요 방법들을 비교해 볼게요. 본문에 적힌 가격은 2026년 7월 기준이에요.',
+        '방콕은 골프 여행지로도 손색이 없는 도시예요. 도심에서 차로 닿는 거리에 세계적인 수준의 코스가 있고, 드라이빙 레인지 경쟁도 치열하며, 더위나 일정 때문에 야외 라운딩이 어려울 때를 위한 실내 시뮬레이터 선택지도 점점 좋아지고 있어요. 방콕과 그 주변에서 골프를 즐기는 주요 방법들을 비교해 볼게요. 본문에 적힌 가격은 2026년 7월 기준이에요.',
       list_items: [
         {
           rank: 1,
@@ -4574,13 +4574,13 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     content: {
       year: 2026,
       intro:
-        '曼谷是一个认真的高尔夫目的地——市中心30分钟车程内就有世界级球场，练习场的竞争也很激烈，而当高温或行程不允许你到户外打球时，室内模拟器的选择正变得越来越强。下面把曼谷及周边主要的高尔夫体验放在一起比较。',
+        '曼谷在高尔夫上是个不折不扣的目的地——市中心30分钟车程内就有世界级球场，练习场的竞争也很激烈，而当高温或行程不允许你到户外打球时，室内模拟器的选择正变得越来越强。下面把曼谷及周边主要的高尔夫体验放在一起比较。',
       list_items: [
         {
           rank: 1,
           name: 'LENGOLF — Indoor Golf Simulator (Chidlom)',
           description:
-            'LENGOLF在Mercury Ville、BTS Chidlom设有独立球位，配Bravo高尔夫模拟器。球位租用最多可5人同用，含标准球杆套装，并可调用一整套真实球场的资料库。这些达到Trackman级别的模拟器，精度足以做真正的挥杆分析——LENGOLF也提供由泰国PGA认证教练根据模拟器数据授课的课程。最新球位收费与课程价格见len.golf。',
+            'LENGOLF在Mercury Ville、BTS Chidlom设有独立球位，配Bravo高尔夫模拟器。球位租用最多可5人同用，含标准球杆套装，并可调用完整的真实球场库。这些达到Trackman级别的模拟器，精度足以做真正的挥杆分析——LENGOLF也提供由泰国PGA认证教练根据模拟器数据授课的课程。最新球位收费与课程价格见len.golf。',
           pros: [
             '任何天气、任何时段都能打',
             '有数据支撑的挥杆反馈——对进步真的有用',
@@ -4619,7 +4619,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           rank: 3,
           name: 'Nikanti Golf Club',
           description:
-            '泰国设计最好的现代球场之一——18洞，地形起伏明显，沙坑布置有力，养护水准很高。球场在Nakhon Pathom（佛统府），距曼谷市中心约60分钟。它的路线设计很有想法，既能考住个位数差点的球手，中差点球友打起来也不难受。果岭费约3,000–4,500泰铢，含球童。',
+            '泰国设计最好的现代球场之一——18洞，地形起伏明显，沙坑布置很见功夫，养护水准很高。球场在Nakhon Pathom（佛统府），距曼谷市中心约60分钟。它的布局设计很有想法，既能考住个位数差点的球手，中差点球友打起来也不难受。果岭费约3,000–4,500泰铢，含球童。',
           pros: [
             '世界级的球场设计——泰国前五',
             '对低差点球手挑战性足',
@@ -4627,7 +4627,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           ],
           cons: [
             '是从曼谷出发车程最远的球场之一（60分钟以上）',
-            '路线不太容错——高差点球手打起来会吃力',
+            '布局不太容错——高差点球手打起来会吃力',
           ],
           is_lengolf: false,
           address: '59/9 Moo 3, Nakhon Chai Si, Nakhon Pathom',
@@ -4637,14 +4637,14 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           rank: 4,
           name: 'Royal Golf & Country Club',
           description:
-            '位于曼谷东北方向Min Buri的热门18洞球场，车程45分钟。球场状态不错，果岭费合理（1,800–2,500泰铢），开球时间也相对好订。路线谈不上最有挑战，但作为工作日打球的稳妥选择很够用。住在Sukhumvit的外籍球友很喜欢这里。',
+            '位于曼谷东北方向Min Buri的热门18洞球场，车程45分钟。球场状态不错，果岭费合理（1,800–2,500泰铢），开球时间也相对好订。布局谈不上最有挑战，但作为工作日打球的稳妥选择很够用。住在Sukhumvit的外籍球友很喜欢这里。',
           pros: [
             '是从曼谷市中心最容易到达的球场之一',
             '果岭费合理',
             '适合工作日下场——开球时间比较好订',
           ],
           cons: [
-            '路线的挑战性一般',
+            '布局的挑战性一般',
             '球场状态随季节波动',
           ],
           is_lengolf: false,
@@ -4708,7 +4708,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
       ],
       conclusion:
-        '单论打球本身和球场的挑战性，Alpine Golf Club和Nikanti是曼谷最好的选择——但两者都要开车45–60分钟，而且基本得搭上一整天。如果你要的是方便、有数据支撑的练习和全年都能打，LENGOLF的模拟器对大多数常驻曼谷的球友来说是最实际的选择。想在市中心快速练一会儿球，Sinthorn练习场正好补上这个位置。以上果岭费与收费为各球场公开信息，截至2026年，实际以球场公布为准。',
+        '单论打球本身和球场的挑战性，Alpine Golf Club和Nikanti是曼谷最好的选择——但两者都要开车45–60分钟，而且基本得搭上一整天。如果你要的是方便、有数据支撑的练习和全年都能打，LENGOLF的模拟器对大多数常驻曼谷的球友来说是最实际的选择。想在市中心快速练一会儿球，Sinthorn练习场正好补上这个位置。果岭费与各项收费截至2026年，实际以球场公布为准。',
     },
   },
 
@@ -5123,7 +5123,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
             '隣接するモール（Gaysorn、Isetan）と直結',
           ],
           cons: [
-            'モールが苦手な方には情報量が多すぎます',
+            'モールが苦手な方には規模が大きすぎて疲れます',
             '週末はかなり混雑します',
           ],
           is_lengolf: false,
@@ -5134,7 +5134,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           rank: 3,
           name: 'Erawan Shrine',
           description:
-            'ラチャダムリ通りとプルンチット通りの交差点にある、タイで最も参拝者の多い祠です。雰囲気は本物で、日中を通して伝統舞踊が奉納され、絶えない参拝者の人波が、高級ホテルに囲まれた立地にもかかわらずバンコクで最も文化的に生きた公共空間のひとつにしています。',
+            'ラチャダムリ通りとプルンチット通りの交差点にある、タイで最も参拝者の多い祠です。雰囲気は本物で、日中を通して伝統舞踊が奉納されます。絶えない参拝者の人波は、高級ホテルに囲まれた立地にもかかわらず、ここをバンコクで最も文化的に生きた公共空間のひとつにしています。',
           pros: [
             '商業地区のただ中で味わえる独特の文化体験',
             '参拝は無料',
@@ -5422,12 +5422,12 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
       ],
       conclusion:
-        '칫롬과 플런칫 일대는 고급 쇼핑(Gaysorn, CentralWorld)과 호텔 바, 식사에 강하지만 정말 색다른 액티비티는 드물어요. LENGOLF가 그 빈자리를 채우는, 이 동네에서 식당도 스파도 아닌 유일한 액티비티 공간이에요. 문화를 원한다면 BACC가 BTS 두 정거장 거리에 있어 짧게 다녀올 만해요. 술과 웰니스는 각각 Hyde & Seek과 Divana 스파가 첫손에 꼽혀요.',
+        '칫롬과 플런칫 일대는 고급 쇼핑(Gaysorn, CentralWorld)과 호텔 바, 식사에 강하지만 정말 색다른 액티비티는 드물어요. LENGOLF가 그 빈자리를 채우는, 이 동네에서 식당도 스파도 아닌 유일한 액티비티 공간이에요. 문화를 원한다면 BACC가 BTS 두 정거장 거리에 있어 짧게 다녀올 만해요. 술과 웰니스는 각각 Hyde & Seek 바와 Divana 스파가 첫손에 꼽혀요.',
     },
   },
 
   // ─── ZH: best-things-to-do-near-chidlom ───
-  // Title/meta carry the searchable gloss 齐隆 alongside the immutable Latin
+  // Title/meta carry the searchable gloss 奇隆 alongside the immutable Latin
   // "Chidlom". Erawan Shrine is glossed once in its description as 四面佛 — the
   // established Mainland name, not a coinage; CentralWorld keeps 尚泰世界 from the
   // shipped ZH corpus. Figures verbatim: 9点到23点, 15–30分钟, 两站BTS, 10分钟,
@@ -5439,9 +5439,9 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     id: 'best-7-zh',
     page_type: 'best_of_listicle',
     slug: 'best-things-to-do-near-chidlom',
-    title: 'Chidlom（齐隆）与Ploenchit好去处2026 — 购物、美食与娱乐',
+    title: 'Chidlom（奇隆）与Ploenchit好去处2026 — 购物、美食与娱乐',
     meta_description:
-      'BTS Chidlom（齐隆）与Ploenchit好去处：Mercury Ville与CentralWorld周边的购物、餐饮、酒吧、水疗、艺术馆与高尔夫模拟器。',
+      'BTS Chidlom（奇隆）与Ploenchit好去处：Mercury Ville与CentralWorld周边的购物、餐饮、酒吧、水疗、艺术馆与高尔夫模拟器。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -5485,7 +5485,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
             '与旁边的商场直接连通（Gaysorn、Isetan）',
           ],
           cons: [
-            '不爱逛商场的人会觉得信息量过大',
+            '不爱逛商场的人会觉得眼花缭乱',
             '周末非常拥挤',
           ],
           is_lengolf: false,
@@ -5496,7 +5496,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           rank: 3,
           name: 'Erawan Shrine',
           description:
-            '泰国参拜人数最多的神龛，中文一般称作四面佛，位于Ratchadamri路与Ploenchit路交叉口。这是一处气氛真实的停留点——传统舞者整天都在表演，络绎不绝的信众让它即便被豪华酒店包围，依然是曼谷文化感最强的公共空间之一。',
+            '泰国参拜人数最多的神坛，中文一般称作四面佛，位于Ratchadamri路与Ploenchit路交叉口。这是一处气氛真实的停留点——传统舞者整天都在表演，络绎不绝的信众让它即便被豪华酒店包围，依然是曼谷文化感最强的公共空间之一。',
           pros: [
             '在购物区正中心的一次独特文化体验',
             '免费参观',
@@ -5603,7 +5603,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
       ],
       conclusion:
-        'Chidlom至Ploenchit一带最强的是高端购物（Gaysorn、CentralWorld）、酒店酒吧和餐饮——真正独特的活动却不多。LENGOLF正好补上这个缺口，是这一带唯一不是餐厅也不是水疗的活动场地。想看点文化，BACC距Chidlom 2站BTS，值得跑一趟。喝酒选Hyde & Seek，做水疗选Divana，各自都是这一带的首选。以上价格为各场所公开信息，截至2026年，实际以门店公布为准。',
+        'Chidlom至Ploenchit一带最强的是高端购物（Gaysorn、CentralWorld）、酒店酒吧和餐饮——真正独特的活动却不多。LENGOLF正好补上这个缺口，是这一带唯一不是餐厅也不是水疗的活动场地。想看点文化，BACC距Chidlom 2站BTS，值得跑一趟。喝酒选Hyde & Seek，做水疗选Divana，各自都是这一带的首选。价格截至2026年，实际以门店公布为准。',
     },
   },
 ]
