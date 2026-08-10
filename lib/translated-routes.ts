@@ -157,11 +157,24 @@ const TRANSLATED_ROUTES: Record<
       "/faq/where-play-golf-night-bangkok",
       "/faq/do-you-need-golf-travel-bag-thailand",
       "/faq/how-far-in-advance-book-golf-bangkok",
-      // /cost (price_guide), /activities (activity_occasion) and /best
-      // (best_of_listicle). These four SEO sections were EN-hardcoded at the
-      // route level until the locale-capable commit; /hotels remains EN-only
-      // (data/hotel-pages.ts has no non-EN entries yet). Smoke section L5
-      // asserts this list agrees with the data files in both directions.
+      // The four flat SEO sections — /cost (price_guide), /activities
+      // (activity_occasion), /best (best_of_listicle) and /hotels
+      // (hotel_concierge). All were EN-hardcoded at the route level until the
+      // locale-capable commit, and all four now ship in every locale. Smoke
+      // section L5 asserts this list agrees with the data files in both
+      // directions.
+      "/hotels/things-to-do-near-arnoma-grand-bangkok",
+      "/hotels/things-to-do-near-sindhorn-midtown",
+      "/hotels/things-to-do-near-grand-hyatt-erawan",
+      "/hotels/things-to-do-near-athenee-hotel",
+      "/hotels/things-to-do-near-intercontinental-bangkok",
+      "/hotels/things-to-do-near-hotel-indigo-wireless-road",
+      "/hotels/things-to-do-near-novotel-ploenchit",
+      "/hotels/things-to-do-near-renaissance-ratchaprasong",
+      "/hotels/things-to-do-near-okura-prestige-bangkok",
+      "/hotels/things-to-do-near-anantara-siam",
+      "/hotels/things-to-do-near-mercure-siam",
+      "/hotels/things-to-do-near-kimpton-maa-lai",
       "/best/best-team-building-activities-bangkok",
       "/best/best-bars-near-bts-chidlom",
       "/best/best-corporate-event-venues-bangkok",
@@ -318,11 +331,24 @@ const TRANSLATED_ROUTES: Record<
       "/faq/where-play-golf-night-bangkok",
       "/faq/do-you-need-golf-travel-bag-thailand",
       "/faq/how-far-in-advance-book-golf-bangkok",
-      // /cost (price_guide), /activities (activity_occasion) and /best
-      // (best_of_listicle). These four SEO sections were EN-hardcoded at the
-      // route level until the locale-capable commit; /hotels remains EN-only
-      // (data/hotel-pages.ts has no non-EN entries yet). Smoke section L5
-      // asserts this list agrees with the data files in both directions.
+      // The four flat SEO sections — /cost (price_guide), /activities
+      // (activity_occasion), /best (best_of_listicle) and /hotels
+      // (hotel_concierge). All were EN-hardcoded at the route level until the
+      // locale-capable commit, and all four now ship in every locale. Smoke
+      // section L5 asserts this list agrees with the data files in both
+      // directions.
+      "/hotels/things-to-do-near-arnoma-grand-bangkok",
+      "/hotels/things-to-do-near-sindhorn-midtown",
+      "/hotels/things-to-do-near-grand-hyatt-erawan",
+      "/hotels/things-to-do-near-athenee-hotel",
+      "/hotels/things-to-do-near-intercontinental-bangkok",
+      "/hotels/things-to-do-near-hotel-indigo-wireless-road",
+      "/hotels/things-to-do-near-novotel-ploenchit",
+      "/hotels/things-to-do-near-renaissance-ratchaprasong",
+      "/hotels/things-to-do-near-okura-prestige-bangkok",
+      "/hotels/things-to-do-near-anantara-siam",
+      "/hotels/things-to-do-near-mercure-siam",
+      "/hotels/things-to-do-near-kimpton-maa-lai",
       "/best/best-team-building-activities-bangkok",
       "/best/best-bars-near-bts-chidlom",
       "/best/best-corporate-event-venues-bangkok",
@@ -512,11 +538,24 @@ const TRANSLATED_ROUTES: Record<
       "/faq/where-play-golf-night-bangkok",
       "/faq/do-you-need-golf-travel-bag-thailand",
       "/faq/how-far-in-advance-book-golf-bangkok",
-      // /cost (price_guide), /activities (activity_occasion) and /best
-      // (best_of_listicle). These four SEO sections were EN-hardcoded at the
-      // route level until the locale-capable commit; /hotels remains EN-only
-      // (data/hotel-pages.ts has no non-EN entries yet). Smoke section L5
-      // asserts this list agrees with the data files in both directions.
+      // The four flat SEO sections — /cost (price_guide), /activities
+      // (activity_occasion), /best (best_of_listicle) and /hotels
+      // (hotel_concierge). All were EN-hardcoded at the route level until the
+      // locale-capable commit, and all four now ship in every locale. Smoke
+      // section L5 asserts this list agrees with the data files in both
+      // directions.
+      "/hotels/things-to-do-near-arnoma-grand-bangkok",
+      "/hotels/things-to-do-near-sindhorn-midtown",
+      "/hotels/things-to-do-near-grand-hyatt-erawan",
+      "/hotels/things-to-do-near-athenee-hotel",
+      "/hotels/things-to-do-near-intercontinental-bangkok",
+      "/hotels/things-to-do-near-hotel-indigo-wireless-road",
+      "/hotels/things-to-do-near-novotel-ploenchit",
+      "/hotels/things-to-do-near-renaissance-ratchaprasong",
+      "/hotels/things-to-do-near-okura-prestige-bangkok",
+      "/hotels/things-to-do-near-anantara-siam",
+      "/hotels/things-to-do-near-mercure-siam",
+      "/hotels/things-to-do-near-kimpton-maa-lai",
       "/best/best-team-building-activities-bangkok",
       "/best/best-bars-near-bts-chidlom",
       "/best/best-corporate-event-venues-bangkok",
@@ -698,11 +737,24 @@ const TRANSLATED_ROUTES: Record<
       "/faq/where-play-golf-night-bangkok",
       "/faq/do-you-need-golf-travel-bag-thailand",
       "/faq/how-far-in-advance-book-golf-bangkok",
-      // /cost (price_guide), /activities (activity_occasion) and /best
-      // (best_of_listicle). These four SEO sections were EN-hardcoded at the
-      // route level until the locale-capable commit; /hotels remains EN-only
-      // (data/hotel-pages.ts has no non-EN entries yet). Smoke section L5
-      // asserts this list agrees with the data files in both directions.
+      // The four flat SEO sections — /cost (price_guide), /activities
+      // (activity_occasion), /best (best_of_listicle) and /hotels
+      // (hotel_concierge). All were EN-hardcoded at the route level until the
+      // locale-capable commit, and all four now ship in every locale. Smoke
+      // section L5 asserts this list agrees with the data files in both
+      // directions.
+      "/hotels/things-to-do-near-arnoma-grand-bangkok",
+      "/hotels/things-to-do-near-sindhorn-midtown",
+      "/hotels/things-to-do-near-grand-hyatt-erawan",
+      "/hotels/things-to-do-near-athenee-hotel",
+      "/hotels/things-to-do-near-intercontinental-bangkok",
+      "/hotels/things-to-do-near-hotel-indigo-wireless-road",
+      "/hotels/things-to-do-near-novotel-ploenchit",
+      "/hotels/things-to-do-near-renaissance-ratchaprasong",
+      "/hotels/things-to-do-near-okura-prestige-bangkok",
+      "/hotels/things-to-do-near-anantara-siam",
+      "/hotels/things-to-do-near-mercure-siam",
+      "/hotels/things-to-do-near-kimpton-maa-lai",
       "/best/best-team-building-activities-bangkok",
       "/best/best-bars-near-bts-chidlom",
       "/best/best-corporate-event-venues-bangkok",
