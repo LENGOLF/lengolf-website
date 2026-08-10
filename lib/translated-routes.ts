@@ -157,9 +157,11 @@ const TRANSLATED_ROUTES: Record<
       "/faq/where-play-golf-night-bangkok",
       "/faq/do-you-need-golf-travel-bag-thailand",
       "/faq/how-far-in-advance-book-golf-bangkok",
-      // /cost (price_guide) and /activities (activity_occasion). These four
-      // SEO sections were EN-hardcoded at the route level until the
-      // locale-capable commit; /hotels and /best remain EN-only for now.
+      // /cost (price_guide), /activities (activity_occasion) and /best
+      // (best_of_listicle). These four SEO sections were EN-hardcoded at the
+      // route level until the locale-capable commit; /hotels remains EN-only
+      // (data/hotel-pages.ts has no non-EN entries yet). Smoke section L5
+      // asserts this list agrees with the data files in both directions.
       "/activities/bachelor-party-ideas-bangkok",
       "/activities/birthday-party-venues-bangkok",
       "/activities/date-night-ideas-bangkok",
@@ -309,9 +311,11 @@ const TRANSLATED_ROUTES: Record<
       "/faq/where-play-golf-night-bangkok",
       "/faq/do-you-need-golf-travel-bag-thailand",
       "/faq/how-far-in-advance-book-golf-bangkok",
-      // /cost (price_guide) and /activities (activity_occasion). These four
-      // SEO sections were EN-hardcoded at the route level until the
-      // locale-capable commit; /hotels and /best remain EN-only for now.
+      // /cost (price_guide), /activities (activity_occasion) and /best
+      // (best_of_listicle). These four SEO sections were EN-hardcoded at the
+      // route level until the locale-capable commit; /hotels remains EN-only
+      // (data/hotel-pages.ts has no non-EN entries yet). Smoke section L5
+      // asserts this list agrees with the data files in both directions.
       "/activities/bachelor-party-ideas-bangkok",
       "/activities/birthday-party-venues-bangkok",
       "/activities/date-night-ideas-bangkok",
@@ -494,9 +498,11 @@ const TRANSLATED_ROUTES: Record<
       "/faq/where-play-golf-night-bangkok",
       "/faq/do-you-need-golf-travel-bag-thailand",
       "/faq/how-far-in-advance-book-golf-bangkok",
-      // /cost (price_guide) and /activities (activity_occasion). These four
-      // SEO sections were EN-hardcoded at the route level until the
-      // locale-capable commit; /hotels and /best remain EN-only for now.
+      // /cost (price_guide), /activities (activity_occasion) and /best
+      // (best_of_listicle). These four SEO sections were EN-hardcoded at the
+      // route level until the locale-capable commit; /hotels remains EN-only
+      // (data/hotel-pages.ts has no non-EN entries yet). Smoke section L5
+      // asserts this list agrees with the data files in both directions.
       "/activities/bachelor-party-ideas-bangkok",
       "/activities/birthday-party-venues-bangkok",
       "/activities/date-night-ideas-bangkok",
@@ -671,9 +677,11 @@ const TRANSLATED_ROUTES: Record<
       "/faq/where-play-golf-night-bangkok",
       "/faq/do-you-need-golf-travel-bag-thailand",
       "/faq/how-far-in-advance-book-golf-bangkok",
-      // /cost (price_guide) and /activities (activity_occasion). These four
-      // SEO sections were EN-hardcoded at the route level until the
-      // locale-capable commit; /hotels and /best remain EN-only for now.
+      // /cost (price_guide), /activities (activity_occasion) and /best
+      // (best_of_listicle). These four SEO sections were EN-hardcoded at the
+      // route level until the locale-capable commit; /hotels remains EN-only
+      // (data/hotel-pages.ts has no non-EN entries yet). Smoke section L5
+      // asserts this list agrees with the data files in both directions.
       "/activities/bachelor-party-ideas-bangkok",
       "/activities/birthday-party-venues-bangkok",
       "/activities/date-night-ideas-bangkok",
@@ -822,6 +830,29 @@ export function getRegisteredGuidePaths(locale: string): string[] {
 export function getRegisteredFaqPaths(locale: string): string[] {
   return (TRANSLATED_ROUTES[locale]?.staticRoutes ?? []).filter((r) =>
     r.startsWith("/faq/"),
+  );
+}
+
+/**
+ * Paths registered as translated for `locale` under one of the flat SEO
+ * sections that are NOT /guide/ or /faq/ — '/cost/', '/activities/',
+ * '/best/', '/hotels/'. Those four render from data files via
+ * lib/seo-pages.ts (PAGE_DATA_MAP) with `dynamicParams` off, so exactly the
+ * same one-sided-edit hazard applies as for guides and FAQs: a data entry
+ * with no registry line is built and then 301'd away, and a registry line
+ * with no data entry is a hard 404 advertised in hreflang. This registry
+ * cannot import those data files (it is edge-bundled), so the smoke tests
+ * assert the two lists agree — see scripts/smoke-test.ts section L5.
+ *
+ * `prefix` is the bare section name ('cost'), matching the keys of
+ * ROUTE_PREFIX_TO_TYPE in lib/seo-pages.ts.
+ */
+export function getRegisteredSeoSectionPaths(
+  locale: string,
+  prefix: string,
+): string[] {
+  return (TRANSLATED_ROUTES[locale]?.staticRoutes ?? []).filter((r) =>
+    r.startsWith(`/${prefix}/`),
   );
 }
 

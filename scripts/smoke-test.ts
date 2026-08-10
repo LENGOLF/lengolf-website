@@ -4243,6 +4243,140 @@ async function runFaqRegistryLivenessTests() {
   }
 }
 
+// ── L5) Flat SEO-section registry consistency + liveness ────────────
+// /cost, /activities, /best and /hotels render from data files through
+// lib/seo-pages.ts. Until the /cost+/activities batch these four routes were
+// EN-hardcoded, so no drift was possible and no guard existed; now that they
+// build per-locale params they carry exactly the hazard sections I/J/J3 guard
+// for guides, FAQs and course details, and L2/L3/L4 for liveness:
+//   - data entry with no registry line → built, then 301'd to English. The
+//     translation exists and is unreachable, silently.
+//   - registry line with no data entry → hard 404 (dynamicParams is false)
+//     while hreflang and the sitemap advertise it.
+// Consistency and liveness live in one section here because these sections
+// share a single shape; splitting them would triple the boilerplate for no
+// extra coverage. /hotels is listed and simply contributes zero paths until
+// that batch lands — which is why the anti-vacuity guard below counts SECTIONS
+// checked, not paths found.
+const SEO_SECTION_PREFIXES = ["cost", "activities", "best", "hotels"] as const;
+
+async function runSeoSectionRegistryTests() {
+  console.log(
+    "\n\x1b[1mL5) Flat SEO-section registry consistency + liveness\x1b[0m",
+  );
+  const { getRegisteredSeoSectionPaths, ALL_LOCALES } = await import(
+    "../lib/translated-routes"
+  );
+  const { PAGE_DATA_MAP, ROUTE_PREFIX_TO_TYPE } = await import(
+    "../lib/seo-pages"
+  );
+
+  let sectionsChecked = 0;
+  let livePaths = 0;
+
+  for (const prefix of SEO_SECTION_PREFIXES) {
+    const pageType = ROUTE_PREFIX_TO_TYPE[prefix];
+    const pages = PAGE_DATA_MAP[pageType];
+    if (!pages) {
+      fail(
+        `No data source for /${prefix}/`,
+        `ROUTE_PREFIX_TO_TYPE maps it to '${pageType}' but PAGE_DATA_MAP has no entry — lib/seo-pages.ts lost a section.`,
+      );
+      continue;
+    }
+    sectionsChecked++;
+
+    for (const locale of ALL_LOCALES) {
+      if (locale === "en") continue;
+      const fromData = new Set(
+        pages
+          .filter((p) => p.locale === locale && p.status === "published")
+          .map((p) => `/${prefix}/${p.slug}`),
+      );
+      const fromRegistry = new Set(getRegisteredSeoSectionPaths(locale, prefix));
+      const missingInRegistry = [...fromData].filter(
+        (p) => !fromRegistry.has(p),
+      );
+      const missingInData = [...fromRegistry].filter((p) => !fromData.has(p));
+
+      if (missingInRegistry.length > 0) {
+        fail(
+          `Registry missing '${locale}' /${prefix}/ page(s)`,
+          `${missingInRegistry.join(", ")} — add to ${locale}.staticRoutes in lib/translated-routes.ts or the translation is unreachable (middleware 301s it)`,
+        );
+      }
+      if (missingInData.length > 0) {
+        fail(
+          `Registry lists '${locale}' /${prefix}/ page(s) with no data`,
+          `${missingInData.join(", ")} — remove from lib/translated-routes.ts or add a locale:'${locale}' entry to the ${pageType} data file (currently 404s while advertised in hreflang)`,
+        );
+      }
+      if (missingInRegistry.length === 0 && missingInData.length === 0) {
+        pass(
+          `Registry ⇄ data in sync for '${locale}' /${prefix}/ (${fromData.size} translated)`,
+        );
+      }
+
+      // Liveness — registry-derived like L2/L3/L4, so a future /hotels batch
+      // needs zero routeTests edits.
+      let ok = 0;
+      const paths = [...fromRegistry];
+      for (const path of paths) {
+        const target = `/${locale}${path}/`;
+        try {
+          const res = await fetch(`${BASE}${target}`, { redirect: "manual" });
+          if (res.status !== 200) {
+            fail(
+              `Registered /${prefix}/ translation not live: ${target}`,
+              `expected 200, got ${res.status} — a registered '${locale}' page that doesn't serve (missing data row, render throw, or a middleware/allowlist regression sending it back to EN).`,
+            );
+            continue;
+          }
+          const body = await res.text();
+          if (!body.includes('<main id="main-content">')) {
+            fail(
+              `Registered /${prefix}/ translation missing main content: ${target}`,
+              'served 200 without <main id="main-content">',
+            );
+            continue;
+          }
+          // Same inverse-of-/guide/ rule as L4: none of these four routes
+          // calls interpolateFacts, so a {{token}} copied in from a guide
+          // entry ships raw to the reader with nothing throwing.
+          if (body.includes("{{")) {
+            fail(
+              `Unresolved fact token rendered on ${target}`,
+              `body contains '{{' — /${prefix}/ entries must use price LITERALS; the route never interpolates.`,
+            );
+            continue;
+          }
+          ok++;
+        } catch (err) {
+          fail(`${target} fetch error`, String(err));
+        }
+      }
+      livePaths += ok;
+      if (paths.length > 0 && ok === paths.length) {
+        pass(`All ${ok} registered '${locale}' /${prefix}/ pages serve 200`);
+      }
+    }
+  }
+
+  // Anti-vacuity: counts SECTIONS, not paths. An untranslated section
+  // legitimately contributes zero paths, so a path-count guard would have to
+  // be relaxed to accommodate /hotels and would then never fire at all.
+  if (sectionsChecked !== SEO_SECTION_PREFIXES.length) {
+    fail(
+      "L5 skipped a flat SEO section",
+      `checked ${sectionsChecked} of ${SEO_SECTION_PREFIXES.length} — a section lost its PAGE_DATA_MAP wiring, which would otherwise read as a silent pass.`,
+    );
+  } else {
+    pass(
+      `L5 checked ${sectionsChecked} flat SEO section(s), ${livePaths} live translated path(s)`,
+    );
+  }
+}
+
 // ── M) Wayfinding copy consistency (BTS Chidlom exit number) ────────
 // The correct exit for The Mercury Ville is Exit 4 — confirmed with the owner
 // (2026-07-28) and by the on-screen Thai text in LENGOLF's own POV wayfinding
@@ -4633,6 +4767,7 @@ async function main() {
   await runCourseDetailRegistryLivenessTests();
   await runRegionHubRegistryLivenessTests();
   await runFaqRegistryLivenessTests();
+  await runSeoSectionRegistryTests();
   await runWayfindingTests();
   await runRegionCountTests();
 
