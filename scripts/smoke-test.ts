@@ -4063,10 +4063,21 @@ async function runCourseDetailRegistryLivenessTests() {
   const { getRegisteredCourseDetailPaths, ALL_LOCALES } =
     await import("../lib/translated-routes");
 
+  // Same anti-vacuity guard as L3/L4/L5. L2 predates them and had none: if
+  // getRegisteredCourseDetailPaths regressed to [], every locale would be
+  // skipped, the section would print a header, assert nothing and read as a
+  // pass — leaving 60 URLs whose route has dynamicParams=false (so drift is a
+  // HARD 404 advertised by hreflang) with no liveness check at all.
+  let covered = 0;
+
   for (const locale of ALL_LOCALES) {
     if (locale === "en") continue;
     const paths = getRegisteredCourseDetailPaths(locale);
-    if (paths.length === 0) continue; // ko/zh have no course-detail translations yet
+    // A locale with no course-detail translations is legitimate; the guard
+    // below catches ALL of them being empty. (ko/zh were the untranslated
+    // pair until the ko/zh batch — do not read this as still true.)
+    if (paths.length === 0) continue;
+    covered += paths.length;
     let ok = 0;
     for (const path of paths) {
       const target = `/${locale}${path}/`;
@@ -4100,6 +4111,15 @@ async function runCourseDetailRegistryLivenessTests() {
         `All ${ok} registered '${locale}' course-detail translations serve 200`,
       );
     }
+  }
+
+  if (covered === 0) {
+    fail(
+      "L2 covered zero course-detail pages",
+      "getRegisteredCourseDetailPaths() returned nothing for every non-en locale — the whole section asserted nothing. Either lib/translated-routes.ts lost its course-detail entries or the helper regressed; both would otherwise show up as a silent pass.",
+    );
+  } else {
+    pass(`L2 covered ${covered} registered course-detail path(s)`);
   }
 }
 

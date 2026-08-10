@@ -1,5 +1,9 @@
-import Link from 'next/link'
+// Locale-aware Link: a bare next/link drops the locale prefix, so every
+// "Explore More" card on the 48 translated pages exited to English.
+import { Link } from '@/i18n/navigation'
 import { ArrowRight, Check, MapPin, Clock, Star, Utensils, Navigation, Calendar } from 'lucide-react'
+import { getTranslations } from 'next-intl/server'
+import { getSiteFacts, money } from '@/lib/site-facts'
 import { BOOKING_URL, BUSINESS_INFO, SOCIAL_LINKS } from '@/lib/constants'
 import type { HotelConciergeSeoPage } from '@/types/seo-pages'
 
@@ -13,8 +17,22 @@ function renderStars(count: number) {
   ))
 }
 
-export default function HotelConciergePage({ data }: Props) {
+export default async function HotelConciergePage({ data }: Props) {
   const { content } = data
+  const locale = data.locale
+
+  const [t, facts] = await Promise.all([
+    getTranslations('HotelConciergePage'),
+    getSiteFacts(),
+  ])
+
+  // Bay rate and bay capacity come from the POS-backed facts, not from the
+  // catalogs — a price baked into five message files is five places to drift.
+  const bayFrom = money(locale, facts.bayHourlyMin)
+  // Premium club rental has no SiteFacts field yet (only courseRentalDay), so
+  // it stays a literal here — one place, not five. Corroborated across
+  // data/pricing.ts ("from 150 THB per hour").
+  const premiumClubFrom = money(locale, 150)
 
   return (
     <div className="hotel-concierge-page">
@@ -22,17 +40,17 @@ export default function HotelConciergePage({ data }: Props) {
       <section className="relative bg-gradient-to-br from-[#1a472a] to-[#2d6a4f] py-16 md:py-24 text-white">
         <div className="mx-auto max-w-[900px] px-5">
           <p className="text-sm font-medium uppercase tracking-wider text-[#d4a843] mb-4">
-            Hotel Guest Guide
+            {t('eyebrow')}
           </p>
           <h1 className="text-3xl font-bold md:text-5xl mb-4">{data.title}</h1>
           <div className="flex flex-wrap items-center gap-4 mb-8 text-white/80">
             <div className="flex items-center gap-1.5">
               <MapPin className="h-4 w-4" />
-              <span>{content.hotel_distance_m}m from LENGOLF</span>
+              <span>{t('distanceFromLengolf', { distance: content.hotel_distance_m })}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <Clock className="h-4 w-4" />
-              <span>{content.walking_time_mins} min walk</span>
+              <span>{t('minWalk', { mins: content.walking_time_mins })}</span>
             </div>
             <div className="flex items-center gap-1">
               {renderStars(content.hotel_star_rating)}
@@ -45,7 +63,7 @@ export default function HotelConciergePage({ data }: Props) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg bg-[#d4a843] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#c49a3a]"
             >
-              Book a Bay
+              {t('bookABay')}
             </a>
             <a
               href={SOCIAL_LINKS.line}
@@ -53,7 +71,7 @@ export default function HotelConciergePage({ data }: Props) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg border-2 border-white/30 px-6 py-3 font-semibold text-white transition-colors hover:bg-white/10"
             >
-              LINE Us
+              {t('lineUs')}
             </a>
           </div>
         </div>
@@ -64,19 +82,19 @@ export default function HotelConciergePage({ data }: Props) {
         <div className="mx-auto max-w-[900px] px-5">
           <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-4">
             <Navigation className="inline h-6 w-6 mr-2 text-[#2d6a4f]" />
-            How to Walk to LENGOLF
+            {t('walkHeading')}
           </h2>
           <div className="rounded-xl border bg-white p-6">
             <div className="flex items-start gap-4">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#e8f5e9] text-[#2d6a4f] font-bold text-xs">
-                {content.walking_time_mins} min
+                {t('minsBadge', { mins: content.walking_time_mins })}
               </div>
               <div>
                 <p className="text-base leading-relaxed text-muted-foreground">
                   {content.walking_directions}
                 </p>
                 <p className="mt-3 text-sm font-medium text-[#2d6a4f]">
-                  Distance: {content.hotel_distance_m}m · Walking time: {content.walking_time_mins} minutes
+                  {t('distanceLine', { distance: content.hotel_distance_m, mins: content.walking_time_mins })}
                 </p>
               </div>
             </div>
@@ -85,7 +103,7 @@ export default function HotelConciergePage({ data }: Props) {
           {/* Google Maps Embed */}
           {content.google_maps_embed && (
             <div className="mt-8">
-              <h3 className="text-xl font-bold text-[#1a472a] mb-4">Map & Directions</h3>
+              <h3 className="text-xl font-bold text-[#1a472a] mb-4">{t('mapHeading')}</h3>
               <div className="rounded-xl overflow-hidden border">
                 <iframe
                   src={content.google_maps_embed}
@@ -95,7 +113,7 @@ export default function HotelConciergePage({ data }: Props) {
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title={`Map from ${content.hotel_name} to LENGOLF`}
+                  title={t('mapTitle', { hotel: content.hotel_name })}
                 />
               </div>
             </div>
@@ -107,30 +125,32 @@ export default function HotelConciergePage({ data }: Props) {
       <section className="py-12 md:py-16 bg-[#f8f9fa]">
         <div className="mx-auto max-w-[900px] px-5">
           <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-4">
-            Why Visit LENGOLF During Your Stay
+            {t('whyHeading')}
           </h2>
           <p className="text-base leading-relaxed text-muted-foreground md:text-lg mb-6">
-            LENGOLF is an indoor golf simulator bar at Mercury Ville, BTS Chidlom — just a {content.walking_time_mins}-minute
-            walk from {content.hotel_name}. With premium Bravo golf simulators, a full bar, and air-conditioning,
-            it&apos;s a great activity for hotel guests — whether you&apos;re a golfer or have never picked up a club.
-            Bay rental starts at 550 THB/hour for up to 5 people.
+            {t('whyBody', {
+              mins: content.walking_time_mins,
+              hotel: content.hotel_name,
+              rate: bayFrom,
+              n: facts.maxPlayersPerBay,
+            })}
           </p>
           <div className="flex flex-wrap gap-3">
             <div className="flex items-center gap-2 rounded-full bg-[#e8f5e9] px-4 py-2 text-sm text-[#2d6a4f]">
               <Check className="h-4 w-4" />
-              550 THB/hour for up to 5 people
+              {t('pillRate', { rate: bayFrom, n: facts.maxPlayersPerBay })}
             </div>
             <div className="flex items-center gap-2 rounded-full bg-[#e8f5e9] px-4 py-2 text-sm text-[#2d6a4f]">
               <Check className="h-4 w-4" />
-              Mercury Ville, BTS Chidlom (Exit 4)
+              {t('pillLocation')}
             </div>
             <div className="flex items-center gap-2 rounded-full bg-[#e8f5e9] px-4 py-2 text-sm text-[#2d6a4f]">
               <Check className="h-4 w-4" />
-              Air-conditioned, rain-proof, open until late
+              {t('pillComfort')}
             </div>
             <div className="flex items-center gap-2 rounded-full bg-[#e8f5e9] px-4 py-2 text-sm text-[#2d6a4f]">
               <Check className="h-4 w-4" />
-              Premium club rental from 150 THB/hour
+              {t('pillClubs', { rate: premiumClubFrom })}
             </div>
           </div>
         </div>
@@ -140,29 +160,34 @@ export default function HotelConciergePage({ data }: Props) {
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-[900px] px-5">
           <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-4">
-            Is LENGOLF Walkable from {content.hotel_name}?
+            {t('walkableHeading', { hotel: content.hotel_name })}
           </h2>
           <div className="rounded-xl border bg-white p-6">
             {content.hotel_distance_m <= 500 ? (
               <p className="text-base leading-relaxed text-muted-foreground">
-                <strong className="text-[#1a472a]">Yes — very easily.</strong> At just {content.hotel_distance_m}m,
-                LENGOLF is a {content.walking_time_mins}-minute walk from {content.hotel_name}. The route is
-                straightforward along covered sidewalks with BTS Chidlom as a clear landmark. You won&apos;t
-                even need a taxi.
+                <strong className="text-[#1a472a]">{t('walkableNearLead')}</strong>{' '}
+                {t('walkableNearBody', {
+                  distance: content.hotel_distance_m,
+                  mins: content.walking_time_mins,
+                  hotel: content.hotel_name,
+                })}
               </p>
             ) : content.hotel_distance_m <= 800 ? (
               <p className="text-base leading-relaxed text-muted-foreground">
-                <strong className="text-[#1a472a]">Yes — a comfortable walk.</strong> At {content.hotel_distance_m}m,
-                LENGOLF is about a {content.walking_time_mins}-minute walk from {content.hotel_name}. The route
-                follows main roads with sidewalks. In Bangkok&apos;s heat, you might prefer taking the BTS
-                (1-2 stops) — it&apos;s faster and air-conditioned.
+                <strong className="text-[#1a472a]">{t('walkableMidLead')}</strong>{' '}
+                {t('walkableMidBody', {
+                  distance: content.hotel_distance_m,
+                  mins: content.walking_time_mins,
+                  hotel: content.hotel_name,
+                })}
               </p>
             ) : (
               <p className="text-base leading-relaxed text-muted-foreground">
-                <strong className="text-[#1a472a]">Walkable, but BTS is better in the heat.</strong> At {content.hotel_distance_m}m,
-                the walk takes about {content.walking_time_mins} minutes. In Bangkok&apos;s heat (35°C+), we
-                recommend taking the BTS — it&apos;s just 1-2 stops to BTS Chidlom, where The Mercury Ville
-                is directly connected. A short taxi or Grab ride takes about 5-8 minutes and costs around 60-80 THB.
+                <strong className="text-[#1a472a]">{t('walkableFarLead')}</strong>{' '}
+                {t('walkableFarBody', {
+                  distance: content.hotel_distance_m,
+                  mins: content.walking_time_mins,
+                })}
               </p>
             )}
           </div>
@@ -175,7 +200,7 @@ export default function HotelConciergePage({ data }: Props) {
           <div className="mx-auto max-w-[900px] px-5">
             <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-4">
               <MapPin className="inline h-6 w-6 mr-2 text-[#2d6a4f]" />
-              Exploring the Area Around {content.hotel_name}
+              {t('areaHeading', { hotel: content.hotel_name })}
             </h2>
             <div className="rounded-xl border bg-white p-6 md:p-8">
               <p className="text-base leading-relaxed text-muted-foreground md:text-lg">
@@ -192,7 +217,7 @@ export default function HotelConciergePage({ data }: Props) {
           <div className="mx-auto max-w-[900px] px-5">
             <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-6">
               <Calendar className="inline h-6 w-6 mr-2 text-[#2d6a4f]" />
-              Suggested Day Itinerary from {content.hotel_name}
+              {t('itineraryHeading', { hotel: content.hotel_name })}
             </h2>
             <div className="relative">
               {/* Timeline line */}
@@ -221,7 +246,7 @@ export default function HotelConciergePage({ data }: Props) {
           <div className="mx-auto max-w-[900px] px-5">
             <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-6">
               <Utensils className="inline h-6 w-6 mr-2 text-[#2d6a4f]" />
-              Where to Eat Near {content.hotel_name}
+              {t('eatHeading', { hotel: content.hotel_name })}
             </h2>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {content.nearby_restaurants.map((restaurant) => (
@@ -232,7 +257,9 @@ export default function HotelConciergePage({ data }: Props) {
                   <h3 className="font-semibold text-[#1a472a] mb-1">{restaurant.name}</h3>
                   <p className="text-sm text-muted-foreground mb-2">{restaurant.cuisine}</p>
                   <p className="text-xs text-[#2d6a4f] font-medium">
-                    {restaurant.distance_m === 0 ? 'In hotel' : `${restaurant.distance_m}m away`}
+                    {restaurant.distance_m === 0
+                      ? t('inHotel')
+                      : t('distanceAway', { distance: restaurant.distance_m })}
                   </p>
                 </div>
               ))}
@@ -246,7 +273,7 @@ export default function HotelConciergePage({ data }: Props) {
         <section className="py-12 md:py-16">
           <div className="mx-auto max-w-[900px] px-5">
             <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-6">
-              Other Things to Do Near {content.hotel_name}
+              {t('activitiesHeading', { hotel: content.hotel_name })}
             </h2>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {content.nearby_activities.map((activity) => (
@@ -260,7 +287,7 @@ export default function HotelConciergePage({ data }: Props) {
                       <h3 className="font-semibold text-[#1a472a] mb-1">{activity.name}</h3>
                       <p className="text-sm text-muted-foreground capitalize">{activity.type}</p>
                       <p className="text-xs text-[#2d6a4f] font-medium mt-1">
-                        {activity.distance_m}m from hotel
+                        {t('distanceFromHotel', { distance: activity.distance_m })}
                       </p>
                     </div>
                   </div>
@@ -275,10 +302,15 @@ export default function HotelConciergePage({ data }: Props) {
       <section className="py-12 md:py-16 bg-gradient-to-br from-[#1a472a] to-[#2d6a4f] text-white text-center">
         <div className="mx-auto max-w-[900px] px-5">
           <h2 className="text-2xl font-bold md:text-3xl mb-4">
-            Visit LENGOLF During Your Stay
+            {t('ctaTitle')}
           </h2>
           <p className="text-white/80 mb-8 max-w-lg mx-auto">
-            Just a {content.walking_time_mins}-minute walk from {content.hotel_name}. Book a bay at LENGOLF, {BUSINESS_INFO.addressShort}. Open {BUSINESS_INFO.hours}.
+            {t('ctaText', {
+              mins: content.walking_time_mins,
+              hotel: content.hotel_name,
+              address: BUSINESS_INFO.addressShort,
+              hours: BUSINESS_INFO.hours,
+            })}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <a
@@ -287,13 +319,13 @@ export default function HotelConciergePage({ data }: Props) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg bg-[#d4a843] px-8 py-3 font-semibold text-white transition-colors hover:bg-[#c49a3a]"
             >
-              Book Now
+              {t('bookNow')}
             </a>
             <a
               href={`tel:${BUSINESS_INFO.phoneRaw}`}
               className="inline-flex items-center gap-2 rounded-lg border-2 border-white/30 px-8 py-3 font-semibold text-white transition-colors hover:bg-white/10"
             >
-              Call {BUSINESS_INFO.phone}
+              {t('call', { phone: BUSINESS_INFO.phone })}
             </a>
             <a
               href={SOCIAL_LINKS.line}
@@ -301,7 +333,7 @@ export default function HotelConciergePage({ data }: Props) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg border-2 border-white/30 px-8 py-3 font-semibold text-white transition-colors hover:bg-white/10"
             >
-              LINE Us
+              {t('lineUs')}
             </a>
           </div>
         </div>
@@ -311,7 +343,7 @@ export default function HotelConciergePage({ data }: Props) {
       {data.related_slugs && data.related_slugs.length > 0 && (
         <section className="py-12 md:py-16">
           <div className="mx-auto max-w-[900px] px-5">
-            <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-6">Explore More</h2>
+            <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-6">{t('exploreMore')}</h2>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
               {data.related_slugs.map((path) => {
                 const label = path

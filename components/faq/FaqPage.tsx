@@ -448,10 +448,16 @@ function renderParagraph(text: string, key: string | number, headingContext?: st
     // rather than being flattened into bullets.
     const ordered = items.length > 0 && isOrdinalItem(items[0])
     const ListTag = ordered ? 'ol' : 'ul'
+    // Honour the author's own first number. A block that starts at 3 (a run
+    // split across a heading, or a numbering gap) would otherwise be silently
+    // renumbered from 1 — the list markup would contradict the source text.
+    // The corpus is clean today; this keeps it from mattering if it stops being.
+    const startAt = ordered ? Number(items[0].match(/^\s*(\d+)\./)![1]) : 1
 
     return (
       <ListTag
         key={key}
+        {...(ordered && startAt !== 1 ? { start: startAt } : {})}
         className={`my-4 ${ordered ? 'list-decimal' : 'list-disc'} pl-6 space-y-2`}
       >
         {items.map((item, j) => (

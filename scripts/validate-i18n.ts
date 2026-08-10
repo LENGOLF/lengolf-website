@@ -70,6 +70,7 @@ import { getFaqHubContent } from '@/data/faq-hub'
 import { priceGuidePages } from '@/data/price-guide-pages'
 import { activityOccasionPages } from '@/data/activity-occasions'
 import { bestOfListiclePages } from '@/data/best-of-listicle-pages'
+import { hotelConciergePages } from '@/data/hotel-pages'
 import {
   getRegisteredGuidePaths,
   getRegisteredFaqPaths,
@@ -832,6 +833,7 @@ const SSG_UI_NAMESPACES: Record<string, Locale[]> = (() => {
   const activity = localesWithSeoPages(activityOccasionPages)
   const priceGuide = localesWithSeoPages(priceGuidePages)
   const bestOf = localesWithSeoPages(bestOfListiclePages)
+  const hotel = localesWithSeoPages(hotelConciergePages)
   // The /golf-courses/ hub page + HubMapExplorer. No dedicated registry
   // helper exists for a single static path, so derive its SSG locales
   // directly from the registry (currently th only).
@@ -860,6 +862,7 @@ const SSG_UI_NAMESPACES: Record<string, Locale[]> = (() => {
     // being checked when /activities and /cost were translated.
     ...(activity.length > 0 ? { ActivityPage: activity } : {}),
     ...(priceGuide.length > 0 ? { PriceGuidePage: priceGuide } : {}),
+    ...(hotel.length > 0 ? { HotelConciergePage: hotel } : {}),
     ...(bestOf.length > 0 ? { BestOfListiclePage: bestOf } : {}),
     // components/faq/FaqPage.tsx getTranslations('ContactInfo') on every FAQ
     // page; components/activities/ActivityPage.tsx,
