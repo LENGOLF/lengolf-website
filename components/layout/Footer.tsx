@@ -26,6 +26,12 @@ const DISCOVER_LINKS = [
   { key: 'faqLink', href: '/faq/' as const },
 ] as const
 
+const LEGAL_LINKS = [
+  { key: 'privacyPolicy', href: '/privacy-policy' as const },
+  { key: 'termsOfService', href: '/terms-of-service' as const },
+  { key: 'rentalAgreement', href: '/golf-course-club-rental-agreement' as const },
+] as const
+
 const linkStyle = {
   fontFamily: '"Poppins", sans-serif',
   fontWeight: 400,
@@ -237,9 +243,21 @@ export default async function Footer() {
         <div className="flex flex-col items-center gap-2 text-center text-xs text-foreground/70 sm:flex-row sm:justify-between sm:text-left">
           <p>{t('copyright', { year: new Date().getFullYear() })}</p>
           <div className="flex gap-4">
-            <Link href="/privacy-policy" className="transition-colors hover:text-primary">{t('privacyPolicy')}</Link>
-            <Link href="/terms-of-service" className="transition-colors hover:text-primary">{t('termsOfService')}</Link>
-            <Link href="/golf-course-club-rental-agreement" className="transition-colors hover:text-primary">{t('rentalAgreement')}</Link>
+            {/* RawLink for the same reason as DISCOVER_LINKS above: these three
+                pages are hardcoded English (no translation hook at all), so
+                they are deliberately absent from the registry and the
+                locale-aware Link would emit /ja/privacy-policy/ only for the
+                middleware to 301 it back. The LABELS are localized; only the
+                href is un-prefixed. Derived, so if one of them ever gains a
+                translation it starts prefixing on its own. */}
+            {LEGAL_LINKS.map(({ key, href }) => {
+              const LinkTag = hasTranslationForLocale(locale, href) ? Link : RawLink
+              return (
+                <LinkTag key={href} href={href} className="transition-colors hover:text-primary">
+                  {t(key)}
+                </LinkTag>
+              )
+            })}
           </div>
         </div>
       </div>
