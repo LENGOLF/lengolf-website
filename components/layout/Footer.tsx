@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { getTranslations } from 'next-intl/server'
+import RawLink from 'next/link'
 import { Link } from '@/i18n/navigation'
 import { SOCIAL_LINKS, BUSINESS_INFO, storageUrl } from '@/lib/constants'
 import { FacebookIcon, LineIcon, InstagramIcon } from '@/components/shared/SocialIcons'
@@ -16,9 +17,15 @@ const FOOTER_MENU_KEYS = [
   { key: 'blog', href: '/blog' as const },
 ] as const
 
+// `raw: true` means "link to the un-prefixed path deliberately": the target is
+// registered for NO locale, so the locale-aware Link would emit /ja/... and the
+// middleware would 301 it straight back to English. That is a wasted hop for
+// the reader and for crawlers, on every translated page in the site — the
+// footer renders on all of them. Drop the flag the moment the target is
+// translated, or readers will be pinned to English instead.
 const DISCOVER_LINKS = [
   { key: 'thingsToDoLink', href: '/activities/' as const },
-  { key: 'planningLink', href: '/golf-in-thailand-guide/' as const },
+  { key: 'planningLink', href: '/golf-in-thailand-guide/' as const, raw: true },
   { key: 'golfCoursesLink', href: '/golf-courses/' as const },
   { key: 'hotelsLink', href: '/hotels/' as const },
   { key: 'faqLink', href: '/faq/' as const },
@@ -156,17 +163,20 @@ export default async function Footer() {
               {t('discoverMore')}
             </h3>
             <ul>
-              {DISCOVER_LINKS.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="block transition-colors hover:text-[#005a32]"
-                    style={linkStyle}
-                  >
-                    {t(item.key)}
-                  </Link>
-                </li>
-              ))}
+              {DISCOVER_LINKS.map((item) => {
+                const LinkTag = 'raw' in item && item.raw ? RawLink : Link
+                return (
+                  <li key={item.href}>
+                    <LinkTag
+                      href={item.href}
+                      className="block transition-colors hover:text-[#005a32]"
+                      style={linkStyle}
+                    >
+                      {t(item.key)}
+                    </LinkTag>
+                  </li>
+                )
+              })}
             </ul>
           </div>
 

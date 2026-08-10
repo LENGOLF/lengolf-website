@@ -1479,6 +1479,18 @@
     "activitiesHeading": "{hotel} 근처에서 할 만한 다른 활동",
     "distanceFromHotel": "호텔에서 {distance}m",
     "ctaTitle": "머무는 동안 LENGOLF에서",
-    "ctaText": "{hotel}에서 도보 {mins}분이에요. LENGOLF({address})에서 베이를 예약하세요. 영업시간: {hours}."
+    "ctaText": "{hotel}에서 도보 {mins}분이에요. LENGOLF({address})에서 베이를 예약하세요. 영업시간: {hours}.",
+    "activityType": {
+      "attraction": "관광",
+      "cultural": "문화",
+      "dining": "식사",
+      "entertainment": "엔터테인먼트",
+      "landmark": "랜드마크",
+      "medical": "의료",
+      "nightlife": "나이트라이프",
+      "outdoor": "야외",
+      "shopping": "쇼핑",
+      "transport": "교통"
+    }
   }
 }

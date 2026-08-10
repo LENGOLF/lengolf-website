@@ -1477,6 +1477,18 @@
     "activitiesHeading": "{hotel}周辺のその他の過ごし方",
     "distanceFromHotel": "ホテルから{distance}m",
     "ctaTitle": "滞在中にLENGOLFへ",
-    "ctaText": "{hotel}から徒歩{mins}分。LENGOLF（{address}）でベイを予約。営業時間：{hours}"
+    "ctaText": "{hotel}から徒歩{mins}分。LENGOLF（{address}）でベイを予約。営業時間：{hours}",
+    "activityType": {
+      "attraction": "観光",
+      "cultural": "文化",
+      "dining": "食事",
+      "entertainment": "エンタメ",
+      "landmark": "ランドマーク",
+      "medical": "医療",
+      "nightlife": "ナイトライフ",
+      "outdoor": "アウトドア",
+      "shopping": "ショッピング",
+      "transport": "交通"
+    }
   }
 }

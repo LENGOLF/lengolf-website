@@ -12,6 +12,13 @@ interface Props {
   data: HotelConciergeSeoPage
 }
 
+/** Every `nearby_activities[].type` present in data/hotel-pages.ts. */
+const ACTIVITY_TYPES = new Set([
+  'attraction', 'cultural', 'dining', 'entertainment', 'landmark',
+  'medical', 'nightlife', 'outdoor', 'shopping', 'transport',
+])
+type ActivityTypeKey = `activityType.${string}`
+
 function renderStars(count: number) {
   return Array.from({ length: count }, (_, i) => (
     <Star key={i} className="h-4 w-4 fill-[#d4a843] text-[#d4a843]" />
@@ -22,8 +29,9 @@ export default async function HotelConciergePage({ data }: Props) {
   const { content } = data
   const locale = data.locale
 
-  const [t, facts, relatedLabels] = await Promise.all([
+  const [t, tContact, facts, relatedLabels] = await Promise.all([
     getTranslations('HotelConciergePage'),
+    getTranslations('ContactInfo'),
     getSiteFacts(),
     buildRelatedLabels(data.related_slugs, data.locale),
   ])
@@ -88,7 +96,12 @@ export default async function HotelConciergePage({ data }: Props) {
           </h2>
           <div className="rounded-xl border bg-white p-6">
             <div className="flex items-start gap-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#e8f5e9] text-[#2d6a4f] font-bold text-xs">
+              {/* Was a fixed h-10 w-10 circle, sized for the English "6 min".
+                  Localized forms are longer — th "30 นาที", zh "30 分钟" on the
+                  30-minute mercure-siam walk — and overflowed it. A pill that
+                  grows with its content keeps the shape for short values and
+                  stops clipping the long ones. */}
+              <div className="flex h-10 min-w-10 shrink-0 items-center justify-center whitespace-nowrap rounded-full bg-[#e8f5e9] px-3 text-center text-xs font-bold text-[#2d6a4f]">
                 {t('minsBadge', { mins: content.walking_time_mins })}
               </div>
               <div>
@@ -287,7 +300,17 @@ export default async function HotelConciergePage({ data }: Props) {
                     <MapPin className="h-5 w-5 mt-0.5 shrink-0 text-[#d4a843]" />
                     <div>
                       <h3 className="font-semibold text-[#1a472a] mb-1">{activity.name}</h3>
-                      <p className="text-sm text-muted-foreground capitalize">{activity.type}</p>
+                      {/* activity.type is a machine key, not copy. Rendering
+                          it raw put English category words ("cultural",
+                          "shopping") directly above the distance line this
+                          component localizes. Guarded by the known-token list
+                          so a new token added to the data degrades to the raw
+                          value instead of throwing on a missing message. */}
+                      <p className="text-sm text-muted-foreground capitalize">
+                        {ACTIVITY_TYPES.has(activity.type)
+                          ? t(`activityType.${activity.type}` as ActivityTypeKey)
+                          : activity.type}
+                      </p>
                       <p className="text-xs text-[#2d6a4f] font-medium mt-1">
                         {t('distanceFromHotel', { distance: activity.distance_m })}
                       </p>
@@ -310,8 +333,14 @@ export default async function HotelConciergePage({ data }: Props) {
             {t('ctaText', {
               mins: content.walking_time_mins,
               hotel: content.hotel_name,
-              address: BUSINESS_INFO.addressShort,
-              hours: BUSINESS_INFO.hours,
+              // Same substitution as the four sibling SEO components:
+              // BUSINESS_INFO.addressShort and .hours are English-only
+              // constants that would strand an English fragment inside an
+              // otherwise translated sentence. ContactInfo.address is the
+              // localized address; facts.openingHours ("09:00–23:00") is
+              // locale-neutral.
+              address: tContact('address'),
+              hours: facts.openingHours,
             })}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">

@@ -1390,6 +1390,18 @@
     "activitiesHeading": "Other Things to Do Near {hotel}",
     "distanceFromHotel": "{distance}m from hotel",
     "ctaTitle": "Visit LENGOLF During Your Stay",
-    "ctaText": "Just a {mins}-minute walk from {hotel}. Book a bay at LENGOLF, {address}. Open {hours}."
+    "ctaText": "Just a {mins}-minute walk from {hotel}. Book a bay at LENGOLF, {address}. Open {hours}.",
+    "activityType": {
+      "attraction": "Attraction",
+      "cultural": "Cultural",
+      "dining": "Dining",
+      "entertainment": "Entertainment",
+      "landmark": "Landmark",
+      "medical": "Medical",
+      "nightlife": "Nightlife",
+      "outdoor": "Outdoor",
+      "shopping": "Shopping",
+      "transport": "Transport"
+    }
   }
 }

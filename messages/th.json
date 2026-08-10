@@ -1390,6 +1390,18 @@
     "activitiesHeading": "กิจกรรมอื่นใกล้ {hotel}",
     "distanceFromHotel": "ห่างจากโรงแรม {distance} เมตร",
     "ctaTitle": "แวะ LENGOLF ระหว่างเข้าพัก",
-    "ctaText": "เดินจาก {hotel} เพียง {mins} นาที จองเบย์ที่ LENGOLF, {address} เปิด {hours}"
+    "ctaText": "เดินจาก {hotel} เพียง {mins} นาที จองเบย์ที่ LENGOLF, {address} เปิด {hours}",
+    "activityType": {
+      "attraction": "สถานที่ท่องเที่ยว",
+      "cultural": "วัฒนธรรม",
+      "dining": "ร้านอาหาร",
+      "entertainment": "ความบันเทิง",
+      "landmark": "แลนด์มาร์ก",
+      "medical": "การแพทย์",
+      "nightlife": "สถานบันเทิงยามค่ำคืน",
+      "outdoor": "กลางแจ้ง",
+      "shopping": "ช้อปปิ้ง",
+      "transport": "การเดินทาง"
+    }
   }
 }

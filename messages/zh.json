@@ -1480,6 +1480,18 @@
     "activitiesHeading": "{hotel}附近的其他去处",
     "distanceFromHotel": "距酒店{distance}米",
     "ctaTitle": "入住期间来LENGOLF",
-    "ctaText": "从{hotel}步行仅{mins}分钟。在LENGOLF（{address}）预订您的球位。营业时间：{hours}"
+    "ctaText": "从{hotel}步行仅{mins}分钟。在LENGOLF（{address}）预订您的球位。营业时间：{hours}",
+    "activityType": {
+      "attraction": "景点",
+      "cultural": "文化",
+      "dining": "餐饮",
+      "entertainment": "娱乐",
+      "landmark": "地标",
+      "medical": "医疗",
+      "nightlife": "夜生活",
+      "outdoor": "户外",
+      "shopping": "购物",
+      "transport": "交通"
+    }
   }
 }

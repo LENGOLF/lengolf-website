@@ -476,6 +476,11 @@ function renderParagraph(text: string, key: string | number, headingContext?: st
     const bulletLines = lines.slice(firstBulletIdx).filter(isListItem)
     const orderedMixed = bulletLines.length > 0 && isOrdinalItem(bulletLines[0])
     const MixedListTag = orderedMixed ? 'ol' : 'ul'
+    // Same as the pure-list branch above: honour the author's first number
+    // rather than silently restarting the list at 1.
+    const mixedStartAt = orderedMixed
+      ? Number(bulletLines[0].match(/^\s*(\d+)\./)![1])
+      : 1
     const isPricingContext = headingContext && PRICING_HEADING_RE.test(headingContext)
 
     return (
@@ -487,6 +492,7 @@ function renderParagraph(text: string, key: string | number, headingContext?: st
           renderPriceTable(bulletLines, `${key}-table`)
         ) : (
           <MixedListTag
+            {...(orderedMixed && mixedStartAt !== 1 ? { start: mixedStartAt } : {})}
             className={`my-4 ${orderedMixed ? 'list-decimal' : 'list-disc'} pl-6 space-y-2`}
           >
             {bulletLines.map((item, j) => (

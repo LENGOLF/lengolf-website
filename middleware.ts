@@ -27,8 +27,24 @@ export default function middleware(request: NextRequest) {
   // Always run intlMiddleware (it handles locale rewriting for [locale] param)
   const response = intlMiddleware(request)
 
-  // Intercept: if intlMiddleware redirects to an untranslated locale route,
-  // strip the locale cookie and re-run to prevent redirect loop
+  // Intercept: intlMiddleware wants to redirect to a locale route that has no
+  // translation for this path. Serve English for THIS request instead.
+  //
+  // This used to delete the NEXT_LOCALE cookie and re-run intlMiddleware,
+  // which only works when the COOKIE was the source of the locale. Locale
+  // detection also reads Accept-Language (localeDetection defaults to true in
+  // i18n/routing.ts), and a re-run detects the same locale from the same
+  // header — so a browser sending "Accept-Language: ja" with no cookie
+  // ping-ponged forever:
+  //
+  //   GET /golf-in-thailand-guide/  -> 307 /ja/golf-in-thailand-guide/
+  //   GET /ja/golf-in-thailand-guide/ -> 301 /golf-in-thailand-guide/   (loop above)
+  //
+  // i.e. ERR_TOO_MANY_REDIRECTS on a page the footer links from every page in
+  // the site. Rewriting (not redirecting) to the /en tree ends it in one hop
+  // and returns the page the reader asked for. The cookie is deliberately NOT
+  // set: this request falls back to English, the reader's language preference
+  // is not overwritten for the rest of the site.
   const location = response.headers.get('location')
   if (location && response.status >= 300 && response.status < 400) {
     try {
@@ -39,8 +55,9 @@ export default function middleware(request: NextRequest) {
         if (redirectPath === `/${locale}` || redirectPath.startsWith(`/${locale}/`)) {
           const pathWithoutLocale = redirectPath.replace(new RegExp(`^/${locale}`), '') || '/'
           if (!hasTranslationForLocale(locale, pathWithoutLocale)) {
-            request.cookies.delete('NEXT_LOCALE')
-            return intlMiddleware(request)
+            const url = request.nextUrl.clone()
+            url.pathname = `/en${pathWithoutLocale === '/' ? '' : pathWithoutLocale}`
+            return NextResponse.rewrite(url)
           }
           break
         }
