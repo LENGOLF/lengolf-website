@@ -19,8 +19,9 @@ export const course: GolfCourse = {
   driving_range: true,
   website: null,
   phone: '+66 75 218 966',
-  latitude: 7.79,       // model estimate — unconfirmed GPS
-  longitude: 99.62,     // model estimate — unconfirmed GPS
+  latitude: 7.707859,
+  longitude: 99.596897,
+  coordinates_verified_at: '2026-08-10',
   distance_from_bangkok_km: 850,
   drive_time_from_bangkok_min: 660,
   google_maps_url: null,
