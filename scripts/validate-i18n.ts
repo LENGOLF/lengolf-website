@@ -19,6 +19,7 @@
  *   - data/faq-hub.ts           — the /faq/ hub content per locale
  *   - data/price-guide-pages.ts — /cost entries with locale ja/ko/zh/th
  *   - data/activity-occasions.ts — /activities entries, same locales
+ *   - data/best-of-listicle-pages.ts — /best entries, same locales
  * data/faq-pages.ts imports lib/pricing at module level, but that module is
  * tsx-safe by design: its React `cache` call falls back to identity outside
  * the RSC runtime (see the comment in lib/pricing.ts), and the live pricing
@@ -68,6 +69,7 @@ import { PRICE_TIER_I18N } from '@/data/price-tiers'
 import { getFaqHubContent } from '@/data/faq-hub'
 import { priceGuidePages } from '@/data/price-guide-pages'
 import { activityOccasionPages } from '@/data/activity-occasions'
+import { bestOfListiclePages } from '@/data/best-of-listicle-pages'
 import {
   getRegisteredGuidePaths,
   getRegisteredFaqPaths,
@@ -307,10 +309,16 @@ for (const locale of LOCALES) {
 //     stay English on every locale page, which also means they must not be
 //     linted: one of them legitimately contains "!!", and the exclamation
 //     check would fail an entry for faithfully reproducing a real review.
-const NON_PROSE_SEO_FIELD_RE = /^occasion_type$|^last_verified$|^curated_reviews\[/
+// `list_items[].address` is a street address and `.website` a URL — neither is
+// prose, and linting them fires the brand and terminology checks on
+// identifiers. `rank`, `year` and `is_lengolf` are numeric/boolean and drop
+// out of flattenMessages on their own.
+const NON_PROSE_SEO_FIELD_RE =
+  /^occasion_type$|^last_verified$|^curated_reviews\[|^list_items\[\d+\]\.(address|website)$/
 for (const [label, pages] of [
   ['cost', priceGuidePages],
   ['activity', activityOccasionPages],
+  ['best', bestOfListiclePages],
 ] as const) {
   for (const page of pages) {
     if (!LOCALES.includes(page.locale as Locale)) continue
