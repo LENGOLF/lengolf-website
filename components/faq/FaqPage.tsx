@@ -83,7 +83,7 @@ export default async function FaqPageComponent({ data }: Props) {
       <section className="pb-12 md:pb-16">
         <div className="mx-auto max-w-[900px] px-5">
           <div className="prose prose-lg max-w-none text-muted-foreground prose-headings:text-[#1a472a] prose-strong:text-[#1a472a]">
-            {content.answer_body.split('\n\n').map((paragraph, i) => {
+            {coalesceOrdinalBlocks(content.answer_body.split('\n\n')).map((paragraph, i) => {
               // Handle markdown-style bold headers (standalone **heading**)
               if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
                 const text = paragraph.replace(/\*\*/g, '')
@@ -365,6 +365,62 @@ function renderPriceTable(items: string[], key: string | number) {
       ))}
     </div>
   )
+}
+
+/**
+ * Merge runs of adjacent blocks that are each a pure numbered-list block into
+ * one block, so they render as a single continuous <ol>.
+ *
+ * answer_body is split on '\n\n' and each block renders independently. Authors
+ * write numbered lists both ways — items on consecutive lines inside one block,
+ * and items separated by blank lines. The second shape used to be harmless,
+ * because before ordered lists rendered at all every 'N. ' line fell through to
+ * the plain <p> branch and the reader saw the author's own numbers as text.
+ * Once <ol> rendering landed, each of those blocks became a one-item <ol> and
+ * every item restarted at 1 — faq-17 showed "1. Visa Exemption / 1. Visa on
+ * Arrival / 1. e-Visa". So the list feature regressed the very content it was
+ * meant to fix.
+ *
+ * Only a run whose numbering CONTINUES is merged (…2. then 3.). Two genuinely
+ * separate lists sitting back to back, where the second restarts at 1, stay
+ * separate — merging those would silently renumber the second list.
+ */
+function coalesceOrdinalBlocks(blocks: string[]): string[] {
+  const ordinalOf = (line: string) => {
+    const m = line.match(/^\s*(\d+)\.\s+/)
+    return m ? Number(m[1]) : null
+  }
+  const asOrdinalBlock = (block: string) => {
+    const lines = block.split('\n').filter((l) => l.trim() !== '')
+    if (lines.length === 0) return null
+    const nums = lines.map(ordinalOf)
+    if (nums.some((n) => n === null)) return null
+    return { first: nums[0] as number, last: nums[nums.length - 1] as number }
+  }
+
+  const out: string[] = []
+  let run: string[] = []
+  let runLast: number | null = null
+
+  const flush = () => {
+    if (run.length > 0) out.push(run.join('\n'))
+    run = []
+    runLast = null
+  }
+
+  for (const block of blocks) {
+    const info = asOrdinalBlock(block)
+    if (!info) {
+      flush()
+      out.push(block)
+      continue
+    }
+    if (runLast !== null && info.first !== runLast + 1) flush()
+    run.push(block)
+    runLast = info.last
+  }
+  flush()
+  return out
 }
 
 /** Render a content paragraph, handling tables, bullet lists, and inline bold */

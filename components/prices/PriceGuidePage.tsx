@@ -1,5 +1,10 @@
 import { Fragment } from 'react'
-import Link from 'next/link'
+// Locale-aware Link: a bare next/link emits an un-prefixed href, so every
+// related-page card on a translated page exited the reader's locale back to
+// English. Every related_slugs target IS translated in every locale that
+// ships these pages, so this was a pure locale exit, not a missing page.
+// BestOfListiclePage already imports from here.
+import { Link } from '@/i18n/navigation'
 import { ArrowRight, Check, Calendar } from 'lucide-react'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { getSiteFacts, getFactTokens } from '@/lib/site-facts'

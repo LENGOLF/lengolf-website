@@ -4267,8 +4267,10 @@ async function runFaqRegistryLivenessTests() {
 // for guides, FAQs and course details, and L2/L3/L4 for liveness:
 //   - data entry with no registry line → built, then 301'd to English. The
 //     translation exists and is unreachable, silently.
-//   - registry line with no data entry → hard 404 (dynamicParams is false)
-//     while hreflang and the sitemap advertise it.
+//   - registry line with no data entry → hard 404 (the page component calls
+//     notFound() when the lookup misses) while hreflang and the sitemap
+//     advertise it. These four routes do NOT set dynamicParams = false; the
+//     outcome is the same 404, the mechanism is not.
 // Consistency and liveness live in one section here because these sections
 // share a single shape; splitting them would triple the boilerplate for no
 // extra coverage. /hotels is listed and simply contributes zero paths until

@@ -717,8 +717,26 @@ export function getPriceGuidePageJsonLd(page: {
   const localePrefix = locale === 'en' ? '' : `/${locale}`
   // Parse price breakdown items and extract actual prices
   const parsedOffers = page.content.price_breakdown.map((item) => {
-    // Check for price range (e.g., "550–950 THB/hr" or "550-950")
-    const rangeMatch = item.price.match(/^(\d[\d,]*)\s*[–-]\s*(\d[\d,]*)/)
+    // Anchor the figure to its CURRENCY token rather than to the start of the
+    // string. The old parser anchored the range at ^ and then fell back to the
+    // first digit run anywhere, which is correct only while the number leads.
+    // Translated rows put a quantity first — ja "1時間550〜950THB", ko
+    // "1라운드 1,000~1,500바트" — so the anchored range missed and the fallback
+    // captured the quantity's "1", emitting lowPrice "1" on a LENGOLF-branded
+    // Product. That is a "from ฿1" rich result. th and zh only escaped because
+    // their unit happens to trail. Every locale places the currency
+    // immediately after the figure, so that is the reliable anchor.
+    const CURRENCY = String.raw`(?:THB|บาท|바트|泰铢|฿)`
+    // U+301C 〜 (ja), U+FF5E ～, ASCII ~ (ko), – — and hyphen. Hyphen last so
+    // it is a literal inside the class.
+    const DASH = String.raw`[–—〜～~-]`
+    const rangeMatch =
+      item.price.match(
+        new RegExp(String.raw`(\d[\d,]*)\s*${DASH}\s*(\d[\d,]*)\s*${CURRENCY}`)
+      ) ??
+      // No currency token in the row (bare "550-950"): fall back to the old
+      // ^-anchored form so EN rows that never carried a unit still parse.
+      item.price.match(/^(\d[\d,]*)\s*[–-]\s*(\d[\d,]*)/)
     if (rangeMatch) {
       return {
         '@type': 'Offer' as const,
@@ -731,8 +749,12 @@ export function getPriceGuidePageJsonLd(page: {
       }
     }
 
-    // Check for single price (e.g., "1,800 THB/hr" or "150")
-    const singlePriceMatch = item.price.match(/(\d[\d,]*)/)
+    // Check for single price (e.g., "1,800 THB/hr" or "150"). Currency-anchored
+    // first, for the same reason as the range above — ja "1時間150THB" would
+    // otherwise parse as 1.
+    const singlePriceMatch =
+      item.price.match(new RegExp(String.raw`(\d[\d,]*)\s*${CURRENCY}`)) ??
+      item.price.match(/(\d[\d,]*)/)
     if (singlePriceMatch) {
       return {
         '@type': 'Offer' as const,

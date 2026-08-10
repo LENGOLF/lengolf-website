@@ -865,10 +865,13 @@ export function getRegisteredFaqPaths(locale: string): string[] {
  * Paths registered as translated for `locale` under one of the flat SEO
  * sections that are NOT /guide/ or /faq/ — '/cost/', '/activities/',
  * '/best/', '/hotels/'. Those four render from data files via
- * lib/seo-pages.ts (PAGE_DATA_MAP) with `dynamicParams` off, so exactly the
- * same one-sided-edit hazard applies as for guides and FAQs: a data entry
- * with no registry line is built and then 301'd away, and a registry line
- * with no data entry is a hard 404 advertised in hreflang. This registry
+ * lib/seo-pages.ts (PAGE_DATA_MAP), and their page components call
+ * notFound() when getSeoPageBySlug returns null, so exactly the same
+ * one-sided-edit hazard applies as for guides and FAQs: a data entry with no
+ * registry line is built and then 301'd away, and a registry line with no
+ * data entry is a hard 404 advertised in hreflang. (Unlike the course-detail
+ * route these do not set `dynamicParams = false` — the 404 comes from
+ * notFound(), but the user-visible outcome is identical.) This registry
  * cannot import those data files (it is edge-bundled), so the smoke tests
  * assert the two lists agree — see scripts/smoke-test.ts section L5.
  *
