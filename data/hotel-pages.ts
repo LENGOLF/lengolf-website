@@ -1092,7 +1092,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-intercontinental-bangkok',
     title: 'Things to Do Near InterContinental Bangkok | Guest Activities',
     meta_description:
-      'Staying at InterContinental Bangkok? Discover activities nearby — indoor golf at LENGOLF (just across the street), Erawan Shrine, CentralWorld shopping, and dining options.',
+      'Staying at InterContinental Bangkok? Discover activities nearby — indoor golf at LENGOLF (a 6-minute walk), Erawan Shrine, CentralWorld shopping, and dining options.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1148,7 +1148,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-intercontinental-bangkok',
     title: 'สิ่งที่น่าทำใกล้ InterContinental Bangkok | กิจกรรมสำหรับผู้เข้าพัก',
     meta_description:
-      'พักที่ InterContinental Bangkok อยู่ใช่ไหม รวมกิจกรรมใกล้โรงแรม ทั้งกอล์ฟในร่มที่ LENGOLF (อยู่ฝั่งตรงข้ามถนนพอดี) ศาลพระพรหมเอราวัณ ช้อปปิ้งที่ CentralWorld และร้านอาหารอีกหลายทางเลือก',
+      'พักที่ InterContinental Bangkok อยู่ใช่ไหม รวมกิจกรรมใกล้โรงแรม ทั้งกอล์ฟในร่มที่ LENGOLF (เดิน 6 นาที) ศาลพระพรหมเอราวัณ ช้อปปิ้งที่ CentralWorld และร้านอาหารอีกหลายทางเลือก',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1204,7 +1204,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-intercontinental-bangkok',
     title: 'インターコンチネンタル・バンコク周辺の過ごし方 — 宿泊者向けアクティビティ',
     meta_description:
-      'インターコンチネンタル・バンコク（InterContinental Bangkok）周辺の過ごし方。通りの向かいのLENGOLFでインドアゴルフ、エラワン廟、セントラルワールドでの買い物とグルメ情報。',
+      'インターコンチネンタル・バンコク（InterContinental Bangkok）周辺の過ごし方。徒歩6分のLENGOLFでインドアゴルフ、エラワン廟、セントラルワールドでの買い物とグルメ情報。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1260,7 +1260,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-intercontinental-bangkok',
     title: 'InterContinental Bangkok 주변 즐길 거리 — 투숙객 액티비티 가이드',
     meta_description:
-      'InterContinental Bangkok에 묵는다면 길 건너 LENGOLF 실내 골프를 비롯해 Erawan Shrine, CentralWorld 쇼핑, 주변 맛집까지 가까운 즐길 거리를 정리했어요.',
+      'InterContinental Bangkok에 묵는다면 도보 6분 거리의 LENGOLF 실내 골프를 비롯해 Erawan Shrine, CentralWorld 쇼핑, 주변 맛집까지 가까운 즐길 거리를 정리했어요.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1316,7 +1316,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-intercontinental-bangkok',
     title: 'InterContinental Bangkok附近好去处 — 住客活动指南',
     meta_description:
-      '住在InterContinental Bangkok？周边玩法很多：LENGOLF室内高尔夫几乎就在马路对面，还有四面佛、CentralWorld购物与各式餐厅。',
+      '住在InterContinental Bangkok？周边玩法很多：步行6分钟即到LENGOLF室内高尔夫，还有四面佛、CentralWorld购物与各式餐厅。',
     featured_image: null,
     schema_markup: null,
     status: 'published',

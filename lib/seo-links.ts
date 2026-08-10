@@ -29,6 +29,16 @@ export function relatedQuestionPath(slug: string): string {
  */
 const DERIVED_PREFIXES = new Set(['near', 'under', 'compare', 'best-for'])
 
+// Single-segment core routes that related_slugs can point at. A path missing
+// from this set falls through to `return null`, and every consumer then applies
+// its own title-cased-slug fallback — which renders an ENGLISH card title under
+// a localized heading. /menu and /golf-courses were missing while being linked
+// from 5 activity entries and 4 FAQ entries, so 8 non-EN pages showed "Menu"
+// and "Golf Courses" next to correctly localized siblings.
+//
+// Adding a path here is only half the fix: it must also have a
+// ExplainerPage.pathLabels.<segment> entry in ALL FIVE catalogs, or t()
+// resolves nothing.
 const STATIC_LABEL_PATHS = new Set([
   'golf',
   'lessons',
@@ -37,6 +47,8 @@ const STATIC_LABEL_PATHS = new Set([
   'golf-course-club-rental',
   'golf-in-thailand-guide',
   'corporate-golf-packages',
+  'menu',
+  'golf-courses',
 ])
 
 /**

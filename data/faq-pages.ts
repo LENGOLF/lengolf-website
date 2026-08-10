@@ -2863,9 +2863,11 @@ export const faqPages: FaqSeoPage[] = [
   // the mfa.go.th / immigration.go.th / thaievisa.go.th / tdac.immigration.go.th
   // sources are preserved verbatim. Legal terms keep the EN form in parentheses
   // (Visa Exemption, Visa on Arrival, e-Visa). The EN numbered pathway list is
-  // kept as an ordinal-prefixed "- " list: FaqPage only renders "- " lines as a
-  // list, so a bare "1." list would collapse into one run-on paragraph
-  // (the same call the shipped faq-30-th made). related_slugs:
+  // The EN numbered pathway list is carried as a plain "1." list, matching EN.
+  // (It was previously written as "- **1. …**" because FaqPage only rendered
+  // "- " lines as a list; commit 311cef3 in this branch taught LIST_ITEM_RE to
+  // match "N. " too, which made that workaround render a BULLET with the
+  // ordinal surviving as bold body text — "• 1. 유효한 여권".) related_slugs:
   // /golf-in-thailand-guide has no KO route and is replaced with
   // /guide/first-time-golf-thailand.
   {
@@ -2887,7 +2889,7 @@ export const faqPages: FaqSeoPage[] = [
       answer_intro:
         '대부분의 방문객에게 태국 골프 휴가는 일반 관광 입국이면 충분해요. 골프 전용 비자나 스포츠 허가 같은 건 없어요. 관건은 내 여권에 어떤 입국 경로가 적용되는지 하나예요. 비자 면제인지, 도착 비자인지, e-Visa인지요.',
       answer_body:
-        '**주의:** 비자 규정은 자주 바뀌어요. 아래 내용은 2026년 초 기준의 상황이고 일반적인 안내로만 참고해 주세요. 여행을 예약하기 전에 가까운 태국 대사관이나 태국 이민국 공식 웹사이트에서 본인에게 적용되는 요건을 반드시 확인하세요.\n\n**세 가지 입국 경로**\n\n- **1. 비자 면제(Visa Exemption)** — 많은 국적의 여행자가 사전에 비자를 신청하지 않고 태국에 입국할 수 있어요. 골프 휴가는 관광 입국으로 허용되는 활동 범위에 무리 없이 들어가요. 면제 대상 여부는 인터넷에서 찾은 목록에 의존하지 마시고, 태국 외교부 웹사이트에서 직접 확인하세요\n- **2. 도착 비자(Visa on Arrival, VOA)** — 비자 면제 대상이 아닌 국적이라면 수완나품(BKK)과 돈므앙(DMK)을 포함한 지정 국제공항에서 도착 비자를 받을 수 있는 경우가 있어요. 사진, 출국 항공권 증빙, 충분한 자금 증빙이 필요하고, 창구에서 태국 바트로 수수료를 내야 해요. 붐비는 시간대에는 줄이 길어질 수 있으니, 이른 티타임이 잡혀 있다면 도착 일정에 이 시간을 넣어 두세요\n- **3. e-Visa** — 태국의 e-Visa 제도를 이용하면 해당 국적의 여행자는 출발 전에 공식 태국 e-Visa 포털(thaievisa.go.th)에서 온라인으로 신청할 수 있어요\n\n**출발 전에 확인할 것**\n\n- 태국 외교부 웹사이트나 본국의 태국 대사관에서 본인의 입국 경로를 확인하세요\n- 입국일로부터 여권 잔여 유효기간이 최소 6개월 남아 있어야 해요\n- 돌아가는 항공권이나 제3국행 항공권 확인서를 지참하세요\n- 인접 국가로 넘어갔다 돌아올 계획이라면, 본인의 입국 형태가 재입국을 허용하는지 확인하세요\n\n**공항에서**\n\n2025년 5월부터 종이 TM6 입국 카드가 태국 디지털 입국 카드(TDAC)로 대체됐어요. 대부분의 외국인 방문객은 항공편 출발 전 72시간 이내에 온라인으로 이 절차를 마쳐야 해요. tdac.immigration.go.th에서 무료로 하실 수 있어요. 제출하면 QR 코드를 받고, 이민국 창구에서 이 코드를 보여주시면 돼요.\n\n**골프 여행자를 위한 실질적인 조언**\n\n- 골프 전용 비자는 없어요. 일반 관광 입국으로 퍼블릭 코스, 프라이빗 클럽, 방콕의 LENGOLF 같은 실내 시뮬레이터까지 모든 골프 활동을 즐길 수 있어요\n- 자기 클럽을 가져오는 여행자는 많고 대체로 복잡하지 않아요. 여행에 쓰려고 가져오는 개인 장비에는 관세가 붙지 않아요\n- 티타임은 미리 예약하세요. 비자와 입국 절차를 빼면 실질적으로 가장 중요한 준비예요\n\n**공식 정보:** 태국 외교부(mfa.go.th) · 태국 이민국(immigration.go.th) · 태국 e-Visa 포털(thaievisa.go.th)',
+        '**주의:** 비자 규정은 자주 바뀌어요. 아래 내용은 2026년 초 기준의 상황이고 일반적인 안내로만 참고해 주세요. 여행을 예약하기 전에 가까운 태국 대사관이나 태국 이민국 공식 웹사이트에서 본인에게 적용되는 요건을 반드시 확인하세요.\n\n**세 가지 입국 경로**\n\n1. **비자 면제(Visa Exemption)** — 많은 국적의 여행자가 사전에 비자를 신청하지 않고 태국에 입국할 수 있어요. 골프 휴가는 관광 입국으로 허용되는 활동 범위에 무리 없이 들어가요. 면제 대상 여부는 인터넷에서 찾은 목록에 의존하지 마시고, 태국 외교부 웹사이트에서 직접 확인하세요\n2. **도착 비자(Visa on Arrival, VOA)** — 비자 면제 대상이 아닌 국적이라면 수완나품(BKK)과 돈므앙(DMK)을 포함한 지정 국제공항에서 도착 비자를 받을 수 있는 경우가 있어요. 사진, 출국 항공권 증빙, 충분한 자금 증빙이 필요하고, 창구에서 태국 바트로 수수료를 내야 해요. 붐비는 시간대에는 줄이 길어질 수 있으니, 이른 티타임이 잡혀 있다면 도착 일정에 이 시간을 넣어 두세요\n3. **e-Visa** — 태국의 e-Visa 제도를 이용하면 해당 국적의 여행자는 출발 전에 공식 태국 e-Visa 포털(thaievisa.go.th)에서 온라인으로 신청할 수 있어요\n\n**출발 전에 확인할 것**\n\n- 태국 외교부 웹사이트나 본국의 태국 대사관에서 본인의 입국 경로를 확인하세요\n- 입국일로부터 여권 잔여 유효기간이 최소 6개월 남아 있어야 해요\n- 돌아가는 항공권이나 제3국행 항공권 확인서를 지참하세요\n- 인접 국가로 넘어갔다 돌아올 계획이라면, 본인의 입국 형태가 재입국을 허용하는지 확인하세요\n\n**공항에서**\n\n2025년 5월부터 종이 TM6 입국 카드가 태국 디지털 입국 카드(TDAC)로 대체됐어요. 대부분의 외국인 방문객은 항공편 출발 전 72시간 이내에 온라인으로 이 절차를 마쳐야 해요. tdac.immigration.go.th에서 무료로 하실 수 있어요. 제출하면 QR 코드를 받고, 이민국 창구에서 이 코드를 보여주시면 돼요.\n\n**골프 여행자를 위한 실질적인 조언**\n\n- 골프 전용 비자는 없어요. 일반 관광 입국으로 퍼블릭 코스, 프라이빗 클럽, 방콕의 LENGOLF 같은 실내 시뮬레이터까지 모든 골프 활동을 즐길 수 있어요\n- 자기 클럽을 가져오는 여행자는 많고 대체로 복잡하지 않아요. 여행에 쓰려고 가져오는 개인 장비에는 관세가 붙지 않아요\n- 티타임은 미리 예약하세요. 비자와 입국 절차를 빼면 실질적으로 가장 중요한 준비예요\n\n**공식 정보:** 태국 외교부(mfa.go.th) · 태국 이민국(immigration.go.th) · 태국 e-Visa 포털(thaievisa.go.th)',
       related_questions: [
         { slug: 'thailand-entry-requirements-golfers', question: '태국 입국 조건 2026 — 골퍼를 위한 빠른 안내' },
         { slug: '/guide/suvarnabhumi-airport-to-bangkok-golf', question: '수완나품 공항에서 방콕 시내로 — 골프 여행자 가이드' },
@@ -3056,9 +3058,11 @@ export const faqPages: FaqSeoPage[] = [
   // 6개월 passport validity stays a 권장 (EN "recommends"), 자금 증빙 stays at
   // 심사관의 재량, insurance stays 필수는 아니지만 권장, and both disclaimers
   // plus the immigration.go.th / customs.go.th / tdac.immigration.go.th sources
-  // are preserved. The EN numbered checklist is kept as an ordinal-prefixed
-  // "- " list so FaqPage renders it as a list rather than one run-on paragraph.
-  // related_slugs: /golf-in-thailand-guide has no KO route and is replaced with
+  // are preserved. The EN numbered checklist is carried as a plain "1." list,
+  // matching EN. (It was previously "- **1. …**", a workaround for FaqPage
+  // rendering only "- " lines as a list; commit 311cef3 in this branch made
+  // "N. " a list marker too, which turned that into a bullet with the ordinal
+  // showing as bold text.) related_slugs: /golf-in-thailand-guide has no KO route and is replaced with
   // the KO baggage FAQ in this batch plus /guide/first-time-golf-thailand.
   {
     id: 'faq-18-ko',
@@ -3079,7 +3083,7 @@ export const faqPages: FaqSeoPage[] = [
       answer_intro:
         '2026년 골프 여행자를 위한 태국 입국 조건은 간단해요. 코로나 시기의 제한은 없고, 골프 전용 허가도 없고, 개인용 클럽에 별도의 통관 요건도 없어요. 출발 전에 해야 할 가장 중요한 일은 태국 디지털 입국 카드(TDAC) 작성이에요. 2025년 5월에 기존 종이 TM6 양식을 대체했어요.',
       answer_body:
-        '**주의:** 입국 요건은 사전 공지 없이 바뀔 수 있어요. 출발 전에 태국 이민국(immigration.go.th)이나 가까운 태국 대사관에서 현재 규정을 반드시 확인하세요.\n\n**출발 전 체크리스트**\n\n- **1. 유효한 여권** — 태국 이민국은 예정 출국일로부터 최소 6개월의 잔여 유효기간을 권장해요\n- **2. 돌아가는 항공권 또는 제3국행 항공권** — 출국 항공권 증빙은 입국 심사에서 통상적으로 요구돼요\n- **3. 숙소 정보** — 첫날 밤 묵을 호텔 이름과 주소\n- **4. 자금 증빙** — 은행 카드와 약간의 현금을 지참하세요. 구체적인 금액은 심사관의 재량이에요\n- **5. 여행자 보험 또는 건강 보험** — 필수는 아니지만 특히 스포츠 활동을 하신다면 강력히 권해 드려요\n- **6. TDAC 작성 완료** — 태국 디지털 입국 카드는 항공편 출발 전 72시간 이내에 tdac.immigration.go.th에서 온라인으로 제출해야 해요 (무료이고, 입국 심사용 QR 코드가 발급돼요)\n\n**코로나 이후 달라진 점**\n\n태국은 2022년에 팬데믹 시기의 입국 제한을 모두 해제했어요. 2026년 현재 백신 접종 증명도, 사전 건강 신고도, 도착 후 검사도 필요 없어요. 코로나 이후 달라진 주요 절차는 2025년 5월부터 TDAC가 종이 TM6 입국 카드를 대체했다는 점이에요.\n\n**세관에서의 골프 장비**\n\n수완나품(BKK)이나 돈므앙(DMK)으로 풀세트를 들고 들어오는 것은 흔한 일이에요. 개인용 장비에는 별도의 신고나 허가가 필요 없어요. 다만 소매 포장 상태의 새 클럽이나 고가 물품을 가져오신다면 안전하게 신고해 두세요. 코스에서 빌리는 것도 간편한 대안이에요. Callaway를 포함한 대여 세트를 방콕 인근 대부분의 골프장과 LENGOLF에서 이용할 수 있어요.\n\n**건강 보험과 여행자 보험**\n\n의무 입국 요건은 아니지만 강력히 권해 드려요. 가입하신 보험이 골프 중 부상을 보장하는지, 먼 나라에서 오신다면 의료 후송이 포함되는지 확인해 보세요.\n\n**공식 정보:** 태국 이민국(immigration.go.th) · 태국 관세청(customs.go.th) · TDAC 포털(tdac.immigration.go.th)',
+        '**주의:** 입국 요건은 사전 공지 없이 바뀔 수 있어요. 출발 전에 태국 이민국(immigration.go.th)이나 가까운 태국 대사관에서 현재 규정을 반드시 확인하세요.\n\n**출발 전 체크리스트**\n\n1. **유효한 여권** — 태국 이민국은 예정 출국일로부터 최소 6개월의 잔여 유효기간을 권장해요\n2. **돌아가는 항공권 또는 제3국행 항공권** — 출국 항공권 증빙은 입국 심사에서 통상적으로 요구돼요\n3. **숙소 정보** — 첫날 밤 묵을 호텔 이름과 주소\n4. **자금 증빙** — 은행 카드와 약간의 현금을 지참하세요. 구체적인 금액은 심사관의 재량이에요\n5. **여행자 보험 또는 건강 보험** — 필수는 아니지만 특히 스포츠 활동을 하신다면 강력히 권해 드려요\n6. **TDAC 작성 완료** — 태국 디지털 입국 카드는 항공편 출발 전 72시간 이내에 tdac.immigration.go.th에서 온라인으로 제출해야 해요 (무료이고, 입국 심사용 QR 코드가 발급돼요)\n\n**코로나 이후 달라진 점**\n\n태국은 2022년에 팬데믹 시기의 입국 제한을 모두 해제했어요. 2026년 현재 백신 접종 증명도, 사전 건강 신고도, 도착 후 검사도 필요 없어요. 코로나 이후 달라진 주요 절차는 2025년 5월부터 TDAC가 종이 TM6 입국 카드를 대체했다는 점이에요.\n\n**세관에서의 골프 장비**\n\n수완나품(BKK)이나 돈므앙(DMK)으로 풀세트를 들고 들어오는 것은 흔한 일이에요. 개인용 장비에는 별도의 신고나 허가가 필요 없어요. 다만 소매 포장 상태의 새 클럽이나 고가 물품을 가져오신다면 안전하게 신고해 두세요. 코스에서 빌리는 것도 간편한 대안이에요. Callaway를 포함한 대여 세트를 방콕 인근 대부분의 골프장과 LENGOLF에서 이용할 수 있어요.\n\n**건강 보험과 여행자 보험**\n\n의무 입국 요건은 아니지만 강력히 권해 드려요. 가입하신 보험이 골프 중 부상을 보장하는지, 먼 나라에서 오신다면 의료 후송이 포함되는지 확인해 보세요.\n\n**공식 정보:** 태국 이민국(immigration.go.th) · 태국 관세청(customs.go.th) · TDAC 포털(tdac.immigration.go.th)',
       related_questions: [
         { slug: 'thailand-visa-guide-golf-tourists', question: '태국 골프 여행 비자 가이드 — 무비자·도착 비자·e-Visa' },
         { slug: '/guide/suvarnabhumi-airport-to-bangkok-golf', question: '수완나품 공항에서 방콕 시내로 — 골프 여행자 가이드' },
