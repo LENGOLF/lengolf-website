@@ -3,6 +3,7 @@
 import { Link } from '@/i18n/navigation'
 import { ArrowRight, Check, MapPin, Clock, Star, Utensils, Navigation, Calendar } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
+import { buildRelatedLabels } from '@/lib/seo-links'
 import { getSiteFacts, money } from '@/lib/site-facts'
 import { BOOKING_URL, BUSINESS_INFO, SOCIAL_LINKS } from '@/lib/constants'
 import type { HotelConciergeSeoPage } from '@/types/seo-pages'
@@ -21,9 +22,10 @@ export default async function HotelConciergePage({ data }: Props) {
   const { content } = data
   const locale = data.locale
 
-  const [t, facts] = await Promise.all([
+  const [t, facts, relatedLabels] = await Promise.all([
     getTranslations('HotelConciergePage'),
     getSiteFacts(),
+    buildRelatedLabels(data.related_slugs, data.locale),
   ])
 
   // Bay rate and bay capacity come from the POS-backed facts, not from the
@@ -346,12 +348,18 @@ export default async function HotelConciergePage({ data }: Props) {
             <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-6">{t('exploreMore')}</h2>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
               {data.related_slugs.map((path) => {
-                const label = path
-                  .split('/')
-                  .filter(Boolean)
-                  .pop()!
-                  .replace(/-/g, ' ')
-                  .replace(/\b\w/g, (c) => c.toUpperCase())
+                // Localized target title, falling back to the slug only when
+                // the target has no entry in this locale (or is not an SEO
+                // page). The slug fallback alone rendered English card titles
+                // under a localized heading on every translated page.
+                const label =
+                  relatedLabels[path] ??
+                  path
+                    .split('/')
+                    .filter(Boolean)
+                    .pop()!
+                    .replace(/-/g, ' ')
+                    .replace(/\b\w/g, (c) => c.toUpperCase())
                 return (
                   <Link
                     key={path}

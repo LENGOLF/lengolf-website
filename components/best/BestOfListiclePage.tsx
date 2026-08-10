@@ -1,6 +1,7 @@
 import { Link } from '@/i18n/navigation'
 import { ArrowRight, Check, ExternalLink, MapPin, ThumbsDown, ThumbsUp, Trophy } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
+import { buildRelatedLabels } from '@/lib/seo-links'
 import { getSiteFacts } from '@/lib/site-facts'
 import { BOOKING_URL, BUSINESS_INFO, SOCIAL_LINKS } from '@/lib/constants'
 import type { BestOfListicleSeoPage } from '@/types/seo-pages'
@@ -18,10 +19,11 @@ type ListicleTranslator = Awaited<ReturnType<typeof getTranslations<'BestOfListi
 export default async function BestOfListiclePage({ data }: Props) {
   const { content } = data
 
-  const [t, tContact, facts] = await Promise.all([
+  const [t, tContact, facts, relatedLabels] = await Promise.all([
     getTranslations('BestOfListiclePage'),
     getTranslations('ContactInfo'),
     getSiteFacts(),
+    buildRelatedLabels(data.related_slugs, data.locale),
   ])
 
   return (
@@ -153,12 +155,18 @@ export default async function BestOfListiclePage({ data }: Props) {
             <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-6">{t('exploreMore')}</h2>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
               {data.related_slugs.map((path) => {
-                const label = path
-                  .split('/')
-                  .filter(Boolean)
-                  .pop()!
-                  .replace(/-/g, ' ')
-                  .replace(/\b\w/g, (c) => c.toUpperCase())
+                // Localized target title, falling back to the slug only when
+                // the target has no entry in this locale (or is not an SEO
+                // page). The slug fallback alone rendered English card titles
+                // under a localized heading on every translated page.
+                const label =
+                  relatedLabels[path] ??
+                  path
+                    .split('/')
+                    .filter(Boolean)
+                    .pop()!
+                    .replace(/-/g, ' ')
+                    .replace(/\b\w/g, (c) => c.toUpperCase())
                 return (
                   <Link
                     key={path}
