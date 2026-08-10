@@ -1104,10 +1104,10 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     content: {
       hotel_name: 'InterContinental Bangkok',
       hotel_neighbourhood: 'Ratchaprasong / Chidlom',
-      hotel_distance_m: 150,
-      walking_time_mins: 2,
+      hotel_distance_m: 450,
+      walking_time_mins: 6,
       walking_directions:
-        'Exit InterContinental Bangkok onto Ploenchit Road and walk east — LENGOLF at Mercury Ville is essentially across the street. Walk east along Ploenchit Road and The Mercury Ville is on your right within 2 minutes. LENGOLF is on Floor 4.',
+        'Exit InterContinental Bangkok onto Ploenchit Road and walk east toward BTS Chidlom. Continue east along Ploenchit Road and The Mercury Ville is on your right within 6 minutes. LENGOLF is on Floor 4.',
       hotel_star_rating: 5,
       nearby_restaurants: [
         { name: 'Theo Mio (InterContinental)', cuisine: 'Italian', distance_m: 0 },
@@ -1119,12 +1119,12 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 100 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 300 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 150 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 600 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 450 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 600 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=InterContinental+Bangkok+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
-        'The InterContinental occupies a prime position on Ploenchit Road, right at the Ratchaprasong intersection — Bangkok\'s version of Times Square. This is the convergence point of the city\'s major shopping malls: CentralWorld (300m west), Gaysorn Village (150m), Siam Paragon (600m), and Central Embassy (400m east). During the day, the area pulses with shoppers and office workers; in the evening, the rooftop bars and restaurants come alive. The hotel is particularly well-positioned for business travelers — the Ploenchit and Chidlom BTS stations bracket the hotel, and Bangkok\'s main financial districts (Silom, Sathorn, Asok) are each within 15 minutes by train. The Fireplace Grill on the hotel\'s ground floor is a destination steakhouse that draws diners from across the city, while Theo Mio upstairs serves refined Italian with views over the Ratchaprasong skyline. For after-work entertainment, LENGOLF is an 8-minute walk west — many InterContinental guests come for happy-hour golf sessions with colleagues. The Erawan Shrine, just 100m away, is worth visiting at dusk when the crowds thin and the golden light creates a magical atmosphere.',
+        'The InterContinental occupies a prime position on Ploenchit Road, right at the Ratchaprasong intersection — Bangkok\'s version of Times Square. This is the convergence point of the city\'s major shopping malls: CentralWorld (300m west), Gaysorn Village (150m), Siam Paragon (600m), and Central Embassy (400m east). During the day, the area pulses with shoppers and office workers; in the evening, the rooftop bars and restaurants come alive. The hotel is particularly well-positioned for business travelers — the Ploenchit and Chidlom BTS stations bracket the hotel, and Bangkok\'s main financial districts (Silom, Sathorn, Asok) are each within 15 minutes by train. The Fireplace Grill on the hotel\'s ground floor is a destination steakhouse that draws diners from across the city, while Theo Mio upstairs serves refined Italian with views over the Ratchaprasong skyline. For after-work entertainment, LENGOLF is a 6-minute walk east — many InterContinental guests come for happy-hour golf sessions with colleagues. The Erawan Shrine, just 100m away, is worth visiting at dusk when the crowds thin and the golden light creates a magical atmosphere.',
       suggested_itinerary: [
         { time: '7:30 AM', activity: 'Breakfast at the hotel — the international buffet at Espresso covers all bases' },
         { time: '9:00 AM', activity: 'Quick visit to the Erawan Shrine (100m) — early morning is the most peaceful time' },
@@ -1160,10 +1160,10 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     content: {
       hotel_name: 'InterContinental Bangkok',
       hotel_neighbourhood: 'ราชประสงค์ / ชิดลม',
-      hotel_distance_m: 150,
-      walking_time_mins: 2,
+      hotel_distance_m: 450,
+      walking_time_mins: 6,
       walking_directions:
-        'ออกจาก InterContinental Bangkok มายังถนนเพลินจิต (Ploenchit Road) แล้วเดินไปทางทิศตะวันออก LENGOLF ที่ Mercury Ville อยู่ฝั่งตรงข้ามถนนแทบจะพอดี เดินไปทางทิศตะวันออกตามถนนเพลินจิต แล้ว The Mercury Ville จะอยู่ทางขวามือภายใน 2 นาที LENGOLF อยู่ชั้น 4',
+        'ออกจาก InterContinental Bangkok มายังถนนเพลินจิต (Ploenchit Road) แล้วเดินไปทางทิศตะวันออกมุ่งหน้า BTS ชิดลม เดินต่อไปตามถนนเพลินจิต แล้ว The Mercury Ville จะอยู่ทางขวามือภายใน 6 นาที LENGOLF อยู่ชั้น 4',
       hotel_star_rating: 5,
       nearby_restaurants: [
         { name: 'Theo Mio (InterContinental)', cuisine: 'อาหารอิตาเลียน', distance_m: 0 },
@@ -1175,12 +1175,12 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 100 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 300 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 150 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 600 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 450 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 600 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=InterContinental+Bangkok+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
-        'InterContinental อยู่ในทำเลชั้นดีบนถนนเพลินจิต ตรงแยกราชประสงค์พอดี ซึ่งเทียบได้กับไทม์สแควร์เวอร์ชันกรุงเทพฯ ที่นี่คือจุดบรรจบของศูนย์การค้าใหญ่ของเมือง ทั้ง CentralWorld (300 เมตรทางทิศตะวันตก) Gaysorn Village (150 เมตร) Siam Paragon (600 เมตร) และ Central Embassy (400 เมตรทางทิศตะวันออก) กลางวันย่านนี้เต็มไปด้วยนักช้อปและพนักงานออฟฟิศ ส่วนตอนเย็นรูฟท็อปบาร์และร้านอาหารจะเริ่มคึกคัก โรงแรมเหมาะกับนักเดินทางเพื่อธุรกิจเป็นพิเศษ เพราะมีสถานี BTS เพลินจิตและ BTS ชิดลม ขนาบอยู่สองฝั่ง และย่านธุรกิจหลักของกรุงเทพฯ อย่างสีลม สาทร และอโศก อยู่ห่างออกไปไม่เกิน 15 นาทีโดยรถไฟฟ้า Fireplace Grill ที่ชั้นล่างของโรงแรมเป็นสเต๊กเฮาส์ที่คนจากทั่วเมืองตั้งใจมากิน ส่วน Theo Mio ชั้นบนเสิร์ฟอาหารอิตาเลียนประณีตพร้อมวิวเส้นขอบฟ้าย่านราชประสงค์ สำหรับกิจกรรมหลังเลิกงาน LENGOLF อยู่ห่างออกไป 8 นาทีเดินทางทิศตะวันตก และผู้เข้าพัก InterContinental จำนวนไม่น้อยแวะไปเล่นกอล์ฟช่วงแฮปปี้อาวร์กับเพื่อนร่วมงาน ส่วนศาลพระพรหมเอราวัณที่อยู่ห่างเพียง 100 เมตร ควรไปช่วงโพล้เพล้ ตอนที่คนเริ่มบางตาและแสงสีทองทำให้บรรยากาศดูพิเศษ',
+        'InterContinental อยู่ในทำเลชั้นดีบนถนนเพลินจิต ตรงแยกราชประสงค์พอดี ซึ่งเทียบได้กับไทม์สแควร์เวอร์ชันกรุงเทพฯ ที่นี่คือจุดบรรจบของศูนย์การค้าใหญ่ของเมือง ทั้ง CentralWorld (300 เมตรทางทิศตะวันตก) Gaysorn Village (150 เมตร) Siam Paragon (600 เมตร) และ Central Embassy (400 เมตรทางทิศตะวันออก) กลางวันย่านนี้เต็มไปด้วยนักช้อปและพนักงานออฟฟิศ ส่วนตอนเย็นรูฟท็อปบาร์และร้านอาหารจะเริ่มคึกคัก โรงแรมเหมาะกับนักเดินทางเพื่อธุรกิจเป็นพิเศษ เพราะมีสถานี BTS เพลินจิตและ BTS ชิดลม ขนาบอยู่สองฝั่ง และย่านธุรกิจหลักของกรุงเทพฯ อย่างสีลม สาทร และอโศก อยู่ห่างออกไปไม่เกิน 15 นาทีโดยรถไฟฟ้า Fireplace Grill ที่ชั้นล่างของโรงแรมเป็นสเต๊กเฮาส์ที่คนจากทั่วเมืองตั้งใจมากิน ส่วน Theo Mio ชั้นบนเสิร์ฟอาหารอิตาเลียนประณีตพร้อมวิวเส้นขอบฟ้าย่านราชประสงค์ สำหรับกิจกรรมหลังเลิกงาน LENGOLF อยู่ห่างออกไป 6 นาทีเดินทางทิศตะวันออก และผู้เข้าพัก InterContinental จำนวนไม่น้อยแวะไปเล่นกอล์ฟช่วงแฮปปี้อาวร์กับเพื่อนร่วมงาน ส่วนศาลพระพรหมเอราวัณที่อยู่ห่างเพียง 100 เมตร ควรไปช่วงโพล้เพล้ ตอนที่คนเริ่มบางตาและแสงสีทองทำให้บรรยากาศดูพิเศษ',
       suggested_itinerary: [
         { time: '07:30 น.', activity: 'อาหารเช้าที่โรงแรม บุฟเฟต์นานาชาติที่ Espresso มีครบทุกหมวด' },
         { time: '09:00 น.', activity: 'แวะศาลพระพรหมเอราวัณ (100 เมตร) ช่วงเช้าเป็นเวลาที่สงบที่สุด' },
@@ -1216,10 +1216,10 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     content: {
       hotel_name: 'InterContinental Bangkok',
       hotel_neighbourhood: 'Ratchaprasong / Chidlom',
-      hotel_distance_m: 150,
-      walking_time_mins: 2,
+      hotel_distance_m: 450,
+      walking_time_mins: 6,
       walking_directions:
-        'InterContinental Bangkokを出てプルンチット通り（Ploenchit Road）に出たら、東へ歩きます。ザ・マーキュリービルのLENGOLFは、ほぼ通りの向かい側です。プルンチット通りを東へ進むと、2分以内に右手にザ・マーキュリービルがあります。LENGOLFは4階です。',
+        'InterContinental Bangkokを出てプルンチット通り（Ploenchit Road）に出たら、BTSチットロム方面へ東に歩きます。プルンチット通りを東へ進むと、6分以内に右手にザ・マーキュリービルがあります。LENGOLFは4階です。',
       hotel_star_rating: 5,
       nearby_restaurants: [
         { name: 'Theo Mio (InterContinental)', cuisine: 'イタリア料理', distance_m: 0 },
@@ -1231,12 +1231,12 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 100 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 300 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 150 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 600 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 450 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 600 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=InterContinental+Bangkok+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
-        'InterContinentalが建つのは、プルンチット通りのラチャプラソン交差点という一等地。バンコク版タイムズスクエアとも言える場所です。主要ショッピングモールがここで交わります。西に300mのセントラルワールド、150mのGaysorn Village、600mのサイアムパラゴン、そして東に400mのセントラル・エンバシー。日中は買い物客とオフィスワーカーで活気づき、夜になるとルーフトップバーやレストランが動き出します。出張利用にも都合がよく、BTSプルンチット駅とBTSチットロム駅がホテルを挟む位置にあり、シーロム、サトーン、アソークといった主要ビジネス街へはいずれも電車で15分以内です。1階のFireplace Grillは市内各所から食事客が集まる名物ステーキハウスで、上階のTheo Mioはラチャプラソンの街並みを見下ろしながら洗練されたイタリア料理を出します。仕事帰りの楽しみとしては、西へ徒歩8分のLENGOLFへ。同僚と連れ立ってハッピーアワーのゴルフを楽しむ宿泊客も少なくありません。100m先のエラワン廟は、人出が落ち着いて金色の光が差す夕暮れ時に訪れるのがおすすめです。',
+        'InterContinentalが建つのは、プルンチット通りのラチャプラソン交差点という一等地。バンコク版タイムズスクエアとも言える場所です。主要ショッピングモールがここで交わります。西に300mのセントラルワールド、150mのGaysorn Village、600mのサイアムパラゴン、そして東に400mのセントラル・エンバシー。日中は買い物客とオフィスワーカーで活気づき、夜になるとルーフトップバーやレストランが動き出します。出張利用にも都合がよく、BTSプルンチット駅とBTSチットロム駅がホテルを挟む位置にあり、シーロム、サトーン、アソークといった主要ビジネス街へはいずれも電車で15分以内です。1階のFireplace Grillは市内各所から食事客が集まる名物ステーキハウスで、上階のTheo Mioはラチャプラソンの街並みを見下ろしながら洗練されたイタリア料理を出します。仕事帰りの楽しみとしては、東へ徒歩6分のLENGOLFへ。同僚と連れ立ってハッピーアワーのゴルフを楽しむ宿泊客も少なくありません。100m先のエラワン廟は、人出が落ち着いて金色の光が差す夕暮れ時に訪れるのがおすすめです。',
       suggested_itinerary: [
         { time: '7:30', activity: 'ホテルで朝食。Espressoのインターナショナルビュッフェは一通り揃っています' },
         { time: '9:00', activity: 'エラワン廟（100m）にさっと立ち寄り。早朝がいちばん静かです' },
@@ -1272,10 +1272,10 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     content: {
       hotel_name: 'InterContinental Bangkok',
       hotel_neighbourhood: 'Ratchaprasong / Chidlom',
-      hotel_distance_m: 150,
-      walking_time_mins: 2,
+      hotel_distance_m: 450,
+      walking_time_mins: 6,
       walking_directions:
-        'InterContinental Bangkok에서 Ploenchit Road 쪽으로 나와 동쪽으로 걸어요. Mercury Ville의 LENGOLF는 사실상 길 건너편이에요. Ploenchit Road에서 동쪽으로 걸으면 2분 안에 오른편에 The Mercury Ville 건물이 나와요. LENGOLF는 4층에 있어요.',
+        'InterContinental Bangkok에서 Ploenchit Road 쪽으로 나와 BTS 칫롬역 방향인 동쪽으로 걸어요. Ploenchit Road에서 동쪽으로 걸으면 6분 안에 오른편에 The Mercury Ville 건물이 나와요. LENGOLF는 4층에 있어요.',
       hotel_star_rating: 5,
       nearby_restaurants: [
         { name: 'Theo Mio (InterContinental)', cuisine: '이탈리아 요리', distance_m: 0 },
@@ -1287,12 +1287,12 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 100 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 300 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 150 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 600 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 450 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 600 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=InterContinental+Bangkok+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
-        'InterContinental 호텔은 Ploenchit Road의 요지, Ratchaprasong 교차로 바로 앞에 있어요. 방콕판 타임스스퀘어라고 할 만한 자리예요. 도시의 주요 쇼핑몰이 이곳에서 만나요. CentralWorld(서쪽 300m), Gaysorn Village(150m), Siam Paragon(600m), Central Embassy(동쪽 400m)까지 모두 가까워요. 낮에는 쇼핑객과 직장인으로 활기가 넘치고, 저녁이면 루프톱 바와 레스토랑이 살아나요. 특히 비즈니스 여행자에게 자리가 좋아요. 호텔 양옆으로 BTS 플런칫역과 BTS 칫롬역이 있고, 방콕의 주요 업무 지구인 Silom, Sathorn, Asok까지 각각 전철로 15분 안에 닿아요. 호텔 1층 Fireplace Grill 레스토랑은 도시 곳곳에서 손님이 찾아오는 스테이크하우스이고, 위층 Theo Mio 레스토랑은 Ratchaprasong 스카이라인이 내려다보이는 정갈한 이탈리아 요리를 내요. 퇴근 후 즐길 거리로는 서쪽으로 도보 8분 거리의 LENGOLF가 있어요. InterContinental 투숙객 중에는 동료들과 해피아워 골프 세션을 즐기러 오는 분이 많아요. 100m 거리의 Erawan Shrine 사원은 인파가 잦아드는 해 질 무렵에 가면 금빛 조명 속 특별한 분위기를 만날 수 있어요.',
+        'InterContinental 호텔은 Ploenchit Road의 요지, Ratchaprasong 교차로 바로 앞에 있어요. 방콕판 타임스스퀘어라고 할 만한 자리예요. 도시의 주요 쇼핑몰이 이곳에서 만나요. CentralWorld(서쪽 300m), Gaysorn Village(150m), Siam Paragon(600m), Central Embassy(동쪽 400m)까지 모두 가까워요. 낮에는 쇼핑객과 직장인으로 활기가 넘치고, 저녁이면 루프톱 바와 레스토랑이 살아나요. 특히 비즈니스 여행자에게 자리가 좋아요. 호텔 양옆으로 BTS 플런칫역과 BTS 칫롬역이 있고, 방콕의 주요 업무 지구인 Silom, Sathorn, Asok까지 각각 전철로 15분 안에 닿아요. 호텔 1층 Fireplace Grill 레스토랑은 도시 곳곳에서 손님이 찾아오는 스테이크하우스이고, 위층 Theo Mio 레스토랑은 Ratchaprasong 스카이라인이 내려다보이는 정갈한 이탈리아 요리를 내요. 퇴근 후 즐길 거리로는 동쪽으로 도보 6분 거리의 LENGOLF가 있어요. InterContinental 투숙객 중에는 동료들과 해피아워 골프 세션을 즐기러 오는 분이 많아요. 100m 거리의 Erawan Shrine 사원은 인파가 잦아드는 해 질 무렵에 가면 금빛 조명 속 특별한 분위기를 만날 수 있어요.',
       suggested_itinerary: [
         { time: '07:30', activity: '호텔에서 조식 — Espresso의 인터내셔널 뷔페면 웬만한 취향은 다 커버돼요' },
         { time: '09:00', activity: 'Erawan Shrine(100m) 짧게 둘러보기 — 이른 아침이 가장 평온해요' },
@@ -1328,10 +1328,10 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     content: {
       hotel_name: 'InterContinental Bangkok',
       hotel_neighbourhood: 'Ratchaprasong / Chidlom',
-      hotel_distance_m: 150,
-      walking_time_mins: 2,
+      hotel_distance_m: 450,
+      walking_time_mins: 6,
       walking_directions:
-        '从InterContinental Bangkok出来走到Ploenchit Road，向东走——Mercury Ville里的LENGOLF基本就在马路对面。沿Ploenchit Road一路向东，2分钟内The Mercury Ville就在你右手边。LENGOLF在4楼。',
+        '从InterContinental Bangkok出来走到Ploenchit Road，向东走，朝BTS Chidlom站方向。沿Ploenchit Road一路向东，6分钟内The Mercury Ville就在你右手边。LENGOLF在4楼。',
       hotel_star_rating: 5,
       nearby_restaurants: [
         { name: 'Theo Mio (InterContinental)', cuisine: '意大利菜', distance_m: 0 },
@@ -1343,12 +1343,12 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 100 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 300 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 150 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 600 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 450 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 600 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=InterContinental+Bangkok+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
-        'InterContinental占据了Ploenchit Road上的黄金位置，正对Ratchaprasong路口——相当于曼谷版的时代广场。这里是全城主要商场的交汇点：CentralWorld（尚泰世界，向西300米）、Gaysorn Village（150米）、Siam Paragon（暹罗百丽宫，600米）和Central Embassy（向东400米）。白天这一带是购物者和上班族的洪流，入夜之后天台酒吧和餐厅接力登场。酒店对商务旅客尤其合适——BTS Ploenchit站和BTS Chidlom站一左一右夹着酒店，去Silom、Sathorn、Asok这几个曼谷主要商务区，搭轻轨各在15分钟以内。酒店一楼的Fireplace Grill是全城食客专程赶来的牛排餐厅，楼上的Theo Mio则供应精致意大利菜，可以俯瞰Ratchaprasong的天际线。下班后想找点娱乐，LENGOLF向西步行8分钟就到——不少InterContinental的住客会约上同事来打一场欢乐时光的球。距酒店只有100米的Erawan Shrine（四面佛）值得在黄昏时去，那时人流散去，金色的光线让气氛格外好。',
+        'InterContinental占据了Ploenchit Road上的黄金位置，正对Ratchaprasong路口——相当于曼谷版的时代广场。这里是全城主要商场的交汇点：CentralWorld（尚泰世界，向西300米）、Gaysorn Village（150米）、Siam Paragon（暹罗百丽宫，600米）和Central Embassy（向东400米）。白天这一带是购物者和上班族的洪流，入夜之后天台酒吧和餐厅接力登场。酒店对商务旅客尤其合适——BTS Ploenchit站和BTS Chidlom站一左一右夹着酒店，去Silom、Sathorn、Asok这几个曼谷主要商务区，搭轻轨各在15分钟以内。酒店一楼的Fireplace Grill是全城食客专程赶来的牛排餐厅，楼上的Theo Mio则供应精致意大利菜，可以俯瞰Ratchaprasong的天际线。下班后想找点娱乐，LENGOLF向东步行6分钟就到——不少InterContinental的住客会约上同事来打一场欢乐时光的球。距酒店只有100米的Erawan Shrine（四面佛）值得在黄昏时去，那时人流散去，金色的光线让气氛格外好。',
       suggested_itinerary: [
         { time: '07:30', activity: '在酒店吃早餐——Espresso的国际自助早餐样样齐全' },
         { time: '09:00', activity: '快速去一趟Erawan Shrine（100米）——清早最安静' },
