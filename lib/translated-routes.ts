@@ -162,6 +162,13 @@ const TRANSLATED_ROUTES: Record<
       // route level until the locale-capable commit; /hotels remains EN-only
       // (data/hotel-pages.ts has no non-EN entries yet). Smoke section L5
       // asserts this list agrees with the data files in both directions.
+      "/best/best-team-building-activities-bangkok",
+      "/best/best-bars-near-bts-chidlom",
+      "/best/best-corporate-event-venues-bangkok",
+      "/best/best-indoor-entertainment-bangkok",
+      "/best/best-birthday-party-venues-adults-bangkok",
+      "/best/best-golf-experiences-bangkok",
+      "/best/best-things-to-do-near-chidlom",
       "/activities/bachelor-party-ideas-bangkok",
       "/activities/birthday-party-venues-bangkok",
       "/activities/date-night-ideas-bangkok",
@@ -316,6 +323,13 @@ const TRANSLATED_ROUTES: Record<
       // route level until the locale-capable commit; /hotels remains EN-only
       // (data/hotel-pages.ts has no non-EN entries yet). Smoke section L5
       // asserts this list agrees with the data files in both directions.
+      "/best/best-team-building-activities-bangkok",
+      "/best/best-bars-near-bts-chidlom",
+      "/best/best-corporate-event-venues-bangkok",
+      "/best/best-indoor-entertainment-bangkok",
+      "/best/best-birthday-party-venues-adults-bangkok",
+      "/best/best-golf-experiences-bangkok",
+      "/best/best-things-to-do-near-chidlom",
       "/activities/bachelor-party-ideas-bangkok",
       "/activities/birthday-party-venues-bangkok",
       "/activities/date-night-ideas-bangkok",
@@ -503,6 +517,13 @@ const TRANSLATED_ROUTES: Record<
       // route level until the locale-capable commit; /hotels remains EN-only
       // (data/hotel-pages.ts has no non-EN entries yet). Smoke section L5
       // asserts this list agrees with the data files in both directions.
+      "/best/best-team-building-activities-bangkok",
+      "/best/best-bars-near-bts-chidlom",
+      "/best/best-corporate-event-venues-bangkok",
+      "/best/best-indoor-entertainment-bangkok",
+      "/best/best-birthday-party-venues-adults-bangkok",
+      "/best/best-golf-experiences-bangkok",
+      "/best/best-things-to-do-near-chidlom",
       "/activities/bachelor-party-ideas-bangkok",
       "/activities/birthday-party-venues-bangkok",
       "/activities/date-night-ideas-bangkok",
@@ -682,6 +703,13 @@ const TRANSLATED_ROUTES: Record<
       // route level until the locale-capable commit; /hotels remains EN-only
       // (data/hotel-pages.ts has no non-EN entries yet). Smoke section L5
       // asserts this list agrees with the data files in both directions.
+      "/best/best-team-building-activities-bangkok",
+      "/best/best-bars-near-bts-chidlom",
+      "/best/best-corporate-event-venues-bangkok",
+      "/best/best-indoor-entertainment-bangkok",
+      "/best/best-birthday-party-venues-adults-bangkok",
+      "/best/best-golf-experiences-bangkok",
+      "/best/best-things-to-do-near-chidlom",
       "/activities/bachelor-party-ideas-bangkok",
       "/activities/birthday-party-venues-bangkok",
       "/activities/date-night-ideas-bangkok",
