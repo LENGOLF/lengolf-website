@@ -13,6 +13,28 @@ LENGOLF website — a Next.js 15 (App Router) site for an indoor golf simulator 
 - **Start production:** `npm run start`
 - **Lint:** `npm run lint`
 - **Validate internal links:** `npm run validate:links` — checks that SEO cross-links in `data/*.ts` (`related_slugs`, FAQ `related_questions`) resolve to published pages. No server needed.
+- **⚠️ EVERY translation batch needs NATIVE-LANGUAGE QA before it merges — the
+  automated gate does not substitute for it.** `validate:i18n` catches mechanical
+  violations (emoji, currency form, terminology `avoid` variants, namespace
+  parity); it cannot tell you that a sentence means the opposite of the source.
+  Native QA has caught a blocker in **four of five** batches run so far, and none
+  of those blockers was mechanically detectable:
+    - ja `/best`: a conclusion ending `料理教室が抜けています` — "the cooking class
+      is MISSING from this list", the inverse of EN's "beats everything else",
+      as the last sentence of the page.
+    - ko `/best`: `Hyde & Seek이` / `Hyde & Seek과` — wrong particle allomorph
+      ("Seek" transcribes to 시크, vowel-final, so both were the consonant-final
+      form). A regex CANNOT catch this: the allomorph depends on the Korean
+      READING, which Latin text does not carry, so a mechanical "no particle
+      after Latin" check flags every correct attachment instead.
+    - zh `/best`: a coined `齐隆` for Chidlom while `messages/zh.json` ships
+      `奇隆` 5×, so one page rendered two spellings of the same BTS station.
+    - ko/zh course details: one blocker plus ~55 fixes.
+  **`/hotels` (48 content entries + 35 UI-chrome strings) shipped in PR #90
+  WITHOUT this pass** — an account spend limit killed the reviewers. It is the
+  only section in the corpus that has never had a native speaker read it as
+  prose. Run that QA before trusting it, and do not let a future batch merge on
+  a green gate alone.
 - **Validate i18n house style:** `npm run validate:i18n` — lints localized guide content (ja/ko/zh/th entries in `data/explainer-pages.ts` and `data/faq-pages.ts`, `REGION_HUB_I18N` in `data/golf-courses-i18n.ts`, `PRICE_TIER_I18N` in `data/price-tiers.ts`, per-course `locales.<locale>` in `data/golf-courses/*/*.ts`, the non-EN blocks of `CONTENT` in `data/faq-hub.ts`) plus the **UI chrome strings in `messages/{ja,ko,zh,th}.json`** against the machine-readable glossaries in `data/i18n-glossary/*.json`. ERROR-level (fails): emoji, exclamation marks, full-width digits (ja), terminology `avoid` variants, brand-immutable case corruption, unbalanced `**`/unbalanced braces (see the ICU bullet below), and a UI-message namespace entirely missing from a locale catalog (see next bullet). WARN-level (non-blocking): currency-convention drift, unscoped honesty claims, prices with no "as of" marker, individual UI-message key gaps vs `messages/en.json`. Automates the mechanical subset of `docs/i18n-review-checklist.md`; `--self-test` proves the detectors. No server needed.
 - **The `messages/*.json` corpus is ERROR-checks-only** (`uiChrome` in `scripts/validate-i18n.ts`). The three WARN checks are entry-shaped prose rules that don't transfer to microcopy: `price-as-of` assumes an entry is an article that can carry a date marker in its prose, but a hero subtitle reading `1時間550バーツ〜` has nowhere to put one (the live price lives in `data/pricing.ts`); `currency` and `honesty` are calibrated for long-form text and misfire on 3-word stat badges. Running them over the catalogs would have added ~200 standing warnings, which is how a linter teaches people to ignore it. English is excluded from this corpus by design — the glossaries encode *target*-language terminology, so linting the source language against them is meaningless.
 - **`checkMarkup` runs TWO brace rules, split by dialect — do not collapse them.** `checkMarkup()` in `scripts/validate-i18n.ts` used to count literal `{{` vs `}}` bigrams. That fit the `{{token}}` placeholders in `data/explainer-pages.ts` but hard-failed every ICU plural, because `{count, plural, =1 {…} other {# …}}` ends in a `}}` with no `{{` anywhere; `messages/en.json` is excluded from the corpus so EN never hit it, and the non-EN workaround was a **load-bearing space** before the final brace. Since PR #88 the check is (a) a structural brace **depth-scan** on everything, plus (b) the old bigram equality **scoped to the `{{token}}` dialect** (non-`uiChrome` units) via the `dialect` parameter. Both are needed, and **depth-scanning alone is weaker, not stronger** — this was the review finding on PR #88 after exactly that claim was made: `{{bayHourlyFrom} }` is brace-*balanced* and sails through the depth-scan, but `lib/site-facts.ts` substitutes on `/\{\{\s*(\w+)\s*\}\}/g`, so the split closer misses the anchor, `replace()` no-ops, and the raw token ships to visitors **without throwing** (the throw there only fires for well-formed tokens with unknown names). That shape is the load-bearing space itself. Conversely the depth-scan catches `}}{{`, which the bigram counter passed 1-for-1. The scoping is safe only because the dialects don't mix: `messages/*.json` has no `{{token}}`, the content data has no ICU. Known gap: ICU escapes a literal brace by quoting (`Use '{' here`), which the depth-scan reads as unclosed — nothing does this today; strip ICU-quoted spans before scanning if it ever comes up. **When adding an ICU plural to a non-EN catalog, write it normally — no spacing tricks.**
