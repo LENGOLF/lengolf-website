@@ -27,7 +27,10 @@
  * Usage: npx tsx scripts/validate-internal-links.ts
  */
 
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { PAGE_DATA_MAP, ROUTE_PREFIX_TO_TYPE } from '@/lib/seo-pages'
+import { hasTranslationForLocale } from '@/lib/translated-routes'
 import { relatedQuestionPath } from '@/lib/seo-links'
 import type { SeoPage } from '@/types/seo-pages'
 
@@ -137,8 +140,55 @@ for (const [prefix, pages] of Object.entries(SECTIONS)) {
   }
 }
 
+// ── Stale negative-probe guard ──────────────────────────────────────────
+//
+// The smoke test asserts that certain locale URLs 301 to English because their
+// target is UNTRANSLATED. Every translation batch can invalidate one of those:
+// once the slug gains a translation the page correctly 200s and the probe
+// fails. That has now cost three CI cycles in one PR (the ja/ko/zh /faq
+// probes, then the TH /hotels canary), and it is detectable statically in the
+// fast lint job instead of after a full build.
+//
+// A probe asserting a 301 must point at a path that is NOT registered as
+// translated for that locale. This is a text parse of the probe table rather
+// than an import, because the smoke test needs a live server to load.
+const smokeSrc = readFileSync(
+  join(process.cwd(), 'scripts/smoke-test.ts'),
+  'utf8'
+)
+const probeSection = smokeSrc.slice(
+  smokeSrc.indexOf('const thaiRedirectTests'),
+  smokeSrc.indexOf('// F) Locale-cookie tests')
+)
+const staleProbes: string[] = []
+for (const m of probeSection.matchAll(/path:\s*"\/(th|ja|ko|zh)(\/[^"]*)"/g)) {
+  const [, locale, rawPath] = m
+  const path = rawPath.replace(/\/$/, '') || '/'
+  if (hasTranslationForLocale(locale, path)) {
+    staleProbes.push(`/${locale}${rawPath}`)
+  }
+}
+
+if (staleProbes.length > 0) {
+  console.error(
+    `❌ validate-internal-links: ${staleProbes.length} stale negative probe(s) in scripts/smoke-test.ts:\n`
+  )
+  for (const p of staleProbes) console.error(`  • ${p}`)
+  console.error(
+    '\nEach asserts a 301 but its path is now REGISTERED as translated, so it' +
+      ' serves 200 and the smoke test will fail.\nFix: re-anchor the probe to a' +
+      ' slug that is genuinely untranslated in that locale. Only DELETE it if no' +
+      ' untranslated page remains in that section — and say so in the comment,' +
+      ' because deleting leaves the middleware 301 without negative coverage.'
+  )
+  process.exit(1)
+}
+
 if (broken.length === 0) {
-  console.log('✅ validate-internal-links: all SEO cross-links resolve to published pages.')
+  console.log(
+    '✅ validate-internal-links: all SEO cross-links resolve to published pages,' +
+      ' no stale negative probes.'
+  )
   process.exit(0)
 }
 

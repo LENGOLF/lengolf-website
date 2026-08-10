@@ -3203,15 +3203,19 @@ const thaiRedirectTests: ThaiRedirectTest[] = [
     expectedLocation: "/golf-courses/bangkok/lakewood-country-club/",
     label: "Untranslated JA course detail (EN-only route must 301)",
   },
-  // The EN-only SEO-page families (/hotels, /cost, /activities, /best) build
-  // no locale copies either; this canary covers the mechanism for all four —
-  // none of their prefixes are in lib/translated-routes.ts, so every non-EN
-  // URL must 301 to the English page.
-  {
-    path: "/th/hotels/things-to-do-near-grand-hyatt-erawan/",
-    expectedLocation: "/hotels/things-to-do-near-grand-hyatt-erawan/",
-    label: "Untranslated TH hotel-concierge page (EN-only route must 301)",
-  },
+  // NOTE: the former "untranslated TH hotel-concierge page must 301" canary is
+  // gone on purpose. It covered all four flat SEO families (/hotels, /cost,
+  // /activities, /best) back when none of their prefixes were in
+  // lib/translated-routes.ts. All four now ship in every locale, so there is
+  // no untranslated page left in ANY of them to probe — the same reason the
+  // price-tier and TH-guide probes above were removed.
+  //
+  // Coverage did not shrink. Section L5 asserts registry ⇄ data agreement in
+  // BOTH directions for all four sections plus liveness of every registered
+  // path, so an allowlist that widened past the data still fails. The
+  // middleware-301 mechanism itself stays covered by the /faq, course-detail,
+  // near-station and blog canaries below, all of which still have genuinely
+  // untranslated targets.
   // Untranslated localized blog post must 301 to the English canonical — only
   // slugs in data/blog-translated-slugs.ts[locale] may 200 under /<locale>/blog/.
   // topgolf-bangkok-vs-lengolf is an EN-only post (never translated), so it is
