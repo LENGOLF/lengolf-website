@@ -831,6 +831,7 @@ const SSG_UI_NAMESPACES: Record<string, Locale[]> = (() => {
   const faq = localesWithPaths(getRegisteredFaqPaths)
   const activity = localesWithSeoPages(activityOccasionPages)
   const priceGuide = localesWithSeoPages(priceGuidePages)
+  const bestOf = localesWithSeoPages(bestOfListiclePages)
   // The /golf-courses/ hub page + HubMapExplorer. No dedicated registry
   // helper exists for a single static path, so derive its SSG locales
   // directly from the registry (currently th only).
@@ -848,20 +849,24 @@ const SSG_UI_NAMESPACES: Record<string, Locale[]> = (() => {
     ),
     ExplainerPage: localesWithPaths(getRegisteredGuidePaths),
     FaqPage: faq,
-    // /activities/<slug> and /cost/<slug>. Spread in only once the locale set
-    // is non-empty: checkNamespaceParity treats a 0-locale entry as a registry
-    // regression and hard-errors, and today both sections are EN-only, so a
-    // bare `ActivityPage: activity` would fail CI for a namespace that is
-    // simply not translated yet. Once the content batch adds the first
-    // ja/ko/zh/th entry to either data file, the namespace enters the
-    // allowlist on its own and parity is enforced from that commit onward.
+    // /activities/<slug>, /cost/<slug> and /best/<slug>. Spread in only once
+    // the locale set is non-empty: checkNamespaceParity treats a 0-locale entry
+    // as a registry regression and hard-errors, and a section with no non-EN
+    // entries yet resolves to [], so a bare `BestOfListiclePage: bestOf` would
+    // fail CI for a namespace that is simply not translated yet. Once the
+    // content batch adds the first ja/ko/zh/th entry to the data file, the
+    // namespace enters the allowlist on its own and parity is enforced from
+    // that commit onward — which is how ActivityPage/PriceGuidePage started
+    // being checked when /activities and /cost were translated.
     ...(activity.length > 0 ? { ActivityPage: activity } : {}),
     ...(priceGuide.length > 0 ? { PriceGuidePage: priceGuide } : {}),
+    ...(bestOf.length > 0 ? { BestOfListiclePage: bestOf } : {}),
     // components/faq/FaqPage.tsx getTranslations('ContactInfo') on every FAQ
-    // page; components/activities/ActivityPage.tsx and
-    // components/prices/PriceGuidePage.tsx do the same for the localized
+    // page; components/activities/ActivityPage.tsx,
+    // components/prices/PriceGuidePage.tsx and
+    // components/best/BestOfListiclePage.tsx do the same for the localized
     // address in their CTA copy.
-    ContactInfo: [...new Set([...faq, ...activity, ...priceGuide])],
+    ContactInfo: [...new Set([...faq, ...activity, ...priceGuide, ...bestOf])],
   }
 })()
 

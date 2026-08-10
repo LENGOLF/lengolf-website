@@ -1427,5 +1427,22 @@
     "bookNow": "立即预订",
     "call": "致电{phone}",
     "exploreMore": "更多内容"
+  },
+  "BestOfListiclePage": {
+    "eyebrow": "曼谷指南 · {year}年",
+    "bookABay": "预订球位",
+    "lineUs": "LINE联系我们",
+    "rankedHeading": "排名：最佳选择",
+    "editorsPick": "编辑推荐",
+    "rankBadge": "第{rank}名",
+    "pros": "优点",
+    "cons": "缺点",
+    "visitWebsite": "访问网站",
+    "verdictHeading": "我们的结论",
+    "ctaTitle": "准备好来LENGOLF体验了吗？",
+    "ctaText": "在LENGOLF（{address}）预订您的球位。营业时间：{hours}",
+    "bookNow": "立即预订",
+    "call": "致电{phone}",
+    "exploreMore": "更多内容"
   }
 }

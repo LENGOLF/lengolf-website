@@ -1424,5 +1424,22 @@
     "bookNow": "今すぐ予約",
     "call": "電話 {phone}",
     "exploreMore": "もっと見る"
+  },
+  "BestOfListiclePage": {
+    "eyebrow": "バンコクガイド・{year}年",
+    "bookABay": "ベイを予約",
+    "lineUs": "LINEで問い合わせ",
+    "rankedHeading": "ランキング：おすすめの選択肢",
+    "editorsPick": "編集部おすすめ",
+    "rankBadge": "{rank}位",
+    "pros": "メリット",
+    "cons": "デメリット",
+    "visitWebsite": "ウェブサイトを見る",
+    "verdictHeading": "総評",
+    "ctaTitle": "LENGOLFに行ってみませんか",
+    "ctaText": "LENGOLF（{address}）でベイを予約。営業時間：{hours}",
+    "bookNow": "今すぐ予約",
+    "call": "電話 {phone}",
+    "exploreMore": "もっと見る"
   }
 }

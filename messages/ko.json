@@ -1426,5 +1426,22 @@
     "bookNow": "지금 예약",
     "call": "전화 {phone}",
     "exploreMore": "더 알아보기"
+  },
+  "BestOfListiclePage": {
+    "eyebrow": "방콕 가이드 · {year}년",
+    "bookABay": "베이 예약",
+    "lineUs": "LINE 문의",
+    "rankedHeading": "순위: 가장 좋은 선택지",
+    "editorsPick": "에디터 추천",
+    "rankBadge": "{rank}위",
+    "pros": "장점",
+    "cons": "단점",
+    "visitWebsite": "웹사이트 보기",
+    "verdictHeading": "총평",
+    "ctaTitle": "LENGOLF에 방문해 보세요",
+    "ctaText": "LENGOLF({address})에서 베이를 예약하세요. 영업시간: {hours}.",
+    "bookNow": "지금 예약",
+    "call": "전화 {phone}",
+    "exploreMore": "더 알아보기"
   }
 }

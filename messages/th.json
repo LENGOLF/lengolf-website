@@ -1337,5 +1337,22 @@
     "bookNow": "จองเลย",
     "call": "โทร {phone}",
     "exploreMore": "อ่านเพิ่มเติม"
+  },
+  "BestOfListiclePage": {
+    "eyebrow": "ไกด์กรุงเทพฯ · {year}",
+    "bookABay": "จองเบย์",
+    "lineUs": "แชท LINE",
+    "rankedHeading": "จัดอันดับ: ตัวเลือกที่ดีที่สุด",
+    "editorsPick": "ตัวเลือกแนะนำ",
+    "rankBadge": "อันดับ {rank}",
+    "pros": "ข้อดี",
+    "cons": "ข้อเสีย",
+    "visitWebsite": "เข้าชมเว็บไซต์",
+    "verdictHeading": "สรุปจากเรา",
+    "ctaTitle": "พร้อมมาที่ LENGOLF แล้วหรือยัง?",
+    "ctaText": "จองเบย์ที่ LENGOLF, {address} เปิด {hours}",
+    "bookNow": "จองเลย",
+    "call": "โทร {phone}",
+    "exploreMore": "อ่านเพิ่มเติม"
   }
 }

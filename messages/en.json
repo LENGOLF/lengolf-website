@@ -1337,5 +1337,22 @@
     "bookNow": "Book Now",
     "call": "Call {phone}",
     "exploreMore": "Explore More"
+  },
+  "BestOfListiclePage": {
+    "eyebrow": "Bangkok Guide · {year}",
+    "bookABay": "Book a Bay",
+    "lineUs": "LINE Us",
+    "rankedHeading": "Ranked: The Best Options",
+    "editorsPick": "Editor's Pick",
+    "rankBadge": "#{rank}",
+    "pros": "Pros",
+    "cons": "Cons",
+    "visitWebsite": "Visit website",
+    "verdictHeading": "Our Verdict",
+    "ctaTitle": "Ready to Visit LENGOLF?",
+    "ctaText": "Book a bay at LENGOLF, {address}. Open {hours}.",
+    "bookNow": "Book Now",
+    "call": "Call {phone}",
+    "exploreMore": "Explore More"
   }
 }

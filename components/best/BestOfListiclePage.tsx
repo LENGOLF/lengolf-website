@@ -1,5 +1,7 @@
 import { Link } from '@/i18n/navigation'
 import { ArrowRight, Check, ExternalLink, MapPin, ThumbsDown, ThumbsUp, Trophy } from 'lucide-react'
+import { getTranslations } from 'next-intl/server'
+import { getSiteFacts } from '@/lib/site-facts'
 import { BOOKING_URL, BUSINESS_INFO, SOCIAL_LINKS } from '@/lib/constants'
 import type { BestOfListicleSeoPage } from '@/types/seo-pages'
 
@@ -7,8 +9,20 @@ interface Props {
   data: BestOfListicleSeoPage
 }
 
-export default function BestOfListiclePage({ data }: Props) {
+// The card sub-components below render chrome too (the badge, the pros/cons
+// labels, the per-card CTA). They take the translator as a prop rather than
+// awaiting getTranslations themselves — one await per page, and the sub-trees
+// stay plain sync functions.
+type ListicleTranslator = Awaited<ReturnType<typeof getTranslations<'BestOfListiclePage'>>>
+
+export default async function BestOfListiclePage({ data }: Props) {
   const { content } = data
+
+  const [t, tContact, facts] = await Promise.all([
+    getTranslations('BestOfListiclePage'),
+    getTranslations('ContactInfo'),
+    getSiteFacts(),
+  ])
 
   return (
     <div className="best-of-listicle-page">
@@ -17,7 +31,12 @@ export default function BestOfListiclePage({ data }: Props) {
       <section className="relative bg-gradient-to-br from-[#1a472a] to-[#2d6a4f] py-16 md:py-24 text-white">
         <div className="mx-auto max-w-[900px] px-5">
           <p className="text-sm font-medium uppercase tracking-wider text-[#d4a843] mb-3">
-            Bangkok Guide · {content.year}
+            {/* Stringified deliberately. A BARE {year} placeholder is a string
+                argument in ICU and prints 2026 unformatted, so this is not
+                load-bearing today — but the moment anyone writes
+                {year, number} in a catalog it becomes "2,026" in all five
+                locales. Passing a string makes that edit inert. */}
+            {t('eyebrow', { year: String(content.year) })}
           </p>
           <h1 className="text-3xl font-bold md:text-5xl mb-6">{data.title}</h1>
           <div className="flex flex-wrap gap-3">
@@ -27,7 +46,7 @@ export default function BestOfListiclePage({ data }: Props) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg bg-[#d4a843] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#c49a3a]"
             >
-              Book a Bay
+              {t('bookABay')}
             </a>
             <a
               href={SOCIAL_LINKS.line}
@@ -35,7 +54,7 @@ export default function BestOfListiclePage({ data }: Props) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg border-2 border-white/30 px-6 py-3 font-semibold text-white transition-colors hover:bg-white/10"
             >
-              LINE Us
+              {t('lineUs')}
             </a>
           </div>
         </div>
@@ -54,15 +73,15 @@ export default function BestOfListiclePage({ data }: Props) {
       <section className="pb-12 md:pb-16">
         <div className="mx-auto max-w-[900px] px-5">
           <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-8">
-            Ranked: The Best Options
+            {t('rankedHeading')}
           </h2>
 
           <div className="space-y-6">
             {content.list_items.map((item) =>
               item.is_lengolf ? (
-                <LengolfCard key={item.rank} item={item} />
+                <LengolfCard key={item.rank} item={item} t={t} />
               ) : (
-                <CompetitorCard key={item.rank} item={item} />
+                <CompetitorCard key={item.rank} item={item} t={t} />
               )
             )}
           </div>
@@ -73,7 +92,7 @@ export default function BestOfListiclePage({ data }: Props) {
       <section className="py-12 md:py-16 bg-[#f8f9fa]">
         <div className="mx-auto max-w-[900px] px-5">
           <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-4">
-            Our Verdict
+            {t('verdictHeading')}
           </h2>
           <div className="rounded-xl border bg-white p-6 md:p-8">
             <p className="text-base leading-relaxed text-muted-foreground md:text-lg">
@@ -86,11 +105,19 @@ export default function BestOfListiclePage({ data }: Props) {
       {/* ── CTA ──────────────────────────────────────────────────────────── */}
       <section className="py-12 md:py-16 bg-gradient-to-br from-[#1a472a] to-[#2d6a4f] text-white text-center">
         <div className="mx-auto max-w-[900px] px-5">
-          <h2 className="text-2xl font-bold md:text-3xl mb-4">
-            Ready to Visit LENGOLF?
-          </h2>
+          <h2 className="text-2xl font-bold md:text-3xl mb-4">{t('ctaTitle')}</h2>
           <p className="text-white/80 mb-8 max-w-lg mx-auto">
-            Book a bay at LENGOLF, {BUSINESS_INFO.addressShort}. Open {BUSINESS_INFO.hours}.
+            {t('ctaText', {
+              // Same substitution as components/faq/FaqPage.tsx,
+              // components/activities/ActivityPage.tsx and
+              // components/prices/PriceGuidePage.tsx: BUSINESS_INFO.addressShort
+              // and BUSINESS_INFO.hours are English-only constants that would
+              // strand an English fragment inside an otherwise translated
+              // sentence. ContactInfo.address is the localized address and
+              // facts.openingHours ("09:00–23:00") is locale-neutral.
+              address: tContact('address'),
+              hours: facts.openingHours,
+            })}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <a
@@ -99,13 +126,13 @@ export default function BestOfListiclePage({ data }: Props) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg bg-[#d4a843] px-8 py-3 font-semibold text-white transition-colors hover:bg-[#c49a3a]"
             >
-              Book Now
+              {t('bookNow')}
             </a>
             <a
               href={`tel:${BUSINESS_INFO.phoneRaw}`}
               className="inline-flex items-center gap-2 rounded-lg border-2 border-white/30 px-8 py-3 font-semibold text-white transition-colors hover:bg-white/10"
             >
-              Call {BUSINESS_INFO.phone}
+              {t('call', { phone: BUSINESS_INFO.phone })}
             </a>
             <a
               href={SOCIAL_LINKS.line}
@@ -113,7 +140,7 @@ export default function BestOfListiclePage({ data }: Props) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg border-2 border-white/30 px-8 py-3 font-semibold text-white transition-colors hover:bg-white/10"
             >
-              LINE Us
+              {t('lineUs')}
             </a>
           </div>
         </div>
@@ -123,7 +150,7 @@ export default function BestOfListiclePage({ data }: Props) {
       {data.related_slugs && data.related_slugs.length > 0 && (
         <section className="py-12 md:py-16">
           <div className="mx-auto max-w-[900px] px-5">
-            <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-6">Explore More</h2>
+            <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-6">{t('exploreMore')}</h2>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
               {data.related_slugs.map((path) => {
                 const label = path
@@ -157,17 +184,17 @@ export default function BestOfListiclePage({ data }: Props) {
 
 type ListItem = BestOfListicleSeoPage['content']['list_items'][number]
 
-function LengolfCard({ item }: { item: ListItem }) {
+function LengolfCard({ item, t }: { item: ListItem; t: ListicleTranslator }) {
   return (
     <div className="relative rounded-xl border-2 border-[#2d6a4f] bg-white p-6 shadow-md">
       {/* Editor's Pick badge */}
       <div className="absolute -top-3 left-6 flex items-center gap-1.5 rounded-full bg-[#d4a843] px-3 py-1 text-xs font-bold text-white shadow">
         <Trophy className="h-3 w-3" />
-        Editor&apos;s Pick
+        {t('editorsPick')}
       </div>
 
       <div className="flex items-start gap-4 mt-2">
-        <RankBadge rank={item.rank} highlighted />
+        <RankBadge rank={item.rank} highlighted t={t} />
 
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2 mb-3">
@@ -178,7 +205,7 @@ function LengolfCard({ item }: { item: ListItem }) {
             {item.description}
           </p>
 
-          <ProsConsGrid pros={item.pros} cons={item.cons} />
+          <ProsConsGrid pros={item.pros} cons={item.cons} t={t} />
 
           <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-border mt-4">
             {item.address && (
@@ -193,7 +220,7 @@ function LengolfCard({ item }: { item: ListItem }) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg bg-[#d4a843] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#c49a3a]"
             >
-              Book a Bay
+              {t('bookABay')}
             </a>
           </div>
         </div>
@@ -202,11 +229,11 @@ function LengolfCard({ item }: { item: ListItem }) {
   )
 }
 
-function CompetitorCard({ item }: { item: ListItem }) {
+function CompetitorCard({ item, t }: { item: ListItem; t: ListicleTranslator }) {
   return (
     <div className="rounded-xl border bg-white p-6">
       <div className="flex items-start gap-4">
-        <RankBadge rank={item.rank} highlighted={false} />
+        <RankBadge rank={item.rank} highlighted={false} t={t} />
 
         <div className="flex-1 min-w-0">
           <h3 className="text-lg font-bold text-[#1a472a] mb-3">{item.name}</h3>
@@ -215,7 +242,7 @@ function CompetitorCard({ item }: { item: ListItem }) {
             {item.description}
           </p>
 
-          <ProsConsGrid pros={item.pros} cons={item.cons} />
+          <ProsConsGrid pros={item.pros} cons={item.cons} t={t} />
 
           <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-border mt-4">
             {item.address && (
@@ -231,7 +258,7 @@ function CompetitorCard({ item }: { item: ListItem }) {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-sm text-[#2d6a4f] hover:underline"
               >
-                Visit website <ExternalLink className="h-3.5 w-3.5" />
+                {t('visitWebsite')} <ExternalLink className="h-3.5 w-3.5" />
               </a>
             )}
           </div>
@@ -241,7 +268,15 @@ function CompetitorCard({ item }: { item: ListItem }) {
   )
 }
 
-function RankBadge({ rank, highlighted }: { rank: number; highlighted: boolean }) {
+function RankBadge({
+  rank,
+  highlighted,
+  t,
+}: {
+  rank: number
+  highlighted: boolean
+  t: ListicleTranslator
+}) {
   return (
     <div
       className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-bold text-sm ${
@@ -250,17 +285,28 @@ function RankBadge({ rank, highlighted }: { rank: number; highlighted: boolean }
           : 'bg-gray-100 text-gray-600'
       }`}
     >
-      #{rank}
+      {/* '#N' is an English ordinal convention, not a bare numeral — ja/ko/zh
+          write the rank with their own ordinal marker (1位 / 1위 / 第1名), so
+          the whole badge is a message rather than a hardcoded '#' + number. */}
+      {t('rankBadge', { rank })}
     </div>
   )
 }
 
-function ProsConsGrid({ pros, cons }: { pros: string[]; cons: string[] }) {
+function ProsConsGrid({
+  pros,
+  cons,
+  t,
+}: {
+  pros: string[]
+  cons: string[]
+  t: ListicleTranslator
+}) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
       <div>
         <p className="text-xs font-semibold text-[#2d6a4f] flex items-center gap-1 mb-2">
-          <ThumbsUp className="h-3.5 w-3.5" /> Pros
+          <ThumbsUp className="h-3.5 w-3.5" /> {t('pros')}
         </p>
         <ul className="space-y-1.5">
           {pros.map((pro) => (
@@ -273,7 +319,7 @@ function ProsConsGrid({ pros, cons }: { pros: string[]; cons: string[] }) {
       </div>
       <div>
         <p className="text-xs font-semibold text-gray-500 flex items-center gap-1 mb-2">
-          <ThumbsDown className="h-3.5 w-3.5" /> Cons
+          <ThumbsDown className="h-3.5 w-3.5" /> {t('cons')}
         </p>
         <ul className="space-y-1.5">
           {cons.map((con) => (
