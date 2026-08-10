@@ -3141,19 +3141,35 @@ const thaiRedirectTests: ThaiRedirectTest[] = [
   // untranslated slug and ship English content under a locale URL unnoticed.
   // (Replaces the price-tier negative probe removed above — every locale now
   // has price tiers, so no untranslated tier remains to test.)
+  //
+  // THE SLUG IS AN INVARIANT, NOT A CONSTANT — same trap as the
+  // courseDetailHref negative assertion. These three probes used to point at
+  // what-to-wear-to-indoor-golf-bar (ja), how-long-does-simulator-golf-take
+  // (ko) and can-kids-play-golf-simulators (zh); the FAQ-completion batch
+  // translated all three and every probe started 200ing. The fix is to
+  // RE-ANCHOR, never to delete: dropping them leaves the /faq middleware
+  // 301 with no negative coverage at all, so an allowlist that widened to an
+  // untranslated slug would ship English under a locale URL unnoticed.
+  //
+  // where-to-play-golf-at-night-in-bangkok is the one FAQ untranslated in all
+  // four locales, and deliberately so — it duplicates
+  // where-play-golf-night-bangkok, which is canonical (2 inbound internal
+  // links vs 0). If that duplicate is ever consolidated with a 301, or
+  // translated, there is no untranslated FAQ left to probe and this block has
+  // to go — say so in the commit rather than letting it silently 200.
   {
-    path: "/ja/faq/what-to-wear-to-indoor-golf-bar/",
-    expectedLocation: "/faq/what-to-wear-to-indoor-golf-bar/",
+    path: "/ja/faq/where-to-play-golf-at-night-in-bangkok/",
+    expectedLocation: "/faq/where-to-play-golf-at-night-in-bangkok/",
     label: "Untranslated JA FAQ (only translated slugs may 200)",
   },
   {
-    path: "/ko/faq/how-long-does-simulator-golf-take/",
-    expectedLocation: "/faq/how-long-does-simulator-golf-take/",
+    path: "/ko/faq/where-to-play-golf-at-night-in-bangkok/",
+    expectedLocation: "/faq/where-to-play-golf-at-night-in-bangkok/",
     label: "Untranslated KO FAQ (only translated slugs may 200)",
   },
   {
-    path: "/zh/faq/can-kids-play-golf-simulators/",
-    expectedLocation: "/faq/can-kids-play-golf-simulators/",
+    path: "/zh/faq/where-to-play-golf-at-night-in-bangkok/",
+    expectedLocation: "/faq/where-to-play-golf-at-night-in-bangkok/",
     label: "Untranslated ZH FAQ (only translated slugs may 200)",
   },
   // EN-only golf-course routes (near/best-for/compare) build no locale copies
