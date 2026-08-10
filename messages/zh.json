@@ -1394,7 +1394,7 @@
     "ctaTitle": "准备好亲自体验了吗？",
     "ctaText": "在LENGOLF（{address}）预订您的球位。营业时间：{hours}",
     "bookNow": "立即预订",
-    "call": "致电 {phone}",
+    "call": "致电{phone}",
     "exploreMore": "更多内容"
   },
   "PriceGuidePage": {
@@ -1425,7 +1425,7 @@
     "ctaTitle": "准备好开始了吗？",
     "ctaText": "在LENGOLF（{address}）预订您的球位。营业时间：{hours}",
     "bookNow": "立即预订",
-    "call": "致电 {phone}",
+    "call": "致电{phone}",
     "exploreMore": "更多内容"
   }
 }

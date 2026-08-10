@@ -1391,7 +1391,7 @@
     "faqTitle": "자주 묻는",
     "faqTitleSuffix": "질문",
     "ctaTitle": "직접 체험해 보시겠어요?",
-    "ctaText": "LENGOLF({address})에서 베이를 예약하세요. 영업시간: {hours}",
+    "ctaText": "LENGOLF({address})에서 베이를 예약하세요. 영업시간: {hours}.",
     "bookNow": "지금 예약",
     "call": "전화 {phone}",
     "exploreMore": "더 알아보기"
@@ -1421,8 +1421,8 @@
     "pillRate": "1시간 {rate}, 최대 {n}명",
     "pillLocation": "The Mercury Ville, BTS 칫롬역 4번 출구",
     "pillComfort": "에어컨 완비, 비 걱정 없음, 밤늦게까지 영업",
-    "ctaTitle": "플레이할 준비가 되셨나요?",
-    "ctaText": "LENGOLF({address})에서 베이를 예약하세요. 영업시간: {hours}",
+    "ctaTitle": "이제 한번 쳐 보실까요?",
+    "ctaText": "LENGOLF({address})에서 베이를 예약하세요. 영업시간: {hours}.",
     "bookNow": "지금 예약",
     "call": "전화 {phone}",
     "exploreMore": "더 알아보기"
