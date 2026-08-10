@@ -34,7 +34,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'CentralWorld Shopping', type: 'shopping', distance_m: 200 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 300 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 700 },
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 500 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 400 },
       ],
@@ -89,7 +89,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'CentralWorld Shopping', type: 'shopping', distance_m: 200 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 300 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 700 },
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 500 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 400 },
       ],
@@ -145,7 +145,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'CentralWorld Shopping', type: 'shopping', distance_m: 200 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 300 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 700 },
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 500 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 400 },
       ],
@@ -200,7 +200,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'CentralWorld Shopping', type: 'shopping', distance_m: 200 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 300 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 700 },
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 500 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 400 },
       ],
@@ -255,7 +255,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'CentralWorld Shopping', type: 'shopping', distance_m: 200 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 300 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 700 },
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 500 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 400 },
       ],
@@ -303,7 +303,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 300 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 400 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 350 },
         { name: 'Sindhorn Village', type: 'shopping', distance_m: 150 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 600 },
       ],
@@ -358,7 +358,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 300 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 400 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 350 },
         { name: 'Sindhorn Village', type: 'shopping', distance_m: 150 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 600 },
       ],
@@ -413,7 +413,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 300 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 400 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 350 },
         { name: 'Sindhorn Village', type: 'shopping', distance_m: 150 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 600 },
       ],
@@ -468,7 +468,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 300 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 400 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 350 },
         { name: 'Sindhorn Village', type: 'shopping', distance_m: 150 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 600 },
       ],
@@ -523,7 +523,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 300 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 400 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 350 },
         { name: 'Sindhorn Village', type: 'shopping', distance_m: 150 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 600 },
       ],
@@ -850,7 +850,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 400 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 600 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 700 },
         { name: 'US Embassy / UK Embassy', type: 'landmark', distance_m: 300 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 700 },
       ],
@@ -905,7 +905,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 400 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 600 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 700 },
         { name: 'US Embassy / UK Embassy', type: 'landmark', distance_m: 300 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 700 },
       ],
@@ -960,7 +960,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 400 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 600 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 700 },
         { name: 'US Embassy / UK Embassy', type: 'landmark', distance_m: 300 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 700 },
       ],
@@ -1014,7 +1014,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 400 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 600 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 700 },
         { name: 'US Embassy / UK Embassy', type: 'landmark', distance_m: 300 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 700 },
       ],
@@ -1068,7 +1068,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 400 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 600 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 700 },
         { name: 'US Embassy / UK Embassy', type: 'landmark', distance_m: 300 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 700 },
       ],
@@ -1662,7 +1662,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Ploenchit BTS to explore Bangkok', type: 'transport', distance_m: 150 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 800 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 1500 },
         { name: 'Bumrungrad Hospital', type: 'medical', distance_m: 500 },
         { name: 'Nana Entertainment', type: 'nightlife', distance_m: 400 },
       ],
@@ -1717,7 +1717,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Ploenchit BTS to explore Bangkok', type: 'transport', distance_m: 150 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 800 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 1500 },
         { name: 'Bumrungrad Hospital', type: 'medical', distance_m: 500 },
         { name: 'Nana Entertainment', type: 'nightlife', distance_m: 400 },
       ],
@@ -1772,7 +1772,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Ploenchit BTS to explore Bangkok', type: 'transport', distance_m: 150 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 800 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 1500 },
         { name: 'Bumrungrad Hospital', type: 'medical', distance_m: 500 },
         { name: 'Nana Entertainment', type: 'nightlife', distance_m: 400 },
       ],
@@ -1827,7 +1827,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Ploenchit BTS to explore Bangkok', type: 'transport', distance_m: 150 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 800 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 1500 },
         { name: 'Bumrungrad Hospital', type: 'medical', distance_m: 500 },
         { name: 'Nana Entertainment', type: 'nightlife', distance_m: 400 },
       ],
@@ -1881,7 +1881,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Ploenchit BTS to explore Bangkok', type: 'transport', distance_m: 150 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 800 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 1500 },
         { name: 'Bumrungrad Hospital', type: 'medical', distance_m: 500 },
         { name: 'Nana Entertainment', type: 'nightlife', distance_m: 400 },
       ],
@@ -2207,7 +2207,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Ploenchit BTS', type: 'transport', distance_m: 100 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 900 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 600 },
         { name: 'Central Embassy', type: 'shopping', distance_m: 200 },
         { name: 'Nai Lert Park Heritage Home', type: 'cultural', distance_m: 300 },
       ],
@@ -2263,7 +2263,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Ploenchit BTS', type: 'transport', distance_m: 100 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 900 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 600 },
         { name: 'Central Embassy', type: 'shopping', distance_m: 200 },
         { name: 'Nai Lert Park Heritage Home', type: 'cultural', distance_m: 300 },
       ],
@@ -2319,7 +2319,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Ploenchit BTS', type: 'transport', distance_m: 100 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 900 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 600 },
         { name: 'Central Embassy', type: 'shopping', distance_m: 200 },
         { name: 'Nai Lert Park Heritage Home', type: 'cultural', distance_m: 300 },
       ],
@@ -2375,7 +2375,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Ploenchit BTS', type: 'transport', distance_m: 100 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 900 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 600 },
         { name: 'Central Embassy', type: 'shopping', distance_m: 200 },
         { name: 'Nai Lert Park Heritage Home', type: 'cultural', distance_m: 300 },
       ],
@@ -2430,7 +2430,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Ploenchit BTS', type: 'transport', distance_m: 100 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 900 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 600 },
         { name: 'Central Embassy', type: 'shopping', distance_m: 200 },
         { name: 'Nai Lert Park Heritage Home', type: 'cultural', distance_m: 300 },
       ],
@@ -2481,7 +2481,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 300 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 800 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 1000 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 800 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 300 },
         { name: 'Bangkok Art and Culture Centre', type: 'cultural', distance_m: 700 },
       ],
@@ -2536,7 +2536,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 300 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 800 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 1000 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 800 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 300 },
         { name: 'Bangkok Art and Culture Centre', type: 'cultural', distance_m: 700 },
       ],
@@ -2592,7 +2592,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 300 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 800 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 1000 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 800 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 300 },
         { name: 'Bangkok Art and Culture Centre', type: 'cultural', distance_m: 700 },
       ],
@@ -2647,7 +2647,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 300 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 800 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 1000 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 800 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 300 },
         { name: 'Bangkok Art and Culture Centre', type: 'cultural', distance_m: 700 },
       ],
@@ -2702,7 +2702,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 300 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 800 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 1000 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 800 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 300 },
         { name: 'Bangkok Art and Culture Centre', type: 'cultural', distance_m: 700 },
       ],
@@ -2753,7 +2753,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         { name: 'Siam Paragon', type: 'shopping', distance_m: 200 },
         { name: 'SEA LIFE Bangkok Ocean World', type: 'attraction', distance_m: 250 },
         { name: 'MBK Center', type: 'shopping', distance_m: 200 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 1000 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 2100 },
         { name: 'Bangkok Art and Culture Centre', type: 'cultural', distance_m: 300 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Mercure+Bangkok+Siam+to+LENGOLF&t=m&z=16&output=embed',
@@ -2809,7 +2809,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         { name: 'Siam Paragon', type: 'shopping', distance_m: 200 },
         { name: 'SEA LIFE Bangkok Ocean World', type: 'attraction', distance_m: 250 },
         { name: 'MBK Center', type: 'shopping', distance_m: 200 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 1000 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 2100 },
         { name: 'Bangkok Art and Culture Centre', type: 'cultural', distance_m: 300 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Mercure+Bangkok+Siam+to+LENGOLF&t=m&z=16&output=embed',
@@ -2867,7 +2867,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         { name: 'Siam Paragon', type: 'shopping', distance_m: 200 },
         { name: 'SEA LIFE Bangkok Ocean World', type: 'attraction', distance_m: 250 },
         { name: 'MBK Center', type: 'shopping', distance_m: 200 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 1000 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 2100 },
         { name: 'Bangkok Art and Culture Centre', type: 'cultural', distance_m: 300 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Mercure+Bangkok+Siam+to+LENGOLF&t=m&z=16&output=embed',
@@ -2924,7 +2924,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         { name: 'Siam Paragon', type: 'shopping', distance_m: 200 },
         { name: 'SEA LIFE Bangkok Ocean World', type: 'attraction', distance_m: 250 },
         { name: 'MBK Center', type: 'shopping', distance_m: 200 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 1000 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 2100 },
         { name: 'Bangkok Art and Culture Centre', type: 'cultural', distance_m: 300 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Mercure+Bangkok+Siam+to+LENGOLF&t=m&z=16&output=embed',
@@ -2980,7 +2980,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         { name: 'Siam Paragon', type: 'shopping', distance_m: 200 },
         { name: 'SEA LIFE Bangkok Ocean World', type: 'attraction', distance_m: 250 },
         { name: 'MBK Center', type: 'shopping', distance_m: 200 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 1000 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 2100 },
         { name: 'Bangkok Art and Culture Centre', type: 'cultural', distance_m: 300 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Mercure+Bangkok+Siam+to+LENGOLF&t=m&z=16&output=embed',
@@ -3031,7 +3031,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 500 },
         { name: 'Langsuan Restaurant Row', type: 'dining', distance_m: 100 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 1200 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 800 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 800 },
         { name: 'Sindhorn Village', type: 'shopping', distance_m: 500 },
       ],
@@ -3091,7 +3091,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 500 },
         { name: 'Langsuan Restaurant Row', type: 'dining', distance_m: 100 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 1200 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 800 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 800 },
         { name: 'Sindhorn Village', type: 'shopping', distance_m: 500 },
       ],
@@ -3151,7 +3151,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 500 },
         { name: 'Langsuan Restaurant Row', type: 'dining', distance_m: 100 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 1200 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 800 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 800 },
         { name: 'Sindhorn Village', type: 'shopping', distance_m: 500 },
       ],
@@ -3211,7 +3211,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 500 },
         { name: 'Langsuan Restaurant Row', type: 'dining', distance_m: 100 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 1200 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 800 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 800 },
         { name: 'Sindhorn Village', type: 'shopping', distance_m: 500 },
       ],
@@ -3270,7 +3270,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 500 },
         { name: 'Langsuan Restaurant Row', type: 'dining', distance_m: 100 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 1200 },
+        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 800 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 800 },
         { name: 'Sindhorn Village', type: 'shopping', distance_m: 500 },
       ],
