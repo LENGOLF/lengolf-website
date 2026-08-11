@@ -264,23 +264,29 @@ export default async function GolfCourseClubRentalPage({ params }: { params: Pro
               const genderLine = t.has(`${slugKey}.gender`)
                 ? t(`${slugKey}.gender`)
                 : set.gender === 'mens' ? "Men's Full Set" : "Women's Full Set"
-              // Slug-keyed i18n specs when translated; DB specifications as the
-              // fallback so a brand-new set renders before its copy lands.
-              const specs = t.has(`${slugKey}.spec1`)
+              // Slug-keyed i18n specs when FULLY translated (all three bullets);
+              // DB specifications as the fallback so a brand-new set renders
+              // before its copy lands and a half-translated block never leaks
+              // raw key paths.
+              const specs = [1, 2, 3].every((j) => t.has(`${slugKey}.spec${j}`))
                 ? [1, 2, 3].map((j) => t(`${slugKey}.spec${j}`))
                 : set.specifications
               // Colour variants with their own shoots render one captioned strip
               // per variant (the two-bag offering is the selling point); shaft
               // variants have no images and inherit the single base gallery.
               const imageVariants = set.variants.filter((v) => v.images && v.images.length > 0)
+              const singleGallery = setGallery(set, imageVariants[0]?.key)
               const galleries: { caption: string | null; images: SetVariantImage[] }[] =
                 imageVariants.length >= 2
                   ? imageVariants.map((v) => ({
                       caption: t.has(`variantLabels.${v.key}`) ? t(`variantLabels.${v.key}`) : (v.label ?? v.key),
                       images: v.images!,
                     }))
-                  : set.gallery.length > 0
-                    ? [{ caption: null, images: setGallery(set) }]
+                  // Single strip, uncaptioned. Passing the lone image-variant's
+                  // key (if any) means a variant-first authored set with an
+                  // empty base gallery still shows its images.
+                  : singleGallery.length > 0
+                    ? [{ caption: null, images: singleGallery }]
                     : []
               return (
                 <div key={set.slug} className="rounded-xl border border-primary/20 bg-white p-6">

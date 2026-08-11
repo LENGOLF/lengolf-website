@@ -225,9 +225,11 @@ export interface RentalClubSet {
 /** Defensive parse — DB-authored jsonb, never trust the shape. */
 function parseImages(raw: unknown): SetVariantImage[] {
   if (!Array.isArray(raw)) return []
-  return raw.filter(
-    (i): i is SetVariantImage => !!i && typeof i === 'object' && typeof (i as SetVariantImage).path === 'string'
-  )
+  return raw
+    .filter(
+      (i): i is { path: string; alt?: unknown } => !!i && typeof i === 'object' && typeof (i as SetVariantImage).path === 'string'
+    )
+    .map((i) => ({ path: i.path, alt: typeof i.alt === 'string' ? i.alt : '' }))
 }
 
 function parseVariants(raw: unknown): SetVariant[] {
