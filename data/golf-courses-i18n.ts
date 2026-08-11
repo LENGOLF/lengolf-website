@@ -484,37 +484,37 @@ export function getTranslatedRegionHubParams(): { locale: string; region: string
  * that locale's staticRoutes in lib/translated-routes.ts — the smoke-test
  * course-detail consistency check fails CI in both directions if they drift.
  */
-type CourseDetailLocale = 'th' | 'ja'
+type CourseDetailLocale = 'th' | 'ja' | 'ko' | 'zh'
 
 export const COURSE_DETAIL_I18N: {
   region: string
   slug: string
   locales: readonly CourseDetailLocale[]
 }[] = [
-  { region: 'bangkok', slug: 'sai-golf-club', locales: ['th', 'ja'] },
-  { region: 'bangkok', slug: 'the-legacy-golf-club', locales: ['th', 'ja'] },
-  { region: 'chiang-mai', slug: 'lanna-golf-course', locales: ['th', 'ja'] },
+  { region: 'bangkok', slug: 'sai-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'the-legacy-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'chiang-mai', slug: 'lanna-golf-course', locales: ['th', 'ja', 'ko', 'zh'] },
   // Batch 2 (2026-08) — top course pages by GSC impressions (90d) within
   // regions whose hubs are translated for both locales. Suvarnabhumi (1,319
   // imp) deliberately excluded pending the Phoenix Gold slug merge.
-  { region: 'bangkok', slug: 'pinehurst-golf-country-club', locales: ['th', 'ja'] },
-  { region: 'bangkok', slug: 'siam-country-club-bangkok', locales: ['th', 'ja'] },
-  { region: 'bangkok', slug: 'ayutthaya-golf-club', locales: ['th', 'ja'] },
-  { region: 'bangkok', slug: 'muang-ake-golf-course', locales: ['th', 'ja'] },
-  { region: 'phuket', slug: 'blue-canyon-lakes-course', locales: ['th', 'ja'] },
-  { region: 'phuket', slug: 'phuket-country-club', locales: ['th', 'ja'] },
-  { region: 'pattaya', slug: 'wangjuntr-golf-park', locales: ['th', 'ja'] },
+  { region: 'bangkok', slug: 'pinehurst-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'siam-country-club-bangkok', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'ayutthaya-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'muang-ake-golf-course', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'phuket', slug: 'blue-canyon-lakes-course', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'phuket', slug: 'phuket-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'wangjuntr-golf-park', locales: ['th', 'ja', 'ko', 'zh'] },
   // Batch 3 (2026-08) — GSC-demand picks within translated-hub regions:
   // Alpine (compare-page 656 imp + TH "alpine golf club ราคา" queries),
   // Nikanti (~1,400 imp across guide + name queries), Royal Gems ("the rg
   // city golf club" 110 imp + TH ราคา queries), Burapha (JPN-geo demand),
   // Laem Chabang ("laem chabang international country club prices" 70 imp).
   // Suvarnabhumi still excluded — see the Batch 2 note above.
-  { region: 'bangkok', slug: 'alpine-golf-club', locales: ['th', 'ja'] },
-  { region: 'bangkok', slug: 'nikanti-golf-club', locales: ['th', 'ja'] },
-  { region: 'bangkok', slug: 'royal-gems-golf-sports-club', locales: ['th', 'ja'] },
-  { region: 'pattaya', slug: 'burapha-golf-club', locales: ['th', 'ja'] },
-  { region: 'pattaya', slug: 'laem-chabang-international', locales: ['th', 'ja'] },
+  { region: 'bangkok', slug: 'alpine-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'nikanti-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'royal-gems-golf-sports-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'burapha-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'laem-chabang-international', locales: ['th', 'ja', 'ko', 'zh'] },
 ]
 
 /**

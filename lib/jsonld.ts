@@ -575,13 +575,18 @@ export function getActivityPageJsonLd(page: {
   slug: string
   meta_description: string | null
   content: { other_activities: { name: string; description: string }[] }
-}) {
+}, locale: string = 'en') {
+  // Locale-aware URLs: a translated page must point its structured data at
+  // its OWN locale URL. Emitting the bare EN URL from a /th/ or /ja/ page
+  // contradicts that page's canonical + hreflang — the same defect PR #88
+  // fixed on the FAQ hub's BreadcrumbList. Mirrors getSeoFaqPageJsonLd.
+  const localePrefix = locale === 'en' ? '' : `/${locale}`
   return {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: page.title,
     description: page.meta_description || undefined,
-    url: `${SITE_URL}/activities/${page.slug}/`,
+    url: `${SITE_URL}${localePrefix}/activities/${page.slug}/`,
     numberOfItems: page.content.other_activities.length + 1,
     itemListElement: [
       {
@@ -675,13 +680,18 @@ export function getHotelConciergePageJsonLd(page: {
     nearby_restaurants: { name: string; cuisine: string; distance_m: number }[]
     nearby_activities: { name: string; type: string; distance_m: number }[]
   }
-}) {
+}, locale: string = 'en') {
+  // Locale-aware URLs: a translated page must point its structured data at
+  // its OWN locale URL. Emitting the bare EN URL from a /th/ or /ja/ page
+  // contradicts that page's canonical + hreflang — the same defect PR #88
+  // fixed on the FAQ hub's BreadcrumbList. Mirrors getSeoFaqPageJsonLd.
+  const localePrefix = locale === 'en' ? '' : `/${locale}`
   return {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     name: BUSINESS_INFO.name,
     description: page.meta_description || `Things to do near ${page.content.hotel_name}`,
-    url: `${SITE_URL}/hotels/${page.slug}/`,
+    url: `${SITE_URL}${localePrefix}/hotels/${page.slug}/`,
     address: getPostalAddressJsonLd(),
     geo: {
       '@type': 'GeoCoordinates',
@@ -699,11 +709,34 @@ export function getPriceGuidePageJsonLd(page: {
     price_breakdown: { item: string; price: string; notes: string }[]
     last_verified: string
   }
-}) {
+}, locale: string = 'en') {
+  // Locale-aware URLs: a translated page must point its structured data at
+  // its OWN locale URL. Emitting the bare EN URL from a /th/ or /ja/ page
+  // contradicts that page's canonical + hreflang — the same defect PR #88
+  // fixed on the FAQ hub's BreadcrumbList. Mirrors getSeoFaqPageJsonLd.
+  const localePrefix = locale === 'en' ? '' : `/${locale}`
   // Parse price breakdown items and extract actual prices
   const parsedOffers = page.content.price_breakdown.map((item) => {
-    // Check for price range (e.g., "550–950 THB/hr" or "550-950")
-    const rangeMatch = item.price.match(/^(\d[\d,]*)\s*[–-]\s*(\d[\d,]*)/)
+    // Anchor the figure to its CURRENCY token rather than to the start of the
+    // string. The old parser anchored the range at ^ and then fell back to the
+    // first digit run anywhere, which is correct only while the number leads.
+    // Translated rows put a quantity first — ja "1時間550〜950THB", ko
+    // "1라운드 1,000~1,500바트" — so the anchored range missed and the fallback
+    // captured the quantity's "1", emitting lowPrice "1" on a LENGOLF-branded
+    // Product. That is a "from ฿1" rich result. th and zh only escaped because
+    // their unit happens to trail. Every locale places the currency
+    // immediately after the figure, so that is the reliable anchor.
+    const CURRENCY = String.raw`(?:THB|บาท|바트|泰铢|฿)`
+    // U+301C 〜 (ja), U+FF5E ～, ASCII ~ (ko), – — and hyphen. Hyphen last so
+    // it is a literal inside the class.
+    const DASH = String.raw`[–—〜～~-]`
+    const rangeMatch =
+      item.price.match(
+        new RegExp(String.raw`(\d[\d,]*)\s*${DASH}\s*(\d[\d,]*)\s*${CURRENCY}`)
+      ) ??
+      // No currency token in the row (bare "550-950"): fall back to the old
+      // ^-anchored form so EN rows that never carried a unit still parse.
+      item.price.match(/^(\d[\d,]*)\s*[–-]\s*(\d[\d,]*)/)
     if (rangeMatch) {
       return {
         '@type': 'Offer' as const,
@@ -716,8 +749,12 @@ export function getPriceGuidePageJsonLd(page: {
       }
     }
 
-    // Check for single price (e.g., "1,800 THB/hr" or "150")
-    const singlePriceMatch = item.price.match(/(\d[\d,]*)/)
+    // Check for single price (e.g., "1,800 THB/hr" or "150"). Currency-anchored
+    // first, for the same reason as the range above — ja "1時間150THB" would
+    // otherwise parse as 1.
+    const singlePriceMatch =
+      item.price.match(new RegExp(String.raw`(\d[\d,]*)\s*${CURRENCY}`)) ??
+      item.price.match(/(\d[\d,]*)/)
     if (singlePriceMatch) {
       return {
         '@type': 'Offer' as const,
@@ -777,7 +814,7 @@ export function getPriceGuidePageJsonLd(page: {
     '@type': 'Product',
     name: BUSINESS_INFO.name,
     description: page.meta_description || page.title,
-    url: `${SITE_URL}/cost/${page.slug}/`,
+    url: `${SITE_URL}${localePrefix}/cost/${page.slug}/`,
     brand: {
       '@type': 'Brand',
       name: BUSINESS_INFO.name,
@@ -1024,13 +1061,18 @@ export function getBestOfListiclePageJsonLd(page: {
       website?: string
     }[]
   }
-}) {
+}, locale: string = 'en') {
+  // Locale-aware URLs: a translated page must point its structured data at
+  // its OWN locale URL. Emitting the bare EN URL from a /th/ or /ja/ page
+  // contradicts that page's canonical + hreflang — the same defect PR #88
+  // fixed on the FAQ hub's BreadcrumbList. Mirrors getSeoFaqPageJsonLd.
+  const localePrefix = locale === 'en' ? '' : `/${locale}`
   return {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: page.title,
     description: page.meta_description || undefined,
-    url: `${SITE_URL}/best/${page.slug}/`,
+    url: `${SITE_URL}${localePrefix}/best/${page.slug}/`,
     numberOfItems: page.content.list_items.length,
     itemListElement: page.content.list_items.map((item) => ({
       '@type': 'ListItem',

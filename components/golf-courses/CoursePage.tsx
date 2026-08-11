@@ -25,8 +25,9 @@ interface Props {
 }
 
 export default function CoursePage({ course, regionLabel, relatedCourses = [], crossLinks = [], faqs = [] }: Props) {
-  // UI chrome comes from the GolfCourseDetail namespace (en + th + ja — the
-  // course-detail pilot locales; ko/zh never SSG this component). Number
+  // UI chrome comes from the GolfCourseDetail namespace, which now ships in
+  // all five locales (ko/zh joined in the ko/zh course-detail batch, so this
+  // component DOES SSG for them). Number
   // args are pre-stringified/pre-formatted before hitting ICU so EN output
   // stays byte-identical (ICU number formatting would group "Est. 2,021").
   const t = useTranslations('GolfCourseDetail')
@@ -472,13 +473,19 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
                 </h2>
               </div>
               <div className="divide-y bg-white">
-                <Link
+                {/* RawLink, not the locale-aware Link: /golf-in-thailand-guide
+                    is registered for NO locale, so a prefixed href would 301
+                    to English from all 60 translated course pages — an extra
+                    hop for the reader and for crawlers, to reach the same
+                    page. Every other link in this block IS translated. Switch
+                    this back to Link the moment the guide gets translated. */}
+                <RawLink
                   href="/golf-in-thailand-guide"
                   className="flex items-center gap-3 px-5 py-3.5 text-sm transition-colors hover:bg-muted/40"
                 >
                   <ArrowRight className="h-4 w-4 shrink-0 text-primary" />
                   <span>{t('planGuide')}</span>
-                </Link>
+                </RawLink>
                 <Link
                   href="/guide/best-time-play-golf-thailand"
                   className="flex items-center gap-3 px-5 py-3.5 text-sm transition-colors hover:bg-muted/40"

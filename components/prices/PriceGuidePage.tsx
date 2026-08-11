@@ -1,6 +1,14 @@
 import { Fragment } from 'react'
-import Link from 'next/link'
+// Locale-aware Link: a bare next/link emits an un-prefixed href, so every
+// related-page card on a translated page exited the reader's locale back to
+// English. Every related_slugs target IS translated in every locale that
+// ships these pages, so this was a pure locale exit, not a missing page.
+// BestOfListiclePage already imports from here.
+import { Link } from '@/i18n/navigation'
 import { ArrowRight, Check, Calendar } from 'lucide-react'
+import { getLocale, getTranslations } from 'next-intl/server'
+import { buildRelatedLabels } from '@/lib/seo-links'
+import { getSiteFacts, getFactTokens } from '@/lib/site-facts'
 import { BOOKING_URL, BUSINESS_INFO, SOCIAL_LINKS } from '@/lib/constants'
 import { StarIcon } from '@/components/shared/StarRating'
 import type { PriceGuideSeoPage } from '@/types/seo-pages'
@@ -35,10 +43,19 @@ function groupPriceRows(rows: { item: string; price: string; notes: string }[]):
   return groups
 }
 
-export default function PriceGuidePageComponent({ data }: Props) {
+export default async function PriceGuidePageComponent({ data }: Props) {
   const { content } = data
   const priceGroups = groupPriceRows(content.price_breakdown)
   const hasVenueGroups = priceGroups.some((g) => g.venue !== null)
+
+  const locale = await getLocale()
+  const [t, tContact, facts, tokens, relatedLabels] = await Promise.all([
+    getTranslations('PriceGuidePage'),
+    getTranslations('ContactInfo'),
+    getSiteFacts(),
+    getFactTokens(locale),
+    buildRelatedLabels(data.related_slugs, locale),
+  ])
 
   return (
     <div className="price-guide-page">
@@ -48,7 +65,7 @@ export default function PriceGuidePageComponent({ data }: Props) {
           <h1 className="text-3xl font-bold md:text-5xl mb-4">{data.title}</h1>
           <div className="flex items-center gap-2 text-white/70 text-sm mb-8">
             <Calendar className="h-4 w-4" />
-            <span>Prices last verified: {content.last_verified}</span>
+            <span>{t('lastVerified', { date: content.last_verified })}</span>
           </div>
           <div className="flex flex-wrap gap-3">
             <a
@@ -57,7 +74,7 @@ export default function PriceGuidePageComponent({ data }: Props) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg bg-[#d4a843] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#c49a3a]"
             >
-              Book a Bay
+              {t('bookABay')}
             </a>
             <a
               href={SOCIAL_LINKS.line}
@@ -65,7 +82,7 @@ export default function PriceGuidePageComponent({ data }: Props) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg border-2 border-white/30 px-6 py-3 font-semibold text-white transition-colors hover:bg-white/10"
             >
-              LINE Us
+              {t('lineUs')}
             </a>
           </div>
         </div>
@@ -84,15 +101,15 @@ export default function PriceGuidePageComponent({ data }: Props) {
       <section className="py-12 md:py-16 bg-[#f8f9fa]">
         <div className="mx-auto max-w-[900px] px-5">
           <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-6">
-            Price Breakdown
+            {t('priceBreakdownHeading')}
           </h2>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-sm">
               <thead>
                 <tr className="border-b-2 border-[#2d6a4f]">
-                  <th className="py-3 pr-4 text-left font-semibold text-[#1a472a]">Item</th>
-                  <th className="py-3 px-4 text-left font-semibold text-[#2d6a4f] whitespace-nowrap">Price</th>
-                  <th className="py-3 pl-4 text-left font-semibold text-muted-foreground">Notes</th>
+                  <th className="py-3 pr-4 text-left font-semibold text-[#1a472a]">{t('colItem')}</th>
+                  <th className="py-3 px-4 text-left font-semibold text-[#2d6a4f] whitespace-nowrap">{t('colPrice')}</th>
+                  <th className="py-3 pl-4 text-left font-semibold text-muted-foreground">{t('colNotes')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -139,19 +156,19 @@ export default function PriceGuidePageComponent({ data }: Props) {
         <section className="py-12 md:py-16">
           <div className="mx-auto max-w-[900px] px-5">
             <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-6">
-              Venue Comparison
+              {t('venueComparisonHeading')}
             </h2>
             <div className="overflow-x-auto">
               <table className="w-full border-collapse text-sm">
                 <thead>
                   <tr className="border-b-2 border-[#2d6a4f]">
-                    <th className="py-3 pr-3 text-left font-semibold text-[#1a472a]">Venue</th>
-                    <th className="py-3 px-3 text-left font-semibold text-[#1a472a] whitespace-nowrap">Cheapest</th>
-                    <th className="py-3 px-3 text-left font-semibold text-[#1a472a] whitespace-nowrap">Peak</th>
-                    <th className="py-3 px-3 text-left font-semibold text-[#1a472a]">Players</th>
-                    <th className="py-3 px-3 text-left font-semibold text-[#1a472a]">Tech</th>
-                    <th className="py-3 px-3 text-left font-semibold text-[#1a472a]">Tax Incl.</th>
-                    <th className="py-3 pl-3 text-left font-semibold text-[#1a472a]">Location</th>
+                    <th className="py-3 pr-3 text-left font-semibold text-[#1a472a]">{t('colVenue')}</th>
+                    <th className="py-3 px-3 text-left font-semibold text-[#1a472a] whitespace-nowrap">{t('colCheapest')}</th>
+                    <th className="py-3 px-3 text-left font-semibold text-[#1a472a] whitespace-nowrap">{t('colPeak')}</th>
+                    <th className="py-3 px-3 text-left font-semibold text-[#1a472a]">{t('colPlayers')}</th>
+                    <th className="py-3 px-3 text-left font-semibold text-[#1a472a]">{t('colTech')}</th>
+                    <th className="py-3 px-3 text-left font-semibold text-[#1a472a]">{t('colTaxIncluded')}</th>
+                    <th className="py-3 pl-3 text-left font-semibold text-[#1a472a]">{t('colLocation')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -171,7 +188,7 @@ export default function PriceGuidePageComponent({ data }: Props) {
                         <td className="py-3 px-3 whitespace-nowrap">{venue.peak_rate}</td>
                         <td className="py-3 px-3 text-center">{venue.players_per_bay ?? '—'}</td>
                         <td className="py-3 px-3">{venue.tech}</td>
-                        <td className="py-3 px-3 text-center">{venue.price_includes_tax === null ? '—' : venue.price_includes_tax ? 'Yes' : 'No'}</td>
+                        <td className="py-3 px-3 text-center">{venue.price_includes_tax === null ? '—' : venue.price_includes_tax ? t('taxYes') : t('taxNo')}</td>
                         <td className="py-3 pl-3 text-muted-foreground">{venue.location}</td>
                       </tr>
                     )
@@ -211,7 +228,7 @@ export default function PriceGuidePageComponent({ data }: Props) {
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-[900px] px-5">
           <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-4">
-            How the Costs Compare
+            {t('costsCompareHeading')}
           </h2>
           <p className="text-base leading-relaxed text-muted-foreground md:text-lg">
             {content.comparison_with_alternatives}
@@ -224,7 +241,7 @@ export default function PriceGuidePageComponent({ data }: Props) {
         <section className="py-12 md:py-16 bg-[#f8f9fa]">
           <div className="mx-auto max-w-[900px] px-5">
             <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-6">
-              What Guests Say About Value
+              {t('reviewsHeading')}
             </h2>
             <div className="grid gap-5 sm:grid-cols-3">
               {content.curated_reviews.slice(0, 3).map((review) => {
@@ -259,7 +276,7 @@ export default function PriceGuidePageComponent({ data }: Props) {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary/80"
               >
-                Read all reviews on Google
+                {t('readAllReviews')}
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               </a>
             </div>
@@ -272,7 +289,7 @@ export default function PriceGuidePageComponent({ data }: Props) {
         <div className="mx-auto max-w-[900px] px-5">
           <div className="rounded-xl border-2 border-[#d4a843]/30 bg-[#fefbf0] p-6 md:p-8">
             <h2 className="text-xl font-bold text-[#1a472a] md:text-2xl mb-3">
-              The Bottom Line
+              {t('bottomLineHeading')}
             </h2>
             <p className="text-base leading-relaxed text-muted-foreground md:text-lg mb-4">
               {content.value_proposition}
@@ -280,15 +297,18 @@ export default function PriceGuidePageComponent({ data }: Props) {
             <div className="flex flex-wrap gap-3">
               <div className="flex items-center gap-2 rounded-full bg-[#e8f5e9] px-4 py-2 text-sm text-[#2d6a4f]">
                 <Check className="h-4 w-4" />
-                550 THB/hour for up to 5 people
+                {/* POS-backed, like the identical pills on /faq/ and
+                    /activities/ — a price guide quoting a stale hardcoded rate
+                    next to its own live price table is the worst place for it. */}
+                {t('pillRate', { rate: tokens.bayHourlyFrom, n: facts.maxPlayersPerBay })}
               </div>
               <div className="flex items-center gap-2 rounded-full bg-[#e8f5e9] px-4 py-2 text-sm text-[#2d6a4f]">
                 <Check className="h-4 w-4" />
-                Mercury Ville, BTS Chidlom (Exit 4)
+                {t('pillLocation')}
               </div>
               <div className="flex items-center gap-2 rounded-full bg-[#e8f5e9] px-4 py-2 text-sm text-[#2d6a4f]">
                 <Check className="h-4 w-4" />
-                Air-conditioned, rain-proof, open until late
+                {t('pillComfort')}
               </div>
             </div>
           </div>
@@ -298,9 +318,15 @@ export default function PriceGuidePageComponent({ data }: Props) {
       {/* CTA Section */}
       <section className="py-12 md:py-16 bg-gradient-to-br from-[#1a472a] to-[#2d6a4f] text-white text-center">
         <div className="mx-auto max-w-[900px] px-5">
-          <h2 className="text-2xl font-bold md:text-3xl mb-4">Ready to Play?</h2>
+          <h2 className="text-2xl font-bold md:text-3xl mb-4">{t('ctaTitle')}</h2>
           <p className="text-white/80 mb-8 max-w-lg mx-auto">
-            Book a bay at LENGOLF, {BUSINESS_INFO.addressShort}. Open {BUSINESS_INFO.hours}.
+            {t('ctaText', {
+              // See the identical substitution in components/faq/FaqPage.tsx:
+              // BUSINESS_INFO.addressShort / .hours are English constants that
+              // would strand an English fragment inside a translated sentence.
+              address: tContact('address'),
+              hours: facts.openingHours,
+            })}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <a
@@ -309,13 +335,13 @@ export default function PriceGuidePageComponent({ data }: Props) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg bg-[#d4a843] px-8 py-3 font-semibold text-white transition-colors hover:bg-[#c49a3a]"
             >
-              Book Now
+              {t('bookNow')}
             </a>
             <a
               href={`tel:${BUSINESS_INFO.phoneRaw}`}
               className="inline-flex items-center gap-2 rounded-lg border-2 border-white/30 px-8 py-3 font-semibold text-white transition-colors hover:bg-white/10"
             >
-              Call {BUSINESS_INFO.phone}
+              {t('call', { phone: BUSINESS_INFO.phone })}
             </a>
             <a
               href={SOCIAL_LINKS.line}
@@ -323,7 +349,7 @@ export default function PriceGuidePageComponent({ data }: Props) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg border-2 border-white/30 px-8 py-3 font-semibold text-white transition-colors hover:bg-white/10"
             >
-              LINE Us
+              {t('lineUs')}
             </a>
           </div>
         </div>
@@ -333,15 +359,21 @@ export default function PriceGuidePageComponent({ data }: Props) {
       {data.related_slugs && data.related_slugs.length > 0 && (
         <section className="py-12 md:py-16">
           <div className="mx-auto max-w-[900px] px-5">
-            <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-6">Explore More</h2>
+            <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-6">{t('exploreMore')}</h2>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
               {data.related_slugs.map((path) => {
-                const label = path
-                  .split('/')
-                  .filter(Boolean)
-                  .pop()!
-                  .replace(/-/g, ' ')
-                  .replace(/\b\w/g, (c) => c.toUpperCase())
+                // Localized target title, falling back to the slug only when
+                // the target has no entry in this locale (or is not an SEO
+                // page). The slug fallback alone rendered English card titles
+                // under a localized heading on every translated page.
+                const label =
+                  relatedLabels[path] ??
+                  path
+                    .split('/')
+                    .filter(Boolean)
+                    .pop()!
+                    .replace(/-/g, ' ')
+                    .replace(/\b\w/g, (c) => c.toUpperCase())
                 return (
                   <Link
                     key={path}

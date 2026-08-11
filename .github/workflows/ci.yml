@@ -49,6 +49,14 @@ jobs:
       # incident — a scraped Thai-national rate shipping as the visitor rate.
       - run: npm run validate:courses
 
+      # Hotel-concierge distances: the SAME distance to LENGOLF is stated in
+      # hotel_distance_m (hero, walkability band, CTA) and in the
+      # nearby_activities LENGOLF card. Nothing tied them together and they
+      # disagreed on 9 of 12 entries, so one page printed two answers. Also
+      # catches an implausible walking pace and any locale that changed a
+      # number EN owns.
+      - run: npm run validate:hotels
+
   build-and-smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 10

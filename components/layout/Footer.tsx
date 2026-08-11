@@ -1,6 +1,8 @@
 import Image from 'next/image'
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
+import RawLink from 'next/link'
 import { Link } from '@/i18n/navigation'
+import { hasTranslationForLocale } from '@/lib/translated-routes'
 import { SOCIAL_LINKS, BUSINESS_INFO, storageUrl } from '@/lib/constants'
 import { FacebookIcon, LineIcon, InstagramIcon } from '@/components/shared/SocialIcons'
 
@@ -24,6 +26,12 @@ const DISCOVER_LINKS = [
   { key: 'faqLink', href: '/faq/' as const },
 ] as const
 
+const LEGAL_LINKS = [
+  { key: 'privacyPolicy', href: '/privacy-policy' as const },
+  { key: 'termsOfService', href: '/terms-of-service' as const },
+  { key: 'rentalAgreement', href: '/golf-course-club-rental-agreement' as const },
+] as const
+
 const linkStyle = {
   fontFamily: '"Poppins", sans-serif',
   fontWeight: 400,
@@ -34,6 +42,7 @@ const linkStyle = {
 } as const
 
 export default async function Footer() {
+  const locale = await getLocale()
   const t = await getTranslations('Footer')
   const tNav = await getTranslations('Nav')
 
@@ -156,17 +165,32 @@ export default async function Footer() {
               {t('discoverMore')}
             </h3>
             <ul>
-              {DISCOVER_LINKS.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="block transition-colors hover:text-[#005a32]"
-                    style={linkStyle}
-                  >
-                    {t(item.key)}
-                  </Link>
-                </li>
-              ))}
+              {DISCOVER_LINKS.map((item) => {
+                // DERIVED, not a hand-maintained flag. The locale-aware Link
+                // prefixes every href; for a target with no translation in
+                // this locale the middleware then 301s it straight back to
+                // English — a wasted hop on every page in the site, since the
+                // footer renders on all of them. Three of these five are
+                // currently untranslated in all four locales
+                // (/activities/, /golf-in-thailand-guide/, /hotels/), and a
+                // hand-kept flag had already drifted to covering only one.
+                // Deriving it means the hop disappears the moment a section
+                // IS translated, with nothing to remember.
+                const LinkTag = hasTranslationForLocale(locale, item.href)
+                  ? Link
+                  : RawLink
+                return (
+                  <li key={item.href}>
+                    <LinkTag
+                      href={item.href}
+                      className="block transition-colors hover:text-[#005a32]"
+                      style={linkStyle}
+                    >
+                      {t(item.key)}
+                    </LinkTag>
+                  </li>
+                )
+              })}
             </ul>
           </div>
 
@@ -219,9 +243,21 @@ export default async function Footer() {
         <div className="flex flex-col items-center gap-2 text-center text-xs text-foreground/70 sm:flex-row sm:justify-between sm:text-left">
           <p>{t('copyright', { year: new Date().getFullYear() })}</p>
           <div className="flex gap-4">
-            <Link href="/privacy-policy" className="transition-colors hover:text-primary">{t('privacyPolicy')}</Link>
-            <Link href="/terms-of-service" className="transition-colors hover:text-primary">{t('termsOfService')}</Link>
-            <Link href="/golf-course-club-rental-agreement" className="transition-colors hover:text-primary">{t('rentalAgreement')}</Link>
+            {/* RawLink for the same reason as DISCOVER_LINKS above: these three
+                pages are hardcoded English (no translation hook at all), so
+                they are deliberately absent from the registry and the
+                locale-aware Link would emit /ja/privacy-policy/ only for the
+                middleware to 301 it back. The LABELS are localized; only the
+                href is un-prefixed. Derived, so if one of them ever gains a
+                translation it starts prefixing on its own. */}
+            {LEGAL_LINKS.map(({ key, href }) => {
+              const LinkTag = hasTranslationForLocale(locale, href) ? Link : RawLink
+              return (
+                <LinkTag key={href} href={href} className="transition-colors hover:text-primary">
+                  {t(key)}
+                </LinkTag>
+              )
+            })}
           </div>
         </div>
       </div>

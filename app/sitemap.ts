@@ -103,19 +103,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.5,
   }))
 
-  // TODO: Activity pages are English-only in Phase 1A. Add Thai translations in Phase 1B.
-  const activityPages: MetadataRoute.Sitemap = activitySlugs.map((slug) => ({
-    url: `${SITE_URL}/activities/${slug}/`,
-    lastModified: reviewed,
-    changeFrequency: 'monthly' as const,
-    priority: 0.6,
-    alternates: {
-      languages: {
-        en: `${SITE_URL}/activities/${slug}/`,
-        // th: `${SITE_URL}/th/activities/${slug}/`, // TODO: Add when Thai content is ready
-      },
-    },
-  }))
+  const activityPages: MetadataRoute.Sitemap = activitySlugs.map((slug) => {
+    // Emit hreflang alternates only for activities with translations
+    // (registered in lib/translated-routes.ts) — EN-only pages stay plain.
+    // Replaces a hand-maintained languages map that hardcoded a lone
+    // self-referential `en` plus a commented-out `th` TODO: it advertised an
+    // alternates cluster of one and could not track the registry.
+    const languages = getAlternates(`/activities/${slug}/`)
+    return {
+      url: `${SITE_URL}/activities/${slug}/`,
+      lastModified: reviewed,
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+      ...(Object.keys(languages).length > 1 ? { alternates: { languages } } : {}),
+    }
+  })
 
   const faqPageEntries: MetadataRoute.Sitemap = faqSlugs.map((slug) => {
     // Emit hreflang alternates only for FAQs with translations
@@ -130,19 +132,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   })
 
-  const hotelPages: MetadataRoute.Sitemap = hotelSlugs.map((slug) => ({
-    url: `${SITE_URL}/hotels/${slug}/`,
-    lastModified: reviewed,
-    changeFrequency: 'monthly' as const,
-    priority: 0.6,
-  }))
+  const hotelPages: MetadataRoute.Sitemap = hotelSlugs.map((slug) => {
+    const languages = getAlternates(`/hotels/${slug}/`)
+    return {
+      url: `${SITE_URL}/hotels/${slug}/`,
+      lastModified: reviewed,
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+      ...(Object.keys(languages).length > 1 ? { alternates: { languages } } : {}),
+    }
+  })
 
-  const costPages: MetadataRoute.Sitemap = costSlugs.map((slug) => ({
-    url: `${SITE_URL}/cost/${slug}/`,
-    lastModified: reviewed,
-    changeFrequency: 'monthly' as const,
-    priority: 0.6,
-  }))
+  const costPages: MetadataRoute.Sitemap = costSlugs.map((slug) => {
+    const languages = getAlternates(`/cost/${slug}/`)
+    return {
+      url: `${SITE_URL}/cost/${slug}/`,
+      lastModified: reviewed,
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+      ...(Object.keys(languages).length > 1 ? { alternates: { languages } } : {}),
+    }
+  })
 
   const explainerPageEntries: MetadataRoute.Sitemap = explainerSlugs.map((slug) => {
     // Emit hreflang alternates only for guides with translations
@@ -157,12 +167,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   })
 
-  const bestOfPageEntries: MetadataRoute.Sitemap = bestOfSlugs.map((slug) => ({
-    url: `${SITE_URL}/best/${slug}/`,
-    lastModified: reviewed,
-    changeFrequency: 'monthly' as const,
-    priority: 0.6,
-  }))
+  const bestOfPageEntries: MetadataRoute.Sitemap = bestOfSlugs.map((slug) => {
+    const languages = getAlternates(`/best/${slug}/`)
+    return {
+      url: `${SITE_URL}/best/${slug}/`,
+      lastModified: reviewed,
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+      ...(Object.keys(languages).length > 1 ? { alternates: { languages } } : {}),
+    }
+  })
 
   // ── Golf course section ──────────────────────────────────────────────────────
   // Emit hreflang alternates only when the hub has translations

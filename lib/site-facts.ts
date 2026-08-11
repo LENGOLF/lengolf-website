@@ -176,7 +176,14 @@ function num(value: number): string {
   return value.toLocaleString('en-US')
 }
 
-function money(locale: string, value: number): string {
+/**
+ * Format a THB amount in `locale`'s currency convention (th "550 บาท",
+ * ja "550THB", ko "550바트", zh "550泰铢"). Exported because UI chrome needs
+ * the same convention as guide tokens — HotelConciergePage renders the bay
+ * rate and premium-club rate, and duplicating the per-locale spacing/word
+ * rules in a component is how the two drift apart.
+ */
+export function money(locale: string, value: number): string {
   const style = CURRENCY_BY_LOCALE[locale] ?? CURRENCY_BY_LOCALE.en
   return `${num(value)}${style.space}${style.word}`
 }

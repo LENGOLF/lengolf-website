@@ -39,6 +39,9 @@
  *  L3) Region-hub translated registry liveness: every registered
  *      '/golf-courses/<region>' translation must serve 200 with
  *      <main id="main-content"> (L2's guard, one level up the hub tree)
+ *  L4) FAQ translated registry liveness: every registered '/faq/<slug>'
+ *      translation must serve 200 with <main id="main-content"> and no
+ *      unresolved {{token}} (the FAQ route never interpolates facts)
  *   M) Wayfinding copy: BTS Chidlom is Exit 4, across both the DB-driven
  *      /location/* pages and the repo's JA/KO/ZH + EN wayfinding strings
  *   N) Region-hub course-count agreement: both ICU plural branches of
@@ -1862,6 +1865,20 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  // One KO and one ZH course-detail canary (full registry-derived coverage in
+  // L2). These two locales previously had ZERO course-detail translations
+  // while their 14 region hubs were live, so every course link on a ko/zh hub
+  // 301'd out of the locale; the batch that added them closed that funnel.
+  {
+    path: "/ko/golf-courses/bangkok/sai-golf-club/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/zh/golf-courses/bangkok/sai-golf-club/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
   // TH guide catch-up batch — brings TH to parity with ja/ko/zh at 46 guides.
   // contentAbsent guards unresolved {{fact tokens}} (4 of these entries use them).
   {
@@ -2576,11 +2593,35 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '/ja/golf-courses/bangkok/alpine-golf-club/',
   },
-  // ko has ZERO course-detail translations, so no course link may be prefixed.
+  // ko/zh now have the same 15 course-detail translations as th/ja, so the
+  // NEGATIVE half of this invariant can no longer be "ko prefixes nothing" —
+  // it has to name a course that is genuinely absent from COURSE_DETAIL_I18N.
+  // Keeping only the positive half would leave an always-prefix regression
+  // (the exact bug PR #88 fixed in HubMapExplorer) completely unguarded.
+  //
+  // INVARIANT, not a fixed slug: lakewood-country-club must stay OUT of
+  // COURSE_DETAIL_I18N. If a future batch translates it, move these two
+  // assertions to another untranslated Bangkok course rather than deleting
+  // them — same rule the untranslated-course redirect canary carries.
   {
     path: "/ko/golf-courses/bangkok/",
     expectedStatus: [200],
-    contentAbsent: '/ko/golf-courses/bangkok/sai-golf-club',
+    contentMarker: '/ko/golf-courses/bangkok/sai-golf-club/',
+  },
+  {
+    path: "/ko/golf-courses/bangkok/",
+    expectedStatus: [200],
+    contentAbsent: '/ko/golf-courses/bangkok/lakewood-country-club',
+  },
+  {
+    path: "/zh/golf-courses/bangkok/",
+    expectedStatus: [200],
+    contentMarker: '/zh/golf-courses/bangkok/sai-golf-club/',
+  },
+  {
+    path: "/zh/golf-courses/bangkok/",
+    expectedStatus: [200],
+    contentAbsent: '/zh/golf-courses/bangkok/lakewood-country-club',
   },
   // Same invariant on the top-level hub, whose map (HubMapExplorer) links
   // every one of the 149 courses. The region-hub pair above only proves the
@@ -2597,17 +2638,40 @@ const routeTests: RouteTest[] = [
   {
     path: "/ko/golf-courses/",
     expectedStatus: [200],
-    contentAbsent: '/ko/golf-courses/bangkok/alpine-golf-club',
+    contentMarker: '/ko/golf-courses/bangkok/alpine-golf-club/',
+  },
+  {
+    path: "/ko/golf-courses/",
+    expectedStatus: [200],
+    contentAbsent: '/ko/golf-courses/bangkok/lakewood-country-club',
+  },
+  {
+    path: "/zh/golf-courses/",
+    expectedStatus: [200],
+    contentMarker: '/zh/golf-courses/bangkok/alpine-golf-club/',
+  },
+  {
+    path: "/zh/golf-courses/",
+    expectedStatus: [200],
+    contentAbsent: '/zh/golf-courses/bangkok/lakewood-country-club',
   },
   // Same invariant on the RoundupList surface (price tiers SSG th/ja/ko/zh).
   // The marker is a COURSE-DETAIL path, not the region-hub prefix: this tier
   // page renders no region-hub link at all today, so '/ko/golf-courses/bangkok/'
   // passed vacuously and would have kept passing under an always-prefix
   // regression that only touches course hrefs.
+  // ko now has sai translated, so this flips from negative to positive and
+  // becomes the mirror of the ja assertion below. No untranslated-course
+  // negative is pinned on THIS surface on purpose: the tier roster is a
+  // DERIVED top 12 (getCoursesUnderPrice(meta.thb, 12)), so naming a specific
+  // untranslated course here would break on any green-fee correction that
+  // reshuffles the ranking — the same fragility that retired four indexed
+  // /compare/ URLs in PR #88. The always-prefix negative is asserted on the
+  // two hub surfaces above instead, which render every course unranked.
   {
     path: "/ko/golf-courses/under/1500-baht/",
     expectedStatus: [200],
-    contentAbsent: '/ko/golf-courses/bangkok/sai-golf-club',
+    contentMarker: '/ko/golf-courses/bangkok/sai-golf-club/',
   },
   // The positive half, which the tier surface was missing entirely: ja HAS sai
   // translated, so its link on the tier roster must be prefixed. Without this,
@@ -3077,19 +3141,35 @@ const thaiRedirectTests: ThaiRedirectTest[] = [
   // untranslated slug and ship English content under a locale URL unnoticed.
   // (Replaces the price-tier negative probe removed above — every locale now
   // has price tiers, so no untranslated tier remains to test.)
+  //
+  // THE SLUG IS AN INVARIANT, NOT A CONSTANT — same trap as the
+  // courseDetailHref negative assertion. These three probes used to point at
+  // what-to-wear-to-indoor-golf-bar (ja), how-long-does-simulator-golf-take
+  // (ko) and can-kids-play-golf-simulators (zh); the FAQ-completion batch
+  // translated all three and every probe started 200ing. The fix is to
+  // RE-ANCHOR, never to delete: dropping them leaves the /faq middleware
+  // 301 with no negative coverage at all, so an allowlist that widened to an
+  // untranslated slug would ship English under a locale URL unnoticed.
+  //
+  // where-to-play-golf-at-night-in-bangkok is the one FAQ untranslated in all
+  // four locales, and deliberately so — it duplicates
+  // where-play-golf-night-bangkok, which is canonical (2 inbound internal
+  // links vs 0). If that duplicate is ever consolidated with a 301, or
+  // translated, there is no untranslated FAQ left to probe and this block has
+  // to go — say so in the commit rather than letting it silently 200.
   {
-    path: "/ja/faq/what-to-wear-to-indoor-golf-bar/",
-    expectedLocation: "/faq/what-to-wear-to-indoor-golf-bar/",
+    path: "/ja/faq/where-to-play-golf-at-night-in-bangkok/",
+    expectedLocation: "/faq/where-to-play-golf-at-night-in-bangkok/",
     label: "Untranslated JA FAQ (only translated slugs may 200)",
   },
   {
-    path: "/ko/faq/how-long-does-simulator-golf-take/",
-    expectedLocation: "/faq/how-long-does-simulator-golf-take/",
+    path: "/ko/faq/where-to-play-golf-at-night-in-bangkok/",
+    expectedLocation: "/faq/where-to-play-golf-at-night-in-bangkok/",
     label: "Untranslated KO FAQ (only translated slugs may 200)",
   },
   {
-    path: "/zh/faq/can-kids-play-golf-simulators/",
-    expectedLocation: "/faq/can-kids-play-golf-simulators/",
+    path: "/zh/faq/where-to-play-golf-at-night-in-bangkok/",
+    expectedLocation: "/faq/where-to-play-golf-at-night-in-bangkok/",
     label: "Untranslated ZH FAQ (only translated slugs may 200)",
   },
   // EN-only golf-course routes (near/best-for/compare) build no locale copies
@@ -3123,15 +3203,19 @@ const thaiRedirectTests: ThaiRedirectTest[] = [
     expectedLocation: "/golf-courses/bangkok/lakewood-country-club/",
     label: "Untranslated JA course detail (EN-only route must 301)",
   },
-  // The EN-only SEO-page families (/hotels, /cost, /activities, /best) build
-  // no locale copies either; this canary covers the mechanism for all four —
-  // none of their prefixes are in lib/translated-routes.ts, so every non-EN
-  // URL must 301 to the English page.
-  {
-    path: "/th/hotels/things-to-do-near-grand-hyatt-erawan/",
-    expectedLocation: "/hotels/things-to-do-near-grand-hyatt-erawan/",
-    label: "Untranslated TH hotel-concierge page (EN-only route must 301)",
-  },
+  // NOTE: the former "untranslated TH hotel-concierge page must 301" canary is
+  // gone on purpose. It covered all four flat SEO families (/hotels, /cost,
+  // /activities, /best) back when none of their prefixes were in
+  // lib/translated-routes.ts. All four now ship in every locale, so there is
+  // no untranslated page left in ANY of them to probe — the same reason the
+  // price-tier and TH-guide probes above were removed.
+  //
+  // Coverage did not shrink. Section L5 asserts registry ⇄ data agreement in
+  // BOTH directions for all four sections plus liveness of every registered
+  // path, so an allowlist that widened past the data still fails. The
+  // middleware-301 mechanism itself stays covered by the /faq, course-detail,
+  // near-station and blog canaries below, all of which still have genuinely
+  // untranslated targets.
   // Untranslated localized blog post must 301 to the English canonical — only
   // slugs in data/blog-translated-slugs.ts[locale] may 200 under /<locale>/blog/.
   // topgolf-bangkok-vs-lengolf is an EN-only post (never translated), so it is
@@ -3474,6 +3558,84 @@ async function runThaiRedirectTests() {
       pass(label);
     } catch (err) {
       fail(label, `fetch error: ${(err as Error).message}`);
+    }
+  }
+}
+
+// ── F2) Accept-Language locale detection must not loop ──────────────
+// Section F covers the COOKIE path only. Locale detection also reads
+// Accept-Language (localeDetection defaults to true in i18n/routing.ts), and
+// that path had an INFINITE REDIRECT LOOP: intlMiddleware 307'd
+// /golf-in-thailand-guide/ to /ja/golf-in-thailand-guide/, the untranslated-
+// route rule 301'd it back, and the loop-breaker — which deleted the
+// NEXT_LOCALE cookie and re-ran detection — could not help, because the
+// locale came from the HEADER, not the cookie. Real browsers showed
+// ERR_TOO_MANY_REDIRECTS on a page the footer links from every page.
+//
+// The fix rewrites to the /en tree instead of re-running detection. Without
+// this section a revert to the cookie-delete form merges CI-green and
+// re-ships the loop, since nothing else sends an Accept-Language header.
+const acceptLanguageTests: { path: string; lang: string; label: string }[] = [
+  {
+    path: "/golf-in-thailand-guide/",
+    lang: "ja-JP,ja;q=0.9",
+    label: "JA browser, no cookie, untranslated page (loop guard)",
+  },
+  {
+    path: "/golf-in-thailand-guide/",
+    lang: "zh-CN,zh;q=0.9",
+    label: "ZH browser, no cookie, untranslated page (loop guard)",
+  },
+  {
+    path: "/faq/where-to-play-golf-at-night-in-bangkok/",
+    lang: "ko-KR,ko;q=0.9",
+    label: "KO browser, no cookie, untranslated FAQ (loop guard)",
+  },
+  {
+    path: "/hotels/",
+    lang: "th-TH,th;q=0.9",
+    label: "TH browser, no cookie, untranslated hub (loop guard)",
+  },
+];
+
+async function runAcceptLanguageTests() {
+  console.log(
+    "\n\x1b[1mF2) Accept-Language detection (no redirect loop)\x1b[0m",
+  );
+  for (const t of acceptLanguageTests) {
+    try {
+      const res = await fetch(`${BASE}${t.path}`, {
+        redirect: "manual",
+        headers: { "Accept-Language": t.lang },
+      });
+      if (res.status >= 300 && res.status < 400) {
+        fail(
+          t.label,
+          `redirected ${res.status} → ${res.headers.get("location") || ""}. The untranslated-route rule sends it straight back, so this is the ERR_TOO_MANY_REDIRECTS loop. middleware.ts must REWRITE to /en, not re-run locale detection.`,
+        );
+        continue;
+      }
+      if (res.status !== 200) {
+        fail(t.label, `expected 200, got ${res.status}`);
+        continue;
+      }
+      const body = await res.text();
+      if (!body.includes('<main id="main-content">')) {
+        fail(t.label, 'served 200 without <main id="main-content">');
+        continue;
+      }
+      // The reader asked for a locale with no translation, so they must get
+      // the English page — not a shell, and not a half-localized one.
+      if (!/<html[^>]*lang="en"/.test(body)) {
+        fail(
+          t.label,
+          `served 200 but not lang="en" — the fallback must serve the English page`,
+        );
+        continue;
+      }
+      pass(t.label);
+    } catch (err) {
+      fail(t.label, String(err));
     }
   }
 }
@@ -3979,10 +4141,21 @@ async function runCourseDetailRegistryLivenessTests() {
   const { getRegisteredCourseDetailPaths, ALL_LOCALES } =
     await import("../lib/translated-routes");
 
+  // Same anti-vacuity guard as L3/L4/L5. L2 predates them and had none: if
+  // getRegisteredCourseDetailPaths regressed to [], every locale would be
+  // skipped, the section would print a header, assert nothing and read as a
+  // pass — leaving 60 URLs whose route has dynamicParams=false (so drift is a
+  // HARD 404 advertised by hreflang) with no liveness check at all.
+  let covered = 0;
+
   for (const locale of ALL_LOCALES) {
     if (locale === "en") continue;
     const paths = getRegisteredCourseDetailPaths(locale);
-    if (paths.length === 0) continue; // ko/zh have no course-detail translations yet
+    // A locale with no course-detail translations is legitimate; the guard
+    // below catches ALL of them being empty. (ko/zh were the untranslated
+    // pair until the ko/zh batch — do not read this as still true.)
+    if (paths.length === 0) continue;
+    covered += paths.length;
     let ok = 0;
     for (const path of paths) {
       const target = `/${locale}${path}/`;
@@ -4016,6 +4189,15 @@ async function runCourseDetailRegistryLivenessTests() {
         `All ${ok} registered '${locale}' course-detail translations serve 200`,
       );
     }
+  }
+
+  if (covered === 0) {
+    fail(
+      "L2 covered zero course-detail pages",
+      "getRegisteredCourseDetailPaths() returned nothing for every non-en locale — the whole section asserted nothing. Either lib/translated-routes.ts lost its course-detail entries or the helper regressed; both would otherwise show up as a silent pass.",
+    );
+  } else {
+    pass(`L2 covered ${covered} registered course-detail path(s)`);
   }
 }
 
@@ -4091,6 +4273,227 @@ async function runRegionHubRegistryLivenessTests() {
     );
   } else {
     pass(`L3 covered ${covered} registered region-hub path(s)`);
+  }
+}
+
+// ── L4) FAQ translated registry liveness ────────────────────────────
+// The /faq/<slug> counterpart of L2/L3, and until the FAQ-completion batch
+// the ONLY translated section with no liveness assertion at all: section I
+// proved the registry and the data agreed, but nothing ever fetched a
+// translated FAQ page. Registry ⇄ data agreement is not liveness — both
+// sides can agree on a slug whose page throws at render, loses its
+// FaqPage namespace, or serves a 200 error shell.
+//
+// generateStaticParams() returns getAllSeoPageParams('faq'), i.e. only
+// locale×slug combos with published content, and the route does NOT set
+// dynamicParams=false — so a registry entry with no data row renders
+// on demand in English under a locale URL rather than 404ing. That drift is
+// section I's job in both directions; what this adds is proof each page
+// actually serves in its own locale.
+//
+// Registry-derived, so future FAQ batches need zero routeTests edits — which
+// is why the FAQ-completion batch (71 new entries across th/ja/ko/zh) added
+// none.
+async function runFaqRegistryLivenessTests() {
+  console.log("\n\x1b[1mL4) FAQ translated registry liveness\x1b[0m");
+  const { getRegisteredFaqPaths, ALL_LOCALES } = await import(
+    "../lib/translated-routes"
+  );
+
+  // Same anti-vacuity guard as L2/L3: every assertion is registry-derived, so
+  // an empty registry would print a header, assert nothing, and read exactly
+  // like a pass.
+  let covered = 0;
+
+  for (const locale of ALL_LOCALES) {
+    if (locale === "en") continue;
+    const paths = getRegisteredFaqPaths(locale);
+    if (paths.length === 0) continue;
+    covered += paths.length;
+    let ok = 0;
+    for (const path of paths) {
+      const target = `/${locale}${path}/`;
+      try {
+        const res = await fetch(`${BASE}${target}`, { redirect: "manual" });
+        if (res.status !== 200) {
+          fail(
+            `Registered FAQ translation not live: ${target}`,
+            `expected 200, got ${res.status} — lib/translated-routes.ts lists a '${locale}' FAQ page that doesn't serve (missing data row, render throw, or a middleware/allowlist regression sending it back to EN).`,
+          );
+          continue;
+        }
+        const body = await res.text();
+        if (!body.includes('<main id="main-content">')) {
+          fail(
+            `Registered FAQ translation missing main content: ${target}`,
+            'served 200 without <main id="main-content">',
+          );
+          continue;
+        }
+        // FAQ answers are rendered verbatim — the route never calls
+        // interpolateFacts (only /guide/ and llms.txt do). A {{token}}
+        // copied in from a guide entry would therefore ship raw to the
+        // reader with nothing throwing, so assert its absence here.
+        if (body.includes("{{")) {
+          fail(
+            `Unresolved fact token rendered on ${target}`,
+            "body contains '{{' — FAQ entries must use price LITERALS; the FAQ route never interpolates.",
+          );
+          continue;
+        }
+        ok++;
+      } catch (err) {
+        fail(`${target} fetch error`, String(err));
+      }
+    }
+    if (ok === paths.length) {
+      pass(`All ${ok} registered '${locale}' FAQ translations serve 200`);
+    }
+  }
+
+  if (covered === 0) {
+    fail(
+      "L4 covered zero FAQ pages",
+      "getRegisteredFaqPaths() returned nothing for every non-en locale — the whole section asserted nothing. Either lib/translated-routes.ts lost its /faq/ entries or the helper regressed; both would otherwise show up as a silent pass.",
+    );
+  } else {
+    pass(`L4 covered ${covered} registered FAQ path(s)`);
+  }
+}
+
+// ── L5) Flat SEO-section registry consistency + liveness ────────────
+// /cost, /activities, /best and /hotels render from data files through
+// lib/seo-pages.ts. Until the /cost+/activities batch these four routes were
+// EN-hardcoded, so no drift was possible and no guard existed; now that they
+// build per-locale params they carry exactly the hazard sections I/J/J3 guard
+// for guides, FAQs and course details, and L2/L3/L4 for liveness:
+//   - data entry with no registry line → built, then 301'd to English. The
+//     translation exists and is unreachable, silently.
+//   - registry line with no data entry → hard 404 (the page component calls
+//     notFound() when the lookup misses) while hreflang and the sitemap
+//     advertise it. These four routes do NOT set dynamicParams = false; the
+//     outcome is the same 404, the mechanism is not.
+// Consistency and liveness live in one section here because these sections
+// share a single shape; splitting them would triple the boilerplate for no
+// extra coverage. /hotels is listed and simply contributes zero paths until
+// that batch lands — which is why the anti-vacuity guard below counts SECTIONS
+// checked, not paths found.
+const SEO_SECTION_PREFIXES = ["cost", "activities", "best", "hotels"] as const;
+
+async function runSeoSectionRegistryTests() {
+  console.log(
+    "\n\x1b[1mL5) Flat SEO-section registry consistency + liveness\x1b[0m",
+  );
+  const { getRegisteredSeoSectionPaths, ALL_LOCALES } = await import(
+    "../lib/translated-routes"
+  );
+  const { PAGE_DATA_MAP, ROUTE_PREFIX_TO_TYPE } = await import(
+    "../lib/seo-pages"
+  );
+
+  let sectionsChecked = 0;
+  let livePaths = 0;
+
+  for (const prefix of SEO_SECTION_PREFIXES) {
+    const pageType = ROUTE_PREFIX_TO_TYPE[prefix];
+    const pages = PAGE_DATA_MAP[pageType];
+    if (!pages) {
+      fail(
+        `No data source for /${prefix}/`,
+        `ROUTE_PREFIX_TO_TYPE maps it to '${pageType}' but PAGE_DATA_MAP has no entry — lib/seo-pages.ts lost a section.`,
+      );
+      continue;
+    }
+    sectionsChecked++;
+
+    for (const locale of ALL_LOCALES) {
+      if (locale === "en") continue;
+      const fromData = new Set(
+        pages
+          .filter((p) => p.locale === locale && p.status === "published")
+          .map((p) => `/${prefix}/${p.slug}`),
+      );
+      const fromRegistry = new Set(getRegisteredSeoSectionPaths(locale, prefix));
+      const missingInRegistry = [...fromData].filter(
+        (p) => !fromRegistry.has(p),
+      );
+      const missingInData = [...fromRegistry].filter((p) => !fromData.has(p));
+
+      if (missingInRegistry.length > 0) {
+        fail(
+          `Registry missing '${locale}' /${prefix}/ page(s)`,
+          `${missingInRegistry.join(", ")} — add to ${locale}.staticRoutes in lib/translated-routes.ts or the translation is unreachable (middleware 301s it)`,
+        );
+      }
+      if (missingInData.length > 0) {
+        fail(
+          `Registry lists '${locale}' /${prefix}/ page(s) with no data`,
+          `${missingInData.join(", ")} — remove from lib/translated-routes.ts or add a locale:'${locale}' entry to the ${pageType} data file (currently 404s while advertised in hreflang)`,
+        );
+      }
+      if (missingInRegistry.length === 0 && missingInData.length === 0) {
+        pass(
+          `Registry ⇄ data in sync for '${locale}' /${prefix}/ (${fromData.size} translated)`,
+        );
+      }
+
+      // Liveness — registry-derived like L2/L3/L4, so a future /hotels batch
+      // needs zero routeTests edits.
+      let ok = 0;
+      const paths = [...fromRegistry];
+      for (const path of paths) {
+        const target = `/${locale}${path}/`;
+        try {
+          const res = await fetch(`${BASE}${target}`, { redirect: "manual" });
+          if (res.status !== 200) {
+            fail(
+              `Registered /${prefix}/ translation not live: ${target}`,
+              `expected 200, got ${res.status} — a registered '${locale}' page that doesn't serve (missing data row, render throw, or a middleware/allowlist regression sending it back to EN).`,
+            );
+            continue;
+          }
+          const body = await res.text();
+          if (!body.includes('<main id="main-content">')) {
+            fail(
+              `Registered /${prefix}/ translation missing main content: ${target}`,
+              'served 200 without <main id="main-content">',
+            );
+            continue;
+          }
+          // Same inverse-of-/guide/ rule as L4: none of these four routes
+          // calls interpolateFacts, so a {{token}} copied in from a guide
+          // entry ships raw to the reader with nothing throwing.
+          if (body.includes("{{")) {
+            fail(
+              `Unresolved fact token rendered on ${target}`,
+              `body contains '{{' — /${prefix}/ entries must use price LITERALS; the route never interpolates.`,
+            );
+            continue;
+          }
+          ok++;
+        } catch (err) {
+          fail(`${target} fetch error`, String(err));
+        }
+      }
+      livePaths += ok;
+      if (paths.length > 0 && ok === paths.length) {
+        pass(`All ${ok} registered '${locale}' /${prefix}/ pages serve 200`);
+      }
+    }
+  }
+
+  // Anti-vacuity: counts SECTIONS, not paths. An untranslated section
+  // legitimately contributes zero paths, so a path-count guard would have to
+  // be relaxed to accommodate /hotels and would then never fire at all.
+  if (sectionsChecked !== SEO_SECTION_PREFIXES.length) {
+    fail(
+      "L5 skipped a flat SEO section",
+      `checked ${sectionsChecked} of ${SEO_SECTION_PREFIXES.length} — a section lost its PAGE_DATA_MAP wiring, which would otherwise read as a silent pass.`,
+    );
+  } else {
+    pass(
+      `L5 checked ${sectionsChecked} flat SEO section(s), ${livePaths} live translated path(s)`,
+    );
   }
 }
 
@@ -4473,6 +4876,7 @@ async function main() {
   await runSeoTests();
   await runThaiRedirectTests();
   await runThaiCookieTests();
+  await runAcceptLanguageTests();
   await runNotFoundTests();
   await runLlmDiscoverabilityTests();
   await runRegistryConsistencyTests();
@@ -4483,6 +4887,8 @@ async function main() {
   await runBlogRegistryLivenessTests();
   await runCourseDetailRegistryLivenessTests();
   await runRegionHubRegistryLivenessTests();
+  await runFaqRegistryLivenessTests();
+  await runSeoSectionRegistryTests();
   await runWayfindingTests();
   await runRegionCountTests();
 

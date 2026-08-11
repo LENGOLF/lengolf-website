@@ -27,8 +27,24 @@ export default function middleware(request: NextRequest) {
   // Always run intlMiddleware (it handles locale rewriting for [locale] param)
   const response = intlMiddleware(request)
 
-  // Intercept: if intlMiddleware redirects to an untranslated locale route,
-  // strip the locale cookie and re-run to prevent redirect loop
+  // Intercept: intlMiddleware wants to redirect to a locale route that has no
+  // translation for this path. Serve English for THIS request instead.
+  //
+  // This used to delete the NEXT_LOCALE cookie and re-run intlMiddleware,
+  // which only works when the COOKIE was the source of the locale. Locale
+  // detection also reads Accept-Language (localeDetection defaults to true in
+  // i18n/routing.ts), and a re-run detects the same locale from the same
+  // header — so a browser sending "Accept-Language: ja" with no cookie
+  // ping-ponged forever:
+  //
+  //   GET /golf-in-thailand-guide/  -> 307 /ja/golf-in-thailand-guide/
+  //   GET /ja/golf-in-thailand-guide/ -> 301 /golf-in-thailand-guide/   (loop above)
+  //
+  // i.e. ERR_TOO_MANY_REDIRECTS on a page the footer links from every page in
+  // the site. Rewriting (not redirecting) to the /en tree ends it in one hop
+  // and returns the page the reader asked for. The cookie is deliberately NOT
+  // set: this request falls back to English, the reader's language preference
+  // is not overwritten for the rest of the site.
   const location = response.headers.get('location')
   if (location && response.status >= 300 && response.status < 400) {
     try {
@@ -38,9 +54,23 @@ export default function middleware(request: NextRequest) {
       for (const locale of LOCALE_PREFIXES) {
         if (redirectPath === `/${locale}` || redirectPath.startsWith(`/${locale}/`)) {
           const pathWithoutLocale = redirectPath.replace(new RegExp(`^/${locale}`), '') || '/'
+          // Only intercept a PURE prefix-add — the detection redirect this
+          // whole block exists for. next-intl issues locale-prefixed redirects
+          // for a second reason: canonicalizing a case-variant prefix
+          // (`/JA/x/` -> `/ja/x/`, matched case-insensitively upstream while
+          // LOCALE_PREFIXES above is case-sensitive). Rewriting THAT one serves
+          // a 200 English page at the non-canonical URL instead of letting it
+          // redirect, so every case variant of every locale becomes an
+          // indexable soft-duplicate. Let those through: the 307 lands on the
+          // lower-cased path, which the 301 loop at the top then resolves.
+          if (pathWithoutLocale !== pathname) break
           if (!hasTranslationForLocale(locale, pathWithoutLocale)) {
-            request.cookies.delete('NEXT_LOCALE')
-            return intlMiddleware(request)
+            const url = request.nextUrl.clone()
+            // Keep the trailing slash (`trailingSlash: true` in next.config.js).
+            // pathWithoutLocale is already '/' for the root case, so `/en/`
+            // falls out — dropping it would rewrite to an unnormalized `/en`.
+            url.pathname = `/en${pathWithoutLocale}`
+            return NextResponse.rewrite(url)
           }
           break
         }

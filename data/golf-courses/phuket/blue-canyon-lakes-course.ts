@@ -50,8 +50,28 @@ export const course: GolfCourse = {
         rental_cta_context: `วางแผนจะออกรอบที่ Lakes Course ของ Blue Canyon ระหว่างทริปภูเก็ตอยู่ใช่ไหม หากเส้นทางของคุณผ่านกรุงเทพฯ สามารถเช่าไม้กอล์ฟระดับพรีเมียมส่งถึงโรงแรมของคุณได้ ไม่ต้องเสียค่าโหลดสัมภาระ และพร้อมออกรอบได้ทันทีที่มาถึง`,
       },
     },
-    ko: null,
-    zh: null,
+    ko: {
+      title: `Blue Canyon Lakes Course 푸켓 — 그린피·코스 가이드·클럽 대여`,
+      meta_description: `Blue Canyon Lakes Course 푸켓 평일 그린피는 약 1,850바트예요. 호수가 주인공인 파 72 리조트 스타일 코스 안내와, 방콕 호텔로 배달되는 LENGOLF 클럽 대여를 함께 정리했어요.`,
+      prose: {
+        overview: `Blue Canyon Country Club의 Lakes Course는 명성 높은 Canyon Course의 동생 격 코스예요. Thalang 지구의 같은 부지와 클럽하우스 시설을 함께 쓰면서도, 결이 다른 골프 경험을 선사합니다. 설계는 Yoshikazu Kato가 맡았고 1999년 2월에 문을 열었어요. 코스 이름은 레이아웃을 규정하는 크고 아름다운 호수들에서 왔는데, 옛 주석 광산의 채굴 흔적이 광활한 워터 해저드로 다시 태어난 것이죠. 챔피언십 티 기준 전장은 7,129야드로 Canyon Course보다 아주 조금 짧고, 훨씬 개방적인 리조트 스타일의 성격을 띱니다. Canyon만큼의 기술적 난도까지는 원하지 않으면서 장관을 배경으로 수준 높은 라운딩을 즐기고 싶은 골퍼들이 즐겨 찾는 편이에요. 그린피가 상당히 저렴해서 이틀째 골프를 계획하거나, 핸디캡상 Canyon Course가 버겁게 느껴지는 방문객에게는 가성비가 아주 뛰어난 선택지가 됩니다.`,
+        layout_and_experience: `파 72 레이아웃을 규정하는 것은 물이에요. 여러 홀에서 큰 호수를 넘기거나 호숫가를 따라 공략하는 정확한 드라이브와 어프로치가 필요하고, 위험과 보상의 줄다리기가 늘 존재하면서도 숨 막힐 정도로 짓누르지는 않습니다. 페어웨이는 Canyon Course보다 넓고 지형도 평탄해서 걷기에 더 편한 코스지만, 카트 이용은 여전히 필수예요. 그린은 크고 구름이 정직해서, Canyon에서 잘 통하는 펀치 앤드 런 전략보다 꾸준한 볼 스트라이킹에 보답하는 설계입니다. 핸디캡이 높은 골퍼라면 Blue Canyon의 두 코스 중 Lakes Course가 더 편안하게 느껴질 거예요. 게임을 흥미롭게 만들 만큼 물이 있으면서도, 90타대를 치는 방문객이 감당할 수 있는 난도거든요. 로우 핸디캐퍼에게도 코스의 폭과 진행 속도 덕분에 코스 매니지먼트를 가다듬거나 마지막 날 가볍게 한 라운딩 하기에 좋습니다. Canyon Course와 함께 쓰는 드라이빙 레인지, 연습용 퍼팅 그린, 레스토랑, 스파, 숙박 시설은 푸켓의 어느 골프장과 견줘도 손꼽히는 수준이에요.`,
+        tips: `Blue Canyon에서 두 라운딩을 계획하고 있다면 Lakes Course는 이상적인 선택이에요. 오전에 Lakes를 돌고 오후에 Canyon Course로 넘어가거나, 이튿날 Canyon을 잡는 흐름을 추천합니다. 티타임은 성수기에도 Canyon보다 잡기 수월한 편이고요. 워터 홀에서 볼을 자주 잃는 편이라면 여분의 볼을 넉넉히 챙기세요. 거리가 긴 파 4 홀 중에는 티에서 호수 가장자리를 넘겨야 하는 홀이 몇 개 있거든요. 바람은 캐디에게 물어보는 게 좋아요. 개방적인 레이아웃이라 바람이 어프로치에 미치는 영향이, 상대적으로 보호받는 Canyon Course보다 큽니다. 그린피도 Canyon Course보다 훨씬 저렴해서 푸켓 기준으로는 각별히 알뜰한 라운딩이 돼요.`,
+        location_and_access: `Lakes Course는 Blue Canyon Country Club 부지 안, Thalang 지구 Thepkasattri Road 165 Moo 1에 자리해요. 푸켓 국제공항에서 약 10km, 차로 15~20분 거리입니다. 방콕에서 오는 방문객은 모두 비행기를 이용해요(약 1시간 20분). Patong Beach에서는 차로 약 35~40분 걸립니다. 이동은 Grab이나 호텔 픽업 서비스를 추천하고, 두 코스는 같은 클럽하우스와 주차장을 함께 씁니다.`,
+        rental_cta_context: `푸켓 여행 중에 Blue Canyon의 Lakes Course를 라운딩할 계획이고 일정에 방콕이 포함돼 있다면, 프리미엄 대여 클럽을 방콕 호텔까지 받아 보세요. 수하물 요금을 내지 않고도 도착하자마자 바로 플레이할 수 있어요.`,
+      },
+    },
+    zh: {
+      title: `Blue Canyon Lakes Course普吉果岭费与球场攻略 — 球杆租借`,
+      meta_description: `Blue Canyon Lakes Course平日果岭费约1,850泰铢，是一座以湖泊为主角的标准杆72度假风球场。附球场攻略，以及送到曼谷酒店的LENGOLF球杆租借。`,
+      prose: {
+        overview: `Blue Canyon Country Club的Lakes Course是名声在外的Canyon Course的姊妹球场，问世更晚，与其共用Thalang县的同一片场地和会所设施，却提供截然不同的高尔夫体验。球场由Yoshikazu Kato设计，1999年2月开放。名字来自那一连串定义了整条布局的大型湖泊——它们由昔日锡矿的采掘坑改造而成，化作开阔的水障碍。锦标赛发球台全长7,129码，比Canyon Course略短，性格上更开阔、更偏度假风。它往往吸引那些想在壮阔景致中打一场高水准球、又不愿承受Canyon那种技术难度的球手。果岭费明显更低，也让它成为第二天下场，或差点不适合硬碰Canyon Course的访客眼中极具性价比的选择。`,
+        layout_and_experience: `标准杆72的布局由水定义：多个洞需要越过或沿着大湖打出精准的开球与攻果岭球，风险与回报的博弈始终在场，却不至于压得人喘不过气。球道比Canyon Course宽裕，地形也更平坦，走着打更轻松——尽管球车仍是强制使用的。果岭面积大、滚动线路真实，比起在Canyon上奏效的低弹道滚进策略，这里更回报稳定扎实的击球。对高差点球手来说，Lakes Course是Blue Canyon两座球场中更从容的一座：水量足以让比赛保持悬念，但对90杆上下的访客仍在可控范围。对低差点球手而言，球场的宽度与打球节奏也适合练习球场管理，或在行程最后一天轻松打一轮。与Canyon Course共用的练习场、练习果岭、餐厅、水疗和住宿设施，在普吉所有高尔夫场地中都属一流。`,
+        tips: `如果你打算在Blue Canyon打两轮，Lakes Course是理想的起点：上午打Lakes，下午接Canyon Course，或者把Canyon放到第二天。这里的开球时间即使在旺季也比Canyon好订。容易在水洞丢球的人，建议多带几筒球——有几个长的4杆洞，从发球台起就得越过湖岸。风向不妨问问球童：布局开阔，风对攻果岭球的影响比相对有遮蔽的Canyon Course更明显。果岭费也比Canyon Course低得多，以普吉的水准衡量，这是一轮格外划算的球。`,
+        location_and_access: `Lakes Course位于Blue Canyon Country Club场地内，地址是Thalang县Thepkasattri Road 165 Moo 1，距普吉国际机场约10公里，车程约15–20分钟。从曼谷前来的访客都搭飞机（约1小时20分钟）。从Patong Beach开车约35–40分钟。交通建议使用Grab或酒店接送；两座球场共用同一座会所与停车场。`,
+        rental_cta_context: `如果你打算在普吉行程里打一场Blue Canyon的Lakes Course，而路线又会经过曼谷，可以把高端租借球杆直接送到你的曼谷酒店——省下托运行李费，落地就能开打。`,
+      },
+    },
     ja: {
       title: `Blue Canyon Country Club — Lakes Course（プーケット）— グリーンフィー・コース紹介・クラブレンタル`,
       meta_description: `グリーンフィーは平日約1,850THB。Blue CanyonのLakes Courseは、湖が主役のリゾートスタイル・パー72コースです。バンコクのホテルへ届くLENGOLFのクラブレンタルもご案内します。`,

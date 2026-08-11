@@ -17,6 +17,9 @@
  *   - data/faq-pages.ts         — faqPages entries with locale ja/ko/zh/th
  *   - data/price-tiers.ts       — PRICE_TIER_I18N (th/ja/ko/zh tier strings)
  *   - data/faq-hub.ts           — the /faq/ hub content per locale
+ *   - data/price-guide-pages.ts — /cost entries with locale ja/ko/zh/th
+ *   - data/activity-occasions.ts — /activities entries, same locales
+ *   - data/best-of-listicle-pages.ts — /best entries, same locales
  * data/faq-pages.ts imports lib/pricing at module level, but that module is
  * tsx-safe by design: its React `cache` call falls back to identity outside
  * the RSC runtime (see the comment in lib/pricing.ts), and the live pricing
@@ -64,6 +67,10 @@ import type { GolfCourse } from '@/types/golf-courses'
 import { faqPages } from '@/data/faq-pages'
 import { PRICE_TIER_I18N } from '@/data/price-tiers'
 import { getFaqHubContent } from '@/data/faq-hub'
+import { priceGuidePages } from '@/data/price-guide-pages'
+import { activityOccasionPages } from '@/data/activity-occasions'
+import { bestOfListiclePages } from '@/data/best-of-listicle-pages'
+import { hotelConciergePages } from '@/data/hotel-pages'
 import {
   getRegisteredGuidePaths,
   getRegisteredFaqPaths,
@@ -282,6 +289,65 @@ for (const locale of LOCALES) {
     .filter(([field]) => !/\.categories\[|^faqLinks\./.test(field))
     .map(([field, value]) => ({ locale, entryId, field, value }))
   if (units.length > 0) entries.push({ entryId, locale, units })
+}
+
+// data/price-guide-pages.ts (/cost) and data/activity-occasions.ts
+// (/activities). Both were outside this corpus, so the moment those routes
+// became locale-capable a translated entry would have shipped with NO
+// house-style, terminology or honesty checking at all — the same gap
+// data/faq-hub.ts had before PR #88. Wired up BEFORE any translation lands so
+// the first batch is linted, not the second.
+//
+// Flattened generically (flattenMessages yields only non-empty strings, so
+// numeric/boolean fields — seasonal_relevance, show_aqi_widget,
+// players_per_bay, price_includes_tax — are excluded automatically).
+// Non-prose STRING fields still have to be named:
+//   - occasion_type is a machine key ('rainy-day', 'date-night'), not copy.
+//   - last_verified is an ISO date.
+//   - curated_reviews are VERBATIM third-party quotes from named customers
+//     ("Chidbhan T.", "Jack S."). They are deliberately NOT translated —
+//     rewording a named person's quoted words misrepresents them — so they
+//     stay English on every locale page, which also means they must not be
+//     linted: one of them legitimately contains "!!", and the exclamation
+//     check would fail an entry for faithfully reproducing a real review.
+// `list_items[].address` is a street address and `.website` a URL — neither is
+// prose, and linting them fires the brand and terminology checks on
+// identifiers. `rank`, `year` and `is_lengolf` are numeric/boolean and drop
+// out of flattenMessages on their own.
+// `google_maps_embed` is a URL for the same reason, and
+// `suggested_itinerary[].time` is a clock reading ("2:00 PM") that the /hotels
+// batch deliberately keeps as the same instant in every locale.
+const NON_PROSE_SEO_FIELD_RE =
+  /^occasion_type$|^last_verified$|^curated_reviews\[|^list_items\[\d+\]\.(address|website)$|^google_maps_embed$|^suggested_itinerary\[\d+\]\.time$/
+// `hotel` was imported for the SSG-namespace check but never added here, so the
+// 48 /hotels translations shipped in PR #90 got ZERO house-style checking — no
+// emoji, exclamation, full-width-digit, terminology or brand-casing gate — on
+// the one section that also shipped without native-language QA. Verified by
+// injection: an emoji + `！` in a ja hotel `area_guide` passed clean before this
+// line and fails after it.
+for (const [label, pages] of [
+  ['cost', priceGuidePages],
+  ['activity', activityOccasionPages],
+  ['best', bestOfListiclePages],
+  ['hotel', hotelConciergePages],
+] as const) {
+  for (const page of pages) {
+    if (!LOCALES.includes(page.locale as Locale)) continue
+    const locale = page.locale as Locale
+    const entryId = `${label}:${page.id}`
+    const leaves: Array<[string, string]> = []
+    flattenMessages(page.content, '', leaves)
+    const units = [
+      { locale, entryId, field: 'title', value: page.title },
+      ...(page.meta_description
+        ? [{ locale, entryId, field: 'meta_description', value: page.meta_description }]
+        : []),
+      ...leaves
+        .filter(([field]) => !NON_PROSE_SEO_FIELD_RE.test(field))
+        .map(([field, value]) => ({ locale, entryId, field, value })),
+    ]
+    if (units.length > 0) entries.push({ entryId, locale, units })
+  }
 }
 
 for (const [region, byLocale] of Object.entries(REGION_HUB_I18N)) {
@@ -754,11 +820,30 @@ runCorpusChecks(entries)
 const localesWithPaths = (registered: (locale: string) => string[]): Locale[] =>
   LOCALES.filter((l) => registered(l).length > 0)
 
+// /activities/<slug> and /cost/<slug> have NO registry helper — and shouldn't.
+// Their generateStaticParams is getAllSeoPageParams(type), which enumerates the
+// published entries of the data file directly, so the data file IS the list of
+// locale x slug pairs that get built. Deriving from the same source therefore
+// tracks what actually SSGs, and starts enforcing by itself the moment the
+// first non-EN entry lands — no hand-maintained locale list to go stale, and no
+// dependency on lib/translated-routes.ts, which these routes never consult for
+// param generation.
+const localesWithSeoPages = (
+  pages: readonly { locale: string; status: string }[]
+): Locale[] =>
+  LOCALES.filter((l) =>
+    pages.some((p) => p.locale === l && p.status === 'published')
+  )
+
 const SSG_UI_NAMESPACES: Record<string, Locale[]> = (() => {
   const regionHub = localesWithPaths(getRegisteredRegionHubPaths)
   const priceTier = localesWithPaths(getRegisteredPriceTierPaths)
   const courseDetail = localesWithPaths(getRegisteredCourseDetailPaths)
   const faq = localesWithPaths(getRegisteredFaqPaths)
+  const activity = localesWithSeoPages(activityOccasionPages)
+  const priceGuide = localesWithSeoPages(priceGuidePages)
+  const bestOf = localesWithSeoPages(bestOfListiclePages)
+  const hotel = localesWithSeoPages(hotelConciergePages)
   // The /golf-courses/ hub page + HubMapExplorer. No dedicated registry
   // helper exists for a single static path, so derive its SSG locales
   // directly from the registry (currently th only).
@@ -776,8 +861,25 @@ const SSG_UI_NAMESPACES: Record<string, Locale[]> = (() => {
     ),
     ExplainerPage: localesWithPaths(getRegisteredGuidePaths),
     FaqPage: faq,
-    // components/faq/FaqPage.tsx also getTranslations('ContactInfo') on every FAQ page.
-    ContactInfo: faq,
+    // /activities/<slug>, /cost/<slug> and /best/<slug>. Spread in only once
+    // the locale set is non-empty: checkNamespaceParity treats a 0-locale entry
+    // as a registry regression and hard-errors, and a section with no non-EN
+    // entries yet resolves to [], so a bare `BestOfListiclePage: bestOf` would
+    // fail CI for a namespace that is simply not translated yet. Once the
+    // content batch adds the first ja/ko/zh/th entry to the data file, the
+    // namespace enters the allowlist on its own and parity is enforced from
+    // that commit onward — which is how ActivityPage/PriceGuidePage started
+    // being checked when /activities and /cost were translated.
+    ...(activity.length > 0 ? { ActivityPage: activity } : {}),
+    ...(priceGuide.length > 0 ? { PriceGuidePage: priceGuide } : {}),
+    ...(hotel.length > 0 ? { HotelConciergePage: hotel } : {}),
+    ...(bestOf.length > 0 ? { BestOfListiclePage: bestOf } : {}),
+    // components/faq/FaqPage.tsx getTranslations('ContactInfo') on every FAQ
+    // page; components/activities/ActivityPage.tsx,
+    // components/prices/PriceGuidePage.tsx and
+    // components/best/BestOfListiclePage.tsx do the same for the localized
+    // address in their CTA copy.
+    ContactInfo: [...new Set([...faq, ...activity, ...priceGuide, ...bestOf])],
   }
 })()
 

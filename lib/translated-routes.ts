@@ -137,6 +137,68 @@ const TRANSLATED_ROUTES: Record<
       "/faq/practice-golf-swing-without-driving-range-bangkok",
       "/faq/what-to-wear-to-indoor-golf-bar",
       "/faq/best-time-of-day-golf-bangkok",
+      // FAQ-completion batch: brings every locale to 31 of 32 FAQ pages.
+      // The 32nd (where-to-play-golf-at-night-in-bangkok) is deliberately
+      // untranslated — it duplicates where-play-golf-night-bangkok, which is
+      // the canonical page (2 inbound internal links vs 0). Translating both
+      // would have shipped 8 duplicate pages. The EN pair still wants
+      // consolidating with a 301.
+      "/faq/how-much-does-corporate-golf-event-cost-bangkok",
+      "/faq/can-you-bring-golf-clubs-as-checked-baggage-thailand",
+      "/faq/thailand-visa-guide-golf-tourists",
+      "/faq/thailand-entry-requirements-golfers",
+      "/faq/grab-vs-taxi-bangkok-golf",
+      "/faq/how-many-golf-courses-thailand",
+      "/faq/last-minute-golf-tee-times-thailand",
+      "/faq/golf-shoes-thailand",
+      "/faq/golf-fitness-heat-thailand",
+      "/faq/do-you-need-caddie-thailand-golf",
+      "/faq/how-much-tip-caddie-thailand",
+      "/faq/where-play-golf-night-bangkok",
+      "/faq/do-you-need-golf-travel-bag-thailand",
+      "/faq/how-far-in-advance-book-golf-bangkok",
+      // The four flat SEO sections — /cost (price_guide), /activities
+      // (activity_occasion), /best (best_of_listicle) and /hotels
+      // (hotel_concierge). All were EN-hardcoded at the route level until the
+      // locale-capable commit, and all four now ship in every locale. Smoke
+      // section L5 asserts this list agrees with the data files in both
+      // directions.
+      "/hotels/things-to-do-near-arnoma-grand-bangkok",
+      "/hotels/things-to-do-near-sindhorn-midtown",
+      "/hotels/things-to-do-near-grand-hyatt-erawan",
+      "/hotels/things-to-do-near-athenee-hotel",
+      "/hotels/things-to-do-near-intercontinental-bangkok",
+      "/hotels/things-to-do-near-hotel-indigo-wireless-road",
+      "/hotels/things-to-do-near-novotel-ploenchit",
+      "/hotels/things-to-do-near-renaissance-ratchaprasong",
+      "/hotels/things-to-do-near-okura-prestige-bangkok",
+      "/hotels/things-to-do-near-anantara-siam",
+      "/hotels/things-to-do-near-mercure-siam",
+      "/hotels/things-to-do-near-kimpton-maa-lai",
+      "/best/best-team-building-activities-bangkok",
+      "/best/best-bars-near-bts-chidlom",
+      "/best/best-corporate-event-venues-bangkok",
+      "/best/best-indoor-entertainment-bangkok",
+      "/best/best-birthday-party-venues-adults-bangkok",
+      "/best/best-golf-experiences-bangkok",
+      "/best/best-things-to-do-near-chidlom",
+      "/activities/bachelor-party-ideas-bangkok",
+      "/activities/birthday-party-venues-bangkok",
+      "/activities/date-night-ideas-bangkok",
+      "/activities/family-activities-bangkok",
+      "/activities/golf-simulator-for-non-golfers",
+      "/activities/group-activities-bangkok",
+      "/activities/indoor-activities-bangkok",
+      "/activities/private-party-venues-bangkok",
+      "/activities/rainy-day-activities-bangkok",
+      "/activities/things-to-do-bangkok-at-night",
+      "/activities/weekend-activities-bangkok",
+      "/cost/corporate-golf-event-cost-bangkok",
+      "/cost/cost-of-renting-golf-clubs-bangkok",
+      "/cost/golf-lesson-prices-bangkok",
+      "/cost/golf-simulator-prices-bangkok",
+      "/cost/how-much-does-golf-cost-bangkok",
+      "/cost/lengolf-pricing-guide",
     ],
     dynamicRoutePatterns: [],
   },
@@ -207,6 +269,28 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/under/3500-baht",
       "/golf-courses/under/5000-baht",
       "/golf-courses/under/7500-baht",
+      // Translated course-detail pages (data/golf-courses-i18n.ts
+      // COURSE_DETAIL_I18N) — kept in sync by the smoke-test course-detail
+      // registry consistency check (section J3); liveness of each built page
+      // is asserted by section L2. Added in the ko/zh course-detail batch,
+      // which closes the funnel PR #88 opened: the 14 region hubs went live
+      // in ko/zh with zero translated course pages beneath them, so every
+      // course link on those hubs left the locale.
+      "/golf-courses/bangkok/sai-golf-club",
+      "/golf-courses/bangkok/the-legacy-golf-club",
+      "/golf-courses/chiang-mai/lanna-golf-course",
+      "/golf-courses/bangkok/pinehurst-golf-country-club",
+      "/golf-courses/bangkok/siam-country-club-bangkok",
+      "/golf-courses/bangkok/ayutthaya-golf-club",
+      "/golf-courses/bangkok/muang-ake-golf-course",
+      "/golf-courses/phuket/blue-canyon-lakes-course",
+      "/golf-courses/phuket/phuket-country-club",
+      "/golf-courses/pattaya/wangjuntr-golf-park",
+      "/golf-courses/bangkok/alpine-golf-club",
+      "/golf-courses/bangkok/nikanti-golf-club",
+      "/golf-courses/bangkok/royal-gems-golf-sports-club",
+      "/golf-courses/pattaya/burapha-golf-club",
+      "/golf-courses/pattaya/laem-chabang-international",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -222,6 +306,73 @@ const TRANSLATED_ROUTES: Record<
       "/faq/cost-to-fly-with-golf-clubs-to-thailand",
       "/faq/worth-taking-golf-lessons-bangkok-holiday",
       "/faq/what-golf-clubs-available-rent-bangkok",
+      // FAQ-completion batch: brings every locale to 31 of 32 FAQ pages.
+      // The 32nd (where-to-play-golf-at-night-in-bangkok) is deliberately
+      // untranslated — it duplicates where-play-golf-night-bangkok, which is
+      // the canonical page (2 inbound internal links vs 0). Translating both
+      // would have shipped 8 duplicate pages. The EN pair still wants
+      // consolidating with a 301.
+      "/faq/how-long-does-simulator-golf-take",
+      "/faq/what-to-wear-to-indoor-golf-bar",
+      "/faq/can-kids-play-golf-simulators",
+      "/faq/practice-golf-swing-without-driving-range-bangkok",
+      "/faq/how-much-does-corporate-golf-event-cost-bangkok",
+      "/faq/can-you-bring-golf-clubs-as-checked-baggage-thailand",
+      "/faq/thailand-visa-guide-golf-tourists",
+      "/faq/thailand-entry-requirements-golfers",
+      "/faq/best-time-of-day-golf-bangkok",
+      "/faq/grab-vs-taxi-bangkok-golf",
+      "/faq/how-many-golf-courses-thailand",
+      "/faq/last-minute-golf-tee-times-thailand",
+      "/faq/golf-shoes-thailand",
+      "/faq/golf-fitness-heat-thailand",
+      "/faq/do-you-need-caddie-thailand-golf",
+      "/faq/how-much-tip-caddie-thailand",
+      "/faq/where-play-golf-night-bangkok",
+      "/faq/do-you-need-golf-travel-bag-thailand",
+      "/faq/how-far-in-advance-book-golf-bangkok",
+      // The four flat SEO sections — /cost (price_guide), /activities
+      // (activity_occasion), /best (best_of_listicle) and /hotels
+      // (hotel_concierge). All were EN-hardcoded at the route level until the
+      // locale-capable commit, and all four now ship in every locale. Smoke
+      // section L5 asserts this list agrees with the data files in both
+      // directions.
+      "/hotels/things-to-do-near-arnoma-grand-bangkok",
+      "/hotels/things-to-do-near-sindhorn-midtown",
+      "/hotels/things-to-do-near-grand-hyatt-erawan",
+      "/hotels/things-to-do-near-athenee-hotel",
+      "/hotels/things-to-do-near-intercontinental-bangkok",
+      "/hotels/things-to-do-near-hotel-indigo-wireless-road",
+      "/hotels/things-to-do-near-novotel-ploenchit",
+      "/hotels/things-to-do-near-renaissance-ratchaprasong",
+      "/hotels/things-to-do-near-okura-prestige-bangkok",
+      "/hotels/things-to-do-near-anantara-siam",
+      "/hotels/things-to-do-near-mercure-siam",
+      "/hotels/things-to-do-near-kimpton-maa-lai",
+      "/best/best-team-building-activities-bangkok",
+      "/best/best-bars-near-bts-chidlom",
+      "/best/best-corporate-event-venues-bangkok",
+      "/best/best-indoor-entertainment-bangkok",
+      "/best/best-birthday-party-venues-adults-bangkok",
+      "/best/best-golf-experiences-bangkok",
+      "/best/best-things-to-do-near-chidlom",
+      "/activities/bachelor-party-ideas-bangkok",
+      "/activities/birthday-party-venues-bangkok",
+      "/activities/date-night-ideas-bangkok",
+      "/activities/family-activities-bangkok",
+      "/activities/golf-simulator-for-non-golfers",
+      "/activities/group-activities-bangkok",
+      "/activities/indoor-activities-bangkok",
+      "/activities/private-party-venues-bangkok",
+      "/activities/rainy-day-activities-bangkok",
+      "/activities/things-to-do-bangkok-at-night",
+      "/activities/weekend-activities-bangkok",
+      "/cost/corporate-golf-event-cost-bangkok",
+      "/cost/cost-of-renting-golf-clubs-bangkok",
+      "/cost/golf-lesson-prices-bangkok",
+      "/cost/golf-simulator-prices-bangkok",
+      "/cost/how-much-does-golf-cost-bangkok",
+      "/cost/lengolf-pricing-guide",
       "/guide/corporate-golf-events-bangkok",
       "/guide/best-time-play-golf-thailand",
       "/guide/nikanti-golf-club-bangkok",
@@ -325,6 +476,28 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/under/3500-baht",
       "/golf-courses/under/5000-baht",
       "/golf-courses/under/7500-baht",
+      // Translated course-detail pages (data/golf-courses-i18n.ts
+      // COURSE_DETAIL_I18N) — kept in sync by the smoke-test course-detail
+      // registry consistency check (section J3); liveness of each built page
+      // is asserted by section L2. Added in the ko/zh course-detail batch,
+      // which closes the funnel PR #88 opened: the 14 region hubs went live
+      // in ko/zh with zero translated course pages beneath them, so every
+      // course link on those hubs left the locale.
+      "/golf-courses/bangkok/sai-golf-club",
+      "/golf-courses/bangkok/the-legacy-golf-club",
+      "/golf-courses/chiang-mai/lanna-golf-course",
+      "/golf-courses/bangkok/pinehurst-golf-country-club",
+      "/golf-courses/bangkok/siam-country-club-bangkok",
+      "/golf-courses/bangkok/ayutthaya-golf-club",
+      "/golf-courses/bangkok/muang-ake-golf-course",
+      "/golf-courses/phuket/blue-canyon-lakes-course",
+      "/golf-courses/phuket/phuket-country-club",
+      "/golf-courses/pattaya/wangjuntr-golf-park",
+      "/golf-courses/bangkok/alpine-golf-club",
+      "/golf-courses/bangkok/nikanti-golf-club",
+      "/golf-courses/bangkok/royal-gems-golf-sports-club",
+      "/golf-courses/pattaya/burapha-golf-club",
+      "/golf-courses/pattaya/laem-chabang-international",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -340,6 +513,73 @@ const TRANSLATED_ROUTES: Record<
       "/faq/cost-to-fly-with-golf-clubs-to-thailand",
       "/faq/worth-taking-golf-lessons-bangkok-holiday",
       "/faq/what-golf-clubs-available-rent-bangkok",
+      // FAQ-completion batch: brings every locale to 31 of 32 FAQ pages.
+      // The 32nd (where-to-play-golf-at-night-in-bangkok) is deliberately
+      // untranslated — it duplicates where-play-golf-night-bangkok, which is
+      // the canonical page (2 inbound internal links vs 0). Translating both
+      // would have shipped 8 duplicate pages. The EN pair still wants
+      // consolidating with a 301.
+      "/faq/how-long-does-simulator-golf-take",
+      "/faq/what-to-wear-to-indoor-golf-bar",
+      "/faq/can-kids-play-golf-simulators",
+      "/faq/practice-golf-swing-without-driving-range-bangkok",
+      "/faq/how-much-does-corporate-golf-event-cost-bangkok",
+      "/faq/can-you-bring-golf-clubs-as-checked-baggage-thailand",
+      "/faq/thailand-visa-guide-golf-tourists",
+      "/faq/thailand-entry-requirements-golfers",
+      "/faq/best-time-of-day-golf-bangkok",
+      "/faq/grab-vs-taxi-bangkok-golf",
+      "/faq/how-many-golf-courses-thailand",
+      "/faq/last-minute-golf-tee-times-thailand",
+      "/faq/golf-shoes-thailand",
+      "/faq/golf-fitness-heat-thailand",
+      "/faq/do-you-need-caddie-thailand-golf",
+      "/faq/how-much-tip-caddie-thailand",
+      "/faq/where-play-golf-night-bangkok",
+      "/faq/do-you-need-golf-travel-bag-thailand",
+      "/faq/how-far-in-advance-book-golf-bangkok",
+      // The four flat SEO sections — /cost (price_guide), /activities
+      // (activity_occasion), /best (best_of_listicle) and /hotels
+      // (hotel_concierge). All were EN-hardcoded at the route level until the
+      // locale-capable commit, and all four now ship in every locale. Smoke
+      // section L5 asserts this list agrees with the data files in both
+      // directions.
+      "/hotels/things-to-do-near-arnoma-grand-bangkok",
+      "/hotels/things-to-do-near-sindhorn-midtown",
+      "/hotels/things-to-do-near-grand-hyatt-erawan",
+      "/hotels/things-to-do-near-athenee-hotel",
+      "/hotels/things-to-do-near-intercontinental-bangkok",
+      "/hotels/things-to-do-near-hotel-indigo-wireless-road",
+      "/hotels/things-to-do-near-novotel-ploenchit",
+      "/hotels/things-to-do-near-renaissance-ratchaprasong",
+      "/hotels/things-to-do-near-okura-prestige-bangkok",
+      "/hotels/things-to-do-near-anantara-siam",
+      "/hotels/things-to-do-near-mercure-siam",
+      "/hotels/things-to-do-near-kimpton-maa-lai",
+      "/best/best-team-building-activities-bangkok",
+      "/best/best-bars-near-bts-chidlom",
+      "/best/best-corporate-event-venues-bangkok",
+      "/best/best-indoor-entertainment-bangkok",
+      "/best/best-birthday-party-venues-adults-bangkok",
+      "/best/best-golf-experiences-bangkok",
+      "/best/best-things-to-do-near-chidlom",
+      "/activities/bachelor-party-ideas-bangkok",
+      "/activities/birthday-party-venues-bangkok",
+      "/activities/date-night-ideas-bangkok",
+      "/activities/family-activities-bangkok",
+      "/activities/golf-simulator-for-non-golfers",
+      "/activities/group-activities-bangkok",
+      "/activities/indoor-activities-bangkok",
+      "/activities/private-party-venues-bangkok",
+      "/activities/rainy-day-activities-bangkok",
+      "/activities/things-to-do-bangkok-at-night",
+      "/activities/weekend-activities-bangkok",
+      "/cost/corporate-golf-event-cost-bangkok",
+      "/cost/cost-of-renting-golf-clubs-bangkok",
+      "/cost/golf-lesson-prices-bangkok",
+      "/cost/golf-simulator-prices-bangkok",
+      "/cost/how-much-does-golf-cost-bangkok",
+      "/cost/lengolf-pricing-guide",
       "/guide/corporate-golf-events-bangkok",
       "/guide/best-time-play-golf-thailand",
       "/guide/nikanti-golf-club-bangkok",
@@ -472,6 +712,73 @@ const TRANSLATED_ROUTES: Record<
       "/faq/cost-to-fly-with-golf-clubs-to-thailand",
       "/faq/worth-taking-golf-lessons-bangkok-holiday",
       "/faq/what-golf-clubs-available-rent-bangkok",
+      // FAQ-completion batch: brings every locale to 31 of 32 FAQ pages.
+      // The 32nd (where-to-play-golf-at-night-in-bangkok) is deliberately
+      // untranslated — it duplicates where-play-golf-night-bangkok, which is
+      // the canonical page (2 inbound internal links vs 0). Translating both
+      // would have shipped 8 duplicate pages. The EN pair still wants
+      // consolidating with a 301.
+      "/faq/how-long-does-simulator-golf-take",
+      "/faq/what-to-wear-to-indoor-golf-bar",
+      "/faq/can-kids-play-golf-simulators",
+      "/faq/practice-golf-swing-without-driving-range-bangkok",
+      "/faq/how-much-does-corporate-golf-event-cost-bangkok",
+      "/faq/can-you-bring-golf-clubs-as-checked-baggage-thailand",
+      "/faq/thailand-visa-guide-golf-tourists",
+      "/faq/thailand-entry-requirements-golfers",
+      "/faq/best-time-of-day-golf-bangkok",
+      "/faq/grab-vs-taxi-bangkok-golf",
+      "/faq/how-many-golf-courses-thailand",
+      "/faq/last-minute-golf-tee-times-thailand",
+      "/faq/golf-shoes-thailand",
+      "/faq/golf-fitness-heat-thailand",
+      "/faq/do-you-need-caddie-thailand-golf",
+      "/faq/how-much-tip-caddie-thailand",
+      "/faq/where-play-golf-night-bangkok",
+      "/faq/do-you-need-golf-travel-bag-thailand",
+      "/faq/how-far-in-advance-book-golf-bangkok",
+      // The four flat SEO sections — /cost (price_guide), /activities
+      // (activity_occasion), /best (best_of_listicle) and /hotels
+      // (hotel_concierge). All were EN-hardcoded at the route level until the
+      // locale-capable commit, and all four now ship in every locale. Smoke
+      // section L5 asserts this list agrees with the data files in both
+      // directions.
+      "/hotels/things-to-do-near-arnoma-grand-bangkok",
+      "/hotels/things-to-do-near-sindhorn-midtown",
+      "/hotels/things-to-do-near-grand-hyatt-erawan",
+      "/hotels/things-to-do-near-athenee-hotel",
+      "/hotels/things-to-do-near-intercontinental-bangkok",
+      "/hotels/things-to-do-near-hotel-indigo-wireless-road",
+      "/hotels/things-to-do-near-novotel-ploenchit",
+      "/hotels/things-to-do-near-renaissance-ratchaprasong",
+      "/hotels/things-to-do-near-okura-prestige-bangkok",
+      "/hotels/things-to-do-near-anantara-siam",
+      "/hotels/things-to-do-near-mercure-siam",
+      "/hotels/things-to-do-near-kimpton-maa-lai",
+      "/best/best-team-building-activities-bangkok",
+      "/best/best-bars-near-bts-chidlom",
+      "/best/best-corporate-event-venues-bangkok",
+      "/best/best-indoor-entertainment-bangkok",
+      "/best/best-birthday-party-venues-adults-bangkok",
+      "/best/best-golf-experiences-bangkok",
+      "/best/best-things-to-do-near-chidlom",
+      "/activities/bachelor-party-ideas-bangkok",
+      "/activities/birthday-party-venues-bangkok",
+      "/activities/date-night-ideas-bangkok",
+      "/activities/family-activities-bangkok",
+      "/activities/golf-simulator-for-non-golfers",
+      "/activities/group-activities-bangkok",
+      "/activities/indoor-activities-bangkok",
+      "/activities/private-party-venues-bangkok",
+      "/activities/rainy-day-activities-bangkok",
+      "/activities/things-to-do-bangkok-at-night",
+      "/activities/weekend-activities-bangkok",
+      "/cost/corporate-golf-event-cost-bangkok",
+      "/cost/cost-of-renting-golf-clubs-bangkok",
+      "/cost/golf-lesson-prices-bangkok",
+      "/cost/golf-simulator-prices-bangkok",
+      "/cost/how-much-does-golf-cost-bangkok",
+      "/cost/lengolf-pricing-guide",
       "/guide/corporate-golf-events-bangkok",
       "/guide/best-time-play-golf-thailand",
       "/guide/nikanti-golf-club-bangkok",
@@ -603,6 +910,32 @@ export function getRegisteredGuidePaths(locale: string): string[] {
 export function getRegisteredFaqPaths(locale: string): string[] {
   return (TRANSLATED_ROUTES[locale]?.staticRoutes ?? []).filter((r) =>
     r.startsWith("/faq/"),
+  );
+}
+
+/**
+ * Paths registered as translated for `locale` under one of the flat SEO
+ * sections that are NOT /guide/ or /faq/ — '/cost/', '/activities/',
+ * '/best/', '/hotels/'. Those four render from data files via
+ * lib/seo-pages.ts (PAGE_DATA_MAP), and their page components call
+ * notFound() when getSeoPageBySlug returns null, so exactly the same
+ * one-sided-edit hazard applies as for guides and FAQs: a data entry with no
+ * registry line is built and then 301'd away, and a registry line with no
+ * data entry is a hard 404 advertised in hreflang. (Unlike the course-detail
+ * route these do not set `dynamicParams = false` — the 404 comes from
+ * notFound(), but the user-visible outcome is identical.) This registry
+ * cannot import those data files (it is edge-bundled), so the smoke tests
+ * assert the two lists agree — see scripts/smoke-test.ts section L5.
+ *
+ * `prefix` is the bare section name ('cost'), matching the keys of
+ * ROUTE_PREFIX_TO_TYPE in lib/seo-pages.ts.
+ */
+export function getRegisteredSeoSectionPaths(
+  locale: string,
+  prefix: string,
+): string[] {
+  return (TRANSLATED_ROUTES[locale]?.staticRoutes ?? []).filter((r) =>
+    r.startsWith(`/${prefix}/`),
   );
 }
 

@@ -68,16 +68,32 @@ async function lookup(course: GolfCourse): Promise<PlacesHit | null> {
  * Anchored on the `  latitude: ` line prefix so it can't touch coordinates
  * nested inside the legacy schema_markup string.
  */
-function applyToFile(abs: string, lat: number, lng: number) {
+function applyToFile(abs: string, lat: number, lng: number): boolean {
   let src = fs.readFileSync(abs, 'utf8')
-  src = src.replace(/^ {2}latitude: -?[\d.]+,$/m, `  latitude: ${lat},`)
-  src = src.replace(/^ {2}longitude: -?[\d.]+,$/m, `  longitude: ${lng},`)
+
+  // `null` is a legitimate value for both fields (5 courses ship that way), and
+  // it does NOT match [\d.]+. The old code let both coordinate replaces no-op
+  // on those files while the verified-at fallback below — which matched
+  // `longitude: .*` — still fired, stamping a course as coordinate-verified
+  // with null coordinates. That is worse than leaving it alone: the attestation
+  // is what silences validate:courses and what hasTrustedCoordinates trusts.
+  // Accept null here, and only stamp once BOTH numbers are actually written.
+  const NUM_OR_NULL = String.raw`(?:-?[\d.]+|null)`
+  const latRe = new RegExp(String.raw`^ {2}latitude: ${NUM_OR_NULL},$`, 'm')
+  const lngRe = new RegExp(String.raw`^ {2}longitude: ${NUM_OR_NULL},$`, 'm')
+
+  if (!latRe.test(src) || !lngRe.test(src)) return false
+
+  src = src.replace(latRe, `  latitude: ${lat},`)
+  src = src.replace(lngRe, `  longitude: ${lng},`)
+
   if (/^ {2}coordinates_verified_at:/m.test(src)) {
     src = src.replace(/^ {2}coordinates_verified_at: .*$/m, `  coordinates_verified_at: '${TODAY}',`)
   } else {
     src = src.replace(/^ {2}longitude: .*$/m, (m) => `${m}\n  coordinates_verified_at: '${TODAY}',`)
   }
   fs.writeFileSync(abs, src)
+  return true
 }
 
 async function main() {
@@ -95,6 +111,9 @@ async function main() {
   const agreed: string[] = []
   const drifted: string[] = []
   const unresolved: string[] = []
+  // A --write that silently no-ops is the failure mode this script had: the
+  // run reports the course as handled while the file is unchanged. Track it.
+  const writeFailed: string[] = []
 
   // Places lookups run through a bounded pool: ~149 serial round-trips cost
   // 1-1.5 min of wall time and a single hung response stalls the batch, while
@@ -129,7 +148,7 @@ async function main() {
 
     if (course.latitude === null || course.longitude === null) {
       drifted.push(`${file}: had no coordinates → ${hit.lat},${hit.lng} (${hit.name})`)
-      if (WRITE) applyToFile(abs, hit.lat, hit.lng)
+      if (WRITE && !applyToFile(abs, hit.lat, hit.lng)) writeFailed.push(file)
       continue
     }
 
@@ -139,14 +158,29 @@ async function main() {
     )
     if (km <= MATCH_KM) {
       agreed.push(`${file}: agrees within ${km.toFixed(2)} km (${hit.name})`)
-      if (WRITE) applyToFile(abs, hit.lat, hit.lng)
+      if (WRITE && !applyToFile(abs, hit.lat, hit.lng)) writeFailed.push(file)
     } else {
       drifted.push(
         `${file}: stored ${course.latitude},${course.longitude} is ${km.toFixed(1)} km from ` +
         `Places "${hit.name}" ${hit.lat},${hit.lng} — ${hit.address}`
       )
-      if (WRITE) applyToFile(abs, hit.lat, hit.lng)
+      if (WRITE && !applyToFile(abs, hit.lat, hit.lng)) writeFailed.push(file)
     }
+  }
+
+  if (writeFailed.length) {
+    console.error('\n── WRITE FAILED (file left unchanged, nothing stamped) ──')
+    for (const w of writeFailed) console.error(`  ! ${w}`)
+    console.error(
+      '  The latitude/longitude lines did not match the expected shape.\n' +
+      '  Fix by hand — do NOT add a coordinates_verified_at stamp to a course\n' +
+      '  whose coordinates were not written.'
+    )
+    // A silent exit 0 here is the same class of bug the write guard fixes: the
+    // operator sees "Applied: N agreed" scroll past and believes the run
+    // landed. Report it on stderr AND fail, so a scripted `--write` cannot
+    // swallow it.
+    process.exitCode = 1
   }
 
   if (drifted.length) {
@@ -159,7 +193,10 @@ async function main() {
   }
   console.log(
     `\n${WRITE ? 'Applied' : 'Report only'}: ${agreed.length} agreed, ` +
-    `${drifted.length} drifted, ${unresolved.length} unresolved, of ${courses.length} courses.`
+    `${drifted.length} drifted, ${unresolved.length} unresolved, of ${courses.length} courses.` +
+    // agreed/drifted still count courses whose write failed, so say so on the
+    // same line rather than letting the totals imply they all landed.
+    (writeFailed.length ? ` ${writeFailed.length} of those were NOT written (see above).` : '')
   )
   if (!WRITE && (drifted.length || agreed.length)) {
     console.log('Re-run with `-- --write` to apply corrections and stamp coordinates_verified_at.')

@@ -20,7 +20,7 @@ export function formatBaht(n: number): string {
  * so adding the next pilot locale (ko/zh) here extends driveTimeLabel,
  * asOfMonthYear, and the SEO/FAQ generators with one edit.
  */
-export const COURSE_CONTENT_LOCALES = ['en', 'th', 'ja'] as const
+export const COURSE_CONTENT_LOCALES = ['en', 'th', 'ja', 'ko', 'zh'] as const
 export type FormatLocale = (typeof COURSE_CONTENT_LOCALES)[number]
 
 // Per-locale drive-time fragments. EN templates are byte-identical to the
@@ -45,6 +45,21 @@ const DRIVE_TIME_L10N: Record<
     minutes: (min) => `約${min}分`,
     hours: (h) => `約${h}時間`,
     suffix: (val) => `${val}（バンコクから）`,
+  },
+  // KO and ZH both front the origin rather than appending it: Korean and
+  // Chinese put the source of a distance before the measure, so a trailing
+  // "(from Bangkok)" parenthetical — the EN/JA shape — reads as an
+  // afterthought bolted onto the number. The suffix() contract only says
+  // "combine val with the origin", not "append", so fronting is in-contract.
+  ko: {
+    minutes: (min) => `약 ${min}분`,
+    hours: (h) => `약 ${h}시간`,
+    suffix: (val) => `방콕에서 ${val}`,
+  },
+  zh: {
+    minutes: (min) => `约${min}分钟`,
+    hours: (h) => `约${h}小时`,
+    suffix: (val) => `距曼谷${val}车程`,
   },
 }
 
@@ -82,6 +97,11 @@ export function driveTimeLabel(
  *                          month name comes from the locale)
  *   ja → "2026年7月"      (half-width digits; callers wrap it per the glossary
  *                          as-of form （2026年7月現在）)
+ *   ko → "2026년 7월"     (callers wrap per the KO glossary as-of form
+ *                          "(2026년 7월 기준)"; space after 년 per KO spacing)
+ *   zh → "2026年7月"      (same shape as ja, but callers wrap it per the ZH
+ *                          glossary as-of form "截至2026年7月" — inline, no
+ *                          parentheses — so the two must not be merged)
  */
 export function asOfMonthYear(isoDate: string, locale: FormatLocale): string {
   const d = new Date(`${isoDate}T00:00:00Z`)
@@ -92,6 +112,10 @@ export function asOfMonthYear(isoDate: string, locale: FormatLocale): string {
       return `${month} ${year}`
     }
     case 'ja':
+      return `${year}年${d.getUTCMonth() + 1}月`
+    case 'ko':
+      return `${year}년 ${d.getUTCMonth() + 1}월`
+    case 'zh':
       return `${year}年${d.getUTCMonth() + 1}月`
     default:
       return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })

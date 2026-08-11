@@ -83,7 +83,7 @@ export default async function FaqPageComponent({ data }: Props) {
       <section className="pb-12 md:pb-16">
         <div className="mx-auto max-w-[900px] px-5">
           <div className="prose prose-lg max-w-none text-muted-foreground prose-headings:text-[#1a472a] prose-strong:text-[#1a472a]">
-            {content.answer_body.split('\n\n').map((paragraph, i) => {
+            {coalesceOrdinalBlocks(content.answer_body.split('\n\n')).map((paragraph, i) => {
               // Handle markdown-style bold headers (standalone **heading**)
               if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
                 const text = paragraph.replace(/\*\*/g, '')
@@ -299,6 +299,42 @@ export default async function FaqPageComponent({ data }: Props) {
 
 const PRICING_HEADING_RE = /rates?|packages?|pricing|costs?|lesson/i
 
+/**
+ * A list item marker: a "- " bullet OR an "N. " ordinal.
+ *
+ * Ordered items are matched because the EN FAQ corpus writes ordered steps as
+ * "1. ", "2. " … and, before this existed, such a block matched neither the
+ * bullet branch nor the mixed branch below and fell all the way through to the
+ * plain <p> renderer — where the single \n between items collapses in HTML and
+ * the whole list ships as one run-on sentence. That was live on 36 blocks
+ * across 15 EN entries, and identically on ja/ko/zh (31 blocks each), because
+ * translators faithfully carry the source's numbering.
+ *
+ * The trailing \s+ is load-bearing: it stops a decimal from being read as an
+ * ordinal, so a line opening "2.5 hours for a round" stays a paragraph.
+ */
+const LIST_ITEM_RE = /^\s*(?:-|\d+\.)\s+/
+/** Strip the leading "- " or "N. " so the item text can be rendered on its own. */
+const stripListMarker = (item: string) => item.replace(LIST_ITEM_RE, '')
+// A marker with nothing after it is not an item. Without the emptiness test,
+// the \s+ swallows a bare "-   " line's trailing spaces and it renders as an
+// empty <li>; the old `.trim().startsWith('- ')` form could not match it.
+const isListItem = (line: string) => LIST_ITEM_RE.test(line) && stripListMarker(line).trim() !== ''
+const isOrdinalItem = (line: string) => /^\s*\d+\.\s+/.test(line) && isListItem(line)
+/**
+ * Every item must carry the SAME marker shape for the block to render as one
+ * list. `ordered` is decided from items[0] while stripListMarker strips BOTH
+ * shapes from every item, so a mixed block loses the minority marker's
+ * ordinality outright: "- Bullet\n2. Second\n3. Third" would render as three
+ * bullets with "2." and "3." deleted, and "1. First\n- Bullet" would fabricate
+ * a "2." in front of the bullet. Falling back to the paragraph path keeps the
+ * markers visible as literal text — wrong-looking, but not silently altered
+ * content. The corpus is homogeneous today; this is what keeps a future edit
+ * from quietly dropping a number.
+ */
+const isHomogeneousList = (items: string[]) =>
+  items.length > 0 && items.every((i) => isOrdinalItem(i) === isOrdinalItem(items[0]))
+
 /** Parse "Label: Value" from a bullet item. Returns null if pattern not found. */
 function parsePriceLine(item: string): { label: string; value: string } | null {
   // Use ": " (colon + space) to avoid splitting on times like "14:00"
@@ -312,7 +348,7 @@ function parsePriceLine(item: string): { label: string; value: string } | null {
 
 /** Render a bullet list as a styled price table when all items are "Label: Value" pairs */
 function renderPriceTable(items: string[], key: string | number) {
-  const parsed = items.map((item) => parsePriceLine(item.replace(/^-\s*/, '')))
+  const parsed = items.map((item) => parsePriceLine(stripListMarker(item)))
   const allParsed = parsed.every(Boolean)
 
   if (!allParsed) {
@@ -321,7 +357,7 @@ function renderPriceTable(items: string[], key: string | number) {
       <ul key={key} className="my-4 list-disc pl-6 space-y-2">
         {items.map((item, j) => (
           <li key={j} className="text-muted-foreground">
-            <BoldText text={item.replace(/^-\s*/, '')} />
+            <BoldText text={stripListMarker(item)} />
           </li>
         ))}
       </ul>
@@ -347,6 +383,62 @@ function renderPriceTable(items: string[], key: string | number) {
   )
 }
 
+/**
+ * Merge runs of adjacent blocks that are each a pure numbered-list block into
+ * one block, so they render as a single continuous <ol>.
+ *
+ * answer_body is split on '\n\n' and each block renders independently. Authors
+ * write numbered lists both ways — items on consecutive lines inside one block,
+ * and items separated by blank lines. The second shape used to be harmless,
+ * because before ordered lists rendered at all every 'N. ' line fell through to
+ * the plain <p> branch and the reader saw the author's own numbers as text.
+ * Once <ol> rendering landed, each of those blocks became a one-item <ol> and
+ * every item restarted at 1 — faq-17 showed "1. Visa Exemption / 1. Visa on
+ * Arrival / 1. e-Visa". So the list feature regressed the very content it was
+ * meant to fix.
+ *
+ * Only a run whose numbering CONTINUES is merged (…2. then 3.). Two genuinely
+ * separate lists sitting back to back, where the second restarts at 1, stay
+ * separate — merging those would silently renumber the second list.
+ */
+function coalesceOrdinalBlocks(blocks: string[]): string[] {
+  const ordinalOf = (line: string) => {
+    const m = line.match(/^\s*(\d+)\.\s+/)
+    return m ? Number(m[1]) : null
+  }
+  const asOrdinalBlock = (block: string) => {
+    const lines = block.split('\n').filter((l) => l.trim() !== '')
+    if (lines.length === 0) return null
+    const nums = lines.map(ordinalOf)
+    if (nums.some((n) => n === null)) return null
+    return { first: nums[0] as number, last: nums[nums.length - 1] as number }
+  }
+
+  const out: string[] = []
+  let run: string[] = []
+  let runLast: number | null = null
+
+  const flush = () => {
+    if (run.length > 0) out.push(run.join('\n'))
+    run = []
+    runLast = null
+  }
+
+  for (const block of blocks) {
+    const info = asOrdinalBlock(block)
+    if (!info) {
+      flush()
+      out.push(block)
+      continue
+    }
+    if (runLast !== null && info.first !== runLast + 1) flush()
+    run.push(block)
+    runLast = info.last
+  }
+  flush()
+  return out
+}
+
 /** Render a content paragraph, handling tables, bullet lists, and inline bold */
 function renderParagraph(text: string, key: string | number, headingContext?: string) {
   const lines = text.split('\n')
@@ -356,33 +448,57 @@ function renderParagraph(text: string, key: string | number, headingContext?: st
     return <MarkdownTable key={key} lines={lines} />
   }
 
-  // Check if it's a list (lines starting with -)
-  const isList = lines.every((line) => line.trim().startsWith('- ') || line.trim() === '')
+  // Check if it's a list (lines starting with "- " or "N. ")
+  const isList =
+    lines.every((line) => isListItem(line) || line.trim() === '') &&
+    isHomogeneousList(lines.filter(isListItem))
 
   if (isList) {
-    const items = lines.filter((line) => line.trim().startsWith('- '))
+    const items = lines.filter(isListItem)
     const isPricingContext = headingContext && PRICING_HEADING_RE.test(headingContext)
 
     if (isPricingContext) {
       return renderPriceTable(items, key)
     }
 
+    // Ordered when the items are numbered — the source's numbering is
+    // meaningful (ranked reasons, sequential steps), so it renders as <ol>
+    // rather than being flattened into bullets.
+    const ordered = items.length > 0 && isOrdinalItem(items[0])
+    const ListTag = ordered ? 'ol' : 'ul'
+    // Honour the author's own first number. A block that starts at 3 (a run
+    // split across a heading, or a numbering gap) would otherwise be silently
+    // renumbered from 1 — the list markup would contradict the source text.
+    // The corpus is clean today; this keeps it from mattering if it stops being.
+    const startAt = ordered ? Number(items[0].match(/^\s*(\d+)\./)![1]) : 1
+
     return (
-      <ul key={key} className="my-4 list-disc pl-6 space-y-2">
+      <ListTag
+        key={key}
+        {...(ordered && startAt !== 1 ? { start: startAt } : {})}
+        className={`my-4 ${ordered ? 'list-decimal' : 'list-disc'} pl-6 space-y-2`}
+      >
         {items.map((item, j) => (
           <li key={j} className="text-muted-foreground">
-            <BoldText text={item.replace(/^-\s*/, '')} />
+            <BoldText text={stripListMarker(item)} />
           </li>
         ))}
-      </ul>
+      </ListTag>
     )
   }
 
-  // Handle mixed content: intro text followed by bullet list
-  const firstBulletIdx = lines.findIndex((line) => line.trim().startsWith('- '))
-  if (firstBulletIdx > 0) {
+  // Handle mixed content: intro text followed by a bullet or numbered list
+  const firstBulletIdx = lines.findIndex(isListItem)
+  if (firstBulletIdx > 0 && isHomogeneousList(lines.slice(firstBulletIdx).filter(isListItem))) {
     const introLines = lines.slice(0, firstBulletIdx).filter((l) => l.trim() !== '')
-    const bulletLines = lines.slice(firstBulletIdx).filter((l) => l.trim().startsWith('- '))
+    const bulletLines = lines.slice(firstBulletIdx).filter(isListItem)
+    const orderedMixed = bulletLines.length > 0 && isOrdinalItem(bulletLines[0])
+    const MixedListTag = orderedMixed ? 'ol' : 'ul'
+    // Same as the pure-list branch above: honour the author's first number
+    // rather than silently restarting the list at 1.
+    const mixedStartAt = orderedMixed
+      ? Number(bulletLines[0].match(/^\s*(\d+)\./)![1])
+      : 1
     const isPricingContext = headingContext && PRICING_HEADING_RE.test(headingContext)
 
     return (
@@ -393,21 +509,24 @@ function renderParagraph(text: string, key: string | number, headingContext?: st
         {isPricingContext ? (
           renderPriceTable(bulletLines, `${key}-table`)
         ) : (
-          <ul className="my-4 list-disc pl-6 space-y-2">
+          <MixedListTag
+            {...(orderedMixed && mixedStartAt !== 1 ? { start: mixedStartAt } : {})}
+            className={`my-4 ${orderedMixed ? 'list-decimal' : 'list-disc'} pl-6 space-y-2`}
+          >
             {bulletLines.map((item, j) => (
               <li key={j} className="text-muted-foreground">
-                <BoldText text={item.replace(/^-\s*/, '')} />
+                <BoldText text={stripListMarker(item)} />
               </li>
             ))}
-          </ul>
+          </MixedListTag>
         )}
-        {/* Render any trailing text after bullets */}
-        {lines.slice(firstBulletIdx).some((l) => l.trim() !== '' && !l.trim().startsWith('- ')) && (
+        {/* Render any trailing text after the list */}
+        {lines.slice(firstBulletIdx).some((l) => l.trim() !== '' && !isListItem(l)) && (
           <p className="my-4 text-muted-foreground leading-relaxed">
             <BoldText
               text={lines
                 .slice(firstBulletIdx)
-                .filter((l) => l.trim() !== '' && !l.trim().startsWith('- '))
+                .filter((l) => l.trim() !== '' && !isListItem(l))
                 .join(' ')}
             />
           </p>

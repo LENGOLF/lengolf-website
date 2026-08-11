@@ -14,6 +14,7 @@
     "validate:i18n": "tsx scripts/validate-i18n.ts",
     "validate:i18n:self-test": "tsx scripts/validate-i18n.ts --self-test",
     "validate:courses": "tsx scripts/validate-courses.ts",
+    "validate:hotels": "tsx scripts/validate-hotels.ts",
     "verify:coordinates": "tsx scripts/verify-course-coordinates.ts",
     "inventory": "tsx scripts/page-inventory.ts",
     "translate:seed": "tsx --env-file=.env.local scripts/translation-seed.ts",

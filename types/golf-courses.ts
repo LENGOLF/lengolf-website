@@ -28,6 +28,15 @@ export interface GolfCourse {
   year_opened: number | null
   green_fee_weekday_thb: number | null
   green_fee_weekend_thb: number | null
+  /**
+   * When true, green_fee_weekday_thb / green_fee_weekend_thb are the
+   * LOW-season / HIGH-season prices, not weekday / weekend. A handful of
+   * resort courses (e.g. phuket-country-club) price by season; their prose
+   * says so. Set this so the auto-generated "weekday/weekend" fee FAQ and
+   * the meta fee line are suppressed rather than asserting a false
+   * day-of-week split in FAQPage structured data.
+   */
+  fee_is_seasonal?: boolean
   caddie_fee_thb: number | null
   cart_fee_thb: number | null
   caddie_required: boolean
