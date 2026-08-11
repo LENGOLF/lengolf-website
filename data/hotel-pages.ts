@@ -24,7 +24,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 700,
       walking_time_mins: 11,
       walking_directions:
-        'Exit Arnoma Grand Bangkok onto Ratchadamri Road. Turn left and then left again (east) onto Rama I Road. Walk east along Rama I Road — LENGOLF at Mercury Ville will be on your right within 11 minutes. LENGOLF is on Floor 4. Take the escalator up from the ground floor.',
+        'Exit Arnoma Grand Bangkok onto Ratchadamri Road. Turn left and then left again (east) onto Ploenchit Road. Walk east along Ploenchit Road — LENGOLF at Mercury Ville will be on your right within 11 minutes. LENGOLF is on Floor 4. Take the escalator up from the ground floor.',
       hotel_star_rating: 4,
       nearby_restaurants: [
         { name: 'Nara Thai Cuisine (CentralWorld)', cuisine: 'Thai', distance_m: 250 },
@@ -79,7 +79,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 700,
       walking_time_mins: 11,
       walking_directions:
-        'ออกจาก Arnoma Grand Bangkok มายังถนนราชดำริ (Ratchadamri Road) เลี้ยวซ้าย แล้วเลี้ยวซ้ายอีกครั้ง (ไปทางทิศตะวันออก) เข้าสู่ถนนพระราม 1 (Rama I Road) เดินไปทางทิศตะวันออกตามถนนพระราม 1 แล้ว LENGOLF ที่ Mercury Ville จะอยู่ทางขวามือภายใน 11 นาที LENGOLF อยู่ชั้น 4 ขึ้นบันไดเลื่อนจากชั้นล่าง',
+        'ออกจาก Arnoma Grand Bangkok มายังถนนราชดำริ (Ratchadamri Road) เลี้ยวซ้าย แล้วเลี้ยวซ้ายอีกครั้ง (ไปทางทิศตะวันออก) เข้าสู่ถนนเพลินจิต (Ploenchit Road) เดินไปทางทิศตะวันออกตามถนนเพลินจิต แล้ว LENGOLF ที่ Mercury Ville จะอยู่ทางขวามือภายใน 11 นาที LENGOLF อยู่ชั้น 4 ขึ้นบันไดเลื่อนจากชั้นล่าง',
       hotel_star_rating: 4,
       nearby_restaurants: [
         { name: 'Nara Thai Cuisine (CentralWorld)', cuisine: 'อาหารไทย', distance_m: 250 },
@@ -135,7 +135,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 700,
       walking_time_mins: 11,
       walking_directions:
-        'Arnoma Grand Bangkokを出て、ラチャダムリ通り（Ratchadamri Road）へ。左に曲がり、もう一度左（東）に曲がってラマ1世通り（Rama I Road）に入ります。ラマ1世通りを東へ進むと、11分以内に右手にザ・マーキュリービルのLENGOLFが見えてきます。LENGOLFは4階です。1階からエスカレーターで上がってください。',
+        'Arnoma Grand Bangkokを出て、ラチャダムリ通り（Ratchadamri Road）へ。左に曲がり、もう一度左（東）に曲がってプルンチット通り（Ploenchit Road）に入ります。プルンチット通りを東へ進むと、11分以内に右手にザ・マーキュリービルのLENGOLFが見えてきます。LENGOLFは4階です。1階からエスカレーターで上がってください。',
       hotel_star_rating: 4,
       nearby_restaurants: [
         { name: 'Nara Thai Cuisine (CentralWorld)', cuisine: 'タイ料理', distance_m: 250 },
@@ -190,7 +190,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 700,
       walking_time_mins: 11,
       walking_directions:
-        'Arnoma Grand Bangkok에서 Ratchadamri Road 쪽으로 나옵니다. 왼쪽으로 돈 다음 한 번 더 왼쪽(동쪽)으로 꺾어 Rama I Road에 들어섭니다. Rama I Road에서 동쪽으로 걸으면 11분 안에 오른편으로 Mercury Ville의 LENGOLF가 보여요. LENGOLF는 4층에 있어요. 1층에서 에스컬레이터를 타고 올라가면 됩니다.',
+        'Arnoma Grand Bangkok에서 Ratchadamri Road 쪽으로 나옵니다. 왼쪽으로 돈 다음 한 번 더 왼쪽(동쪽)으로 꺾어 Ploenchit Road에 들어섭니다. Ploenchit Road에서 동쪽으로 걸으면 11분 안에 오른편으로 Mercury Ville의 LENGOLF가 보여요. LENGOLF는 4층에 있어요. 1층에서 에스컬레이터를 타고 올라가면 됩니다.',
       hotel_star_rating: 4,
       nearby_restaurants: [
         { name: 'Nara Thai Cuisine (CentralWorld)', cuisine: '태국 요리', distance_m: 250 },
@@ -245,7 +245,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 700,
       walking_time_mins: 11,
       walking_directions:
-        '从Arnoma Grand Bangkok出来，走到Ratchadamri Road上。先左转，再左转一次（向东）进入Rama I Road。沿Rama I Road一路向东走，11分钟内就会看到右手边Mercury Ville里的LENGOLF。LENGOLF在4楼，从一楼搭扶梯上去即可。',
+        '从Arnoma Grand Bangkok出来，走到Ratchadamri Road上。先左转，再左转一次（向东）进入Ploenchit Road。沿Ploenchit Road一路向东走，11分钟内就会看到右手边Mercury Ville里的LENGOLF。LENGOLF在4楼，从一楼搭扶梯上去即可。',
       hotel_star_rating: 4,
       nearby_restaurants: [
         { name: 'Nara Thai Cuisine (CentralWorld)', cuisine: '泰餐', distance_m: 250 },
@@ -562,7 +562,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 500,
       walking_time_mins: 6,
       walking_directions:
-        'Exit Grand Hyatt Erawan and walk west along Ploenchit Road toward BTS Chidlom. Pass Gaysorn Village on your right. The Mercury Ville is connected to BTS Chidlom station on your left — enter from street level and take the escalator to Floor 4 for LENGOLF.',
+        'Exit Grand Hyatt Erawan and walk east along Ploenchit Road toward BTS Chidlom. Pass Gaysorn Village on your right. The Mercury Ville is connected to BTS Chidlom station on your left — enter from street level and take the escalator to Floor 4 for LENGOLF.',
       hotel_star_rating: 5,
       nearby_restaurants: [
         { name: 'Tables Grill (Grand Hyatt)', cuisine: 'Steakhouse', distance_m: 0 },
@@ -619,7 +619,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 500,
       walking_time_mins: 6,
       walking_directions:
-        'ออกจาก Grand Hyatt Erawan แล้วเดินไปทางทิศตะวันตกตามถนนเพลินจิต (Ploenchit Road) มุ่งหน้าสู่ BTS ชิดลม ผ่าน Gaysorn Village ทางขวามือ The Mercury Ville เชื่อมต่อกับสถานี BTS ชิดลม อยู่ทางซ้ายมือ เข้าจากระดับถนนแล้วขึ้นบันไดเลื่อนไปชั้น 4 เพื่อไปยัง LENGOLF',
+        'ออกจาก Grand Hyatt Erawan แล้วเดินไปทางทิศตะวันออกตามถนนเพลินจิต (Ploenchit Road) มุ่งหน้าสู่ BTS ชิดลม ผ่าน Gaysorn Village ทางขวามือ The Mercury Ville เชื่อมต่อกับสถานี BTS ชิดลม อยู่ทางซ้ายมือ เข้าจากระดับถนนแล้วขึ้นบันไดเลื่อนไปชั้น 4 เพื่อไปยัง LENGOLF',
       hotel_star_rating: 5,
       nearby_restaurants: [
         { name: 'Tables Grill (Grand Hyatt)', cuisine: 'สเต๊กเฮาส์', distance_m: 0 },
@@ -676,7 +676,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 500,
       walking_time_mins: 6,
       walking_directions:
-        'Grand Hyatt Erawanを出て、プルンチット通り（Ploenchit Road）を西へ、BTSチットロム駅の方向に歩きます。右手にGaysorn Villageを見ながら進んでください。BTSチットロム駅と直結したザ・マーキュリービルが左手にあります。1階から入り、エスカレーターで4階へ上がるとLENGOLFです。',
+        'Grand Hyatt Erawanを出て、プルンチット通り（Ploenchit Road）を東へ、BTSチットロム駅の方向に歩きます。右手にGaysorn Villageを見ながら進んでください。BTSチットロム駅と直結したザ・マーキュリービルが左手にあります。1階から入り、エスカレーターで4階へ上がるとLENGOLFです。',
       hotel_star_rating: 5,
       nearby_restaurants: [
         { name: 'Tables Grill (Grand Hyatt)', cuisine: 'ステーキハウス', distance_m: 0 },
@@ -732,7 +732,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 500,
       walking_time_mins: 6,
       walking_directions:
-        'Grand Hyatt Erawan 호텔에서 나와 Ploenchit Road에서 서쪽으로, BTS 칫롬역 방향으로 걸어갑니다. 오른편으로 Gaysorn Village 쇼핑몰을 지나갑니다. 왼편에 있는 The Mercury Ville 건물은 BTS 칫롬역과 연결돼 있어요. 지상층에서 들어가 에스컬레이터를 타고 4층 LENGOLF까지 올라가면 됩니다.',
+        'Grand Hyatt Erawan 호텔에서 나와 Ploenchit Road에서 동쪽으로, BTS 칫롬역 방향으로 걸어갑니다. 오른편으로 Gaysorn Village 쇼핑몰을 지나갑니다. 왼편에 있는 The Mercury Ville 건물은 BTS 칫롬역과 연결돼 있어요. 지상층에서 들어가 에스컬레이터를 타고 4층 LENGOLF까지 올라가면 됩니다.',
       hotel_star_rating: 5,
       nearby_restaurants: [
         { name: 'Tables Grill (Grand Hyatt)', cuisine: '스테이크하우스', distance_m: 0 },
@@ -789,7 +789,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 500,
       walking_time_mins: 6,
       walking_directions:
-        '从Grand Hyatt Erawan出来，沿Ploenchit Road向西朝BTS Chidlom站走，右手边会经过Gaysorn Village。The Mercury Ville在你左手边，与BTS Chidlom站相连——从街面进入，搭扶梯上到4楼就是LENGOLF。',
+        '从Grand Hyatt Erawan出来，沿Ploenchit Road向东朝BTS Chidlom站走，右手边会经过Gaysorn Village。The Mercury Ville在你左手边，与BTS Chidlom站相连——从街面进入，搭扶梯上到4楼就是LENGOLF。',
       hotel_star_rating: 5,
       nearby_restaurants: [
         { name: 'Tables Grill (Grand Hyatt)', cuisine: '牛排餐厅', distance_m: 0 },
@@ -1920,7 +1920,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 450,
       walking_time_mins: 6,
       walking_directions:
-        'Exit Renaissance Bangkok onto Sukhumvit Road via the main entrance. Turn right and walk west along Ploenchit Road — The Mercury Ville will be on your right at BTS Chidlom within 6 minutes. LENGOLF is on Floor 4.',
+        'Exit Renaissance Bangkok onto Ratchadamri Road via the main entrance. Turn right and walk east along Ploenchit Road — The Mercury Ville will be on your right at BTS Chidlom within 6 minutes. LENGOLF is on Floor 4.',
       hotel_star_rating: 5,
       nearby_restaurants: [
         { name: 'Flavors (Renaissance)', cuisine: 'International', distance_m: 0 },
@@ -1976,7 +1976,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 450,
       walking_time_mins: 6,
       walking_directions:
-        'ออกจาก Renaissance Bangkok ทางประตูหลักสู่ถนนสุขุมวิท (Sukhumvit Road) เลี้ยวขวาแล้วเดินไปทางทิศตะวันตกตามถนนเพลินจิต (Ploenchit Road) The Mercury Ville จะอยู่ทางขวามือที่ BTS ชิดลม ภายใน 6 นาที LENGOLF อยู่ชั้น 4',
+        'ออกจาก Renaissance Bangkok ทางประตูหลักสู่ถนนราชดำริ (Ratchadamri Road) เลี้ยวขวาแล้วเดินไปทางทิศตะวันออกตามถนนเพลินจิต (Ploenchit Road) The Mercury Ville จะอยู่ทางขวามือที่ BTS ชิดลม ภายใน 6 นาที LENGOLF อยู่ชั้น 4',
       hotel_star_rating: 5,
       nearby_restaurants: [
         { name: 'Flavors (Renaissance)', cuisine: 'อาหารนานาชาติ', distance_m: 0 },
@@ -2033,7 +2033,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 450,
       walking_time_mins: 6,
       walking_directions:
-        'Renaissance Bangkokの正面玄関からスクンビット通り（Sukhumvit Road）へ出ます。右に曲がり、プルンチット通り（Ploenchit Road）を西へ歩くと、6分以内にBTSチットロム駅のところで右手にザ・マーキュリービルが見えます。LENGOLFは4階です。',
+        'Renaissance Bangkokの正面玄関からラチャダムリ通り（Ratchadamri Road）へ出ます。右に曲がり、プルンチット通り（Ploenchit Road）を東へ歩くと、6分以内にBTSチットロム駅のところで右手にザ・マーキュリービルが見えます。LENGOLFは4階です。',
       hotel_star_rating: 5,
       nearby_restaurants: [
         { name: 'Flavors (Renaissance)', cuisine: 'インターナショナル', distance_m: 0 },
@@ -2090,7 +2090,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 450,
       walking_time_mins: 6,
       walking_directions:
-        'Renaissance Bangkok 호텔 정문에서 Sukhumvit Road 쪽으로 나옵니다. 오른쪽으로 돈 뒤 Ploenchit Road에서 서쪽으로 걸으면, 6분 안에 BTS 칫롬역 오른편으로 The Mercury Ville 건물이 나와요. LENGOLF는 4층에 있어요.',
+        'Renaissance Bangkok 호텔 정문에서 Ratchadamri Road 쪽으로 나옵니다. 오른쪽으로 돈 뒤 Ploenchit Road에서 동쪽으로 걸으면, 6분 안에 BTS 칫롬역 오른편으로 The Mercury Ville 건물이 나와요. LENGOLF는 4층에 있어요.',
       hotel_star_rating: 5,
       nearby_restaurants: [
         { name: 'Flavors (Renaissance)', cuisine: '인터내셔널', distance_m: 0 },
@@ -2146,7 +2146,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 450,
       walking_time_mins: 6,
       walking_directions:
-        '从Renaissance Bangkok的正门出来到Sukhumvit Road上。右转，沿Ploenchit Road向西走——6分钟内The Mercury Ville就会出现在右手边的BTS Chidlom站旁。LENGOLF在4楼。',
+        '从Renaissance Bangkok的正门出来到Ratchadamri Road上。右转，沿Ploenchit Road向东走——6分钟内The Mercury Ville就会出现在右手边的BTS Chidlom站旁。LENGOLF在4楼。',
       hotel_star_rating: 5,
       nearby_restaurants: [
         { name: 'Flavors (Renaissance)', cuisine: '国际料理', distance_m: 0 },

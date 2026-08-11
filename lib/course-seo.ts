@@ -108,9 +108,12 @@ export function getCourseDescription(course: GolfCourse, locale: CourseSeoLocale
 
   const designerLead = `${course.holes}-hole ${course.designer ? `${course.designer}-designed ` : ''}golf course in ${course.province}.`
   const plainLead = `${course.holes}-hole golf course in ${course.province}.`
-  const fee = course.green_fee_weekday_thb
-    ? ` Weekday green fee ~${thb(course.green_fee_weekday_thb)}.`
-    : ''
+  // Skip the "Weekday green fee" line when the course prices seasonally —
+  // the number is a low-season price, not a weekday one (see fee_is_seasonal).
+  const fee =
+    course.green_fee_weekday_thb && !course.fee_is_seasonal
+      ? ` Weekday green fee ~${thb(course.green_fee_weekday_thb)}.`
+      : ''
   const drive =
     course.drive_time_from_bangkok_min && course.drive_time_from_bangkok_min <= 240
       ? ` ${course.drive_time_from_bangkok_min} min from central Bangkok.`
@@ -551,7 +554,11 @@ export function getCourseFaqs(course: GolfCourse, locale: CourseSeoLocale = 'en'
     return faqs
   }
 
-  if (course.green_fee_weekday_thb) {
+  // Seasonal-priced courses skip the generated weekday/weekend fee FAQ: their
+  // fields are low/high season, and this FAQ ships as FAQPage structured data,
+  // so emitting it would assert a day-of-week split that does not exist. The
+  // prose carries the seasonal pricing instead.
+  if (course.green_fee_weekday_thb && !course.fee_is_seasonal) {
     faqs.push({
       question: L.feeQuestion(name),
       answer: L.feeAnswer(

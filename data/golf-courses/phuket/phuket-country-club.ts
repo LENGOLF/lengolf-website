@@ -11,6 +11,11 @@ export const course: GolfCourse = {
   year_opened: 1989,
   green_fee_weekday_thb: 2800,
   green_fee_weekend_thb: 4000,
+  // Phuket CC prices by SEASON, not day of week: the 2,800 / 4,000 above are
+  // low-season / high-season (the prose says so). This flag suppresses the
+  // auto weekday/weekend fee FAQ + meta line so structured data does not
+  // assert a false day-of-week split.
+  fee_is_seasonal: true,
   caddie_fee_thb: 400,
   cart_fee_thb: 700,
   caddie_required: true,
