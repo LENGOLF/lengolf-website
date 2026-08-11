@@ -731,16 +731,26 @@
     "premiumSpec3": "Jaws Raw Wedges (52°, 56°) — Dynamic Gold S200",
     "premiumSpec4": "Odyssey White Hot Black Series Five Putter — Stroke Lab shaft",
     "premiumSpec5": "Callaway camo bag included",
-    "club1Name": "Callaway Warbird",
-    "club1Gender": "Men's Full Set",
-    "club1Spec1": "Driver, Fairway Woods, Irons (5–PW, SW)",
-    "club1Spec2": "Odyssey White Hot Pro Putter included",
-    "club1Spec3": "All-matching Callaway set, excellent condition",
-    "club2Name": "Majesty Shuttle",
-    "club2Gender": "Women's Full Set",
-    "club2Spec1": "Driver, TaylorMade Gloire 5W, Irons (7–PW)",
-    "club2Spec2": "Puppy's Paw 56° Wedge + TaylorMade Rossa Putter",
-    "club2Spec3": "Premium Japanese brand, lightweight design",
+    "sets": {
+      "premium-mens-warbird": {
+        "name": "Callaway Warbird",
+        "gender": "Men's Full Set",
+        "spec1": "Driver, Fairway Woods, Irons (5–PW, SW)",
+        "spec2": "Odyssey White Hot Pro Putter included",
+        "spec3": "All-matching Callaway set, excellent condition"
+      },
+      "premium-womens-majesty": {
+        "name": "Majesty Shuttle",
+        "gender": "Women's Full Set",
+        "spec1": "Driver, TaylorMade Gloire 5W, Irons (7–PW)",
+        "spec2": "Puppy's Paw 56° Wedge + TaylorMade Rossa Putter",
+        "spec3": "Premium Japanese brand, lightweight design"
+      }
+    },
+    "variantLabels": {
+      "white": "White",
+      "black": "Black"
+    },
     "formTitle": "Book Your Clubs",
     "formSubtitle": "Select your set, dates, and delivery — book online in minutes",
     "ctaTitle": "Ready to book your clubs?",

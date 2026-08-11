@@ -350,6 +350,9 @@ export type Database = {
           is_active: boolean
           website_visible: boolean
           display_order: number
+          gallery: Json
+          variants: Json
+          variant_axis: string | null
           created_at: string
           updated_at: string
         }
@@ -378,6 +381,9 @@ export type Database = {
           is_active?: boolean
           website_visible?: boolean
           display_order?: number
+          gallery?: Json
+          variants?: Json
+          variant_axis?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -406,6 +412,9 @@ export type Database = {
           is_active?: boolean
           website_visible?: boolean
           display_order?: number
+          gallery?: Json
+          variants?: Json
+          variant_axis?: string | null
           created_at?: string
           updated_at?: string
         }
