@@ -169,13 +169,18 @@ async function main() {
   }
 
   if (writeFailed.length) {
-    console.log('\n── WRITE FAILED (file left unchanged, nothing stamped) ──')
-    for (const w of writeFailed) console.log(`  ! ${w}`)
-    console.log(
+    console.error('\n── WRITE FAILED (file left unchanged, nothing stamped) ──')
+    for (const w of writeFailed) console.error(`  ! ${w}`)
+    console.error(
       '  The latitude/longitude lines did not match the expected shape.\n' +
       '  Fix by hand — do NOT add a coordinates_verified_at stamp to a course\n' +
       '  whose coordinates were not written.'
     )
+    // A silent exit 0 here is the same class of bug the write guard fixes: the
+    // operator sees "Applied: N agreed" scroll past and believes the run
+    // landed. Report it on stderr AND fail, so a scripted `--write` cannot
+    // swallow it.
+    process.exitCode = 1
   }
 
   if (drifted.length) {
@@ -188,7 +193,10 @@ async function main() {
   }
   console.log(
     `\n${WRITE ? 'Applied' : 'Report only'}: ${agreed.length} agreed, ` +
-    `${drifted.length} drifted, ${unresolved.length} unresolved, of ${courses.length} courses.`
+    `${drifted.length} drifted, ${unresolved.length} unresolved, of ${courses.length} courses.` +
+    // agreed/drifted still count courses whose write failed, so say so on the
+    // same line rather than letting the totals imply they all landed.
+    (writeFailed.length ? ` ${writeFailed.length} of those were NOT written (see above).` : '')
   )
   if (!WRITE && (drifted.length || agreed.length)) {
     console.log('Re-run with `-- --write` to apply corrections and stamp coordinates_verified_at.')

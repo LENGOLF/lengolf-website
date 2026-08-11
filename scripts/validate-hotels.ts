@@ -38,6 +38,20 @@ const MAX_PACE = 120
 const errors: string[] = []
 const warnings: string[] = []
 
+// Anti-vacuity floor, matching the guards the smoke test's L2/L4/L5 carry.
+// Every check below is inside `for (const page of hotelConciergePages)`, so an
+// empty corpus makes the whole script a no-op that prints a green checkmark —
+// verified by replacing the data file with `[]`: "0 entries pass", exit 0.
+// Reachable by splitting data/hotel-pages.ts into a barrel, moving to DB
+// loading, or adding a `.filter()` on a field that later gets renamed.
+const MIN_ENTRIES = 60 // 12 hotels x en/th/ja/ko/zh
+if (hotelConciergePages.length < MIN_ENTRIES) {
+  errors.push(
+    `only ${hotelConciergePages.length} entries loaded (expected >= ${MIN_ENTRIES}) — ` +
+      `data source empty or filtered away, so every check below asserted nothing`
+  )
+}
+
 // EN is the source of truth for every typed field; a translation may not
 // change a number. (verify-hotels asserted this pre-merge; this keeps it true
 // afterwards, when edits land directly in the data file.)
@@ -66,10 +80,19 @@ for (const page of hotelConciergePages) {
     }
   }
 
-  const lengolfCard = c.nearby_activities.find((a) => /lengolf/i.test(a.name))
-  if (lengolfCard && lengolfCard.distance_m !== c.hotel_distance_m) {
+  // Assert the card EXISTS before comparing it. `find(...) && ...` silently
+  // disarms the check — the one defect this gate was written for — the moment
+  // the card is renamed away from the /lengolf/i anchor. Verified: retitling it
+  // "Indoor Golf Simulator" let a 2000m-vs-700m contradiction pass green.
+  const lengolfCards = c.nearby_activities.filter((a) => /lengolf/i.test(a.name))
+  if (lengolfCards.length !== 1) {
     errors.push(
-      `${tag}: nearby_activities LENGOLF card says ${lengolfCard.distance_m}m but ` +
+      `${tag}: expected exactly 1 nearby_activities card matching /lengolf/i, found ` +
+        `${lengolfCards.length} — the distance cross-check has nothing to anchor on`
+    )
+  } else if (lengolfCards[0].distance_m !== c.hotel_distance_m) {
+    errors.push(
+      `${tag}: nearby_activities LENGOLF card says ${lengolfCards[0].distance_m}m but ` +
         `hotel_distance_m is ${c.hotel_distance_m}m — same quantity, two answers on one page`
     )
   }

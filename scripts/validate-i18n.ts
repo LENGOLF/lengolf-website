@@ -314,12 +314,22 @@ for (const locale of LOCALES) {
 // prose, and linting them fires the brand and terminology checks on
 // identifiers. `rank`, `year` and `is_lengolf` are numeric/boolean and drop
 // out of flattenMessages on their own.
+// `google_maps_embed` is a URL for the same reason, and
+// `suggested_itinerary[].time` is a clock reading ("2:00 PM") that the /hotels
+// batch deliberately keeps as the same instant in every locale.
 const NON_PROSE_SEO_FIELD_RE =
-  /^occasion_type$|^last_verified$|^curated_reviews\[|^list_items\[\d+\]\.(address|website)$/
+  /^occasion_type$|^last_verified$|^curated_reviews\[|^list_items\[\d+\]\.(address|website)$|^google_maps_embed$|^suggested_itinerary\[\d+\]\.time$/
+// `hotel` was imported for the SSG-namespace check but never added here, so the
+// 48 /hotels translations shipped in PR #90 got ZERO house-style checking — no
+// emoji, exclamation, full-width-digit, terminology or brand-casing gate — on
+// the one section that also shipped without native-language QA. Verified by
+// injection: an emoji + `！` in a ja hotel `area_guide` passed clean before this
+// line and fails after it.
 for (const [label, pages] of [
   ['cost', priceGuidePages],
   ['activity', activityOccasionPages],
   ['best', bestOfListiclePages],
+  ['hotel', hotelConciergePages],
 ] as const) {
   for (const page of pages) {
     if (!LOCALES.includes(page.locale as Locale)) continue

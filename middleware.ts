@@ -54,9 +54,22 @@ export default function middleware(request: NextRequest) {
       for (const locale of LOCALE_PREFIXES) {
         if (redirectPath === `/${locale}` || redirectPath.startsWith(`/${locale}/`)) {
           const pathWithoutLocale = redirectPath.replace(new RegExp(`^/${locale}`), '') || '/'
+          // Only intercept a PURE prefix-add — the detection redirect this
+          // whole block exists for. next-intl issues locale-prefixed redirects
+          // for a second reason: canonicalizing a case-variant prefix
+          // (`/JA/x/` -> `/ja/x/`, matched case-insensitively upstream while
+          // LOCALE_PREFIXES above is case-sensitive). Rewriting THAT one serves
+          // a 200 English page at the non-canonical URL instead of letting it
+          // redirect, so every case variant of every locale becomes an
+          // indexable soft-duplicate. Let those through: the 307 lands on the
+          // lower-cased path, which the 301 loop at the top then resolves.
+          if (pathWithoutLocale !== pathname) break
           if (!hasTranslationForLocale(locale, pathWithoutLocale)) {
             const url = request.nextUrl.clone()
-            url.pathname = `/en${pathWithoutLocale === '/' ? '' : pathWithoutLocale}`
+            // Keep the trailing slash (`trailingSlash: true` in next.config.js).
+            // pathWithoutLocale is already '/' for the root case, so `/en/`
+            // falls out — dropping it would rewrite to an unnormalized `/en`.
+            url.pathname = `/en${pathWithoutLocale}`
             return NextResponse.rewrite(url)
           }
           break

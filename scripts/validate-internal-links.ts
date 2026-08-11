@@ -156,17 +156,46 @@ const smokeSrc = readFileSync(
   join(process.cwd(), 'scripts/smoke-test.ts'),
   'utf8'
 )
-const probeSection = smokeSrc.slice(
-  smokeSrc.indexOf('const thaiRedirectTests'),
-  smokeSrc.indexOf('// F) Locale-cookie tests')
-)
+// Both markers must resolve. `indexOf` returns -1 on a rename, and
+// `slice(-1, end)` clamps the start past the end, yielding an EMPTY string —
+// so the guard would parse zero probes and print its own success line. This
+// guard-for-the-guard is the difference between "no stale probes" and "never
+// looked".
+const probeStart = smokeSrc.indexOf('const thaiRedirectTests')
+const probeEnd = smokeSrc.indexOf('// F) Locale-cookie tests')
+if (probeStart === -1 || probeEnd === -1 || probeEnd <= probeStart) {
+  console.error(
+    '❌ validate-internal-links: could not locate the negative-probe table in' +
+      ' scripts/smoke-test.ts (markers "const thaiRedirectTests" and' +
+      ' "// F) Locale-cookie tests").\nThe stale-probe check just asserted' +
+      ' NOTHING. Re-point the markers, or export the table and import it here.'
+  )
+  process.exit(1)
+}
+const probeSection = smokeSrc.slice(probeStart, probeEnd)
 const staleProbes: string[] = []
+let probesParsed = 0
 for (const m of probeSection.matchAll(/path:\s*"\/(th|ja|ko|zh)(\/[^"]*)"/g)) {
   const [, locale, rawPath] = m
+  probesParsed++
   const path = rawPath.replace(/\/$/, '') || '/'
   if (hasTranslationForLocale(locale, path)) {
     staleProbes.push(`/${locale}${rawPath}`)
   }
+}
+// The parse regex needs double quotes on one line; a formatter flip to single
+// quotes, or refactoring the table into a helper call, yields 0 matches with
+// no signal. Floor it well below today's count (15) so normal churn is fine
+// but a parse that stopped working is loud.
+const MIN_PROBES = 10
+if (probesParsed < MIN_PROBES) {
+  console.error(
+    `❌ validate-internal-links: parsed only ${probesParsed} negative probe(s)` +
+      ` (expected >= ${MIN_PROBES}) from scripts/smoke-test.ts.\nThe probe-table` +
+      ' parse no longer matches its source — this check is not protecting' +
+      ' anything. Update the regex, or export the table and import it here.'
+  )
+  process.exit(1)
 }
 
 if (staleProbes.length > 0) {

@@ -314,10 +314,26 @@ const PRICING_HEADING_RE = /rates?|packages?|pricing|costs?|lesson/i
  * ordinal, so a line opening "2.5 hours for a round" stays a paragraph.
  */
 const LIST_ITEM_RE = /^\s*(?:-|\d+\.)\s+/
-const isListItem = (line: string) => LIST_ITEM_RE.test(line)
-const isOrdinalItem = (line: string) => /^\s*\d+\.\s+/.test(line)
 /** Strip the leading "- " or "N. " so the item text can be rendered on its own. */
 const stripListMarker = (item: string) => item.replace(LIST_ITEM_RE, '')
+// A marker with nothing after it is not an item. Without the emptiness test,
+// the \s+ swallows a bare "-   " line's trailing spaces and it renders as an
+// empty <li>; the old `.trim().startsWith('- ')` form could not match it.
+const isListItem = (line: string) => LIST_ITEM_RE.test(line) && stripListMarker(line).trim() !== ''
+const isOrdinalItem = (line: string) => /^\s*\d+\.\s+/.test(line) && isListItem(line)
+/**
+ * Every item must carry the SAME marker shape for the block to render as one
+ * list. `ordered` is decided from items[0] while stripListMarker strips BOTH
+ * shapes from every item, so a mixed block loses the minority marker's
+ * ordinality outright: "- Bullet\n2. Second\n3. Third" would render as three
+ * bullets with "2." and "3." deleted, and "1. First\n- Bullet" would fabricate
+ * a "2." in front of the bullet. Falling back to the paragraph path keeps the
+ * markers visible as literal text — wrong-looking, but not silently altered
+ * content. The corpus is homogeneous today; this is what keeps a future edit
+ * from quietly dropping a number.
+ */
+const isHomogeneousList = (items: string[]) =>
+  items.length > 0 && items.every((i) => isOrdinalItem(i) === isOrdinalItem(items[0]))
 
 /** Parse "Label: Value" from a bullet item. Returns null if pattern not found. */
 function parsePriceLine(item: string): { label: string; value: string } | null {
@@ -433,7 +449,9 @@ function renderParagraph(text: string, key: string | number, headingContext?: st
   }
 
   // Check if it's a list (lines starting with "- " or "N. ")
-  const isList = lines.every((line) => isListItem(line) || line.trim() === '')
+  const isList =
+    lines.every((line) => isListItem(line) || line.trim() === '') &&
+    isHomogeneousList(lines.filter(isListItem))
 
   if (isList) {
     const items = lines.filter(isListItem)
@@ -471,7 +489,7 @@ function renderParagraph(text: string, key: string | number, headingContext?: st
 
   // Handle mixed content: intro text followed by a bullet or numbered list
   const firstBulletIdx = lines.findIndex(isListItem)
-  if (firstBulletIdx > 0) {
+  if (firstBulletIdx > 0 && isHomogeneousList(lines.slice(firstBulletIdx).filter(isListItem))) {
     const introLines = lines.slice(0, firstBulletIdx).filter((l) => l.trim() !== '')
     const bulletLines = lines.slice(firstBulletIdx).filter(isListItem)
     const orderedMixed = bulletLines.length > 0 && isOrdinalItem(bulletLines[0])
