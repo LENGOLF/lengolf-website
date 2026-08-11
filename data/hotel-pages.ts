@@ -44,7 +44,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       suggested_itinerary: [
         { time: '10:00 AM', activity: 'Breakfast at the hotel, then walk across to CentralWorld for morning shopping before the crowds arrive' },
         { time: '12:30 PM', activity: 'Lunch at Din Tai Fung (CentralWorld, 6th floor) — the xiao long bao is worth the queue' },
-        { time: '2:00 PM', activity: 'Walk 4 minutes to LENGOLF at Mercury Ville for an afternoon session (~550 THB/hour, up to 5 people)' },
+        { time: '2:00 PM', activity: 'Walk 11 minutes to LENGOLF at Mercury Ville for an afternoon session (~550 THB/hour, up to 5 people)' },
         { time: '4:00 PM', activity: 'Grab a coffee at Smith & Co. in Mercury Ville before heading back' },
         { time: '6:30 PM', activity: 'Dinner at Somboon Seafood for their famous curry crab — a Bangkok institution since 1969' },
         { time: '8:30 PM', activity: 'Evening walk along the Chidlom skywalk to Gaysorn Village for rooftop drinks at Vanilla Sky Bar' },
@@ -99,7 +99,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       suggested_itinerary: [
         { time: '10:00 น.', activity: 'อาหารเช้าที่โรงแรม แล้วเดินข้ามไป CentralWorld เพื่อช้อปปิ้งช่วงเช้าก่อนที่คนจะเริ่มเยอะ' },
         { time: '12:30 น.', activity: 'มื้อกลางวันที่ Din Tai Fung (CentralWorld ชั้น 6) เสี่ยวหลงเปาของที่นี่คุ้มกับการต่อคิว' },
-        { time: '14:00 น.', activity: 'เดิน 4 นาทีไปที่ LENGOLF ใน Mercury Ville สำหรับรอบบ่าย (ประมาณ 550 บาท/ชั่วโมง สำหรับผู้เล่นสูงสุด 5 คน)' },
+        { time: '14:00 น.', activity: 'เดิน 11 นาทีไปที่ LENGOLF ใน Mercury Ville สำหรับรอบบ่าย (ประมาณ 550 บาท/ชั่วโมง สำหรับผู้เล่นสูงสุด 5 คน)' },
         { time: '16:00 น.', activity: 'แวะจิบกาแฟที่ Smith & Co. ใน Mercury Ville ก่อนเดินกลับ' },
         { time: '18:30 น.', activity: 'มื้อเย็นที่ Somboon Seafood กับปูผัดผงกะหรี่ชื่อดัง ร้านที่อยู่คู่กรุงเทพฯ มาตั้งแต่ปี 1969' },
         { time: '20:30 น.', activity: 'เดินเล่นยามค่ำบนทางเดินลอยฟ้าชิดลมไปยัง Gaysorn Village แล้วขึ้นไปดื่มบนรูฟท็อปที่ Vanilla Sky Bar' },
@@ -155,7 +155,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       suggested_itinerary: [
         { time: '10:00', activity: 'ホテルで朝食をとったあと、通りを渡ってセントラルワールドへ。混み合う前の午前中に買い物をすませます' },
         { time: '12:30', activity: 'Din Tai Fung（セントラルワールド6階）でランチ。小籠包は行列に並ぶ価値があります' },
-        { time: '14:00', activity: '徒歩4分でザ・マーキュリービルのLENGOLFへ。午後のセッションを（1時間約550THB、最大5名まで／2026年7月現在）' },
+        { time: '14:00', activity: '徒歩11分でザ・マーキュリービルのLENGOLFへ。午後のセッションを（1時間約550THB、最大5名まで／2026年7月現在）' },
         { time: '16:00', activity: '戻る前に、ザ・マーキュリービルのSmith & Co.でコーヒーを一杯' },
         { time: '18:30', activity: 'Somboon Seafoodで名物のカニのカレー炒め（プーパッポンカリー）を。1969年から続くバンコクの老舗です' },
         { time: '20:30', activity: 'チットロムのスカイウォークを歩いてGaysorn Villageへ。ルーフトップのVanilla Sky Barで一杯' },
@@ -210,7 +210,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       suggested_itinerary: [
         { time: '10:00', activity: '호텔에서 아침을 먹고, 사람이 몰리기 전에 CentralWorld 쇼핑몰로 건너가 오전 쇼핑 즐기기' },
         { time: '12:30', activity: 'Din Tai Fung (CentralWorld 6층)에서 점심 — 샤오롱바오는 줄을 설 만한 가치가 있어요' },
-        { time: '14:00', activity: '4분만 걸어 Mercury Ville의 LENGOLF에서 오후 세션 (최대 5명까지 시간당 약 550바트, 2026년 7월 기준)' },
+        { time: '14:00', activity: '11분만 걸어 Mercury Ville의 LENGOLF에서 오후 세션 (최대 5명까지 시간당 약 550바트, 2026년 7월 기준)' },
         { time: '16:00', activity: '돌아가는 길에 Mercury Ville 안 Smith & Co.에서 커피 한 잔' },
         { time: '18:30', activity: 'Somboon Seafood에서 저녁 — 1969년부터 이어져 온 방콕의 명소로, 커리 크랩이 유명해요' },
         { time: '20:30', activity: '칫롬 스카이워크를 따라 저녁 산책을 하고 Gaysorn Village까지 걸어가 Vanilla Sky Bar에서 루프톱 한 잔' },
@@ -265,7 +265,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       suggested_itinerary: [
         { time: '10:00', activity: '在酒店吃过早餐，趁人潮还没涌进来，走到对面的CentralWorld逛一逛' },
         { time: '12:30', activity: '在Din Tai Fung（CentralWorld 6楼）吃午饭——小笼包值得排这个队' },
-        { time: '14:00', activity: '步行4分钟到Mercury Ville里的LENGOLF打一场下午的球（每小时约550泰铢，最多5人）' },
+        { time: '14:00', activity: '步行11分钟到Mercury Ville里的LENGOLF打一场下午的球（每小时约550泰铢，最多5人）' },
         { time: '16:00', activity: '回程前先到Mercury Ville的Smith & Co.喝杯咖啡' },
         { time: '18:30', activity: '到Somboon Seafood吃招牌咖喱蟹——1969年开业至今的曼谷老字号' },
         { time: '20:30', activity: '晚上沿Chidlom空中步道散步到Gaysorn Village，在Vanilla Sky Bar的天台上喝一杯' },

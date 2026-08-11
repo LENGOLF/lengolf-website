@@ -10,7 +10,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     slug: 'best-team-building-activities-bangkok',
     title: 'Best Team Building Activities in Bangkok (2026)',
     meta_description:
-      'Looking for the best team building activities in Bangkok? We ranked the top 7 options — from golf simulators and cooking classes to muay thai. Honest pros, cons, and pricing.',
+      'Looking for the best team building activities in Bangkok? We ranked the top 6 options — from golf simulators and cooking classes to muay thai. Honest pros, cons, and pricing.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
