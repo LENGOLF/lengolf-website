@@ -3982,7 +3982,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           rank: 4,
           name: 'Royal Golf & Country Club',
           description:
-            'Popular 18-hole course 45 minutes northeast of Bangkok in Min Buri. Good condition, reasonable green fees (1,800–2,500 THB), and relatively easy to get a tee time. Not the most challenging layout but a reliable option for mid-week golf. Popular with expat golfers based on Sukhumvit.',
+            'Popular 18-hole course about 35 minutes east of Bangkok near Suvarnabhumi Airport. Good condition, reasonable green fees (3,500–4,500 THB), and relatively easy to get a tee time. Not the most challenging layout but a reliable option for mid-week golf. Popular with expat golfers based on Sukhumvit.',
           pros: [
             'One of the most accessible courses from central Bangkok',
             'Reasonable green fees',
@@ -3993,7 +3993,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
             'Course condition varies seasonally',
           ],
           is_lengolf: false,
-          address: 'Minburi, Bangkok (eastern suburbs)',
+          address: 'Racha Thewa, Samut Prakan (near Suvarnabhumi Airport)',
           website: undefined,
         },
         {
@@ -4144,7 +4144,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           rank: 4,
           name: 'Royal Golf & Country Club',
           description:
-            'สนาม 18 หลุมยอดนิยม ห่างจากกรุงเทพฯ ไปทางตะวันออกเฉียงเหนือ 45 นาที ในเขตมีนบุรี สภาพสนามดี ค่ากรีนฟีสมเหตุสมผล (1,800-2,500 บาท) และจองทีไทม์ได้ค่อนข้างง่าย เลย์เอาต์ไม่ได้ท้าทายที่สุด แต่เป็นตัวเลือกที่ไว้ใจได้สำหรับการออกรอบกลางสัปดาห์ เป็นที่นิยมในหมู่นักกอล์ฟชาวต่างชาติที่พักอยู่ย่านสุขุมวิท',
+            'สนาม 18 หลุมยอดนิยม ห่างจากกรุงเทพฯ ไปทางตะวันออกราว 35 นาที ใกล้สนามบินสุวรรณภูมิ สภาพสนามดี ค่ากรีนฟีสมเหตุสมผล (3,500-4,500 บาท) และจองทีไทม์ได้ค่อนข้างง่าย เลย์เอาต์ไม่ได้ท้าทายที่สุด แต่เป็นตัวเลือกที่ไว้ใจได้สำหรับการออกรอบกลางสัปดาห์ เป็นที่นิยมในหมู่นักกอล์ฟชาวต่างชาติที่พักอยู่ย่านสุขุมวิท',
           pros: [
             'เป็นหนึ่งในสนามที่ไปถึงได้ง่ายที่สุดจากใจกลางกรุงเทพฯ',
             'ค่ากรีนฟีสมเหตุสมผล',
@@ -4155,7 +4155,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
             'สภาพสนามเปลี่ยนไปตามฤดูกาล',
           ],
           is_lengolf: false,
-          address: 'Minburi, Bangkok (eastern suburbs)',
+          address: 'Racha Thewa, Samut Prakan (near Suvarnabhumi Airport)',
           website: undefined,
         },
         {
@@ -4219,10 +4219,10 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
   },
 
   // ─── JA: best-golf-experiences-bangkok ───
-  // Every green fee carried from THIS entry only (Alpine 2,500〜3,500 / 3,500〜4,500THB,
-  // 合計4,000〜6,000THB, Nikanti 3,000〜4,500THB, Royal 1,800〜2,500THB, Sinthorn
-  // 200〜400THB, Muang Ake 1,200THB〜) — they disagree with data/golf-courses/*, which is
-  // reported, not silently reconciled. Glossary terms used: グリーンフィー, キャディー,
+  // Green fees for Alpine (5,400/7,400), Nikanti (5,500/6,500 all-inclusive),
+  // Muang Ake (700/1,030) and Royal (3,500/4,500, Suvarnabhumi-airport course
+  // in Samut Prakan) were reconciled to the attested data/golf-courses/* files
+  // per owner decision. Glossary terms used: グリーンフィー, キャディー,
   // ティータイム, ドライビングレンジ. PGA claim stays 'タイPGA認定コーチ' — no Japanese-
   // language or Japanese-coach claim is made anywhere.
   {
@@ -4306,7 +4306,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           rank: 4,
           name: 'Royal Golf & Country Club',
           description:
-            'バンコクの北東45分、ミンブリーにある人気の18ホールコース。コンディションは良好、グリーンフィーも1,800〜2,500THBと手頃で、ティータイムも比較的取りやすい。難度が高いレイアウトではありませんが、平日のゴルフには安心して選べます。スクンビット在住の外国人ゴルファーによく利用されています。',
+            'バンコクの東およそ35分、スワンナプーム空港近くにある人気の18ホールコース。コンディションは良好、グリーンフィーも3,500〜4,500THBと手頃で、ティータイムも比較的取りやすい。難度が高いレイアウトではありませんが、平日のゴルフには安心して選べます。スクンビット在住の外国人ゴルファーによく利用されています。',
           pros: [
             'バンコク中心部から最もアクセスしやすいコースのひとつ',
             '手頃なグリーンフィー',
@@ -4317,7 +4317,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
             'コースコンディションは季節によって変動します',
           ],
           is_lengolf: false,
-          address: 'Minburi, Bangkok (eastern suburbs)',
+          address: 'Racha Thewa, Samut Prakan (near Suvarnabhumi Airport)',
           website: undefined,
         },
         {
@@ -4471,7 +4471,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           rank: 4,
           name: 'Royal Golf & Country Club',
           description:
-            '방콕 북동쪽 Min Buri에 있는 인기 18홀 코스로, 차로 45분 거리예요. 관리 상태가 좋고 그린피도 합리적이며(1,800~2,500바트), 티타임 잡기도 비교적 쉬워요. 난도가 높은 레이아웃은 아니지만 주중 골프에는 믿음직한 선택지예요. Sukhumvit에 사는 외국인 골퍼들에게 인기가 많아요.',
+            '방콕 동쪽, 수완나품 공항 근처에 있는 인기 18홀 코스로, 차로 약 35분 거리예요. 관리 상태가 좋고 그린피도 합리적이며(3,500~4,500바트), 티타임 잡기도 비교적 쉬워요. 난도가 높은 레이아웃은 아니지만 주중 골프에는 믿음직한 선택지예요. Sukhumvit에 사는 외국인 골퍼들에게 인기가 많아요.',
           pros: [
             '방콕 도심에서 접근성이 가장 좋은 코스 중 하나예요',
             '그린피가 합리적이에요',
@@ -4482,7 +4482,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
             '계절에 따라 코스 상태 편차가 있어요',
           ],
           is_lengolf: false,
-          address: 'Minburi, Bangkok (eastern suburbs)',
+          address: 'Racha Thewa, Samut Prakan (near Suvarnabhumi Airport)',
           website: undefined,
         },
         {
@@ -4633,7 +4633,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           rank: 4,
           name: 'Royal Golf & Country Club',
           description:
-            '位于曼谷东北方向Min Buri的热门18洞球场，车程45分钟。球场状态不错，果岭费合理（1,800–2,500泰铢），开球时间也相对好订。布局谈不上最有挑战，但作为工作日打球的稳妥选择很够用。住在Sukhumvit的外籍球友很喜欢这里。',
+            '位于曼谷东侧、素万那普机场附近的热门18洞球场，车程约35分钟。球场状态不错，果岭费合理（3,500–4,500泰铢），开球时间也相对好订。布局谈不上最有挑战，但作为工作日打球的稳妥选择很够用。住在Sukhumvit的外籍球友很喜欢这里。',
           pros: [
             '是从曼谷市中心最容易到达的球场之一',
             '果岭费合理',
@@ -4644,7 +4644,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
             '球场状态随季节波动',
           ],
           is_lengolf: false,
-          address: 'Minburi, Bangkok (eastern suburbs)',
+          address: 'Racha Thewa, Samut Prakan (near Suvarnabhumi Airport)',
           website: undefined,
         },
         {
