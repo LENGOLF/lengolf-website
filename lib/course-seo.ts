@@ -180,7 +180,7 @@ interface CourseFaqL10n {
     province: string | undefined
   ): string
   caddieQuestion(name: string): string
-  caddieAnswer(name: string, required: boolean, fee: number | null): string
+  caddieAnswer(name: string, required: boolean, fee: number | null, tipIncluded: boolean): string
   rentalQuestion(name: string): string
   rentalAnswer(name: string, availability: boolean | null, fee: number | null): string
 }
@@ -272,10 +272,13 @@ const FAQ_L10N: Record<CourseSeoLocale, CourseFaqL10n> = {
       return answer + `. The course is in ${province}.`
     },
     caddieQuestion: (name) => `Do I need a caddie at ${name}?`,
-    caddieAnswer: (name, required, fee) => {
+    caddieAnswer: (name, required, fee, tipIncluded) => {
       const feeNote = fee ? `, with a caddie fee of about ${thb(fee)} per round` : ''
+      const tipNote = tipIncluded
+        ? ' The green fee is all-inclusive, so the caddie tip is already covered — no extra tipping is expected.'
+        : ' Caddie tips (typically 300–500 THB) are customary on top.'
       return required
-        ? `Yes — caddies are mandatory at ${name}${feeNote}. Caddie tips (typically 300–500 THB) are customary on top.`
+        ? `Yes — caddies are mandatory at ${name}${feeNote}.${tipNote}`
         : `Caddies are optional at ${name}${feeNote}.`
     },
     rentalQuestion: (name) => `Can I rent golf clubs to play ${name}?`,
@@ -324,10 +327,13 @@ const FAQ_L10N: Record<CourseSeoLocale, CourseFaqL10n> = {
       return answer
     },
     caddieQuestion: (name) => `ต้องใช้แคดดี้ที่ ${name} หรือไม่`,
-    caddieAnswer: (name, required, fee) => {
+    caddieAnswer: (name, required, fee, tipIncluded) => {
       const feeNote = fee ? ` โดยมีค่าแคดดี้ประมาณ ${n(fee)} บาทต่อรอบ` : ''
+      const tipNote = tipIncluded
+        ? ` ค่ากรีนฟีเป็นแบบรวมทุกอย่าง ทิปแคดดี้จึงรวมอยู่ในราคาแล้ว ไม่ต้องจ่ายเพิ่ม`
+        : ` และตามธรรมเนียมจะมีทิปแคดดี้เพิ่มอีกประมาณ 300-500 บาท`
       return required
-        ? `จำเป็น — ${name} กำหนดให้ใช้แคดดี้${feeNote} และตามธรรมเนียมจะมีทิปแคดดี้เพิ่มอีกประมาณ 300-500 บาท`
+        ? `จำเป็น — ${name} กำหนดให้ใช้แคดดี้${feeNote}${tipNote}`
         : `แคดดี้เป็นทางเลือกที่ ${name}${feeNote}`
     },
     rentalQuestion: (name) => `เช่าไม้กอล์ฟเพื่อออกรอบที่ ${name} ได้หรือไม่`,
@@ -378,10 +384,13 @@ const FAQ_L10N: Record<CourseSeoLocale, CourseFaqL10n> = {
       return answer
     },
     caddieQuestion: (name) => `${name}ではキャディーは必要ですか？`,
-    caddieAnswer: (name, required, fee) => {
+    caddieAnswer: (name, required, fee, tipIncluded) => {
       const feeNote = fee ? `（キャディーフィーは1ラウンド約${n(fee)}THB）` : ''
+      const tipNote = tipIncluded
+        ? `グリーンフィーはオールインクルーシブで、キャディーへのチップも料金に含まれているため、別途のチップは不要です。`
+        : `慣習として、これとは別にキャディーへのチップ（通常300〜500THB）を渡します。`
       return required
-        ? `はい — ${name}ではキャディーの同伴が必須です${feeNote}。慣習として、これとは別にキャディーへのチップ（通常300〜500THB）を渡します。`
+        ? `はい — ${name}ではキャディーの同伴が必須です${feeNote}。${tipNote}`
         : `${name}ではキャディーの利用は任意です${feeNote}。`
     },
     rentalQuestion: (name) => `${name}でプレーする際にゴルフクラブをレンタルできますか？`,
@@ -442,10 +451,13 @@ const FAQ_L10N: Record<CourseSeoLocale, CourseFaqL10n> = {
       return answer
     },
     caddieQuestion: (name) => `${name}에서 캐디가 필요한가요?`,
-    caddieAnswer: (name, required, fee) => {
+    caddieAnswer: (name, required, fee, tipIncluded) => {
       const feeNote = fee ? ` (캐디피는 1라운드 약 ${n(fee)}바트)` : ''
+      const tipNote = tipIncluded
+        ? ` 그린피가 올인클루시브라 캐디 팁도 요금에 포함되어 있어, 별도로 팁을 건넬 필요가 없습니다.`
+        : ` 관례상 이와 별도로 캐디 팁(보통 300~500바트)을 따로 건넵니다.`
       return required
-        ? `네 — ${name}에서는 캐디 동반이 필수입니다${feeNote}. 관례상 이와 별도로 캐디 팁(보통 300~500바트)을 따로 건넵니다.`
+        ? `네 — ${name}에서는 캐디 동반이 필수입니다${feeNote}.${tipNote}`
         : `${name}에서 캐디 이용은 선택 사항입니다${feeNote}.`
     },
     rentalQuestion: (name) => `${name}에서 플레이할 때 골프 클럽을 대여할 수 있나요?`,
@@ -500,10 +512,13 @@ const FAQ_L10N: Record<CourseSeoLocale, CourseFaqL10n> = {
       return answer
     },
     caddieQuestion: (name) => `在${name}打球需要球童吗？`,
-    caddieAnswer: (name, required, fee) => {
+    caddieAnswer: (name, required, fee, tipIncluded) => {
       const feeNote = fee ? `（球童费每轮约${n(fee)}泰铢）` : ''
+      const tipNote = tipIncluded
+        ? `果岭费为全包价，球童小费已包含在内，无需另付。`
+        : `按惯例还需另付球童小费，通常为300–500泰铢。`
       return required
-        ? `需要 — ${name}规定必须由球童陪同${feeNote}。按惯例还需另付球童小费，通常为300–500泰铢。`
+        ? `需要 — ${name}规定必须由球童陪同${feeNote}。${tipNote}`
         : `在${name}，是否请球童可自行选择${feeNote}。`
     },
     rentalQuestion: (name) => `在${name}打球可以租借球杆吗？`,
@@ -592,7 +607,7 @@ export function getCourseFaqs(course: GolfCourse, locale: CourseSeoLocale = 'en'
 
   faqs.push({
     question: L.caddieQuestion(name),
-    answer: L.caddieAnswer(name, course.caddie_required, course.caddie_fee_thb ?? null),
+    answer: L.caddieAnswer(name, course.caddie_required, course.caddie_fee_thb ?? null, course.caddie_tip_included ?? false),
   })
 
   faqs.push({

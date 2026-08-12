@@ -40,6 +40,8 @@ export interface GolfCourse {
   caddie_fee_thb: number | null
   cart_fee_thb: number | null
   caddie_required: boolean
+  /** Green fee is all-inclusive of the caddie tip (no extra tipping expected). */
+  caddie_tip_included?: boolean
   cart_required: boolean
   driving_range: boolean | null
   website: string | null
