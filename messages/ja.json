@@ -1472,7 +1472,7 @@
     "mapHeading": "地図とルート",
     "mapTitle": "{hotel}からLENGOLFまでの地図",
     "whyHeading": "滞在中にLENGOLFへ立ち寄る理由",
-    "whyBody": "LENGOLFは、ザ・マーキュリービル（BTSチットロム駅）にある屋内ゴルフシミュレーターバーです。{hotel}から徒歩{mins}分。Bravoの高精度シミュレーターとフルバー、冷房完備の空間が揃い、ゴルフ経験の有無を問わず滞在中の過ごし方として楽しめます。ベイの料金は1時間{rate}（最大{n}名）から。",
+    "whyBody": "LENGOLFは、ザ・マーキュリービル（BTSチットロム駅）にある屋内ゴルフシミュレーターバーです。{hotel}から徒歩{mins}分。Bravoのプレミアムシミュレーターとフルバー、冷房完備の空間が揃い、ゴルフ経験の有無を問わず滞在中の過ごし方として楽しめます。ベイの料金は1時間{rate}（最大{n}名）から。",
     "pillClubs": "プレミアムクラブレンタル 1時間{rate}から",
     "walkableHeading": "{hotel}からLENGOLFまで歩けますか",
     "walkableNearLead": "はい、無理なく歩けます。",
