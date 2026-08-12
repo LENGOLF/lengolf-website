@@ -922,7 +922,7 @@ export default async function GolfInThailandGuidePage({
                   LENGOLF club rental
                 </p>
                 <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.8)' }}>
-                  Callaway Warbird (men&apos;s) and Majesty Shuttle (women&apos;s) from ฿150/hr for simulator sessions. Callaway Paradym Forged Carbon available as a premium upgrade. Course rental from ฿1,200/day.
+                  Callaway Warbird (men&apos;s) and Callaway REVA (women&apos;s) from ฿150/hr for simulator sessions. Callaway Paradym Forged Carbon available as a premium upgrade. Course rental from ฿1,200/day.
                 </p>
                 <Link
                   href="/golf-course-club-rental"

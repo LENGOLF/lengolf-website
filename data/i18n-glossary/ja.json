@@ -69,9 +69,9 @@
   "transliterations": {
     "Chidlom": "チットロム",
     "The Mercury Ville": "ザ・マーキュリービル",
-    "Majesty": "マジェスティ",
+    "REVA": "レヴァ",
     "Bangkok": "バンコク",
-    "note": "In JA prose, BTS station and building names are transliterated to katakana (BTSチットロム駅, ザ・マーキュリービル4階). 'The Mercury Ville' / 'Mercury Ville' in Latin is also attested and acceptable in address-like contexts. Latin brand/product names are glossed once with katakana in parens on first use: Majesty（マジェスティ）. Keep LENGOLF, len.golf, BTS, MRT, PGA, LINE @lengolf, booking.len.golf, and Callaway verbatim. NOTE: transliterating Chidlom/Mercury Ville is intentional JA-prose style and diverges from the Latin-verbatim brand_immutable list (which governs the pure-TS lexicon check for UI strings) — do not 'correct' チットロム／ザ・マーキュリービル in shipped JA guide copy."
+    "note": "In JA prose, BTS station and building names are transliterated to katakana (BTSチットロム駅, ザ・マーキュリービル4階). 'The Mercury Ville' / 'Mercury Ville' in Latin is also attested and acceptable in address-like contexts. Latin brand/product names are glossed once with katakana in parens on first use: REVA（レヴァ）. Keep LENGOLF, len.golf, BTS, MRT, PGA, LINE @lengolf, booking.len.golf, and Callaway verbatim. NOTE: transliterating Chidlom/Mercury Ville is intentional JA-prose style and diverges from the Latin-verbatim brand_immutable list (which governs the pure-TS lexicon check for UI strings) — do not 'correct' チットロム／ザ・マーキュリービル in shipped JA guide copy."
   },
   "seo_norms": {
     "title_display_target": "~32 full-width characters before SERP truncation; front-load the target query, then a descriptive tail after an em dash — (shipped guide titles run 34–65 chars, acceptable for the tail).",
@@ -82,7 +82,7 @@
     "Anti-repetition: vary sentence-final forms; do not end three consecutive sentences with です。 Mix in ます／体言止め where natural.",
     "Half-width digits and Latin units (kg, THB) inside Japanese text; no space between number and unit (6kg, 1,800THB).",
     "No exclamation marks, no emoji. Friendly-professional です/ます調 throughout.",
-    "Gloss a Latin brand/product name once with katakana in parens on first use (Majesty（マジェスティ）), then either form.",
+    "Gloss a Latin brand/product name once with katakana in parens on first use (REVA（レヴァ）), then either form.",
     "Em dash — (spaced) for asides; wave dash 〜 for numeric ranges."
   ]
 }

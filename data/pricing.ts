@@ -270,7 +270,7 @@ export const golfFaqItems = [
   },
   {
     question: 'Do I need to bring my own golf clubs?',
-    answer: 'No, standard club sets are provided free with every bay rental, including ladies\' sets. We also offer premium club rentals — Callaway Warbird (men\'s) and Majesty Shuttle (women\'s) — starting at 150 THB per hour. Premium clubs can be used in-house or taken to any golf course in Bangkok. See our club rental page for full details and pricing. You\'re always welcome to bring your own clubs too.',
+    answer: 'No, standard club sets are provided free with every bay rental, including ladies\' sets. We also offer premium club rentals — Callaway Warbird (men\'s) and Callaway REVA (women\'s) — starting at 150 THB per hour. Premium clubs can be used in-house or taken to any golf course in Bangkok. See our club rental page for full details and pricing. You\'re always welcome to bring your own clubs too.',
   },
   {
     question: 'How many people can play per bay?',
@@ -325,7 +325,7 @@ export interface ClubRentalFeature {
 }
 
 export const clubRentalWhyChoose: ClubRentalFeature[] = [
-  { title: 'Premium Quality', description: 'Callaway Warbird and Majesty Shuttle — trusted brands used by pros and amateurs worldwide', icon: 'award' },
+  { title: 'Premium Quality', description: 'Callaway Warbird and Callaway REVA — trusted brands used by pros and amateurs worldwide', icon: 'award' },
   { title: 'Use Anywhere + Delivery', description: 'Rent for in-house play or take clubs to any golf course in Bangkok with same-day delivery', icon: 'map-pin' },
   { title: 'Flexible Duration', description: 'Hourly, half-day, or full-day rental — pay only for the time you need', icon: 'clock' },
   { title: 'Easy Booking', description: 'Reserve clubs online at booking.len.golf or walk in — no deposit required', icon: 'calendar' },
@@ -336,11 +336,11 @@ export const clubRentalWhyChoose: ClubRentalFeature[] = [
 export const clubRentalFaqItems = [
   {
     question: 'Can tourists rent golf clubs at LENGOLF?',
-    answer: 'Absolutely! We welcome tourists and visitors. Standard clubs are free with any bay booking, and premium Callaway/Majesty sets start at just 150 THB per hour. No membership or deposit required — just walk in or book online at booking.len.golf.',
+    answer: 'Absolutely! We welcome tourists and visitors. Standard clubs are free with any bay booking, and premium Callaway sets start at just 150 THB per hour. No membership or deposit required — just walk in or book online at booking.len.golf.',
   },
   {
     question: 'What brands are available for premium club rental?',
-    answer: 'We offer Callaway Warbird full sets for men and Majesty Shuttle full sets for women. Both include driver, fairway woods, irons (5–PW), and putter. These are current-generation clubs maintained to high standards.',
+    answer: 'We offer Callaway Warbird full sets for men and Callaway REVA full sets for women. Both include driver, fairway woods, irons (5–PW), and putter. These are current-generation clubs maintained to high standards.',
   },
   {
     question: 'Can I use rented clubs outside of LENGOLF?',
@@ -443,7 +443,7 @@ export const homeFaqItems = [
   },
   {
     question: 'Do I need to bring my own golf clubs?',
-    answer: 'No — standard golf club sets are provided free with every bay booking, including ladies\' sets. We also offer premium Callaway Warbird and Majesty Shuttle rentals from 150 THB per hour. Visit our club rental page for details.',
+    answer: 'No — standard golf club sets are provided free with every bay booking, including ladies\' sets. We also offer premium Callaway Warbird and Callaway REVA rentals from 150 THB per hour. Visit our club rental page for details.',
   },
   {
     question: 'Do you offer golf lessons?',

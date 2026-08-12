@@ -838,7 +838,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
       sections: [
         {
           heading: 'LENGOLF: Full Rate Card',
-          body: 'LENGOLF is at Mercury Ville, directly connected to BTS Chidlom (Exit 4). Weekday rates: 550 THB/hr before 14:00, 750 THB/hr from 14:00–23:00. Weekend/holiday rates: 750 THB/hr before 14:00, 950 THB/hr from 14:00–23:00. All prices per bay (up to 5 players), inclusive of VAT. Free standard club rental is included with every booking. Premium club rental (Callaway, Majesty) is available from 150 THB/hr. Monthly packages: Bronze (5 hrs, 3,000 THB), Silver (15 hrs, 8,000 THB), Gold (30 hrs, 14,000 THB), Diamond Unlimited (8,000 THB/month), Diamond+ Unlimited (18,000 THB/3 months). Early Bird packages (before 14:00 only): 10 hrs for 4,800 THB, or unlimited for 5,000 THB/month.',
+          body: 'LENGOLF is at Mercury Ville, directly connected to BTS Chidlom (Exit 4). Weekday rates: 550 THB/hr before 14:00, 750 THB/hr from 14:00–23:00. Weekend/holiday rates: 750 THB/hr before 14:00, 950 THB/hr from 14:00–23:00. All prices per bay (up to 5 players), inclusive of VAT. Free standard club rental is included with every booking. Premium club rental (Callaway) is available from 150 THB/hr. Monthly packages: Bronze (5 hrs, 3,000 THB), Silver (15 hrs, 8,000 THB), Gold (30 hrs, 14,000 THB), Diamond Unlimited (8,000 THB/month), Diamond+ Unlimited (18,000 THB/3 months). Early Bird packages (before 14:00 only): 10 hrs for 4,800 THB, or unlimited for 5,000 THB/month.',
         },
         {
           heading: 'Front 9: Full Rate Card',
@@ -1011,7 +1011,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
       sections: [
         {
           heading: 'LENGOLF: อัตราค่าบริการทั้งหมด',
-          body: 'LENGOLF อยู่ที่ Mercury Ville เชื่อมต่อโดยตรงกับ BTS ชิดลม (ทางออก 4) อัตราวันธรรมดา 550 บาท/ชั่วโมง ก่อน 14:00 น. และ 750 บาท/ชั่วโมง ตั้งแต่ 14:00-23:00 น. อัตราวันหยุดสุดสัปดาห์และวันนักขัตฤกษ์ 750 บาท/ชั่วโมง ก่อน 14:00 น. และ 950 บาท/ชั่วโมง ตั้งแต่ 14:00-23:00 น. ทุกราคาคิดต่อเบย์ (ผู้เล่นสูงสุด 5 คน) และรวมภาษีมูลค่าเพิ่มแล้ว ทุกการจองรวมบริการเช่าไม้กอล์ฟมาตรฐานฟรี ส่วนไม้กอล์ฟระดับพรีเมียม (Callaway, Majesty) เช่าได้เริ่มต้น 150 บาท/ชั่วโมง แพ็กเกจรายเดือนมี Bronze (5 ชั่วโมง 3,000 บาท) Silver (15 ชั่วโมง 8,000 บาท) Gold (30 ชั่วโมง 14,000 บาท) Diamond Unlimited (8,000 บาท/เดือน) และ Diamond+ Unlimited (18,000 บาท/3 เดือน) ส่วนแพ็กเกจ Early Bird (ใช้ได้ก่อน 14:00 น. เท่านั้น) อยู่ที่ 10 ชั่วโมง 4,800 บาท หรือไม่จำกัดชั่วโมง 5,000 บาท/เดือน',
+          body: 'LENGOLF อยู่ที่ Mercury Ville เชื่อมต่อโดยตรงกับ BTS ชิดลม (ทางออก 4) อัตราวันธรรมดา 550 บาท/ชั่วโมง ก่อน 14:00 น. และ 750 บาท/ชั่วโมง ตั้งแต่ 14:00-23:00 น. อัตราวันหยุดสุดสัปดาห์และวันนักขัตฤกษ์ 750 บาท/ชั่วโมง ก่อน 14:00 น. และ 950 บาท/ชั่วโมง ตั้งแต่ 14:00-23:00 น. ทุกราคาคิดต่อเบย์ (ผู้เล่นสูงสุด 5 คน) และรวมภาษีมูลค่าเพิ่มแล้ว ทุกการจองรวมบริการเช่าไม้กอล์ฟมาตรฐานฟรี ส่วนไม้กอล์ฟระดับพรีเมียม (Callaway) เช่าได้เริ่มต้น 150 บาท/ชั่วโมง แพ็กเกจรายเดือนมี Bronze (5 ชั่วโมง 3,000 บาท) Silver (15 ชั่วโมง 8,000 บาท) Gold (30 ชั่วโมง 14,000 บาท) Diamond Unlimited (8,000 บาท/เดือน) และ Diamond+ Unlimited (18,000 บาท/3 เดือน) ส่วนแพ็กเกจ Early Bird (ใช้ได้ก่อน 14:00 น. เท่านั้น) อยู่ที่ 10 ชั่วโมง 4,800 บาท หรือไม่จำกัดชั่วโมง 5,000 บาท/เดือน',
         },
         {
           heading: 'Front 9: อัตราค่าบริการทั้งหมด',
@@ -1193,7 +1193,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
       sections: [
         {
           heading: 'LENGOLF — 料金表のすべて',
-          body: 'LENGOLFはザ・マーキュリービル内にあり、BTSチットロム駅（4番出口）から直結しています。平日は14:00までが1時間550THB、14:00〜23:00が1時間750THB。週末と祝日は14:00までが1時間750THB、14:00〜23:00が1時間950THB。すべて1ベイあたり（最大5名）の料金で、VAT込みです。標準クラブのレンタルはご予約ごとに無料で付属します。プレミアムクラブのレンタル（Callaway、Majesty（マジェスティ））は1時間150THBから。月額パッケージはBronze（5時間・3,000THB）、Silver（15時間・8,000THB）、Gold（30時間・14,000THB）、Diamond Unlimited（月額8,000THB）、Diamond+ Unlimited（3か月18,000THB）。Early Birdパッケージ（14:00までの利用限定）は10時間4,800THB、または月額5,000THBの無制限プランです。',
+          body: 'LENGOLFはザ・マーキュリービル内にあり、BTSチットロム駅（4番出口）から直結しています。平日は14:00までが1時間550THB、14:00〜23:00が1時間750THB。週末と祝日は14:00までが1時間750THB、14:00〜23:00が1時間950THB。すべて1ベイあたり（最大5名）の料金で、VAT込みです。標準クラブのレンタルはご予約ごとに無料で付属します。プレミアムクラブのレンタル（Callaway（マジェスティ））は1時間150THBから。月額パッケージはBronze（5時間・3,000THB）、Silver（15時間・8,000THB）、Gold（30時間・14,000THB）、Diamond Unlimited（月額8,000THB）、Diamond+ Unlimited（3か月18,000THB）。Early Birdパッケージ（14:00までの利用限定）は10時間4,800THB、または月額5,000THBの無制限プランです。',
         },
         {
           heading: 'Front 9 — 料金表のすべて',
@@ -1376,7 +1376,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
       sections: [
         {
           heading: 'LENGOLF: 전체 요금표',
-          body: 'LENGOLF는 BTS 칫롬역(4번 출구)과 바로 연결되는 Mercury Ville에 있어요. 평일 요금은 14:00 이전 시간당 550바트, 14:00~23:00 시간당 750바트예요. 주말과 공휴일은 14:00 이전 시간당 750바트, 14:00~23:00 시간당 950바트고요. 모든 요금은 베이 단위(최대 5명)에 VAT가 포함된 금액이에요. 예약할 때마다 기본 클럽 대여가 무료로 포함되고, 프리미엄 클럽(Callaway, Majesty) 대여는 시간당 150바트부터예요. 월 패키지는 Bronze(5시간, 3,000바트), Silver(15시간, 8,000바트), Gold(30시간, 14,000바트), Diamond 무제한(월 8,000바트), Diamond+ 무제한(3개월 18,000바트)이 있어요. Early Bird 패키지(14:00 이전 전용)는 10시간 4,800바트, 무제한은 월 5,000바트예요.',
+          body: 'LENGOLF는 BTS 칫롬역(4번 출구)과 바로 연결되는 Mercury Ville에 있어요. 평일 요금은 14:00 이전 시간당 550바트, 14:00~23:00 시간당 750바트예요. 주말과 공휴일은 14:00 이전 시간당 750바트, 14:00~23:00 시간당 950바트고요. 모든 요금은 베이 단위(최대 5명)에 VAT가 포함된 금액이에요. 예약할 때마다 기본 클럽 대여가 무료로 포함되고, 프리미엄 클럽(Callaway) 대여는 시간당 150바트부터예요. 월 패키지는 Bronze(5시간, 3,000바트), Silver(15시간, 8,000바트), Gold(30시간, 14,000바트), Diamond 무제한(월 8,000바트), Diamond+ 무제한(3개월 18,000바트)이 있어요. Early Bird 패키지(14:00 이전 전용)는 10시간 4,800바트, 무제한은 월 5,000바트예요.',
         },
         {
           heading: 'Front 9: 전체 요금표',
@@ -1561,7 +1561,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
       sections: [
         {
           heading: 'LENGOLF：完整价目表',
-          body: 'LENGOLF位于Mercury Ville，与BTS Chidlom站（4号出口）直接相连。平日价格：14:00前550泰铢/小时，14:00–23:00为750泰铢/小时。周末与节假日：14:00前750泰铢/小时，14:00–23:00为950泰铢/小时。所有价格按球位计（最多5人），已含增值税。每次预订都免费包含标准球杆租借。高级球杆租借（Callaway、Majesty）每小时150泰铢起。月卡套餐：Bronze（5小时，3,000泰铢）、Silver（15小时，8,000泰铢）、Gold（30小时，14,000泰铢）、Diamond不限时（8,000泰铢/月）、Diamond+不限时（18,000泰铢/3个月）。Early Bird套餐仅限14:00前使用：10小时4,800泰铢，或不限时5,000泰铢/月。',
+          body: 'LENGOLF位于Mercury Ville，与BTS Chidlom站（4号出口）直接相连。平日价格：14:00前550泰铢/小时，14:00–23:00为750泰铢/小时。周末与节假日：14:00前750泰铢/小时，14:00–23:00为950泰铢/小时。所有价格按球位计（最多5人），已含增值税。每次预订都免费包含标准球杆租借。高级球杆租借（Callaway）每小时150泰铢起。月卡套餐：Bronze（5小时，3,000泰铢）、Silver（15小时，8,000泰铢）、Gold（30小时，14,000泰铢）、Diamond不限时（8,000泰铢/月）、Diamond+不限时（18,000泰铢/3个月）。Early Bird套餐仅限14:00前使用：10小时4,800泰铢，或不限时5,000泰铢/月。',
         },
         {
           heading: 'Front 9：完整价目表',
@@ -1650,7 +1650,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: 'Small Event Package (10–15 guests)', price: '9,999 THB', notes: '2 bays, 3 hours. Includes 10 beers, 5 cocktails, unlimited soft drinks, food.' },
         { item: 'Medium Event Package (15–25 guests)', price: '21,999 THB', notes: '4 bays (exclusive), 3 hours. Includes 20 beers, 10 cocktails, unlimited soft drinks, food.' },
         { item: 'Standard club rental', price: 'Free', notes: 'Included with every bay booking. Men\'s and ladies\' sets available.' },
-        { item: 'Premium club rental (Callaway / Majesty)', price: '150 THB/hr', notes: '250 THB/2hr, 400 THB/4hr, 1,200 THB/day. Can be taken off-site.' },
+        { item: 'Premium club rental (Callaway)', price: '150 THB/hr', notes: '250 THB/2hr, 400 THB/4hr, 1,200 THB/day. Can be taken off-site.' },
       ],
       comparison_with_alternatives:
         'All LENGOLF prices are inclusive of VAT. What you see is what you pay — no hidden fees, no joining fees, no minimum spend requirements. Standard club rental is free with every bay booking, which is unique among Bangkok simulator venues. Our monthly packages provide the best per-hour rates in the city: the Diamond+ Unlimited package at 18,000 THB for 3 months of unlimited play is unmatched for regular golfers.',
@@ -1718,7 +1718,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: 'แพ็กเกจจัดงานขนาดเล็ก (10-15 คน)', price: '9,999 บาท', notes: '2 เบย์ 3 ชั่วโมง รวมเบียร์ 10 ขวด ค็อกเทล 5 แก้ว น้ำอัดลมไม่จำกัด และอาหาร' },
         { item: 'แพ็กเกจจัดงานขนาดกลาง (15-25 คน)', price: '21,999 บาท', notes: '4 เบย์ (เหมาทั้งร้าน) 3 ชั่วโมง รวมเบียร์ 20 ขวด ค็อกเทล 10 แก้ว น้ำอัดลมไม่จำกัด และอาหาร' },
         { item: 'เช่าไม้กอล์ฟชุดมาตรฐาน', price: 'ฟรี', notes: 'รวมอยู่ในทุกการจองเบย์ มีทั้งชุดผู้ชายและผู้หญิง' },
-        { item: 'เช่าไม้กอล์ฟชุดพรีเมียม (Callaway / Majesty)', price: '150 บาท/ชม.', notes: '250 บาท/2 ชม. 400 บาท/4 ชม. 1,200 บาท/วัน นำออกไปใช้นอกสถานที่ได้' },
+        { item: 'เช่าไม้กอล์ฟชุดพรีเมียม (Callaway)', price: '150 บาท/ชม.', notes: '250 บาท/2 ชม. 400 บาท/4 ชม. 1,200 บาท/วัน นำออกไปใช้นอกสถานที่ได้' },
       ],
       comparison_with_alternatives:
         'ราคาทั้งหมดของ LENGOLF รวมภาษีมูลค่าเพิ่มแล้ว เห็นราคาเท่าไรก็จ่ายเท่านั้น ไม่มีค่าใช้จ่ายแอบแฝง ไม่มีค่าสมัครสมาชิก และไม่มียอดใช้จ่ายขั้นต่ำ บริการเช่าไม้กอล์ฟชุดมาตรฐานฟรีในทุกการจองเบย์ ซึ่งเป็นสิ่งที่ไม่มีที่อื่นในบรรดาสถานที่กอล์ฟซิมูเลเตอร์ในกรุงเทพฯ ส่วนแพ็กเกจรายเดือนของเราให้ราคาต่อชั่วโมงที่ดีที่สุดในเมือง โดยเฉพาะแพ็กเกจ Diamond+ Unlimited ที่ 18,000 บาท สำหรับเล่นไม่จำกัด 3 เดือน ซึ่งหาที่เทียบได้ยากสำหรับนักกอล์ฟที่มาเป็นประจำ',
@@ -1795,7 +1795,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: 'スモールイベントパッケージ（10〜15名）', price: '9,999THB', notes: '2ベイ・3時間。ビール10杯、カクテル5杯、ソフトドリンク飲み放題、フード付き。' },
         { item: 'ミディアムイベントパッケージ（15〜25名）', price: '21,999THB', notes: '4ベイ貸切・3時間。ビール20杯、カクテル10杯、ソフトドリンク飲み放題、フード付き。' },
         { item: '標準クラブレンタル', price: '無料', notes: 'ベイのご予約すべてに含まれます。メンズ・レディースのセットをご用意しています。' },
-        { item: 'プレミアムクラブレンタル（Callaway / Majesty）', price: '1時間150THB', notes: '2時間250THB、4時間400THB、1日1,200THB。館外への持ち出しも可能です。' },
+        { item: 'プレミアムクラブレンタル（Callaway）', price: '1時間150THB', notes: '2時間250THB、4時間400THB、1日1,200THB。館外への持ち出しも可能です。' },
       ],
       comparison_with_alternatives:
         'LENGOLFの料金はすべてVAT込みです。表示どおりの金額でご利用いただけます——隠れた費用も、入会金も、最低利用金額もありません。標準クラブのレンタルがベイのご予約に無料で付く点は、バンコクのシミュレーター施設のなかでも独自のものです。月額パッケージは市内で最も良い1時間あたりの単価になり、なかでも3か月18,000THBのDiamond+ Unlimitedは、定期的にプレーされる方にとって比べるもののない内容です。',
@@ -1873,7 +1873,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: '소규모 이벤트 패키지 (10~15명)', price: '9,999바트', notes: '베이 2개, 3시간. 맥주 10잔, 칵테일 5잔, 소프트드링크 무제한, 음식 포함.' },
         { item: '중규모 이벤트 패키지 (15~25명)', price: '21,999바트', notes: '베이 4개(단독 이용), 3시간. 맥주 20잔, 칵테일 10잔, 소프트드링크 무제한, 음식 포함.' },
         { item: '기본 클럽 대여', price: '무료', notes: '모든 베이 예약에 포함돼요. 남성용과 여성용 세트가 있어요.' },
-        { item: '프리미엄 클럽 대여 (Callaway / Majesty)', price: '150바트/시간', notes: '2시간 250바트, 4시간 400바트, 하루 1,200바트. 외부로 가져가실 수 있어요.' },
+        { item: '프리미엄 클럽 대여 (Callaway)', price: '150바트/시간', notes: '2시간 250바트, 4시간 400바트, 하루 1,200바트. 외부로 가져가실 수 있어요.' },
       ],
       comparison_with_alternatives:
         'LENGOLF 요금은 모두 VAT가 포함된 금액이에요. 보이는 금액이 곧 내는 금액이라 숨은 비용도, 가입비도, 최소 결제 금액도 없어요. 기본 클럽 대여는 모든 베이 예약에 무료로 포함되는데, 방콕 시뮬레이터 매장 중에서는 드문 조건이에요. 월 패키지는 시내에서 시간당 단가가 가장 좋고, 특히 3개월 무제한 Diamond+ 18,000바트는 자주 치시는 분에게 견줄 곳이 없어요.',
@@ -1953,7 +1953,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: '小型活动套餐（10–15人）', price: '9,999泰铢', notes: '2个球位，3小时。含啤酒10瓶、鸡尾酒5杯、软饮无限畅饮及餐点。' },
         { item: '中型活动套餐（15–25人）', price: '21,999泰铢', notes: '4个球位（包场），3小时。含啤酒20瓶、鸡尾酒10杯、软饮无限畅饮及餐点。' },
         { item: '标准球杆租借', price: '免费', notes: '每次球位预订都包含。男士与女士套装皆有。' },
-        { item: '高级球杆租借（Callaway／Majesty）', price: '150泰铢/小时', notes: '2小时250泰铢，4小时400泰铢，全日1,200泰铢。可带出店外使用。' },
+        { item: '高级球杆租借（Callaway）', price: '150泰铢/小时', notes: '2小时250泰铢，4小时400泰铢，全日1,200泰铢。可带出店外使用。' },
       ],
       comparison_with_alternatives:
         'LENGOLF所有价格都已含增值税。看到多少就是付多少——没有隐藏费用，没有入会费，也没有最低消费。每次球位预订都免费提供标准球杆，这一点在曼谷的模拟器场馆里是独一份。我们的月卡套餐是全城折合单价最低的：Diamond+不限时套餐3个月18,000泰铢随便打，对常来的球友来说无人能比。',
@@ -2008,7 +2008,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         'Golf club rental in Bangkok ranges from free (at LENGOLF, included with every bay booking) to 1,500 THB per round at outdoor courses. If you\'re a tourist deciding whether to bring your own clubs or rent, this guide breaks down every option and cost.',
       price_breakdown: [
         { item: 'LENGOLF — Standard set (in-house)', price: 'Free', notes: 'Included with every bay booking. Men\'s and ladies\' sets. In-house use only.' },
-        { item: 'LENGOLF — Premium set (Callaway / Majesty)', price: '150 THB/hr', notes: '250 THB/2hr, 400 THB/4hr, 1,200 THB/day. Can be taken to any Bangkok course.' },
+        { item: 'LENGOLF — Premium set (Callaway)', price: '150 THB/hr', notes: '250 THB/2hr, 400 THB/4hr, 1,200 THB/day. Can be taken to any Bangkok course.' },
         { item: 'Outdoor course rental', price: '1,000–1,500 THB/round', notes: 'Sets available at most courses. Quality varies.' },
         { item: 'Standalone rental service', price: '800–1,500 THB/day', notes: 'Delivered to your hotel or course. Higher quality, more selection.' },
         { item: 'Flying clubs to Thailand (airline fees)', price: '2,000–6,000+ THB each way', notes: 'Varies by airline. AirAsia: ~4,200–6,300 THB each way. Even full-service airlines do not include golf bags in checked luggage for free.' },
@@ -2017,7 +2017,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: 'Golf balls (LENGOLF)', price: '400 THB / 6 balls', notes: 'Srixon quality. Available at LENGOLF.' },
       ],
       comparison_with_alternatives:
-        'For tourists visiting Bangkok, the math is clear: flying with golf clubs costs 4,000–12,000 THB round-trip in airline fees alone, plus the hassle and risk of damage. LENGOLF\'s free standard club rental eliminates this entirely for simulator golf. If you want to play outdoor courses too, our premium rental at 1,200 THB/day for Callaway or Majesty sets is competitive with standalone rental services and significantly cheaper than most course pro shop rentals.',
+        'For tourists visiting Bangkok, the math is clear: flying with golf clubs costs 4,000–12,000 THB round-trip in airline fees alone, plus the hassle and risk of damage. LENGOLF\'s free standard club rental eliminates this entirely for simulator golf. If you want to play outdoor courses too, our premium rental at 1,200 THB/day for Callaway sets is competitive with standalone rental services and significantly cheaper than most course pro shop rentals.',
       value_proposition:
         'LENGOLF is the only simulator venue in Bangkok that includes free standard club rental with every bay booking. Walk in empty-handed, play immediately. For outdoor courses, our premium club delivery service (1,200 THB/day + 500 THB delivery within Bangkok) is the most convenient option — we bring the clubs to your hotel or the course.',
       last_verified: '2026-02-19',
@@ -2028,7 +2028,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         },
         {
           heading: 'LENGOLF Club Delivery Service',
-          body: 'Our premium club sets (Callaway Warbird for men, Majesty Shuttle for women) can be rented for the full day at 1,200 THB and delivered anywhere in Bangkok for a flat 500 THB fee. Same-day delivery is available if booked before noon. This means you can rent from LENGOLF, have clubs delivered to your hotel, play an outdoor course, and return them — no need to visit a separate rental shop.',
+          body: 'Our premium club sets (Callaway Warbird for men, Callaway REVA for women) can be rented for the full day at 1,200 THB and delivered anywhere in Bangkok for a flat 500 THB fee. Same-day delivery is available if booked before noon. This means you can rent from LENGOLF, have clubs delivered to your hotel, play an outdoor course, and return them — no need to visit a separate rental shop.',
         },
       ],
       curated_reviews: [
@@ -2065,7 +2065,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         'ค่าเช่าไม้กอล์ฟในกรุงเทพฯ มีตั้งแต่ฟรี (ที่ LENGOLF รวมอยู่ในทุกการจองเบย์) ไปจนถึง 1,500 บาทต่อรอบที่สนามกลางแจ้ง หากคุณกำลังตัดสินใจว่าจะพกไม้กอล์ฟของตัวเองมาหรือเช่าเอาที่นี่ คู่มือนี้แจกแจงทุกตัวเลือกและค่าใช้จ่ายให้ครบ (ข้อมูล ณ กุมภาพันธ์ 2026)',
       price_breakdown: [
         { item: 'LENGOLF — ชุดมาตรฐาน (ใช้ในร้าน)', price: 'ฟรี', notes: 'รวมอยู่ในทุกการจองเบย์ มีทั้งชุดผู้ชายและผู้หญิง ใช้ได้เฉพาะในร้าน' },
-        { item: 'LENGOLF — ชุดพรีเมียม (Callaway / Majesty)', price: '150 บาท/ชม.', notes: '250 บาท/2 ชม. 400 บาท/4 ชม. 1,200 บาท/วัน นำไปใช้ที่สนามใดก็ได้ในกรุงเทพฯ' },
+        { item: 'LENGOLF — ชุดพรีเมียม (Callaway)', price: '150 บาท/ชม.', notes: '250 บาท/2 ชม. 400 บาท/4 ชม. 1,200 บาท/วัน นำไปใช้ที่สนามใดก็ได้ในกรุงเทพฯ' },
         { item: 'เช่าที่สนามกลางแจ้ง', price: '1,000-1,500 บาท/รอบ', notes: 'สนามส่วนใหญ่มีชุดไม้ให้เช่า คุณภาพแตกต่างกันไป' },
         { item: 'บริการเช่าไม้กอล์ฟเฉพาะทาง', price: '800-1,500 บาท/วัน', notes: 'ส่งถึงที่พักหรือสนามกอล์ฟ คุณภาพสูงกว่าและมีให้เลือกมากกว่า' },
         { item: 'ค่าโหลดไม้กอล์ฟมาไทย (ค่าธรรมเนียมสายการบิน)', price: '2,000-6,000+ บาทต่อเที่ยว', notes: 'แตกต่างกันตามสายการบิน AirAsia ประมาณ 4,200-6,300 บาทต่อเที่ยว แม้แต่สายการบินฟูลเซอร์วิสก็ไม่ได้รวมถุงกอล์ฟไว้ในน้ำหนักสัมภาระใต้ท้องเครื่องแบบไม่มีค่าใช้จ่าย' },
@@ -2074,7 +2074,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: 'ลูกกอล์ฟ (LENGOLF)', price: '400 บาท / 6 ลูก', notes: 'คุณภาพระดับ Srixon มีจำหน่ายที่ LENGOLF' },
       ],
       comparison_with_alternatives:
-        'สำหรับนักท่องเที่ยวที่มากรุงเทพฯ การคำนวณค่อนข้างชัดเจน การขนไม้กอล์ฟขึ้นเครื่องมีค่าธรรมเนียมสายการบินไป-กลับ 4,000-12,000 บาท ยังไม่นับความยุ่งยากและความเสี่ยงที่ไม้จะเสียหาย บริการเช่าไม้กอล์ฟชุดมาตรฐานฟรีของ LENGOLF ตัดค่าใช้จ่ายส่วนนี้ออกไปทั้งหมดสำหรับการเล่นกอล์ฟซิมูเลเตอร์ และหากคุณอยากออกรอบสนามกลางแจ้งด้วย ชุดพรีเมียมของเราที่ 1,200 บาทต่อวันสำหรับ Callaway หรือ Majesty ก็สู้ราคาบริการเช่าเฉพาะทางได้ และถูกกว่าการเช่าที่โปรช็อปของสนามส่วนใหญ่อย่างมาก',
+        'สำหรับนักท่องเที่ยวที่มากรุงเทพฯ การคำนวณค่อนข้างชัดเจน การขนไม้กอล์ฟขึ้นเครื่องมีค่าธรรมเนียมสายการบินไป-กลับ 4,000-12,000 บาท ยังไม่นับความยุ่งยากและความเสี่ยงที่ไม้จะเสียหาย บริการเช่าไม้กอล์ฟชุดมาตรฐานฟรีของ LENGOLF ตัดค่าใช้จ่ายส่วนนี้ออกไปทั้งหมดสำหรับการเล่นกอล์ฟซิมูเลเตอร์ และหากคุณอยากออกรอบสนามกลางแจ้งด้วย ชุดพรีเมียมของเราที่ 1,200 บาทต่อวันสำหรับ Callaway ก็สู้ราคาบริการเช่าเฉพาะทางได้ และถูกกว่าการเช่าที่โปรช็อปของสนามส่วนใหญ่อย่างมาก',
       value_proposition:
         'LENGOLF เป็นสถานที่กอล์ฟซิมูเลเตอร์แห่งเดียวในกรุงเทพฯ ที่รวมบริการเช่าไม้กอล์ฟชุดมาตรฐานฟรีไว้ในทุกการจองเบย์ เดินตัวเปล่าเข้ามาแล้วเล่นได้ทันที ส่วนการออกรอบสนามกลางแจ้ง บริการส่งไม้กอล์ฟชุดพรีเมียมของเรา (1,200 บาทต่อวัน บวกค่าจัดส่ง 500 บาทภายในกรุงเทพฯ) เป็นตัวเลือกที่สะดวกที่สุด เพราะเรานำไม้ไปส่งถึงที่พักหรือถึงสนามให้เลย',
       last_verified: '2026-02-19',
@@ -2085,7 +2085,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         },
         {
           heading: 'บริการส่งไม้กอล์ฟของ LENGOLF',
-          body: 'ชุดไม้กอล์ฟระดับพรีเมียมของเรา (Callaway Warbird สำหรับผู้ชาย และ Majesty Shuttle สำหรับผู้หญิง) เช่าแบบเต็มวันได้ในราคา 1,200 บาท และจัดส่งได้ทุกที่ในกรุงเทพฯ ในอัตราคงที่ 500 บาท มีบริการจัดส่งภายในวันเดียวกันหากจองก่อนเที่ยง นั่นหมายความว่าคุณเช่าจาก LENGOLF ให้ส่งไม้ไปที่ที่พัก ออกรอบสนามกลางแจ้ง แล้วส่งคืนได้เลย โดยไม่ต้องแวะร้านเช่าไม้กอล์ฟที่อื่น',
+          body: 'ชุดไม้กอล์ฟระดับพรีเมียมของเรา (Callaway Warbird สำหรับผู้ชาย และ Callaway REVA สำหรับผู้หญิง) เช่าแบบเต็มวันได้ในราคา 1,200 บาท และจัดส่งได้ทุกที่ในกรุงเทพฯ ในอัตราคงที่ 500 บาท มีบริการจัดส่งภายในวันเดียวกันหากจองก่อนเที่ยง นั่นหมายความว่าคุณเช่าจาก LENGOLF ให้ส่งไม้ไปที่ที่พัก ออกรอบสนามกลางแจ้ง แล้วส่งคืนได้เลย โดยไม่ต้องแวะร้านเช่าไม้กอล์ฟที่อื่น',
         },
       ],
       curated_reviews: [
@@ -2133,7 +2133,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         'バンコクでのゴルフクラブレンタルは、LENGOLFのようにベイのご予約に無料で付く場合から、屋外コースで1ラウンド1,500THBかかる場合まで幅があります。旅行でお越しの方がご自身のクラブを持ち込むか現地で借りるかを判断できるよう、選択肢と費用を一つずつ整理します（2026年2月現在）。',
       price_breakdown: [
         { item: 'LENGOLF — 標準セット（館内利用）', price: '無料', notes: 'ベイのご予約すべてに含まれます。メンズ・レディースのセット。館内でのご利用のみ。' },
-        { item: 'LENGOLF — プレミアムセット（Callaway / Majesty）', price: '1時間150THB', notes: '2時間250THB、4時間400THB、1日1,200THB。バンコクのどのゴルフ場へも持ち出せます。' },
+        { item: 'LENGOLF — プレミアムセット（Callaway）', price: '1時間150THB', notes: '2時間250THB、4時間400THB、1日1,200THB。バンコクのどのゴルフ場へも持ち出せます。' },
         { item: '屋外コースでのレンタル', price: '1ラウンド1,000〜1,500THB', notes: '多くのコースにセットが用意されています。品質はまちまちです。' },
         { item: 'レンタル専門サービス', price: '1日800〜1,500THB', notes: 'ホテルやゴルフ場までお届け。品質が高く、選択肢も豊富です。' },
         { item: 'クラブの空輸（航空会社の手数料）', price: '片道2,000〜6,000THB以上', notes: '航空会社によって異なります。AirAsiaは片道およそ4,200〜6,300THB。フルサービスの航空会社でも、ゴルフバッグが受託手荷物に無料で含まれることはありません。' },
@@ -2142,7 +2142,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: 'ゴルフボール（LENGOLF）', price: '6球400THB', notes: 'Srixonクラスの品質。LENGOLFでお求めいただけます。' },
       ],
       comparison_with_alternatives:
-        'バンコクを訪れる旅行者にとって、計算ははっきりしています。ゴルフクラブを空輸すると航空会社の手数料だけで往復4,000〜12,000THB、これに手間と破損のリスクが加わります。LENGOLFの標準クラブレンタルは無料なので、シミュレーターゴルフに関してはこの費用がまるごと不要です。屋外コースにも出たい場合は、CallawayやMajesty（マジェスティ）のセットを1日1,200THBで借りられるプレミアムレンタルが、レンタル専門サービスと比べても競争力があり、コースのプロショップでのレンタルより大幅に安く済みます。',
+        'バンコクを訪れる旅行者にとって、計算ははっきりしています。ゴルフクラブを空輸すると航空会社の手数料だけで往復4,000〜12,000THB、これに手間と破損のリスクが加わります。LENGOLFの標準クラブレンタルは無料なので、シミュレーターゴルフに関してはこの費用がまるごと不要です。屋外コースにも出たい場合は、Callaway（マジェスティ）のセットを1日1,200THBで借りられるプレミアムレンタルが、レンタル専門サービスと比べても競争力があり、コースのプロショップでのレンタルより大幅に安く済みます。',
       value_proposition:
         'バンコクのシミュレーター施設のなかで、ベイのご予約すべてに標準クラブレンタルが無料で付くのはLENGOLFだけです。手ぶらでお越しいただき、そのままプレーできます。屋外コースに出る日には、プレミアムクラブの配送サービス（1日1,200THBと、バンコク市内への配送500THB）が最も便利です——ホテルでもゴルフ場でも、クラブをお届けします。',
       last_verified: '2026-02-19',
@@ -2153,7 +2153,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         },
         {
           heading: 'LENGOLFのクラブ配送サービス',
-          body: 'プレミアムセット（メンズはCallaway Warbird、レディースはMajesty（マジェスティ）Shuttle）は1日1,200THBで終日レンタルでき、バンコク市内であれば一律500THBでどこへでもお届けします。正午までにご予約いただければ当日配送も可能です。つまりLENGOLFで借りて、ホテルにクラブを届けてもらい、屋外コースを回って返却する——別のレンタルショップに立ち寄る必要はありません。',
+          body: 'プレミアムセット（メンズはCallaway Warbird、レディースはCallaway REVA）は1日1,200THBで終日レンタルでき、バンコク市内であれば一律500THBでどこへでもお届けします。正午までにご予約いただければ当日配送も可能です。つまりLENGOLFで借りて、ホテルにクラブを届けてもらい、屋外コースを回って返却する——別のレンタルショップに立ち寄る必要はありません。',
         },
       ],
       curated_reviews: [
@@ -2201,7 +2201,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         '방콕의 골프 클럽 대여 비용은 무료(LENGOLF에서는 베이 예약마다 기본 세트가 포함돼요)부터 실외 코스 1라운드 1,500바트까지예요. 클럽을 가져올지 빌릴지 고민하시는 여행자라면, 이 글에서 선택지와 비용을 하나씩 짚어 드릴게요 (2026년 2월 기준).',
       price_breakdown: [
         { item: 'LENGOLF — 기본 세트 (매장 내 이용)', price: '무료', notes: '모든 베이 예약에 포함돼요. 남성용과 여성용 세트. 매장 안에서만 사용해요.' },
-        { item: 'LENGOLF — 프리미엄 세트 (Callaway / Majesty)', price: '150바트/시간', notes: '2시간 250바트, 4시간 400바트, 하루 1,200바트. 방콕 어느 골프장으로든 가져가실 수 있어요.' },
+        { item: 'LENGOLF — 프리미엄 세트 (Callaway)', price: '150바트/시간', notes: '2시간 250바트, 4시간 400바트, 하루 1,200바트. 방콕 어느 골프장으로든 가져가실 수 있어요.' },
         { item: '실외 골프장 대여', price: '1라운드 1,000~1,500바트', notes: '대부분의 골프장에 세트가 있어요. 품질 편차가 커요.' },
         { item: '전문 대여 서비스', price: '1일 800~1,500바트', notes: '호텔이나 골프장으로 배송해 줘요. 품질이 좋고 선택 폭도 넓어요.' },
         { item: '클럽 항공 운송 (항공사 요금)', price: '편도 2,000~6,000바트 이상', notes: '항공사마다 달라요. AirAsia는 편도 약 4,200~6,300바트. 풀서비스 항공사도 골프백을 무료 위탁 수하물로 포함해 주지는 않아요.' },
@@ -2210,7 +2210,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: '골프공 (LENGOLF)', price: '6개 400바트', notes: 'Srixon급 품질. LENGOLF에서 판매해요.' },
       ],
       comparison_with_alternatives:
-        '방콕에 오시는 여행자라면 계산은 분명해요. 클럽을 비행기로 가져오면 항공사 요금만 왕복 4,000~12,000바트가 들고, 번거로움과 파손 위험도 감수해야 해요. 시뮬레이터 골프라면 LENGOLF의 무료 기본 클럽 대여로 이 비용이 전부 사라져요. 실외 코스도 함께 도실 계획이라면 Callaway나 Majesty 세트를 하루 1,200바트에 빌리는 프리미엄 대여가 전문 대여 서비스와 견줄 만하고, 대부분의 골프장 프로샵 대여보다는 훨씬 저렴해요.',
+        '방콕에 오시는 여행자라면 계산은 분명해요. 클럽을 비행기로 가져오면 항공사 요금만 왕복 4,000~12,000바트가 들고, 번거로움과 파손 위험도 감수해야 해요. 시뮬레이터 골프라면 LENGOLF의 무료 기본 클럽 대여로 이 비용이 전부 사라져요. 실외 코스도 함께 도실 계획이라면 Callaway 세트를 하루 1,200바트에 빌리는 프리미엄 대여가 전문 대여 서비스와 견줄 만하고, 대부분의 골프장 프로샵 대여보다는 훨씬 저렴해요.',
       value_proposition:
         '방콕에서 베이 예약마다 기본 클럽 대여를 무료로 포함하는 시뮬레이터 매장은 LENGOLF뿐이에요. 빈손으로 오셔서 바로 치시면 돼요. 실외 코스에 나가신다면 프리미엄 클럽 배송 서비스(하루 1,200바트에 방콕 시내 배송 500바트)가 가장 편해요. 호텔이든 골프장이든 저희가 클럽을 가져다 드려요.',
       last_verified: '2026-02-19',
@@ -2221,7 +2221,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         },
         {
           heading: 'LENGOLF 클럽 배송 서비스',
-          body: '프리미엄 세트(남성용 Callaway Warbird, 여성용 Majesty Shuttle)는 하루 1,200바트에 빌리실 수 있고, 방콕 시내 어디든 균일 500바트로 배송해 드려요. 정오 이전에 예약하시면 당일 배송도 가능해요. LENGOLF에서 빌려 호텔로 받고, 실외 코스에서 치고, 그대로 반납하시면 되니까 대여점을 따로 찾아갈 필요가 없어요.',
+          body: '프리미엄 세트(남성용 Callaway Warbird, 여성용 Callaway REVA)는 하루 1,200바트에 빌리실 수 있고, 방콕 시내 어디든 균일 500바트로 배송해 드려요. 정오 이전에 예약하시면 당일 배송도 가능해요. LENGOLF에서 빌려 호텔로 받고, 실외 코스에서 치고, 그대로 반납하시면 되니까 대여점을 따로 찾아갈 필요가 없어요.',
         },
       ],
       curated_reviews: [
@@ -2270,7 +2270,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         '在曼谷租高尔夫球杆，价格从免费（LENGOLF每次球位预订都包含）到室外球场一轮1,500泰铢都有。如果你是游客，正在纠结要不要把自己的球杆带过来，这篇会把每一种选择和费用都拆开讲清楚，截至2026年2月。',
       price_breakdown: [
         { item: 'LENGOLF — 标准套装（店内使用）', price: '免费', notes: '每次球位预订都包含。男士与女士套装皆有。仅限店内使用。' },
-        { item: 'LENGOLF — 高级套装（Callaway／Majesty）', price: '150泰铢/小时', notes: '2小时250泰铢，4小时400泰铢，全日1,200泰铢。可带到曼谷任何一家球场。' },
+        { item: 'LENGOLF — 高级套装（Callaway）', price: '150泰铢/小时', notes: '2小时250泰铢，4小时400泰铢，全日1,200泰铢。可带到曼谷任何一家球场。' },
         { item: '室外球场租借', price: '1,000–1,500泰铢/轮', notes: '多数球场都有整套可租。品质差异较大。' },
         { item: '专门的租借服务', price: '800–1,500泰铢/日', notes: '送到你的酒店或球场。品质更好，可选范围也更广。' },
         { item: '把球杆托运到泰国（航空公司收费）', price: '2,000–6,000泰铢以上／单程', notes: '各航空公司不同。AirAsia约4,200–6,300泰铢／单程。即便是全服务航空，托运行李额度也不会免费包含高尔夫球包。' },
@@ -2279,7 +2279,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: '高尔夫球（LENGOLF）', price: '400泰铢／6颗', notes: 'Srixon品质。LENGOLF店内有售。' },
       ],
       comparison_with_alternatives:
-        '对来曼谷旅行的球友来说，这笔账很清楚：把球杆托运过来，光航空公司的费用来回就是4,000–12,000泰铢，还要加上麻烦和被磕碰的风险。打模拟器的话，LENGOLF免费的标准球杆租借直接把这一项归零。如果你也想去室外球场打，我们的高级套装每日1,200泰铢，租一整套Callaway或Majesty，和专门的租借服务比价格相当，也比多数球场专卖店的租借便宜不少。',
+        '对来曼谷旅行的球友来说，这笔账很清楚：把球杆托运过来，光航空公司的费用来回就是4,000–12,000泰铢，还要加上麻烦和被磕碰的风险。打模拟器的话，LENGOLF免费的标准球杆租借直接把这一项归零。如果你也想去室外球场打，我们的高级套装每日1,200泰铢，租一整套Callaway，和专门的租借服务比价格相当，也比多数球场专卖店的租借便宜不少。',
       value_proposition:
         'LENGOLF是曼谷唯一一家每次球位预订都免费附带标准球杆的模拟器场馆。两手空空走进来，立刻就能打。要去室外球场的话，我们的高级球杆配送服务（每日1,200泰铢，曼谷市内配送统一500泰铢）是最省事的选择——球杆直接送到你的酒店或球场。',
       last_verified: '2026-02-19',
@@ -2290,7 +2290,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         },
         {
           heading: 'LENGOLF球杆配送服务',
-          body: '我们的高级球杆套装（男士Callaway Warbird、女士Majesty Shuttle）可以按全日1,200泰铢租用，并以统一500泰铢的费用送到曼谷任何地方。中午前下单可当日送达。也就是说，你可以在LENGOLF租，让球杆送到酒店，去室外球场打完一轮再还回来——不必再专门跑一趟租借店。',
+          body: '我们的高级球杆套装（男士Callaway Warbird、女士Callaway REVA）可以按全日1,200泰铢租用，并以统一500泰铢的费用送到曼谷任何地方。中午前下单可当日送达。也就是说，你可以在LENGOLF租，让球杆送到酒店，去室外球场打完一轮再还回来——不必再专门跑一趟租借店。',
         },
       ],
       curated_reviews: [

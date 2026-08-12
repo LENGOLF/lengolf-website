@@ -74,7 +74,7 @@
     "The Mercury Ville": "The Mercury Ville",
     "Bangkok": "曼谷",
     "Thai Airways": "泰国国际航空（Thai Airways）",
-    "note": "ZH keeps station/venue names in Latin (Chidlom, The Mercury Ville) rather than transliterating; only Bangkok is localized (曼谷). Airline and brand names are glossed once with the Latin name in full-width parens on first use, e.g. 泰国国际航空（Thai Airways）, then either form. Keep LENGOLF, len.golf, BTS, MRT, PGA, LINE @lengolf, len.golf, and Latin product names (Callaway, Majesty) verbatim."
+    "note": "ZH keeps station/venue names in Latin (Chidlom, The Mercury Ville) rather than transliterating; only Bangkok is localized (曼谷). Airline and brand names are glossed once with the Latin name in full-width parens on first use, e.g. 泰国国际航空（Thai Airways）, then either form. Keep LENGOLF, len.golf, BTS, MRT, PGA, LINE @lengolf, len.golf, and Latin product names (Callaway, REVA) verbatim."
   },
   "seo_norms": {
     "title_display_target": "~28–30 Hanzi characters; front-load the target query, then a descriptive tail after an em dash — (shipped ZH guide titles run 22–27 chars).",

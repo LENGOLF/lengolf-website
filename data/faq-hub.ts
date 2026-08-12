@@ -93,7 +93,7 @@ const en: FaqHubContent = {
     {
       question: 'Do I need to bring my own golf clubs or equipment?',
       answer:
-        'No. Free standard club sets for men and ladies are included with every bay booking, so most guests arrive empty-handed. If you want better equipment, premium Callaway and Majesty sets rent from 150 THB per hour; see the golf club rental page.',
+        'No. Free standard club sets for men and ladies are included with every bay booking, so most guests arrive empty-handed. If you want better equipment, premium Callaway sets rent from 150 THB per hour; see the golf club rental page.',
     },
     {
       question: 'What should I wear? Do I need golf shoes or a glove?',
@@ -225,7 +225,7 @@ const th: FaqHubContent = {
     {
       question: 'ต้องนำไม้กอล์ฟหรืออุปกรณ์มาเองไหม',
       answer:
-        'ไม่ต้องนำมาเอง ทุกการจองเบย์มีชุดไม้มาตรฐานทั้งของผู้ชายและผู้หญิงให้ใช้ฟรี ลูกค้าส่วนใหญ่มาตัวเปล่าได้เลย หากต้องการอุปกรณ์ที่ดีขึ้น มีชุดพรีเมียม Callaway และ Majesty ให้เช่าเริ่มต้น 150 บาทต่อชั่วโมง ดูรายละเอียดที่หน้าเช่าไม้กอล์ฟ',
+        'ไม่ต้องนำมาเอง ทุกการจองเบย์มีชุดไม้มาตรฐานทั้งของผู้ชายและผู้หญิงให้ใช้ฟรี ลูกค้าส่วนใหญ่มาตัวเปล่าได้เลย หากต้องการอุปกรณ์ที่ดีขึ้น มีชุดพรีเมียม Callaway ให้เช่าเริ่มต้น 150 บาทต่อชั่วโมง ดูรายละเอียดที่หน้าเช่าไม้กอล์ฟ',
     },
     {
       question: 'ต้องแต่งตัวอย่างไร ต้องมีรองเท้ากอล์ฟหรือถุงมือไหม',
@@ -356,7 +356,7 @@ const ja: FaqHubContent = {
     {
       question: 'ゴルフクラブや道具は持参する必要がありますか？',
       answer:
-        'いいえ、必要ありません。ベイのご予約にはメンズ・レディースの標準クラブセットが無料で付くため、ほとんどのお客様が手ぶらでお越しになります。より良い道具をお使いになりたい方には、CallawayとMajesty（マジェスティ）のプレミアムセットを1時間150THBからご用意しています。詳しくはクラブレンタルページをご覧ください。',
+        'いいえ、必要ありません。ベイのご予約にはメンズ・レディースの標準クラブセットが無料で付くため、ほとんどのお客様が手ぶらでお越しになります。より良い道具をお使いになりたい方には、Callawayのプレミアムセットを1時間150THBからご用意しています。詳しくはクラブレンタルページをご覧ください。',
     },
     {
       question: '服装はどうすればよいですか？ゴルフシューズやグローブは必要ですか？',
@@ -488,7 +488,7 @@ const ko: FaqHubContent = {
     {
       question: '골프 클럽이나 장비를 직접 가져와야 하나요?',
       answer:
-        '아니요. 베이를 예약하시면 남성용과 여성용 기본 클럽 세트가 무료로 포함되기 때문에, 대부분의 손님은 빈손으로 오세요. 더 좋은 장비를 원하신다면 프리미엄 Callaway와 Majesty 세트를 시간당 150바트부터 대여하실 수 있어요. 자세한 내용은 클럽 대여 페이지를 확인하세요.',
+        '아니요. 베이를 예약하시면 남성용과 여성용 기본 클럽 세트가 무료로 포함되기 때문에, 대부분의 손님은 빈손으로 오세요. 더 좋은 장비를 원하신다면 프리미엄 Callaway 세트를 시간당 150바트부터 대여하실 수 있어요. 자세한 내용은 클럽 대여 페이지를 확인하세요.',
     },
     {
       question: '복장은 어떻게 해야 하나요? 골프화나 장갑이 필요한가요?',
@@ -619,7 +619,7 @@ const zh: FaqHubContent = {
     {
       question: '需要自己带球杆或装备吗？',
       answer:
-        '不需要。每次预订球位都免费提供男士和女士的标准球杆套组，所以大多数客人都是空手前来。如果你想用更好的装备，Callaway和Majesty的高端套组每小时150泰铢起租；详情请见球杆租借页面。',
+        '不需要。每次预订球位都免费提供男士和女士的标准球杆套组，所以大多数客人都是空手前来。如果你想用更好的装备，Callaway的高端套组每小时150泰铢起租；详情请见球杆租借页面。',
     },
     {
       question: '该穿什么？需要高尔夫球鞋或手套吗？',

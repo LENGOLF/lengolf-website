@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       canonical: getCanonical(locale, '/golf-club-rental/'),
       languages: getAlternates('/golf-club-rental/'),
     },
-    openGraph: { images: [{ url: storageUrl('venue/venue-simulator-01.jpg'), alt: 'Rent Callaway Warbird, Majesty or Paradym golf clubs at LENGOLF Bangkok — free Standard set with every bay booking, Premium from 150 THB/hr' }] },
+    openGraph: { images: [{ url: storageUrl('venue/venue-simulator-01.jpg'), alt: 'Rent Callaway Warbird, REVA or Paradym golf clubs at LENGOLF Bangkok — free Standard set with every bay booking, Premium from 150 THB/hr' }] },
   }
 }
 
@@ -111,7 +111,7 @@ export default async function ClubRentalPage({ params }: { params: Promise<{ loc
       <section className="relative flex h-[50vh] min-h-[400px] max-h-[550px] items-center text-white overflow-hidden">
         <Image
           src={storageUrl('golf/hero-golf.jpg')}
-          alt="Rent premium Callaway and Majesty golf clubs at LENGOLF Bangkok indoor simulator — free Standard set included, Premium from 150 THB/hr"
+          alt="Rent premium Callaway golf clubs at LENGOLF Bangkok indoor simulator — free Standard set included, Premium from 150 THB/hr"
           fill
           className="object-cover object-center"
           priority
