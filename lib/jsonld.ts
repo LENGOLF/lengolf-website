@@ -318,7 +318,7 @@ export function getClubRentalPricingJsonLd() {
     '@context': 'https://schema.org',
     '@type': 'OfferCatalog',
     name: 'LENGOLF Golf Club Rental',
-    description: 'Golf club rental service at LENGOLF Bangkok — free standard sets, premium Callaway & Majesty rentals, Premium+ Callaway Paradym, gear add-ons, and delivery in Bangkok',
+    description: 'Golf club rental service at LENGOLF Bangkok — free standard sets, premium Callaway rentals, Premium+ Callaway Paradym, gear add-ons, and delivery in Bangkok',
     provider: {
       '@type': 'EntertainmentBusiness',
       name: BUSINESS_INFO.name,
@@ -335,7 +335,7 @@ export function getClubRentalPricingJsonLd() {
       {
         '@type': 'Offer',
         name: 'Premium Club Rental – 1 Hour',
-        description: 'Callaway Warbird (men\'s) or Majesty Shuttle (women\'s) full set for 1 hour',
+        description: 'Callaway Warbird (men\'s) or Callaway REVA (women\'s) full set for 1 hour',
         price: '150',
         priceCurrency: 'THB',
         unitCode: 'HUR',
@@ -344,28 +344,28 @@ export function getClubRentalPricingJsonLd() {
       {
         '@type': 'Offer',
         name: 'Premium Club Rental – 2 Hours',
-        description: 'Callaway Warbird or Majesty Shuttle full set for 2 hours',
+        description: 'Callaway Warbird or Callaway REVA full set for 2 hours',
         price: '250',
         priceCurrency: 'THB',
       },
       {
         '@type': 'Offer',
         name: 'Premium Club Rental – 3 Hours',
-        description: 'Callaway Warbird or Majesty Shuttle full set for 3 hours',
+        description: 'Callaway Warbird or Callaway REVA full set for 3 hours',
         price: '350',
         priceCurrency: 'THB',
       },
       {
         '@type': 'Offer',
         name: 'Premium Club Rental – 4 Hours',
-        description: 'Callaway Warbird or Majesty Shuttle full set for 4 hours',
+        description: 'Callaway Warbird or Callaway REVA full set for 4 hours',
         price: '400',
         priceCurrency: 'THB',
       },
       {
         '@type': 'Offer',
         name: 'Premium Club Rental – 5 Hours',
-        description: 'Callaway Warbird or Majesty Shuttle full set for 5 hours',
+        description: 'Callaway Warbird or Callaway REVA full set for 5 hours',
         price: '450',
         priceCurrency: 'THB',
       },
@@ -540,7 +540,7 @@ export function getClubRentalServiceJsonLd() {
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: 'Golf Club Rental at LENGOLF',
-    description: 'Golf club rental service in Bangkok — free standard house sets with every bay booking, premium Callaway Warbird and Majesty Shuttle rentals, gear add-ons, and same-day delivery anywhere in Bangkok.',
+    description: 'Golf club rental service in Bangkok — free standard house sets with every bay booking, premium Callaway Warbird and Callaway REVA rentals, gear add-ons, and same-day delivery anywhere in Bangkok.',
     provider: {
       '@type': 'EntertainmentBusiness',
       name: BUSINESS_INFO.name,
@@ -564,7 +564,7 @@ export function getClubRentalServiceJsonLd() {
         name: 'Premium Club Rental',
         price: '150',
         priceCurrency: 'THB',
-        description: 'Callaway Warbird or Majesty Shuttle full set, per hour',
+        description: 'Callaway Warbird or Callaway REVA full set, per hour',
       },
     ],
   }
@@ -883,7 +883,7 @@ export function getCourseClubRentalServiceJsonLd() {
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: 'Golf Course Club Rental Bangkok — LENGOLF',
-    description: 'Rent premium golf clubs for any Bangkok golf course. Callaway Paradym Forged Carbon (tour-grade), Callaway Warbird, or Majesty Shuttle full sets. Full-day and multi-day packages. Delivery anywhere in Bangkok for 500 THB. Book and pay online with instant confirmation.',
+    description: 'Rent premium golf clubs for any Bangkok golf course. Callaway Paradym Forged Carbon (tour-grade), Callaway Warbird, or Callaway REVA full sets. Full-day and multi-day packages. Delivery anywhere in Bangkok for 500 THB. Book and pay online with instant confirmation.',
     provider: {
       '@type': 'EntertainmentBusiness',
       name: BUSINESS_INFO.name,
@@ -900,7 +900,7 @@ export function getCourseClubRentalServiceJsonLd() {
         name: '1-Day Premium Course Club Rental',
         price: '1200',
         priceCurrency: 'THB',
-        description: 'Full-day rental of Callaway Warbird or Majesty Shuttle set for any Bangkok golf course',
+        description: 'Full-day rental of Callaway Warbird or Callaway REVA set for any Bangkok golf course',
       },
       {
         '@type': 'Offer',
@@ -967,7 +967,7 @@ export function getCourseClubRentalPricingJsonLd() {
       url: SITE_URL,
     },
     itemListElement: [
-      { '@type': 'Offer', name: '1-Day Premium Course Rental (Warbird / Majesty)', price: '1200', priceCurrency: 'THB' },
+      { '@type': 'Offer', name: '1-Day Premium Course Rental (Warbird / REVA)', price: '1200', priceCurrency: 'THB' },
       { '@type': 'Offer', name: '3-Day Premium Course Rental', price: '2400', priceCurrency: 'THB' },
       { '@type': 'Offer', name: '7-Day Premium Course Rental', price: '4800', priceCurrency: 'THB' },
       { '@type': 'Offer', name: '14-Day Premium Course Rental', price: '8400', priceCurrency: 'THB' },

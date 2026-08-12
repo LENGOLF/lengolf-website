@@ -62,9 +62,10 @@ const WHY_RENT_ROWS = ['trip', 'discount', 'set', 'quality', 'pick', 'delivery']
 // (CourseClubRental.sets.<slug>.*) and falls back to the DB name/specifications
 // so a brand-new set renders EN-only before its translations land.
 
-// Sets whose card carries the Japanese-brand callout (differentiator for
-// JA/KO/ZH golf travelers). Keyed by slug; self-empties when the set retires.
-const JAPANESE_BRAND_CALLOUT = new Set(['premium-womens-majesty'])
+// Sets whose card carries an extra brand callout. Was the Japanese-brand note
+// for Majesty; now the REVA women's-line note. Keyed by slug, so it follows the
+// set rather than the tier/gender slot and self-empties when a set retires.
+const BRAND_CALLOUT = new Set(['premium-womens-reva'])
 
 /** "Premium Men's - Callaway Warbird" -> "Callaway Warbird" (DB-name fallback). */
 function setShortName(name: string): string {
@@ -81,7 +82,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       canonical: getCanonical(locale, '/golf-course-club-rental/'),
       languages: getAlternates('/golf-course-club-rental/'),
     },
-    openGraph: { images: [{ url: storageUrl('golf/hero-course-rental.webp'), alt: 'Rent premium golf clubs for any Bangkok golf course — Callaway Paradym, Warbird, Majesty from 1,200 THB/day' }] },
+    openGraph: { images: [{ url: storageUrl('golf/hero-course-rental.webp'), alt: 'Rent premium golf clubs for any Bangkok golf course — Callaway Paradym, Warbird, REVA from 1,200 THB/day' }] },
   }
 }
 
@@ -133,7 +134,7 @@ export default async function GolfCourseClubRentalPage({ params }: { params: Pro
       <section className="relative flex items-start pt-10 pb-10 text-white overflow-hidden md:items-center md:py-0 md:h-[50vh] md:min-h-[400px] md:max-h-[550px]">
         <Image
           src={storageUrl('golf/hero-course-rental.webp')}
-          alt="Rent Callaway Paradym, Warbird or Majesty golf clubs for Bangkok golf courses — from 1,200 THB/day with delivery"
+          alt="Rent Callaway Paradym, Warbird or REVA golf clubs for Bangkok golf courses — from 1,200 THB/day with delivery"
           fill
           className="object-cover object-[center_35%]"
           priority
@@ -314,10 +315,10 @@ export default async function GolfCourseClubRentalPage({ params }: { params: Pro
                   {/* Japanese-brand callout — differentiator for JA/KO/ZH golf
                       travelers who know the brand. Slug-keyed; self-empties when
                       the set retires. */}
-                  {JAPANESE_BRAND_CALLOUT.has(set.slug) && (
+                  {BRAND_CALLOUT.has(set.slug) && (
                     <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3">
-                      <p className="mb-1 text-xs font-bold uppercase tracking-wider text-amber-800">{t('majestyCalloutTitle')}</p>
-                      <p className="text-xs leading-relaxed text-amber-700">{t('majestyCalloutText')}</p>
+                      <p className="mb-1 text-xs font-bold uppercase tracking-wider text-amber-800">{t('brandCalloutTitle')}</p>
+                      <p className="text-xs leading-relaxed text-amber-700">{t('brandCalloutText')}</p>
                     </div>
                   )}
                 </div>
