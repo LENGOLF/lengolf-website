@@ -71,8 +71,15 @@ function whenToChoose(a: GolfCourse, b: GolfCourse): { forA: string[]; forB: str
   const forA: string[] = []
   const forB: string[] = []
 
+  // Fee recommendations must compare like with like. When either course prices
+  // by SEASON (fee_is_seasonal), its two fee fields are low/high season — not
+  // weekday/weekend — so "cheaper on weekdays" / "costs less on Saturday-Sunday"
+  // would assert a day-of-week split that does not exist, on an indexed page.
+  // The fee rows in SpecTable still show both numbers, annotated by season.
+  const feeComparable = !a.fee_is_seasonal && !b.fee_is_seasonal
+
   // Weekday fee
-  if (a.green_fee_weekday_thb !== null && b.green_fee_weekday_thb !== null) {
+  if (feeComparable && a.green_fee_weekday_thb !== null && b.green_fee_weekday_thb !== null) {
     const diff = a.green_fee_weekday_thb - b.green_fee_weekday_thb
     if (Math.abs(diff) >= 500) {
       const cheaper = diff < 0 ? a : b
@@ -85,12 +92,27 @@ function whenToChoose(a: GolfCourse, b: GolfCourse): { forA: string[]; forB: str
   }
 
   // Weekend premium
-  if (a.green_fee_weekend_thb !== null && b.green_fee_weekend_thb !== null) {
+  if (feeComparable && a.green_fee_weekend_thb !== null && b.green_fee_weekend_thb !== null) {
     const diff = a.green_fee_weekend_thb - b.green_fee_weekend_thb
     if (Math.abs(diff) >= 500) {
       const cheaper = diff < 0 ? a : b
       const list = diff < 0 ? forA : forB
       list.push(`Weekend value — ${cheaper.name} costs less on Saturday/Sunday.`)
+    }
+  }
+
+  // Seasonal pairing: the day-of-week bullets above are withheld, so fall back to
+  // a framing that is true under BOTH pricing models — the lower of a course's two
+  // fees is its starting price whether the variation is weekday/weekend or
+  // low/high season (validate:courses enforces weekend >= weekday, and low < high).
+  if (!feeComparable && a.green_fee_weekday_thb !== null && b.green_fee_weekday_thb !== null) {
+    const diff = a.green_fee_weekday_thb - b.green_fee_weekday_thb
+    if (Math.abs(diff) >= 500) {
+      const cheaper = diff < 0 ? a : b
+      const list = diff < 0 ? forA : forB
+      list.push(
+        `Lower starting fee — ${cheaper.name} starts at ${Math.min(a.green_fee_weekday_thb, b.green_fee_weekday_thb).toLocaleString('en-US')} THB versus ${Math.max(a.green_fee_weekday_thb, b.green_fee_weekday_thb).toLocaleString('en-US')} THB.`
+      )
     }
   }
 
