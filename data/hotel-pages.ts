@@ -278,7 +278,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-sindhorn-midtown',
     title: 'Things to Do Near Sindhorn Midtown Hotel Bangkok | Local Guide',
     meta_description:
-      'Staying at Sindhorn Midtown? Here\'s what to do nearby — indoor golf at LENGOLF (400m), rooftop dining, shopping at CentralWorld, and more around Lumpini.',
+      'Staying at Sindhorn Midtown? Here\'s what to do nearby — indoor golf at LENGOLF (350m), rooftop dining, shopping at CentralWorld, and more around Lumpini.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -333,7 +333,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-sindhorn-midtown',
     title: 'สิ่งที่น่าทำใกล้ Sindhorn Midtown Hotel กรุงเทพฯ | ไกด์ประจำย่าน',
     meta_description:
-      'พักที่ Sindhorn Midtown อยู่ใช่ไหม นี่คือสิ่งที่น่าทำใกล้โรงแรม ทั้งกอล์ฟในร่มที่ LENGOLF (400 เมตร) ร้านอาหารรูฟท็อป ช้อปปิ้งที่ CentralWorld และอื่น ๆ รอบย่านลุมพินี',
+      'พักที่ Sindhorn Midtown อยู่ใช่ไหม นี่คือสิ่งที่น่าทำใกล้โรงแรม ทั้งกอล์ฟในร่มที่ LENGOLF (350 เมตร) ร้านอาหารรูฟท็อป ช้อปปิ้งที่ CentralWorld และอื่น ๆ รอบย่านลุมพินี',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -388,7 +388,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-sindhorn-midtown',
     title: 'シンドーン・ミッドタウン周辺の過ごし方 — 宿泊者のためのエリアガイド',
     meta_description:
-      'シンドーン・ミッドタウン（Sindhorn Midtown）周辺の過ごし方。徒歩400mのLENGOLFでインドアゴルフ、ランスアン通りのレストラン、ルンピニー公園、セントラルワールドでの買い物まで。',
+      'シンドーン・ミッドタウン（Sindhorn Midtown）周辺の過ごし方。徒歩350mのLENGOLFでインドアゴルフ、ランスアン通りのレストラン、ルンピニー公園、セントラルワールドでの買い物まで。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -443,7 +443,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-sindhorn-midtown',
     title: 'Sindhorn Midtown 주변 즐길 거리 — 랑수언·룸피니 로컬 가이드',
     meta_description:
-      'Sindhorn Midtown에 묵는다면 400m 거리의 LENGOLF 실내 골프부터 루프톱 다이닝, CentralWorld 쇼핑까지 룸피니 주변에서 할 수 있는 것들을 정리했어요.',
+      'Sindhorn Midtown에 묵는다면 350m 거리의 LENGOLF 실내 골프부터 루프톱 다이닝, CentralWorld 쇼핑까지 룸피니 주변에서 할 수 있는 것들을 정리했어요.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -498,7 +498,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-sindhorn-midtown',
     title: 'Sindhorn Midtown Hotel附近好去处 — 曼谷Langsuan一带指南',
     meta_description:
-      '住在Sindhorn Midtown？周边可以这样安排：LENGOLF室内高尔夫（400米）、天台餐饮、CentralWorld购物，以及Lumpini公园一带的更多去处。',
+      '住在Sindhorn Midtown？周边可以这样安排：LENGOLF室内高尔夫（350米）、天台餐饮、CentralWorld购物，以及Lumpini公园一带的更多去处。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1637,7 +1637,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-novotel-ploenchit',
     title: 'Things to Do Near Novotel Bangkok Ploenchit Sukhumvit | Activities',
     meta_description:
-      'Staying at Novotel Ploenchit? Discover what to do nearby — indoor golf at LENGOLF (800m or 1 BTS stop), shopping, Thai street food, and evening entertainment.',
+      'Staying at Novotel Ploenchit? Discover what to do nearby — indoor golf at LENGOLF (1.5km, or 1 BTS stop), shopping, Thai street food, and evening entertainment.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1692,7 +1692,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-novotel-ploenchit',
     title: 'สิ่งที่น่าทำใกล้ Novotel Bangkok Ploenchit Sukhumvit | กิจกรรม',
     meta_description:
-      'พักที่ Novotel Ploenchit อยู่ใช่ไหม รวมสิ่งที่น่าทำใกล้โรงแรม ทั้งกอล์ฟในร่มที่ LENGOLF (800 เมตร หรือ BTS 1 สถานี) ช้อปปิ้ง สตรีทฟู้ดไทย และความบันเทิงยามค่ำ',
+      'พักที่ Novotel Ploenchit อยู่ใช่ไหม รวมสิ่งที่น่าทำใกล้โรงแรม ทั้งกอล์ฟในร่มที่ LENGOLF (1.5 กม. หรือ BTS 1 สถานี) ช้อปปิ้ง สตรีทฟู้ดไทย และความบันเทิงยามค่ำ',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1747,7 +1747,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-novotel-ploenchit',
     title: 'ノボテル・バンコク・プルンチット周辺の過ごし方 — アクティビティガイド',
     meta_description:
-      'ノボテル・プルンチット（Novotel Bangkok Ploenchit Sukhumvit）周辺の過ごし方。LENGOLFのインドアゴルフはBTSで1駅（800m）、買い物、タイの屋台料理、夜の楽しみ方までまとめました。',
+      'ノボテル・プルンチット（Novotel Bangkok Ploenchit Sukhumvit）周辺の過ごし方。LENGOLFのインドアゴルフはBTSで1駅（徒歩1.5km）、買い物、タイの屋台料理、夜の楽しみ方までまとめました。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1802,7 +1802,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-novotel-ploenchit',
     title: 'Novotel Bangkok Ploenchit 주변 즐길 거리 — 액티비티 가이드',
     meta_description:
-      'Novotel Ploenchit에 묵는다면 LENGOLF 실내 골프(800m 또는 BTS 한 정거장)부터 쇼핑, 태국 길거리 음식, 저녁 나들이까지 가까운 즐길 거리를 정리했어요.',
+      'Novotel Ploenchit에 묵는다면 LENGOLF 실내 골프(도보 1.5km 또는 BTS 한 정거장)부터 쇼핑, 태국 길거리 음식, 저녁 나들이까지 가까운 즐길 거리를 정리했어요.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1856,7 +1856,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-novotel-ploenchit',
     title: 'Novotel Bangkok Ploenchit附近好去处 — 周边活动指南',
     meta_description:
-      '住在Novotel Ploenchit？周边这样安排：LENGOLF室内高尔夫（800米，或BTS一站）、购物、泰式路边小吃与夜间娱乐。',
+      '住在Novotel Ploenchit？周边这样安排：LENGOLF室内高尔夫（1.5公里，或BTS一站）、购物、泰式路边小吃与夜间娱乐。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2455,7 +2455,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-anantara-siam',
     title: 'Things to Do Near Anantara Siam Bangkok | Guest Activities',
     meta_description:
-      'Staying at Anantara Siam Bangkok? Discover nearby activities — indoor golf at LENGOLF (1km), Siam Paragon, Erawan Shrine, rooftop dining, and more.',
+      'Staying at Anantara Siam Bangkok? Discover nearby activities — indoor golf at LENGOLF (800m), Siam Paragon, Erawan Shrine, rooftop dining, and more.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2510,7 +2510,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-anantara-siam',
     title: 'สิ่งที่น่าทำใกล้ Anantara Siam Bangkok | กิจกรรมสำหรับผู้เข้าพัก',
     meta_description:
-      'พักที่ Anantara Siam Bangkok อยู่ใช่ไหม รวมกิจกรรมใกล้โรงแรม ทั้งกอล์ฟในร่มที่ LENGOLF (1 กม.) Siam Paragon ศาลพระพรหมเอราวัณ ร้านอาหารรูฟท็อป และอื่น ๆ',
+      'พักที่ Anantara Siam Bangkok อยู่ใช่ไหม รวมกิจกรรมใกล้โรงแรม ทั้งกอล์ฟในร่มที่ LENGOLF (800 เมตร) Siam Paragon ศาลพระพรหมเอราวัณ ร้านอาหารรูฟท็อป และอื่น ๆ',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2566,7 +2566,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-anantara-siam',
     title: 'アナンタラ・サイアム・バンコク周辺の過ごし方 — 宿泊者向けアクティビティ',
     meta_description:
-      'アナンタラ・サイアム・バンコク（Anantara Siam Bangkok）周辺の過ごし方。1km先のLENGOLFでインドアゴルフ、サイアムパラゴン、エラワン廟、ルーフトップでの食事まで。',
+      'アナンタラ・サイアム・バンコク（Anantara Siam Bangkok）周辺の過ごし方。800m先のLENGOLFでインドアゴルフ、サイアムパラゴン、エラワン廟、ルーフトップでの食事まで。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2621,7 +2621,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-anantara-siam',
     title: 'Anantara Siam Bangkok 주변 즐길 거리 — 투숙객 액티비티 가이드',
     meta_description:
-      'Anantara Siam Bangkok에 묵는다면 1km 거리의 LENGOLF 실내 골프부터 Siam Paragon, Erawan Shrine, 루프톱 다이닝까지 가까운 즐길 거리를 정리했어요.',
+      'Anantara Siam Bangkok에 묵는다면 800m 거리의 LENGOLF 실내 골프부터 Siam Paragon, Erawan Shrine, 루프톱 다이닝까지 가까운 즐길 거리를 정리했어요.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2676,7 +2676,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-anantara-siam',
     title: 'Anantara Siam Bangkok附近好去处 — 住客活动指南',
     meta_description:
-      '住在Anantara Siam Bangkok？周边活动这样挑：LENGOLF室内高尔夫（1公里）、暹罗百丽宫、四面佛与天台餐饮。',
+      '住在Anantara Siam Bangkok？周边活动这样挑：LENGOLF室内高尔夫（800米）、暹罗百丽宫、四面佛与天台餐饮。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2726,7 +2726,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-mercure-siam',
     title: 'Things to Do Near Mercure Bangkok Siam | Activities & Food Guide',
     meta_description:
-      'Staying at Mercure Bangkok Siam? Discover nearby activities — indoor golf at LENGOLF (1km by BTS), Siam Square shopping, street food, and entertainment.',
+      'Staying at Mercure Bangkok Siam? Discover nearby activities — indoor golf at LENGOLF (2.1km, or 1 BTS stop), Siam Square shopping, street food, and entertainment.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2782,7 +2782,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-mercure-siam',
     title: 'สิ่งที่น่าทำใกล้ Mercure Bangkok Siam | ไกด์กิจกรรมและร้านอาหาร',
     meta_description:
-      'พักที่ Mercure Bangkok Siam อยู่ใช่ไหม รวมกิจกรรมใกล้โรงแรม ทั้งกอล์ฟในร่มที่ LENGOLF (1 กม. โดย BTS) ช้อปปิ้งสยามสแควร์ สตรีทฟู้ด และความบันเทิง',
+      'พักที่ Mercure Bangkok Siam อยู่ใช่ไหม รวมกิจกรรมใกล้โรงแรม ทั้งกอล์ฟในร่มที่ LENGOLF (2.1 กม. หรือ BTS 1 สถานี) ช้อปปิ้งสยามสแควร์ สตรีทฟู้ด และความบันเทิง',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2840,7 +2840,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-mercure-siam',
     title: 'メルキュール・バンコク・サイアム周辺の過ごし方 — アクティビティとグルメ',
     meta_description:
-      'メルキュール・バンコク・サイアム（Mercure Bangkok Siam）周辺の過ごし方。BTSで1駅（1km）のLENGOLFでインドアゴルフ、サイアムスクエアでの買い物、屋台グルメ、娯楽施設をご紹介します。',
+      'メルキュール・バンコク・サイアム（Mercure Bangkok Siam）周辺の過ごし方。BTSで1駅（徒歩2.1km）のLENGOLFでインドアゴルフ、サイアムスクエアでの買い物、屋台グルメ、娯楽施設をご紹介します。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2897,7 +2897,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-mercure-siam',
     title: 'Mercure Bangkok Siam 주변 즐길 거리 — 액티비티와 먹거리 가이드',
     meta_description:
-      'Mercure Bangkok Siam에 묵는다면 BTS로 1km 거리의 LENGOLF 실내 골프부터 Siam Square 쇼핑, 길거리 음식, 가족 나들이까지 가까운 즐길 거리를 정리했어요.',
+      'Mercure Bangkok Siam에 묵는다면 도보 2.1km 또는 BTS 한 정거장 거리의 LENGOLF 실내 골프부터 Siam Square 쇼핑, 길거리 음식, 가족 나들이까지 가까운 즐길 거리를 정리했어요.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2953,7 +2953,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-mercure-siam',
     title: 'Mercure Bangkok Siam附近好去处 — 周边活动与美食指南',
     meta_description:
-      '住在Mercure Bangkok Siam？周边这样玩：搭BTS去LENGOLF打室内高尔夫（1公里）、逛Siam Square、吃路边小吃，还有各种娱乐。',
+      '住在Mercure Bangkok Siam？周边这样玩：去LENGOLF打室内高尔夫（2.1公里，或搭BTS一站）、逛Siam Square、吃路边小吃，还有各种娱乐。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
