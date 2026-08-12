@@ -1668,7 +1668,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Novotel+Bangkok+Ploenchit+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
-        'The Novotel Ploenchit sits at the western edge of Sukhumvit — Bangkok\'s longest and most diverse road. This stretch between BTS Ploenchit and Nana is where the Sukhumvit dining and nightlife scene begins, offering a grittier, more authentic Bangkok experience than the polished mall district further west. Soi 11, one of Bangkok\'s most famous side streets, is a 400m walk and transforms after dark into a strip of restaurants, bars, and clubs that draws both locals and expats. During the day, the area offers excellent street food — the Soi 11 alley has vendors selling pad kra pao (basil stir-fry), boat noodles, and som tam (green papaya salad) for 50-80 THB. BTS Ploenchit is a 2-minute walk from the hotel, which puts you one stop from LENGOLF at BTS Chidlom — making it one of the easiest commutes to indoor golf in the area. Bumrungrad Hospital (500m), one of the top medical tourism destinations in Southeast Asia, is nearby — many hotel guests are medical tourists combining treatment with leisure. For families, the Novotel\'s swimming pool and kids\' area are solid, and the Central Embassy mall (3 BTS stops) has an excellent kids\' play area.',
+        'The Novotel Ploenchit sits at the western edge of Sukhumvit — Bangkok\'s longest and most diverse road. This stretch between BTS Ploenchit and Nana is where the Sukhumvit dining and nightlife scene begins, offering a grittier, more authentic Bangkok experience than the polished mall district further west. Soi 11, one of Bangkok\'s most famous side streets, is a 400m walk and transforms after dark into a strip of restaurants, bars, and clubs that draws both locals and expats. During the day, the area offers excellent street food — the Soi 11 alley has vendors selling pad kra pao (basil stir-fry), boat noodles, and som tam (green papaya salad) for 50-80 THB. BTS Ploenchit is a 2-minute walk from the hotel, which puts you one stop from LENGOLF at BTS Chidlom — making it one of the easiest commutes to indoor golf in the area. Bumrungrad Hospital (500m), one of the top medical tourism destinations in Southeast Asia, is nearby — many hotel guests are medical tourists combining treatment with leisure. For families, the Novotel\'s swimming pool and kids\' area are solid, and the Central Embassy mall (by BTS Ploenchit) has an excellent kids\' play area.',
       suggested_itinerary: [
         { time: '8:00 AM', activity: 'Breakfast at The Square (in-hotel) or grab a coffee from the lobby café' },
         { time: '9:30 AM', activity: 'Take BTS from Ploenchit to Siam (2 stops) for shopping at Siam Paragon and MBK' },
@@ -1723,7 +1723,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Novotel+Bangkok+Ploenchit+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
-        'Novotel Ploenchit ตั้งอยู่ปลายด้านตะวันตกของถนนสุขุมวิท ถนนที่ยาวและหลากหลายที่สุดของกรุงเทพฯ ช่วงระหว่าง BTS เพลินจิตกับนานาคือจุดเริ่มต้นของฉากร้านอาหารและไนต์ไลฟ์แบบสุขุมวิท ซึ่งดิบและใกล้เคียงกรุงเทพฯ ของจริงมากกว่าย่านห้างที่ขัดเงาถัดไปทางตะวันตก ซอย 11 หนึ่งในซอยที่มีชื่อเสียงที่สุดของกรุงเทพฯ อยู่ห่างออกไป 400 เมตร และหลังพระอาทิตย์ตกจะกลายเป็นแนวร้านอาหาร บาร์ และคลับ ที่ดึงดูดทั้งคนไทยและชาวต่างชาติที่ทำงานในเมือง ส่วนกลางวันย่านนี้มีสตรีทฟู้ดที่ดีมาก ในตรอกซอย 11 มีแม่ค้าขายผัดกะเพรา ก๋วยเตี๋ยวเรือ และส้มตำ ในราคา 50-80 บาท BTS เพลินจิตอยู่ห่างจากโรงแรม 2 นาทีเดิน ซึ่งทำให้คุณอยู่ห่างจาก LENGOLF ที่ BTS ชิดลม เพียงสถานีเดียว จึงเป็นหนึ่งในเส้นทางไปเล่นกอล์ฟในร่มที่ง่ายที่สุดในย่านนี้ โรงพยาบาลบำรุงราษฎร์ (500 เมตร) ซึ่งเป็นหนึ่งในจุดหมายด้านการท่องเที่ยวเชิงการแพทย์อันดับต้น ๆ ของเอเชียตะวันออกเฉียงใต้ ก็อยู่ใกล้ ผู้เข้าพักจำนวนไม่น้อยจึงเป็นผู้ที่มารักษาพร้อมกับเที่ยวไปด้วย สำหรับครอบครัว สระว่ายน้ำและโซนเด็กของ Novotel ทำได้ดี และห้าง Central Embassy (BTS 3 สถานี) มีโซนเครื่องเล่นสำหรับเด็กที่ยอดเยี่ยม',
+        'Novotel Ploenchit ตั้งอยู่ปลายด้านตะวันตกของถนนสุขุมวิท ถนนที่ยาวและหลากหลายที่สุดของกรุงเทพฯ ช่วงระหว่าง BTS เพลินจิตกับนานาคือจุดเริ่มต้นของฉากร้านอาหารและไนต์ไลฟ์แบบสุขุมวิท ซึ่งดิบและใกล้เคียงกรุงเทพฯ ของจริงมากกว่าย่านห้างที่ขัดเงาถัดไปทางตะวันตก ซอย 11 หนึ่งในซอยที่มีชื่อเสียงที่สุดของกรุงเทพฯ อยู่ห่างออกไป 400 เมตร และหลังพระอาทิตย์ตกจะกลายเป็นแนวร้านอาหาร บาร์ และคลับ ที่ดึงดูดทั้งคนไทยและชาวต่างชาติที่ทำงานในเมือง ส่วนกลางวันย่านนี้มีสตรีทฟู้ดที่ดีมาก ในตรอกซอย 11 มีแม่ค้าขายผัดกะเพรา ก๋วยเตี๋ยวเรือ และส้มตำ ในราคา 50-80 บาท BTS เพลินจิตอยู่ห่างจากโรงแรม 2 นาทีเดิน ซึ่งทำให้คุณอยู่ห่างจาก LENGOLF ที่ BTS ชิดลม เพียงสถานีเดียว จึงเป็นหนึ่งในเส้นทางไปเล่นกอล์ฟในร่มที่ง่ายที่สุดในย่านนี้ โรงพยาบาลบำรุงราษฎร์ (500 เมตร) ซึ่งเป็นหนึ่งในจุดหมายด้านการท่องเที่ยวเชิงการแพทย์อันดับต้น ๆ ของเอเชียตะวันออกเฉียงใต้ ก็อยู่ใกล้ ผู้เข้าพักจำนวนไม่น้อยจึงเป็นผู้ที่มารักษาพร้อมกับเที่ยวไปด้วย สำหรับครอบครัว สระว่ายน้ำและโซนเด็กของ Novotel ทำได้ดี และห้าง Central Embassy (ที่ BTS เพลินจิต) มีโซนเครื่องเล่นสำหรับเด็กที่ยอดเยี่ยม',
       suggested_itinerary: [
         { time: '08:00 น.', activity: 'อาหารเช้าที่ The Square ในโรงแรม หรือซื้อกาแฟจากคาเฟ่ที่ล็อบบี้' },
         { time: '09:30 น.', activity: 'นั่ง BTS จากเพลินจิตไปสยาม (2 สถานี) เพื่อช้อปปิ้งที่ Siam Paragon และ MBK' },
@@ -1778,7 +1778,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Novotel+Bangkok+Ploenchit+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
-        'Novotel Ploenchitが建つのは、バンコクで最も長く多彩な通りであるスクンビットの西端です。BTSプルンチット駅からナナにかけての一帯は、スクンビットの食とナイトライフが始まる場所。西側の洗練されたモール地区よりも雑然としていて、生活のにおいのするバンコクが味わえます。バンコクでも名の知れたソイ11は徒歩400m。日が暮れるとレストラン、バー、クラブが並ぶ通りに変わり、地元の人と在住外国人でにぎわいます。昼は屋台が充実していて、ソイ11の路地ではガパオライス、ボートヌードル、ソムタム（青パパイヤのサラダ）が50〜80THBで食べられます。BTSプルンチット駅はホテルから徒歩2分。LENGOLFのあるBTSチットロム駅まで1駅なので、この界隈ではインドアゴルフへの移動がとりわけ楽です。東南アジア有数の医療ツーリズムの拠点であるバムルンラード病院も500mの距離にあり、治療と滞在を兼ねた宿泊客も多く見かけます。家族連れにはNovotelのプールとキッズエリアが頼りになりますし、BTSで3駅のセントラル・エンバシーには充実したキッズプレイエリアがあります。',
+        'Novotel Ploenchitが建つのは、バンコクで最も長く多彩な通りであるスクンビットの西端です。BTSプルンチット駅からナナにかけての一帯は、スクンビットの食とナイトライフが始まる場所。西側の洗練されたモール地区よりも雑然としていて、生活のにおいのするバンコクが味わえます。バンコクでも名の知れたソイ11は徒歩400m。日が暮れるとレストラン、バー、クラブが並ぶ通りに変わり、地元の人と在住外国人でにぎわいます。昼は屋台が充実していて、ソイ11の路地ではガパオライス、ボートヌードル、ソムタム（青パパイヤのサラダ）が50〜80THBで食べられます。BTSプルンチット駅はホテルから徒歩2分。LENGOLFのあるBTSチットロム駅まで1駅なので、この界隈ではインドアゴルフへの移動がとりわけ楽です。東南アジア有数の医療ツーリズムの拠点であるバムルンラード病院も500mの距離にあり、治療と滞在を兼ねた宿泊客も多く見かけます。家族連れにはNovotelのプールとキッズエリアが頼りになりますし、BTSプルンチット駅すぐのセントラル・エンバシーには充実したキッズプレイエリアがあります。',
       suggested_itinerary: [
         { time: '8:00', activity: 'The Square（ホテル内）で朝食、またはロビーのカフェでコーヒーを' },
         { time: '9:30', activity: 'BTSでプルンチット駅からサイアム駅まで2駅。サイアムパラゴンとMBKで買い物を' },
@@ -1794,7 +1794,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
   // ─── KO: things-to-do-near-novotel-ploenchit ───
   // Figures from EN hotel-7: 1.5km / 21분, BTS 플런칫역 도보 2분, 서쪽 한 정거장,
   // 문 앞에서 문 앞까지 약 10분, 택시 약 5분·약 60바트, 4층, Soi 11 400m,
-  // 길거리 음식 50~80바트, Bumrungrad 500m, Central Embassy BTS 3정거장,
+  // 길거리 음식 50~80바트, Bumrungrad 500m, Central Embassy BTS 플런칫역 옆,
   // 약 550바트/시간 최대 5명. "기준"은 as-of 표기에만 쓰고 BTS 문장에서는 뺐어요.
   {
     id: 'hotel-7-ko',
@@ -1833,7 +1833,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Novotel+Bangkok+Ploenchit+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
-        'Novotel Ploenchit 호텔은 방콕에서 가장 길고 다양한 도로인 Sukhumvit의 서쪽 끝자락에 있어요. BTS 플런칫역과 나나 사이의 이 구간에서 Sukhumvit의 식음료와 나이트라이프 신이 시작돼요. 서쪽의 정돈된 쇼핑몰 지구보다 거칠고 더 방콕다운 경험을 할 수 있어요. 방콕에서 가장 유명한 골목 중 하나인 Soi 11 거리는 400m 떨어져 있고, 해가 지면 현지인과 외국인 거주자가 함께 몰리는 레스토랑·바·클럽 거리로 바뀌어요. 낮에는 길거리 음식이 훌륭해요. Soi 11 골목 노점에서는 팟 끄라파오(바질 볶음), 보트 누들, 쏨땀(그린 파파야 샐러드)을 50~80바트에 팔아요. 호텔에서 BTS 플런칫역까지 2분이면 걸어가고, 거기서 BTS 칫롬역의 LENGOLF까지 한 정거장이라 이 일대에서 실내 골프에 가장 쉽게 닿는 편이에요. 동남아시아 최고의 의료 관광지로 꼽히는 Bumrungrad Hospital 병원도 500m 거리라, 치료와 여행을 함께 하는 투숙객이 많아요. 가족 여행이라면 Novotel 호텔의 수영장과 키즈 공간이 무난하고, BTS로 세 정거장 거리의 Central Embassy 쇼핑몰에는 훌륭한 어린이 놀이 공간이 있어요.',
+        'Novotel Ploenchit 호텔은 방콕에서 가장 길고 다양한 도로인 Sukhumvit의 서쪽 끝자락에 있어요. BTS 플런칫역과 나나 사이의 이 구간에서 Sukhumvit의 식음료와 나이트라이프 신이 시작돼요. 서쪽의 정돈된 쇼핑몰 지구보다 거칠고 더 방콕다운 경험을 할 수 있어요. 방콕에서 가장 유명한 골목 중 하나인 Soi 11 거리는 400m 떨어져 있고, 해가 지면 현지인과 외국인 거주자가 함께 몰리는 레스토랑·바·클럽 거리로 바뀌어요. 낮에는 길거리 음식이 훌륭해요. Soi 11 골목 노점에서는 팟 끄라파오(바질 볶음), 보트 누들, 쏨땀(그린 파파야 샐러드)을 50~80바트에 팔아요. 호텔에서 BTS 플런칫역까지 2분이면 걸어가고, 거기서 BTS 칫롬역의 LENGOLF까지 한 정거장이라 이 일대에서 실내 골프에 가장 쉽게 닿는 편이에요. 동남아시아 최고의 의료 관광지로 꼽히는 Bumrungrad Hospital 병원도 500m 거리라, 치료와 여행을 함께 하는 투숙객이 많아요. 가족 여행이라면 Novotel 호텔의 수영장과 키즈 공간이 무난하고, BTS 플런칫역 옆 Central Embassy 쇼핑몰에는 훌륭한 어린이 놀이 공간이 있어요.',
       suggested_itinerary: [
         { time: '08:00', activity: 'The Square(호텔 내)에서 조식, 또는 로비 카페에서 커피 한 잔' },
         { time: '09:30', activity: 'BTS 플런칫역에서 시암역까지 두 정거장 이동해 Siam Paragon과 MBK에서 쇼핑' },
@@ -1848,7 +1848,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
 
   // ─── ZH: things-to-do-near-novotel-ploenchit ───
   // Figures carried from EN: 1,500m / 21分钟 / 4星, BTS门到门约10分钟, 打车约5分钟约60泰铢,
-  // Soi 11 400m, Bumrungrad 500m, 路边小吃50–80泰铢, Central Embassy 3站BTS.
+  // Soi 11 400m, Bumrungrad 500m, 路边小吃50–80泰铢, Central Embassy 就在BTS Ploenchit站.
   // Range separator –, per zh conventions. Cheap Charlie\'s apostrophe escaped.
   {
     id: 'hotel-7-zh',
@@ -1887,7 +1887,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Novotel+Bangkok+Ploenchit+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
-        'Novotel Ploenchit位于Sukhumvit的西端——这是曼谷最长、也最多元的一条路。BTS Ploenchit站到Nana之间的这一段，正是Sukhumvit餐饮与夜生活的起点，比再往西的商场区更粗粝，也更贴近真实的曼谷。曼谷最有名的巷子之一Soi 11步行400米可达，入夜后变成一整条餐厅、酒吧和夜店，本地人和外籍居民都爱去。白天这一带的路边小吃很出色——Soi 11的巷子里有摊贩卖打抛饭、船面和青木瓜沙拉，一份50–80泰铢。BTS Ploenchit站距酒店步行2分钟，从这里到LENGOLF所在的BTS Chidlom站只有一站，是这一带去室内高尔夫最省事的路线之一。500米外的Bumrungrad Hospital是东南亚顶尖的医疗旅游目的地之一，不少住客正是把治疗和休闲结合起来的医疗游客。带孩子的家庭，Novotel的泳池和儿童区都不错；搭BTS 3站可达的Central Embassy商场也有很好的儿童游乐区。',
+        'Novotel Ploenchit位于Sukhumvit的西端——这是曼谷最长、也最多元的一条路。BTS Ploenchit站到Nana之间的这一段，正是Sukhumvit餐饮与夜生活的起点，比再往西的商场区更粗粝，也更贴近真实的曼谷。曼谷最有名的巷子之一Soi 11步行400米可达，入夜后变成一整条餐厅、酒吧和夜店，本地人和外籍居民都爱去。白天这一带的路边小吃很出色——Soi 11的巷子里有摊贩卖打抛饭、船面和青木瓜沙拉，一份50–80泰铢。BTS Ploenchit站距酒店步行2分钟，从这里到LENGOLF所在的BTS Chidlom站只有一站，是这一带去室内高尔夫最省事的路线之一。500米外的Bumrungrad Hospital是东南亚顶尖的医疗旅游目的地之一，不少住客正是把治疗和休闲结合起来的医疗游客。带孩子的家庭，Novotel的泳池和儿童区都不错；就在BTS Ploenchit站的Central Embassy商场也有很好的儿童游乐区。',
       suggested_itinerary: [
         { time: '08:00', activity: '在酒店的The Square吃早餐，或者到大堂咖啡吧买杯咖啡' },
         { time: '09:30', activity: '从Ploenchit搭BTS到Siam（2站），逛Siam Paragon和MBK' },
