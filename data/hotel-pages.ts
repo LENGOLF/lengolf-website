@@ -293,7 +293,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 350,
       walking_time_mins: 5,
       walking_directions:
-        'Exit Sindhorn Midtown onto Soi Langsuan. Walk north to Ploenchit Road, then turn right (east). Continue toward BTS Chidlom station — The Mercury Ville is on your right, directly connected to the BTS. LENGOLF is on Floor 4.',
+        'Exit Sindhorn Midtown onto Soi Langsuan. Walk north to Ploenchit Road — The Mercury Ville sits right at the corner where Soi Langsuan meets Ploenchit Road, directly connected to BTS Chidlom station. LENGOLF is on Floor 4.',
       hotel_star_rating: 4,
       nearby_restaurants: [
         { name: 'Baan Khanitha (Langsuan)', cuisine: 'Thai Fine Dining', distance_m: 200 },
@@ -348,7 +348,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 350,
       walking_time_mins: 5,
       walking_directions:
-        'ออกจาก Sindhorn Midtown มายังซอยหลังสวน (Soi Langsuan) เดินขึ้นไปทางทิศเหนือจนถึงถนนเพลินจิต (Ploenchit Road) แล้วเลี้ยวขวา (ไปทางทิศตะวันออก) เดินต่อไปทางสถานี BTS ชิดลม The Mercury Ville จะอยู่ทางขวามือ เชื่อมต่อกับ BTS โดยตรง LENGOLF อยู่ชั้น 4',
+        'ออกจาก Sindhorn Midtown มายังซอยหลังสวน (Soi Langsuan) เดินขึ้นไปทางทิศเหนือจนถึงถนนเพลินจิต (Ploenchit Road) The Mercury Ville อยู่ตรงหัวมุมที่ซอยหลังสวนบรรจบกับถนนเพลินจิตพอดี เชื่อมต่อกับสถานี BTS ชิดลมโดยตรง LENGOLF อยู่ชั้น 4',
       hotel_star_rating: 4,
       nearby_restaurants: [
         { name: 'Baan Khanitha (Langsuan)', cuisine: 'อาหารไทยไฟน์ไดนิ่ง', distance_m: 200 },
@@ -403,7 +403,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 350,
       walking_time_mins: 5,
       walking_directions:
-        'Sindhorn Midtownを出て、ランスアン通り（Soi Langsuan）へ。北へ進んでプルンチット通り（Ploenchit Road）に出たら、右（東）に曲がります。BTSチットロム駅の方向へ進むと、右手にBTSと直結したザ・マーキュリービルがあります。LENGOLFは4階です。',
+        'Sindhorn Midtownを出て、ランスアン通り（Soi Langsuan）へ。北へ進んでプルンチット通り（Ploenchit Road）に出ると、ちょうどランスアン通りとプルンチット通りが交わる角にザ・マーキュリービルがあります。BTSチットロム駅に直結しています。LENGOLFは4階です。',
       hotel_star_rating: 4,
       nearby_restaurants: [
         { name: 'Baan Khanitha (Langsuan)', cuisine: 'タイ高級料理', distance_m: 200 },
@@ -458,7 +458,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 350,
       walking_time_mins: 5,
       walking_directions:
-        'Sindhorn Midtown에서 Soi Langsuan 쪽으로 나옵니다. 북쪽으로 걸어 Ploenchit Road에 닿으면 오른쪽(동쪽)으로 꺾어요. BTS 칫롬역 방향으로 계속 걸으면 오른편에 The Mercury Ville 건물이 나와요. BTS와 바로 연결돼 있어요. LENGOLF는 4층에 있어요.',
+        'Sindhorn Midtown에서 Soi Langsuan 쪽으로 나옵니다. 북쪽으로 걸어 Ploenchit Road에 닿으면, 두 길이 만나는 모퉁이에 바로 The Mercury Ville 건물이 있어요. BTS 칫롬역과 바로 연결돼 있어요. LENGOLF는 4층에 있어요.',
       hotel_star_rating: 4,
       nearby_restaurants: [
         { name: 'Baan Khanitha (Langsuan)', cuisine: '태국 파인다이닝', distance_m: 200 },
@@ -513,7 +513,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 350,
       walking_time_mins: 5,
       walking_directions:
-        '从Sindhorn Midtown出来，走到Soi Langsuan上。向北走到Ploenchit Road，然后右转（向东）。继续朝BTS Chidlom站方向走——The Mercury Ville就在你的右手边，与BTS直接相连。LENGOLF在4楼。',
+        '从Sindhorn Midtown出来，走到Soi Langsuan上。向北走到Ploenchit Road——The Mercury Ville就在Soi Langsuan与Ploenchit Road交汇的路口，与BTS Chidlom站直接相连。LENGOLF在4楼。',
       hotel_star_rating: 4,
       nearby_restaurants: [
         { name: 'Baan Khanitha (Langsuan)', cuisine: '泰式高级料理', distance_m: 200 },
