@@ -96,20 +96,54 @@ export async function getRentalClubPricing(): Promise<{
     // tier means a hidden premium set wouldn't visibly change the table, but filter for
     // correctness so the pricing only ever reflects publicly-bookable sets.
     .eq('website_visible', true)
+    // Stable order so any positional read stays deterministic (pricing itself is
+    // min-per-tier and order-independent).
+    .order('display_order', { ascending: true })
+    .order('slug', { ascending: true })
 
   if (error || !data) {
     console.error('Error fetching rental pricing:', error)
     return { indoor: [], course: [] }
   }
 
-  const premium = data.find((r) => r.tier === 'premium')
-  const premiumPlus = data.find((r) => r.tier === 'premium-plus')
+  type PriceKey = 'indoor_price_1h' | 'indoor_price_2h' | 'indoor_price_3h' | 'indoor_price_4h' | 'indoor_price_5h' | 'course_price_1d' | 'course_price_3d' | 'course_price_7d' | 'course_price_14d'
 
-  if (!premium || !premiumPlus) {
+  // The public table is a "from"-price table: cheapest live row per tier per
+  // duration. Deterministic regardless of row order — the old
+  // `data.find(r => r.tier === 'premium')` took whichever premium row PostgREST
+  // returned first, which became non-deterministic once a second premium set
+  // (REVA) existed. Only looked correct because all premium rows share pricing.
+  const byTier = (tier: string) => data.filter((r) => r.tier === tier)
+  const minPrice = (tier: string, key: PriceKey): number | null => {
+    const vals = byTier(tier)
+      .map((r) => r[key])
+      .filter((v): v is number => v != null)
+    return vals.length > 0 ? Math.min(...vals) : null
+  }
+
+  const premiumRows = byTier('premium')
+  const premiumPlusRows = byTier('premium-plus')
+
+  if (premiumRows.length === 0 || premiumPlusRows.length === 0) {
     return { indoor: [], course: [] }
   }
 
-  type PriceKey = 'indoor_price_1h' | 'indoor_price_2h' | 'indoor_price_3h' | 'indoor_price_4h' | 'indoor_price_5h' | 'course_price_1d' | 'course_price_3d' | 'course_price_7d' | 'course_price_14d'
+  // Silent public-price drift is the real hazard: if two live rows of one tier
+  // ever disagree, the table shows the cheapest — make the divergence loud.
+  for (const [tier, rows] of [['premium', premiumRows], ['premium-plus', premiumPlusRows]] as const) {
+    if (new Set(rows.map((r) => r.course_price_1d)).size > 1) {
+      console.warn(`rental pricing: ${tier} rows disagree on course_price_1d — table shows the cheapest`)
+    }
+  }
+
+  const premium = Object.fromEntries(
+    (['indoor_price_1h', 'indoor_price_2h', 'indoor_price_3h', 'indoor_price_4h', 'indoor_price_5h', 'course_price_1d', 'course_price_3d', 'course_price_7d', 'course_price_14d'] as PriceKey[])
+      .map((k) => [k, minPrice('premium', k)])
+  ) as Record<PriceKey, number | null>
+  const premiumPlus = Object.fromEntries(
+    (['indoor_price_1h', 'indoor_price_2h', 'indoor_price_3h', 'indoor_price_4h', 'indoor_price_5h', 'course_price_1d', 'course_price_3d', 'course_price_7d', 'course_price_14d'] as PriceKey[])
+      .map((k) => [k, minPrice('premium-plus', k)])
+  ) as Record<PriceKey, number | null>
 
   const indoorDurations: { key: PriceKey; label: string }[] = [
     { key: 'indoor_price_1h', label: '1 Hour' },
@@ -150,6 +184,106 @@ export async function getRentalClubPricing(): Promise<{
     }))
 
   return { indoor, course }
+}
+
+// ── Rental Club Sets (DB-driven cards + galleries) ──
+
+export interface SetVariantImage {
+  path: string
+  alt: string
+}
+
+/**
+ * A colour/shaft variant within ONE bookable set (soft preference, never a
+ * separate row — availability stays combined). `images` present = overrides the
+ * set's base gallery (colour variants); absent = inherits it (shaft variants).
+ */
+export interface SetVariant {
+  key: string
+  label: string | null
+  swatch?: string | null
+  thumb?: string | null
+  spec?: string | null
+  images?: SetVariantImage[]
+}
+
+export interface RentalClubSet {
+  id: string
+  slug: string
+  name: string
+  tier: string
+  gender: string
+  brand: string | null
+  model: string | null
+  specifications: string[]
+  gallery: SetVariantImage[]
+  variants: SetVariant[]
+  variant_axis: string | null
+  display_order: number
+}
+
+/** Defensive parse — DB-authored jsonb, never trust the shape. */
+function parseImages(raw: unknown): SetVariantImage[] {
+  if (!Array.isArray(raw)) return []
+  return raw
+    .filter(
+      (i): i is { path: string; alt?: unknown } => !!i && typeof i === 'object' && typeof (i as SetVariantImage).path === 'string'
+    )
+    .map((i) => ({ path: i.path, alt: typeof i.alt === 'string' ? i.alt : '' }))
+}
+
+function parseVariants(raw: unknown): SetVariant[] {
+  if (!Array.isArray(raw)) return []
+  return raw
+    .filter((v): v is Record<string, unknown> => !!v && typeof v === 'object' && typeof (v as SetVariant).key === 'string')
+    .map((v) => ({
+      key: v.key as string,
+      label: typeof v.label === 'string' ? v.label : null,
+      swatch: typeof v.swatch === 'string' ? v.swatch : null,
+      thumb: typeof v.thumb === 'string' ? v.thumb : null,
+      spec: typeof v.spec === 'string' ? v.spec : null,
+      images: v.images !== undefined ? parseImages(v.images) : undefined,
+    }))
+}
+
+/** Variant images if present, else the set's base gallery. */
+export function setGallery(set: Pick<RentalClubSet, 'gallery' | 'variants'>, key?: string | null): SetVariantImage[] {
+  const variant = key ? set.variants.find((v) => v.key === key) : undefined
+  if (variant?.images && variant.images.length > 0) return variant.images
+  return set.gallery
+}
+
+/** Publicly-bookable sets with their DB-driven galleries, in display order. */
+export async function getRentalClubSets(): Promise<RentalClubSet[]> {
+  const supabase = createClient()
+
+  const { data, error } = await supabase
+    .from('rental_club_sets')
+    .select('id, slug, name, tier, gender, brand, model, specifications, gallery, variants, variant_axis, display_order')
+    .eq('is_active', true)
+    .eq('website_visible', true)
+    .order('display_order', { ascending: true })
+    .order('slug', { ascending: true })
+
+  if (error || !data) {
+    console.error('Error fetching rental club sets:', error)
+    return []
+  }
+
+  return data.map((row) => ({
+    id: row.id,
+    slug: row.slug,
+    name: row.name,
+    tier: row.tier,
+    gender: row.gender,
+    brand: row.brand,
+    model: row.model,
+    specifications: Array.isArray(row.specifications) ? (row.specifications as string[]).filter((s) => typeof s === 'string') : [],
+    gallery: parseImages(row.gallery),
+    variants: parseVariants(row.variants),
+    variant_axis: row.variant_axis,
+    display_order: row.display_order,
+  }))
 }
 
 export async function getRelatedClubs(club: UsedClub, limit = 3): Promise<UsedClub[]> {

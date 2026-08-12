@@ -731,16 +731,26 @@
     "premiumSpec3": "เวดจ์ Jaws Raw (52°, 56°) — ก้าน Dynamic Gold S200",
     "premiumSpec4": "พัตเตอร์ Odyssey White Hot Black Series Five — ก้าน Stroke Lab",
     "premiumSpec5": "รวมกระเป๋า Callaway ลายพราง",
-    "club1Name": "Callaway Warbird",
-    "club1Gender": "ชุดเต็มผู้ชาย",
-    "club1Spec1": "ไดรเวอร์, แฟร์เวย์วูด, เหล็ก (5–PW, SW)",
-    "club1Spec2": "พัตเตอร์ Odyssey White Hot Pro รวมอยู่ด้วย",
-    "club1Spec3": "ชุด Callaway ครบเซ็ต สภาพดีเยี่ยม",
-    "club2Name": "Majesty Shuttle",
-    "club2Gender": "ชุดเต็มผู้หญิง",
-    "club2Spec1": "ไดรเวอร์, TaylorMade Gloire 5W, เหล็ก (7–PW)",
-    "club2Spec2": "เวดจ์ Puppy's Paw 56° + พัตเตอร์ TaylorMade Rossa",
-    "club2Spec3": "แบรนด์ญี่ปุ่นพรีเมียม น้ำหนักเบา",
+    "sets": {
+      "premium-mens-warbird": {
+        "name": "Callaway Warbird",
+        "gender": "ชุดเต็มผู้ชาย",
+        "spec1": "ไดรเวอร์, แฟร์เวย์วูด, เหล็ก (5–PW, SW)",
+        "spec2": "พัตเตอร์ Odyssey White Hot Pro รวมอยู่ด้วย",
+        "spec3": "ชุด Callaway ครบเซ็ต สภาพดีเยี่ยม"
+      },
+      "premium-womens-majesty": {
+        "name": "Majesty Shuttle",
+        "gender": "ชุดเต็มผู้หญิง",
+        "spec1": "ไดรเวอร์, TaylorMade Gloire 5W, เหล็ก (7–PW)",
+        "spec2": "เวดจ์ Puppy's Paw 56° + พัตเตอร์ TaylorMade Rossa",
+        "spec3": "แบรนด์ญี่ปุ่นพรีเมียม น้ำหนักเบา"
+      }
+    },
+    "variantLabels": {
+      "white": "สีขาว",
+      "black": "สีดำ"
+    },
     "formTitle": "จองไม้กอล์ฟ",
     "formSubtitle": "เลือกชุดไม้ วันที่ และการจัดส่ง — จองออนไลน์ได้เลย",
     "ctaTitle": "พร้อมจองไม้กอล์ฟแล้วหรือยัง?",

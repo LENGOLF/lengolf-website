@@ -108,16 +108,26 @@
     "premiumSpec3": "Jaws Raw挖起杆（52°、56°）— Dynamic Gold S200",
     "premiumSpec4": "Odyssey White Hot Black Series Five推杆 — Stroke Lab杆身",
     "premiumSpec5": "附Callaway迷彩球袋",
-    "club1Name": "Callaway Warbird",
-    "club1Gender": "男士全套",
-    "club1Spec1": "一号木、球道木、铁杆（5至劈起杆、沙杆）",
-    "club1Spec2": "附Odyssey White Hot Pro推杆",
-    "club1Spec3": "全套Callaway配齐，品相极佳",
-    "club2Name": "Majesty Shuttle",
-    "club2Gender": "女士全套",
-    "club2Spec1": "一号木、TaylorMade Gloire 5号木、铁杆（7至劈起杆）",
-    "club2Spec2": "Puppy's Paw 56°挖起杆 + TaylorMade Rossa推杆",
-    "club2Spec3": "日本顶级品牌，轻量化设计",
+    "sets": {
+      "premium-mens-warbird": {
+        "name": "Callaway Warbird",
+        "gender": "男士全套",
+        "spec1": "一号木、球道木、铁杆（5至劈起杆、沙杆）",
+        "spec2": "附Odyssey White Hot Pro推杆",
+        "spec3": "全套Callaway配齐，品相极佳"
+      },
+      "premium-womens-majesty": {
+        "name": "Majesty Shuttle",
+        "gender": "女士全套",
+        "spec1": "一号木、TaylorMade Gloire 5号木、铁杆（7至劈起杆）",
+        "spec2": "Puppy's Paw 56°挖起杆 + TaylorMade Rossa推杆",
+        "spec3": "日本顶级品牌，轻量化设计"
+      }
+    },
+    "variantLabels": {
+      "white": "白色",
+      "black": "黑色"
+    },
     "formTitle": "预订球杆",
     "formSubtitle": "选择套装、日期和配送方式，数分钟内完成在线预订",
     "contactPrefix": "如有疑问，请联系",

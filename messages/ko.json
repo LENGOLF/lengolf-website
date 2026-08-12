@@ -108,16 +108,26 @@
     "premiumSpec3": "Jaws Raw 웨지(52°, 56°) — Dynamic Gold S200",
     "premiumSpec4": "Odyssey White Hot Black Series Five 퍼터 — Stroke Lab 샤프트",
     "premiumSpec5": "Callaway 카모 백 포함",
-    "club1Name": "Callaway Warbird",
-    "club1Gender": "남성용 풀 세트",
-    "club1Spec1": "드라이버, 페어웨이 우드, 아이언(5–PW, SW)",
-    "club1Spec2": "Odyssey White Hot Pro 퍼터 포함",
-    "club1Spec3": "모든 클럽 Callaway 동일 세트, 최상의 컨디션",
-    "club2Name": "Majesty Shuttle",
-    "club2Gender": "여성용 풀 세트",
-    "club2Spec1": "드라이버, TaylorMade Gloire 5W, 아이언(7–PW)",
-    "club2Spec2": "Puppy's Paw 56° 웨지 + TaylorMade Rossa 퍼터",
-    "club2Spec3": "일본 프리미엄 브랜드, 경량 디자인",
+    "sets": {
+      "premium-mens-warbird": {
+        "name": "Callaway Warbird",
+        "gender": "남성용 풀 세트",
+        "spec1": "드라이버, 페어웨이 우드, 아이언(5–PW, SW)",
+        "spec2": "Odyssey White Hot Pro 퍼터 포함",
+        "spec3": "모든 클럽 Callaway 동일 세트, 최상의 컨디션"
+      },
+      "premium-womens-majesty": {
+        "name": "Majesty Shuttle",
+        "gender": "여성용 풀 세트",
+        "spec1": "드라이버, TaylorMade Gloire 5W, 아이언(7–PW)",
+        "spec2": "Puppy's Paw 56° 웨지 + TaylorMade Rossa 퍼터",
+        "spec3": "일본 프리미엄 브랜드, 경량 디자인"
+      }
+    },
+    "variantLabels": {
+      "white": "화이트",
+      "black": "블랙"
+    },
     "formTitle": "클럽 예약하기",
     "formSubtitle": "세트, 날짜, 배송 방법을 선택하고 온라인으로 빠르게 예약하세요",
     "ctaTitle": "클럽 예약할 준비가 되셨나요?",

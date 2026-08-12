@@ -108,16 +108,26 @@
     "premiumSpec3": "Jaws Rawウェッジ（52°、56°）— Dynamic Gold S200",
     "premiumSpec4": "Odyssey White Hot Black Series Fiveパター — Stroke Labシャフト",
     "premiumSpec5": "Callawaycamoバッグ付属",
-    "club1Name": "Callaway Warbird",
-    "club1Gender": "メンズ フルセット",
-    "club1Spec1": "ドライバー、フェアウェイウッド、アイアン（5〜PW、SW）",
-    "club1Spec2": "Odyssey White Hot Proパター付属",
-    "club1Spec3": "全てCallawayで統一されたセット、最高の状態",
-    "club2Name": "Majesty Shuttle",
-    "club2Gender": "レディース フルセット",
-    "club2Spec1": "ドライバー、TaylorMade Gloire 5W、アイアン（7〜PW）",
-    "club2Spec2": "Puppy's Paw 56°ウェッジ + TaylorMade Rossaパター",
-    "club2Spec3": "日本のプレミアムブランド、軽量設計",
+    "sets": {
+      "premium-mens-warbird": {
+        "name": "Callaway Warbird",
+        "gender": "メンズ フルセット",
+        "spec1": "ドライバー、フェアウェイウッド、アイアン（5〜PW、SW）",
+        "spec2": "Odyssey White Hot Proパター付属",
+        "spec3": "全てCallawayで統一されたセット、最高の状態"
+      },
+      "premium-womens-majesty": {
+        "name": "Majesty Shuttle",
+        "gender": "レディース フルセット",
+        "spec1": "ドライバー、TaylorMade Gloire 5W、アイアン（7〜PW）",
+        "spec2": "Puppy's Paw 56°ウェッジ + TaylorMade Rossaパター",
+        "spec3": "日本のプレミアムブランド、軽量設計"
+      }
+    },
+    "variantLabels": {
+      "white": "ホワイト",
+      "black": "ブラック"
+    },
     "formTitle": "クラブを予約する",
     "formSubtitle": "セット、日程、配送方法を選択し、数分でオンライン予約",
     "ctaTitle": "クラブの予約準備はできましたか？",
