@@ -248,13 +248,13 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
                     <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t('greenFees')}</p>
                     {activeCourse.green_fee_weekday_thb && (
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-muted-foreground">{t('weekday')}</span>
+                        <span className="text-xs text-muted-foreground">{t(activeCourse.fee_is_seasonal ? 'lowSeason' : 'weekday')}</span>
                         <span className="text-xs font-bold text-foreground">{formatFee(activeCourse.green_fee_weekday_thb)}</span>
                       </div>
                     )}
                     {activeCourse.green_fee_weekend_thb && (
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-muted-foreground">{t('weekend')}</span>
+                        <span className="text-xs text-muted-foreground">{t(activeCourse.fee_is_seasonal ? 'highSeason' : 'weekend')}</span>
                         <span className="text-xs font-bold text-foreground">{formatFee(activeCourse.green_fee_weekend_thb)}</span>
                       </div>
                     )}

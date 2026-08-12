@@ -1263,7 +1263,9 @@
     "wknd": "週末",
     "viewFullGuide": "詳しいガイド・コツ・アクセスを見る",
     "openGuide": "ガイドを開く",
-    "close": "閉じる"
+    "close": "閉じる",
+    "lowSeason": "ローシーズン",
+    "highSeason": "ハイシーズン"
   },
   "GolfCoursePriceTier": {
     "metaDescription": "平日グリーンフィー฿{amount}以下で回れるバンコク近郊の上位ゴルフ場と、この価格帯で知っておきたいポイントをご紹介します。",
@@ -1339,7 +1341,11 @@
     "nudgeEyebrowNoRental": "このコースにレンタルがない場合は",
     "nudgeBody": "現行モデルのCallaway Paradym、Warbird、REVAのセット — ハウスクラブではありません。<price>1日1,200THB</price>から。複数日割引あり、バンコク市内のホテルへお届けも可能です。",
     "nudgeBodyNoRental": "このコースにはクラブレンタルがありませんが、LENGOLFなら借りられます。現行モデルのCallaway Paradym、Warbird、REVAのセットが<price>1日1,200THB</price>から。複数日割引あり、バンコク市内のホテルへお届けも可能です。",
-    "seePackages": "パッケージを見る"
+    "seePackages": "パッケージを見る",
+    "lowSeasonGreenFee": "ローシーズングリーンフィー",
+    "highSeasonFee": "ハイシーズン：{price}THB",
+    "lowSeason": "ローシーズン",
+    "highSeason": "ハイシーズン"
   },
   "ExplainerPage": {
     "guideLabel": "LENGOLFガイド",

@@ -116,14 +116,14 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
             {/* Green fee highlight — shown when data is available */}
             {course.green_fee_weekday_thb && (
               <div className="shrink-0 rounded-2xl border border-white/15 bg-white/10 px-6 py-4 text-right backdrop-blur-sm">
-                <p className="text-xs font-semibold uppercase tracking-widest text-white/60">{t('weekdayGreenFee')}</p>
+                <p className="text-xs font-semibold uppercase tracking-widest text-white/60">{t(course.fee_is_seasonal ? 'lowSeasonGreenFee' : 'weekdayGreenFee')}</p>
                 <p className="mt-0.5 text-3xl font-black text-white">
                   {course.green_fee_weekday_thb.toLocaleString('en-US')}
                   <span className="ml-1 text-base font-semibold text-white/70">{t('thb')}</span>
                 </p>
                 {course.green_fee_weekend_thb && (
                   <p className="mt-1 text-xs text-white/50">
-                    {t('weekendFee', { price: course.green_fee_weekend_thb.toLocaleString('en-US') })}
+                    {t(course.fee_is_seasonal ? 'highSeasonFee' : 'weekendFee', { price: course.green_fee_weekend_thb.toLocaleString('en-US') })}
                   </p>
                 )}
               </div>
@@ -370,7 +370,7 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
                 <div className="divide-y bg-white">
                   {course.green_fee_weekday_thb && (
                     <div className="flex items-center justify-between px-5 py-3.5">
-                      <span className="text-sm text-muted-foreground">{t('weekday')}</span>
+                      <span className="text-sm text-muted-foreground">{t(course.fee_is_seasonal ? 'lowSeason' : 'weekday')}</span>
                       <span className="font-bold text-foreground">
                         {t('feeThb', { price: course.green_fee_weekday_thb.toLocaleString('en-US') })}
                       </span>
@@ -378,7 +378,7 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
                   )}
                   {course.green_fee_weekend_thb && (
                     <div className="flex items-center justify-between px-5 py-3.5">
-                      <span className="text-sm text-muted-foreground">{t('weekend')}</span>
+                      <span className="text-sm text-muted-foreground">{t(course.fee_is_seasonal ? 'highSeason' : 'weekend')}</span>
                       <span className="font-bold text-foreground">
                         {t('feeThb', { price: course.green_fee_weekend_thb.toLocaleString('en-US') })}
                       </span>

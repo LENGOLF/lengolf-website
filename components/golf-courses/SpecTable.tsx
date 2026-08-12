@@ -30,14 +30,14 @@ const ROWS: Row[] = [
     label: 'Weekday green fee',
     cell: (c) =>
       c.green_fee_weekday_thb !== null
-        ? `${c.green_fee_weekday_thb.toLocaleString('en-US')} THB`
+        ? `${c.green_fee_weekday_thb.toLocaleString('en-US')} THB${c.fee_is_seasonal ? ' (low season)' : ''}`
         : '—',
   },
   {
     label: 'Weekend green fee',
     cell: (c) =>
       c.green_fee_weekend_thb !== null
-        ? `${c.green_fee_weekend_thb.toLocaleString('en-US')} THB`
+        ? `${c.green_fee_weekend_thb.toLocaleString('en-US')} THB${c.fee_is_seasonal ? ' (high season)' : ''}`
         : '—',
   },
   {

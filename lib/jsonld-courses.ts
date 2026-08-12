@@ -35,7 +35,7 @@ function golfCourseItem(c: GolfCourse): Record<string, unknown> {
       '@type': 'Offer',
       price: String(c.green_fee_weekday_thb),
       priceCurrency: 'THB',
-      description: 'Weekday green fee',
+      description: c.fee_is_seasonal ? 'Low season green fee' : 'Weekday green fee',
     }
   }
   return item
@@ -131,7 +131,7 @@ export function getCourseDetailJsonLd(
     const offers: Record<string, unknown>[] = [
       {
         '@type': 'Offer',
-        name: 'Weekday green fee',
+        name: c.fee_is_seasonal ? 'Low season green fee' : 'Weekday green fee',
         price: String(fee),
         priceCurrency: 'THB',
       },
@@ -139,7 +139,7 @@ export function getCourseDetailJsonLd(
     if (c.green_fee_weekend_thb !== null) {
       offers.push({
         '@type': 'Offer',
-        name: 'Weekend green fee',
+        name: c.fee_is_seasonal ? 'High season green fee' : 'Weekend green fee',
         price: String(c.green_fee_weekend_thb),
         priceCurrency: 'THB',
       })

@@ -1265,7 +1265,9 @@
     "wknd": "주말",
     "viewFullGuide": "전체 가이드, 팁 및 오시는 길 보기",
     "openGuide": "가이드 열기",
-    "close": "닫기"
+    "close": "닫기",
+    "lowSeason": "비수기",
+    "highSeason": "성수기"
   },
   "GolfCoursePriceTier": {
     "metaDescription": "평일 그린피 ฿{amount} 이하인 방콕 근교 상위 골프장과 이 가격대에서 알아 두어야 할 점을 소개합니다.",
@@ -1341,7 +1343,11 @@
     "nudgeEyebrowNoRental": "이 코스에 대여 클럽이 없나요?",
     "nudgeBody": "현행 모델 Callaway Paradym, Warbird, REVA 세트 — 골프장 비치용 클럽이 아닙니다. <price>하루 1,200바트</price>부터이며, 여러 날 대여 할인과 방콕 호텔 배송도 가능합니다.",
     "nudgeBodyNoRental": "이 코스에는 클럽 대여가 없지만 LENGOLF에서는 빌릴 수 있습니다. 현행 모델 Callaway Paradym, Warbird, REVA 세트를 <price>하루 1,200바트</price>부터 이용할 수 있으며, 여러 날 대여 할인과 방콕 호텔 배송도 가능합니다.",
-    "seePackages": "패키지 보기"
+    "seePackages": "패키지 보기",
+    "lowSeasonGreenFee": "비수기 그린피",
+    "highSeasonFee": "성수기: {price}바트",
+    "lowSeason": "비수기",
+    "highSeason": "성수기"
   },
   "ExplainerPage": {
     "guideLabel": "LENGOLF 가이드",

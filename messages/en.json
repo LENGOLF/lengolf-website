@@ -1176,7 +1176,9 @@
     "wknd": "wknd",
     "viewFullGuide": "View full guide, tips & directions",
     "openGuide": "Open guide",
-    "close": "Close"
+    "close": "Close",
+    "lowSeason": "Low season",
+    "highSeason": "High season"
   },
   "GolfCoursePriceTier": {
     "metaDescription": "Top Bangkok-area golf courses with weekday green fees under ฿{amount}, with what to expect at this price band.",
@@ -1252,7 +1254,11 @@
     "nudgeEyebrowNoRental": "No rentals at this course?",
     "nudgeBody": "Current-generation Callaway Paradym, Warbird & REVA sets — not house clubs. From <price>1,200 THB/day</price> with multi-day discounts and Bangkok hotel delivery.",
     "nudgeBodyNoRental": "This course doesn't offer club rental — but LENGOLF does. Current-generation Callaway Paradym, Warbird & REVA sets from <price>1,200 THB/day</price> with multi-day discounts and Bangkok hotel delivery.",
-    "seePackages": "See packages"
+    "seePackages": "See packages",
+    "lowSeasonGreenFee": "Low season green fee",
+    "highSeasonFee": "High season: {price} THB",
+    "lowSeason": "Low season",
+    "highSeason": "High season"
   },
   "ExplainerPage": {
     "guideLabel": "LENGOLF Guide",
