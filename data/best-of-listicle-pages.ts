@@ -4044,7 +4044,6 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           ],
           cons: [
             'No bar or full F&B — purely golf-focused',
-            'Less polished venue experience',
           ],
           is_lengolf: false,
           address: 'Multiple locations — Emporium Mall, Thong Lo, On Nut',
@@ -4206,7 +4205,6 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           ],
           cons: [
             'ไม่มีบาร์หรืออาหารและเครื่องดื่มเต็มรูปแบบ เน้นกอล์ฟล้วน ๆ',
-            'ประสบการณ์ในร้านเนี้ยบน้อยกว่า',
           ],
           is_lengolf: false,
           address: 'Multiple locations — Emporium Mall, Thong Lo, On Nut',
@@ -4368,7 +4366,6 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           ],
           cons: [
             'バーやフルサービスの飲食はなく、ゴルフに特化しています',
-            '施設としての完成度は控えめ',
           ],
           is_lengolf: false,
           address: 'Multiple locations — Emporium Mall, Thong Lo, On Nut',
@@ -4533,7 +4530,6 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           ],
           cons: [
             '바나 제대로 된 식음료가 없어 골프에만 집중된 곳이에요',
-            '공간 경험의 완성도가 떨어져요',
           ],
           is_lengolf: false,
           address: 'Multiple locations — Emporium Mall, Thong Lo, On Nut',
@@ -4695,7 +4691,6 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           ],
           cons: [
             '没有吧台或完整餐饮——纯粹以打球为主',
-            '场馆体验没那么精致',
           ],
           is_lengolf: false,
           address: 'Multiple locations — Emporium Mall, Thong Lo, On Nut',
