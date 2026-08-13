@@ -13,6 +13,26 @@ LENGOLF website — a Next.js 15 (App Router) site for an indoor golf simulator 
 - **Start production:** `npm run start`
 - **Lint:** `npm run lint`
 - **Validate internal links:** `npm run validate:links` — checks that SEO cross-links in `data/*.ts` (`related_slugs`, FAQ `related_questions`) resolve to published pages. No server needed.
+- **⚠️ NO PR IS "READY" WITHOUT A `pr-rigor` PASS — and an inline `/code-review`
+  with zero agents spawned is NOT a review.** Run `.claude/skills/pr-rigor/SKILL.md`
+  before telling anyone (especially the user's manager) that a PR is ready, green,
+  or mergeable. It spawns 3–6 independent adversarial finders on *distinct* angles
+  plus role passes: **claim audit** (every assertion in the PR body, the commit
+  messages and any CLAUDE.md text the PR adds, verified against code), **guard
+  efficacy** (break each guard's input on purpose, confirm it goes red),
+  native-QA per locale, and a release-readiness verdict. Every verdict states
+  `Independent review agents spawned: N`; if N is 0 you may not report a verdict.
+  This rule existed as an operator convention from PR #36 onward, was named in the
+  bodies of #36/#56/#57/#86/#88 and **written down nowhere**, which is precisely
+  how it got lost. It has now been violated twice with the same signature: PR #88
+  disclosed reporting a verdict from a zero-agent self-read, and PR #93 reported
+  "no correctness bugs" from a single inline `/code-review` — an outside pass then
+  found six confirmed defects, three live on indexed pages, with CI fully green.
+  **CI cannot read a sentence; `lint`/`build-and-smoke`/`lighthouse` were green for
+  every one of those defects.** Corollary: *treat any claim in the commit history,
+  a PR description, or this file as an assertion, not evidence* — verify it or
+  delete it. And never generalize from one fixed instance ("found the missed
+  consumer" → "all consumers now honor it"): enumerate repo-wide, don't infer.
 - **⚠️ EVERY translation batch needs NATIVE-LANGUAGE QA before it merges — the
   automated gate does not substitute for it.** `validate:i18n` catches mechanical
   violations (emoji, currency form, terminology `avoid` variants, namespace
