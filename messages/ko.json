@@ -1275,7 +1275,7 @@
     "breadcrumbCurrent": "฿{amount} 이하",
     "eyebrowBadge": "그린피 · ฿{amount} 이하",
     "catchHeading": "주의해야 할 점",
-    "topCoursesHeading": "요금 ฿{amount} 이하 상위 {count}개 코스",
+    "topCoursesHeading": "그린피 ฿{amount} 이하 상위 {count}개 코스",
     "roundupReason": "평일 {price}바트부터",
     "otherPriceBands": "다른 가격대",
     "roundupReasonSeasonal": "비수기 {price}바트부터"

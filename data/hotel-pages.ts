@@ -1857,7 +1857,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-novotel-ploenchit',
     title: 'Novotel Bangkok Ploenchit附近好去处 — 周边活动指南',
     meta_description:
-      '住在Novotel Ploenchit？周边这样安排：LENGOLF室内高尔夫（1.5公里，或BTS一站）、购物、泰式路边小吃与夜间娱乐。',
+      '住在Novotel Ploenchit？周边这样安排：LENGOLF室内高尔夫（1.5公里，或搭BTS一站）、购物、泰式路边小吃与夜间娱乐。',
     featured_image: null,
     schema_markup: null,
     status: 'published',

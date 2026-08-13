@@ -5291,7 +5291,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           pros: [
             '쇼핑과 식사, 놀거리가 한 건물에 엄청나게 많아요',
             'Ratchaprasong 광장에서 1년 내내 행사와 푸드 페스티벌이 열려요',
-            'Gaysorn Village 쇼핑몰과 랏차쁘라송 스카이워크로 바로 연결돼요',
+            'Gaysorn Village 쇼핑몰과 Ratchaprasong 스카이워크로 바로 연결돼요',
           ],
           cons: [
             '쇼핑몰을 싫어하는 사람에게는 부담스러운 규모예요',
@@ -5472,7 +5472,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           pros: [
             '一个综合体里就有极其丰富的零售、餐饮和娱乐',
             'Ratchaprasong广场常年有活动和美食节',
-            '与Gaysorn Village和Ratchaprasong天桥系统直接连通',
+            '与Gaysorn Village和Ratchaprasong空中走廊网络直接连通',
           ],
           cons: [
             '不爱逛商场的人会觉得眼花缭乱',

@@ -1276,7 +1276,7 @@
     "breadcrumbCurrent": "฿{amount}以下",
     "eyebrowBadge": "果岭费 · ฿{amount}以下",
     "catchHeading": "有什么要注意的？",
-    "topCoursesHeading": "价格฿{amount}以下的{count}座精选球场",
+    "topCoursesHeading": "果岭费฿{amount}以下的{count}座精选球场",
     "roundupReason": "平日{price}泰铢起",
     "otherPriceBands": "其他价格区间",
     "roundupReasonSeasonal": "淡季{price}泰铢起"
