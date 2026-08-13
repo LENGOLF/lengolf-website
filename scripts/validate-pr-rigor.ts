@@ -12,6 +12,11 @@
  * requires writing an explicit number a reviewer can challenge, instead of
  * saying nothing.
  *
+ * CAVEAT: `github.event.pull_request.body` is captured in the event payload, so
+ * editing a PR description does NOT re-trigger this check and re-running the job
+ * replays the stale body. Push a commit to re-evaluate. (Observed on PR #93: the
+ * gate correctly failed a run whose payload predated the disclosure being added.)
+ *
  * Runs only when a PR body is available (CI provides it via PR_BODY). Locally,
  * and on pushes that are not pull requests, it no-ops with a clear message
  * rather than failing — a gate that blocks ordinary local work gets disabled,
