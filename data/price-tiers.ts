@@ -28,7 +28,7 @@ export const PRICE_TIERS: readonly PriceTier[] = [
     slug: '2500-baht',
     title: 'Best Bangkok-Area Golf Courses Under ฿2,500',
     framing:
-      'Honest mid-budget golf within 90 minutes of central Bangkok. Most courses in this band are 15+ years old and run by the same ownership group that built them, and priced for the Thai retail golfer rather than the inbound tourist.',
+      'Honest mid-budget golf within 90 minutes of central Bangkok. Most courses in this band are 15+ years old, run by the same ownership group that built them, and priced for the Thai retail golfer rather than the inbound tourist.',
     catch:
       'Booking is often phone-only, with limited English on the line. Conditioning is solid in the dry season but green speeds vary. Caddies and carts are usually mandatory and bundled in.',
   },
@@ -228,7 +228,7 @@ export const PRICE_TIER_I18N: Partial<
       framing:
         'จุดคุ้มค่าที่สุดสำหรับนักกอล์ฟที่ดูแลงบประมาณ — สนามสมัยใหม่ในระยะเวลาไม่เกิน 1 ชั่วโมงจากกรุงเทพฯ ในราคาที่ตลาดกอล์ฟต่างประเทศส่วนใหญ่มองว่าถูกอย่างไม่น่าเชื่อ สำหรับการเล่น 18 หลุมพร้อมแคดดี้และรถกอล์ฟ',
       catch:
-        'ราคามักปรับขึ้น 30-40% ในช่วงพีค โดยสนามส่วนใหญ่ในกลุ่มนี้คือช่วงวันหยุดสุดสัปดาห์ ส่วนสนามที่คิดราคาตามฤดูกาลจะเป็นช่วงไฮซีซัน หากเลือกวันเล่นได้ยืดหยุ่นก็ช่วยประหยัดได้มากในระดับราคานี้ สนามบางแห่งในกลุ่มบนของระดับราคานี้มีธรรมเนียมทิปแคดดี้ที่จะเพิ่มค่าใช้จ่ายอีก 300-500 บาท จากค่ากรีนฟีที่ประกาศไว้ (ข้อมูล ณ กรกฎาคม 2026)',
+        'ราคามักปรับขึ้น 30-40% ในช่วงพีค ซึ่งสำหรับสนามส่วนใหญ่ในกลุ่มนี้คือช่วงวันหยุดสุดสัปดาห์ ส่วนสนามที่คิดราคาตามฤดูกาลจะเป็นช่วงไฮซีซัน หากเลือกวันเล่นได้ยืดหยุ่นก็ช่วยประหยัดได้มากในระดับราคานี้ สนามบางแห่งในกลุ่มบนของระดับราคานี้มีธรรมเนียมทิปแคดดี้ที่จะเพิ่มค่าใช้จ่ายอีก 300-500 บาท จากค่ากรีนฟีที่ประกาศไว้ (ข้อมูล ณ กรกฎาคม 2026)',
     },
     ja: {
       title: 'バンコク近郊のコスパの良いゴルフ場 ฿3,500以下 — おすすめコースと注意点',
@@ -242,7 +242,7 @@ export const PRICE_TIER_I18N: Partial<
       framing:
         '예산을 생각하며 여행하는 골퍼에게 가장 균형 잡힌 가격대예요. 방콕에서 1시간 이내의 현대적인 코스를, 캐디와 카트가 포함된 18홀 라운딩치고는 해외 대부분의 시장에서 믿기 어려울 만큼 낮은 가격에 즐길 수 있어요.',
       catch:
-        '요금이 30~40% 뛰는 시기가 있어요. 이 가격대에서는 대부분의 코스가 주말이고, 시즌에 따라 요금이 달라지는 코스는 성수기가 그 시기예요. 날짜를 유연하게 잡을 수 있다면 이 가격대에서는 그만큼 아낄 수 있어요. 가격대 상단의 일부 코스에는 캐디 팁 관행이 있어서, 공시된 그린피에 300~500바트가 슬그머니 더해지기도 해요 (2026년 7월 기준).',
+        '요금이 30~40% 뛰는 시기가 있어요. 이 가격대에서 대부분의 코스는 주말이, 시즌에 따라 요금이 달라지는 코스는 성수기가 그 시기예요. 날짜를 유연하게 잡을 수 있다면 이 가격대에서는 그만큼 아낄 수 있어요. 가격대 상단의 일부 코스에는 캐디 팁 관행이 있어서, 공시된 그린피에 300~500바트가 슬그머니 더해지기도 해요 (2026년 7월 기준).',
     },
     zh: {
       title: '曼谷周边高性价比高尔夫球场 ฿3,500以下 — 推荐球场与注意事项',
