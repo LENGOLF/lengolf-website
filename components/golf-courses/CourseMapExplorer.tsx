@@ -1,4 +1,5 @@
 'use client'
+import { feeLabelKeys } from '@/lib/course-fees'
 
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
@@ -248,13 +249,13 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
                     <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t('greenFees')}</p>
                     {activeCourse.green_fee_weekday_thb && (
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-muted-foreground">{t(activeCourse.fee_is_seasonal ? 'lowSeason' : 'weekday')}</span>
+                        <span className="text-xs text-muted-foreground">{t(feeLabelKeys(activeCourse).lower)}</span>
                         <span className="text-xs font-bold text-foreground">{formatFee(activeCourse.green_fee_weekday_thb)}</span>
                       </div>
                     )}
                     {activeCourse.green_fee_weekend_thb && (
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-muted-foreground">{t(activeCourse.fee_is_seasonal ? 'highSeason' : 'weekend')}</span>
+                        <span className="text-xs text-muted-foreground">{t(feeLabelKeys(activeCourse).upper)}</span>
                         <span className="text-xs font-bold text-foreground">{formatFee(activeCourse.green_fee_weekend_thb)}</span>
                       </div>
                     )}
@@ -367,7 +368,7 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
                       <span className="ml-0.5 text-[10px] font-medium text-muted-foreground">{t('thb')}</span>
                     </p>
                     {weekend && (
-                      <p className="text-[11px] text-muted-foreground">{weekend.toLocaleString('en-US')} {t(course.fee_is_seasonal ? 'highSeason' : 'wknd')}</p>
+                      <p className="text-[11px] text-muted-foreground">{weekend.toLocaleString('en-US')} {t(feeLabelKeys(course).upperShort)}</p>
                     )}
                   </>
                 ) : (

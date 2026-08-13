@@ -1181,12 +1181,12 @@
     "highSeason": "ไฮซีซัน"
   },
   "GolfCoursePriceTier": {
-    "metaDescription": "รวมสนามกอล์ฟใกล้กรุงเทพฯ ที่มีค่ากรีนฟีวันธรรมดาไม่เกิน ฿{amount} พร้อมสิ่งที่ควรรู้ก่อนจองในระดับราคานี้",
+    "metaDescription": "รวมสนามกอล์ฟใกล้กรุงเทพฯ ที่มีค่ากรีนฟีไม่เกิน ฿{amount} พร้อมสิ่งที่ควรรู้ก่อนจองในระดับราคานี้",
     "breadcrumbGolfCourses": "สนามกอล์ฟ",
     "breadcrumbCurrent": "ไม่เกิน ฿{amount}",
-    "eyebrowBadge": "ค่ากรีนฟีวันธรรมดา · ไม่เกิน ฿{amount}",
+    "eyebrowBadge": "ค่ากรีนฟี · ไม่เกิน ฿{amount}",
     "catchHeading": "ข้อควรทราบ",
-    "topCoursesHeading": "{count} สนามอันดับต้น ค่ากรีนฟีวันธรรมดาไม่เกิน ฿{amount}",
+    "topCoursesHeading": "{count} สนามอันดับต้น ค่ากรีนฟีไม่เกิน ฿{amount}",
     "roundupReason": "เริ่มต้น {price} บาท (วันธรรมดา)",
     "otherPriceBands": "ช่วงราคาอื่น ๆ",
     "roundupReasonSeasonal": "เริ่มต้น {price} บาท (โลว์ซีซัน)"

@@ -28,16 +28,42 @@ export function pricesByDayOfWeek(c: FeeBasisSource): boolean {
 }
 
 /**
- * next-intl key pair for the two rates, for localized surfaces. Keys exist in the
- * `GolfCourseDetail` and `GolfCourseRegion` namespaces of every locale catalog.
+ * next-intl keys for the two rates, for localized surfaces. Every field here is a
+ * key that exists in all five catalogs; the caller picks the one matching its slot:
+ *
+ * - `lower` / `upper` — bare basis words for a two-row fee table or a map popup
+ *   (`GolfCourseDetail` and `GolfCourseRegion`).
+ * - `lowerHeading` — the hero chip's heading over the lower rate.
+ * - `upperInline` — the hero chip's inline "{price} THB" line for the upper rate.
+ * - `upperShort` — the abbreviated tag the region-hub roster puts after the upper
+ *   rate, where the non-seasonal form is `wknd` rather than `weekend`.
+ *
+ * Returning the whole set (rather than one pair) is deliberate: the catalogs use
+ * four different key families for the same decision, and picking them inline is
+ * what let three separate audits miss a site.
  */
 export function feeLabelKeys(c: FeeBasisSource): {
   lower: 'weekday' | 'lowSeason'
   upper: 'weekend' | 'highSeason'
+  lowerHeading: 'weekdayGreenFee' | 'lowSeasonGreenFee'
+  upperInline: 'weekendFee' | 'highSeasonFee'
+  upperShort: 'wknd' | 'highSeason'
 } {
   return c.fee_is_seasonal
-    ? { lower: 'lowSeason', upper: 'highSeason' }
-    : { lower: 'weekday', upper: 'weekend' }
+    ? {
+        lower: 'lowSeason',
+        upper: 'highSeason',
+        lowerHeading: 'lowSeasonGreenFee',
+        upperInline: 'highSeasonFee',
+        upperShort: 'highSeason',
+      }
+    : {
+        lower: 'weekday',
+        upper: 'weekend',
+        lowerHeading: 'weekdayGreenFee',
+        upperInline: 'weekendFee',
+        upperShort: 'wknd',
+      }
 }
 
 /**

@@ -1181,12 +1181,12 @@
     "highSeason": "High season"
   },
   "GolfCoursePriceTier": {
-    "metaDescription": "Top Bangkok-area golf courses with weekday green fees under ฿{amount}, with what to expect at this price band.",
+    "metaDescription": "Top Bangkok-area golf courses with green fees under ฿{amount}, with what to expect at this price band.",
     "breadcrumbGolfCourses": "Golf Courses",
     "breadcrumbCurrent": "Under ฿{amount}",
-    "eyebrowBadge": "Weekday green fee · Under ฿{amount}",
+    "eyebrowBadge": "Green fee · Under ฿{amount}",
     "catchHeading": "What's the catch?",
-    "topCoursesHeading": "Top {count} courses, weekday fee under ฿{amount}",
+    "topCoursesHeading": "Top {count} courses, green fee under ฿{amount}",
     "roundupReason": "Weekday from {price} THB.",
     "otherPriceBands": "Other price bands",
     "roundupReasonSeasonal": "Low season from {price} THB."

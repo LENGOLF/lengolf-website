@@ -48,6 +48,7 @@ jobs:
       # carries a fees_verified_at attestation. Born from the Artitaya ฿400
       # incident — a scraped Thai-national rate shipping as the visitor rate.
       - run: npm run validate:courses
+      - run: npm run validate:fee-labels
 
       # Hotel-concierge distances: the SAME distance to LENGOLF is stated in
       # hotel_distance_m (hero, walkability band, CTA) and in the

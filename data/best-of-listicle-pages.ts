@@ -4750,7 +4750,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           pros: [
             'Enormous range of retail, dining, and entertainment in one complex',
             'Year-round events and food festivals in Ratchaprasong plaza',
-            'Direct connection to adjacent malls (Gaysorn, Central Chidlom)',
+            'Direct skywalk connection to Gaysorn Village and the Ratchaprasong skywalk network',
           ],
           cons: [
             'Overwhelming for visitors who dislike malls',
@@ -4931,7 +4931,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           pros: [
             'มีทั้งร้านค้า ร้านอาหาร และความบันเทิงหลากหลายมากในที่เดียว',
             'มีอีเวนต์และเทศกาลอาหารที่ลานราชประสงค์ตลอดทั้งปี',
-            'เชื่อมต่อตรงกับห้างข้างเคียง (เกษร และเซ็นทรัล ชิดลม)',
+            'เชื่อมต่อตรงกับเกษร วิลเลจ และทางเดินลอยฟ้าราชประสงค์',
           ],
           cons: [
             'ใหญ่จนท่วมท้นสำหรับคนที่ไม่ชอบเดินห้าง',
@@ -5110,7 +5110,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           pros: [
             '物販、飲食、娯楽がひとつの複合施設に集約されています',
             'ラチャプラソン広場では通年でイベントやフードフェスが開催されます',
-            '隣接するモール（Gaysorn、Central Chidlom）と直結',
+            'Gaysorn Villageとラチャプラソンのスカイウォークに直結',
           ],
           cons: [
             'モールが苦手な方には規模が大きすぎて疲れます',
@@ -5291,7 +5291,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           pros: [
             '쇼핑과 식사, 놀거리가 한 건물에 엄청나게 많아요',
             'Ratchaprasong 광장에서 1년 내내 행사와 푸드 페스티벌이 열려요',
-            '옆 쇼핑몰(Gaysorn, Central Chidlom)과 바로 연결돼요',
+            'Gaysorn Village 쇼핑몰과 랏차쁘라송 스카이워크로 바로 연결돼요',
           ],
           cons: [
             '쇼핑몰을 싫어하는 사람에게는 부담스러운 규모예요',
@@ -5472,7 +5472,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           pros: [
             '一个综合体里就有极其丰富的零售、餐饮和娱乐',
             'Ratchaprasong广场常年有活动和美食节',
-            '与旁边的商场直接连通（Gaysorn、Central Chidlom）',
+            '与Gaysorn Village和Ratchaprasong天桥系统直接连通',
           ],
           cons: [
             '不爱逛商场的人会觉得眼花缭乱',

@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const airport = AIRPORTS[station]
   if (airport) {
     const title = `Golf Courses Near ${airport.name} (${airport.iata}): Distances & Green Fees`
-    const description = `Golf courses ranked by straight-line distance from ${airport.name} (${airport.iata}), with weekday/weekend green fees, club-rental availability, and how to book your round.`
+    const description = `Golf courses ranked by straight-line distance from ${airport.name} (${airport.iata}), with green fees, club-rental availability, and how to book your round.`
     const canonicalUrl = `${SITE_URL}/golf-courses/near/${station}/`
     return {
       title,
@@ -62,7 +62,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!meta) return { title: 'Not Found' }
 
   const title = `Best Golf Courses Near ${meta.name} BTS — Drive Times & Green Fees`
-  const description = `Top golf courses ranked by distance from ${meta.name} BTS station, with drive times, weekday/weekend green fees, and on-site facilities.`
+  const description = `Top golf courses ranked by distance from ${meta.name} BTS station, with drive times, green fees, and on-site facilities.`
   const canonicalUrl = `${SITE_URL}/golf-courses/near/${station}/`
 
   return {
