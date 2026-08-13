@@ -49,6 +49,10 @@ jobs:
       # incident — a scraped Thai-national rate shipping as the visitor rate.
       - run: npm run validate:courses
       - run: npm run validate:fee-labels
+      - name: pr-rigor disclosure
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: npm run validate:pr-rigor
 
       # Hotel-concierge distances: the SAME distance to LENGOLF is stated in
       # hotel_distance_m (hero, walkability band, CTA) and in the

@@ -6,7 +6,7 @@ description: The pre-merge review gate for this repo. Run BEFORE telling anyone 
 # pr-rigor
 
 The gate that decides whether a PR may be called ready. Reconstructed from its
-only surviving record — the PR bodies and comments of #36, #56, #57, #86 and #88
+only surviving record — the PR bodies of #36, #56 and #57 and a comment on #88 (#86 describes the same discipline without using the name)
 — after it was lost by never having been written down.
 
 ## The rule that this exists to enforce
@@ -17,7 +17,8 @@ only surviving record — the PR bodies and comments of #36, #56, #57, #86 and #
 This is quoted from PR #88, which disclosed exactly that failure. It has now
 happened at least twice (PR #88, and PR #93 where a clean inline `/code-review`
 was reported as "no correctness bugs" and an outside pass then found six
-confirmed defects, three of them live on indexed pages).
+confirmed defects — at least four live on indexed pages, one that rendered
+nowhere — with later rounds finding five more).
 
 **Corollary maxim, from #88:** *treat any claim in the commit history, the PR
 description, or CLAUDE.md as an assertion, not evidence.* Verify it or delete it.
@@ -112,6 +113,15 @@ Post as a PR comment, in this order:
    issues belong here, named, rather than omitted.
 6. **Gate** — `lint · typecheck · validate:links · validate:i18n · validate:courses
    · validate:hotels` + smoke count + CI conclusion.
+
+## Enforcement
+
+The disclosure above is self-attested by the party with the incentive to skip it,
+which is why `npm run validate:pr-rigor` exists: CI fails the `lint` job when the
+PR body has no `Independent review agents spawned: N` line with N >= 3. It cannot
+prove the agents ran — it makes *silent omission* impossible, forcing an explicit
+claim that a reviewer can then challenge. This gate was added because the very
+first PR to carry this skill (#93) shipped without the disclosure it mandates.
 
 ## Anti-patterns this gate exists to stop
 

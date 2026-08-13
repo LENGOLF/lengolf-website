@@ -25,7 +25,8 @@
     "test:mobile": "playwright test tests/landing-page-mobile.spec.ts",
     "test:mobile:ui": "playwright test tests/landing-page-mobile.spec.ts --ui",
     "test:mobile:report": "playwright show-report",
-    "validate:fee-labels": "tsx scripts/validate-fee-labels.ts"
+    "validate:fee-labels": "tsx scripts/validate-fee-labels.ts",
+    "validate:pr-rigor": "tsx scripts/validate-pr-rigor.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.92.0",
