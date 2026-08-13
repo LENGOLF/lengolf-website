@@ -30,8 +30,11 @@ description, or CLAUDE.md as an assertion, not evidence.* Verify it or delete it
 - Before writing a PR description that makes coverage claims.
 - After any push that changes behaviour, if a prior pr-rigor verdict is stale.
 
-CI passing is **not** a substitute. Every defect found on PR #93 shipped with
-`lint`, `build-and-smoke` and `lighthouse` all green.
+CI passing is **not** a substitute. Every *pre-existing* defect PR #93 fixed had
+shipped to `main` with `lint`, `build-and-smoke` and `lighthouse` green — CI was
+never going to catch them, because none of them is a thing CI can read. (Do not
+over-claim this: CI was legitimately red on two commits of PR #93 itself, for an
+unrelated `next/font` failure.)
 
 ## Structure
 
@@ -82,11 +85,26 @@ Reviewers never edit. You fact-check every finding against the source, apply the
 fixes yourself, and re-run the gate. A finding you disagree with is recorded with
 its reason, not silently dropped.
 
-**Verify by rendering, not by reasoning.** For data-driven output, execute the
-actual code path and print what a reader would see. On PR #93 the final check was
-a script that rendered every affected surface for the seasonal course and
-asserted no day-of-week claim survived — that is evidence; "I checked the
-consumers" is not.
+**Verify by rendering, not by reasoning** — but know what rendering proves. On
+PR #93 a script rendered every *known* affected surface for the seasonal course
+and asserted no day-of-week claim survived. That check passed and was still
+wrong: two live defects sat on surfaces the script never enumerated (the
+`/under/<tier>/` page chrome, and prose in a guide). **Rendering verifies the
+sites you already found; it cannot tell you the set is complete.**
+
+So the rule that actually held is upstream of it:
+
+1. **Enumerate repo-wide first** — `grep -rn <field> --include=*.ts --include=*.tsx .`
+   with NO directory scoping — and write down a disposition for EVERY hit
+   (renders a label / makes a claim / numeric-only). The enumeration is the
+   deliverable; the fix is downstream of it.
+2. **Search the claim, not the field.** A grep for `caddie_tip_included` cannot
+   find prose written before that flag existed. Grep the words a reader would
+   see ("tip", "weekday") as well as the identifier.
+3. **Then render** each enumerated site and print what a reader gets.
+
+"I checked the consumers" is not evidence. A list of every consumer with its
+disposition, plus rendered output per site, is.
 
 ## Required disclosure
 

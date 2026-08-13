@@ -30,8 +30,8 @@ LENGOLF website — a Next.js 15 (App Router) site for an indoor golf simulator 
   "no correctness bugs" from a single inline `/code-review` — an outside pass then
   found six confirmed defects — at least four live on indexed pages, one that
   rendered nowhere — with CI fully green. Later rounds found five more.
-  **CI cannot read a sentence; `lint`/`build-and-smoke`/`lighthouse` were green for
-  every one of those defects.** Corollary: *treat any claim in the commit history,
+  **CI cannot read a sentence: every one of those defects had reached `main` with
+  `lint`/`build-and-smoke`/`lighthouse` green.** Corollary: *treat any claim in the commit history,
   a PR description, or this file as an assertion, not evidence* — verify it or
   delete it. And never generalize from one fixed instance ("found the missed
   consumer" → "all consumers now honor it"): enumerate repo-wide, don't infer.
