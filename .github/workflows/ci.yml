@@ -133,6 +133,19 @@ jobs:
   lighthouse:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # Serialized behind build-and-smoke rather than run in parallel. Both jobs
+    # run `next build`, and app/[locale]/layout.tsx pulls FIVE font families
+    # through next/font/google at build time. Run concurrently, the two jobs hit
+    # fonts.googleapis.com from the same runner network simultaneously and one
+    # gets throttled; the loader then reads null out of the response and the
+    # build dies with "An error occurred in `next/font` — Cannot read properties
+    # of null (reading '1')". Observed alternating between the two jobs on
+    # consecutive runs of PR #93 (8d87d7e: lighthouse died; 5bb85ce:
+    # build-and-smoke died, lighthouse passed on the SAME commit) — which is
+    # what rules out a code defect.
+    # `needs` also stops us burning a 4-minute Lighthouse run on a build that
+    # already failed its smoke tests.
+    needs: build-and-smoke
     steps:
       - uses: actions/checkout@v4
 
