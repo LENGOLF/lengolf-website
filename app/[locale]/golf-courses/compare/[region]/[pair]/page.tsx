@@ -5,6 +5,7 @@ import { Link } from '@/i18n/navigation'
 import { SITE_URL } from '@/lib/constants'
 import { REGION_META, getCourseBySlug, type Region } from '@/lib/golf-courses'
 import { getBreadcrumbJsonLd } from '@/lib/jsonld'
+import { pricesByDayOfWeek, feeBasisNoteEn } from '@/lib/course-fees'
 import { getCourseComparisonJsonLd } from '@/lib/jsonld-courses'
 import {
   comparisonCrossLink,
@@ -76,7 +77,7 @@ function whenToChoose(a: GolfCourse, b: GolfCourse): { forA: string[]; forB: str
   // weekday/weekend — so "cheaper on weekdays" / "costs less on Saturday-Sunday"
   // would assert a day-of-week split that does not exist, on an indexed page.
   // The fee rows in SpecTable still show both numbers, annotated by season.
-  const feeComparable = !a.fee_is_seasonal && !b.fee_is_seasonal
+  const feeComparable = pricesByDayOfWeek(a) && pricesByDayOfWeek(b)
 
   // Weekday fee
   if (feeComparable && a.green_fee_weekday_thb !== null && b.green_fee_weekday_thb !== null) {
@@ -110,8 +111,12 @@ function whenToChoose(a: GolfCourse, b: GolfCourse): { forA: string[]; forB: str
     if (Math.abs(diff) >= 500) {
       const cheaper = diff < 0 ? a : b
       const list = diff < 0 ? forA : forB
+      const pricier = diff < 0 ? b : a
+      // Name each side's basis: the two starting rates are real and comparable,
+      // but they are reached differently (one low-season, one weekday), and an
+      // unlabelled "starts at X versus Y" quietly implies a shared basis.
       list.push(
-        `Lower starting fee — ${cheaper.name} starts at ${Math.min(a.green_fee_weekday_thb, b.green_fee_weekday_thb).toLocaleString('en-US')} THB versus ${Math.max(a.green_fee_weekday_thb, b.green_fee_weekday_thb).toLocaleString('en-US')} THB.`
+        `Lower starting fee — ${cheaper.name} starts at ${cheaper.green_fee_weekday_thb!.toLocaleString('en-US')} THB (${feeBasisNoteEn(cheaper, 'lower')}) versus ${pricier.green_fee_weekday_thb!.toLocaleString('en-US')} THB (${feeBasisNoteEn(pricier, 'lower')}).`
       )
     }
   }

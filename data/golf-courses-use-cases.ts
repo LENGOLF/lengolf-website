@@ -1,4 +1,5 @@
 import type { GolfCourse } from '@/types/golf-courses'
+import { pricesByDayOfWeek, feeLabelsEn } from '@/lib/course-fees'
 
 /**
  * Use-case taxonomy for /golf-courses/best-for/[use-case]/ pages.
@@ -49,7 +50,9 @@ export const USE_CASE_RULES: Record<UseCase, UseCaseMeta> = {
       const parts: string[] = []
       if (c.driving_range) parts.push('on-site driving range')
       if (c.green_fee_weekday_thb)
-        parts.push(`weekday from ${c.green_fee_weekday_thb.toLocaleString('en-US')} THB`)
+        parts.push(
+          `${feeLabelsEn(c).lower.toLowerCase()} from ${c.green_fee_weekday_thb.toLocaleString('en-US')} THB`
+        )
       if (c.par <= 71) parts.push(`par ${c.par}`)
       return parts.join(' · ')
     },
@@ -60,7 +63,13 @@ export const USE_CASE_RULES: Record<UseCase, UseCaseMeta> = {
     title: 'Best Bangkok-Area Golf Courses for Weekday Play',
     framing:
       'These courses charge a meaningfully lower fee Mon–Fri than they do at the weekend — a structural pricing difference that rewards visitors with flexible itineraries. All entries below have at least a 500 THB weekday discount versus weekend rates.',
+    // A seasonally-priced course has no weekday/weekend split at all — its two
+    // fees are low/high season — so it cannot qualify for "weekday play" however
+    // large the gap between them. Without this guard phuket-country-club listed
+    // here with "Weekday 2,800 vs weekend 4,000 THB", a day-of-week claim it
+    // does not make, on a statically generated indexed page.
     predicate: (c) =>
+      pricesByDayOfWeek(c) &&
       c.green_fee_weekday_thb !== null &&
       c.green_fee_weekend_thb !== null &&
       c.green_fee_weekend_thb - c.green_fee_weekday_thb >= 500,
@@ -116,7 +125,9 @@ export const USE_CASE_RULES: Record<UseCase, UseCaseMeta> = {
     reasonFor: (c) => {
       const parts: string[] = ['walking permitted']
       if (c.green_fee_weekday_thb)
-        parts.push(`weekday from ${c.green_fee_weekday_thb.toLocaleString('en-US')} THB`)
+        parts.push(
+          `${feeLabelsEn(c).lower.toLowerCase()} from ${c.green_fee_weekday_thb.toLocaleString('en-US')} THB`
+        )
       if (c.driving_range) parts.push('range on site')
       return parts.join(' · ')
     },
@@ -131,7 +142,9 @@ export const USE_CASE_RULES: Record<UseCase, UseCaseMeta> = {
     reasonFor: (c) => {
       const parts: string[] = [`par ${c.par}`, 'driving range on site']
       if (c.green_fee_weekday_thb)
-        parts.push(`weekday from ${c.green_fee_weekday_thb.toLocaleString('en-US')} THB`)
+        parts.push(
+          `${feeLabelsEn(c).lower.toLowerCase()} from ${c.green_fee_weekday_thb.toLocaleString('en-US')} THB`
+        )
       return parts.join(' · ')
     },
     crossLink: { href: '/lessons', label: 'Improve fast at LENGOLF lessons' },

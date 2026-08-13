@@ -1188,7 +1188,8 @@
     "catchHeading": "What's the catch?",
     "topCoursesHeading": "Top {count} courses, weekday fee under ฿{amount}",
     "roundupReason": "Weekday from {price} THB.",
-    "otherPriceBands": "Other price bands"
+    "otherPriceBands": "Other price bands",
+    "roundupReasonSeasonal": "Low season from {price} THB."
   },
   "GolfCourseShared": {
     "feeFrom": "from {price} THB",

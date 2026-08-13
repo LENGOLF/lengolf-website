@@ -164,7 +164,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
   },
 
   // ─── KO: things-to-do-near-arnoma-grand-bangkok ───
-  // Figures carried from EN hotel-1: 700m / 11분, 4층, 도보 4분(itinerary), 약 550바트/시간
+  // Figures carried from EN hotel-1: 700m / 11분, 4층, 도보 11분(itinerary), 약 550바트/시간
   // 최대 5명, 35°C, 남쪽 5분. Latin proper nouns never take a Korean particle — every
   // one is followed by a Korean noun (CentralWorld 쇼핑몰이) or an invariant particle
   // (에/에서/의/까지). Stations transliterated per glossary + corpus: BTS 칫롬역.
@@ -323,8 +323,9 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
   },
 
   // ─── TH: things-to-do-near-sindhorn-midtown ───
-  // Figures carried verbatim: 350 m field / 5 min / 4 stars, meta keeps EN's own
-  // "400 m" wording, 40 บาท ต่อ 30 นาที, ประมาณ 550 บาท/ชั่วโมง, จอง 2 สัปดาห์ล่วงหน้า,
+  // Figures carried verbatim: 350 m field / 5 min / 4 stars (the meta figure was
+  // EN's own "400 m"; reconciled to the 350 m field for every locale in a54c156),
+  // 40 บาท ต่อ 30 นาที, ประมาณ 550 บาท/ชั่วโมง, จอง 2 สัปดาห์ล่วงหน้า,
   // "Sorn (2 Michelin Stars)" left as a business name. Clock 24h + น.
   // "Restaurant Row" glossed rather than transliterated.
   {
@@ -378,9 +379,9 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
   },
 
   // ─── JA: things-to-do-near-sindhorn-midtown ───
-  // Carries EN's own split figures without reconciling them: hotel_distance_m 350 /
-  // 5分, but the meta says 400m (matching the nearby_activities card) — kept as EN
-  // has it. Paddle boat 30分40THB, Sorn の予約は2週間以上前, all from EN.
+  // hotel_distance_m 350 / 5分. The meta used to carry EN's own diverging "400m";
+  // a54c156 reconciled meta to the field across all locales, so both now read 350m.
+  // Paddle boat 30分40THB, Sorn の予約は2週間以上前, all from EN.
   // 「レストラン・ロウ」 keeps EN's nickname as a quoted rendering.
   {
     id: 'hotel-2-ja',
@@ -433,7 +434,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
   },
 
   // ─── KO: things-to-do-near-sindhorn-midtown ───
-  // Figures from EN hotel-2: 350m / 5분(헤더), meta의 400m, 4층, Lumpini Park 300m,
+  // Figures from EN hotel-2: 350m / 5분(헤더), meta도 350m(a54c156에서 400m→350m로 정정), 4층, Lumpini Park 300m,
   // 오리배 30분 40바트, Sorn 미쉐린 2스타, 2주 전 예약, 약 550바트/시간 최대 5명.
   // "The Mercury Ville 건물이" 처럼 Latin 뒤에는 반드시 한국어 명사를 붙였고,
   // Lumpini Park에는 동격 쉼표를 써서 조사 접촉을 피했어요.
@@ -490,8 +491,8 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
   // ─── ZH: things-to-do-near-sindhorn-midtown ───
   // Figures carried from EN: 350m / 5分钟 / 4星, Lumpini 300m, Sindhorn Village 150m,
   // CentralWorld 600m, ~550泰铢/小时最多5人, 天鹅船30分钟40泰铢, 提前2周订位.
-  // Meta keeps EN's own 400m figure (EN meta says 400m while hotel_distance_m is
-  // 350 — flagged in report, not silently reconciled). Lumpini glossed once as 伦披尼公园.
+  // Meta previously carried EN's own 400m while hotel_distance_m was 350; a54c156
+  // reconciled meta to the field, so both now read 350m. Lumpini glossed once as 伦披尼公园.
   {
     id: 'hotel-2-zh',
     page_type: 'hotel_concierge',
@@ -1195,9 +1196,9 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
 
   // ─── JA: things-to-do-near-intercontinental-bangkok ───
   // EN contradicts itself here (2分/東 in the directions vs 徒歩8分/西 in area_guide,
-  // and 150m vs a 600m activity card). Every field is carried faithfully to its own
-  // EN sentence and the conflict is reported, not silently reconciled.
-  // Figures: 150m / 2分 / 300m・150m・600m・400m の各モール / 約550THB / 最大5名.
+  // NOTE: this header once described EN's 150m / 2分 split. That was resolved in EN
+  // before merge — the entry is a consistent 450m / 6分 / 東 and the JA matches it.
+  // Figures: 450m / 6分 / 300m・150m・600m・400m の各モール / 約550THB / 最大5名.
   {
     id: 'hotel-5-ja',
     page_type: 'hotel_concierge',
@@ -1250,10 +1251,10 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
   },
 
   // ─── KO: things-to-do-near-intercontinental-bangkok ───
-  // Figures from EN hotel-5: 150m / 2분, 4층, Erawan Shrine 100m, Gaysorn 150m,
+  // Figures from EN hotel-5: 450m / 6분, 4층, Erawan Shrine 100m, Gaysorn 150m,
   // CentralWorld 300m, Siam Paragon 600m, Central Embassy 동쪽 400m, Red Sky 55층
-  // 도보 10분, 약 550바트/시간 최대 5명. EN이 walking_directions(동쪽·2분)와
-  // area_guide(서쪽·도보 8분)에서 엇갈리는데 둘 다 원문대로 옮겼어요(보고서 참조).
+  // 도보 10분, 약 550바트/시간 최대 5명. (이 헤더에 있던 150m/2분·서쪽 8분 메모는
+  // EN이 450m/6분·동쪽으로 정리되기 전의 내용이라 갱신했어요.)
   {
     id: 'hotel-5-ko',
     page_type: 'hotel_concierge',

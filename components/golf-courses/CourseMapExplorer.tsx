@@ -367,7 +367,7 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
                       <span className="ml-0.5 text-[10px] font-medium text-muted-foreground">{t('thb')}</span>
                     </p>
                     {weekend && (
-                      <p className="text-[11px] text-muted-foreground">{weekend.toLocaleString('en-US')} {t('wknd')}</p>
+                      <p className="text-[11px] text-muted-foreground">{weekend.toLocaleString('en-US')} {t(course.fee_is_seasonal ? 'highSeason' : 'wknd')}</p>
                     )}
                   </>
                 ) : (

@@ -1188,7 +1188,8 @@
     "catchHeading": "ข้อควรทราบ",
     "topCoursesHeading": "{count} สนามอันดับต้น ค่ากรีนฟีวันธรรมดาไม่เกิน ฿{amount}",
     "roundupReason": "เริ่มต้น {price} บาท (วันธรรมดา)",
-    "otherPriceBands": "ช่วงราคาอื่น ๆ"
+    "otherPriceBands": "ช่วงราคาอื่น ๆ",
+    "roundupReasonSeasonal": "เริ่มต้น {price} บาท (โลว์ซีซัน)"
   },
   "GolfCourseShared": {
     "feeFrom": "เริ่มต้น {price} บาท",
