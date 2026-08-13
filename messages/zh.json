@@ -1266,17 +1266,20 @@
     "wknd": "周末",
     "viewFullGuide": "查看完整指南、贴士与路线",
     "openGuide": "打开指南",
-    "close": "关闭"
+    "close": "关闭",
+    "lowSeason": "淡季",
+    "highSeason": "旺季"
   },
   "GolfCoursePriceTier": {
-    "metaDescription": "汇总平日果岭费不超过฿{amount}的曼谷周边优质高尔夫球场，并介绍这个价位段的注意事项。",
+    "metaDescription": "汇总果岭费不超过฿{amount}的曼谷周边优质高尔夫球场，并介绍这个价位段的注意事项。",
     "breadcrumbGolfCourses": "高尔夫球场",
     "breadcrumbCurrent": "฿{amount}以下",
-    "eyebrowBadge": "平日果岭费 · ฿{amount}以下",
+    "eyebrowBadge": "果岭费 · ฿{amount}以下",
     "catchHeading": "有什么要注意的？",
-    "topCoursesHeading": "平日价格฿{amount}以下的{count}座精选球场",
+    "topCoursesHeading": "果岭费฿{amount}以下的{count}座精选球场",
     "roundupReason": "平日{price}泰铢起",
-    "otherPriceBands": "其他价格区间"
+    "otherPriceBands": "其他价格区间",
+    "roundupReasonSeasonal": "淡季{price}泰铢起"
   },
   "GolfCourseShared": {
     "feeFrom": "{price}泰铢起",
@@ -1342,7 +1345,11 @@
     "nudgeEyebrowNoRental": "这家球场不提供球杆租借？",
     "nudgeBody": "现行款Callaway Paradym、Warbird与REVA整套球杆 — 而非球场自备的公用球杆。<price>每日1,200泰铢</price>起，多日租借享折扣，并可送达您在曼谷的酒店。",
     "nudgeBodyNoRental": "这家球场不提供球杆租借 — 但LENGOLF可以。现行款Callaway Paradym、Warbird与REVA整套球杆，<price>每日1,200泰铢</price>起，多日租借享折扣，并可送达您在曼谷的酒店。",
-    "seePackages": "查看套餐"
+    "seePackages": "查看套餐",
+    "lowSeasonGreenFee": "淡季果岭费",
+    "highSeasonFee": "旺季：{price}泰铢",
+    "lowSeason": "淡季",
+    "highSeason": "旺季"
   },
   "ExplainerPage": {
     "guideLabel": "LENGOLF指南",
@@ -1475,7 +1482,7 @@
     "mapHeading": "地图与路线",
     "mapTitle": "从{hotel}到LENGOLF的地图",
     "whyHeading": "入住期间为什么值得来LENGOLF",
-    "whyBody": "LENGOLF是位于The Mercury Ville、BTS Chidlom站的室内高尔夫模拟器酒吧，从{hotel}步行只需{mins}分钟。这里配有Bravo高精度模拟器、齐全的酒吧和室内空调，无论你打过球还是从没碰过球杆，都很适合入住期间来玩。球位价格{rate}/小时起，最多{n}人。",
+    "whyBody": "LENGOLF是位于The Mercury Ville、BTS Chidlom站的室内高尔夫模拟器酒吧，从{hotel}步行只需{mins}分钟。这里配有Bravo高端模拟器、齐全的酒吧和室内空调，无论您打过球还是从没碰过球杆，都很适合入住期间来玩。球位价格{rate}/小时起，最多{n}人。",
     "pillClubs": "高级球杆租赁{rate}/小时起",
     "walkableHeading": "从{hotel}步行到LENGOLF方便吗",
     "walkableNearLead": "很方便。",

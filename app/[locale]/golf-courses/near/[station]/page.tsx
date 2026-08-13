@@ -7,6 +7,7 @@ import { getBreadcrumbJsonLd } from '@/lib/jsonld'
 import { getCourseRoundupJsonLd } from '@/lib/jsonld-courses'
 import { BTS_STATIONS } from '@/data/bts-stations'
 import { AIRPORTS } from '@/data/airports'
+import { pricesByDayOfWeek, feeBasisNoteEn } from '@/lib/course-fees'
 import {
   getCoursesNearStation,
   getCoursesNearAirport,
@@ -47,7 +48,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const airport = AIRPORTS[station]
   if (airport) {
     const title = `Golf Courses Near ${airport.name} (${airport.iata}): Distances & Green Fees`
-    const description = `Golf courses ranked by straight-line distance from ${airport.name} (${airport.iata}), with weekday/weekend green fees, club-rental availability, and how to book your round.`
+    const description = `Golf courses ranked by straight-line distance from ${airport.name} (${airport.iata}), with green fees, club-rental availability, and how to book your round.`
     const canonicalUrl = `${SITE_URL}/golf-courses/near/${station}/`
     return {
       title,
@@ -61,7 +62,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!meta) return { title: 'Not Found' }
 
   const title = `Best Golf Courses Near ${meta.name} BTS — Drive Times & Green Fees`
-  const description = `Top golf courses ranked by distance from ${meta.name} BTS station, with drive times, weekday/weekend green fees, and on-site facilities.`
+  const description = `Top golf courses ranked by distance from ${meta.name} BTS station, with drive times, green fees, and on-site facilities.`
   const canonicalUrl = `${SITE_URL}/golf-courses/near/${station}/`
 
   return {
@@ -92,6 +93,10 @@ async function AirportPage({ locale, slug }: { locale: string; slug: string }) {
 
   const items = await getCoursesNearAirport(slug, 8)
   if (items.length === 0) notFound()
+
+  // True when the listed courses do not all price on the same basis (day-of-week
+  // vs season), which forces the shared column headers to go basis-neutral.
+  const mixedFeeBasis = items.some(({ course }) => !pricesByDayOfWeek(course))
 
   const canonicalUrl = `${SITE_URL}/golf-courses/near/${slug}/`
   const breadcrumbJsonLd = getBreadcrumbJsonLd([
@@ -160,13 +165,19 @@ async function AirportPage({ locale, slug }: { locale: string; slug: string }) {
                 <tr className="border-b border-border bg-muted/40 text-left text-xs uppercase tracking-wider text-muted-foreground">
                   <th className="px-4 py-3 font-semibold">Course</th>
                   <th className="px-4 py-3 font-semibold">Straight-line</th>
-                  <th className="px-4 py-3 font-semibold">Green fee (weekday)</th>
-                  <th className="px-4 py-3 font-semibold">Green fee (weekend)</th>
+                  {/* Column headers are shared by every row, so they can only name
+                      a basis when all listed courses price the same way. If any
+                      seasonal course appears, the headers go basis-neutral and each
+                      cell states its own basis. See lib/course-fees.ts. */}
+                  <th className="px-4 py-3 font-semibold">Green fee ({mixedFeeBasis ? 'lower' : 'weekday'})</th>
+                  <th className="px-4 py-3 font-semibold">Green fee ({mixedFeeBasis ? 'higher' : 'weekend'})</th>
                   <th className="px-4 py-3 font-semibold">Club rental</th>
                 </tr>
               </thead>
               <tbody>
                 {items.map(({ course, km }) => {
+                  const basisNote = (which: 'lower' | 'upper') =>
+                    mixedFeeBasis ? ` (${feeBasisNoteEn(course, which)})` : ''
                   const weekday = formatFee(course.green_fee_weekday_thb)
                   const weekend = formatFee(course.green_fee_weekend_thb)
                   const rental =
@@ -191,8 +202,8 @@ async function AirportPage({ locale, slug }: { locale: string; slug: string }) {
                         </div>
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap text-foreground/80">~{km.toFixed(1)} km</td>
-                      <td className="px-4 py-3 whitespace-nowrap text-foreground/80">{weekday ?? 'Not listed'}</td>
-                      <td className="px-4 py-3 whitespace-nowrap text-foreground/80">{weekend ?? 'Not listed'}</td>
+                      <td className="px-4 py-3 whitespace-nowrap text-foreground/80">{weekday ? `${weekday}${basisNote('lower')}` : 'Not listed'}</td>
+                      <td className="px-4 py-3 whitespace-nowrap text-foreground/80">{weekend ? `${weekend}${basisNote('upper')}` : 'Not listed'}</td>
                       <td className="px-4 py-3 whitespace-nowrap text-foreground/80">{rental}</td>
                     </tr>
                   )

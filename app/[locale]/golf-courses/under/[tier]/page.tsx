@@ -7,6 +7,7 @@ import { getBreadcrumbJsonLd } from '@/lib/jsonld'
 import { getCourseRoundupJsonLd } from '@/lib/jsonld-courses'
 import { PRICE_TIERS, getPriceTierTranslation, getTranslatedPriceTierParams } from '@/data/price-tiers'
 import { getCoursesUnderPrice, getPriceTierSlugs } from '@/lib/golf-courses-derived'
+import { pricesByDayOfWeek } from '@/lib/course-fees'
 import RoundupList from '@/components/golf-courses/RoundupList'
 import CrossLinkBlock from '@/components/golf-courses/CrossLinkBlock'
 import RentalCtaBanner from '@/components/golf-courses/RentalCtaBanner'
@@ -144,7 +145,13 @@ export default async function CoursesUnderPricePage({ params }: Props) {
               course: c,
               reason:
                 c.green_fee_weekday_thb !== null
-                  ? t('roundupReason', { price: c.green_fee_weekday_thb.toLocaleString('en-US') })
+                  ? t(
+                      // A seasonal course's lower fee is its low-season rate, not a
+                      // weekday one — the tier roster is indexed, so the basis has
+                      // to match the course. See lib/course-fees.ts.
+                      pricesByDayOfWeek(c) ? 'roundupReason' : 'roundupReasonSeasonal',
+                      { price: c.green_fee_weekday_thb.toLocaleString('en-US') }
+                    )
                   : '',
             }))}
           />

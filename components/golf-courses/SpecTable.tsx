@@ -1,6 +1,7 @@
 import { Check, X } from 'lucide-react'
 import type { GolfCourse } from '@/types/golf-courses'
 import { driveTimeLabel } from '@/lib/format'
+import { pricesByDayOfWeek, feeLabelsEn, feeBasisNoteEn } from '@/lib/course-fees'
 
 interface Props {
   a: GolfCourse
@@ -13,7 +14,7 @@ interface Row {
   cell: (c: GolfCourse) => React.ReactNode
 }
 
-const ROWS: Row[] = [
+const ROWS_HEAD: Row[] = [
   { label: 'Holes / Par', cell: (c) => `${c.holes} · Par ${c.par}` },
   { label: 'Designer', cell: (c) => c.designer ?? '—' },
   { label: 'Year opened', cell: (c) => (c.year_opened ? String(c.year_opened) : '—') },
@@ -26,20 +27,39 @@ const ROWS: Row[] = [
     cell: (c) =>
       c.distance_from_bangkok_km !== null ? `${c.distance_from_bangkok_km} km` : '—',
   },
-  {
-    label: 'Weekday green fee',
-    cell: (c) =>
-      c.green_fee_weekday_thb !== null
-        ? `${c.green_fee_weekday_thb.toLocaleString('en-US')} THB`
-        : '—',
-  },
-  {
-    label: 'Weekend green fee',
-    cell: (c) =>
-      c.green_fee_weekend_thb !== null
-        ? `${c.green_fee_weekend_thb.toLocaleString('en-US')} THB`
-        : '—',
-  },
+]
+
+/**
+ * The two fee rows share ONE label across both columns, so the label can only name
+ * a basis when both courses price on the same one. Comparing a day-of-week course
+ * against a seasonal one, the label stays basis-neutral and each cell carries its
+ * own basis — otherwise the row renders "Weekday green fee: 2,800 THB (low season)",
+ * which contradicts itself on a single line.
+ */
+function feeRows(a: GolfCourse, b: GolfCourse): Row[] {
+  const mixedBasis = pricesByDayOfWeek(a) !== pricesByDayOfWeek(b)
+  const shared = feeLabelsEn(a)
+  const note = (c: GolfCourse, which: 'lower' | 'upper') =>
+    mixedBasis ? ` (${feeBasisNoteEn(c, which)})` : ''
+  return [
+    {
+      label: mixedBasis ? 'Lower green fee' : `${shared.lower} green fee`,
+      cell: (c) =>
+        c.green_fee_weekday_thb !== null
+          ? `${c.green_fee_weekday_thb.toLocaleString('en-US')} THB${note(c, 'lower')}`
+          : '—',
+    },
+    {
+      label: mixedBasis ? 'Higher green fee' : `${shared.upper} green fee`,
+      cell: (c) =>
+        c.green_fee_weekend_thb !== null
+          ? `${c.green_fee_weekend_thb.toLocaleString('en-US')} THB${note(c, 'upper')}`
+          : '—',
+    },
+  ]
+}
+
+const ROWS_TAIL: Row[] = [
   {
     label: 'Caddie fee',
     cell: (c) =>
@@ -86,6 +106,7 @@ function BoolBadge({ value }: { value: boolean | null }) {
 }
 
 export default function SpecTable({ a, b }: Props) {
+  const rows = [...ROWS_HEAD, ...feeRows(a, b), ...ROWS_TAIL]
   return (
     <div className="overflow-hidden rounded-2xl border bg-white shadow-sm">
       {/* Header row */}
@@ -109,7 +130,7 @@ export default function SpecTable({ a, b }: Props) {
 
       {/* Body rows */}
       <div className="divide-y divide-border bg-white">
-        {ROWS.map((row) => (
+        {rows.map((row) => (
           <div
             key={row.label}
             className="grid grid-cols-[1fr_1fr] gap-px md:grid-cols-[1.2fr_1fr_1fr]"

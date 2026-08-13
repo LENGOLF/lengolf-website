@@ -622,6 +622,141 @@ function checkBrands(unit: Unit) {
   }
 }
 
+// ── Check 6b: the locale slot holds the locale's own language ───────────────
+// WHY: a whole translated paragraph shipped in the WRONG SLOT — the Simplified
+// Chinese rendering of a price-tier `catch` was written into that tier's `th`
+// field, so /th/golf-courses/under/3500-baht/ served a Chinese paragraph inside
+// Thai page chrome, on a statically generated indexed page. Every gate was
+// green: the string is well-formed, emoji-free, brace-balanced, and its
+// terminology is correct *for Chinese*. The only mechanical trace was a single
+// non-blocking WARN among 388 — a th-locale unit whose price read "500泰铢" —
+// which is not a signal anyone reads. Nothing checked what LANGUAGE a string
+// was in, so a slot swap was invisible.
+//
+// Two rules, because either alone has a hole:
+//
+//   a) DOMINANCE — foreign-script characters outnumber the locale's own, above
+//      a floor. Catches a whole paragraph in the wrong slot while tolerating a
+//      deliberate quotation of another language, which this corpus genuinely
+//      contains and must keep: `directions.grabTip` prints the venue name in
+//      THAI inside the ja/ko/zh copy, precisely so a reader can show it to a
+//      taxi driver. A bare "contains a forbidden script" rule flagged all three
+//      of those, plus 스크린골프 quoted as a term of art in the th/zh
+//      screen-golf explainer, plus 한국어 as the Korean entry in the language
+//      switcher — 11 hits, every one correct copy. That version of this gate
+//      would have been switched off within a week, which protects nothing.
+//
+//   b) REQUIRED script for ja — dominance alone cannot see zh→ja, the one pair
+//      where the wrong language is not "foreign" at all: Chinese is pure Han,
+//      and Han is legal in Japanese, so a Chinese paragraph in a `ja` slot
+//      scores 100% "own". Kana is what distinguishes them. Floored high,
+//      because short all-kanji Japanese is perfectly normal — 毎日午前9時〜午後11時営業
+//      and 動画撮影 / 写真撮影 are both real, correct catalog strings. Only
+//      paragraph-scale kanji-without-a-single-kana is a real signal.
+//
+// Deliberately NOT "any occurrence of a foreign script": see (a). Presence is
+// not decidable; proportion is.
+//
+// KNOWN LIMIT, found while mutation-testing this check: rule (b) requires kana
+// to be exactly ZERO, so it catches a whole-slot swap but NOT a partial one. A
+// first mutation attempt replaced only the first sentence of a ja `catch` and
+// left the Japanese tail in place; kana was 40, the check stayed green, and
+// that is correct behaviour — the string really did still contain Japanese.
+// Tightening this to a kana/kanji RATIO would catch partial swaps, at the cost
+// of firing on legitimately kanji-dense Japanese (headings, spec rows, the
+// all-kanji catalog strings listed above). The defect this gate exists for is
+// the whole-value swap, so the floor stays at zero. A half-translated string
+// remains native QA's job.
+const SCRIPT_CLASS = {
+  thai: /\p{Script=Thai}/gu,
+  hangul: /\p{Script=Hangul}/gu,
+  kana: /\p{Script=Hiragana}|\p{Script=Katakana}/gu,
+  han: /\p{Script=Han}/gu,
+} as const
+
+type ScriptName = keyof typeof SCRIPT_CLASS
+
+/**
+ * Which scripts count as "this locale's own". ja claims Han (kanji) and ko
+ * claims Han (hanja), which is exactly why ja needs the separate kana rule.
+ */
+const LOCALE_OWN_SCRIPTS: Record<string, ScriptName[]> = {
+  th: ['thai'],
+  ja: ['kana', 'han'],
+  ko: ['hangul', 'han'],
+  zh: ['han'],
+}
+
+/** Minimum foreign characters before dominance is even considered. */
+const SCRIPT_MIN_FOREIGN = 8
+/**
+ * How far foreign must outweigh own to count as dominance. A plurality is NOT
+ * enough: Chinese is far denser per character than Thai, so the 25-character
+ * Thai address quoted in the zh `grabTip` outnumbers the 22 Han characters
+ * around it while being entirely correct copy. Requiring 2x separates "quotes
+ * a foreign phrase" from "is a foreign paragraph"; a whole-slot swap scores
+ * infinite (own = 0), so the margin costs nothing against the real defect.
+ */
+const SCRIPT_DOMINANCE_RATIO = 2
+/** Minimum kanji before an all-kanji `ja` string is treated as suspect. */
+const SCRIPT_JA_MIN_KANJI = 30
+
+function countScript(text: string, name: ScriptName): number {
+  return (text.match(SCRIPT_CLASS[name]) ?? []).length
+}
+
+function checkScript(unit: Unit) {
+  const own = LOCALE_OWN_SCRIPTS[unit.locale]
+  if (!own) return // en has no script constraint
+  // Placeholders and markup are Latin by construction — strip them so they
+  // neither satisfy nor violate anything.
+  const text = unit.value.replace(/\{\{[^}]*\}\}/g, '').replace(/\{[^}]*\}/g, '')
+
+  const foreignNames = (Object.keys(SCRIPT_CLASS) as ScriptName[]).filter(
+    (s) => !own.includes(s)
+  )
+  const ownCount = own.reduce((n, s) => n + countScript(text, s), 0)
+  const foreign = foreignNames
+    .map((s) => ({ name: s, n: countScript(text, s) }))
+    .filter((x) => x.n > 0)
+  const foreignCount = foreign.reduce((n, x) => n + x.n, 0)
+
+  // (a) Dominance.
+  if (
+    foreignCount >= SCRIPT_MIN_FOREIGN &&
+    foreignCount > ownCount * SCRIPT_DOMINANCE_RATIO
+  ) {
+    const worst = foreign.sort((x, y) => y.n - x.n)[0]
+    add(
+      'error',
+      unit.locale,
+      unit.entryId,
+      unit.field,
+      'script',
+      `${foreignCount} ${worst.name}-family character(s) vs ${ownCount} ${unit.locale} — ` +
+        `this looks like another locale's text in the ${unit.locale} slot`
+    )
+    return
+  }
+
+  // (b) ja-only: a long run of kanji with no kana at all is Chinese, not
+  // Japanese. Japanese sentence structure cannot avoid kana at this length.
+  if (unit.locale === 'ja') {
+    const kanji = countScript(text, 'han')
+    if (kanji >= SCRIPT_JA_MIN_KANJI && countScript(text, 'kana') === 0) {
+      add(
+        'error',
+        unit.locale,
+        unit.entryId,
+        unit.field,
+        'script',
+        `${kanji} kanji and no kana — a string this long without kana is Chinese, ` +
+          `not Japanese; check whether the zh text landed in the ja slot`
+      )
+    }
+  }
+}
+
 // ── Check 6: markdown bold balance + placeholder / ICU brace integrity ──────
 // TWO braces rules, because two templating dialects share this corpus:
 //
@@ -783,6 +918,7 @@ function runCorpusChecks(corpus: Entry[]) {
       // ERROR 4/5/6
       checkTerminology(unit)
       checkBrands(unit)
+      checkScript(unit)
       // messages/*.json is the ICU dialect; the content data is '{{token}}'.
       checkMarkup(unit, entry.uiChrome ? 'icu' : 'token')
 
@@ -1053,6 +1189,72 @@ if (process.argv.includes('--self-test')) {
   assert('as-of th: ประมาณ 500 บาท does not shield', !AS_OF_MARKERS.th.some((m) => 'ราคาโดยทั่วไปเริ่มต้นประมาณ 500 บาท'.includes(m)))
   assert('as-of th: bare ณ จังหวะ does not shield', !AS_OF_MARKERS.th.some((m) => 'ทำอะไรบ้าง ณ จังหวะปะทะลูก'.includes(m)))
   assert('as-of th: (ข้อมูล ณ กรกฎาคม 2026) shields', AS_OF_MARKERS.th.some((m) => '(ข้อมูล ณ กรกฎาคม 2026)'.includes(m)))
+
+  // ── Check 6b: locale slot holds the locale's own language ─────────────────
+  // The defect: a Simplified Chinese paragraph was written into a price tier's
+  // `th` slot and served on an indexed page. Every other ERROR check passed it
+  // — the string is well-formed Chinese. Both directions are asserted, because
+  // the two rules cover different pairs and each is individually removable.
+  const scriptErrs = (locale: Locale, value: string): number => {
+    const before = issues.length
+    checkScript({ locale, entryId: '__test__', field: '__test__', value })
+    return issues.splice(before).filter((i) => i.level === 'error').length
+  }
+  const ZH_PARA =
+    '价格在高峰期常上涨30–40%：多数球场是周末，按季节定价的球场则是旺季。所以在这个价位段，日期能否灵活安排，差别不小。'
+  const TH_PARA =
+    'ราคามักปรับขึ้น 30-40% ในช่วงพีค โดยสนามส่วนใหญ่ในกลุ่มนี้คือช่วงวันหยุดสุดสัปดาห์ ส่วนสนามที่คิดราคาตามฤดูกาลจะเป็นช่วงไฮซีซัน'
+  const JA_PARA =
+    'ピーク時には料金が30〜40%上がることが多く、この価格帯では多くのコースで週末が、シーズンで料金が変わるコースではハイシーズンがそれにあたります。'
+
+  // Rule (a), dominance — the exact historical defect and its mirror.
+  assert('script: zh paragraph in th slot → 1', scriptErrs('th', ZH_PARA) === 1)
+  assert('script: th paragraph in zh slot → 1', scriptErrs('zh', TH_PARA) === 1)
+  assert('script: ja paragraph in th slot → 1', scriptErrs('th', JA_PARA) === 1)
+  assert('script: correct copy in its own slot → 0', scriptErrs('th', TH_PARA) === 0)
+  assert('script: ja copy in ja slot → 0', scriptErrs('ja', JA_PARA) === 0)
+  assert('script: zh copy in zh slot → 0', scriptErrs('zh', ZH_PARA) === 0)
+
+  // Rule (b), ja kana requirement. Dominance is BLIND to this pair — Han is
+  // legal in Japanese, so a Chinese paragraph in a ja slot scores 100% "own".
+  // Deleting rule (b) leaves every other assertion here green.
+  assert('script: zh paragraph in ja slot → 1 (kana rule, not dominance)', scriptErrs('ja', ZH_PARA) === 1)
+
+  // The false positives that a naive "contains a foreign script" rule produced.
+  // All are real, correct strings from this repo; all 11 fired before the
+  // dominance ratio. If any of these starts erroring, the gate is about to be
+  // switched off by whoever hits it.
+  assert(
+    'script: ja copy quoting a Thai address stays clean (grabTip)',
+    scriptErrs(
+      'ja',
+      'Grabやタクシーでお越しの場合は、ドライバーに「The Mercury Ville, Chidlom」（เดอะ เมอร์คิวรี่ วิลล์ ชิดลม）とお伝えください。'
+    ) === 0
+  )
+  // VERBATIM from data/faq-hub.ts — not a synthetic approximation. An invented
+  // shorter version of this line DID fail this assertion, which is the useful
+  // signal here: Chinese is dense enough that a quoted 25-character Thai
+  // address can outnumber the Han around it, and the real string clears the 2x
+  // ratio with a thin margin (25 thai vs 22 han). Tightening the ratio, or
+  // shortening this line in faq-hub, turns correct copy red. Keep them in sync.
+  assert(
+    'script: zh copy quoting a Thai address stays clean (verbatim faq-hub grabTip)',
+    scriptErrs(
+      'zh',
+      '坐Grab或出租车过来？告诉司机“The Mercury Ville, Chidlom”（เดอะ เมอร์คิวรี่ วิลล์ ชิดลม）。下车点在Ploenchit路的商场入口处。'
+    ) === 0
+  )
+  assert(
+    'script: th copy quoting the Korean term 스크린골프 stays clean',
+    scriptErrs(
+      'th',
+      'กอล์ฟจำลองในร่มที่คนเกาหลีเรียกว่า 스크린골프 กำลังได้รับความนิยมในกรุงเทพฯ อย่างรวดเร็วในช่วงไม่กี่ปีที่ผ่านมา'
+    ) === 0
+  )
+  assert('script: 한국어 as the ja language-switcher label stays clean', scriptErrs('ja', '한국어') === 0)
+  assert('script: all-kanji ja hours line stays clean', scriptErrs('ja', '毎日午前9時〜午後11時営業') === 0)
+  assert('script: all-kanji ja rate note stays clean', scriptErrs('ja', '平日 = 月〜木、週末 = 金〜日') === 0)
+  assert('script: en is exempt', scriptErrs('en' as Locale, 'Weekday green fee') === 0)
 
   // Corpus coverage — each source file actually contributes entries, so a
   // future filter/import regression can't silently shrink the lint surface.

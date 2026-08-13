@@ -151,7 +151,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Arnoma+Grand+Bangkok+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
-        'Arnoma Grandが建つのは、ラチャダムリ通りとプルンチット通りが交わる、バンコク中心部でもとりわけ人通りの多い便利な一角です。通りを渡ればすぐに、東南アジア最大級のライフスタイル複合施設セントラルワールド。数百軒の店舗に映画館、アイススケートリンク、そのへんのレストランに引けを取らないフードコートまで揃っています。チットロム周辺は「オフィス街とショッピング天国が同居する場所」と言われるエリアで、昼はSomboon SeafoodやDin Tai Fungでランチをとるオフィスワーカーでにぎわい、夜になると食事と娯楽のゾーンに表情を変えます。BTSチットロム駅から延びるスカイウォークは、ザ・マーキュリービル、Gaysorn Village、セントラルワールドを地上に降りずにつないでいます。雨季や35°Cを超える午後には、これが本当にありがたい。ローカルな雰囲気を味わいたい方は、ラチャダムリ通りを南に5分ほど歩いてみてください。パッタイやマンゴースティッキーライスを売る屋台が並び、モールの価格とは比べものにならない安さです。',
+        'Arnoma Grandが建つのは、ラチャダムリ通りとプルンチット通りが交わる、バンコク中心部でもとりわけ人通りの多い便利な一角です。通りを渡ればすぐに、東南アジア最大級のライフスタイル複合施設セントラルワールド。数百軒の店舗に映画館、アイススケートリンク、そのへんのレストランに引けを取らないフードコートまで揃っています。チットロム周辺は「オフィス街とショッピング天国が同居する場所」と言われるエリアで、昼はSomboon SeafoodやDin Tai Fungでランチをとるオフィスワーカーでにぎわい、夜になると食事と娯楽のゾーンに表情を変えます。BTSチットロム駅から延びるスカイウォークは、ザ・マーキュリービル、Gaysorn Village、セントラルワールドを地上に降りずにつないでいます。雨季や35°Cの午後には、これが本当にありがたく感じられます。ローカルな雰囲気を味わいたい方は、ラチャダムリ通りを南に5分ほど歩いてみてください。パッタイやマンゴースティッキーライスを売る屋台が並び、モールの価格とは比べものにならない安さです。',
       suggested_itinerary: [
         { time: '10:00', activity: 'ホテルで朝食をとったあと、通りを渡ってセントラルワールドへ。混み合う前の午前中に買い物をすませます' },
         { time: '12:30', activity: 'Din Tai Fung（セントラルワールド6階）でランチ。小籠包は行列に並ぶ価値があります' },
@@ -164,7 +164,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
   },
 
   // ─── KO: things-to-do-near-arnoma-grand-bangkok ───
-  // Figures carried from EN hotel-1: 700m / 11분, 4층, 도보 4분(itinerary), 약 550바트/시간
+  // Figures carried from EN hotel-1: 700m / 11분, 4층, 도보 11분(itinerary), 약 550바트/시간
   // 최대 5명, 35°C, 남쪽 5분. Latin proper nouns never take a Korean particle — every
   // one is followed by a Korean noun (CentralWorld 쇼핑몰이) or an invariant particle
   // (에/에서/의/까지). Stations transliterated per glossary + corpus: BTS 칫롬역.
@@ -278,7 +278,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-sindhorn-midtown',
     title: 'Things to Do Near Sindhorn Midtown Hotel Bangkok | Local Guide',
     meta_description:
-      'Staying at Sindhorn Midtown? Here\'s what to do nearby — indoor golf at LENGOLF (400m), rooftop dining, shopping at CentralWorld, and more around Lumpini.',
+      'Staying at Sindhorn Midtown? Here\'s what to do nearby — indoor golf at LENGOLF (350m), rooftop dining, shopping at CentralWorld, and more around Lumpini.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -293,7 +293,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 350,
       walking_time_mins: 5,
       walking_directions:
-        'Exit Sindhorn Midtown onto Soi Langsuan. Walk north to Ploenchit Road, then turn right (east). Continue toward BTS Chidlom station — The Mercury Ville is on your right, directly connected to the BTS. LENGOLF is on Floor 4.',
+        'Exit Sindhorn Midtown onto Soi Langsuan. Walk north to Ploenchit Road — The Mercury Ville sits right at the corner where Soi Langsuan meets Ploenchit Road, directly connected to BTS Chidlom station. LENGOLF is on Floor 4.',
       hotel_star_rating: 4,
       nearby_restaurants: [
         { name: 'Baan Khanitha (Langsuan)', cuisine: 'Thai Fine Dining', distance_m: 200 },
@@ -323,8 +323,9 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
   },
 
   // ─── TH: things-to-do-near-sindhorn-midtown ───
-  // Figures carried verbatim: 350 m field / 5 min / 4 stars, meta keeps EN's own
-  // "400 m" wording, 40 บาท ต่อ 30 นาที, ประมาณ 550 บาท/ชั่วโมง, จอง 2 สัปดาห์ล่วงหน้า,
+  // Figures carried verbatim: 350 m field / 5 min / 4 stars (the meta figure was
+  // EN's own "400 m"; reconciled to the 350 m field for every locale in a54c156),
+  // 40 บาท ต่อ 30 นาที, ประมาณ 550 บาท/ชั่วโมง, จอง 2 สัปดาห์ล่วงหน้า,
   // "Sorn (2 Michelin Stars)" left as a business name. Clock 24h + น.
   // "Restaurant Row" glossed rather than transliterated.
   {
@@ -333,7 +334,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-sindhorn-midtown',
     title: 'สิ่งที่น่าทำใกล้ Sindhorn Midtown Hotel กรุงเทพฯ | ไกด์ประจำย่าน',
     meta_description:
-      'พักที่ Sindhorn Midtown อยู่ใช่ไหม นี่คือสิ่งที่น่าทำใกล้โรงแรม ทั้งกอล์ฟในร่มที่ LENGOLF (400 เมตร) ร้านอาหารรูฟท็อป ช้อปปิ้งที่ CentralWorld และอื่น ๆ รอบย่านลุมพินี',
+      'พักที่ Sindhorn Midtown อยู่ใช่ไหม นี่คือสิ่งที่น่าทำใกล้โรงแรม ทั้งกอล์ฟในร่มที่ LENGOLF (350 เมตร) ร้านอาหารรูฟท็อป ช้อปปิ้งที่ CentralWorld และอื่น ๆ รอบย่านลุมพินี',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -348,7 +349,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 350,
       walking_time_mins: 5,
       walking_directions:
-        'ออกจาก Sindhorn Midtown มายังซอยหลังสวน (Soi Langsuan) เดินขึ้นไปทางทิศเหนือจนถึงถนนเพลินจิต (Ploenchit Road) แล้วเลี้ยวขวา (ไปทางทิศตะวันออก) เดินต่อไปทางสถานี BTS ชิดลม The Mercury Ville จะอยู่ทางขวามือ เชื่อมต่อกับ BTS โดยตรง LENGOLF อยู่ชั้น 4',
+        'ออกจาก Sindhorn Midtown มายังซอยหลังสวน (Soi Langsuan) เดินขึ้นไปทางทิศเหนือจนถึงถนนเพลินจิต (Ploenchit Road) The Mercury Ville อยู่ตรงหัวมุมที่ซอยหลังสวนบรรจบกับถนนเพลินจิตพอดี เชื่อมต่อกับสถานี BTS ชิดลมโดยตรง LENGOLF อยู่ชั้น 4',
       hotel_star_rating: 4,
       nearby_restaurants: [
         { name: 'Baan Khanitha (Langsuan)', cuisine: 'อาหารไทยไฟน์ไดนิ่ง', distance_m: 200 },
@@ -378,9 +379,9 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
   },
 
   // ─── JA: things-to-do-near-sindhorn-midtown ───
-  // Carries EN's own split figures without reconciling them: hotel_distance_m 350 /
-  // 5分, but the meta says 400m (matching the nearby_activities card) — kept as EN
-  // has it. Paddle boat 30分40THB, Sorn の予約は2週間以上前, all from EN.
+  // hotel_distance_m 350 / 5分. The meta used to carry EN's own diverging "400m";
+  // a54c156 reconciled meta to the field across all locales, so both now read 350m.
+  // Paddle boat 30分40THB, Sorn の予約は2週間以上前, all from EN.
   // 「レストラン・ロウ」 keeps EN's nickname as a quoted rendering.
   {
     id: 'hotel-2-ja',
@@ -388,7 +389,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-sindhorn-midtown',
     title: 'シンドーン・ミッドタウン周辺の過ごし方 — 宿泊者のためのエリアガイド',
     meta_description:
-      'シンドーン・ミッドタウン（Sindhorn Midtown）周辺の過ごし方。徒歩400mのLENGOLFでインドアゴルフ、ランスアン通りのレストラン、ルンピニー公園、セントラルワールドでの買い物まで。',
+      'シンドーン・ミッドタウン（Sindhorn Midtown）周辺の過ごし方。徒歩350mのLENGOLFでインドアゴルフ、ランスアン通りのレストラン、ルンピニー公園、セントラルワールドでの買い物まで。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -403,7 +404,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 350,
       walking_time_mins: 5,
       walking_directions:
-        'Sindhorn Midtownを出て、ランスアン通り（Soi Langsuan）へ。北へ進んでプルンチット通り（Ploenchit Road）に出たら、右（東）に曲がります。BTSチットロム駅の方向へ進むと、右手にBTSと直結したザ・マーキュリービルがあります。LENGOLFは4階です。',
+        'Sindhorn Midtownを出て、ランスアン通り（Soi Langsuan）へ。北へ進んでプルンチット通り（Ploenchit Road）に出ると、ちょうどランスアン通りとプルンチット通りが交わる角にザ・マーキュリービルがあります。BTSチットロム駅に直結しています。LENGOLFは4階です。',
       hotel_star_rating: 4,
       nearby_restaurants: [
         { name: 'Baan Khanitha (Langsuan)', cuisine: 'タイ高級料理', distance_m: 200 },
@@ -433,7 +434,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
   },
 
   // ─── KO: things-to-do-near-sindhorn-midtown ───
-  // Figures from EN hotel-2: 350m / 5분(헤더), meta의 400m, 4층, Lumpini Park 300m,
+  // Figures from EN hotel-2: 350m / 5분(헤더), meta도 350m(a54c156에서 400m→350m로 정정), 4층, Lumpini Park 300m,
   // 오리배 30분 40바트, Sorn 미쉐린 2스타, 2주 전 예약, 약 550바트/시간 최대 5명.
   // "The Mercury Ville 건물이" 처럼 Latin 뒤에는 반드시 한국어 명사를 붙였고,
   // Lumpini Park에는 동격 쉼표를 써서 조사 접촉을 피했어요.
@@ -443,7 +444,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-sindhorn-midtown',
     title: 'Sindhorn Midtown 주변 즐길 거리 — 랑수언·룸피니 로컬 가이드',
     meta_description:
-      'Sindhorn Midtown에 묵는다면 400m 거리의 LENGOLF 실내 골프부터 루프톱 다이닝, CentralWorld 쇼핑까지 룸피니 주변에서 할 수 있는 것들을 정리했어요.',
+      'Sindhorn Midtown에 묵는다면 350m 거리의 LENGOLF 실내 골프부터 루프톱 다이닝, CentralWorld 쇼핑까지 룸피니 주변에서 할 수 있는 것들을 정리했어요.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -458,7 +459,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 350,
       walking_time_mins: 5,
       walking_directions:
-        'Sindhorn Midtown에서 Soi Langsuan 쪽으로 나옵니다. 북쪽으로 걸어 Ploenchit Road에 닿으면 오른쪽(동쪽)으로 꺾어요. BTS 칫롬역 방향으로 계속 걸으면 오른편에 The Mercury Ville 건물이 나와요. BTS와 바로 연결돼 있어요. LENGOLF는 4층에 있어요.',
+        'Sindhorn Midtown에서 Soi Langsuan 쪽으로 나옵니다. 북쪽으로 걸어 Ploenchit Road에 닿으면, 두 길이 만나는 모퉁이에 바로 The Mercury Ville 건물이 있어요. BTS 칫롬역과 바로 연결돼 있어요. LENGOLF는 4층에 있어요.',
       hotel_star_rating: 4,
       nearby_restaurants: [
         { name: 'Baan Khanitha (Langsuan)', cuisine: '태국 파인다이닝', distance_m: 200 },
@@ -490,15 +491,15 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
   // ─── ZH: things-to-do-near-sindhorn-midtown ───
   // Figures carried from EN: 350m / 5分钟 / 4星, Lumpini 300m, Sindhorn Village 150m,
   // CentralWorld 600m, ~550泰铢/小时最多5人, 天鹅船30分钟40泰铢, 提前2周订位.
-  // Meta keeps EN's own 400m figure (EN meta says 400m while hotel_distance_m is
-  // 350 — flagged in report, not silently reconciled). Lumpini glossed once as 伦披尼公园.
+  // Meta previously carried EN's own 400m while hotel_distance_m was 350; a54c156
+  // reconciled meta to the field, so both now read 350m. Lumpini glossed once as 伦披尼公园.
   {
     id: 'hotel-2-zh',
     page_type: 'hotel_concierge',
     slug: 'things-to-do-near-sindhorn-midtown',
     title: 'Sindhorn Midtown Hotel附近好去处 — 曼谷Langsuan一带指南',
     meta_description:
-      '住在Sindhorn Midtown？周边可以这样安排：LENGOLF室内高尔夫（400米）、天台餐饮、CentralWorld购物，以及Lumpini公园一带的更多去处。',
+      '住在Sindhorn Midtown？周边可以这样安排：LENGOLF室内高尔夫（350米）、天台餐饮、CentralWorld购物，以及Lumpini公园一带的更多去处。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -513,7 +514,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_distance_m: 350,
       walking_time_mins: 5,
       walking_directions:
-        '从Sindhorn Midtown出来，走到Soi Langsuan上。向北走到Ploenchit Road，然后右转（向东）。继续朝BTS Chidlom站方向走——The Mercury Ville就在你的右手边，与BTS直接相连。LENGOLF在4楼。',
+        '从Sindhorn Midtown出来，走到Soi Langsuan上。向北走到Ploenchit Road——The Mercury Ville就在Soi Langsuan与Ploenchit Road交汇的路口，与BTS Chidlom站直接相连。LENGOLF在4楼。',
       hotel_star_rating: 4,
       nearby_restaurants: [
         { name: 'Baan Khanitha (Langsuan)', cuisine: '泰式高级料理', distance_m: 200 },
@@ -1195,9 +1196,9 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
 
   // ─── JA: things-to-do-near-intercontinental-bangkok ───
   // EN contradicts itself here (2分/東 in the directions vs 徒歩8分/西 in area_guide,
-  // and 150m vs a 600m activity card). Every field is carried faithfully to its own
-  // EN sentence and the conflict is reported, not silently reconciled.
-  // Figures: 150m / 2分 / 300m・150m・600m・400m の各モール / 約550THB / 最大5名.
+  // NOTE: this header once described EN's 150m / 2分 split. That was resolved in EN
+  // before merge — the entry is a consistent 450m / 6分 / 東 and the JA matches it.
+  // Figures: 450m / 6分 / 300m・150m・600m・400m の各モール / 約550THB / 最大5名.
   {
     id: 'hotel-5-ja',
     page_type: 'hotel_concierge',
@@ -1250,10 +1251,10 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
   },
 
   // ─── KO: things-to-do-near-intercontinental-bangkok ───
-  // Figures from EN hotel-5: 150m / 2분, 4층, Erawan Shrine 100m, Gaysorn 150m,
+  // Figures from EN hotel-5: 450m / 6분, 4층, Erawan Shrine 100m, Gaysorn 150m,
   // CentralWorld 300m, Siam Paragon 600m, Central Embassy 동쪽 400m, Red Sky 55층
-  // 도보 10분, 약 550바트/시간 최대 5명. EN이 walking_directions(동쪽·2분)와
-  // area_guide(서쪽·도보 8분)에서 엇갈리는데 둘 다 원문대로 옮겼어요(보고서 참조).
+  // 도보 10분, 약 550바트/시간 최대 5명. (이 헤더에 있던 150m/2분·서쪽 8분 메모는
+  // EN이 450m/6분·동쪽으로 정리되기 전의 내용이라 갱신했어요.)
   {
     id: 'hotel-5-ko',
     page_type: 'hotel_concierge',
@@ -1637,7 +1638,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-novotel-ploenchit',
     title: 'Things to Do Near Novotel Bangkok Ploenchit Sukhumvit | Activities',
     meta_description:
-      'Staying at Novotel Ploenchit? Discover what to do nearby — indoor golf at LENGOLF (800m or 1 BTS stop), shopping, Thai street food, and evening entertainment.',
+      'Staying at Novotel Ploenchit? Discover what to do nearby — indoor golf at LENGOLF (1.5km, or 1 BTS stop), shopping, Thai street food, and evening entertainment.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1668,7 +1669,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Novotel+Bangkok+Ploenchit+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
-        'The Novotel Ploenchit sits at the western edge of Sukhumvit — Bangkok\'s longest and most diverse road. This stretch between BTS Ploenchit and Nana is where the Sukhumvit dining and nightlife scene begins, offering a grittier, more authentic Bangkok experience than the polished mall district further west. Soi 11, one of Bangkok\'s most famous side streets, is a 400m walk and transforms after dark into a strip of restaurants, bars, and clubs that draws both locals and expats. During the day, the area offers excellent street food — the Soi 11 alley has vendors selling pad kra pao (basil stir-fry), boat noodles, and som tam (green papaya salad) for 50-80 THB. BTS Ploenchit is a 2-minute walk from the hotel, which puts you one stop from LENGOLF at BTS Chidlom — making it one of the easiest commutes to indoor golf in the area. Bumrungrad Hospital (500m), one of the top medical tourism destinations in Southeast Asia, is nearby — many hotel guests are medical tourists combining treatment with leisure. For families, the Novotel\'s swimming pool and kids\' area are solid, and the Central Embassy mall (3 BTS stops) has an excellent kids\' play area.',
+        'The Novotel Ploenchit sits at the western edge of Sukhumvit — Bangkok\'s longest and most diverse road. This stretch between BTS Ploenchit and Nana is where the Sukhumvit dining and nightlife scene begins, offering a grittier, more authentic Bangkok experience than the polished mall district further west. Soi 11, one of Bangkok\'s most famous side streets, is a 400m walk and transforms after dark into a strip of restaurants, bars, and clubs that draws both locals and expats. During the day, the area offers excellent street food — the Soi 11 alley has vendors selling pad kra pao (basil stir-fry), boat noodles, and som tam (green papaya salad) for 50-80 THB. BTS Ploenchit is a 2-minute walk from the hotel, which puts you one stop from LENGOLF at BTS Chidlom — making it one of the easiest commutes to indoor golf in the area. Bumrungrad Hospital (500m), one of the top medical tourism destinations in Southeast Asia, is nearby — many hotel guests are medical tourists combining treatment with leisure. For families, the Novotel\'s swimming pool and kids\' area are solid, and the Central Embassy mall (by BTS Ploenchit) has an excellent kids\' play area.',
       suggested_itinerary: [
         { time: '8:00 AM', activity: 'Breakfast at The Square (in-hotel) or grab a coffee from the lobby café' },
         { time: '9:30 AM', activity: 'Take BTS from Ploenchit to Siam (2 stops) for shopping at Siam Paragon and MBK' },
@@ -1692,7 +1693,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-novotel-ploenchit',
     title: 'สิ่งที่น่าทำใกล้ Novotel Bangkok Ploenchit Sukhumvit | กิจกรรม',
     meta_description:
-      'พักที่ Novotel Ploenchit อยู่ใช่ไหม รวมสิ่งที่น่าทำใกล้โรงแรม ทั้งกอล์ฟในร่มที่ LENGOLF (800 เมตร หรือ BTS 1 สถานี) ช้อปปิ้ง สตรีทฟู้ดไทย และความบันเทิงยามค่ำ',
+      'พักที่ Novotel Ploenchit อยู่ใช่ไหม รวมสิ่งที่น่าทำใกล้โรงแรม ทั้งกอล์ฟในร่มที่ LENGOLF (1.5 กม. หรือ BTS 1 สถานี) ช้อปปิ้ง สตรีทฟู้ดไทย และความบันเทิงยามค่ำ',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1723,7 +1724,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Novotel+Bangkok+Ploenchit+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
-        'Novotel Ploenchit ตั้งอยู่ปลายด้านตะวันตกของถนนสุขุมวิท ถนนที่ยาวและหลากหลายที่สุดของกรุงเทพฯ ช่วงระหว่าง BTS เพลินจิตกับนานาคือจุดเริ่มต้นของฉากร้านอาหารและไนต์ไลฟ์แบบสุขุมวิท ซึ่งดิบและใกล้เคียงกรุงเทพฯ ของจริงมากกว่าย่านห้างที่ขัดเงาถัดไปทางตะวันตก ซอย 11 หนึ่งในซอยที่มีชื่อเสียงที่สุดของกรุงเทพฯ อยู่ห่างออกไป 400 เมตร และหลังพระอาทิตย์ตกจะกลายเป็นแนวร้านอาหาร บาร์ และคลับ ที่ดึงดูดทั้งคนไทยและชาวต่างชาติที่ทำงานในเมือง ส่วนกลางวันย่านนี้มีสตรีทฟู้ดที่ดีมาก ในตรอกซอย 11 มีแม่ค้าขายผัดกะเพรา ก๋วยเตี๋ยวเรือ และส้มตำ ในราคา 50-80 บาท BTS เพลินจิตอยู่ห่างจากโรงแรม 2 นาทีเดิน ซึ่งทำให้คุณอยู่ห่างจาก LENGOLF ที่ BTS ชิดลม เพียงสถานีเดียว จึงเป็นหนึ่งในเส้นทางไปเล่นกอล์ฟในร่มที่ง่ายที่สุดในย่านนี้ โรงพยาบาลบำรุงราษฎร์ (500 เมตร) ซึ่งเป็นหนึ่งในจุดหมายด้านการท่องเที่ยวเชิงการแพทย์อันดับต้น ๆ ของเอเชียตะวันออกเฉียงใต้ ก็อยู่ใกล้ ผู้เข้าพักจำนวนไม่น้อยจึงเป็นผู้ที่มารักษาพร้อมกับเที่ยวไปด้วย สำหรับครอบครัว สระว่ายน้ำและโซนเด็กของ Novotel ทำได้ดี และห้าง Central Embassy (BTS 3 สถานี) มีโซนเครื่องเล่นสำหรับเด็กที่ยอดเยี่ยม',
+        'Novotel Ploenchit ตั้งอยู่ปลายด้านตะวันตกของถนนสุขุมวิท ถนนที่ยาวและหลากหลายที่สุดของกรุงเทพฯ ช่วงระหว่าง BTS เพลินจิตกับนานาคือจุดเริ่มต้นของฉากร้านอาหารและไนต์ไลฟ์แบบสุขุมวิท ซึ่งดิบและใกล้เคียงกรุงเทพฯ ของจริงมากกว่าย่านห้างที่ขัดเงาถัดไปทางตะวันตก ซอย 11 หนึ่งในซอยที่มีชื่อเสียงที่สุดของกรุงเทพฯ อยู่ห่างออกไป 400 เมตร และหลังพระอาทิตย์ตกจะกลายเป็นแนวร้านอาหาร บาร์ และคลับ ที่ดึงดูดทั้งคนไทยและชาวต่างชาติที่ทำงานในเมือง ส่วนกลางวันย่านนี้มีสตรีทฟู้ดที่ดีมาก ในตรอกซอย 11 มีแม่ค้าขายผัดกะเพรา ก๋วยเตี๋ยวเรือ และส้มตำ ในราคา 50-80 บาท BTS เพลินจิตอยู่ห่างจากโรงแรม 2 นาทีเดิน ซึ่งทำให้คุณอยู่ห่างจาก LENGOLF ที่ BTS ชิดลม เพียงสถานีเดียว จึงเป็นหนึ่งในเส้นทางไปเล่นกอล์ฟในร่มที่ง่ายที่สุดในย่านนี้ โรงพยาบาลบำรุงราษฎร์ (500 เมตร) ซึ่งเป็นหนึ่งในจุดหมายด้านการท่องเที่ยวเชิงการแพทย์อันดับต้น ๆ ของเอเชียตะวันออกเฉียงใต้ ก็อยู่ใกล้ ผู้เข้าพักจำนวนไม่น้อยจึงเป็นผู้ที่มารักษาพร้อมกับเที่ยวไปด้วย สำหรับครอบครัว สระว่ายน้ำและโซนเด็กของ Novotel ทำได้ดี และห้าง Central Embassy (ที่ BTS เพลินจิต) มีโซนเครื่องเล่นสำหรับเด็กที่ยอดเยี่ยม',
       suggested_itinerary: [
         { time: '08:00 น.', activity: 'อาหารเช้าที่ The Square ในโรงแรม หรือซื้อกาแฟจากคาเฟ่ที่ล็อบบี้' },
         { time: '09:30 น.', activity: 'นั่ง BTS จากเพลินจิตไปสยาม (2 สถานี) เพื่อช้อปปิ้งที่ Siam Paragon และ MBK' },
@@ -1747,7 +1748,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-novotel-ploenchit',
     title: 'ノボテル・バンコク・プルンチット周辺の過ごし方 — アクティビティガイド',
     meta_description:
-      'ノボテル・プルンチット（Novotel Bangkok Ploenchit Sukhumvit）周辺の過ごし方。LENGOLFのインドアゴルフはBTSで1駅（800m）、買い物、タイの屋台料理、夜の楽しみ方までまとめました。',
+      'ノボテル・プルンチット（Novotel Bangkok Ploenchit Sukhumvit）周辺の過ごし方。LENGOLFのインドアゴルフはBTSで1駅（徒歩なら1.5km）、買い物、タイの屋台料理、夜の楽しみ方までまとめました。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1778,7 +1779,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Novotel+Bangkok+Ploenchit+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
-        'Novotel Ploenchitが建つのは、バンコクで最も長く多彩な通りであるスクンビットの西端です。BTSプルンチット駅からナナにかけての一帯は、スクンビットの食とナイトライフが始まる場所。西側の洗練されたモール地区よりも雑然としていて、生活のにおいのするバンコクが味わえます。バンコクでも名の知れたソイ11は徒歩400m。日が暮れるとレストラン、バー、クラブが並ぶ通りに変わり、地元の人と在住外国人でにぎわいます。昼は屋台が充実していて、ソイ11の路地ではガパオライス、ボートヌードル、ソムタム（青パパイヤのサラダ）が50〜80THBで食べられます。BTSプルンチット駅はホテルから徒歩2分。LENGOLFのあるBTSチットロム駅まで1駅なので、この界隈ではインドアゴルフへの移動がとりわけ楽です。東南アジア有数の医療ツーリズムの拠点であるバムルンラード病院も500mの距離にあり、治療と滞在を兼ねた宿泊客も多く見かけます。家族連れにはNovotelのプールとキッズエリアが頼りになりますし、BTSで3駅のセントラル・エンバシーには充実したキッズプレイエリアがあります。',
+        'Novotel Ploenchitが建つのは、バンコクで最も長く多彩な通りであるスクンビットの西端です。BTSプルンチット駅からナナにかけての一帯は、スクンビットの食とナイトライフが始まる場所。西側の洗練されたモール地区よりも雑然としていて、生活のにおいのするバンコクが味わえます。バンコクでも名の知れたソイ11は徒歩400m。日が暮れるとレストラン、バー、クラブが並ぶ通りに変わり、地元の人と在住外国人でにぎわいます。昼は屋台が充実していて、ソイ11の路地ではガパオライス、ボートヌードル、ソムタム（青パパイヤのサラダ）が50〜80THBで食べられます。BTSプルンチット駅はホテルから徒歩2分。LENGOLFのあるBTSチットロム駅まで1駅なので、この界隈ではインドアゴルフへの移動がとりわけ楽です。東南アジア有数の医療ツーリズムの拠点であるバムルンラード病院も500mの距離にあり、治療と滞在を兼ねた宿泊客も多く見かけます。家族連れにはNovotelのプールとキッズエリアが頼りになりますし、BTSプルンチット駅すぐのセントラル・エンバシーには充実したキッズプレイエリアがあります。',
       suggested_itinerary: [
         { time: '8:00', activity: 'The Square（ホテル内）で朝食、またはロビーのカフェでコーヒーを' },
         { time: '9:30', activity: 'BTSでプルンチット駅からサイアム駅まで2駅。サイアムパラゴンとMBKで買い物を' },
@@ -1794,7 +1795,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
   // ─── KO: things-to-do-near-novotel-ploenchit ───
   // Figures from EN hotel-7: 1.5km / 21분, BTS 플런칫역 도보 2분, 서쪽 한 정거장,
   // 문 앞에서 문 앞까지 약 10분, 택시 약 5분·약 60바트, 4층, Soi 11 400m,
-  // 길거리 음식 50~80바트, Bumrungrad 500m, Central Embassy BTS 3정거장,
+  // 길거리 음식 50~80바트, Bumrungrad 500m, Central Embassy BTS 플런칫역 옆,
   // 약 550바트/시간 최대 5명. "기준"은 as-of 표기에만 쓰고 BTS 문장에서는 뺐어요.
   {
     id: 'hotel-7-ko',
@@ -1802,7 +1803,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-novotel-ploenchit',
     title: 'Novotel Bangkok Ploenchit 주변 즐길 거리 — 액티비티 가이드',
     meta_description:
-      'Novotel Ploenchit에 묵는다면 LENGOLF 실내 골프(800m 또는 BTS 한 정거장)부터 쇼핑, 태국 길거리 음식, 저녁 나들이까지 가까운 즐길 거리를 정리했어요.',
+      'Novotel Ploenchit에 묵는다면 LENGOLF 실내 골프(도보 1.5km 또는 BTS 한 정거장)부터 쇼핑, 태국 길거리 음식, 저녁 나들이까지 가까운 즐길 거리를 정리했어요.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1833,7 +1834,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Novotel+Bangkok+Ploenchit+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
-        'Novotel Ploenchit 호텔은 방콕에서 가장 길고 다양한 도로인 Sukhumvit의 서쪽 끝자락에 있어요. BTS 플런칫역과 나나 사이의 이 구간에서 Sukhumvit의 식음료와 나이트라이프 신이 시작돼요. 서쪽의 정돈된 쇼핑몰 지구보다 거칠고 더 방콕다운 경험을 할 수 있어요. 방콕에서 가장 유명한 골목 중 하나인 Soi 11 거리는 400m 떨어져 있고, 해가 지면 현지인과 외국인 거주자가 함께 몰리는 레스토랑·바·클럽 거리로 바뀌어요. 낮에는 길거리 음식이 훌륭해요. Soi 11 골목 노점에서는 팟 끄라파오(바질 볶음), 보트 누들, 쏨땀(그린 파파야 샐러드)을 50~80바트에 팔아요. 호텔에서 BTS 플런칫역까지 2분이면 걸어가고, 거기서 BTS 칫롬역의 LENGOLF까지 한 정거장이라 이 일대에서 실내 골프에 가장 쉽게 닿는 편이에요. 동남아시아 최고의 의료 관광지로 꼽히는 Bumrungrad Hospital 병원도 500m 거리라, 치료와 여행을 함께 하는 투숙객이 많아요. 가족 여행이라면 Novotel 호텔의 수영장과 키즈 공간이 무난하고, BTS로 세 정거장 거리의 Central Embassy 쇼핑몰에는 훌륭한 어린이 놀이 공간이 있어요.',
+        'Novotel Ploenchit 호텔은 방콕에서 가장 길고 다양한 도로인 Sukhumvit의 서쪽 끝자락에 있어요. BTS 플런칫역과 나나 사이의 이 구간에서 Sukhumvit의 식음료와 나이트라이프 신이 시작돼요. 서쪽의 정돈된 쇼핑몰 지구보다 거칠고 더 방콕다운 경험을 할 수 있어요. 방콕에서 가장 유명한 골목 중 하나인 Soi 11 거리는 400m 떨어져 있고, 해가 지면 현지인과 외국인 거주자가 함께 몰리는 레스토랑·바·클럽 거리로 바뀌어요. 낮에는 길거리 음식이 훌륭해요. Soi 11 골목 노점에서는 팟 끄라파오(바질 볶음), 보트 누들, 쏨땀(그린 파파야 샐러드)을 50~80바트에 팔아요. 호텔에서 BTS 플런칫역까지 2분이면 걸어가고, 거기서 BTS 칫롬역의 LENGOLF까지 한 정거장이라 이 일대에서 실내 골프에 가장 쉽게 닿는 편이에요. 동남아시아 최고의 의료 관광지로 꼽히는 Bumrungrad Hospital 병원도 500m 거리라, 치료와 여행을 함께 하는 투숙객이 많아요. 가족 여행이라면 Novotel 호텔의 수영장과 키즈 공간이 무난하고, BTS 플런칫역 옆 Central Embassy 쇼핑몰에는 훌륭한 어린이 놀이 공간이 있어요.',
       suggested_itinerary: [
         { time: '08:00', activity: 'The Square(호텔 내)에서 조식, 또는 로비 카페에서 커피 한 잔' },
         { time: '09:30', activity: 'BTS 플런칫역에서 시암역까지 두 정거장 이동해 Siam Paragon과 MBK에서 쇼핑' },
@@ -1848,7 +1849,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
 
   // ─── ZH: things-to-do-near-novotel-ploenchit ───
   // Figures carried from EN: 1,500m / 21分钟 / 4星, BTS门到门约10分钟, 打车约5分钟约60泰铢,
-  // Soi 11 400m, Bumrungrad 500m, 路边小吃50–80泰铢, Central Embassy 3站BTS.
+  // Soi 11 400m, Bumrungrad 500m, 路边小吃50–80泰铢, Central Embassy 就在BTS Ploenchit站.
   // Range separator –, per zh conventions. Cheap Charlie\'s apostrophe escaped.
   {
     id: 'hotel-7-zh',
@@ -1856,7 +1857,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-novotel-ploenchit',
     title: 'Novotel Bangkok Ploenchit附近好去处 — 周边活动指南',
     meta_description:
-      '住在Novotel Ploenchit？周边这样安排：LENGOLF室内高尔夫（800米，或BTS一站）、购物、泰式路边小吃与夜间娱乐。',
+      '住在Novotel Ploenchit？周边这样安排：LENGOLF室内高尔夫（1.5公里，或搭BTS一站）、购物、泰式路边小吃与夜间娱乐。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1887,7 +1888,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Novotel+Bangkok+Ploenchit+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
-        'Novotel Ploenchit位于Sukhumvit的西端——这是曼谷最长、也最多元的一条路。BTS Ploenchit站到Nana之间的这一段，正是Sukhumvit餐饮与夜生活的起点，比再往西的商场区更粗粝，也更贴近真实的曼谷。曼谷最有名的巷子之一Soi 11步行400米可达，入夜后变成一整条餐厅、酒吧和夜店，本地人和外籍居民都爱去。白天这一带的路边小吃很出色——Soi 11的巷子里有摊贩卖打抛饭、船面和青木瓜沙拉，一份50–80泰铢。BTS Ploenchit站距酒店步行2分钟，从这里到LENGOLF所在的BTS Chidlom站只有一站，是这一带去室内高尔夫最省事的路线之一。500米外的Bumrungrad Hospital是东南亚顶尖的医疗旅游目的地之一，不少住客正是把治疗和休闲结合起来的医疗游客。带孩子的家庭，Novotel的泳池和儿童区都不错；搭BTS 3站可达的Central Embassy商场也有很好的儿童游乐区。',
+        'Novotel Ploenchit位于Sukhumvit的西端——这是曼谷最长、也最多元的一条路。BTS Ploenchit站到Nana之间的这一段，正是Sukhumvit餐饮与夜生活的起点，比再往西的商场区更粗粝，也更贴近真实的曼谷。曼谷最有名的巷子之一Soi 11步行400米可达，入夜后变成一整条餐厅、酒吧和夜店，本地人和外籍居民都爱去。白天这一带的路边小吃很出色——Soi 11的巷子里有摊贩卖打抛饭、船面和青木瓜沙拉，一份50–80泰铢。BTS Ploenchit站距酒店步行2分钟，从这里到LENGOLF所在的BTS Chidlom站只有一站，是这一带去室内高尔夫最省事的路线之一。500米外的Bumrungrad Hospital是东南亚顶尖的医疗旅游目的地之一，不少住客正是把治疗和休闲结合起来的医疗游客。带孩子的家庭，Novotel的泳池和儿童区都不错；就在BTS Ploenchit站的Central Embassy商场也有很好的儿童游乐区。',
       suggested_itinerary: [
         { time: '08:00', activity: '在酒店的The Square吃早餐，或者到大堂咖啡吧买杯咖啡' },
         { time: '09:30', activity: '从Ploenchit搭BTS到Siam（2站），逛Siam Paragon和MBK' },
@@ -1937,7 +1938,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Renaissance+Bangkok+Ratchaprasong+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
-        'The Renaissance sits directly behind CentralWorld — Southeast Asia\'s largest lifestyle mall — giving guests instant access to over 500 shops, a 15-screen cinema, an ice-skating rink, and one of Bangkok\'s best food courts. The Ratchaprasong district is Bangkok\'s retail core, home to an unbroken chain of malls stretching from Siam Discovery to Gaysorn Village. But the area has cultural depth too: the Ratchaprasong intersection features four Hindu shrines at its corners (Erawan Shrine being the most famous), each dedicated to different deities, and watching the Thai dancers perform is a quintessential Bangkok moment. For corporate guests at the Renaissance — and there are many, given the hotel\'s extensive meeting facilities — the area offers seamless team entertainment. CentralWorld\'s upper floors house excellent restaurants like Nara Thai and Red Sky (the 55th-floor rooftop bar at the adjacent Centara Grand). BigC Supercenter (200m) is the place to stock up on Thai snacks, cosmetics, and souvenirs at local prices — far cheaper than the upmarket malls. The Renaissance\'s main entrance is on Sukhumvit Road, which means the 6-minute walk to LENGOLF is a quick, straight stroll west along Ploenchit Road.',
+        'The Renaissance sits directly behind CentralWorld — Southeast Asia\'s largest lifestyle mall — giving guests instant access to over 500 shops, a 15-screen cinema, an ice-skating rink, and one of Bangkok\'s best food courts. The Ratchaprasong district is Bangkok\'s retail core, home to an unbroken chain of malls stretching from Siam Discovery to Gaysorn Village. But the area has cultural depth too: the Ratchaprasong intersection features four Hindu shrines at its corners (Erawan Shrine being the most famous), each dedicated to different deities, and watching the Thai dancers perform is a quintessential Bangkok moment. For corporate guests at the Renaissance — and there are many, given the hotel\'s extensive meeting facilities — the area offers seamless team entertainment. CentralWorld\'s upper floors house excellent restaurants like Nara Thai and Red Sky (the 55th-floor rooftop bar at the adjacent Centara Grand). BigC Supercenter (200m) is the place to stock up on Thai snacks, cosmetics, and souvenirs at local prices — far cheaper than the upmarket malls. The Renaissance\'s main entrance is on Ratchadamri Road, which means the 6-minute walk to LENGOLF is a quick, straight stroll east along Ploenchit Road.',
       suggested_itinerary: [
         { time: '8:30 AM', activity: 'Breakfast at Flavors — the Renaissance\'s all-day dining restaurant with city views' },
         { time: '10:00 AM', activity: 'Walk to CentralWorld (100m) for shopping — the B2S bookstore on the 6th floor is excellent' },
@@ -1953,8 +1954,9 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
 
   // ─── TH: things-to-do-near-renaissance-ratchaprasong ───
   // Figures carried verbatim: 450 m / 6 min / 5 stars, ร้านค้ากว่า 500 ร้าน, โรงหนัง 15 โรง,
-  // Red Sky ชั้น 55, BigC 200 เมตร, ศาล 4 แห่งที่แยกราชประสงค์. Direction wording ("ออกทาง
-  // ถนนสุขุมวิท ... เดินไปทางทิศตะวันตก") carried exactly as EN wrote it — flagged.
+  // Red Sky ชั้น 55, BigC 200 เมตร, ศาล 4 แห่งที่แยกราชประสงค์. Direction corrected in
+  // 509460e: ประตูหลักอยู่บนถนนราชดำริ และเดินไปทาง "ทิศตะวันออก" ตามถนนเพลินจิต
+  // ทั้งใน walking_directions และ area_guide ตรงกับ EN ที่แก้แล้ว.
   {
     id: 'hotel-8-th',
     page_type: 'hotel_concierge',
@@ -1993,7 +1995,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Renaissance+Bangkok+Ratchaprasong+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
-        'Renaissance ตั้งอยู่ด้านหลัง CentralWorld ศูนย์การค้าไลฟ์สไตล์ที่ใหญ่ที่สุดในเอเชียตะวันออกเฉียงใต้พอดี ผู้เข้าพักจึงเข้าถึงร้านค้ากว่า 500 ร้าน โรงภาพยนตร์ 15 โรง ลานสเก็ตน้ำแข็ง และหนึ่งในศูนย์อาหารที่ดีที่สุดของกรุงเทพฯ ได้ทันที ย่านราชประสงค์คือแกนกลางค้าปลีกของกรุงเทพฯ ที่มีห้างเรียงต่อกันไม่ขาดสายตั้งแต่ Siam Discovery ไปจนถึง Gaysorn Village แต่ย่านนี้ก็มีมิติทางวัฒนธรรมด้วย เพราะแยกราชประสงค์มีศาลฮินดูอยู่ทั้งสี่มุม (โดยศาลพระพรหมเอราวัณเป็นที่รู้จักมากที่สุด) แต่ละแห่งบูชาเทพองค์ต่างกัน และการได้ยืนดูคณะรำไทยแสดงแก้บนถือเป็นภาพจำอย่างหนึ่งของกรุงเทพฯ สำหรับแขกองค์กรของ Renaissance ซึ่งมีจำนวนมากเพราะโรงแรมมีห้องประชุมครบครัน ย่านนี้จัดกิจกรรมให้ทีมได้ราบรื่น ชั้นบนของ CentralWorld มีร้านอาหารดี ๆ อย่าง Nara Thai และ Red Sky (รูฟท็อปบาร์ชั้น 55 ของ Centara Grand ที่อยู่ติดกัน) ส่วน BigC Supercenter (200 เมตร) คือที่ที่ควรไปตุนขนมไทย เครื่องสำอาง และของฝากในราคาแบบคนท้องถิ่น ซึ่งถูกกว่าห้างระดับบนมาก ประตูหลักของ Renaissance อยู่บนถนนสุขุมวิท การเดิน 6 นาทีไป LENGOLF จึงเป็นเส้นทางตรงไปทางทิศตะวันตกตามถนนเพลินจิตแบบสบาย ๆ',
+        'Renaissance ตั้งอยู่ด้านหลัง CentralWorld ศูนย์การค้าไลฟ์สไตล์ที่ใหญ่ที่สุดในเอเชียตะวันออกเฉียงใต้พอดี ผู้เข้าพักจึงเข้าถึงร้านค้ากว่า 500 ร้าน โรงภาพยนตร์ 15 โรง ลานสเก็ตน้ำแข็ง และหนึ่งในศูนย์อาหารที่ดีที่สุดของกรุงเทพฯ ได้ทันที ย่านราชประสงค์คือแกนกลางค้าปลีกของกรุงเทพฯ ที่มีห้างเรียงต่อกันไม่ขาดสายตั้งแต่ Siam Discovery ไปจนถึง Gaysorn Village แต่ย่านนี้ก็มีมิติทางวัฒนธรรมด้วย เพราะแยกราชประสงค์มีศาลฮินดูอยู่ทั้งสี่มุม (โดยศาลพระพรหมเอราวัณเป็นที่รู้จักมากที่สุด) แต่ละแห่งบูชาเทพองค์ต่างกัน และการได้ยืนดูคณะรำไทยแสดงแก้บนถือเป็นภาพจำอย่างหนึ่งของกรุงเทพฯ สำหรับแขกองค์กรของ Renaissance ซึ่งมีจำนวนมากเพราะโรงแรมมีห้องประชุมครบครัน ย่านนี้จัดกิจกรรมให้ทีมได้ราบรื่น ชั้นบนของ CentralWorld มีร้านอาหารดี ๆ อย่าง Nara Thai และ Red Sky (รูฟท็อปบาร์ชั้น 55 ของ Centara Grand ที่อยู่ติดกัน) ส่วน BigC Supercenter (200 เมตร) คือที่ที่ควรไปตุนขนมไทย เครื่องสำอาง และของฝากในราคาแบบคนท้องถิ่น ซึ่งถูกกว่าห้างระดับบนมาก ประตูหลักของ Renaissance อยู่บนถนนราชดำริ การเดิน 6 นาทีไป LENGOLF จึงเป็นเส้นทางตรงไปทางทิศตะวันออกตามถนนเพลินจิตแบบสบาย ๆ',
       suggested_itinerary: [
         { time: '08:30 น.', activity: 'อาหารเช้าที่ Flavors ห้องอาหารออลเดย์ไดนิ่งของ Renaissance พร้อมวิวเมือง' },
         { time: '10:00 น.', activity: 'เดินไป CentralWorld (100 เมตร) เพื่อช้อปปิ้ง ร้านหนังสือ B2S ชั้น 6 ดีมาก' },
@@ -2008,9 +2010,9 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
   },
 
   // ─── JA: things-to-do-near-renaissance-ratchaprasong ───
-  // EN's 「スクンビット通りの正面玄関」と「西へ」 are carried verbatim in both the
-  // directions and the area_guide even though the hotel fronts Ploenchit and
-  // Chidlom lies east — reported to the orchestrator instead of corrected.
+  // Direction corrected in 509460e: the main entrance is on Ratchadamri Road
+  // (ラチャダムリ通り) and the walk to LENGOLF runs east (東へ) along Ploenchit,
+  // in both walking_directions and area_guide — matching the corrected EN.
   // No LENGOLF price appears in rendered copy, so no as-of marker was added.
   {
     id: 'hotel-8-ja',
@@ -2050,7 +2052,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Renaissance+Bangkok+Ratchaprasong+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
-        'Renaissanceは、東南アジア最大級のライフスタイルモールであるセントラルワールドのちょうど裏手に建っています。500を超える店舗、15スクリーンの映画館、アイススケートリンク、そしてバンコク屈指のフードコートがすぐそこ。ラチャプラソン地区はバンコクの小売の中心で、サイアムディスカバリーからGaysorn Villageまでモールが途切れることなく連なります。ただ、この一帯には文化的な奥行きもあります。ラチャプラソン交差点の四つの角には、それぞれ別の神を祀るヒンドゥーの祠があり（もっとも有名なのがエラワン廟）、奉納舞踊を眺める時間はいかにもバンコクらしいひとときです。広い会議施設を持つRenaissanceにはビジネス目的の宿泊が多く、そうしたグループの余暇にもこの立地は好都合。セントラルワールドの上層階には、Nara Thaiや、隣接するCentara Grandの55階にあるルーフトップバーRed Skyなど、質の高い店が入っています。200m先のBigC Supercenterは、タイのお菓子や化粧品、土産物をローカル価格でまとめ買いできる場所で、高級モールとは値段が大きく違います。Renaissanceの正面玄関はスクンビット通りに面しているため、LENGOLFへの徒歩6分はプルンチット通りを西へまっすぐ歩くだけです。',
+        'Renaissanceは、東南アジア最大級のライフスタイルモールであるセントラルワールドのちょうど裏手に建っています。500を超える店舗、15スクリーンの映画館、アイススケートリンク、そしてバンコク屈指のフードコートがすぐそこ。ラチャプラソン地区はバンコクの小売の中心で、サイアムディスカバリーからGaysorn Villageまでモールが途切れることなく連なります。ただ、この一帯には文化的な奥行きもあります。ラチャプラソン交差点の四つの角には、それぞれ別の神を祀るヒンドゥーの祠があり（もっとも有名なのがエラワン廟）、奉納舞踊を眺める時間はいかにもバンコクらしいひとときです。広い会議施設を持つRenaissanceにはビジネス目的の宿泊が多く、そうしたグループの余暇にもこの立地は好都合。セントラルワールドの上層階には、Nara Thaiや、隣接するCentara Grandの55階にあるルーフトップバーRed Skyなど、質の高い店が入っています。200m先のBigC Supercenterは、タイのお菓子や化粧品、土産物をローカル価格でまとめ買いできる場所で、高級モールとは値段が大きく違います。Renaissanceの正面玄関はラチャダムリ通りに面しているため、LENGOLFへの徒歩6分はプルンチット通りを東へまっすぐ歩くだけです。',
       suggested_itinerary: [
         { time: '8:30', activity: 'Flavorsで朝食。Renaissanceのオールデイダイニングで、街の眺めも楽しめます' },
         { time: '10:00', activity: 'セントラルワールド（100m）まで歩いて買い物を。6階の書店B2Sは品揃えが充実しています' },
@@ -2068,7 +2070,8 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
   // Figures from EN hotel-8: 450m / 6분, 4층, CentralWorld 100m(500개 이상 상점,
   // 15개 상영관), Erawan Shrine 200m, BigC 200m, Red Sky 55층 300m, B2S 6층,
   // 푸드코트 7층. EN에 LENGOLF 가격이 없어 가격/as-of 표기를 넣지 않았어요.
-  // EN의 "Sukhumvit Road 정문"과 "서쪽으로" 방향어는 원문대로 옮겼습니다.
+  // 방향은 509460e에서 정정했어요: 정문은 Ratchadamri Road에 있고 Ploenchit Road를
+  // 따라 동쪽으로 걷습니다. walking_directions와 area_guide 모두 수정된 EN과 일치해요.
   {
     id: 'hotel-8-ko',
     page_type: 'hotel_concierge',
@@ -2107,7 +2110,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Renaissance+Bangkok+Ratchaprasong+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
-        'Renaissance 호텔은 동남아시아 최대 라이프스타일 몰인 CentralWorld 바로 뒤에 있어요. 500개가 넘는 상점과 15개 상영관 영화관, 아이스링크, 방콕에서 손꼽히는 푸드코트를 곧바로 이용할 수 있어요. Ratchaprasong 지구는 방콕 리테일의 중심으로, Siam Discovery에서 Gaysorn Village까지 쇼핑몰이 끊이지 않고 이어져요. 그렇다고 문화가 얕은 동네는 아니에요. Ratchaprasong 교차로 네 모퉁이에는 각각 다른 신을 모시는 힌두 사원 네 곳이 있고(가장 유명한 곳이 Erawan Shrine 사원이에요), 태국 무용수들의 공연을 지켜보는 건 전형적인 방콕의 한 장면이에요. Renaissance 호텔은 회의 시설이 넓어 기업 고객이 많은데, 이 동네는 단체 여흥을 짜기에도 매끄러워요. CentralWorld 위층에는 Nara Thai 같은 좋은 식당들이 있고, 옆 건물 Centara Grand 55층 루프톱 바 Red Sky도 가까워요. 200m 거리의 BigC Supercenter 매장은 태국 과자와 화장품, 기념품을 현지 가격에 사기 좋아요. 고급 쇼핑몰보다 훨씬 저렴해요. Renaissance 호텔의 정문은 Sukhumvit Road에 있어서, LENGOLF까지 6분 걷는 길은 Ploenchit Road에서 서쪽으로 곧게 이어지는 짧은 산책이에요.',
+        'Renaissance 호텔은 동남아시아 최대 라이프스타일 몰인 CentralWorld 바로 뒤에 있어요. 500개가 넘는 상점과 15개 상영관 영화관, 아이스링크, 방콕에서 손꼽히는 푸드코트를 곧바로 이용할 수 있어요. Ratchaprasong 지구는 방콕 리테일의 중심으로, Siam Discovery에서 Gaysorn Village까지 쇼핑몰이 끊이지 않고 이어져요. 그렇다고 문화가 얕은 동네는 아니에요. Ratchaprasong 교차로 네 모퉁이에는 각각 다른 신을 모시는 힌두 사원 네 곳이 있고(가장 유명한 곳이 Erawan Shrine 사원이에요), 태국 무용수들의 공연을 지켜보는 건 전형적인 방콕의 한 장면이에요. Renaissance 호텔은 회의 시설이 넓어 기업 고객이 많은데, 이 동네는 단체 여흥을 짜기에도 매끄러워요. CentralWorld 위층에는 Nara Thai 같은 좋은 식당들이 있고, 옆 건물 Centara Grand 55층 루프톱 바 Red Sky도 가까워요. 200m 거리의 BigC Supercenter 매장은 태국 과자와 화장품, 기념품을 현지 가격에 사기 좋아요. 고급 쇼핑몰보다 훨씬 저렴해요. Renaissance 호텔의 정문은 Ratchadamri Road에 있어서, LENGOLF까지 6분 걷는 길은 Ploenchit Road에서 동쪽으로 곧게 이어지는 짧은 산책이에요.',
       suggested_itinerary: [
         { time: '08:30', activity: 'Flavors에서 조식 — 도시 전망을 갖춘 Renaissance 호텔의 올데이 다이닝 레스토랑이에요' },
         { time: '10:00', activity: 'CentralWorld까지 걸어가(100m) 쇼핑 — 6층 B2S 서점이 특히 좋아요' },
@@ -2163,7 +2166,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Renaissance+Bangkok+Ratchaprasong+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
-        'Renaissance就在CentralWorld（尚泰世界）正后方——这是东南亚最大的生活方式商场，住客一出门就有500多家店铺、15个厅的影院、一个溜冰场，以及曼谷最好的美食广场之一。Ratchaprasong区是曼谷的零售核心，从Siam Discovery一路到Gaysorn Village的商场几乎连成一片。不过这一带也有文化的厚度：Ratchaprasong路口的四个角上各有一座印度教神龛（其中最有名的是Erawan Shrine，也就是四面佛），分别供奉不同神祇，看泰国舞者在这里献舞是很地道的曼谷一刻。对Renaissance的商务客人来说——酒店会议设施齐全，这类客人不少——周边安排团队娱乐相当顺手。CentralWorld的高楼层有Nara Thai这样的好餐厅，隔壁Centara Grand的55楼还有天台酒吧Red Sky。200米外的BigC Supercenter是按本地价格采买泰国零食、化妆品和伴手礼的地方，比高档商场便宜得多。Renaissance的正门开在Sukhumvit Road上，因此沿Ploenchit Road向西笔直走6分钟就到LENGOLF，一路好走。',
+        'Renaissance就在CentralWorld（尚泰世界）正后方——这是东南亚最大的生活方式商场，住客一出门就有500多家店铺、15个厅的影院、一个溜冰场，以及曼谷最好的美食广场之一。Ratchaprasong区是曼谷的零售核心，从Siam Discovery一路到Gaysorn Village的商场几乎连成一片。不过这一带也有文化的厚度：Ratchaprasong路口的四个角上各有一座印度教神龛（其中最有名的是Erawan Shrine，也就是四面佛），分别供奉不同神祇，看泰国舞者在这里献舞是很地道的曼谷一刻。对Renaissance的商务客人来说——酒店会议设施齐全，这类客人不少——周边安排团队娱乐相当顺手。CentralWorld的高楼层有Nara Thai这样的好餐厅，隔壁Centara Grand的55楼还有天台酒吧Red Sky。200米外的BigC Supercenter是按本地价格采买泰国零食、化妆品和伴手礼的地方，比高档商场便宜得多。Renaissance的正门开在Ratchadamri Road上，因此沿Ploenchit Road向东笔直走6分钟就到LENGOLF，一路好走。',
       suggested_itinerary: [
         { time: '08:30', activity: '在Flavors吃早餐——Renaissance的全日餐厅，可以看城市景观' },
         { time: '10:00', activity: '走到CentralWorld（100米）购物——6楼的B2S书店很不错' },
@@ -2455,7 +2458,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-anantara-siam',
     title: 'Things to Do Near Anantara Siam Bangkok | Guest Activities',
     meta_description:
-      'Staying at Anantara Siam Bangkok? Discover nearby activities — indoor golf at LENGOLF (1km), Siam Paragon, Erawan Shrine, rooftop dining, and more.',
+      'Staying at Anantara Siam Bangkok? Discover nearby activities — indoor golf at LENGOLF (800m), Siam Paragon, Erawan Shrine, rooftop dining, and more.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2510,7 +2513,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-anantara-siam',
     title: 'สิ่งที่น่าทำใกล้ Anantara Siam Bangkok | กิจกรรมสำหรับผู้เข้าพัก',
     meta_description:
-      'พักที่ Anantara Siam Bangkok อยู่ใช่ไหม รวมกิจกรรมใกล้โรงแรม ทั้งกอล์ฟในร่มที่ LENGOLF (1 กม.) Siam Paragon ศาลพระพรหมเอราวัณ ร้านอาหารรูฟท็อป และอื่น ๆ',
+      'พักที่ Anantara Siam Bangkok อยู่ใช่ไหม รวมกิจกรรมใกล้โรงแรม ทั้งกอล์ฟในร่มที่ LENGOLF (800 เมตร) Siam Paragon ศาลพระพรหมเอราวัณ ร้านอาหารรูฟท็อป และอื่น ๆ',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2566,7 +2569,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-anantara-siam',
     title: 'アナンタラ・サイアム・バンコク周辺の過ごし方 — 宿泊者向けアクティビティ',
     meta_description:
-      'アナンタラ・サイアム・バンコク（Anantara Siam Bangkok）周辺の過ごし方。1km先のLENGOLFでインドアゴルフ、サイアムパラゴン、エラワン廟、ルーフトップでの食事まで。',
+      'アナンタラ・サイアム・バンコク（Anantara Siam Bangkok）周辺の過ごし方。800m先のLENGOLFでインドアゴルフ、サイアムパラゴン、エラワン廟、ルーフトップでの食事まで。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2621,7 +2624,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-anantara-siam',
     title: 'Anantara Siam Bangkok 주변 즐길 거리 — 투숙객 액티비티 가이드',
     meta_description:
-      'Anantara Siam Bangkok에 묵는다면 1km 거리의 LENGOLF 실내 골프부터 Siam Paragon, Erawan Shrine, 루프톱 다이닝까지 가까운 즐길 거리를 정리했어요.',
+      'Anantara Siam Bangkok에 묵는다면 800m 거리의 LENGOLF 실내 골프부터 Siam Paragon, Erawan Shrine, 루프톱 다이닝까지 가까운 즐길 거리를 정리했어요.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2676,7 +2679,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-anantara-siam',
     title: 'Anantara Siam Bangkok附近好去处 — 住客活动指南',
     meta_description:
-      '住在Anantara Siam Bangkok？周边活动这样挑：LENGOLF室内高尔夫（1公里）、暹罗百丽宫、四面佛与天台餐饮。',
+      '住在Anantara Siam Bangkok？周边活动这样挑：LENGOLF室内高尔夫（800米）、暹罗百丽宫、四面佛与天台餐饮。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2726,7 +2729,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-mercure-siam',
     title: 'Things to Do Near Mercure Bangkok Siam | Activities & Food Guide',
     meta_description:
-      'Staying at Mercure Bangkok Siam? Discover nearby activities — indoor golf at LENGOLF (1km by BTS), Siam Square shopping, street food, and entertainment.',
+      'Staying at Mercure Bangkok Siam? Discover nearby activities — indoor golf at LENGOLF (2.1km, or 1 BTS stop), Siam Square shopping, street food, and entertainment.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2782,7 +2785,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-mercure-siam',
     title: 'สิ่งที่น่าทำใกล้ Mercure Bangkok Siam | ไกด์กิจกรรมและร้านอาหาร',
     meta_description:
-      'พักที่ Mercure Bangkok Siam อยู่ใช่ไหม รวมกิจกรรมใกล้โรงแรม ทั้งกอล์ฟในร่มที่ LENGOLF (1 กม. โดย BTS) ช้อปปิ้งสยามสแควร์ สตรีทฟู้ด และความบันเทิง',
+      'พักที่ Mercure Bangkok Siam อยู่ใช่ไหม รวมกิจกรรมใกล้โรงแรม ทั้งกอล์ฟในร่มที่ LENGOLF (2.1 กม. หรือ BTS 1 สถานี) ช้อปปิ้งสยามสแควร์ สตรีทฟู้ด และความบันเทิง',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2840,7 +2843,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-mercure-siam',
     title: 'メルキュール・バンコク・サイアム周辺の過ごし方 — アクティビティとグルメ',
     meta_description:
-      'メルキュール・バンコク・サイアム（Mercure Bangkok Siam）周辺の過ごし方。BTSで1駅（1km）のLENGOLFでインドアゴルフ、サイアムスクエアでの買い物、屋台グルメ、娯楽施設をご紹介します。',
+      'メルキュール・バンコク・サイアム（Mercure Bangkok Siam）周辺の過ごし方。BTSで1駅（徒歩なら2.1km）のLENGOLFでインドアゴルフ、サイアムスクエアでの買い物、屋台グルメ、娯楽施設をご紹介します。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2897,7 +2900,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-mercure-siam',
     title: 'Mercure Bangkok Siam 주변 즐길 거리 — 액티비티와 먹거리 가이드',
     meta_description:
-      'Mercure Bangkok Siam에 묵는다면 BTS로 1km 거리의 LENGOLF 실내 골프부터 Siam Square 쇼핑, 길거리 음식, 가족 나들이까지 가까운 즐길 거리를 정리했어요.',
+      'Mercure Bangkok Siam에 묵는다면 도보 2.1km 또는 BTS 한 정거장 거리의 LENGOLF 실내 골프부터 Siam Square 쇼핑, 길거리 음식, 가족 나들이까지 가까운 즐길 거리를 정리했어요.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2953,7 +2956,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-mercure-siam',
     title: 'Mercure Bangkok Siam附近好去处 — 周边活动与美食指南',
     meta_description:
-      '住在Mercure Bangkok Siam？周边这样玩：搭BTS去LENGOLF打室内高尔夫（1公里）、逛Siam Square、吃路边小吃，还有各种娱乐。',
+      '住在Mercure Bangkok Siam？周边这样玩：去LENGOLF打室内高尔夫（2.1公里，或搭BTS一站）、逛Siam Square、吃路边小吃，还有各种娱乐。',
     featured_image: null,
     schema_markup: null,
     status: 'published',

@@ -1,4 +1,5 @@
 import type { GolfCourse } from '@/types/golf-courses'
+import { feeLabelsEn } from '@/lib/course-fees'
 import { SITE_URL } from '@/lib/constants'
 import { courseMapsUrl, hasTrustedCoordinates } from '@/lib/geo'
 
@@ -35,7 +36,7 @@ function golfCourseItem(c: GolfCourse): Record<string, unknown> {
       '@type': 'Offer',
       price: String(c.green_fee_weekday_thb),
       priceCurrency: 'THB',
-      description: 'Weekday green fee',
+      description: `${feeLabelsEn(c).lower} green fee`,
     }
   }
   return item
@@ -131,7 +132,7 @@ export function getCourseDetailJsonLd(
     const offers: Record<string, unknown>[] = [
       {
         '@type': 'Offer',
-        name: 'Weekday green fee',
+        name: `${feeLabelsEn(c).lower} green fee`,
         price: String(fee),
         priceCurrency: 'THB',
       },
@@ -139,7 +140,7 @@ export function getCourseDetailJsonLd(
     if (c.green_fee_weekend_thb !== null) {
       offers.push({
         '@type': 'Offer',
-        name: 'Weekend green fee',
+        name: `${feeLabelsEn(c).upper} green fee`,
         price: String(c.green_fee_weekend_thb),
         priceCurrency: 'THB',
       })

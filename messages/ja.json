@@ -1263,17 +1263,20 @@
     "wknd": "週末",
     "viewFullGuide": "詳しいガイド・コツ・アクセスを見る",
     "openGuide": "ガイドを開く",
-    "close": "閉じる"
+    "close": "閉じる",
+    "lowSeason": "ローシーズン",
+    "highSeason": "ハイシーズン"
   },
   "GolfCoursePriceTier": {
-    "metaDescription": "平日グリーンフィー฿{amount}以下で回れるバンコク近郊の上位ゴルフ場と、この価格帯で知っておきたいポイントをご紹介します。",
+    "metaDescription": "グリーンフィー฿{amount}以下で回れるバンコク近郊の上位ゴルフ場と、この価格帯で知っておきたいポイントをご紹介します。",
     "breadcrumbGolfCourses": "ゴルフ場",
     "breadcrumbCurrent": "฿{amount}以下",
-    "eyebrowBadge": "平日グリーンフィー · ฿{amount}以下",
+    "eyebrowBadge": "グリーンフィー · ฿{amount}以下",
     "catchHeading": "注意しておきたい点",
-    "topCoursesHeading": "平日料金฿{amount}以下の上位{count}コース",
+    "topCoursesHeading": "グリーンフィー฿{amount}以下の上位{count}コース",
     "roundupReason": "平日{price}THB〜",
-    "otherPriceBands": "その他の価格帯"
+    "otherPriceBands": "その他の価格帯",
+    "roundupReasonSeasonal": "ローシーズン{price}THB〜"
   },
   "GolfCourseShared": {
     "feeFrom": "{price}THB〜",
@@ -1339,7 +1342,11 @@
     "nudgeEyebrowNoRental": "このコースにレンタルがない場合は",
     "nudgeBody": "現行モデルのCallaway Paradym、Warbird、REVAのセット — ハウスクラブではありません。<price>1日1,200THB</price>から。複数日割引あり、バンコク市内のホテルへお届けも可能です。",
     "nudgeBodyNoRental": "このコースにはクラブレンタルがありませんが、LENGOLFなら借りられます。現行モデルのCallaway Paradym、Warbird、REVAのセットが<price>1日1,200THB</price>から。複数日割引あり、バンコク市内のホテルへお届けも可能です。",
-    "seePackages": "パッケージを見る"
+    "seePackages": "パッケージを見る",
+    "lowSeasonGreenFee": "ローシーズングリーンフィー",
+    "highSeasonFee": "ハイシーズン：{price}THB",
+    "lowSeason": "ローシーズン",
+    "highSeason": "ハイシーズン"
   },
   "ExplainerPage": {
     "guideLabel": "LENGOLFガイド",
@@ -1472,7 +1479,7 @@
     "mapHeading": "地図とルート",
     "mapTitle": "{hotel}からLENGOLFまでの地図",
     "whyHeading": "滞在中にLENGOLFへ立ち寄る理由",
-    "whyBody": "LENGOLFは、ザ・マーキュリービル（BTSチットロム駅）にある屋内ゴルフシミュレーターバーです。{hotel}から徒歩{mins}分。Bravoの高精度シミュレーターとフルバー、冷房完備の空間が揃い、ゴルフ経験の有無を問わず滞在中の過ごし方として楽しめます。ベイの料金は1時間{rate}（最大{n}名）から。",
+    "whyBody": "LENGOLFは、ザ・マーキュリービル（BTSチットロム駅）にある屋内ゴルフシミュレーターバーです。{hotel}から徒歩{mins}分。Bravoのプレミアムシミュレーターとフルバー、冷房完備の空間が揃い、ゴルフ経験の有無を問わず滞在中の過ごし方として楽しめます。ベイの料金は1時間{rate}（最大{n}名）から。",
     "pillClubs": "プレミアムクラブレンタル 1時間{rate}から",
     "walkableHeading": "{hotel}からLENGOLFまで歩けますか",
     "walkableNearLead": "はい、無理なく歩けます。",

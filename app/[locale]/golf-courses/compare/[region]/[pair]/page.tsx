@@ -5,6 +5,7 @@ import { Link } from '@/i18n/navigation'
 import { SITE_URL } from '@/lib/constants'
 import { REGION_META, getCourseBySlug, type Region } from '@/lib/golf-courses'
 import { getBreadcrumbJsonLd } from '@/lib/jsonld'
+import { pricesByDayOfWeek, feeBasisNoteEn } from '@/lib/course-fees'
 import { getCourseComparisonJsonLd } from '@/lib/jsonld-courses'
 import {
   comparisonCrossLink,
@@ -71,8 +72,15 @@ function whenToChoose(a: GolfCourse, b: GolfCourse): { forA: string[]; forB: str
   const forA: string[] = []
   const forB: string[] = []
 
+  // Fee recommendations must compare like with like. When either course prices
+  // by SEASON (fee_is_seasonal), its two fee fields are low/high season — not
+  // weekday/weekend — so "cheaper on weekdays" / "costs less on Saturday-Sunday"
+  // would assert a day-of-week split that does not exist, on an indexed page.
+  // The fee rows in SpecTable still show both numbers, annotated by season.
+  const feeComparable = pricesByDayOfWeek(a) && pricesByDayOfWeek(b)
+
   // Weekday fee
-  if (a.green_fee_weekday_thb !== null && b.green_fee_weekday_thb !== null) {
+  if (feeComparable && a.green_fee_weekday_thb !== null && b.green_fee_weekday_thb !== null) {
     const diff = a.green_fee_weekday_thb - b.green_fee_weekday_thb
     if (Math.abs(diff) >= 500) {
       const cheaper = diff < 0 ? a : b
@@ -85,12 +93,31 @@ function whenToChoose(a: GolfCourse, b: GolfCourse): { forA: string[]; forB: str
   }
 
   // Weekend premium
-  if (a.green_fee_weekend_thb !== null && b.green_fee_weekend_thb !== null) {
+  if (feeComparable && a.green_fee_weekend_thb !== null && b.green_fee_weekend_thb !== null) {
     const diff = a.green_fee_weekend_thb - b.green_fee_weekend_thb
     if (Math.abs(diff) >= 500) {
       const cheaper = diff < 0 ? a : b
       const list = diff < 0 ? forA : forB
       list.push(`Weekend value — ${cheaper.name} costs less on Saturday/Sunday.`)
+    }
+  }
+
+  // Seasonal pairing: the day-of-week bullets above are withheld, so fall back to
+  // a framing that is true under BOTH pricing models — the lower of a course's two
+  // fees is its starting price whether the variation is weekday/weekend or
+  // low/high season (validate:courses enforces weekend >= weekday, and low < high).
+  if (!feeComparable && a.green_fee_weekday_thb !== null && b.green_fee_weekday_thb !== null) {
+    const diff = a.green_fee_weekday_thb - b.green_fee_weekday_thb
+    if (Math.abs(diff) >= 500) {
+      const cheaper = diff < 0 ? a : b
+      const list = diff < 0 ? forA : forB
+      const pricier = diff < 0 ? b : a
+      // Name each side's basis: the two starting rates are real and comparable,
+      // but they are reached differently (one low-season, one weekday), and an
+      // unlabelled "starts at X versus Y" quietly implies a shared basis.
+      list.push(
+        `Lower starting fee — ${cheaper.name} starts at ${cheaper.green_fee_weekday_thb!.toLocaleString('en-US')} THB (${feeBasisNoteEn(cheaper, 'lower')}) versus ${pricier.green_fee_weekday_thb!.toLocaleString('en-US')} THB (${feeBasisNoteEn(pricier, 'lower')}).`
+      )
     }
   }
 

@@ -14,6 +14,7 @@ export const course: GolfCourse = {
   caddie_fee_thb: 0,
   cart_fee_thb: 0,
   caddie_required: true,
+  caddie_tip_included: true,
   cart_required: true,
   driving_range: true,
   club_rental_available: true,
