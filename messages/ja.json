@@ -1273,7 +1273,7 @@
     "breadcrumbCurrent": "฿{amount}以下",
     "eyebrowBadge": "グリーンフィー · ฿{amount}以下",
     "catchHeading": "注意しておきたい点",
-    "topCoursesHeading": "料金฿{amount}以下の上位{count}コース",
+    "topCoursesHeading": "グリーンフィー฿{amount}以下の上位{count}コース",
     "roundupReason": "平日{price}THB〜",
     "otherPriceBands": "その他の価格帯",
     "roundupReasonSeasonal": "ローシーズン{price}THB〜"

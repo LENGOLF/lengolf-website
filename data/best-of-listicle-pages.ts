@@ -5110,7 +5110,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
           pros: [
             '物販、飲食、娯楽がひとつの複合施設に集約されています',
             'ラチャプラソン広場では通年でイベントやフードフェスが開催されます',
-            'Gaysorn Villageとラチャプラソンのスカイウォークに直結',
+            'Gaysorn Villageとラチャプラソンのスカイウォーク網に直結しています',
           ],
           cons: [
             'モールが苦手な方には規模が大きすぎて疲れます',

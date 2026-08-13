@@ -1748,7 +1748,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-novotel-ploenchit',
     title: 'ノボテル・バンコク・プルンチット周辺の過ごし方 — アクティビティガイド',
     meta_description:
-      'ノボテル・プルンチット（Novotel Bangkok Ploenchit Sukhumvit）周辺の過ごし方。LENGOLFのインドアゴルフはBTSで1駅（徒歩1.5km）、買い物、タイの屋台料理、夜の楽しみ方までまとめました。',
+      'ノボテル・プルンチット（Novotel Bangkok Ploenchit Sukhumvit）周辺の過ごし方。LENGOLFのインドアゴルフはBTSで1駅（徒歩なら1.5km）、買い物、タイの屋台料理、夜の楽しみ方までまとめました。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1954,8 +1954,9 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
 
   // ─── TH: things-to-do-near-renaissance-ratchaprasong ───
   // Figures carried verbatim: 450 m / 6 min / 5 stars, ร้านค้ากว่า 500 ร้าน, โรงหนัง 15 โรง,
-  // Red Sky ชั้น 55, BigC 200 เมตร, ศาล 4 แห่งที่แยกราชประสงค์. Direction wording ("ออกทาง
-  // ถนนสุขุมวิท ... เดินไปทางทิศตะวันตก") carried exactly as EN wrote it — flagged.
+  // Red Sky ชั้น 55, BigC 200 เมตร, ศาล 4 แห่งที่แยกราชประสงค์. Direction corrected in
+  // 509460e: ประตูหลักอยู่บนถนนราชดำริ และเดินไปทาง "ทิศตะวันออก" ตามถนนเพลินจิต
+  // ทั้งใน walking_directions และ area_guide ตรงกับ EN ที่แก้แล้ว.
   {
     id: 'hotel-8-th',
     page_type: 'hotel_concierge',
@@ -2009,9 +2010,9 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
   },
 
   // ─── JA: things-to-do-near-renaissance-ratchaprasong ───
-  // EN's 「スクンビット通りの正面玄関」と「西へ」 are carried verbatim in both the
-  // directions and the area_guide even though the hotel fronts Ploenchit and
-  // Chidlom lies east — reported to the orchestrator instead of corrected.
+  // Direction corrected in 509460e: the main entrance is on Ratchadamri Road
+  // (ラチャダムリ通り) and the walk to LENGOLF runs east (東へ) along Ploenchit,
+  // in both walking_directions and area_guide — matching the corrected EN.
   // No LENGOLF price appears in rendered copy, so no as-of marker was added.
   {
     id: 'hotel-8-ja',
@@ -2069,7 +2070,8 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
   // Figures from EN hotel-8: 450m / 6분, 4층, CentralWorld 100m(500개 이상 상점,
   // 15개 상영관), Erawan Shrine 200m, BigC 200m, Red Sky 55층 300m, B2S 6층,
   // 푸드코트 7층. EN에 LENGOLF 가격이 없어 가격/as-of 표기를 넣지 않았어요.
-  // EN의 "Sukhumvit Road 정문"과 "서쪽으로" 방향어는 원문대로 옮겼습니다.
+  // 방향은 509460e에서 정정했어요: 정문은 Ratchadamri Road에 있고 Ploenchit Road를
+  // 따라 동쪽으로 걷습니다. walking_directions와 area_guide 모두 수정된 EN과 일치해요.
   {
     id: 'hotel-8-ko',
     page_type: 'hotel_concierge',
@@ -2841,7 +2843,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     slug: 'things-to-do-near-mercure-siam',
     title: 'メルキュール・バンコク・サイアム周辺の過ごし方 — アクティビティとグルメ',
     meta_description:
-      'メルキュール・バンコク・サイアム（Mercure Bangkok Siam）周辺の過ごし方。BTSで1駅（徒歩2.1km）のLENGOLFでインドアゴルフ、サイアムスクエアでの買い物、屋台グルメ、娯楽施設をご紹介します。',
+      'メルキュール・バンコク・サイアム（Mercure Bangkok Siam）周辺の過ごし方。BTSで1駅（徒歩なら2.1km）のLENGOLFでインドアゴルフ、サイアムスクエアでの買い物、屋台グルメ、娯楽施設をご紹介します。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
