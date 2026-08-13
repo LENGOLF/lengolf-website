@@ -39,7 +39,7 @@ export const PRICE_TIERS: readonly PriceTier[] = [
     framing:
       'The sweet spot for the budget-conscious visiting golfer — modern layouts within an hour of Bangkok at a price most international markets would consider impossibly low for an 18-hole round with caddie and cart.',
     catch:
-      'Weekend rates often jump 30–40%, so this tier is most useful for weekday play. Some venues at the top of the band introduce caddie tipping conventions that quietly add 300–500 THB to the published green fee.',
+      'Rates often jump 30–40% at peak times — weekends at most courses here, high season at the seasonally priced ones — so flexible dates are worth real money in this band. Some venues at the top of the band introduce caddie tipping conventions that quietly add 300–500 THB to the published green fee.',
   },
   {
     thb: 5000,
@@ -228,7 +228,7 @@ export const PRICE_TIER_I18N: Partial<
       framing:
         'จุดคุ้มค่าที่สุดสำหรับนักกอล์ฟที่ดูแลงบประมาณ — สนามสมัยใหม่ในระยะเวลาไม่เกิน 1 ชั่วโมงจากกรุงเทพฯ ในราคาที่ตลาดกอล์ฟต่างประเทศส่วนใหญ่มองว่าถูกอย่างไม่น่าเชื่อ สำหรับการเล่น 18 หลุมพร้อมแคดดี้และรถกอล์ฟ',
       catch:
-        'ราคาวันหยุดสุดสัปดาห์มักปรับขึ้น 30-40% ระดับราคานี้จึงเหมาะกับการเล่นวันธรรมดามากที่สุด สนามบางแห่งในกลุ่มบนของระดับราคานี้มีธรรมเนียมทิปแคดดี้ที่จะเพิ่มค่าใช้จ่ายอีก 300-500 บาท จากค่ากรีนฟีที่ประกาศไว้ (ข้อมูล ณ กรกฎาคม 2026)',
+        '价格在高峰时段常上涨30–40%：多数球场是周末，按季节定价的球场则是旺季。所以在这个价位段，日期能否灵活安排，差别不小。价位段上端的部分球场有球童小费惯例，会在公示的果岭费之外悄悄多出300–500泰铢，截至2026年7月。',
     },
     ja: {
       title: 'バンコク近郊のコスパの良いゴルフ場 ฿3,500以下 — おすすめコースと注意点',

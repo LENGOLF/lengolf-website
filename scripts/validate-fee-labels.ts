@@ -56,7 +56,6 @@ const FEE_BASIS_OK_RE = /fee-basis-ok:/
 const NUMERIC_ONLY = new Set([
   'lib/golf-courses-derived.ts',
   'lib/course-fees.ts',
-  'types/golf-courses.ts',
   'app/[locale]/golf-courses/[region]/[slug]/page.tsx',
   'app/[locale]/golf-courses/[region]/[slug]/opengraph-image.tsx',
   'components/golf-courses/RoundupList.tsx',
@@ -87,6 +86,7 @@ function walk(dir: string, out: string[] = []): string[] {
 const errors: string[] = []
 let scanned = 0
 let matched = 0
+let checked = 0
 
 for (const dir of SCAN_DIRS) {
   for (const file of walk(join(ROOT, dir))) {
@@ -96,6 +96,9 @@ for (const dir of SCAN_DIRS) {
     if (!FEE_FIELD_RE.test(src)) continue
     matched++
     if (COURSE_DATA_RE.test(rel) || NUMERIC_ONLY.has(rel)) continue
+    // Counted AFTER the skips: this is the population the rules below actually
+    // run against, and therefore the only number an anti-vacuity floor may use.
+    checked++
     if (!COURSE_FEES_IMPORT_RE.test(src)) {
       errors.push(
         `${rel}: reads a green-fee field but does not import '@/lib/course-fees'.\n` +
@@ -151,11 +154,19 @@ for (const dir of SCAN_DIRS) {
 // Anti-vacuity floor, per the repo's own rule that a gate which cannot fail is
 // worse than no gate. If the walker or the pattern breaks, this goes red rather
 // than printing a reassuring zero.
-const MIN_MATCHED = 12
-if (matched < MIN_MATCHED) {
+// The floor MUST count evaluated files, not matched ones. The first version
+// gated on `matched` (163), which is dominated by the 149 per-course data files
+// that are skipped on the very next line — so pruning SCAN_DIRS to ['data'],
+// i.e. the walker breaking for every real code file, still cleared a floor of
+// 12 and printed a success line. A gate that cannot fail is worse than no gate;
+// this one could not fail for the exact breakage it was written to detect.
+// Found by an EM-simulation review, reproduced by mutation.
+const MIN_CHECKED = 8
+if (checked < MIN_CHECKED) {
   errors.push(
-    `fee-label scan matched only ${matched} file(s) (expected >= ${MIN_MATCHED}) — ` +
-      `the directory walker or FEE_FIELD_RE is broken, so this run proved nothing.`
+    `fee-label scan evaluated only ${checked} file(s) (expected >= ${MIN_CHECKED}) — ` +
+      `the walker, FEE_FIELD_RE, or the skip lists are broken, so this run proved ` +
+      `nothing. ${matched} file(s) mentioned a fee field before skips.`
   )
 }
 
@@ -166,6 +177,7 @@ if (errors.length > 0) {
 }
 
 console.log(
-  `✅ validate-fee-labels: ${matched} fee-reading file(s) across ${scanned} scanned — ` +
-    `all route the basis decision through lib/course-fees.ts or are declared numeric-only`
+  `✅ validate-fee-labels: ${checked} file(s) evaluated (of ${matched} that read a fee ` +
+    `field, across ${scanned} scanned) — all route the basis decision through ` +
+    `lib/course-fees.ts, and no label-shaped site hardcodes a basis`
 )
