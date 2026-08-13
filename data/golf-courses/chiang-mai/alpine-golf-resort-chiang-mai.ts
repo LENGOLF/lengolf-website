@@ -11,6 +11,8 @@ export const course: GolfCourse = {
   year_opened: 2008,
   green_fee_weekday_thb: 3700,
   green_fee_weekend_thb: null,
+  // Prices by SEASON, not day of week: 3,700 is explicitly "the low-season rate, valid April through October"; no weekend figure.
+  fee_is_seasonal: true,
   caddie_fee_thb: 400,
   cart_fee_thb: 800,
   caddie_required: true,

@@ -11,6 +11,8 @@ export const course: GolfCourse = {
   year_opened: 2004,
   green_fee_weekday_thb: 2650,
   green_fee_weekend_thb: 3500,
+  // Prices by SEASON, not day of week: 2,650 = low season (Apr-Oct), 3,500 = high season — stated in tips and meta_description.
+  fee_is_seasonal: true,
   caddie_fee_thb: 400,
   cart_fee_thb: 700,
   caddie_required: true,

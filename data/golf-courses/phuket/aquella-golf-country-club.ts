@@ -11,6 +11,8 @@ export const course: GolfCourse = {
   year_opened: 2021,
   green_fee_weekday_thb: 1850,
   green_fee_weekend_thb: 3150,
+  // Prices by SEASON, not day of week: ฿1,850 low season (Apr-Oct) / ฿3,150 high season — stated in tips and meta_description.
+  fee_is_seasonal: true,
   caddie_fee_thb: 400,
   cart_fee_thb: 700,
   caddie_required: true,

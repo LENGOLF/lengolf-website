@@ -11,6 +11,8 @@ export const course: GolfCourse = {
   year_opened: 2015,
   green_fee_weekday_thb: 2350,
   green_fee_weekend_thb: 3200,
+  // Prices by SEASON, not day of week: 2,350 low season (May-Oct) / 3,200 Andaman dry season (Nov-Apr) — stated in overview.
+  fee_is_seasonal: true,
   caddie_fee_thb: 400,
   cart_fee_thb: 700,
   caddie_required: true,
