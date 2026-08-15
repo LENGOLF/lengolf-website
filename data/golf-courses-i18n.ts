@@ -558,6 +558,15 @@ export const COURSE_DETAIL_I18N: {
   { region: 'pattaya', slug: 'khao-kheow-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'pattaya', slug: 'mountain-shadow-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'pattaya', slug: 'pattana-golf-club-resort', locales: ['th', 'ja', 'ko', 'zh'] },
+  // Wave 2 (partial). The remaining 7 Pattaya courses — rayong-green-valley,
+  // the three Siam Country Club courses, st-andrews-2000, the-emerald and
+  // treasure-hill — are NOT here: their builders were killed mid-edit by an
+  // account spend limit, leaving th/ko written and ja absent. Those files were
+  // reverted to pristine rather than registered, because a registered tuple with
+  // a missing ja block advertises a translation via hreflang that does not exist.
+  { region: 'pattaya', slug: 'pattavia-century-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'pattaya-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'pleasant-valley-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
 ]
 
 /**

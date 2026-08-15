@@ -150,6 +150,9 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/pattaya/khao-kheow-country-club",
       "/golf-courses/pattaya/mountain-shadow-golf-club",
       "/golf-courses/pattaya/pattana-golf-club-resort",
+      "/golf-courses/pattaya/pattavia-century-golf-club",
+      "/golf-courses/pattaya/pattaya-country-club",
+      "/golf-courses/pattaya/pleasant-valley-golf-country-club",
       // Translated FAQ pages (data/faq-pages.ts entries with locale: 'th') —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -359,6 +362,9 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/pattaya/khao-kheow-country-club",
       "/golf-courses/pattaya/mountain-shadow-golf-club",
       "/golf-courses/pattaya/pattana-golf-club-resort",
+      "/golf-courses/pattaya/pattavia-century-golf-club",
+      "/golf-courses/pattaya/pattaya-country-club",
+      "/golf-courses/pattaya/pleasant-valley-golf-country-club",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -600,6 +606,9 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/pattaya/khao-kheow-country-club",
       "/golf-courses/pattaya/mountain-shadow-golf-club",
       "/golf-courses/pattaya/pattana-golf-club-resort",
+      "/golf-courses/pattaya/pattavia-century-golf-club",
+      "/golf-courses/pattaya/pattaya-country-club",
+      "/golf-courses/pattaya/pleasant-valley-golf-country-club",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -833,6 +842,9 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/pattaya/khao-kheow-country-club",
       "/golf-courses/pattaya/mountain-shadow-golf-club",
       "/golf-courses/pattaya/pattana-golf-club-resort",
+      "/golf-courses/pattaya/pattavia-century-golf-club",
+      "/golf-courses/pattaya/pattaya-country-club",
+      "/golf-courses/pattaya/pleasant-valley-golf-country-club",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
