@@ -315,21 +315,23 @@ export async function getRentalClubSets(): Promise<RentalClubSet[]> {
 }
 
 /**
- * Every LIVE set, including ones hidden from the public cards.
+ * Publicly-visible sets PLUS an explicit allow-list of hidden ones.
  *
- * Only the spec sheet uses this. It deliberately does NOT filter on
- * website_visible, because a set can be genuinely rentable while being kept off
- * the marketing cards — the left-handed set is on-request only, and "do you
- * have left-handed clubs?" is one of the most common chat questions, so its
- * specs belong on the sheet.
+ * A set can be genuinely rentable while being kept off the marketing cards —
+ * the left-handed set is on-request only, and "do you have left-handed clubs?"
+ * is one of the most common chat questions, so its specs belong on the sheet.
  *
- * is_active is still enforced: a retired set (Majesty) must never appear here,
- * or the sheet would generate enquiries for clubs we cannot hand out. Callers
- * are expected to allow-list which hidden slugs they surface — see
- * EXTRA_SPEC_SLUGS on the spec page — so a newly-hidden set stays hidden until
- * someone decides otherwise.
+ * The allow-list is a REQUIRED argument and the filter lives here rather than
+ * at the call site, because is_active does not protect us: a retired set can
+ * sit at is_active=true + website_visible=false for a long time (Majesty does
+ * today). If this function returned every active row and left filtering to the
+ * caller, one simplification at the call site would publish a retired set to a
+ * page whose entire purpose is generating booking enquiries. There is
+ * deliberately no exported way to get the unfiltered list.
  */
-export async function getAllLiveRentalClubSets(): Promise<RentalClubSet[]> {
+export async function getRentalClubSetsForSpecSheet(
+  extraSlugs: ReadonlySet<string>
+): Promise<RentalClubSet[]> {
   const supabase = createClient()
 
   const { data, error } = await supabase
@@ -340,90 +342,20 @@ export async function getAllLiveRentalClubSets(): Promise<RentalClubSet[]> {
     .order('slug', { ascending: true })
 
   if (error || !data) {
-    console.error('Error fetching all rental club sets:', error)
+    console.error('Error fetching rental club sets for spec sheet:', error)
     return []
   }
 
-  return (data as RentalSetRow[]).map(mapSet)
+  return (data as RentalSetRow[])
+    .filter((row) => row.website_visible || extraSlugs.has(row.slug))
+    .map(mapSet)
 }
 
-// ── Spec-sheet parsing ──
-
-/** A canonical row in the spec matrix. Order here is the display order. */
-export const SPEC_ROWS = ['driver', 'wood', 'hybrid', 'irons', 'wedges', 'putter', 'bag', 'other'] as const
-export type SpecRow = (typeof SPEC_ROWS)[number]
-
-/**
- * Classify one club description into a spec-matrix row.
- *
- * Order is load-bearing: "irons 6-P steel S-flex" must land on `irons` before
- * the loft check could claim it, and a wedge line mentioning a degree must not
- * be read as a driver. Anything unrecognised falls to `other` rather than being
- * dropped — a silently-vanishing club is worse than an ugly row.
- */
-export function classifySpecPart(part: string): SpecRow {
-  const s = part.toLowerCase()
-  if (/\biron/.test(s)) return 'irons'
-  if (/wedge|jaws|\bsw\b|\bpw\b/.test(s)) return 'wedges'
-  if (/putter|odyssey/.test(s)) return 'putter'
-  if (/hybrid|\b\dh\b/.test(s)) return 'hybrid'
-  if (/wood|\b\dw\b|fairway/.test(s)) return 'wood'
-  if (/driver|ai smoke|1[02]\.5°/.test(s)) return 'driver'
-  if (/\bbag\b/.test(s)) return 'bag'
-  return 'other'
-}
-
-/**
- * Drop a club noun the row header already states, so the Irons row reads
- * "6-P steel S-flex (Nippon N.S. Pro Zelos 7)" instead of "irons 6-P steel...".
- * Only strips a LEADING noun and only when something is left over — a cell that
- * is nothing but its noun keeps its text rather than going blank.
- */
-const ROW_NOUN: Partial<Record<SpecRow, RegExp>> = {
-  irons: /^irons?\s+/i,
-  wedges: /^wedges?\s+/i,
-  putter: /^putters?\s+/i,
-  driver: /^drivers?\s+/i,
-  hybrid: /^hybrids?\s+/i,
-}
-
-export function stripRowNoun(text: string, row: SpecRow): string {
-  const re = ROW_NOUN[row]
-  if (!re) return text
-  const out = text.replace(re, '').trim()
-  return out.length > 0 ? out : text
-}
-
-/**
- * Split a variant's `spec` string into matrix parts.
- *
- * Returns null when the string is a single free-text note rather than a club
- * list. The Warbird variants read "Graphite shafts, R-flex throughout (driver,
- * 5-wood and irons)" — parsing that into rows would file one shaft note under
- * "Driver" and lose the rest, so the separator is the signal: `·` means a club
- * list, no `·` means a note.
- */
-export function parseVariantSpec(spec: string | null | undefined): { row: SpecRow; text: string }[] | null {
-  if (!spec) return null
-  if (!spec.includes('·')) return null
-  const parts = spec.split('·').map((p) => p.trim()).filter(Boolean)
-  if (parts.length < 2) return null
-  return parts.map((raw) => {
-    const row = classifySpecPart(raw)
-    return { row, text: stripRowNoun(raw, row) }
-  })
-}
-
-/**
- * Split a `specifications` entry into a label/value pair when it is authored as
- * "Driver: TaylorMade RBZ 10.5° (Stiff)" — the left-handed set is written that
- * way and renders as a real table. Entries without a colon stay plain bullets.
- */
-export function splitSpecEntry(entry: string): { label: string; value: string } | null {
-  const i = entry.indexOf(': ')
-  if (i <= 0) return null
-  return { label: entry.slice(0, i).trim(), value: entry.slice(i + 2).trim() }
-}
+// Spec-sheet parsing lives in lib/club-specs.ts — it imports no server-only
+// module, so `npm run validate:club-specs` can exercise it directly.
+// Re-exported here so existing import sites keep working.
+export { SPEC_ROWS, classifySpecPart, stripRowNoun, parseVariantSpec, splitSpecEntry } from './club-specs'
+export type { SpecRow } from './club-specs'
 
 export async function getRelatedClubs(club: UsedClub, limit = 3): Promise<UsedClub[]> {
   const supabase = createClient()

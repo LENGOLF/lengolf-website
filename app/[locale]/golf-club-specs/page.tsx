@@ -1,18 +1,15 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import type { Metadata } from 'next'
 import dynamic from 'next/dynamic'
+import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { storageUrl, SITE_URL, SOCIAL_LINKS, BOOKING_URL } from '@/lib/constants'
-import { getAlternates, getCanonical } from '@/lib/translated-routes'
+import { getAlternates, getCanonical, hasTranslationForLocale, ALL_LOCALES } from '@/lib/translated-routes'
 import { getBreadcrumbJsonLd } from '@/lib/jsonld'
-import {
-  getAllLiveRentalClubSets,
-  parseVariantSpec,
-  splitSpecEntry,
-  setGallery,
-  SPEC_ROWS,
-} from '@/lib/clubs'
-import type { RentalClubSet, SetVariantImage, SpecRow } from '@/lib/clubs'
+import { getRentalClubSetsForSpecSheet, setGallery } from '@/lib/clubs'
+import { parseVariantSpec, splitSpecEntry, splitClubPart, SPEC_ROWS } from '@/lib/club-specs'
+import type { RentalClubSet, SetVariantImage } from '@/lib/clubs'
+import type { SpecRow } from '@/lib/club-specs'
 
 const ImageLightbox = dynamic(() => import('@/components/shared/ImageLightbox'), { ssr: true })
 
@@ -28,6 +25,25 @@ export const revalidate = 3600
  * a recurring chat question and its specs are fully authored, so it belongs.
  */
 const EXTRA_SPEC_SLUGS = new Set(['premium-mens-left-handed'])
+
+/**
+ * EN always builds; every other locale builds only if it has a published
+ * translation, mirroring app/[locale]/golf-courses/page.tsx.
+ *
+ * Without this the layout's five locales would each prerender this page, and
+ * JA/KO/ZH have no ClubSpecs namespace — that is ~30 MISSING_MESSAGE warnings
+ * per locale per build plus a self-canonical pointing at a URL that 301s. No
+ * user ever sees those routes (the middleware redirects them), but a warning
+ * that fires in a tight loop during SSG is a defect, not noise.
+ */
+export function generateStaticParams() {
+  return [
+    { locale: 'en' },
+    ...ALL_LOCALES.filter(
+      (locale) => locale !== 'en' && hasTranslationForLocale(locale, '/golf-club-specs')
+    ).map((locale) => ({ locale })),
+  ]
+}
 
 /** "Premium Men's - Callaway Warbird" -> "Callaway Warbird". */
 function setShortName(name: string): string {
@@ -52,9 +68,7 @@ export default async function GolfClubSpecsPage({ params }: { params: Promise<{ 
   setRequestLocale(locale)
   const t = await getTranslations('ClubSpecs')
 
-  const sets = (await getAllLiveRentalClubSets()).filter(
-    (s) => s.website_visible || EXTRA_SPEC_SLUGS.has(s.slug)
-  )
+  const sets = await getRentalClubSetsForSpecSheet(EXTRA_SPEC_SLUGS)
 
   const breadcrumbJsonLd = getBreadcrumbJsonLd([
     { name: 'Home', url: `${SITE_URL}/` },
@@ -70,7 +84,31 @@ export default async function GolfClubSpecsPage({ params }: { params: Promise<{ 
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
 
-      {/* ── Header ── */}
+      {/* This route renders without the site chrome (see BareRouteGate) so the
+          sheet is a clean thing to paste into a LINE chat. It carries its own
+          minimal brand bar and footer instead. */}
+      <header className="border-b border-primary/15 bg-white">
+        <div className="section-max-width section-padding flex items-center justify-between py-4">
+          <Link href="/" className="flex items-center gap-2.5">
+            <Image
+              src={storageUrl('branding/logo.png')}
+              alt="LENGOLF"
+              width={112}
+              height={32}
+              className="h-7 w-auto"
+              priority
+            />
+          </Link>
+          <a
+            href={`${BOOKING_URL}course-rental`}
+            className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white transition-opacity hover:opacity-90"
+          >
+            {t('ctaBook')}
+          </a>
+        </div>
+      </header>
+
+      {/* ── Title ── */}
       <section className="border-b border-primary/15 bg-white py-10 lg:py-14">
         <div className="section-max-width section-padding">
           <p className="mb-2 text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
@@ -172,16 +210,23 @@ export default async function GolfClubSpecsPage({ params }: { params: Promise<{ 
               {t('ctaLine')}
             </a>
           </div>
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm">
-            <Link href="/golf-club-rental" className="font-semibold text-primary hover:underline">
-              {t('backToBay')}
-            </Link>
-            <Link href="/golf-course-club-rental" className="font-semibold text-primary hover:underline">
-              {t('backToCourse')}
-            </Link>
-          </div>
         </section>
       </div>
+
+      {/* Minimal footer — backlinks only, no site-wide nav. */}
+      <footer className="border-t border-primary/15 bg-white py-8">
+        <div className="section-max-width section-padding flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
+          <Link href="/golf-club-rental" className="font-semibold text-primary hover:underline">
+            {t('backToBay')}
+          </Link>
+          <Link href="/golf-course-club-rental" className="font-semibold text-primary hover:underline">
+            {t('backToCourse')}
+          </Link>
+          <Link href="/" className="font-semibold text-primary hover:underline">
+            {t('backHome')}
+          </Link>
+        </div>
+      </footer>
     </>
   )
 }
@@ -229,8 +274,6 @@ function SetBlock({
 
   const noteVariants = set.variants.filter((v) => v.spec && parseVariantSpec(v.spec) === null)
 
-  // Only render rows that at least one column actually fills.
-  const usedRows = SPEC_ROWS.filter((row) => matrixColumns.some((c) => c.parts.some((p) => p.row === row)))
 
   // "Driver: TaylorMade RBZ 10.5° (Stiff)" style entries become a real table.
   const splitEntries = set.specifications.map((e) => ({ raw: e, split: splitSpecEntry(e) }))
@@ -298,40 +341,56 @@ function SetBlock({
         </div>
       )}
 
-      {/* Full club-by-club matrix, one column per shaft option */}
-      {matrixColumns.length > 0 && usedRows.length > 0 && (
-        <div>
-          <h3 className="mb-2 text-sm font-bold uppercase tracking-wider text-muted-foreground">{t('fullSpecs')}</h3>
-          <div className="overflow-x-auto rounded-lg border border-primary/20">
-            <table className="w-full min-w-[560px] border-collapse text-sm">
-              <caption className="sr-only">{t('fullSpecsCaption', { name: setShortName(set.name) })}</caption>
-              <thead>
-                <tr className="bg-primary/5 text-left">
-                  <th scope="col" className="w-32 px-3 py-2.5 font-bold">{t('colClub')}</th>
-                  {matrixColumns.map((c) => (
-                    <th key={c.variant.key} scope="col" className="px-3 py-2.5 font-bold">
-                      {c.variant.label ?? c.variant.key}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {usedRows.map((row) => (
-                  <tr key={row} className="border-t border-primary/15 align-top">
-                    <th scope="row" className="px-3 py-2.5 text-left font-semibold">{rowLabel(row)}</th>
-                    {matrixColumns.map((c) => {
-                      const hits = c.parts.filter((p) => p.row === row)
-                      return (
-                        <td key={c.variant.key} className="px-3 py-2.5 text-muted-foreground">
-                          {hits.length > 0 ? hits.map((h) => h.text).join(' · ') : '—'}
-                        </td>
-                      )
-                    })}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+      {/* Full club-by-club specs — ONE TABLE PER SHAFT OPTION, with the shaft
+          and flex as their own columns. A single wide table with a column pair
+          per option would not fit a phone, and the shaft is the thing people
+          are actually asking about, so it gets a column rather than being
+          buried at the end of a sentence. */}
+      {matrixColumns.length > 0 && (
+        <div className="space-y-5">
+          <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">{t('fullSpecs')}</h3>
+          {matrixColumns.map((c) => {
+            const rows = SPEC_ROWS.filter((row) => c.parts.some((p) => p.row === row))
+            return (
+              <div key={c.variant.key}>
+                <p className="mb-1.5 text-xs font-bold uppercase tracking-wider text-primary">
+                  {c.variant.label ?? c.variant.key}
+                </p>
+                <div className="overflow-x-auto rounded-lg border border-primary/20">
+                  <table className="w-full min-w-[520px] border-collapse text-sm">
+                    <caption className="sr-only">
+                      {t('fullSpecsCaption', { name: `${setShortName(set.name)} — ${c.variant.label ?? c.variant.key}` })}
+                    </caption>
+                    <thead>
+                      <tr className="bg-primary/5 text-left">
+                        <th scope="col" className="w-28 px-3 py-2.5 font-bold">{t('colClub')}</th>
+                        <th scope="col" className="px-3 py-2.5 font-bold">{t('colSpec')}</th>
+                        <th scope="col" className="px-3 py-2.5 font-bold">{t('colShaft')}</th>
+                        <th scope="col" className="w-20 px-3 py-2.5 font-bold">{t('colFlex')}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {rows.map((row) => {
+                        const hits = c.parts.filter((p) => p.row === row).map((p) => splitClubPart(p.text))
+                        const join = (vals: (string | null)[]) => {
+                          const seen = [...new Set(vals.filter((v): v is string => !!v))]
+                          return seen.length > 0 ? seen.join(' · ') : '—'
+                        }
+                        return (
+                          <tr key={row} className="border-t border-primary/15 align-top">
+                            <th scope="row" className="px-3 py-2.5 text-left font-semibold">{rowLabel(row)}</th>
+                            <td className="px-3 py-2.5 text-muted-foreground">{join(hits.map((h) => h.spec))}</td>
+                            <td className="px-3 py-2.5 text-muted-foreground">{join(hits.map((h) => h.shaft))}</td>
+                            <td className="px-3 py-2.5 text-muted-foreground">{join(hits.map((h) => h.flex))}</td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )
+          })}
         </div>
       )}
 
