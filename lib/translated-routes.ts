@@ -166,6 +166,14 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/pattaya/pattavia-century-golf-club",
       "/golf-courses/pattaya/pattaya-country-club",
       "/golf-courses/pattaya/pleasant-valley-golf-country-club",
+      "/golf-courses/pattaya/rayong-green-valley",
+      "/golf-courses/pattaya/siam-country-club-old-course",
+      "/golf-courses/pattaya/siam-country-club-plantation",
+      "/golf-courses/pattaya/siam-country-club-waterside",
+      "/golf-courses/pattaya/st-andrews-2000",
+      "/golf-courses/pattaya/the-emerald-golf-club",
+      "/golf-courses/pattaya/treasure-hill-golf-country-club",
+      "/golf-courses/pattaya/phoenix-gold-golf-club-pattaya",
       // Translated FAQ pages (data/faq-pages.ts entries with locale: 'th') —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -391,6 +399,14 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/pattaya/pattavia-century-golf-club",
       "/golf-courses/pattaya/pattaya-country-club",
       "/golf-courses/pattaya/pleasant-valley-golf-country-club",
+      "/golf-courses/pattaya/rayong-green-valley",
+      "/golf-courses/pattaya/siam-country-club-old-course",
+      "/golf-courses/pattaya/siam-country-club-plantation",
+      "/golf-courses/pattaya/siam-country-club-waterside",
+      "/golf-courses/pattaya/st-andrews-2000",
+      "/golf-courses/pattaya/the-emerald-golf-club",
+      "/golf-courses/pattaya/treasure-hill-golf-country-club",
+      "/golf-courses/pattaya/phoenix-gold-golf-club-pattaya",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -648,6 +664,14 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/pattaya/pattavia-century-golf-club",
       "/golf-courses/pattaya/pattaya-country-club",
       "/golf-courses/pattaya/pleasant-valley-golf-country-club",
+      "/golf-courses/pattaya/rayong-green-valley",
+      "/golf-courses/pattaya/siam-country-club-old-course",
+      "/golf-courses/pattaya/siam-country-club-plantation",
+      "/golf-courses/pattaya/siam-country-club-waterside",
+      "/golf-courses/pattaya/st-andrews-2000",
+      "/golf-courses/pattaya/the-emerald-golf-club",
+      "/golf-courses/pattaya/treasure-hill-golf-country-club",
+      "/golf-courses/pattaya/phoenix-gold-golf-club-pattaya",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -897,6 +921,14 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/pattaya/pattavia-century-golf-club",
       "/golf-courses/pattaya/pattaya-country-club",
       "/golf-courses/pattaya/pleasant-valley-golf-country-club",
+      "/golf-courses/pattaya/rayong-green-valley",
+      "/golf-courses/pattaya/siam-country-club-old-course",
+      "/golf-courses/pattaya/siam-country-club-plantation",
+      "/golf-courses/pattaya/siam-country-club-waterside",
+      "/golf-courses/pattaya/st-andrews-2000",
+      "/golf-courses/pattaya/the-emerald-golf-club",
+      "/golf-courses/pattaya/treasure-hill-golf-country-club",
+      "/golf-courses/pattaya/phoenix-gold-golf-club-pattaya",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.

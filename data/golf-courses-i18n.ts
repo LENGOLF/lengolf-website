@@ -580,6 +580,18 @@ export const COURSE_DETAIL_I18N: {
   { region: 'pattaya', slug: 'pattavia-century-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'pattaya', slug: 'pattaya-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'pattaya', slug: 'pleasant-valley-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  // Batch 5 completion — Pattaya is now 25 of 25. These 8 are the 7 whose
+  // builders a spend limit killed mid-edit (reverted to pristine at the time,
+  // rewritten from scratch here) plus phoenix-gold-golf-club-pattaya, which an
+  // earlier revision wrongly excluded as a duplicate — see the retraction above.
+  { region: 'pattaya', slug: 'rayong-green-valley', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'siam-country-club-old-course', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'siam-country-club-plantation', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'siam-country-club-waterside', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'st-andrews-2000', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'the-emerald-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'treasure-hill-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'phoenix-gold-golf-club-pattaya', locales: ['th', 'ja', 'ko', 'zh'] },
 ]
 
 /**
