@@ -23,8 +23,14 @@ export type SpecRow = (typeof SPEC_ROWS)[number]
  */
 export function classifySpecPart(part: string): SpecRow {
   const s = part.toLowerCase()
-  // Putter first: least ambiguous noun, and a putter line never names another club.
-  if (/putter/.test(s)) return 'putter'
+  // Putter first: a putter line never names another club.
+  //
+  // Matching on the bare word "putter" alone is not enough — a spec may name
+  // the model and shaft without ever saying "putter" ("Odyssey Tri-Beam 70g
+  // (Stroke Lab)"), which silently dropped both putters into "Other". Hence the
+  // maker/model terms. A putter from a brand not listed here still falls to
+  // `other` rather than vanishing, and the row stays visible.
+  if (/putter|odyssey|stroke lab|white hot|tri-?beam|scotty cameron|sightline/.test(s)) return 'putter'
   // Wedges BEFORE irons. Our wedge lines routinely name the iron bag they
   // belong to ("Jaws Raw 54°/58° matched to the iron shafts"), and `\biron` is
   // the broader pattern — testing it first swallowed the whole wedge row.
@@ -120,10 +126,24 @@ const FLEX = /\b(Uniflex|(?:R2|SR|TX|[RSXAL])[-\s]?flex)\s*$/i
  * and the cell renders an em dash. Nothing is ever dropped: whatever is not
  * recognised as shaft or flex stays in `spec`.
  */
-export function splitClubPart(text: string): { spec: string; shaft: string | null; flex: string | null } {
+/**
+ * Shaft weight, written on the sheets as "50g" / "70g".
+ *
+ * Requires digits immediately before the g so it cannot fire on a shaft NAME —
+ * "Dynamic Gold S200" must not yield a weight, and neither must "S200" itself.
+ */
+const WEIGHT = /\b(\d{2,3})\s*g\b/i
+
+export function splitClubPart(text: string): {
+  spec: string
+  shaft: string | null
+  flex: string | null
+  weight: string | null
+} {
   let rest = text
   let shaft: string | null = null
   let flex: string | null = null
+  let weight: string | null = null
 
   // Trailing parenthetical is the shaft: "... R-flex (Fujikura Ventus)".
   const paren = rest.match(/\(([^()]*)\)\s*$/)
@@ -140,6 +160,17 @@ export function splitClubPart(text: string): { spec: string; shaft: string | nul
     rest = (rest.slice(0, flexMatch.index) + rest.slice(flexMatch.index! + raw.length)).replace(/\s{2,}/g, ' ').trim()
   }
 
+  // Weight is pulled AFTER flex so "50g R-flex" leaves a clean remainder, and
+  // BEFORE the inline-shaft lookup so a trailing weight cannot block the
+  // end-anchored shaft match.
+  const weightMatch = rest.match(WEIGHT)
+  if (weightMatch) {
+    weight = `${weightMatch[1]}g`
+    rest = (rest.slice(0, weightMatch.index) + rest.slice(weightMatch.index! + weightMatch[0].length))
+      .replace(/\s{2,}/g, ' ')
+      .trim()
+  }
+
   // Only look for an inline shaft if the parenthetical did not already give us one.
   if (!shaft) {
     const inline = rest.match(INLINE_SHAFTS)
@@ -149,7 +180,7 @@ export function splitClubPart(text: string): { spec: string; shaft: string | nul
     }
   }
 
-  return { spec: rest.replace(/[,\s]+$/, '').trim() || text, shaft, flex }
+  return { spec: rest.replace(/[,\s]+$/, '').trim() || text, shaft, flex, weight }
 }
 
 /**

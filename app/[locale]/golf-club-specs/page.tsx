@@ -371,6 +371,7 @@ function SetBlock({
                         <th scope="col" className="px-3 py-2.5 font-bold">{t('colClub')}</th>
                         <th scope="col" className="px-3 py-2.5 font-bold">{t('colSpec')}</th>
                         <th scope="col" className="px-3 py-2.5 font-bold">{t('colShaft')}</th>
+                        <th scope="col" className="px-3 py-2.5 font-bold">{t('colWeight')}</th>
                         <th scope="col" className="px-3 py-2.5 font-bold">{t('colFlex')}</th>
                       </tr>
                     </thead>
@@ -386,6 +387,11 @@ function SetBlock({
                             <th scope="row" className="px-3 py-2.5 text-left font-semibold">{rowLabel(row)}</th>
                             <td className="px-3 py-2.5 text-muted-foreground">{join(hits.map((h) => h.spec))}</td>
                             <td className="px-3 py-2.5 text-muted-foreground">{join(hits.map((h) => h.shaft))}</td>
+                            {/* Em dash where the owner's sheet records no
+                                weight (steel irons, both wedge sets). A
+                                catalogue figure is a different claim from a
+                                measured one and must not be blended in. */}
+                            <td className="px-3 py-2.5 text-muted-foreground">{join(hits.map((h) => h.weight))}</td>
                             <td className="px-3 py-2.5 text-muted-foreground">{join(hits.map((h) => h.flex))}</td>
                           </tr>
                         )

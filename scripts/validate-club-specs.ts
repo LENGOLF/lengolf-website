@@ -33,16 +33,16 @@ function check(label: string, actual: unknown, expected: unknown) {
 // ── classifySpecPart ──────────────────────────────────────────────────────
 // Live strings first: these are the exact values in the DB today.
 const LIVE: [string, SpecRow][] = [
-  ['Ai Smoke 10.5° R-flex (Mitsubishi Chemical)', 'driver'],
-  ['Paradym 10.5° R-flex (Fujikura Ventus)', 'driver'],
-  ['Paradym 3W 15° + 5W 18° SR-flex (Fujikura Ventus)', 'wood'],
-  ['Paradym 5W 18° R-flex', 'wood'],
+  ['Ai Smoke 10.5° 50g R-flex (Mitsubishi Chemical)', 'driver'],
+  ['Paradym 10.5° 50g R-flex (Fujikura Ventus)', 'driver'],
+  ['Paradym 3W 15° + 5W 18° 50g SR-flex (Fujikura Ventus)', 'wood'],
+  ['Paradym 5W 18° 50g R-flex (Fujikura Ventus)', 'wood'],
   ['irons 6-P steel S-flex (Nippon N.S. Pro Zelos 7)', 'irons'],
-  ['irons 6-P graphite R-flex (Fujikura Ventus)', 'irons'],
+  ['irons 6-P graphite 50g R-flex (Fujikura Ventus)', 'irons'],
   ['Jaws Forged 52°/56° Dynamic Gold S200', 'wedges'],
   ['Jaws Raw 54°/58° Dynamic Gold S200', 'wedges'],
-  ['Odyssey Tri-Beam Stroke Lab putter', 'putter'],
-  ['Odyssey White Hot Black Series Five Stroke Lab putter', 'putter'],
+  ['Odyssey Tri-Beam 70g (Stroke Lab)', 'putter'],
+  ['Odyssey White Hot Black Series Five 70g (Stroke Lab)', 'putter'],
 ]
 
 // Phrasings that are one DB edit away. Each of these misclassified before the
@@ -73,7 +73,7 @@ for (const [input, expected] of [...LIVE, ...NEAR_MISS]) {
 // ── parseVariantSpec ──────────────────────────────────────────────────────
 // A `·`-separated string is a club list and becomes matrix rows.
 const paradymSteel =
-  'Ai Smoke 10.5° R-flex (Mitsubishi Chemical) · Paradym 3W 15° + 5W 18° SR-flex (Fujikura Ventus) · irons 6-P steel S-flex (Nippon N.S. Pro Zelos 7) · Jaws Forged 52°/56° Dynamic Gold S200 · Odyssey Tri-Beam Stroke Lab putter'
+  'Ai Smoke 10.5° 50g R-flex (Mitsubishi Chemical) · Paradym 3W 15° + 5W 18° 50g SR-flex (Fujikura Ventus) · irons 6-P steel S-flex (Nippon N.S. Pro Zelos 7) · Jaws Forged 52°/56° Dynamic Gold S200 · Odyssey Tri-Beam 70g (Stroke Lab)'
 const parsed = parseVariantSpec(paradymSteel)
 check('paradym steel row order', parsed?.map((p) => p.row), ['driver', 'wood', 'irons', 'wedges', 'putter'])
 check(
@@ -103,27 +103,25 @@ check('row without a noun rule is untouched', stripRowNoun('Callaway tour bag', 
 
 // ── splitClubPart (shaft / flex columns) ──────────────────────────────────
 // Every live Paradym club, decomposed the way the table renders it.
-const SPLITS: [string, { spec: string; shaft: string | null; flex: string | null }][] = [
-  ['Ai Smoke 10.5° R-flex (Mitsubishi Chemical)', { spec: 'Ai Smoke 10.5°', shaft: 'Mitsubishi Chemical', flex: 'R' }],
-  ['Paradym 10.5° R-flex (Fujikura Ventus)', { spec: 'Paradym 10.5°', shaft: 'Fujikura Ventus', flex: 'R' }],
-  ['Paradym 3W 15° + 5W 18° SR-flex (Fujikura Ventus)', { spec: 'Paradym 3W 15° + 5W 18°', shaft: 'Fujikura Ventus', flex: 'SR' }],
-  ['6-P steel S-flex (Nippon N.S. Pro Zelos 7)', { spec: '6-P steel', shaft: 'Nippon N.S. Pro Zelos 7', flex: 'S' }],
-  ['6-P graphite R-flex (Fujikura Ventus)', { spec: '6-P graphite', shaft: 'Fujikura Ventus', flex: 'R' }],
-  // No parentheses — the shaft is written inline.
-  ['Jaws Forged 52°/56° Dynamic Gold S200', { spec: 'Jaws Forged 52°/56°', shaft: 'Dynamic Gold S200', flex: null }],
-  ['Jaws Raw 54°/58° Dynamic Gold S200', { spec: 'Jaws Raw 54°/58°', shaft: 'Dynamic Gold S200', flex: null }],
-  // No shaft named at all — must not invent one.
-  ['Paradym 5W 18° R-flex', { spec: 'Paradym 5W 18°', shaft: null, flex: 'R' }],
-  // A club noun trails the shaft name — anchoring strictly at end-of-string
-  // meant every putter rendered an em dash in the Shaft column.
-  ['Odyssey Tri-Beam Stroke Lab putter', { spec: 'Odyssey Tri-Beam', shaft: 'Stroke Lab', flex: null }],
-  ['Odyssey White Hot Black Series Five Stroke Lab putter', { spec: 'Odyssey White Hot Black Series Five', shaft: 'Stroke Lab', flex: null }],
-  // Flex written the way it is stamped on the Warbird shaft band.
-  ['Warbird graphite S FLEX', { spec: 'Warbird graphite', shaft: null, flex: 'S' }],
-  // Mid-sentence flex is prose, not a field — pulling it out left the mangled
-  // "Steel shafts, throughout". It must stay put. (This string is a note and
-  // never reaches the table, but the parser must not corrupt it regardless.)
-  ['Steel shafts, Uniflex throughout', { spec: 'Steel shafts, Uniflex throughout', shaft: null, flex: null }],
+const SPLITS: [string, { spec: string; shaft: string | null; flex: string | null; weight: string | null }][] = [
+  // The live strings AFTER the owner's sheets were transcribed (weights added,
+  // graphite 5-wood shaft restored).
+  ['Ai Smoke 10.5° 50g R-flex (Mitsubishi Chemical)', { spec: 'Ai Smoke 10.5°', shaft: 'Mitsubishi Chemical', flex: 'R', weight: '50g' }],
+  ['Paradym 3W 15° + 5W 18° 50g SR-flex (Fujikura Ventus)', { spec: 'Paradym 3W 15° + 5W 18°', shaft: 'Fujikura Ventus', flex: 'SR', weight: '50g' }],
+  ['Paradym 10.5° 50g R-flex (Fujikura Ventus)', { spec: 'Paradym 10.5°', shaft: 'Fujikura Ventus', flex: 'R', weight: '50g' }],
+  ['Paradym 5W 18° 50g R-flex (Fujikura Ventus)', { spec: 'Paradym 5W 18°', shaft: 'Fujikura Ventus', flex: 'R', weight: '50g' }],
+  ['6-P graphite 50g R-flex (Fujikura Ventus)', { spec: '6-P graphite', shaft: 'Fujikura Ventus', flex: 'R', weight: '50g' }],
+  // The sheet gives NO weight for the steel irons or either wedge set. Nothing
+  // may be inferred into those cells from a catalogue.
+  ['6-P steel S-flex (Nippon N.S. Pro Zelos 7)', { spec: '6-P steel', shaft: 'Nippon N.S. Pro Zelos 7', flex: 'S', weight: null }],
+  ['Jaws Forged 52°/56° Dynamic Gold S200', { spec: 'Jaws Forged 52°/56°', shaft: 'Dynamic Gold S200', flex: null, weight: null }],
+  ['Jaws Raw 54°/58° Dynamic Gold S200', { spec: 'Jaws Raw 54°/58°', shaft: 'Dynamic Gold S200', flex: null, weight: null }],
+  // Putters: weight and shaft, no flex.
+  ['Odyssey Tri-Beam 70g (Stroke Lab)', { spec: 'Odyssey Tri-Beam', shaft: 'Stroke Lab', flex: null, weight: '70g' }],
+  ['Odyssey White Hot Black Series Five 70g (Stroke Lab)', { spec: 'Odyssey White Hot Black Series Five', shaft: 'Stroke Lab', flex: null, weight: '70g' }],
+  // Mid-sentence flex is prose and must stay put — an unanchored match left
+  // the mangled 'Steel shafts, throughout'.
+  ['Steel shafts, Uniflex throughout', { spec: 'Steel shafts, Uniflex throughout', shaft: null, flex: null, weight: null }],
 ]
 for (const [input, expected] of SPLITS) {
   check(`split ${JSON.stringify(input)}`, splitClubPart(input), expected)
@@ -133,6 +131,7 @@ check('unparseable part keeps its text', splitClubPart('Grip: Golf Pride MCC'), 
   spec: 'Grip: Golf Pride MCC',
   shaft: null,
   flex: null,
+  weight: null,
 })
 
 // ── splitSpecEntry ────────────────────────────────────────────────────────
