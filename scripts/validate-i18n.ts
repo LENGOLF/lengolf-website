@@ -386,6 +386,15 @@ for (const [region, byLocale] of Object.entries(REGION_HUB_I18N)) {
 // Also errors when a registered course's (English) province is missing from
 // the PROVINCE_L10N map in lib/course-seo.ts: an unmapped province silently
 // drops the locality clause from the localized FAQ answers and JSON-LD.
+/** Every field of GolfCourseProse. A registered locale ships all of them or none. */
+const COURSE_PROSE_FIELDS = [
+  'overview',
+  'layout_and_experience',
+  'tips',
+  'location_and_access',
+  'rental_cta_context',
+] as const
+
 function courseUnits(locale: Locale, entryId: string, l: NonNullable<GolfCourse['locales']['th']>): Unit[] {
   const u: Unit[] = []
   const push = (field: string, value: string | null | undefined) => {
@@ -425,6 +434,23 @@ for (const region of readdirSync(COURSES_ROOT)) {
       if (!isRegistered && hasContent) {
         add('error', locale, entryId, 'locales', 'course-registry',
           `course file carries locales.${locale} content but COURSE_DETAIL_I18N has no ('${locale}') tuple — the translation exists but never builds`)
+      }
+      // A locale may ship title + meta_description with NO prose at all — that
+      // is a supported state (SERP presence first, body later; CoursePage falls
+      // back to course.prose per field). What is never intentional is a PARTIAL
+      // prose block: it means a writer stopped midway. That case renders English
+      // body text under localized chrome while hreflang advertises a full
+      // translation, and nothing else catches it — the missing-BLOCK case is a
+      // hard 404 that dynamicParams already gates, smoke L2 only asserts 200 +
+      // <main>, and courseUnits() just yields fewer units, so a 3-of-5 block
+      // lints as three clean fields. Found by adversarial review after a spend
+      // limit killed 7 builders mid-edit and left exactly this shape on disk.
+      if (isRegistered && l?.prose) {
+        const missing = COURSE_PROSE_FIELDS.filter((f) => !l.prose?.[f])
+        if (missing.length > 0) {
+          add('error', locale, entryId, 'locales', 'course-prose-partial',
+            `locales.${locale}.prose is PARTIAL — missing ${missing.join(', ')}. Ship all ${COURSE_PROSE_FIELDS.length} prose fields or none at all; a partial block renders English body text under a localized title while hreflang advertises a full translation`)
+        }
       }
       if (isRegistered && l) entries.push({ entryId, locale, units: courseUnits(locale, entryId, l) })
     }
