@@ -331,6 +331,14 @@ export default async function GolfCourseClubRentalPage({ params }: { params: Pro
             <p className="font-semibold" style={{ color: '#007429' }}>{t('handednessNoteTitle')}</p>
             <p className="mt-1 text-muted-foreground">{t('handednessNote')}</p>
           </div>
+
+          {/* These cards stay a teaser — lofts, shaft models and flex live on
+              the spec sheet, which is also the link staff paste into LINE. */}
+          <p className="mx-auto mt-4 max-w-4xl text-center text-sm">
+            <Link href="/golf-club-specs" className="font-semibold text-primary hover:underline">
+              {t('seeFullSpecs')}
+            </Link>
+          </p>
         </div>
       </section>
 

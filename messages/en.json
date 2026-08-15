@@ -665,6 +665,7 @@
     "why4Description": "Reserve clubs online at booking.len.golf or walk in — no deposit required",
     "handednessNoteTitle": "Right-handed by default — left-handed available on request",
     "handednessNote": "All sets shown above are right-handed. Free standard left-handed clubs are available with every bay booking, and we keep one left-handed Premium rental set available on request. Message us on @lengolf to reserve.",
+    "seeFullSpecs": "See full specifications for every set →",
     "courseBannerTitle": "Need clubs for a real golf course?",
     "courseBannerText": "Rent premium Callaway sets to take to any Bangkok course from ฿1,200/day, with hotel and course delivery for ฿500.",
     "courseBannerCta": "See Golf Course Club Rental"
@@ -778,6 +779,7 @@
     "crossLink4Desc": "Private coaching with PGA-certified pros",
     "handednessNoteTitle": "Right-handed by default — left-handed available on request",
     "handednessNote": "All sets shown above are right-handed. We have one left-handed Premium rental set available for course use, charged at our standard Premium daily rates. The Premium+ Paradym is right-handed only. Please message us on LINE @lengolf to confirm availability before your trip.",
+    "seeFullSpecs": "See full specifications for every set →",
     "whyRent": {
       "heading": "Why rent with LENGOLF, not at the course?",
       "savingsHeadline": "Save up to ~36% on a 3-round trip",
@@ -1421,6 +1423,51 @@
       "outdoor": "Outdoor",
       "shopping": "Shopping",
       "transport": "Transport"
+    }
+  },
+  "ClubSpecs": {
+    "metaTitle": "Rental Golf Club Specs | Callaway Paradym, Warbird & REVA",
+    "metaDescription": "Full club-by-club specs for every LENGOLF rental set — lofts, shafts, flex and photos for the Callaway Paradym, Warbird and REVA, plus our left-handed set.",
+    "eyebrow": "Full Specifications",
+    "h1": "What Is Actually In Each Bag",
+    "intro": "Every rental set we own, club by club — lofts, shaft models and flex, with photos of the real bags. Shaft options are shown side by side so you can compare before you book.",
+    "jumpTo": "Jump to a set",
+    "tierPremium": "Premium",
+    "tierPremiumPlus": "Premium+",
+    "mensSet": "Men's set",
+    "womensSet": "Women's set",
+    "onRequest": "On request",
+    "onRequestNote": "Not shown on the booking page — message us on LINE @lengolf before your visit and we will hold it for you.",
+    "inTheBag": "In the bag",
+    "fullSpecs": "Full specifications",
+    "fullSpecsCaption": "Club-by-club specifications for the {name}, by shaft option",
+    "shaftOptions": "Shaft options",
+    "colClub": "Club",
+    "compareTitle": "All sets at a glance",
+    "colSet": "Set",
+    "colTier": "Tier",
+    "colFor": "For",
+    "colOptions": "Options",
+    "colPhotos": "Photos",
+    "noOptions": "One configuration",
+    "noPhotos": "No photos yet",
+    "photoCount": "{count} photos",
+    "compareNote": "All sets are right-handed unless listed otherwise. Tap any photo to see it full size.",
+    "ctaTitle": "Ready to book a set?",
+    "ctaText": "Reserve online for your bay session or to take clubs to a Bangkok course. Not sure which set suits you? Message us and we will help you pick.",
+    "ctaBook": "Book clubs",
+    "ctaLine": "Ask on LINE",
+    "backToBay": "Bay club rental",
+    "backToCourse": "Golf course club rental",
+    "rows": {
+      "driver": "Driver",
+      "wood": "Fairway woods",
+      "hybrid": "Hybrid",
+      "irons": "Irons",
+      "wedges": "Wedges",
+      "putter": "Putter",
+      "bag": "Bag",
+      "other": "Other"
     }
   }
 }

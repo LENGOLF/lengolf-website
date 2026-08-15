@@ -151,6 +151,7 @@
     "pricingCurrencyNote": "1日{price} THBから（{approx}）",
     "handednessNoteTitle": "表示はすべて右利き用 — 左利き用はリクエストにて対応",
     "handednessNote": "上記に表示されているセットはすべて右利き用です。コース利用向けの左利き用プレミアムレンタルセットを1セットご用意しており、通常のプレミアム1日料金でご利用いただけます。プレミアム+ Paradymは右利き専用です。ご旅行前にLINE @lengolfまでご連絡いただき、ご利用可能か確認してください。",
+    "seeFullSpecs": "すべてのセットの詳細スペックを見る →",
     "crossLink3Desc": "シミュレーターベイの時間料金とパッケージ",
     "crossLink3Label": "ベイ料金とシミュレーター",
     "crossLink4Desc": "PGA認定プロによるプライベートコーチング",
@@ -919,6 +920,7 @@
     "why4Description": "booking.len.golfでオンライン予約、またはウォークインも可能——デポジット不要",
     "handednessNoteTitle": "表示はすべて右利き用 — 左利き用はリクエストにて対応",
     "handednessNote": "上記に表示されているセットはすべて右利き用です。スタンダードの左利き用クラブはベイご予約時に無料でご利用いただけます。また、左利き用のプレミアムレンタルセットを1セットご用意しており、ご希望の方はリクエストいただけます。@lengolfまでご連絡ください。",
+    "seeFullSpecs": "すべてのセットの詳細スペックを見る →",
     "courseBannerTitle": "実際のコースで使うクラブをお探しですか？",
     "courseBannerText": "Callawayのプレミアムセットを1日1,200バーツからレンタル。バンコクのどのコースへも、ホテル・コース配送500バーツ。",
     "courseBannerCta": "コース用クラブレンタルを見る"

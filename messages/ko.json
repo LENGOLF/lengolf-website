@@ -151,6 +151,7 @@
     "pricingCurrencyNote": "하루 {price} THB부터 ({approx})",
     "handednessNoteTitle": "표시된 세트는 모두 오른손잡이용 — 왼손잡이용은 요청 시 제공",
     "handednessNote": "위에 표시된 모든 세트는 오른손잡이용입니다. 코스 이용을 위한 왼손잡이용 프리미엄 렌탈 세트가 1개 있으며, 일반 프리미엄 일일 요금이 적용됩니다. 프리미엄+ Paradym은 오른손잡이 전용입니다. 여행 전에 LINE @lengolf으로 연락하여 이용 가능 여부를 확인해 주세요.",
+    "seeFullSpecs": "모든 세트의 전체 사양 보기 →",
     "crossLink3Desc": "시간제 시뮬레이터 베이 요금 및 패키지",
     "crossLink3Label": "베이 요금 및 시뮬레이터",
     "crossLink4Desc": "PGA 공인 프로와의 1대1 코칭",
@@ -835,6 +836,7 @@
     "why4Description": "booking.len.golf에서 온라인 예약 또는 워크인 가능 — 보증금 불필요",
     "handednessNoteTitle": "표시된 세트는 모두 오른손잡이용 — 왼손잡이용은 요청 시 제공",
     "handednessNote": "위에 표시된 모든 세트는 오른손잡이용입니다. 베이 예약 시 표준 왼손잡이용 클럽은 무료로 이용하실 수 있으며, 왼손잡이용 프리미엄 렌탈 세트도 1개 보유하고 있어 요청 시 이용 가능합니다. @lengolf으로 메시지를 보내주세요.",
+    "seeFullSpecs": "모든 세트의 전체 사양 보기 →",
     "courseBannerTitle": "실제 골프장에서 쓸 클럽이 필요하신가요?",
     "courseBannerText": "Callaway 프리미엄 세트를 하루 1,200바트부터 대여하세요. 방콕 어느 골프장이든 호텔·골프장 배송 500바트.",
     "courseBannerCta": "골프장 클럽 렌탈 보기"
