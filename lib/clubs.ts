@@ -220,6 +220,10 @@ export interface RentalClubSet {
   variants: SetVariant[]
   variant_axis: string | null
   display_order: number
+  /** false = live and bookable but deliberately off the public cards (e.g. the
+   *  left-handed set, which is on-request only). Always true for rows returned
+   *  by getRentalClubSets(); only the specs page asks for the hidden ones. */
+  website_visible: boolean
 }
 
 /** Defensive parse — DB-authored jsonb, never trust the shape. */
@@ -253,24 +257,27 @@ export function setGallery(set: Pick<RentalClubSet, 'gallery' | 'variants'>, key
   return set.gallery
 }
 
-/** Publicly-bookable sets with their DB-driven galleries, in display order. */
-export async function getRentalClubSets(): Promise<RentalClubSet[]> {
-  const supabase = createClient()
+const SET_COLUMNS =
+  'id, slug, name, tier, gender, brand, model, specifications, gallery, variants, variant_axis, display_order, website_visible'
 
-  const { data, error } = await supabase
-    .from('rental_club_sets')
-    .select('id, slug, name, tier, gender, brand, model, specifications, gallery, variants, variant_axis, display_order')
-    .eq('is_active', true)
-    .eq('website_visible', true)
-    .order('display_order', { ascending: true })
-    .order('slug', { ascending: true })
+type RentalSetRow = {
+  id: string
+  slug: string
+  name: string
+  tier: string
+  gender: string
+  brand: string | null
+  model: string | null
+  specifications: unknown
+  gallery: unknown
+  variants: unknown
+  variant_axis: string | null
+  display_order: number
+  website_visible: boolean
+}
 
-  if (error || !data) {
-    console.error('Error fetching rental club sets:', error)
-    return []
-  }
-
-  return data.map((row) => ({
+function mapSet(row: RentalSetRow): RentalClubSet {
+  return {
     id: row.id,
     slug: row.slug,
     name: row.name,
@@ -283,8 +290,72 @@ export async function getRentalClubSets(): Promise<RentalClubSet[]> {
     variants: parseVariants(row.variants),
     variant_axis: row.variant_axis,
     display_order: row.display_order,
-  }))
+    website_visible: row.website_visible,
+  }
 }
+
+/** Publicly-bookable sets with their DB-driven galleries, in display order. */
+export async function getRentalClubSets(): Promise<RentalClubSet[]> {
+  const supabase = createClient()
+
+  const { data, error } = await supabase
+    .from('rental_club_sets')
+    .select(SET_COLUMNS)
+    .eq('is_active', true)
+    .eq('website_visible', true)
+    .order('display_order', { ascending: true })
+    .order('slug', { ascending: true })
+
+  if (error || !data) {
+    console.error('Error fetching rental club sets:', error)
+    return []
+  }
+
+  return (data as RentalSetRow[]).map(mapSet)
+}
+
+/**
+ * Publicly-visible sets PLUS an explicit allow-list of hidden ones.
+ *
+ * A set can be genuinely rentable while being kept off the marketing cards —
+ * the left-handed set is on-request only, and "do you have left-handed clubs?"
+ * is one of the most common chat questions, so its specs belong on the sheet.
+ *
+ * The allow-list is a REQUIRED argument and the filter lives here rather than
+ * at the call site, because is_active does not protect us: a retired set can
+ * sit at is_active=true + website_visible=false for a long time (Majesty does
+ * today). If this function returned every active row and left filtering to the
+ * caller, one simplification at the call site would publish a retired set to a
+ * page whose entire purpose is generating booking enquiries. There is
+ * deliberately no exported way to get the unfiltered list.
+ */
+export async function getRentalClubSetsForSpecSheet(
+  extraSlugs: ReadonlySet<string>
+): Promise<RentalClubSet[]> {
+  const supabase = createClient()
+
+  const { data, error } = await supabase
+    .from('rental_club_sets')
+    .select(SET_COLUMNS)
+    .eq('is_active', true)
+    .order('display_order', { ascending: true })
+    .order('slug', { ascending: true })
+
+  if (error || !data) {
+    console.error('Error fetching rental club sets for spec sheet:', error)
+    return []
+  }
+
+  return (data as RentalSetRow[])
+    .filter((row) => row.website_visible || extraSlugs.has(row.slug))
+    .map(mapSet)
+}
+
+// Spec-sheet parsing lives in lib/club-specs.ts — it imports no server-only
+// module, so `npm run validate:club-specs` can exercise it directly.
+// Re-exported here so existing import sites keep working.
+export { SPEC_ROWS, classifySpecPart, stripRowNoun, parseVariantSpec, splitSpecEntry } from './club-specs'
+export type { SpecRow } from './club-specs'
 
 export async function getRelatedClubs(club: UsedClub, limit = 3): Promise<UsedClub[]> {
   const supabase = createClient()

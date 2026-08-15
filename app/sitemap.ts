@@ -56,6 +56,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/events/`, lastModified: reviewed, changeFrequency: 'weekly', priority: 0.9, alternates: { languages: getAlternates('/events/') } },
     { url: `${SITE_URL}/golf-club-rental/`, lastModified: reviewed, changeFrequency: 'weekly', priority: 0.8, alternates: { languages: getAlternates('/golf-club-rental/') } },
     { url: `${SITE_URL}/golf-course-club-rental/`, lastModified: reviewed, changeFrequency: 'weekly', priority: 0.8, alternates: { languages: getAlternates('/golf-course-club-rental/') } },
+    // Reference sheet rather than a landing page — lower priority than the two
+    // rental pages it supports, and it only changes when a set changes.
+    { url: `${SITE_URL}/golf-club-specs/`, lastModified: reviewed, changeFrequency: 'monthly', priority: 0.6, alternates: { languages: getAlternates('/golf-club-specs/') } },
     { url: `${SITE_URL}/lessons/`, lastModified: reviewed, changeFrequency: 'weekly', priority: 0.9, alternates: { languages: getAlternates('/lessons/') } },
     { url: `${SITE_URL}/about-us/`, lastModified: reviewed, changeFrequency: 'monthly', priority: 0.7, alternates: { languages: getAlternates('/about-us/') } },
     { url: `${SITE_URL}/blog/`, lastModified: reviewed, changeFrequency: 'weekly', priority: 0.8, alternates: { languages: getAlternates('/blog/') } },

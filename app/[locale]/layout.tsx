@@ -9,6 +9,7 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import LineChatWidget from '@/components/layout/LineChatWidget'
 import MobileStickyBar from '@/components/layout/MobileStickyBar'
+import BareRouteGate from '@/components/layout/BareRouteGate'
 import { SITE_NAME, SITE_URL, SITE_DESCRIPTION, storageUrl } from '@/lib/constants'
 import { getLocalBusinessJsonLd, getWebSiteJsonLd } from '@/lib/jsonld'
 import { routing } from '@/i18n/routing'
@@ -152,11 +153,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white">
             Skip to main content
           </a>
-          <Header />
+          {/* Standalone routes (the club spec sheet) render without the site
+              chrome — see BareRouteGate. It fails open, so an unrecognised
+              path always keeps its header and footer. */}
+          <BareRouteGate>
+            <Header />
+          </BareRouteGate>
           <main id="main-content">{children}</main>
-          <Footer />
-          <LineChatWidget />
-          <MobileStickyBar />
+          <BareRouteGate>
+            <Footer />
+            <LineChatWidget />
+            <MobileStickyBar />
+          </BareRouteGate>
         </NextIntlClientProvider>
         <Analytics />
       </body>

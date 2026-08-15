@@ -16,6 +16,12 @@ const TRANSLATED_ROUTES: Record<
       "/events",
       "/golf-club-rental",
       "/golf-course-club-rental",
+      // TH only (alongside EN). The spec sheet's chrome is translated; the
+      // club/shaft strings inside it come from rental_club_sets and stay
+      // English in every locale — they are brand and model names that staff
+      // quote verbatim. JA/KO/ZH are deliberately absent, so those locales
+      // redirect to the EN sheet rather than serving a half-translated page.
+      "/golf-club-specs",
       "/lessons",
       "/about-us",
       "/blog",
