@@ -49,6 +49,15 @@ jobs:
       # incident — a scraped Thai-national rate shipping as the visitor rate.
       - run: npm run validate:courses
       - run: npm run validate:fee-labels
+
+      # Club spec-sheet parsers. rental_club_sets.variants[].spec is
+      # staff-authored free text held only in production, and /golf-club-specs/
+      # parses it into a table — so re-wording a spec in the DB can move a club
+      # to the wrong row or blank a column, with nothing in git to catch it.
+      # This pins the live strings plus every phrasing that has already broken
+      # the classifier. Without this step the guard exists but never runs.
+      - run: npm run validate:club-specs
+
       - name: pr-rigor disclosure
         env:
           PR_BODY: ${{ github.event.pull_request.body }}

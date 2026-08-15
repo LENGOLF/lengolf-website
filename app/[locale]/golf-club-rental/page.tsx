@@ -2,11 +2,12 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
+import RawLink from 'next/link'
 import SectionWrapper from '@/components/shared/SectionWrapper'
 import BookingCTA from '@/components/shared/BookingCTA'
 import ImageLightbox from '@/components/shared/ImageLightbox'
 import { storageUrl, SITE_URL, BUSINESS_INFO, BOOKING_URL } from '@/lib/constants'
-import { getAlternates, getCanonical } from '@/lib/translated-routes'
+import { getAlternates, getCanonical, hasTranslationForLocale } from '@/lib/translated-routes'
 import StickyBookCTA from '@/components/clubs/StickyBookCTA'
 import { getClubRentalPricingJsonLd, getClubRentalServiceJsonLd, getFaqPageJsonLd, getBreadcrumbJsonLd } from '@/lib/jsonld'
 import { getRentalClubPricing } from '@/lib/clubs'
@@ -81,6 +82,12 @@ export default async function ClubRentalPage({ params }: { params: Promise<{ loc
     { name: 'Home', url: `${SITE_URL}/` },
     { name: t('metaTitle'), url: `${SITE_URL}/golf-club-rental/` },
   ])
+
+  // /golf-club-specs exists in EN + TH only. On other locales the locale-aware
+  // Link emits a URL the middleware 301s, so every click AND every viewport
+  // prefetch took a redirect hop, with internal link equity flowing through it.
+  // Link straight to the EN sheet instead — same remedy as Footer.tsx.
+  const SpecsLinkTag = hasTranslationForLocale(locale, '/golf-club-specs') ? Link : RawLink
 
   return (
     <>
@@ -285,11 +292,16 @@ export default async function ClubRentalPage({ params }: { params: Promise<{ loc
           </div>
 
           {/* These cards stay a teaser — lofts, shaft models and flex live on
-              the spec sheet, which is also the link staff paste into LINE. */}
+              the spec sheet, which is also the link staff paste into LINE.
+              RawLink on locales without a translated sheet: next-intl's Link
+              would emit /ja/golf-club-specs/, which the middleware 301s to the
+              EN page — so every click AND every viewport prefetch took a
+              redirect hop and internal link equity flowed through it. Same
+              remedy as components/layout/Footer.tsx. */}
           <p className="mx-auto mt-4 max-w-3xl text-center text-sm">
-            <Link href="/golf-club-specs" className="font-semibold text-primary hover:underline">
+            <SpecsLinkTag href="/golf-club-specs/" className="font-semibold text-primary hover:underline">
               {t('seeFullSpecs')}
-            </Link>
+            </SpecsLinkTag>
           </p>
 
           {/* sr-only table for crawlers */}

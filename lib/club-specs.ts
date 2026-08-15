@@ -101,9 +101,13 @@ export function parseVariantSpec(spec: string | null | undefined): { row: SpecRo
  * list can go away — until then, an unlisted inline shaft simply stays in the
  * spec column rather than being lost.
  */
-// The optional trailing club noun matters: the putter reads "Odyssey Tri-Beam
-// Stroke Lab putter", so anchoring the shaft strictly at end-of-string found
-// nothing and the Shaft column rendered an em dash for every putter.
+// The optional trailing club noun is defensive, not currently exercised. It was
+// added when the putters read "Odyssey Tri-Beam Stroke Lab putter" and a strict
+// end anchor found no shaft at all. Transcribing the owner's sheets later
+// rewrote those to "Odyssey Tri-Beam 70g (Stroke Lab)", so the putter shaft now
+// comes from the parenthetical branch instead and INLINE_SHAFTS only reaches
+// the two Dynamic Gold wedge lines. Kept because the trailing-noun style is
+// still valid authoring and would otherwise regress silently.
 const INLINE_SHAFTS =
   /\b(Dynamic Gold\s*[A-Z]?\d*|Stroke Lab|Ventus\s*TR(?:\s*Blue)?|Ventus|N\.?S\.?\s*Pro\s*Zelos\s*\d*|Project X[\w\s]*|KBS[\w\s]*)(?:\s+(?:putter|wedges?|irons?|driver|shafts?))?\s*$/i
 

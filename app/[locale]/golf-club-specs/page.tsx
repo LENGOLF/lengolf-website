@@ -3,8 +3,14 @@ import type { Metadata } from 'next'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
-import { storageUrl, SITE_URL, SOCIAL_LINKS, BOOKING_URL } from '@/lib/constants'
-import { getAlternates, getCanonical, hasTranslationForLocale, ALL_LOCALES } from '@/lib/translated-routes'
+import { storageUrl, SITE_URL, SOCIAL_LINKS, BOOKING_URL, BUSINESS_INFO } from '@/lib/constants'
+import {
+  getAlternates,
+  getCanonical,
+  getResolvedCanonical,
+  hasTranslationForLocale,
+  ALL_LOCALES,
+} from '@/lib/translated-routes'
 import { getBreadcrumbJsonLd } from '@/lib/jsonld'
 import { getRentalClubSetsForSpecSheet, setGallery } from '@/lib/clubs'
 import { parseVariantSpec, splitSpecEntry, splitClubPart, SPEC_ROWS } from '@/lib/club-specs'
@@ -26,6 +32,18 @@ export const revalidate = 3600
  * authored, so it belongs.
  */
 const EXTRA_SPEC_SLUGS = new Set(['premium-mens-left-handed'])
+
+/**
+ * Locales this sheet is published in — derived from the route registry, not
+ * hand-listed, so it cannot drift from generateStaticParams or the hreflang
+ * alternates. Drives the in-page language switcher.
+ */
+const SHEET_LOCALES = ALL_LOCALES.filter(
+  (locale) => locale === 'en' || hasTranslationForLocale(locale, '/golf-club-specs')
+)
+
+/** Endonyms, so a Thai reader sees "ไทย" rather than "Thai". */
+const LOCALE_SWITCH_LABEL: Record<string, string> = { en: 'EN', th: 'ไทย', ja: '日本語', ko: '한국어', zh: '中文' }
 
 /**
  * EN always builds; every other locale builds only if it has a published
@@ -54,12 +72,31 @@ function setShortName(name: string): string {
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'ClubSpecs' })
+  const canonical = getCanonical(locale, '/golf-club-specs/')
   return {
     title: t('metaTitle'),
     description: t('metaDescription'),
     alternates: {
-      canonical: getCanonical(locale, '/golf-club-specs/'),
+      canonical,
       languages: getAlternates('/golf-club-specs/'),
+    },
+    // Declared explicitly, not inherited. Next merges metadata per KEY, so a
+    // segment that omits `openGraph` keeps the ROOT layout's resolved object —
+    // which meant this page advertised og:url = the homepage and og:image = a
+    // photo of the bar interior. This sheet exists to be pasted into a LINE
+    // chat, where that preview card is the entire first impression, so it
+    // needs its own URL, its own locale, and a picture of actual clubs.
+    openGraph: {
+      title: t('metaTitle'),
+      description: t('metaDescription'),
+      url: canonical,
+      locale: locale === 'th' ? 'th_TH' : 'en_US',
+      images: [
+        {
+          url: storageUrl('clubs/premium-plus/2.png'),
+          alt: 'Callaway Paradym Forged Carbon rental set — full bag',
+        },
+      ],
     },
   }
 }
@@ -85,10 +122,15 @@ export default async function GolfClubSpecsPage({ params }: { params: Promise<{ 
     )
   }
 
+  // Locale-resolved, not hardcoded EN. On /th/ the crumbs previously pointed at
+  // the EN URLs, so the terminal node was not the page it sat on — which is
+  // what suppresses the breadcrumb rich result. getResolvedCanonical falls back
+  // to EN only for paths that locale genuinely lacks, so no crumb ever names a
+  // URL that 301s.
   const breadcrumbJsonLd = getBreadcrumbJsonLd([
-    { name: 'Home', url: `${SITE_URL}/` },
-    { name: 'Club Rental', url: `${SITE_URL}/golf-club-rental/` },
-    { name: t('h1'), url: `${SITE_URL}/golf-club-specs/` },
+    { name: 'Home', url: getResolvedCanonical(locale, '/') },
+    { name: 'Club Rental', url: getResolvedCanonical(locale, '/golf-club-rental/') },
+    { name: t('h1'), url: getResolvedCanonical(locale, '/golf-club-specs/') },
   ])
 
   const rowLabel = (row: SpecRow) => t(`rows.${row}`)
@@ -114,12 +156,30 @@ export default async function GolfClubSpecsPage({ params }: { params: Promise<{ 
               priority
             />
           </Link>
-          <a
-            href={`${BOOKING_URL}course-rental`}
-            className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white transition-opacity hover:opacity-90"
-          >
-            {t('ctaBook')}
-          </a>
+          <div className="flex items-center gap-3">
+            {/* The site header carries the ONLY locale switcher (LocaleMenu),
+                and this route hides the header — so without this a Thai reader
+                had no way back to the EN sheet, on a page that is deliberately
+                published in both. Plain anchors: these are absolute, already
+                locale-correct URLs, so next-intl's Link would prefix them
+                again. */}
+            {SHEET_LOCALES.filter((l) => l !== locale).map((l) => (
+              <a
+                key={l}
+                href={`${getCanonical(l, '/golf-club-specs/').replace(SITE_URL, '')}`}
+                hrefLang={l}
+                className="text-sm font-semibold text-primary hover:underline"
+              >
+                {LOCALE_SWITCH_LABEL[l]}
+              </a>
+            ))}
+            <a
+              href={`${BOOKING_URL}course-rental`}
+              className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white transition-opacity hover:opacity-90"
+            >
+              {t('ctaBook')}
+            </a>
+          </div>
         </div>
       </header>
 
@@ -228,18 +288,41 @@ export default async function GolfClubSpecsPage({ params }: { params: Promise<{ 
         </section>
       </div>
 
-      {/* Minimal footer — backlinks only, no site-wide nav. */}
+      {/* Minimal footer — backlinks plus the contact and legal links that the
+          site footer would normally carry. Without these this was the only
+          indexed public page with no phone, no email and no privacy/terms. */}
       <footer className="border-t border-primary/15 bg-white py-8">
-        <div className="section-max-width section-padding flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
-          <Link href="/golf-club-rental" className="font-semibold text-primary hover:underline">
-            {t('backToBay')}
-          </Link>
-          <Link href="/golf-course-club-rental" className="font-semibold text-primary hover:underline">
-            {t('backToCourse')}
-          </Link>
-          <Link href="/" className="font-semibold text-primary hover:underline">
-            {t('backHome')}
-          </Link>
+        <div className="section-max-width section-padding space-y-3 text-center text-sm">
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            <Link href="/golf-club-rental" className="font-semibold text-primary hover:underline">
+              {t('backToBay')}
+            </Link>
+            <Link href="/golf-course-club-rental" className="font-semibold text-primary hover:underline">
+              {t('backToCourse')}
+            </Link>
+            <Link href="/" className="font-semibold text-primary hover:underline">
+              {t('backHome')}
+            </Link>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-muted-foreground">
+            <a href={`tel:${BUSINESS_INFO.phoneRaw}`} className="hover:underline">
+              {BUSINESS_INFO.phone}
+            </a>
+            <a href={`mailto:${BUSINESS_INFO.email}`} className="hover:underline">
+              {BUSINESS_INFO.email}
+            </a>
+            <a href={SOCIAL_LINKS.line} target="_blank" rel="noopener noreferrer" className="hover:underline">
+              LINE @lengolf
+            </a>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-muted-foreground">
+            <Link href="/privacy-policy" className="hover:underline">
+              {t('privacy')}
+            </Link>
+            <Link href="/terms-of-service" className="hover:underline">
+              {t('terms')}
+            </Link>
+          </div>
         </div>
       </footer>
     </>
