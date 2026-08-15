@@ -332,12 +332,16 @@ function SetBlock({
         <div className="mb-6">
           <h3 className="mb-2 text-sm font-bold uppercase tracking-wider text-muted-foreground">{t('inTheBag')}</h3>
           {allSplit ? (
+            // Same nowrap + scroll treatment as the spec matrix. Missing it
+            // here meant "TaylorMade RBZ 10.5° (Stiff)" still broke across two
+            // lines on a phone — the left-handed set is authored as label/value
+            // pairs, so it renders through this branch rather than the matrix.
             <div className="overflow-x-auto rounded-lg border border-primary/15">
-              <table className="w-full border-collapse text-sm">
+              <table className="w-auto min-w-full border-collapse text-sm">
                 <tbody>
                   {splitEntries.map((e, i) => (
-                    <tr key={i} className="border-b border-primary/10 last:border-b-0">
-                      <th scope="row" className="w-40 bg-primary/5 px-3 py-2 text-left font-semibold">{e.split!.label}</th>
+                    <tr key={i} className="border-b border-primary/10 last:border-b-0 [&>*]:whitespace-nowrap">
+                      <th scope="row" className="bg-primary/5 px-3 py-2 text-left font-semibold">{e.split!.label}</th>
                       <td className="px-3 py-2 text-muted-foreground">{e.split!.value}</td>
                     </tr>
                   ))}
