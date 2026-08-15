@@ -133,6 +133,23 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/southern-thailand/hat-yai-resort-golf-club",
       "/golf-courses/southern-thailand/southern-hills-golf-country-club",
       "/golf-courses/southern-thailand/sri-trang-golf-club",
+      // Batch 5 wave 1 (2026-08) — the Pattaya/eastern-seaboard sweep.
+      // phoenix-gold-golf-club-pattaya is deliberately EXCLUDED pending the
+      // Phoenix Gold slug merge: bangkok/phoenix-gold-golf-country-club is a
+      // second published page for the same club (same name, same website)
+      // with contradictory data, and translating one half of an unresolved
+      // duplicate would ship 4 more indexed pages plus hreflang.
+      "/golf-courses/pattaya/amata-spring-country-club",
+      "/golf-courses/pattaya/bangpra-international-golf-club",
+      "/golf-courses/pattaya/chatrium-golf-resort-soi-dao",
+      "/golf-courses/pattaya/chee-chan-golf-resort",
+      "/golf-courses/pattaya/crystal-bay-golf-resort",
+      "/golf-courses/pattaya/eastern-star-country-club",
+      "/golf-courses/pattaya/greenwood-golf-club",
+      "/golf-courses/pattaya/kabinburi-sportclub",
+      "/golf-courses/pattaya/khao-kheow-country-club",
+      "/golf-courses/pattaya/mountain-shadow-golf-club",
+      "/golf-courses/pattaya/pattana-golf-club-resort",
       // Translated FAQ pages (data/faq-pages.ts entries with locale: 'th') —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -325,6 +342,23 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/southern-thailand/hat-yai-resort-golf-club",
       "/golf-courses/southern-thailand/southern-hills-golf-country-club",
       "/golf-courses/southern-thailand/sri-trang-golf-club",
+      // Batch 5 wave 1 (2026-08) — the Pattaya/eastern-seaboard sweep.
+      // phoenix-gold-golf-club-pattaya is deliberately EXCLUDED pending the
+      // Phoenix Gold slug merge: bangkok/phoenix-gold-golf-country-club is a
+      // second published page for the same club (same name, same website)
+      // with contradictory data, and translating one half of an unresolved
+      // duplicate would ship 4 more indexed pages plus hreflang.
+      "/golf-courses/pattaya/amata-spring-country-club",
+      "/golf-courses/pattaya/bangpra-international-golf-club",
+      "/golf-courses/pattaya/chatrium-golf-resort-soi-dao",
+      "/golf-courses/pattaya/chee-chan-golf-resort",
+      "/golf-courses/pattaya/crystal-bay-golf-resort",
+      "/golf-courses/pattaya/eastern-star-country-club",
+      "/golf-courses/pattaya/greenwood-golf-club",
+      "/golf-courses/pattaya/kabinburi-sportclub",
+      "/golf-courses/pattaya/khao-kheow-country-club",
+      "/golf-courses/pattaya/mountain-shadow-golf-club",
+      "/golf-courses/pattaya/pattana-golf-club-resort",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -549,6 +583,23 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/southern-thailand/hat-yai-resort-golf-club",
       "/golf-courses/southern-thailand/southern-hills-golf-country-club",
       "/golf-courses/southern-thailand/sri-trang-golf-club",
+      // Batch 5 wave 1 (2026-08) — the Pattaya/eastern-seaboard sweep.
+      // phoenix-gold-golf-club-pattaya is deliberately EXCLUDED pending the
+      // Phoenix Gold slug merge: bangkok/phoenix-gold-golf-country-club is a
+      // second published page for the same club (same name, same website)
+      // with contradictory data, and translating one half of an unresolved
+      // duplicate would ship 4 more indexed pages plus hreflang.
+      "/golf-courses/pattaya/amata-spring-country-club",
+      "/golf-courses/pattaya/bangpra-international-golf-club",
+      "/golf-courses/pattaya/chatrium-golf-resort-soi-dao",
+      "/golf-courses/pattaya/chee-chan-golf-resort",
+      "/golf-courses/pattaya/crystal-bay-golf-resort",
+      "/golf-courses/pattaya/eastern-star-country-club",
+      "/golf-courses/pattaya/greenwood-golf-club",
+      "/golf-courses/pattaya/kabinburi-sportclub",
+      "/golf-courses/pattaya/khao-kheow-country-club",
+      "/golf-courses/pattaya/mountain-shadow-golf-club",
+      "/golf-courses/pattaya/pattana-golf-club-resort",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -765,6 +816,23 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/southern-thailand/hat-yai-resort-golf-club",
       "/golf-courses/southern-thailand/southern-hills-golf-country-club",
       "/golf-courses/southern-thailand/sri-trang-golf-club",
+      // Batch 5 wave 1 (2026-08) — the Pattaya/eastern-seaboard sweep.
+      // phoenix-gold-golf-club-pattaya is deliberately EXCLUDED pending the
+      // Phoenix Gold slug merge: bangkok/phoenix-gold-golf-country-club is a
+      // second published page for the same club (same name, same website)
+      // with contradictory data, and translating one half of an unresolved
+      // duplicate would ship 4 more indexed pages plus hreflang.
+      "/golf-courses/pattaya/amata-spring-country-club",
+      "/golf-courses/pattaya/bangpra-international-golf-club",
+      "/golf-courses/pattaya/chatrium-golf-resort-soi-dao",
+      "/golf-courses/pattaya/chee-chan-golf-resort",
+      "/golf-courses/pattaya/crystal-bay-golf-resort",
+      "/golf-courses/pattaya/eastern-star-country-club",
+      "/golf-courses/pattaya/greenwood-golf-club",
+      "/golf-courses/pattaya/kabinburi-sportclub",
+      "/golf-courses/pattaya/khao-kheow-country-club",
+      "/golf-courses/pattaya/mountain-shadow-golf-club",
+      "/golf-courses/pattaya/pattana-golf-club-resort",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.

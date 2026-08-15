@@ -536,6 +536,28 @@ export const COURSE_DETAIL_I18N: {
   { region: 'southern-thailand', slug: 'hat-yai-resort-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'southern-thailand', slug: 'southern-hills-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'southern-thailand', slug: 'sri-trang-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  // Batch 5 wave 1 (2026-08) — the Pattaya/eastern-seaboard sweep, roster
+  // completion again rather than GSC demand. Note three of these sit in the
+  // pattaya DIRECTORY (which builds the URL) but in other provinces:
+  // chatrium-golf-resort-soi-dao is Chanthaburi and kabinburi-sportclub is
+  // Prachin Buri — both added to PROVINCE_L10N in 35c7e15.
+  //
+  // phoenix-gold-golf-club-pattaya is deliberately NOT here. It is one half of
+  // an unresolved duplicate: bangkok/phoenix-gold-golf-country-club carries the
+  // same club name and the same website with contradictory data (36 vs 27
+  // holes, B999 vs B3,000, coordinates ~115km apart). Translating it would turn
+  // a 2-page duplicate into a 10-page one. Needs the slug merge first.
+  { region: 'pattaya', slug: 'amata-spring-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'bangpra-international-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'chatrium-golf-resort-soi-dao', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'chee-chan-golf-resort', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'crystal-bay-golf-resort', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'eastern-star-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'greenwood-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'kabinburi-sportclub', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'khao-kheow-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'mountain-shadow-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'pattana-golf-club-resort', locales: ['th', 'ja', 'ko', 'zh'] },
 ]
 
 /**
