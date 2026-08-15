@@ -241,6 +241,16 @@ const PROVINCE_L10N: Record<string, Record<Exclude<CourseSeoLocale, 'en'>, strin
   },
   Songkhla: { th: 'จังหวัดสงขลา', ja: 'ソンクラー県', ko: '송클라주', zh: '宋卡府' },
   Trang: { th: 'จังหวัดตรัง', ja: 'トラン県', ko: '뜨랑주', zh: '董里府' },
+  // Pattaya/eastern-seaboard batch. Same policy as above: zh takes the
+  // established exonyms (尖竹汶府 / 巴真府), ko transcribes with tense
+  // consonants for the unaspirated stops (짠타부리, 쁘라찐부리).
+  Chanthaburi: { th: 'จังหวัดจันทบุรี', ja: 'チャンタブリー県', ko: '짠타부리주', zh: '尖竹汶府' },
+  'Prachin Buri': {
+    th: 'จังหวัดปราจีนบุรี',
+    ja: 'プラーチーンブリー県',
+    ko: '쁘라찐부리주',
+    zh: '巴真府',
+  },
 }
 
 /** Whether a course's (English) province has localized names for the non-EN packs. */

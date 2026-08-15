@@ -4,7 +4,7 @@ export const course: GolfCourse = {
   slug: 'treasure-hill-golf-country-club',
   region: 'pattaya',
   name: `Treasure Hill Golf & Country Club`,
-  province: `Chon Buri`,
+  province: `Chonburi`,
   designer: `Yoshikazu Kato`,
   holes: 18,
   par: 72,
