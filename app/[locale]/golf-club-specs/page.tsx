@@ -18,11 +18,12 @@ export const revalidate = 3600
 /**
  * Hidden-but-live sets that still earn a place on the spec sheet.
  *
- * getAllLiveRentalClubSets() returns every active row regardless of
- * website_visible, so this allow-list is what keeps the sheet deliberate: a set
- * someone hides tomorrow stays off until it is named here. The left-handed set
- * is on-request only and has no photos, but "do you have left-handed clubs?" is
- * a recurring chat question and its specs are fully authored, so it belongs.
+ * Passed to getRentalClubSetsForSpecSheet(), which returns publicly-visible
+ * sets PLUS the slugs named here. The allow-list is what keeps the sheet
+ * deliberate: a set someone hides tomorrow stays off until it is named. The
+ * left-handed set is on-request only and has no photos, but "do you have
+ * left-handed clubs?" is a recurring chat question and its specs are fully
+ * authored, so it belongs.
  */
 const EXTRA_SPEC_SLUGS = new Set(['premium-mens-left-handed'])
 
@@ -69,6 +70,20 @@ export default async function GolfClubSpecsPage({ params }: { params: Promise<{ 
   const t = await getTranslations('ClubSpecs')
 
   const sets = await getRentalClubSetsForSpecSheet(EXTRA_SPEC_SLUGS)
+
+  // The reader swallows DB errors and returns [], so without this a Supabase
+  // blip at build or revalidate time would DEPLOY SUCCESSFULLY as a page with a
+  // headline, an empty jump nav, a comparison table of nothing, and a CTA —
+  // then `revalidate` would serve that hollow sheet for an hour. This page's
+  // whole job is being pasted into a LINE chat, so a plausible-looking empty
+  // one is worse than an error. throw → the build fails loudly and ISR keeps
+  // the last good render instead of caching the blank one.
+  if (sets.length === 0) {
+    throw new Error(
+      'golf-club-specs: no rental club sets returned. Refusing to render an empty spec sheet — ' +
+        'check the rental_club_sets query and Supabase availability.'
+    )
+  }
 
   const breadcrumbJsonLd = getBreadcrumbJsonLd([
     { name: 'Home', url: `${SITE_URL}/` },
