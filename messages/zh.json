@@ -103,7 +103,7 @@
     "premiumBadge": "高级+",
     "premiumName": "Callaway Paradym Forged Carbon",
     "premiumGender": "男士高级+套装",
-    "premiumSpec1": "一号木 10.5° + 球道木 — Ai Smoke（钢杆身球包）或 Paradym（石墨球包）",
+    "premiumSpec1": "一号木 10.5° + 球道木 — Ai Smoke、3号木 + 5号木（钢杆身球包）或 Paradym、5号木（石墨球包）",
     "premiumSpec2": "铁杆 6–P（5支）— Nippon Zelos 7（钢）或 Fujikura Ventus（石墨）",
     "premiumSpec3": "Jaws 挖起杆两支 — Forged 52°/56°（钢杆身球包）或 Raw 54°/58°（石墨球包）",
     "premiumSpec4": "Odyssey 推杆 — Tri-Beam（钢杆身球包）或 White Hot Black Series Five（石墨球包）",
@@ -114,7 +114,7 @@
         "gender": "男士全套",
         "spec1": "一号木、球道木、铁杆（5至劈起杆、沙杆）",
         "spec2": "附Odyssey White Hot Pro推杆",
-        "spec3": "钢杆身（Uniflex）或石墨杆身（R 杆身）铁杆 — 预订时选择"
+        "spec3": "钢杆身（Uniflex）或石墨杆身（R 杆身）— 预订时选择"
       },
       "premium-womens-reva": {
         "name": "Callaway REVA",
@@ -205,7 +205,7 @@
     "q2": "租借球杆的归还政策是什么？",
     "a2": "球杆须以租借时相同状态归还。打完球后请将球杆归还至LENGOLF，或通过配送服务安排取件。超出正常磨损的损坏可能需要承担维修费用。",
     "q3": "全套球杆包含哪些内容？",
-    "a3": "我们提供三种套装：高级+ Callaway Paradym Forged Carbon（一号木、球道木、6至P铁杆、Jaws Raw挖起杆、Odyssey推杆、迷彩球袋）、Callaway Warbird男士套装（一号木、5号木、5至劈起杆/沙杆铁杆、Odyssey推杆）、Callaway REVA女士套装（一号木、4号木、5号铁木、7至劈起杆铁杆、挖起杆、推杆）。",
+    "a3": "我们提供三种套装：高级+ Callaway Paradym Forged Carbon（一号木、球道木、6至P铁杆、Jaws挖起杆、Odyssey推杆、迷彩球袋）、Callaway Warbird男士套装（一号木、5号木、5至劈起杆/沙杆铁杆、Odyssey推杆）、Callaway REVA女士套装（一号木、4号木、5号铁木、7至劈起杆铁杆、挖起杆、推杆）。",
     "q4": "如果我的开球时间很早，能拿到球杆吗？",
     "a4": "预订时请告知开球时间。对于非常早的清晨轮次，建议提前一天联系，安排前一晚配送。我们将尽力配合您的时间安排。",
     "q5": "可以配送到曼谷以外的球场吗？",

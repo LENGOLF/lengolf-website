@@ -103,7 +103,7 @@
     "premiumBadge": "프리미엄+",
     "premiumName": "Callaway Paradym Forged Carbon",
     "premiumGender": "남성용 프리미엄+ 세트",
-    "premiumSpec1": "드라이버 10.5° + 페어웨이 우드 — Ai Smoke(스틸 백) 또는 Paradym(그라파이트 백)",
+    "premiumSpec1": "드라이버 10.5° + 페어웨이 우드 — Ai Smoke, 3W + 5W(스틸 백) 또는 Paradym, 5W(그라파이트 백)",
     "premiumSpec2": "아이언 6–P(5개) — Nippon Zelos 7(스틸) 또는 Fujikura Ventus(그라파이트)",
     "premiumSpec3": "Jaws 웨지 2개 — Forged 52°/56°(스틸 백) 또는 Raw 54°/58°(그라파이트 백)",
     "premiumSpec4": "Odyssey 퍼터 — Tri-Beam(스틸 백) 또는 White Hot Black Series Five(그라파이트 백)",
@@ -114,12 +114,12 @@
         "gender": "남성용 풀 세트",
         "spec1": "드라이버, 페어웨이 우드, 아이언(5–PW, SW)",
         "spec2": "Odyssey White Hot Pro 퍼터 포함",
-        "spec3": "스틸(유니플렉스) 또는 그라파이트(R 플렉스) 아이언 — 예약 시 선택"
+        "spec3": "스틸(유니플렉스) 또는 그라파이트(R 플렉스) — 예약 시 선택"
       },
       "premium-womens-reva": {
         "name": "Callaway REVA",
         "gender": "여성용 풀세트",
-        "spec1": "드라이버 12.5°(L 플렉스), 4-Wood, 5-Hybrid, 아이언(7–9, PW)",
+        "spec1": "드라이버 12.5°(L 플렉스), 4번 우드, 5번 하이브리드, 아이언(7–9, PW)",
         "spec2": "샌드웨지 + Odyssey White Hot OG Seven 퍼터",
         "spec3": "화이트 또는 블랙 — 예약 시 선택"
       }
@@ -202,7 +202,7 @@
     "q2": "대여 클럽 반납 정책은 어떻게 되나요?",
     "a2": "클럽은 대여 시와 동일한 상태로 반납해 주셔야 합니다. 라운드 후 LENGOLF에 반납하시거나 배송 서비스를 통해 픽업을 예약해 주세요. 정상 마모 이상의 손상이 있을 경우 수리 비용이 발생할 수 있습니다.",
     "q3": "풀 세트에는 무엇이 포함되나요?",
-    "a3": "세 가지 세트를 제공합니다: 프리미엄+ Callaway Paradym Forged Carbon(드라이버, 페어웨이 우드, 아이언 6–P, Jaws Raw 웨지, Odyssey 퍼터, 카모 백), Callaway Warbird 남성용 세트(드라이버, 5W, 아이언 5–PW/SW, Odyssey 퍼터), Callaway REVA 여성용 세트(드라이버, 4W, 5H, 아이언 7–PW, 웨지, 퍼터).",
+    "a3": "세 가지 세트를 제공합니다: 프리미엄+ Callaway Paradym Forged Carbon(드라이버, 페어웨이 우드, 아이언 6–P, Jaws 웨지, Odyssey 퍼터, 카모 백), Callaway Warbird 남성용 세트(드라이버, 5W, 아이언 5–PW/SW, Odyssey 퍼터), Callaway REVA 여성용 세트(드라이버, 4W, 5H, 아이언 7–PW, 웨지, 퍼터).",
     "q4": "이른 티타임에도 클럽을 받을 수 있나요?",
     "a4": "예약 시 티타임을 알려주세요. 매우 이른 아침 라운드의 경우 전날 연락하여 전날 저녁 배송을 예약하시는 것을 권장합니다.",
     "q5": "방콕 외 지역 골프장에도 배송하시나요?",

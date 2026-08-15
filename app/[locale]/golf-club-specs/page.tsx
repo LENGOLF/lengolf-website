@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
+import RawLink from 'next/link'
 import { storageUrl, SITE_URL, SOCIAL_LINKS, BOOKING_URL, BUSINESS_INFO } from '@/lib/constants'
 import {
   getAlternates,
@@ -44,6 +45,12 @@ const SHEET_LOCALES = ALL_LOCALES.filter(
 
 /** Endonyms, so a Thai reader sees "ไทย" rather than "Thai". */
 const LOCALE_SWITCH_LABEL: Record<string, string> = { en: 'EN', th: 'ไทย', ja: '日本語', ko: '한국어', zh: '中文' }
+
+/** Legal links the stripped site footer would otherwise have carried. */
+const LEGAL_LINKS = [
+  { href: '/privacy-policy', key: 'privacy' },
+  { href: '/terms-of-service', key: 'terms' },
+] as const
 
 /**
  * EN always builds; every other locale builds only if it has a published
@@ -315,13 +322,21 @@ export default async function GolfClubSpecsPage({ params }: { params: Promise<{ 
               LINE @lengolf
             </a>
           </div>
+          {/* /privacy-policy and /terms-of-service are deliberately EN-only, so
+              the locale-aware Link would emit /th/privacy-policy/ and take a
+              301 on every click. Footer.tsx applies this same ternary to these
+              exact two hrefs — these links only exist here because
+              BareRouteGate strips that Footer, and the remedy has to come with
+              them. scripts/smoke-test.ts pins the redirect behaviour. */}
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-muted-foreground">
-            <Link href="/privacy-policy" className="hover:underline">
-              {t('privacy')}
-            </Link>
-            <Link href="/terms-of-service" className="hover:underline">
-              {t('terms')}
-            </Link>
+            {LEGAL_LINKS.map(({ href, key }) => {
+              const LinkTag = hasTranslationForLocale(locale, href) ? Link : RawLink
+              return (
+                <LinkTag key={href} href={`${href}/`} className="hover:underline">
+                  {t(key)}
+                </LinkTag>
+              )
+            })}
           </div>
         </div>
       </footer>
