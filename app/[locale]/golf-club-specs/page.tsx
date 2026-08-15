@@ -152,10 +152,10 @@ export default async function GolfClubSpecsPage({ params }: { params: Promise<{ 
         <section className="mt-14">
           <h2 className="mb-4 text-2xl font-bold italic">{t('compareTitle')}</h2>
           <div className="overflow-x-auto rounded-xl border border-primary/20">
-            <table className="w-full min-w-[640px] border-collapse text-sm">
+            <table className="w-auto min-w-full border-collapse text-sm">
               <caption className="sr-only">{t('compareTitle')}</caption>
               <thead>
-                <tr className="bg-primary/5 text-left">
+                <tr className="bg-primary/5 text-left [&>th]:whitespace-nowrap">
                   <th scope="col" className="px-4 py-3 font-bold">{t('colSet')}</th>
                   <th scope="col" className="px-4 py-3 font-bold">{t('colTier')}</th>
                   <th scope="col" className="px-4 py-3 font-bold">{t('colFor')}</th>
@@ -167,7 +167,7 @@ export default async function GolfClubSpecsPage({ params }: { params: Promise<{ 
                 {sets.map((set) => {
                   const shots = totalShots(set)
                   return (
-                    <tr key={set.slug} className="border-t border-primary/15">
+                    <tr key={set.slug} className="border-t border-primary/15 [&>*]:whitespace-nowrap">
                       <th scope="row" className="px-4 py-3 text-left font-semibold">
                         <a href={`#${set.slug}`} className="hover:underline">{setShortName(set.name)}</a>
                       </th>
@@ -357,16 +357,21 @@ function SetBlock({
                   {c.variant.label ?? c.variant.key}
                 </p>
                 <div className="overflow-x-auto rounded-lg border border-primary/20">
-                  <table className="w-full min-w-[520px] border-collapse text-sm">
+                  <table className="w-auto min-w-full border-collapse text-sm">
                     <caption className="sr-only">
                       {t('fullSpecsCaption', { name: `${setShortName(set.name)} — ${c.variant.label ?? c.variant.key}` })}
                     </caption>
+                    {/* Every cell is nowrap: a shaft model split across two
+                        lines ("Nippon N.S. Pro / Zelos 7") is hard to scan and
+                        hard to quote back to a customer. The wrapper scrolls
+                        horizontally instead, which is the right trade for a
+                        reference table on a phone. */}
                     <thead>
-                      <tr className="bg-primary/5 text-left">
-                        <th scope="col" className="w-28 px-3 py-2.5 font-bold">{t('colClub')}</th>
+                      <tr className="bg-primary/5 text-left [&>th]:whitespace-nowrap">
+                        <th scope="col" className="px-3 py-2.5 font-bold">{t('colClub')}</th>
                         <th scope="col" className="px-3 py-2.5 font-bold">{t('colSpec')}</th>
                         <th scope="col" className="px-3 py-2.5 font-bold">{t('colShaft')}</th>
-                        <th scope="col" className="w-20 px-3 py-2.5 font-bold">{t('colFlex')}</th>
+                        <th scope="col" className="px-3 py-2.5 font-bold">{t('colFlex')}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -377,7 +382,7 @@ function SetBlock({
                           return seen.length > 0 ? seen.join(' · ') : '—'
                         }
                         return (
-                          <tr key={row} className="border-t border-primary/15 align-top">
+                          <tr key={row} className="border-t border-primary/15 [&>*]:whitespace-nowrap">
                             <th scope="row" className="px-3 py-2.5 text-left font-semibold">{rowLabel(row)}</th>
                             <td className="px-3 py-2.5 text-muted-foreground">{join(hits.map((h) => h.spec))}</td>
                             <td className="px-3 py-2.5 text-muted-foreground">{join(hits.map((h) => h.shaft))}</td>
