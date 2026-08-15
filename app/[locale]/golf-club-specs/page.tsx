@@ -402,6 +402,11 @@ function SetBlock({
               </div>
             )
           })}
+          {/* Only shown when a "~" figure is actually on screen, so the sheet
+              does not carry a footnote about a distinction it is not making. */}
+          {matrixColumns.some((c) => c.parts.some((p) => splitClubPart(p.text).weight?.startsWith('~'))) && (
+            <p className="text-xs text-muted-foreground">{t('estimateNote')}</p>
+          )}
         </div>
       )}
 

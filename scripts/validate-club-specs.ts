@@ -37,7 +37,7 @@ const LIVE: [string, SpecRow][] = [
   ['Paradym 10.5° 50g R-flex (Fujikura Ventus)', 'driver'],
   ['Paradym 3W 15° + 5W 18° 50g SR-flex (Fujikura Ventus)', 'wood'],
   ['Paradym 5W 18° 50g R-flex (Fujikura Ventus)', 'wood'],
-  ['irons 6-P steel S-flex (Nippon N.S. Pro Zelos 7)', 'irons'],
+  ['irons 6-P steel S-flex ~78g (Nippon N.S. Pro Zelos 7)', 'irons'],
   ['irons 6-P graphite 50g R-flex (Fujikura Ventus)', 'irons'],
   ['Jaws Forged 52°/56° Dynamic Gold S200', 'wedges'],
   ['Jaws Raw 54°/58° Dynamic Gold S200', 'wedges'],
@@ -73,13 +73,13 @@ for (const [input, expected] of [...LIVE, ...NEAR_MISS]) {
 // ── parseVariantSpec ──────────────────────────────────────────────────────
 // A `·`-separated string is a club list and becomes matrix rows.
 const paradymSteel =
-  'Ai Smoke 10.5° 50g R-flex (Mitsubishi Chemical) · Paradym 3W 15° + 5W 18° 50g SR-flex (Fujikura Ventus) · irons 6-P steel S-flex (Nippon N.S. Pro Zelos 7) · Jaws Forged 52°/56° Dynamic Gold S200 · Odyssey Tri-Beam 70g (Stroke Lab)'
+  'Ai Smoke 10.5° 50g R-flex (Mitsubishi Chemical) · Paradym 3W 15° + 5W 18° 50g SR-flex (Fujikura Ventus) · irons 6-P steel S-flex ~78g (Nippon N.S. Pro Zelos 7) · Jaws Forged 52°/56° Dynamic Gold S200 · Odyssey Tri-Beam 70g (Stroke Lab)'
 const parsed = parseVariantSpec(paradymSteel)
 check('paradym steel row order', parsed?.map((p) => p.row), ['driver', 'wood', 'irons', 'wedges', 'putter'])
 check(
   'paradym steel strips the redundant Irons noun',
   parsed?.find((p) => p.row === 'irons')?.text,
-  '6-P steel S-flex (Nippon N.S. Pro Zelos 7)'
+  '6-P steel S-flex ~78g (Nippon N.S. Pro Zelos 7)'
 )
 
 // A string with NO separator is a free-text note, not a club list. Parsing the
@@ -111,9 +111,10 @@ const SPLITS: [string, { spec: string; shaft: string | null; flex: string | null
   ['Paradym 10.5° 50g R-flex (Fujikura Ventus)', { spec: 'Paradym 10.5°', shaft: 'Fujikura Ventus', flex: 'R', weight: '50g' }],
   ['Paradym 5W 18° 50g R-flex (Fujikura Ventus)', { spec: 'Paradym 5W 18°', shaft: 'Fujikura Ventus', flex: 'R', weight: '50g' }],
   ['6-P graphite 50g R-flex (Fujikura Ventus)', { spec: '6-P graphite', shaft: 'Fujikura Ventus', flex: 'R', weight: '50g' }],
-  // The sheet gives NO weight for the steel irons or either wedge set. Nothing
-  // may be inferred into those cells from a catalogue.
-  ['6-P steel S-flex (Nippon N.S. Pro Zelos 7)', { spec: '6-P steel', shaft: 'Nippon N.S. Pro Zelos 7', flex: 'S', weight: null }],
+  // The steel irons carry the shaft MAKER'S published figure, marked with a
+  // leading ~ so it reads differently from the owner's measured 50g. The wedge
+  // sets still have neither and must stay blank.
+  ['6-P steel S-flex ~78g (Nippon N.S. Pro Zelos 7)', { spec: '6-P steel', shaft: 'Nippon N.S. Pro Zelos 7', flex: 'S', weight: '~78g' }],
   ['Jaws Forged 52°/56° Dynamic Gold S200', { spec: 'Jaws Forged 52°/56°', shaft: 'Dynamic Gold S200', flex: null, weight: null }],
   ['Jaws Raw 54°/58° Dynamic Gold S200', { spec: 'Jaws Raw 54°/58°', shaft: 'Dynamic Gold S200', flex: null, weight: null }],
   // Putters: weight and shaft, no flex.

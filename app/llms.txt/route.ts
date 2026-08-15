@@ -53,6 +53,7 @@ const KEY_PAGES: { title: string; path: string; desc: string }[] = [
   { title: 'Food & Drinks Menu', path: '/menu/', desc: 'Full menu with THB prices: Smith & Co burgers, Sexy Pizza, cocktails, beer, wine, and unlimited soft drinks.' },
   { title: 'Golf Club Rental', path: '/golf-club-rental/', desc: 'Free house sets plus premium Callaway rentals at the venue.' },
   { title: 'Golf Course Club Rental', path: '/golf-course-club-rental/', desc: 'Rent premium clubs for any Bangkok golf course, with delivery.' },
+  { title: 'Rental Club Specifications', path: '/golf-club-specs/', desc: 'Club-by-club specs for every rental set: lofts, shaft models, shaft weight and flex for the Callaway Paradym (steel and graphite bags), Warbird and REVA, plus the left-handed set, with photos of the real bags.' },
   { title: 'About LENGOLF', path: '/about-us/', desc: 'About the venue, location, and contact details.' },
   { title: 'FAQ', path: '/faq/', desc: 'Quick answers: bay prices, lessons, free club rental, walk-ins, group events, food and drink, opening hours, and step-by-step directions from BTS Chidlom.' },
   { title: 'Golf Courses in Thailand', path: '/golf-courses/', desc: 'Directory of Thai golf courses by region with green fees and course guides.' },

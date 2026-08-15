@@ -984,8 +984,15 @@ const SSG_UI_NAMESPACES: Record<string, Locale[]> = (() => {
   // helper exists for a single static path, so derive its SSG locales
   // directly from the registry (currently th only).
   const hub = LOCALES.filter((l) => hasTranslationForLocale(l, '/golf-courses'))
+  // The club spec sheet (/golf-club-specs). Like `hub` above it is a single
+  // static path with no registry helper, so its SSG locales come straight from
+  // the route registry — currently en + th. Registered here so the next EN-only
+  // key added to ClubSpecs fails CI instead of silently English-falling-back on
+  // the Thai sheet.
+  const clubSpecs = LOCALES.filter((l) => hasTranslationForLocale(l, '/golf-club-specs'))
   return {
     GolfCourseHub: hub,
+    ClubSpecs: clubSpecs,
     GolfCourseRegion: regionHub,
     GolfCoursePriceTier: priceTier,
     // Course-detail pages (CoursePage/CourseFaq + the [slug] route).

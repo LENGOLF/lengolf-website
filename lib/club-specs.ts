@@ -129,10 +129,15 @@ const FLEX = /\b(Uniflex|(?:R2|SR|TX|[RSXAL])[-\s]?flex)\s*$/i
 /**
  * Shaft weight, written on the sheets as "50g" / "70g".
  *
+ * A leading "~" marks a MANUFACTURER-PUBLISHED figure rather than one the owner
+ * measured (e.g. "~78g" for the Nippon Zelos 7 S). The tilde is carried through
+ * to the rendered cell on purpose — the two are different kinds of claim and
+ * the table says which is which rather than blending them.
+ *
  * Requires digits immediately before the g so it cannot fire on a shaft NAME —
  * "Dynamic Gold S200" must not yield a weight, and neither must "S200" itself.
  */
-const WEIGHT = /\b(\d{2,3})\s*g\b/i
+const WEIGHT = /(~?\d{2,3}(?:\.\d)?)\s*g\b/i
 
 export function splitClubPart(text: string): {
   spec: string
@@ -152,23 +157,24 @@ export function splitClubPart(text: string): {
     rest = rest.slice(0, paren.index).trim()
   }
 
+  // Weight comes out BEFORE flex. The sheets write it on either side of the
+  // flex ("10.5° 50g R-flex" but also "S-flex ~78g"), and since FLEX is
+  // end-anchored, a trailing weight would otherwise hide the flex completely —
+  // the Zelos row lost its "S" exactly that way.
+  const weightMatch = rest.match(WEIGHT)
+  if (weightMatch) {
+    weight = `${weightMatch[1]}g`.replace(/\s+/g, '')
+    rest = (rest.slice(0, weightMatch.index) + rest.slice(weightMatch.index! + weightMatch[0].length))
+      .replace(/\s{2,}/g, ' ')
+      .trim()
+  }
+
   const flexMatch = rest.match(FLEX)
   if (flexMatch) {
     // Normalise "R-flex" / "S FLEX" to a bare "R" / "S"; keep "Uniflex" whole.
     const raw = flexMatch[1]
     flex = /uniflex/i.test(raw) ? 'Uniflex' : raw.replace(/[-\s]?flex$/i, '').toUpperCase()
     rest = (rest.slice(0, flexMatch.index) + rest.slice(flexMatch.index! + raw.length)).replace(/\s{2,}/g, ' ').trim()
-  }
-
-  // Weight is pulled AFTER flex so "50g R-flex" leaves a clean remainder, and
-  // BEFORE the inline-shaft lookup so a trailing weight cannot block the
-  // end-anchored shaft match.
-  const weightMatch = rest.match(WEIGHT)
-  if (weightMatch) {
-    weight = `${weightMatch[1]}g`
-    rest = (rest.slice(0, weightMatch.index) + rest.slice(weightMatch.index! + weightMatch[0].length))
-      .replace(/\s{2,}/g, ' ')
-      .trim()
   }
 
   // Only look for an inline shaft if the parenthetical did not already give us one.
