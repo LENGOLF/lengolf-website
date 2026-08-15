@@ -116,6 +116,23 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/bangkok/royal-gems-golf-sports-club",
       "/golf-courses/pattaya/burapha-golf-club",
       "/golf-courses/pattaya/laem-chabang-international",
+      // Batch 4 (2026-08) — the southern/island sweep. Completes phuket,
+      // krabi, khao-lak, koh-samui and southern-thailand to 100% of their
+      // rosters, so a locale reader on those region hubs no longer lands on a
+      // mixed-language list where most course links fall back to English.
+      "/golf-courses/phuket/aquella-golf-country-club",
+      "/golf-courses/phuket/blue-canyon-canyon-course",
+      "/golf-courses/phuket/laguna-golf-phuket",
+      "/golf-courses/phuket/loch-palm-golf-club",
+      "/golf-courses/phuket/mission-hills-phuket",
+      "/golf-courses/phuket/red-mountain-golf-club",
+      "/golf-courses/krabi/pakasai-country-club",
+      "/golf-courses/khao-lak/katathong-golf-resort",
+      "/golf-courses/koh-samui/rajjaprabha-dam-golf-course",
+      "/golf-courses/koh-samui/santiburi-samui-country-club",
+      "/golf-courses/southern-thailand/hat-yai-resort-golf-club",
+      "/golf-courses/southern-thailand/southern-hills-golf-country-club",
+      "/golf-courses/southern-thailand/sri-trang-golf-club",
       // Translated FAQ pages (data/faq-pages.ts entries with locale: 'th') —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -291,6 +308,23 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/bangkok/royal-gems-golf-sports-club",
       "/golf-courses/pattaya/burapha-golf-club",
       "/golf-courses/pattaya/laem-chabang-international",
+      // Batch 4 (2026-08) — the southern/island sweep. Completes phuket,
+      // krabi, khao-lak, koh-samui and southern-thailand to 100% of their
+      // rosters, so a locale reader on those region hubs no longer lands on a
+      // mixed-language list where most course links fall back to English.
+      "/golf-courses/phuket/aquella-golf-country-club",
+      "/golf-courses/phuket/blue-canyon-canyon-course",
+      "/golf-courses/phuket/laguna-golf-phuket",
+      "/golf-courses/phuket/loch-palm-golf-club",
+      "/golf-courses/phuket/mission-hills-phuket",
+      "/golf-courses/phuket/red-mountain-golf-club",
+      "/golf-courses/krabi/pakasai-country-club",
+      "/golf-courses/khao-lak/katathong-golf-resort",
+      "/golf-courses/koh-samui/rajjaprabha-dam-golf-course",
+      "/golf-courses/koh-samui/santiburi-samui-country-club",
+      "/golf-courses/southern-thailand/hat-yai-resort-golf-club",
+      "/golf-courses/southern-thailand/southern-hills-golf-country-club",
+      "/golf-courses/southern-thailand/sri-trang-golf-club",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -498,6 +532,23 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/bangkok/royal-gems-golf-sports-club",
       "/golf-courses/pattaya/burapha-golf-club",
       "/golf-courses/pattaya/laem-chabang-international",
+      // Batch 4 (2026-08) — the southern/island sweep. Completes phuket,
+      // krabi, khao-lak, koh-samui and southern-thailand to 100% of their
+      // rosters, so a locale reader on those region hubs no longer lands on a
+      // mixed-language list where most course links fall back to English.
+      "/golf-courses/phuket/aquella-golf-country-club",
+      "/golf-courses/phuket/blue-canyon-canyon-course",
+      "/golf-courses/phuket/laguna-golf-phuket",
+      "/golf-courses/phuket/loch-palm-golf-club",
+      "/golf-courses/phuket/mission-hills-phuket",
+      "/golf-courses/phuket/red-mountain-golf-club",
+      "/golf-courses/krabi/pakasai-country-club",
+      "/golf-courses/khao-lak/katathong-golf-resort",
+      "/golf-courses/koh-samui/rajjaprabha-dam-golf-course",
+      "/golf-courses/koh-samui/santiburi-samui-country-club",
+      "/golf-courses/southern-thailand/hat-yai-resort-golf-club",
+      "/golf-courses/southern-thailand/southern-hills-golf-country-club",
+      "/golf-courses/southern-thailand/sri-trang-golf-club",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -697,6 +748,23 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/bangkok/royal-gems-golf-sports-club",
       "/golf-courses/pattaya/burapha-golf-club",
       "/golf-courses/pattaya/laem-chabang-international",
+      // Batch 4 (2026-08) — the southern/island sweep. Completes phuket,
+      // krabi, khao-lak, koh-samui and southern-thailand to 100% of their
+      // rosters, so a locale reader on those region hubs no longer lands on a
+      // mixed-language list where most course links fall back to English.
+      "/golf-courses/phuket/aquella-golf-country-club",
+      "/golf-courses/phuket/blue-canyon-canyon-course",
+      "/golf-courses/phuket/laguna-golf-phuket",
+      "/golf-courses/phuket/loch-palm-golf-club",
+      "/golf-courses/phuket/mission-hills-phuket",
+      "/golf-courses/phuket/red-mountain-golf-club",
+      "/golf-courses/krabi/pakasai-country-club",
+      "/golf-courses/khao-lak/katathong-golf-resort",
+      "/golf-courses/koh-samui/rajjaprabha-dam-golf-course",
+      "/golf-courses/koh-samui/santiburi-samui-country-club",
+      "/golf-courses/southern-thailand/hat-yai-resort-golf-club",
+      "/golf-courses/southern-thailand/southern-hills-golf-country-club",
+      "/golf-courses/southern-thailand/sri-trang-golf-club",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.

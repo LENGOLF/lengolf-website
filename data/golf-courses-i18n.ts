@@ -515,6 +515,27 @@ export const COURSE_DETAIL_I18N: {
   { region: 'bangkok', slug: 'royal-gems-golf-sports-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'pattaya', slug: 'burapha-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'pattaya', slug: 'laem-chabang-international', locales: ['th', 'ja', 'ko', 'zh'] },
+  // Batch 4 (2026-08) — the southern/island sweep. Selection is roster
+  // completion, not GSC demand: these 13 finish every course in phuket,
+  // krabi, khao-lak, koh-samui and southern-thailand, taking those five
+  // regions to 100%. The point is the hub→detail funnel — a ja reader on
+  // /ja/golf-courses/phuket/ previously saw 8 courses of which 6 links 301'd
+  // them to English. Note aquella and katathong sit in the phuket and
+  // khao-lak region directories but are both in PHANG NGA province; the
+  // directory builds the URL, the province feeds PROVINCE_L10N.
+  { region: 'phuket', slug: 'aquella-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'phuket', slug: 'blue-canyon-canyon-course', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'phuket', slug: 'laguna-golf-phuket', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'phuket', slug: 'loch-palm-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'phuket', slug: 'mission-hills-phuket', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'phuket', slug: 'red-mountain-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'krabi', slug: 'pakasai-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'khao-lak', slug: 'katathong-golf-resort', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'koh-samui', slug: 'rajjaprabha-dam-golf-course', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'koh-samui', slug: 'santiburi-samui-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'southern-thailand', slug: 'hat-yai-resort-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'southern-thailand', slug: 'southern-hills-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'southern-thailand', slug: 'sri-trang-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
 ]
 
 /**
