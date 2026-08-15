@@ -152,7 +152,7 @@ export default async function GolfClubSpecsPage({ params }: { params: Promise<{ 
           sheet is a clean thing to paste into a LINE chat. It carries its own
           minimal brand bar and footer instead. */}
       <header className="border-b border-primary/15 bg-white">
-        <div className="section-max-width section-padding flex items-center justify-between py-4">
+        <div className="section-max-width section-padding flex items-center justify-between gap-3 py-3 sm:py-4">
           <Link href="/" className="flex items-center gap-2.5">
             <Image
               src={storageUrl('branding/logo.png')}
@@ -232,8 +232,34 @@ export default async function GolfClubSpecsPage({ params }: { params: Promise<{ 
 
         {/* ── At-a-glance comparison ── */}
         <section className="mt-14">
-          <h2 className="mb-4 text-2xl font-bold italic">{t('compareTitle')}</h2>
-          <div className="overflow-x-auto rounded-xl border border-primary/20">
+          <h2 className="mb-4 text-xl font-bold italic sm:text-2xl">{t('compareTitle')}</h2>
+
+          {/* Phones: one card per set. Five columns cannot be read on a 375px
+              screen no matter how the overflow is handled. */}
+          <ul className="space-y-2 sm:hidden">
+            {sets.map((set) => {
+              const shots = totalShots(set)
+              return (
+                <li key={set.slug} className="rounded-xl border border-primary/20 p-3">
+                  <a href={`#${set.slug}`} className="font-semibold text-primary hover:underline">
+                    {setShortName(set.name)}
+                  </a>
+                  <p className="mt-0.5 text-sm text-muted-foreground">
+                    {tierLabel(set.tier)} · {genderLabel(set.gender)}
+                  </p>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {set.variants.length > 0
+                      ? set.variants.map((v) => v.label ?? v.key).join(' / ')
+                      : t('noOptions')}
+                    {' · '}
+                    {shots > 0 ? t('photoCount', { count: shots }) : t('noPhotos')}
+                  </p>
+                </li>
+              )
+            })}
+          </ul>
+
+          <div className="hidden overflow-x-auto rounded-xl border border-primary/20 sm:block">
             <table className="w-auto min-w-full border-collapse text-sm">
               <caption className="sr-only">{t('compareTitle')}</caption>
               <thead>
@@ -430,22 +456,34 @@ function SetBlock({
         <div className="mb-6">
           <h3 className="mb-2 text-sm font-bold uppercase tracking-wider text-muted-foreground">{t('inTheBag')}</h3>
           {allSplit ? (
-            // Same nowrap + scroll treatment as the spec matrix. Missing it
-            // here meant "TaylorMade RBZ 10.5° (Stiff)" still broke across two
-            // lines on a phone — the left-handed set is authored as label/value
-            // pairs, so it renders through this branch rather than the matrix.
-            <div className="overflow-x-auto rounded-lg border border-primary/15">
-              <table className="w-auto min-w-full border-collapse text-sm">
-                <tbody>
-                  {splitEntries.map((e, i) => (
-                    <tr key={i} className="border-b border-primary/10 last:border-b-0 [&>*]:whitespace-nowrap">
-                      <th scope="row" className="bg-primary/5 px-3 py-2 text-left font-semibold">{e.split!.label}</th>
-                      <td className="px-3 py-2 text-muted-foreground">{e.split!.value}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <>
+              {/* Phones: stacked label-over-value, so a long entry like
+                  "Ping i20 (Left-Handed, Regular)" wraps naturally in the
+                  space it has instead of forcing the row sideways. */}
+              <dl className="space-y-2 sm:hidden">
+                {splitEntries.map((e, i) => (
+                  <div key={i} className="rounded-lg border border-primary/15 px-3 py-2">
+                    <dt className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                      {e.split!.label}
+                    </dt>
+                    <dd className="mt-0.5 text-sm">{e.split!.value}</dd>
+                  </div>
+                ))}
+              </dl>
+
+              <div className="hidden overflow-x-auto rounded-lg border border-primary/15 sm:block">
+                <table className="w-auto min-w-full border-collapse text-sm">
+                  <tbody>
+                    {splitEntries.map((e, i) => (
+                      <tr key={i} className="border-b border-primary/10 last:border-b-0 [&>*]:whitespace-nowrap">
+                        <th scope="row" className="bg-primary/5 px-3 py-2 text-left font-semibold">{e.split!.label}</th>
+                        <td className="px-3 py-2 text-muted-foreground">{e.split!.value}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
           ) : (
             <ul className="flex flex-wrap gap-x-2 gap-y-2">
               {set.specifications.map((spec, i) => (
@@ -468,21 +506,64 @@ function SetBlock({
           <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">{t('fullSpecs')}</h3>
           {matrixColumns.map((c) => {
             const rows = SPEC_ROWS.filter((row) => c.parts.some((p) => p.row === row))
+            const cells = (row: SpecRow) => {
+              const hits = c.parts.filter((p) => p.row === row).map((p) => splitClubPart(p.text))
+              const join = (vals: (string | null)[]) => {
+                const seen = [...new Set(vals.filter((v): v is string => !!v))]
+                return seen.length > 0 ? seen.join(' · ') : '—'
+              }
+              return {
+                spec: join(hits.map((h) => h.spec)),
+                shaft: join(hits.map((h) => h.shaft)),
+                weight: join(hits.map((h) => h.weight)),
+                flex: join(hits.map((h) => h.flex)),
+              }
+            }
+            const label = c.variant.label ?? c.variant.key
             return (
               <div key={c.variant.key}>
-                <p className="mb-1.5 text-xs font-bold uppercase tracking-wider text-primary">
-                  {c.variant.label ?? c.variant.key}
-                </p>
-                <div className="overflow-x-auto rounded-lg border border-primary/20">
+                <p className="mb-1.5 text-xs font-bold uppercase tracking-wider text-primary">{label}</p>
+
+                {/* Phones get one card per club instead of a five-column table.
+                    Sideways-scrolling a table to read a spec is miserable on
+                    the device this sheet is actually opened on, and the
+                    previous nowrap-plus-scroll only stopped the text breaking
+                    — it did not make the table readable. Values that are just
+                    an em dash are dropped rather than shown as empty rows. */}
+                <div className="space-y-2 sm:hidden">
+                  {rows.map((row) => {
+                    const v = cells(row)
+                    const facts: [string, string][] = [
+                      [t('colShaft'), v.shaft],
+                      [t('colWeight'), v.weight],
+                      [t('colFlex'), v.flex],
+                    ]
+                    return (
+                      <div key={row} className="rounded-lg border border-primary/20 p-3">
+                        <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                          {rowLabel(row)}
+                        </p>
+                        <p className="mt-0.5 font-semibold">{v.spec}</p>
+                        <dl className="mt-2 space-y-1 text-sm">
+                          {facts
+                            .filter(([, value]) => value !== '—')
+                            .map(([k, value]) => (
+                              <div key={k} className="flex gap-2">
+                                <dt className="shrink-0 text-muted-foreground">{k}</dt>
+                                <dd className="font-medium">{value}</dd>
+                              </div>
+                            ))}
+                        </dl>
+                      </div>
+                    )
+                  })}
+                </div>
+
+                <div className="hidden overflow-x-auto rounded-lg border border-primary/20 sm:block">
                   <table className="w-auto min-w-full border-collapse text-sm">
                     <caption className="sr-only">
-                      {t('fullSpecsCaption', { name: `${setShortName(set.name)} — ${c.variant.label ?? c.variant.key}` })}
+                      {t('fullSpecsCaption', { name: `${setShortName(set.name)} — ${label}` })}
                     </caption>
-                    {/* Every cell is nowrap: a shaft model split across two
-                        lines ("Nippon N.S. Pro / Zelos 7") is hard to scan and
-                        hard to quote back to a customer. The wrapper scrolls
-                        horizontally instead, which is the right trade for a
-                        reference table on a phone. */}
                     <thead>
                       <tr className="bg-primary/5 text-left [&>th]:whitespace-nowrap">
                         <th scope="col" className="px-3 py-2.5 font-bold">{t('colClub')}</th>
@@ -494,22 +575,16 @@ function SetBlock({
                     </thead>
                     <tbody>
                       {rows.map((row) => {
-                        const hits = c.parts.filter((p) => p.row === row).map((p) => splitClubPart(p.text))
-                        const join = (vals: (string | null)[]) => {
-                          const seen = [...new Set(vals.filter((v): v is string => !!v))]
-                          return seen.length > 0 ? seen.join(' · ') : '—'
-                        }
+                        const v = cells(row)
                         return (
                           <tr key={row} className="border-t border-primary/15 [&>*]:whitespace-nowrap">
                             <th scope="row" className="px-3 py-2.5 text-left font-semibold">{rowLabel(row)}</th>
-                            <td className="px-3 py-2.5 text-muted-foreground">{join(hits.map((h) => h.spec))}</td>
-                            <td className="px-3 py-2.5 text-muted-foreground">{join(hits.map((h) => h.shaft))}</td>
+                            <td className="px-3 py-2.5 text-muted-foreground">{v.spec}</td>
+                            <td className="px-3 py-2.5 text-muted-foreground">{v.shaft}</td>
                             {/* Em dash where the owner's sheet records no
-                                weight (steel irons, both wedge sets). A
-                                catalogue figure is a different claim from a
-                                measured one and must not be blended in. */}
-                            <td className="px-3 py-2.5 text-muted-foreground">{join(hits.map((h) => h.weight))}</td>
-                            <td className="px-3 py-2.5 text-muted-foreground">{join(hits.map((h) => h.flex))}</td>
+                                weight (steel irons, both wedge sets). */}
+                            <td className="px-3 py-2.5 text-muted-foreground">{v.weight}</td>
+                            <td className="px-3 py-2.5 text-muted-foreground">{v.flex}</td>
                           </tr>
                         )
                       })}
@@ -519,11 +594,6 @@ function SetBlock({
               </div>
             )
           })}
-          {/* Only shown when a "~" figure is actually on screen, so the sheet
-              does not carry a footnote about a distinction it is not making. */}
-          {matrixColumns.some((c) => c.parts.some((p) => splitClubPart(p.text).weight?.startsWith('~'))) && (
-            <p className="text-xs text-muted-foreground">{t('estimateNote')}</p>
-          )}
         </div>
       )}
 
