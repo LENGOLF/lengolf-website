@@ -354,7 +354,7 @@ export async function getRentalClubSetsForSpecSheet(
 // Spec-sheet parsing lives in lib/club-specs.ts — it imports no server-only
 // module, so `npm run validate:club-specs` can exercise it directly.
 // Re-exported here so existing import sites keep working.
-export { SPEC_ROWS, classifySpecPart, stripRowNoun, parseVariantSpec, splitSpecEntry } from './club-specs'
+export { SPEC_ROWS, classifySpecPart, stripRowNoun, parseVariantSpec, splitClubPart, splitSpecEntry } from './club-specs'
 export type { SpecRow } from './club-specs'
 
 export async function getRelatedClubs(club: UsedClub, limit = 3): Promise<UsedClub[]> {
