@@ -97,7 +97,15 @@ check('single separated part is not a matrix', parseVariantSpec('Driver 10.5° �
 check('strips leading noun', stripRowNoun('irons 6-P steel', 'irons'), '6-P steel')
 check('strips colon form', stripRowNoun('Irons: 6-P steel', 'irons'), '6-P steel')
 // A cell that is nothing BUT its noun must keep its text rather than go blank.
+// The trailing space matters and is the whole point: 'irons' alone never
+// matches the pattern (it requires a separator after the noun), so it exercises
+// nothing. 'irons ' DOES match, strips to empty, and is the only input that
+// reaches the `out.length > 0 ? out : text` fallback. Mutation testing caught
+// this — with only the spaceless case, deleting that fallback stayed green.
 check('noun-only text survives', stripRowNoun('irons', 'irons'), 'irons')
+check('noun-plus-space does not blank the cell', stripRowNoun('irons ', 'irons'), 'irons ')
+check('noun-plus-colon does not blank the cell', stripRowNoun('Irons: ', 'irons'), 'Irons: ')
+check('wedge noun-only does not blank the cell', stripRowNoun('wedges  ', 'wedges'), 'wedges  ')
 check('non-leading occurrence untouched', stripRowNoun('Jaws matched to iron shafts', 'wedges'), 'Jaws matched to iron shafts')
 check('row without a noun rule is untouched', stripRowNoun('Callaway tour bag', 'bag'), 'Callaway tour bag')
 
