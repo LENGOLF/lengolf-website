@@ -542,11 +542,24 @@ export const COURSE_DETAIL_I18N: {
   // chatrium-golf-resort-soi-dao is Chanthaburi and kabinburi-sportclub is
   // Prachin Buri — both added to PROVINCE_L10N in 35c7e15.
   //
-  // phoenix-gold-golf-club-pattaya is deliberately NOT here. It is one half of
-  // an unresolved duplicate: bangkok/phoenix-gold-golf-country-club carries the
-  // same club name and the same website with contradictory data (36 vs 27
-  // holes, B999 vs B3,000, coordinates ~115km apart). Translating it would turn
-  // a 2-page duplicate into a 10-page one. Needs the slug merge first.
+  // NATIVE-LANGUAGE QA HAS NOT RUN on the 14 pattaya entries below. The
+  // southern/island entries above them HAVE had full th/ja/ko/zh native reads.
+  // Do not treat the two groups as equally reviewed.
+  //
+  // Pattaya is 17 of 25, not complete: a spend limit killed 7 builders
+  // mid-edit and those files were reverted to pristine rather than registered
+  // half-written.
+  //
+  // phoenix-gold-golf-club-pattaya is also still untranslated, but NOT because
+  // it is a duplicate. An earlier revision of this comment claimed that and
+  // was WRONG — it inverted the evidence, reading 36-vs-27 holes, different
+  // provinces and coordinates 115km apart as proof of duplication when they
+  // are proof of two DIFFERENT clubs under common ownership (hence the shared
+  // website). docs/golf-course-content-audit-2026-07.md item 8 is the primary
+  // source: the merge pair is bangkok/suvarnabhumi-golf-country-club <->
+  // bangkok/phoenix-gold-golf-country-club (one 36-hole RTJ Jr. course in Nong
+  // Chok), and pattaya/phoenix-gold-golf-club-pattaya "is the genuine Pattaya
+  // sister". It should simply be translated in the next batch.
   { region: 'pattaya', slug: 'amata-spring-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'pattaya', slug: 'bangpra-international-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'pattaya', slug: 'chatrium-golf-resort-soi-dao', locales: ['th', 'ja', 'ko', 'zh'] },

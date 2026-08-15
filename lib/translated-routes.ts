@@ -133,12 +133,25 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/southern-thailand/hat-yai-resort-golf-club",
       "/golf-courses/southern-thailand/southern-hills-golf-country-club",
       "/golf-courses/southern-thailand/sri-trang-golf-club",
-      // Batch 5 wave 1 (2026-08) — the Pattaya/eastern-seaboard sweep.
-      // phoenix-gold-golf-club-pattaya is deliberately EXCLUDED pending the
-      // Phoenix Gold slug merge: bangkok/phoenix-gold-golf-country-club is a
-      // second published page for the same club (same name, same website)
-      // with contradictory data, and translating one half of an unresolved
-      // duplicate would ship 4 more indexed pages plus hreflang.
+      // Batch 5 (2026-08) — the Pattaya/eastern-seaboard sweep, INCOMPLETE.
+      // Pattaya is 17 of 25: an account spend limit killed 7 builders mid-edit
+      // (rayong-green-valley, the three Siam Country Club courses,
+      // st-andrews-2000, the-emerald, treasure-hill), and those files were
+      // reverted to pristine rather than registered half-written.
+      //
+      // NATIVE-LANGUAGE QA HAS NOT RUN on the 14 Pattaya entries below. The
+      // 13 southern/island entries above it HAVE had full th/ja/ko/zh native
+      // reads. Do not treat the two groups as equally reviewed.
+      //
+      // phoenix-gold-golf-club-pattaya is also still untranslated, but NOT
+      // because it is a duplicate — an earlier revision of this comment said
+      // so and was wrong. Per docs/golf-course-content-audit-2026-07.md item 8,
+      // the merge pair is bangkok/suvarnabhumi-golf-country-club <->
+      // bangkok/phoenix-gold-golf-country-club (one 36-hole course in Nong
+      // Chok); pattaya/phoenix-gold-golf-club-pattaya "is the genuine Pattaya
+      // sister". The differing holes/province/coordinates are evidence of two
+      // DIFFERENT clubs, not one duplicated; the shared website is common
+      // ownership. It should simply be translated in the next batch.
       "/golf-courses/pattaya/amata-spring-country-club",
       "/golf-courses/pattaya/bangpra-international-golf-club",
       "/golf-courses/pattaya/chatrium-golf-resort-soi-dao",
@@ -345,12 +358,25 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/southern-thailand/hat-yai-resort-golf-club",
       "/golf-courses/southern-thailand/southern-hills-golf-country-club",
       "/golf-courses/southern-thailand/sri-trang-golf-club",
-      // Batch 5 wave 1 (2026-08) — the Pattaya/eastern-seaboard sweep.
-      // phoenix-gold-golf-club-pattaya is deliberately EXCLUDED pending the
-      // Phoenix Gold slug merge: bangkok/phoenix-gold-golf-country-club is a
-      // second published page for the same club (same name, same website)
-      // with contradictory data, and translating one half of an unresolved
-      // duplicate would ship 4 more indexed pages plus hreflang.
+      // Batch 5 (2026-08) — the Pattaya/eastern-seaboard sweep, INCOMPLETE.
+      // Pattaya is 17 of 25: an account spend limit killed 7 builders mid-edit
+      // (rayong-green-valley, the three Siam Country Club courses,
+      // st-andrews-2000, the-emerald, treasure-hill), and those files were
+      // reverted to pristine rather than registered half-written.
+      //
+      // NATIVE-LANGUAGE QA HAS NOT RUN on the 14 Pattaya entries below. The
+      // 13 southern/island entries above it HAVE had full th/ja/ko/zh native
+      // reads. Do not treat the two groups as equally reviewed.
+      //
+      // phoenix-gold-golf-club-pattaya is also still untranslated, but NOT
+      // because it is a duplicate — an earlier revision of this comment said
+      // so and was wrong. Per docs/golf-course-content-audit-2026-07.md item 8,
+      // the merge pair is bangkok/suvarnabhumi-golf-country-club <->
+      // bangkok/phoenix-gold-golf-country-club (one 36-hole course in Nong
+      // Chok); pattaya/phoenix-gold-golf-club-pattaya "is the genuine Pattaya
+      // sister". The differing holes/province/coordinates are evidence of two
+      // DIFFERENT clubs, not one duplicated; the shared website is common
+      // ownership. It should simply be translated in the next batch.
       "/golf-courses/pattaya/amata-spring-country-club",
       "/golf-courses/pattaya/bangpra-international-golf-club",
       "/golf-courses/pattaya/chatrium-golf-resort-soi-dao",
@@ -589,12 +615,25 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/southern-thailand/hat-yai-resort-golf-club",
       "/golf-courses/southern-thailand/southern-hills-golf-country-club",
       "/golf-courses/southern-thailand/sri-trang-golf-club",
-      // Batch 5 wave 1 (2026-08) — the Pattaya/eastern-seaboard sweep.
-      // phoenix-gold-golf-club-pattaya is deliberately EXCLUDED pending the
-      // Phoenix Gold slug merge: bangkok/phoenix-gold-golf-country-club is a
-      // second published page for the same club (same name, same website)
-      // with contradictory data, and translating one half of an unresolved
-      // duplicate would ship 4 more indexed pages plus hreflang.
+      // Batch 5 (2026-08) — the Pattaya/eastern-seaboard sweep, INCOMPLETE.
+      // Pattaya is 17 of 25: an account spend limit killed 7 builders mid-edit
+      // (rayong-green-valley, the three Siam Country Club courses,
+      // st-andrews-2000, the-emerald, treasure-hill), and those files were
+      // reverted to pristine rather than registered half-written.
+      //
+      // NATIVE-LANGUAGE QA HAS NOT RUN on the 14 Pattaya entries below. The
+      // 13 southern/island entries above it HAVE had full th/ja/ko/zh native
+      // reads. Do not treat the two groups as equally reviewed.
+      //
+      // phoenix-gold-golf-club-pattaya is also still untranslated, but NOT
+      // because it is a duplicate — an earlier revision of this comment said
+      // so and was wrong. Per docs/golf-course-content-audit-2026-07.md item 8,
+      // the merge pair is bangkok/suvarnabhumi-golf-country-club <->
+      // bangkok/phoenix-gold-golf-country-club (one 36-hole course in Nong
+      // Chok); pattaya/phoenix-gold-golf-club-pattaya "is the genuine Pattaya
+      // sister". The differing holes/province/coordinates are evidence of two
+      // DIFFERENT clubs, not one duplicated; the shared website is common
+      // ownership. It should simply be translated in the next batch.
       "/golf-courses/pattaya/amata-spring-country-club",
       "/golf-courses/pattaya/bangpra-international-golf-club",
       "/golf-courses/pattaya/chatrium-golf-resort-soi-dao",
@@ -825,12 +864,25 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/southern-thailand/hat-yai-resort-golf-club",
       "/golf-courses/southern-thailand/southern-hills-golf-country-club",
       "/golf-courses/southern-thailand/sri-trang-golf-club",
-      // Batch 5 wave 1 (2026-08) — the Pattaya/eastern-seaboard sweep.
-      // phoenix-gold-golf-club-pattaya is deliberately EXCLUDED pending the
-      // Phoenix Gold slug merge: bangkok/phoenix-gold-golf-country-club is a
-      // second published page for the same club (same name, same website)
-      // with contradictory data, and translating one half of an unresolved
-      // duplicate would ship 4 more indexed pages plus hreflang.
+      // Batch 5 (2026-08) — the Pattaya/eastern-seaboard sweep, INCOMPLETE.
+      // Pattaya is 17 of 25: an account spend limit killed 7 builders mid-edit
+      // (rayong-green-valley, the three Siam Country Club courses,
+      // st-andrews-2000, the-emerald, treasure-hill), and those files were
+      // reverted to pristine rather than registered half-written.
+      //
+      // NATIVE-LANGUAGE QA HAS NOT RUN on the 14 Pattaya entries below. The
+      // 13 southern/island entries above it HAVE had full th/ja/ko/zh native
+      // reads. Do not treat the two groups as equally reviewed.
+      //
+      // phoenix-gold-golf-club-pattaya is also still untranslated, but NOT
+      // because it is a duplicate — an earlier revision of this comment said
+      // so and was wrong. Per docs/golf-course-content-audit-2026-07.md item 8,
+      // the merge pair is bangkok/suvarnabhumi-golf-country-club <->
+      // bangkok/phoenix-gold-golf-country-club (one 36-hole course in Nong
+      // Chok); pattaya/phoenix-gold-golf-club-pattaya "is the genuine Pattaya
+      // sister". The differing holes/province/coordinates are evidence of two
+      // DIFFERENT clubs, not one duplicated; the shared website is common
+      // ownership. It should simply be translated in the next batch.
       "/golf-courses/pattaya/amata-spring-country-club",
       "/golf-courses/pattaya/bangpra-international-golf-club",
       "/golf-courses/pattaya/chatrium-golf-resort-soi-dao",
