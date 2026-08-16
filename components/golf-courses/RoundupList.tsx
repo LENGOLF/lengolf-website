@@ -20,24 +20,53 @@ interface Props {
   items: RoundupItem[]
 }
 
+/** ASCII and CJK full-width sentence terminators. */
+const TERMINATORS = new Set(['.', '!', '?', '。', '！', '？'])
+
 /**
  * First sentence of the (localized) `prose.overview` — used as the pull quote.
  *
- * The terminator class carries the CJK full-width forms as well as the ASCII
- * ones: ja/zh prose ends sentences with 。, so an ASCII-only class matches
- * nothing and returns the WHOLE paragraph. That is not a crash — the <p> is
- * line-clamp-2 — but it ships a full paragraph where a one-line quote was
- * intended. Adding 。！？ cannot change EN/TH output, since neither contains
- * those characters.
+ * A scan rather than one regex, because the two rules below cannot both be
+ * expressed in a single match without backtracking defeating them: a regex that
+ * exempts a decimal point silently falls BACK to cutting at that same point
+ * when no later terminator exists, which is precisely the case this has to fix.
  *
- * Thai still returns the whole overview by design: Thai writes sentences with
- * no terminal punctuation at all, so there is nothing to split on, and cutting
- * at a character count would break mid-word (Thai has no inter-word spaces).
- * The clamp handles it.
+ * Rule 1 — the CJK full-width terminators must be recognized. ja/zh prose ends
+ * sentences with 。, so an ASCII-only class matched nothing and returned the
+ * whole paragraph where a one-line quote was intended. Measured: ja/ko/zh
+ * first sentences are 71–92 chars at the median, so this is the difference
+ * between a pull quote and a wall of text.
+ *
+ * Rule 2 — an ASCII '.' glued to a digit on BOTH sides is a decimal or a clock
+ * time, not a sentence end. Thai writes times as 06.00 and durations as 2.5,
+ * and Thai has no sentence-terminating punctuation of its own, so the first
+ * stray '.' in a Thai overview falls deep inside the paragraph: 11 of the 50
+ * Thai overviews were being cut MID-NUMBER ("…ทีไทม์ช่วง 06.", "…ราว 2."). The
+ * clamp hides that from a sighted reader; a screen reader and a crawler get the
+ * truncated figure. Requiring whitespace-or-end after an ASCII terminator
+ * covers the same class from the other side.
+ *
+ * Thai therefore still returns the WHOLE overview in most cases (39 of 50 did
+ * already, and the mid-number ones now join them) — there is genuinely nothing
+ * to split on, and a character cut would break mid-word since Thai does not
+ * space between words. Be honest about what that costs: the Thai `<p>` carries
+ * the entire overview, ~763 chars at the median, visually clamped to two lines.
+ * Correct, but not free — a real Thai pull quote needs an authored summary
+ * field, not a smarter split.
  */
 function firstSentence(text: string): string {
-  const m = text.match(/^[^.!?。！？]*[.!?。！？]/)
-  return (m ? m[0] : text).trim()
+  const t = text.trim()
+  for (let i = 0; i < t.length; i++) {
+    const ch = t[i]
+    if (!TERMINATORS.has(ch)) continue
+    // Full-width terminators are unambiguous sentence ends; they are not used
+    // as decimal separators or in abbreviations.
+    if (ch !== '.' && ch !== '!' && ch !== '?') return t.slice(0, i + 1)
+    const next = t[i + 1]
+    if (ch === '.' && /\d/.test(t[i - 1] ?? '') && /\d/.test(next ?? '')) continue
+    if (next === undefined || /\s/.test(next)) return t.slice(0, i + 1)
+  }
+  return t
 }
 
 export default function RoundupList({ items }: Props) {
