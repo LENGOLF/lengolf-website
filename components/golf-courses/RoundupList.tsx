@@ -7,7 +7,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import Link from 'next/link'
 import type { GolfCourse } from '@/types/golf-courses'
 import { driveTimeLabel, toFormatLocale, type FormatLocale } from '@/lib/format'
-import { localizedCourseProse } from '@/lib/course-seo'
+import { localizedOverview } from '@/lib/course-seo'
 import { courseDetailHref } from '@/lib/translated-routes'
 
 export interface RoundupItem {
@@ -100,6 +100,10 @@ export default function RoundupList({ items }: Props) {
     <ol className="space-y-4">
       {items.map((item, idx) => {
         const c = item.course
+        // localizedOverview, NOT localizedCourseProse: the pull quote SPLITS the
+        // text, and splitting has to follow the language the text is actually in
+        // — which is English whenever the per-field fallback fired.
+        const overview = localizedOverview(c, locale)
         return (
           <li key={c.slug}>
             <Link
@@ -124,7 +128,7 @@ export default function RoundupList({ items }: Props) {
                 </div>
 
                 <p className="mt-1.5 text-sm leading-relaxed text-foreground/80 line-clamp-2">
-                  {firstSentence(localizedCourseProse(c, locale).overview, locale)}
+                  {firstSentence(overview.text, overview.locale)}
                 </p>
 
                 {/* Chips: fee + drive time + reason */}

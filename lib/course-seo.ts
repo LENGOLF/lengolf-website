@@ -54,13 +54,38 @@ export function toCourseSeoLocale(l: string): CourseSeoLocale {
  * translation), so the banner renders its own localized default copy instead of
  * an English paragraph. Folding it in here would silently change that.
  */
+/**
+ * The overview PLUS the language it is actually in — which is `'en'` whenever
+ * the per-field fallback fired, regardless of the page locale.
+ *
+ * Any caller that SPLITS, TRUNCATES or EXCERPTS the text needs this rather than
+ * `localizedCourseProse(...).overview`, because those operations are
+ * language-specific. PR #97 shipped the bug this exists to prevent: the roundup
+ * pull quote asked `firstSentence` to split with the PAGE locale, so on a ja/zh
+ * page an untranslated course's ENGLISH overview went through the ja/zh branch,
+ * which only splits on `。`. English has none, so the whole ~850-char paragraph
+ * shipped where a ~180-char first sentence had shipped before — on 7 of the 12
+ * pull quotes of /ja/golf-courses/under/3500-baht/, a regression rather than a
+ * fix. Callers that merely RENDER the text whole (CoursePage body, JSON-LD
+ * description) do not care and should keep using localizedCourseProse.
+ */
+export function localizedOverview(
+  course: GolfCourse,
+  locale: CourseSeoLocale
+): { text: string; locale: CourseSeoLocale } {
+  const localized = locale === 'en' ? undefined : course.locales[locale]?.prose?.overview
+  return localized ? { text: localized, locale } : { text: course.prose.overview, locale: 'en' }
+}
+
 export function localizedCourseProse(
   course: GolfCourse,
   locale: CourseSeoLocale
 ): Omit<GolfCourseProse, 'rental_cta_context'> {
   const L = locale === 'en' ? undefined : course.locales[locale]
   return {
-    overview: L?.prose?.overview ?? course.prose.overview,
+    // Same resolution as localizedOverview, kept as its single source so the
+    // two cannot drift apart.
+    overview: localizedOverview(course, locale).text,
     layout_and_experience: L?.prose?.layout_and_experience ?? course.prose.layout_and_experience,
     tips: L?.prose?.tips ?? course.prose.tips,
     location_and_access: L?.prose?.location_and_access ?? course.prose.location_and_access,
