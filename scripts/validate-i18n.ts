@@ -1038,8 +1038,16 @@ const SSG_UI_NAMESPACES: Record<string, Locale[]> = (() => {
     ClubSpecs: clubSpecs,
     GolfCourseRegion: regionHub,
     GolfCoursePriceTier: priceTier,
-    // Course-detail pages (CoursePage/CourseFaq + the [slug] route).
-    GolfCourseDetail: courseDetail,
+    // Course-detail pages (CoursePage/CourseFaq + the [slug] route) AND the
+    // price-tier route, which pulls this namespace for the green-fee basis
+    // labels it puts in its ItemList JSON-LD. Union, not `courseDetail` alone:
+    // the two registries happen to hold the same locales today, so scoping this
+    // narrowly would be coincidence rather than derivation — and the first tier
+    // translation for a locale with no course-detail translation would SSG with
+    // MISSING_MESSAGE and English Offer labels while this gate stayed green.
+    GolfCourseDetail: LOCALES.filter(
+      (l) => courseDetail.includes(l) || priceTier.includes(l)
+    ),
     // Shared components (RoundupList, RentalCtaBanner) render on hub, tier
     // AND course-detail pages (CoursePage reuses feeFrom + the CTA banner).
     GolfCourseShared: LOCALES.filter(

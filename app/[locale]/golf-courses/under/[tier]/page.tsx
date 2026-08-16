@@ -7,7 +7,7 @@ import { getBreadcrumbJsonLd } from '@/lib/jsonld'
 import { getCourseRoundupJsonLd } from '@/lib/jsonld-courses'
 import { PRICE_TIERS, getPriceTierTranslation, getTranslatedPriceTierParams } from '@/data/price-tiers'
 import { getCoursesUnderPrice, getPriceTierSlugs } from '@/lib/golf-courses-derived'
-import { pricesByDayOfWeek } from '@/lib/course-fees'
+import { pricesByDayOfWeek, feeOfferNames } from '@/lib/course-fees'
 import RoundupList from '@/components/golf-courses/RoundupList'
 import CrossLinkBlock from '@/components/golf-courses/CrossLinkBlock'
 import RentalCtaBanner from '@/components/golf-courses/RentalCtaBanner'
@@ -88,7 +88,14 @@ export default async function CoursesUnderPricePage({ params }: Props) {
     { name: t('breadcrumbGolfCourses'), url: getResolvedCanonical(locale, '/golf-courses/') },
     { name: title, url: canonicalUrl },
   ])
-  const listJsonLd = getCourseRoundupJsonLd(courses, canonicalUrl, title)
+  // This is the only roundup route that SSGs non-EN locales, so it was the only
+  // one emitting an English `Offer.description` ("Weekday green fee") on
+  // ja/ko/zh/th pages. The fee-basis labels live in GolfCourseDetail, hence a
+  // second translator alongside this page's own GolfCoursePriceTier one.
+  const tDetail = await getTranslations('GolfCourseDetail')
+  const listJsonLd = getCourseRoundupJsonLd(courses, canonicalUrl, title, (c) =>
+    feeOfferNames(c, tDetail)
+  )
 
   const otherTiers = PRICE_TIERS.filter((pt) => pt.slug !== tier)
 

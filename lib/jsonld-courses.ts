@@ -5,11 +5,37 @@ import { courseMapsUrl, hasTrustedCoordinates } from '@/lib/geo'
 import { localizedCourseProse, type CourseSeoLocale } from '@/lib/course-seo'
 
 /**
+ * Resolves a course's two green-fee rates to `Offer` labels, e.g.
+ * `{ lower: '平日グリーンフィー', upper: '週末グリーンフィー' }`.
+ *
+ * A FUNCTION rather than a resolved string pair because fee basis is per-course:
+ * a seasonal course (low/high season) and a day-of-week course can appear in the
+ * same roundup, so one pair resolved by the caller would mislabel whichever
+ * disagrees with it. Localized callers build this from `feeOfferNames` in
+ * lib/course-fees.ts; that indirection keeps this module sync and next-intl-free.
+ */
+export type CourseOfferNames = (c: GolfCourse) => { lower: string; upper: string }
+
+/**
+ * The EN default, byte-identical to the labels these builders emitted before
+ * they took a locale. Used verbatim by the three EN-pinned roundup routes
+ * (`/compare/`, `/near/`, `/best-for/` all pin `locale: 'en'` in
+ * generateStaticParams), which therefore need no changes.
+ */
+const enOfferNames: CourseOfferNames = (c) => {
+  const labels = feeLabelsEn(c)
+  return { lower: `${labels.lower} green fee`, upper: `${labels.upper} green fee` }
+}
+
+/**
  * Schema.org GolfCourse representation for a course summary card on a list
  * or comparison page. Compact — full GolfCourse schema lives on the
  * detail page via course.schema_markup.
  */
-function golfCourseItem(c: GolfCourse): Record<string, unknown> {
+function golfCourseItem(
+  c: GolfCourse,
+  offerNames: CourseOfferNames = enOfferNames
+): Record<string, unknown> {
   const item: Record<string, unknown> = {
     '@type': 'GolfCourse',
     name: c.name,
@@ -37,7 +63,7 @@ function golfCourseItem(c: GolfCourse): Record<string, unknown> {
       '@type': 'Offer',
       price: String(c.green_fee_weekday_thb),
       priceCurrency: 'THB',
-      description: `${feeLabelsEn(c).lower} green fee`,
+      description: offerNames(c).lower,
     }
   }
   return item
@@ -54,6 +80,34 @@ function golfCourseItem(c: GolfCourse): Record<string, unknown> {
  * name, address, geo, telephone, priceRange, sameAs, amenityFeature — plus
  * what they were all missing: description, green-fee Offers, hasMap,
  * additionalProperty (holes/par), and a stable @id.
+ *
+ * `description` was localized by PR #97 via `localizedCourseProse`. `offerNames`
+ * completes that pass: `makesOffer[].name` was still built from `feeLabelsEn`,
+ * which lib/course-fees.ts reserves for the EN-pinned routes, so a translated
+ * detail page carried a Japanese description beside an English "Weekday green
+ * fee". Enumerating ONE field of a builder is not enumerating the builder.
+ *
+ * Deliberately still English on every locale, so the next reader doesn't
+ * re-derive it:
+ *   - `name` — the course is a Latin proper noun and `GolfCourseLocale` carries
+ *     no localized name (only title / meta_description / prose).
+ *   - `amenityFeature[].name` — enum-like facet keys, not prose. The
+ *     GolfCourseDetail catalog does carry localized labels, but routing through
+ *     them would also change EN output ("Golf Cart Required" -> "Cart
+ *     required"), which a localization fix has no business doing.
+ *     `additionalProperty[].name` is the OPPOSITE case and the honest reason is
+ *     weaker: EN `statHoles`/`statPar` are byte-identical to the hardcoded
+ *     'Holes'/'Par', so localizing it is free — it is simply out of scope here.
+ *   - `address.addressLocality` — NOT because the derived branch below is hard
+ *     to localize, but because it is never reached: all 149 course files carry a
+ *     `schema_markup.address` object, so `legacyAddress` wins for every course
+ *     and `addressLocality: c.province` is currently dead code. The English
+ *     locality that actually ships comes from the legacy blob (28 of which
+ *     already disagree with the visible `course.province` badge, in English).
+ *     Localizing it therefore means overriding or retiring that blob — a real
+ *     change, not a one-line swap. Note `golfCourseItem` above has no such
+ *     short-circuit, so ITS `addressLocality` is live English on localized tier
+ *     pages; see the known-gaps list in the PR.
  */
 export function getCourseDetailJsonLd(
   c: GolfCourse,
@@ -67,7 +121,8 @@ export function getCourseDetailJsonLd(
    * that contradicts them in English is a mismatch Google reads.
    * Defaults to 'en', keeping every EN page byte-identical.
    */
-  locale: CourseSeoLocale = 'en'
+  locale: CourseSeoLocale = 'en',
+  offerNames: CourseOfferNames = enOfferNames
 ) {
   // The legacy hand-serialised schema_markup blobs are otherwise retired, but
   // ~27 of them carry street-level address data (streetAddress, addressRegion,
@@ -139,10 +194,11 @@ export function getCourseDetailJsonLd(
   const fee = c.green_fee_weekday_thb
   if (fee !== null) {
     schema.priceRange = fee < 1500 ? '฿' : fee < 3000 ? '฿฿' : fee < 5000 ? '฿฿฿' : '฿฿฿฿'
+    const names = offerNames(c)
     const offers: Record<string, unknown>[] = [
       {
         '@type': 'Offer',
-        name: `${feeLabelsEn(c).lower} green fee`,
+        name: names.lower,
         price: String(fee),
         priceCurrency: 'THB',
       },
@@ -150,7 +206,7 @@ export function getCourseDetailJsonLd(
     if (c.green_fee_weekend_thb !== null) {
       offers.push({
         '@type': 'Offer',
-        name: `${feeLabelsEn(c).upper} green fee`,
+        name: names.upper,
         price: String(c.green_fee_weekend_thb),
         priceCurrency: 'THB',
       })
@@ -208,11 +264,25 @@ export function getCourseComparisonJsonLd(
 
 /**
  * ItemList JSON-LD for a roundup page (proximity, price-tier, use-case).
+ *
+ * `offerNames` matters for exactly one caller: `/golf-courses/under/[tier]/` is
+ * the only roundup route that SSGs non-EN locales (see its generateStaticParams
+ * — `/near/`, `/best-for/` and `/compare/` all pin `locale: 'en'`), so it was
+ * emitting an English `Offer.description` on its ja/ko/zh/th pages. Same root
+ * cause as the detail-page Offer labels, and fixed in the same pass:
+ * enumerating a defect and shipping only the cheaper half of it is how the
+ * fee-basis bug survived four rounds.
+ *
+ * The EN default is silent by design (it keeps the three EN-pinned callers
+ * byte-identical), which does mean a FUTURE localized roundup route would ship
+ * English with nothing red. Smoke section L6 fetches this route's ItemList for
+ * that reason; a new localized roundup needs its own assertion there.
  */
 export function getCourseRoundupJsonLd(
   courses: GolfCourse[],
   pageUrl: string,
-  listName: string
+  listName: string,
+  offerNames: CourseOfferNames = enOfferNames
 ) {
   return {
     '@context': 'https://schema.org',
@@ -223,7 +293,7 @@ export function getCourseRoundupJsonLd(
     itemListElement: courses.map((c, idx) => ({
       '@type': 'ListItem',
       position: idx + 1,
-      item: golfCourseItem(c),
+      item: golfCourseItem(c, offerNames),
     })),
   }
 }

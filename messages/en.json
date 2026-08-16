@@ -1206,6 +1206,7 @@
     "chipDesigner": "Designed by {designer}",
     "chipEst": "Est. {year}",
     "weekdayGreenFee": "Weekday green fee",
+    "weekendGreenFee": "Weekend green fee",
     "thb": "THB",
     "weekendFee": "Weekend: {price} THB",
     "closedPermanently": "This course is permanently closed.",
@@ -1259,6 +1260,7 @@
     "nudgeBodyNoRental": "This course doesn't offer club rental — but LENGOLF does. Current-generation Callaway Paradym, Warbird & REVA sets from <price>1,200 THB/day</price> with multi-day discounts and Bangkok hotel delivery.",
     "seePackages": "See packages",
     "lowSeasonGreenFee": "Low season green fee",
+    "highSeasonGreenFee": "High season green fee",
     "highSeasonFee": "High season: {price} THB",
     "lowSeason": "Low season",
     "highSeason": "High season"

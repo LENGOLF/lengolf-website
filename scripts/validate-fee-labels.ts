@@ -56,7 +56,10 @@ const FEE_BASIS_OK_RE = /fee-basis-ok:/
 const NUMERIC_ONLY = new Set([
   'lib/golf-courses-derived.ts',
   'lib/course-fees.ts',
-  'app/[locale]/golf-courses/[region]/[slug]/page.tsx',
+  // NOT the course-detail route: it renders no basis word to a human, but it
+  // now emits `Offer.name` basis labels into JSON-LD via feeOfferNames, and
+  // structured data is read by crawlers. Exempting it would keep the gate green
+  // against a future hardcoded 'Weekday green fee' in that same call.
   'app/[locale]/golf-courses/[region]/[slug]/opengraph-image.tsx',
   'components/golf-courses/RoundupList.tsx',
 ])

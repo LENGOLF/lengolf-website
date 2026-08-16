@@ -1295,6 +1295,7 @@
     "chipDesigner": "설계: {designer}",
     "chipEst": "{year}년 개장",
     "weekdayGreenFee": "평일 그린피",
+    "weekendGreenFee": "주말 그린피",
     "thb": "바트",
     "weekendFee": "주말: {price}바트",
     "closedPermanently": "이 코스는 영구 폐장했습니다.",
@@ -1348,6 +1349,7 @@
     "nudgeBodyNoRental": "이 코스에는 클럽 대여가 없지만 LENGOLF에서는 빌릴 수 있습니다. 현행 모델 Callaway Paradym, Warbird, REVA 세트를 <price>하루 1,200바트</price>부터 이용할 수 있으며, 여러 날 대여 할인과 방콕 호텔 배송도 가능합니다.",
     "seePackages": "패키지 보기",
     "lowSeasonGreenFee": "비수기 그린피",
+    "highSeasonGreenFee": "성수기 그린피",
     "highSeasonFee": "성수기: {price}바트",
     "lowSeason": "비수기",
     "highSeason": "성수기"
