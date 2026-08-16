@@ -4854,6 +4854,115 @@ async function runRegionCountTests() {
   }
 }
 
+// ── O) Localized drive-time labels on translated hub + tier pages ────
+//
+// driveTimeLabel() builds its text in CODE from DRIVE_TIME_L10N rather than
+// reading messages/*.json, so a caller that omits the locale argument silently
+// falls back to 'en' and ships "~50 min" into Japanese chrome. That is exactly
+// what RoundupList and CourseMapExplorer did, on 20 tier pages and 56 region
+// hubs, and NOTHING went red: lint, typecheck, all five validators and the
+// whole smoke suite passed on the bug and on each of four separate reverts of
+// the fix — 35 measurements, 35 green. The locale parameter has a DEFAULT
+// value, so the compiler cannot see the omission either.
+//
+// The negative half is the load-bearing one and it is safe precisely because
+// "~50 min" is a code-generated format literal, not prose: measured 0 hits
+// across all 76 translated golf-course URLs on a correct tree. It carries none
+// of the risk of the checkScript cautionary tale in CLAUDE.md, which fired on
+// eleven legitimately cross-script strings — there is no reason for the EN
+// drive-time template to appear on a non-EN page.
+//
+// The positive half is a SECTION-level floor, not a per-page assertion, and
+// that distinction is the whole design. Eight translated pages
+// (/{th,ja,ko,zh}/golf-courses/{phuket,chiang-mai}/) legitimately show no
+// drive time at all because no course in those regions carries
+// drive_time_from_bangkok_min. A per-page matched pair would fire on all eight
+// correct pages, and a gate that fires on correct code gets switched off.
+const DRIVE_TIME_EN_LEAK = /~\d+(?:\.\d+)?\s*(?:min\b|h\b)/;
+const DRIVE_TIME_OWN_MARKER: Record<string, RegExp> = {
+  th: /~\d+(?:\.\d+)?\s*(?:นาที|ชม\.)/g,
+  ja: /約\d+(?:\.\d+)?(?:分|時間)/g,
+  ko: /약\s*\d+(?:\.\d+)?(?:분|시간)/g,
+  zh: /约\d+(?:\.\d+)?(?:分钟|小时)/g,
+};
+// Real number, not `> 0`: the suite must fail if the derivation stops yielding
+// pages rather than passing vacuously on an empty corpus.
+const DRIVE_TIME_MIN_MARKERS = 300;
+const DRIVE_TIME_MIN_PAGES = 60;
+
+async function runLocalizedDriveTimeTests() {
+  console.log(
+    "\n\x1b[1mO) Localized drive-time labels (translated hubs + tiers)\x1b[0m",
+  );
+  const { getTranslatedRegionHubParams } = await import(
+    "../data/golf-courses-i18n"
+  );
+  const { getTranslatedPriceTierParams } = await import("../data/price-tiers");
+
+  const urls = [
+    ...getTranslatedRegionHubParams().map(
+      ({ locale, region }: { locale: string; region: string }) => ({
+        locale,
+        path: `/${locale}/golf-courses/${region}/`,
+      }),
+    ),
+    ...getTranslatedPriceTierParams().map(
+      ({ locale, tier }: { locale: string; tier: string }) => ({
+        locale,
+        path: `/${locale}/golf-courses/under/${tier}/`,
+      }),
+    ),
+  ];
+
+  if (urls.length < DRIVE_TIME_MIN_PAGES) {
+    fail(
+      "O derived too few translated pages",
+      `only ${urls.length} URLs from the hub + tier registries (floor ${DRIVE_TIME_MIN_PAGES}) — the registries moved or the import shape changed, and this section would otherwise pass on an empty corpus`,
+    );
+    return;
+  }
+
+  let markerTotal = 0;
+  for (const { locale, path } of urls) {
+    const label = `${path} drive-time locale`;
+    try {
+      const res = await fetch(`${BASE}${path}`, { redirect: "follow" });
+      if (res.status !== 200) {
+        fail(label, `expected 200, got ${res.status}`);
+        continue;
+      }
+      // <script> stripped: NextIntlClientProvider serializes the whole catalog
+      // into the flight payload, so an un-stripped body would let a string that
+      // never renders satisfy the check.
+      const markup = renderedMarkup(await res.text());
+      const leak = markup.match(DRIVE_TIME_EN_LEAK);
+      if (leak) {
+        fail(
+          label,
+          `English drive-time label "${leak[0]}" on a ${locale} page — a driveTimeLabel() call is missing its locale argument and defaulted to 'en' (lib/format.ts)`,
+        );
+        continue;
+      }
+      markerTotal += (markup.match(DRIVE_TIME_OWN_MARKER[locale]) ?? []).length;
+      pass(label);
+    } catch (err) {
+      fail(`${label} fetch error`, String(err));
+    }
+  }
+
+  // Anti-vacuity: without this, a change that stopped rendering drive times
+  // altogether would satisfy every negative assertion above and print green.
+  const label = `O localized drive-time markers present (>= ${DRIVE_TIME_MIN_MARKERS})`;
+  if (markerTotal < DRIVE_TIME_MIN_MARKERS) {
+    fail(
+      label,
+      `only ${markerTotal} localized drive-time labels across ${urls.length} translated pages — the negative assertions above cannot distinguish "correctly localized" from "not rendered at all", so this floor is what makes them mean something`,
+    );
+  } else {
+    pass(label);
+  }
+}
+
 // ── Main ────────────────────────────────────────────────────────────
 
 async function main() {
@@ -4891,6 +5000,7 @@ async function main() {
   await runSeoSectionRegistryTests();
   await runWayfindingTests();
   await runRegionCountTests();
+  await runLocalizedDriveTimeTests();
 
   console.log(`\n\x1b[1m${passed} passed, ${failed} failed\x1b[0m`);
   if (failures.length > 0) {

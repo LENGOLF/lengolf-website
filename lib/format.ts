@@ -23,6 +23,20 @@ export function formatBaht(n: number): string {
 export const COURSE_CONTENT_LOCALES = ['en', 'th', 'ja', 'ko', 'zh'] as const
 export type FormatLocale = (typeof COURSE_CONTENT_LOCALES)[number]
 
+/**
+ * Narrow an arbitrary locale string (e.g. next-intl's `useLocale()`) to a
+ * supported FormatLocale, falling back to 'en'.
+ *
+ * This lives here rather than only in lib/course-seo.ts (as `toCourseSeoLocale`,
+ * which now delegates to it) because CLIENT components need it: importing
+ * course-seo.ts would drag FAQ_L10N — eleven prose templates × five locales —
+ * into the browser bundle just to narrow a string. lib/format.ts is the
+ * deliberately dependency-free, client-safe module.
+ */
+export function toFormatLocale(l: string): FormatLocale {
+  return (COURSE_CONTENT_LOCALES as readonly string[]).includes(l) ? (l as FormatLocale) : 'en'
+}
+
 // Per-locale drive-time fragments. EN templates are byte-identical to the
 // pre-i18n hardcoded strings; TH follows the glossary-settled "จากกรุงเทพฯ"
 // suffix; JA uses 約 + half-width digits with the parenthesized suffix

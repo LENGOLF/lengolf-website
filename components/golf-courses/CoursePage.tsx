@@ -13,7 +13,7 @@ import CourseFaq from '@/components/golf-courses/CourseFaq'
 import CourseSatelliteMap from '@/components/golf-courses/CourseSatelliteMap'
 import RentalCtaBanner from '@/components/golf-courses/RentalCtaBanner'
 import { courseMapsUrl, hasTrustedCoordinates } from '@/lib/geo'
-import { toCourseSeoLocale, type CourseFaqItem } from '@/lib/course-seo'
+import { localizedCourseProse, toCourseSeoLocale, type CourseFaqItem } from '@/lib/course-seo'
 
 interface Props {
   course: GolfCourse
@@ -55,14 +55,11 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
 
   // Localized prose with per-field EN fallback: a pilot course may ship
   // title/meta only (locales.<locale>.prose absent) — render EN prose under
-  // the localized chrome rather than blanking sections.
+  // the localized chrome rather than blanking sections. Shared with
+  // RoundupList and the GolfCourse JSON-LD; see localizedCourseProse for why
+  // rental_cta_context is NOT part of it (it wants no EN fallback — see below).
   const L = locale === 'en' ? undefined : course.locales[locale]
-  const prose = {
-    overview: L?.prose?.overview ?? course.prose.overview,
-    layout_and_experience: L?.prose?.layout_and_experience ?? course.prose.layout_and_experience,
-    tips: L?.prose?.tips ?? course.prose.tips,
-    location_and_access: L?.prose?.location_and_access ?? course.prose.location_and_access,
-  }
+  const prose = localizedCourseProse(course, locale)
 
   // Quick-fact chips shown in the hero
   const chips = [

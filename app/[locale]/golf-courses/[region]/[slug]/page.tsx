@@ -217,11 +217,20 @@ export default async function CoursePageRoute({ params }: Props) {
   // generateStaticParams builds EN copies only, so a locale-prefixed image
   // URL would 301 through the middleware — don't put redirecting URLs in
   // schema.org markup.
-  const courseJsonLd = getCourseDetailJsonLd(course, canonicalUrl, `${enUrl}opengraph-image/`)
+  // The `description` follows the page language for the same reason the FAQ
+  // schema below does: this route SSGs th/ja/ko/zh, and the schema should not
+  // describe a Japanese page in English.
+  const seoLocale = toCourseSeoLocale(locale)
+  const courseJsonLd = getCourseDetailJsonLd(
+    course,
+    canonicalUrl,
+    `${enUrl}opengraph-image/`,
+    seoLocale
+  )
 
   // FAQPage schema mirrors the visible CourseFaq block — same source array,
   // localized once here for both.
-  const faqs = getCourseFaqs(course, toCourseSeoLocale(locale))
+  const faqs = getCourseFaqs(course, seoLocale)
   const faqJsonLd = faqs.length > 0 ? getFaqPageJsonLd(faqs) : null
 
   return (

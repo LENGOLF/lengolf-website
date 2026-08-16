@@ -2,6 +2,7 @@ import type { GolfCourse } from '@/types/golf-courses'
 import { feeLabelsEn } from '@/lib/course-fees'
 import { SITE_URL } from '@/lib/constants'
 import { courseMapsUrl, hasTrustedCoordinates } from '@/lib/geo'
+import { localizedCourseProse, type CourseSeoLocale } from '@/lib/course-seo'
 
 /**
  * Schema.org GolfCourse representation for a course summary card on a list
@@ -57,7 +58,16 @@ function golfCourseItem(c: GolfCourse): Record<string, unknown> {
 export function getCourseDetailJsonLd(
   c: GolfCourse,
   canonicalUrl: string,
-  imageUrl?: string
+  imageUrl?: string,
+  /**
+   * Content locale of the page this schema is embedded in. The description is
+   * the one field here made of prose rather than typed facts, so on a
+   * translated detail page it must follow the page language — the visible body
+   * and the <meta description> are both already localized, and structured data
+   * that contradicts them in English is a mismatch Google reads.
+   * Defaults to 'en', keeping every EN page byte-identical.
+   */
+  locale: CourseSeoLocale = 'en'
 ) {
   // The legacy hand-serialised schema_markup blobs are otherwise retired, but
   // ~27 of them carry street-level address data (streetAddress, addressRegion,
@@ -82,7 +92,7 @@ export function getCourseDetailJsonLd(
     '@id': `${canonicalUrl}#golfcourse`,
     name: c.name,
     url: canonicalUrl,
-    description: c.prose.overview,
+    description: localizedCourseProse(c, locale).overview,
     address: legacyAddress ?? {
       '@type': 'PostalAddress',
       addressLocality: c.province,
