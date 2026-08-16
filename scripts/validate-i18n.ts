@@ -63,7 +63,7 @@ import { fileURLToPath } from 'node:url'
 import { explainerPages } from '@/data/explainer-pages'
 import { COURSE_DETAIL_I18N, REGION_HUB_I18N } from '@/data/golf-courses-i18n'
 import { hasProvinceL10n } from '@/lib/course-seo'
-import type { GolfCourse } from '@/types/golf-courses'
+import type { GolfCourse, GolfCourseProse } from '@/types/golf-courses'
 import { faqPages } from '@/data/faq-pages'
 import { PRICE_TIER_I18N } from '@/data/price-tiers'
 import { getFaqHubContent } from '@/data/faq-hub'
@@ -393,7 +393,7 @@ const COURSE_PROSE_FIELDS = [
   'tips',
   'location_and_access',
   'rental_cta_context',
-] as const
+] as const satisfies readonly (keyof GolfCourseProse)[]
 
 function courseUnits(locale: Locale, entryId: string, l: NonNullable<GolfCourse['locales']['th']>): Unit[] {
   const u: Unit[] = []

@@ -542,24 +542,20 @@ export const COURSE_DETAIL_I18N: {
   // chatrium-golf-resort-soi-dao is Chanthaburi and kabinburi-sportclub is
   // Prachin Buri — both added to PROVINCE_L10N in 35c7e15.
   //
-  // NATIVE-LANGUAGE QA HAS NOT RUN on the 14 pattaya entries below. The
-  // southern/island entries above them HAVE had full th/ja/ko/zh native reads.
-  // Do not treat the two groups as equally reviewed.
+  // All 22 pattaya entries have had full th/ja/ko/zh native-language QA, as
+  // have the southern/island entries above them. Pattaya is 25 of 25.
   //
-  // Pattaya is 17 of 25, not complete: a spend limit killed 7 builders
-  // mid-edit and those files were reverted to pristine rather than registered
-  // half-written.
-  //
-  // phoenix-gold-golf-club-pattaya is also still untranslated, but NOT because
-  // it is a duplicate. An earlier revision of this comment claimed that and
-  // was WRONG — it inverted the evidence, reading 36-vs-27 holes, different
-  // provinces and coordinates 115km apart as proof of duplication when they
-  // are proof of two DIFFERENT clubs under common ownership (hence the shared
-  // website). docs/golf-course-content-audit-2026-07.md item 8 is the primary
-  // source: the merge pair is bangkok/suvarnabhumi-golf-country-club <->
+  // phoenix-gold-golf-club-pattaya IS registered (further down). An earlier
+  // revision of this comment claimed it was half of a duplicate and had to be
+  // held back; that was WRONG — it inverted the evidence, reading 36-vs-27
+  // holes, different provinces and coordinates 115km apart as proof of
+  // duplication when they are proof of two DIFFERENT clubs under common
+  // ownership (hence the shared website).
+  // docs/golf-course-content-audit-2026-07.md item 8 is the primary source: the
+  // merge pair is bangkok/suvarnabhumi-golf-country-club <->
   // bangkok/phoenix-gold-golf-country-club (one 36-hole RTJ Jr. course in Nong
   // Chok), and pattaya/phoenix-gold-golf-club-pattaya "is the genuine Pattaya
-  // sister". It should simply be translated in the next batch.
+  // sister".
   { region: 'pattaya', slug: 'amata-spring-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'pattaya', slug: 'bangpra-international-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'pattaya', slug: 'chatrium-golf-resort-soi-dao', locales: ['th', 'ja', 'ko', 'zh'] },
@@ -571,12 +567,12 @@ export const COURSE_DETAIL_I18N: {
   { region: 'pattaya', slug: 'khao-kheow-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'pattaya', slug: 'mountain-shadow-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'pattaya', slug: 'pattana-golf-club-resort', locales: ['th', 'ja', 'ko', 'zh'] },
-  // Wave 2 (partial). The remaining 7 Pattaya courses — rayong-green-valley,
-  // the three Siam Country Club courses, st-andrews-2000, the-emerald and
-  // treasure-hill — are NOT here: their builders were killed mid-edit by an
-  // account spend limit, leaving th/ko written and ja absent. Those files were
-  // reverted to pristine rather than registered, because a registered tuple with
-  // a missing ja block advertises a translation via hreflang that does not exist.
+  // Wave 2. (Historical note, kept because it is the reason the guard below
+  // exists: a spend limit killed these builders mid-edit, leaving th/ko written
+  // and ja absent. Those files were reverted to pristine rather than registered
+  // half-written — a registered tuple with a missing ja block advertises a
+  // translation via hreflang that does not exist. validate:i18n now fails a
+  // PARTIAL prose block outright. They were rewritten and are registered below.)
   { region: 'pattaya', slug: 'pattavia-century-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'pattaya', slug: 'pattaya-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'pattaya', slug: 'pleasant-valley-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },

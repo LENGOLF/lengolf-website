@@ -205,7 +205,20 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
                   <h2 className="mb-3 text-xs font-bold uppercase tracking-widest text-primary">
                     {s.label}
                   </h2>
-                  <p className="text-sm leading-relaxed text-foreground/80">{s.content}</p>
+                  {/* Split on blank lines, as ExplainerPage / ActivityPage / FaqPage all
+                      do. Rendering s.content as one raw string collapsed every
+                      paragraph break in HTML, so multi-paragraph prose shipped as a
+                      single run-on block — 21 EN courses and, once this batch
+                      registered seven of them, 28 localized pages too. Same class as
+                      the 36 run-on lists PR #90 fixed in renderParagraph(). */}
+                  {s.content.split('\n\n').map((paragraph, pIdx) => (
+                    <p
+                      key={pIdx}
+                      className="text-sm leading-relaxed text-foreground/80 [&:not(:first-of-type)]:mt-3"
+                    >
+                      {paragraph.trim()}
+                    </p>
+                  ))}
                 </div>
               ))}
             </div>
