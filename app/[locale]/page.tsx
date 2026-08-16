@@ -12,7 +12,7 @@ import { BUSINESS_INFO, SITE_URL, SOCIAL_LINKS, storageUrl, storageImageUrl } fr
 import { getSiteFacts } from '@/lib/site-facts'
 import { getAlternates, getCanonical, OG_LOCALES, type Locale } from '@/lib/translated-routes'
 import { getFaqPageJsonLd, getAggregateRatingJsonLd, getBreadcrumbJsonLd, getHomePricingJsonLd } from '@/lib/jsonld'
-import { getGoogleReviews } from '@/lib/google-reviews'
+import { getGoogleReviews, truncateReviewText } from '@/lib/google-reviews'
 import FaqSection from '@/components/shared/FaqSection'
 import { StarIcon } from '@/components/shared/StarRating'
 import JapanLandingPage from '@/components/home/JapanLandingPage'
@@ -341,10 +341,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             {/* 3 review cards */}
             <div className="grid gap-5 sm:grid-cols-3">
               {reviewsData.reviews.slice(0, 3).map((review) => {
-                const maxLen = 150
-                const truncated = review.text.length > maxLen
-                  ? review.text.slice(0, maxLen).replace(/\s+\S*$/, '') + '...'
-                  : review.text
+                const truncated = truncateReviewText(review.text, 150)
                 return (
                   <div key={`${review.reviewer_name}-${review.review_created_at}`} className="rounded-lg border border-border/60 bg-white p-5 shadow-sm">
                     <div className="mb-3 flex items-center gap-3">
