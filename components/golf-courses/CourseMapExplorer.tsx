@@ -2,7 +2,7 @@
 import { feeLabelKeys } from '@/lib/course-fees'
 
 import { useState, useCallback, useEffect, useRef } from 'react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 // next/link, NOT the locale-aware i18n Link: the prefix decision is per
 // COURSE, not per locale, so it cannot be made here. Most course detail
 // pages are EN-only and a blanket locale prefix would 301 nearly every
@@ -12,7 +12,7 @@ import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { ArrowRight, Clock, Flag, X, ExternalLink, MapPinOff } from 'lucide-react'
 import type { GolfCourse } from '@/types/golf-courses'
-import { formatFee, driveTimeLabel } from '@/lib/format'
+import { formatFee, driveTimeLabel, toFormatLocale } from '@/lib/format'
 import { courseMapsUrl, hasTrustedCoordinates } from '@/lib/geo'
 import { loadMapsApi, BASE_MAP_OPTIONS } from '@/lib/maps-loader'
 import { pushMapUnavailable } from '@/lib/analytics'
@@ -62,6 +62,14 @@ function makePin(index: number, active: boolean, courseName: string): HTMLDivEle
 
 export default function CourseMapExplorer({ courses, region, regionLabel, center, hrefs }: Props) {
   const t = useTranslations('GolfCourseRegion')
+  // Region hubs SSG th/ja/ko/zh (getTranslatedRegionHubParams), and every other
+  // string in this component already comes from `t`. driveTimeLabel is the only
+  // one whose text is built in code rather than the catalog, so it needs the
+  // locale explicitly or the info panel and the roster's drive column ship
+  // "~70 min" inside otherwise-localized chrome. toFormatLocale (lib/format,
+  // client-safe) rather than toCourseSeoLocale, which would pull course-seo's
+  // FAQ_L10N into this client bundle.
+  const locale = toFormatLocale(useLocale())
   const [activeSlug, setActiveSlug] = useState<string | null>(null)
   const [mapsUnavailable, setMapsUnavailable] = useState(false)
   const activeCourse = courses.find((c) => c.slug === activeSlug) ?? null
@@ -237,7 +245,7 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
                   {activeCourse.drive_time_from_bangkok_min && (
                     <div className="rounded-xl bg-[#f0f7f2] px-3 py-2.5">
                       <p className="text-xs font-bold text-[#003d22]">
-                        {driveTimeLabel(activeCourse.drive_time_from_bangkok_min, false)}
+                        {driveTimeLabel(activeCourse.drive_time_from_bangkok_min, false, locale)}
                       </p>
                       <p className="text-[10px] text-muted-foreground">{t('fromBangkok')}</p>
                     </div>
@@ -378,7 +386,7 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
 
               <div className="flex items-center justify-end gap-1 text-xs text-muted-foreground">
                 {course.drive_time_from_bangkok_min ? (
-                  <><Clock className="h-3 w-3 shrink-0" />{driveTimeLabel(course.drive_time_from_bangkok_min, false)}</>
+                  <><Clock className="h-3 w-3 shrink-0" />{driveTimeLabel(course.drive_time_from_bangkok_min, false, locale)}</>
                 ) : (
                   <span className="text-muted-foreground/40">—</span>
                 )}

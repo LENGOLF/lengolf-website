@@ -1,10 +1,11 @@
-import type { GolfCourse } from '@/types/golf-courses'
+import type { GolfCourse, GolfCourseProse } from '@/types/golf-courses'
 import { pricesByDayOfWeek } from '@/lib/course-fees'
 import {
   asOfMonthYear,
   COURSE_CONTENT_LOCALES,
   formatBaht,
   formatHours,
+  toFormatLocale,
   type FormatLocale,
 } from '@/lib/format'
 
@@ -32,7 +33,38 @@ export type CourseSeoLocale = FormatLocale
 
 /** Narrow an arbitrary locale string to a supported CourseSeoLocale ('en' fallback). */
 export function toCourseSeoLocale(l: string): CourseSeoLocale {
-  return (COURSE_SEO_LOCALES as readonly string[]).includes(l) ? (l as CourseSeoLocale) : 'en'
+  return toFormatLocale(l)
+}
+
+/**
+ * A course's body prose in `locale`, with a PER-FIELD EN fallback: a pilot
+ * course may ship title + meta_description only (`locales.<locale>.prose`
+ * absent), or a partially translated prose object, and the page must render EN
+ * prose under localized chrome rather than blanking a section.
+ *
+ * Single source for this resolution because it has three consumers on
+ * different surfaces — the detail page body (CoursePage), the roundup pull
+ * quote (RoundupList, which shipped the EN overview under localized links on
+ * /{ja,ko,zh,th}/golf-courses/under/<tier>/), and the GolfCourse JSON-LD
+ * `description` on the detail route. Duplicating it per call site is exactly
+ * how the roundup site was missed.
+ *
+ * `rental_cta_context` is DELIBERATELY excluded: CoursePage passes it to
+ * RentalCtaBanner WITHOUT an EN fallback (`undefined` on a locale with no
+ * translation), so the banner renders its own localized default copy instead of
+ * an English paragraph. Folding it in here would silently change that.
+ */
+export function localizedCourseProse(
+  course: GolfCourse,
+  locale: CourseSeoLocale
+): Omit<GolfCourseProse, 'rental_cta_context'> {
+  const L = locale === 'en' ? undefined : course.locales[locale]
+  return {
+    overview: L?.prose?.overview ?? course.prose.overview,
+    layout_and_experience: L?.prose?.layout_and_experience ?? course.prose.layout_and_experience,
+    tips: L?.prose?.tips ?? course.prose.tips,
+    location_and_access: L?.prose?.location_and_access ?? course.prose.location_and_access,
+  }
 }
 
 const thb = formatBaht
