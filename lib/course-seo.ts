@@ -225,6 +225,32 @@ const PROVINCE_L10N: Record<string, Record<Exclude<CourseSeoLocale, 'en'>, strin
   Rayong: { th: 'จังหวัดระยอง', ja: 'ラヨーン県', ko: '라용주', zh: '罗勇府' },
   Chonburi: { th: 'จังหวัดชลบุรี', ja: 'チョンブリー県', ko: '촌부리주', zh: '春武里府' },
   'Nakhon Pathom': { th: 'จังหวัดนครปฐม', ja: 'ナコンパトム県', ko: '나콘빠톰주', zh: '佛统府' },
+  // Southern / island batch. ZH uses the established Chinese exonyms (攀牙 /
+  // 甲米 / 素叻他尼 / 宋卡 / 董里) rather than transcriptions, for the same
+  // reason 大城府 beats a coined 阿育他亚: they are what Chinese sources and
+  // Chinese-language search actually use. KO has no exonym tradition for Thai
+  // provinces and transcribes per the Korean standard for Thai, with tense
+  // consonants for the unaspirated stops (끄라비, 뜨랑).
+  'Phang Nga': { th: 'จังหวัดพังงา', ja: 'パンガー県', ko: '팡응아주', zh: '攀牙府' },
+  Krabi: { th: 'จังหวัดกระบี่', ja: 'クラビ県', ko: '끄라비주', zh: '甲米府' },
+  'Surat Thani': {
+    th: 'จังหวัดสุราษฎร์ธานี',
+    ja: 'スラートターニー県',
+    ko: '수랏타니주',
+    zh: '素叻他尼府',
+  },
+  Songkhla: { th: 'จังหวัดสงขลา', ja: 'ソンクラー県', ko: '송클라주', zh: '宋卡府' },
+  Trang: { th: 'จังหวัดตรัง', ja: 'トラン県', ko: '뜨랑주', zh: '董里府' },
+  // Pattaya/eastern-seaboard batch. Same policy as above: zh takes the
+  // established exonyms (尖竹汶府 / 巴真府), ko transcribes with tense
+  // consonants for the unaspirated stops (짠타부리, 쁘라찐부리).
+  Chanthaburi: { th: 'จังหวัดจันทบุรี', ja: 'チャンタブリー県', ko: '짠타부리주', zh: '尖竹汶府' },
+  'Prachin Buri': {
+    th: 'จังหวัดปราจีนบุรี',
+    ja: 'プラーチーンブリー県',
+    ko: '쁘라찐부리주',
+    zh: '巴真府',
+  },
 }
 
 /** Whether a course's (English) province has localized names for the non-EN packs. */

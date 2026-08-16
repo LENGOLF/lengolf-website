@@ -122,6 +122,57 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/bangkok/royal-gems-golf-sports-club",
       "/golf-courses/pattaya/burapha-golf-club",
       "/golf-courses/pattaya/laem-chabang-international",
+      // Batch 4 (2026-08) — the southern/island sweep. Completes phuket,
+      // krabi, khao-lak, koh-samui and southern-thailand to 100% of their
+      // rosters, so a locale reader on those region hubs no longer lands on a
+      // mixed-language list where most course links fall back to English.
+      "/golf-courses/phuket/aquella-golf-country-club",
+      "/golf-courses/phuket/blue-canyon-canyon-course",
+      "/golf-courses/phuket/laguna-golf-phuket",
+      "/golf-courses/phuket/loch-palm-golf-club",
+      "/golf-courses/phuket/mission-hills-phuket",
+      "/golf-courses/phuket/red-mountain-golf-club",
+      "/golf-courses/krabi/pakasai-country-club",
+      "/golf-courses/khao-lak/katathong-golf-resort",
+      "/golf-courses/koh-samui/rajjaprabha-dam-golf-course",
+      "/golf-courses/koh-samui/santiburi-samui-country-club",
+      "/golf-courses/southern-thailand/hat-yai-resort-golf-club",
+      "/golf-courses/southern-thailand/southern-hills-golf-country-club",
+      "/golf-courses/southern-thailand/sri-trang-golf-club",
+      // Batch 5 (2026-08) — the Pattaya/eastern-seaboard sweep. COMPLETE:
+      // Pattaya is 25 of 25, and all 22 entries below have had full th/ja/ko/zh
+      // native-language QA (3 blockers found and fixed; see the batch commits).
+      //
+      // phoenix-gold-golf-club-pattaya IS included. An earlier revision of this
+      // comment claimed it was half of a duplicate and had to be held back;
+      // that was wrong. Per docs/golf-course-content-audit-2026-07.md item 8
+      // the merge pair is bangkok/suvarnabhumi-golf-country-club <->
+      // bangkok/phoenix-gold-golf-country-club (one 36-hole course in Nong
+      // Chok), and pattaya/phoenix-gold-golf-club-pattaya "is the genuine
+      // Pattaya sister". Differing holes/province/coordinates are evidence of
+      // two DIFFERENT clubs; the shared website is common ownership.
+      "/golf-courses/pattaya/amata-spring-country-club",
+      "/golf-courses/pattaya/bangpra-international-golf-club",
+      "/golf-courses/pattaya/chatrium-golf-resort-soi-dao",
+      "/golf-courses/pattaya/chee-chan-golf-resort",
+      "/golf-courses/pattaya/crystal-bay-golf-resort",
+      "/golf-courses/pattaya/eastern-star-country-club",
+      "/golf-courses/pattaya/greenwood-golf-club",
+      "/golf-courses/pattaya/kabinburi-sportclub",
+      "/golf-courses/pattaya/khao-kheow-country-club",
+      "/golf-courses/pattaya/mountain-shadow-golf-club",
+      "/golf-courses/pattaya/pattana-golf-club-resort",
+      "/golf-courses/pattaya/pattavia-century-golf-club",
+      "/golf-courses/pattaya/pattaya-country-club",
+      "/golf-courses/pattaya/pleasant-valley-golf-country-club",
+      "/golf-courses/pattaya/rayong-green-valley",
+      "/golf-courses/pattaya/siam-country-club-old-course",
+      "/golf-courses/pattaya/siam-country-club-plantation",
+      "/golf-courses/pattaya/siam-country-club-waterside",
+      "/golf-courses/pattaya/st-andrews-2000",
+      "/golf-courses/pattaya/the-emerald-golf-club",
+      "/golf-courses/pattaya/treasure-hill-golf-country-club",
+      "/golf-courses/pattaya/phoenix-gold-golf-club-pattaya",
       // Translated FAQ pages (data/faq-pages.ts entries with locale: 'th') —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -297,6 +348,57 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/bangkok/royal-gems-golf-sports-club",
       "/golf-courses/pattaya/burapha-golf-club",
       "/golf-courses/pattaya/laem-chabang-international",
+      // Batch 4 (2026-08) — the southern/island sweep. Completes phuket,
+      // krabi, khao-lak, koh-samui and southern-thailand to 100% of their
+      // rosters, so a locale reader on those region hubs no longer lands on a
+      // mixed-language list where most course links fall back to English.
+      "/golf-courses/phuket/aquella-golf-country-club",
+      "/golf-courses/phuket/blue-canyon-canyon-course",
+      "/golf-courses/phuket/laguna-golf-phuket",
+      "/golf-courses/phuket/loch-palm-golf-club",
+      "/golf-courses/phuket/mission-hills-phuket",
+      "/golf-courses/phuket/red-mountain-golf-club",
+      "/golf-courses/krabi/pakasai-country-club",
+      "/golf-courses/khao-lak/katathong-golf-resort",
+      "/golf-courses/koh-samui/rajjaprabha-dam-golf-course",
+      "/golf-courses/koh-samui/santiburi-samui-country-club",
+      "/golf-courses/southern-thailand/hat-yai-resort-golf-club",
+      "/golf-courses/southern-thailand/southern-hills-golf-country-club",
+      "/golf-courses/southern-thailand/sri-trang-golf-club",
+      // Batch 5 (2026-08) — the Pattaya/eastern-seaboard sweep. COMPLETE:
+      // Pattaya is 25 of 25, and all 22 entries below have had full th/ja/ko/zh
+      // native-language QA (3 blockers found and fixed; see the batch commits).
+      //
+      // phoenix-gold-golf-club-pattaya IS included. An earlier revision of this
+      // comment claimed it was half of a duplicate and had to be held back;
+      // that was wrong. Per docs/golf-course-content-audit-2026-07.md item 8
+      // the merge pair is bangkok/suvarnabhumi-golf-country-club <->
+      // bangkok/phoenix-gold-golf-country-club (one 36-hole course in Nong
+      // Chok), and pattaya/phoenix-gold-golf-club-pattaya "is the genuine
+      // Pattaya sister". Differing holes/province/coordinates are evidence of
+      // two DIFFERENT clubs; the shared website is common ownership.
+      "/golf-courses/pattaya/amata-spring-country-club",
+      "/golf-courses/pattaya/bangpra-international-golf-club",
+      "/golf-courses/pattaya/chatrium-golf-resort-soi-dao",
+      "/golf-courses/pattaya/chee-chan-golf-resort",
+      "/golf-courses/pattaya/crystal-bay-golf-resort",
+      "/golf-courses/pattaya/eastern-star-country-club",
+      "/golf-courses/pattaya/greenwood-golf-club",
+      "/golf-courses/pattaya/kabinburi-sportclub",
+      "/golf-courses/pattaya/khao-kheow-country-club",
+      "/golf-courses/pattaya/mountain-shadow-golf-club",
+      "/golf-courses/pattaya/pattana-golf-club-resort",
+      "/golf-courses/pattaya/pattavia-century-golf-club",
+      "/golf-courses/pattaya/pattaya-country-club",
+      "/golf-courses/pattaya/pleasant-valley-golf-country-club",
+      "/golf-courses/pattaya/rayong-green-valley",
+      "/golf-courses/pattaya/siam-country-club-old-course",
+      "/golf-courses/pattaya/siam-country-club-plantation",
+      "/golf-courses/pattaya/siam-country-club-waterside",
+      "/golf-courses/pattaya/st-andrews-2000",
+      "/golf-courses/pattaya/the-emerald-golf-club",
+      "/golf-courses/pattaya/treasure-hill-golf-country-club",
+      "/golf-courses/pattaya/phoenix-gold-golf-club-pattaya",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -504,6 +606,57 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/bangkok/royal-gems-golf-sports-club",
       "/golf-courses/pattaya/burapha-golf-club",
       "/golf-courses/pattaya/laem-chabang-international",
+      // Batch 4 (2026-08) — the southern/island sweep. Completes phuket,
+      // krabi, khao-lak, koh-samui and southern-thailand to 100% of their
+      // rosters, so a locale reader on those region hubs no longer lands on a
+      // mixed-language list where most course links fall back to English.
+      "/golf-courses/phuket/aquella-golf-country-club",
+      "/golf-courses/phuket/blue-canyon-canyon-course",
+      "/golf-courses/phuket/laguna-golf-phuket",
+      "/golf-courses/phuket/loch-palm-golf-club",
+      "/golf-courses/phuket/mission-hills-phuket",
+      "/golf-courses/phuket/red-mountain-golf-club",
+      "/golf-courses/krabi/pakasai-country-club",
+      "/golf-courses/khao-lak/katathong-golf-resort",
+      "/golf-courses/koh-samui/rajjaprabha-dam-golf-course",
+      "/golf-courses/koh-samui/santiburi-samui-country-club",
+      "/golf-courses/southern-thailand/hat-yai-resort-golf-club",
+      "/golf-courses/southern-thailand/southern-hills-golf-country-club",
+      "/golf-courses/southern-thailand/sri-trang-golf-club",
+      // Batch 5 (2026-08) — the Pattaya/eastern-seaboard sweep. COMPLETE:
+      // Pattaya is 25 of 25, and all 22 entries below have had full th/ja/ko/zh
+      // native-language QA (3 blockers found and fixed; see the batch commits).
+      //
+      // phoenix-gold-golf-club-pattaya IS included. An earlier revision of this
+      // comment claimed it was half of a duplicate and had to be held back;
+      // that was wrong. Per docs/golf-course-content-audit-2026-07.md item 8
+      // the merge pair is bangkok/suvarnabhumi-golf-country-club <->
+      // bangkok/phoenix-gold-golf-country-club (one 36-hole course in Nong
+      // Chok), and pattaya/phoenix-gold-golf-club-pattaya "is the genuine
+      // Pattaya sister". Differing holes/province/coordinates are evidence of
+      // two DIFFERENT clubs; the shared website is common ownership.
+      "/golf-courses/pattaya/amata-spring-country-club",
+      "/golf-courses/pattaya/bangpra-international-golf-club",
+      "/golf-courses/pattaya/chatrium-golf-resort-soi-dao",
+      "/golf-courses/pattaya/chee-chan-golf-resort",
+      "/golf-courses/pattaya/crystal-bay-golf-resort",
+      "/golf-courses/pattaya/eastern-star-country-club",
+      "/golf-courses/pattaya/greenwood-golf-club",
+      "/golf-courses/pattaya/kabinburi-sportclub",
+      "/golf-courses/pattaya/khao-kheow-country-club",
+      "/golf-courses/pattaya/mountain-shadow-golf-club",
+      "/golf-courses/pattaya/pattana-golf-club-resort",
+      "/golf-courses/pattaya/pattavia-century-golf-club",
+      "/golf-courses/pattaya/pattaya-country-club",
+      "/golf-courses/pattaya/pleasant-valley-golf-country-club",
+      "/golf-courses/pattaya/rayong-green-valley",
+      "/golf-courses/pattaya/siam-country-club-old-course",
+      "/golf-courses/pattaya/siam-country-club-plantation",
+      "/golf-courses/pattaya/siam-country-club-waterside",
+      "/golf-courses/pattaya/st-andrews-2000",
+      "/golf-courses/pattaya/the-emerald-golf-club",
+      "/golf-courses/pattaya/treasure-hill-golf-country-club",
+      "/golf-courses/pattaya/phoenix-gold-golf-club-pattaya",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -703,6 +856,57 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/bangkok/royal-gems-golf-sports-club",
       "/golf-courses/pattaya/burapha-golf-club",
       "/golf-courses/pattaya/laem-chabang-international",
+      // Batch 4 (2026-08) — the southern/island sweep. Completes phuket,
+      // krabi, khao-lak, koh-samui and southern-thailand to 100% of their
+      // rosters, so a locale reader on those region hubs no longer lands on a
+      // mixed-language list where most course links fall back to English.
+      "/golf-courses/phuket/aquella-golf-country-club",
+      "/golf-courses/phuket/blue-canyon-canyon-course",
+      "/golf-courses/phuket/laguna-golf-phuket",
+      "/golf-courses/phuket/loch-palm-golf-club",
+      "/golf-courses/phuket/mission-hills-phuket",
+      "/golf-courses/phuket/red-mountain-golf-club",
+      "/golf-courses/krabi/pakasai-country-club",
+      "/golf-courses/khao-lak/katathong-golf-resort",
+      "/golf-courses/koh-samui/rajjaprabha-dam-golf-course",
+      "/golf-courses/koh-samui/santiburi-samui-country-club",
+      "/golf-courses/southern-thailand/hat-yai-resort-golf-club",
+      "/golf-courses/southern-thailand/southern-hills-golf-country-club",
+      "/golf-courses/southern-thailand/sri-trang-golf-club",
+      // Batch 5 (2026-08) — the Pattaya/eastern-seaboard sweep. COMPLETE:
+      // Pattaya is 25 of 25, and all 22 entries below have had full th/ja/ko/zh
+      // native-language QA (3 blockers found and fixed; see the batch commits).
+      //
+      // phoenix-gold-golf-club-pattaya IS included. An earlier revision of this
+      // comment claimed it was half of a duplicate and had to be held back;
+      // that was wrong. Per docs/golf-course-content-audit-2026-07.md item 8
+      // the merge pair is bangkok/suvarnabhumi-golf-country-club <->
+      // bangkok/phoenix-gold-golf-country-club (one 36-hole course in Nong
+      // Chok), and pattaya/phoenix-gold-golf-club-pattaya "is the genuine
+      // Pattaya sister". Differing holes/province/coordinates are evidence of
+      // two DIFFERENT clubs; the shared website is common ownership.
+      "/golf-courses/pattaya/amata-spring-country-club",
+      "/golf-courses/pattaya/bangpra-international-golf-club",
+      "/golf-courses/pattaya/chatrium-golf-resort-soi-dao",
+      "/golf-courses/pattaya/chee-chan-golf-resort",
+      "/golf-courses/pattaya/crystal-bay-golf-resort",
+      "/golf-courses/pattaya/eastern-star-country-club",
+      "/golf-courses/pattaya/greenwood-golf-club",
+      "/golf-courses/pattaya/kabinburi-sportclub",
+      "/golf-courses/pattaya/khao-kheow-country-club",
+      "/golf-courses/pattaya/mountain-shadow-golf-club",
+      "/golf-courses/pattaya/pattana-golf-club-resort",
+      "/golf-courses/pattaya/pattavia-century-golf-club",
+      "/golf-courses/pattaya/pattaya-country-club",
+      "/golf-courses/pattaya/pleasant-valley-golf-country-club",
+      "/golf-courses/pattaya/rayong-green-valley",
+      "/golf-courses/pattaya/siam-country-club-old-course",
+      "/golf-courses/pattaya/siam-country-club-plantation",
+      "/golf-courses/pattaya/siam-country-club-waterside",
+      "/golf-courses/pattaya/st-andrews-2000",
+      "/golf-courses/pattaya/the-emerald-golf-club",
+      "/golf-courses/pattaya/treasure-hill-golf-country-club",
+      "/golf-courses/pattaya/phoenix-gold-golf-club-pattaya",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.

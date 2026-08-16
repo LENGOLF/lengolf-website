@@ -515,6 +515,79 @@ export const COURSE_DETAIL_I18N: {
   { region: 'bangkok', slug: 'royal-gems-golf-sports-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'pattaya', slug: 'burapha-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'pattaya', slug: 'laem-chabang-international', locales: ['th', 'ja', 'ko', 'zh'] },
+  // Batch 4 (2026-08) — the southern/island sweep. Selection is roster
+  // completion, not GSC demand: these 13 finish every course in phuket,
+  // krabi, khao-lak, koh-samui and southern-thailand, taking those five
+  // regions to 100%. The point is the hub→detail funnel — a ja reader on
+  // /ja/golf-courses/phuket/ previously saw 8 courses of which 6 links 301'd
+  // them to English. Note aquella and katathong sit in the phuket and
+  // khao-lak region directories but are both in PHANG NGA province; the
+  // directory builds the URL, the province feeds PROVINCE_L10N.
+  { region: 'phuket', slug: 'aquella-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'phuket', slug: 'blue-canyon-canyon-course', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'phuket', slug: 'laguna-golf-phuket', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'phuket', slug: 'loch-palm-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'phuket', slug: 'mission-hills-phuket', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'phuket', slug: 'red-mountain-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'krabi', slug: 'pakasai-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'khao-lak', slug: 'katathong-golf-resort', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'koh-samui', slug: 'rajjaprabha-dam-golf-course', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'koh-samui', slug: 'santiburi-samui-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'southern-thailand', slug: 'hat-yai-resort-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'southern-thailand', slug: 'southern-hills-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'southern-thailand', slug: 'sri-trang-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  // Batch 5 wave 1 (2026-08) — the Pattaya/eastern-seaboard sweep, roster
+  // completion again rather than GSC demand. Note three of these sit in the
+  // pattaya DIRECTORY (which builds the URL) but in other provinces:
+  // chatrium-golf-resort-soi-dao is Chanthaburi and kabinburi-sportclub is
+  // Prachin Buri — both added to PROVINCE_L10N in 35c7e15.
+  //
+  // All 22 pattaya entries have had full th/ja/ko/zh native-language QA, as
+  // have the southern/island entries above them. Pattaya is 25 of 25.
+  //
+  // phoenix-gold-golf-club-pattaya IS registered (further down). An earlier
+  // revision of this comment claimed it was half of a duplicate and had to be
+  // held back; that was WRONG — it inverted the evidence, reading 36-vs-27
+  // holes, different provinces and coordinates 115km apart as proof of
+  // duplication when they are proof of two DIFFERENT clubs under common
+  // ownership (hence the shared website).
+  // docs/golf-course-content-audit-2026-07.md item 8 is the primary source: the
+  // merge pair is bangkok/suvarnabhumi-golf-country-club <->
+  // bangkok/phoenix-gold-golf-country-club (one 36-hole RTJ Jr. course in Nong
+  // Chok), and pattaya/phoenix-gold-golf-club-pattaya "is the genuine Pattaya
+  // sister".
+  { region: 'pattaya', slug: 'amata-spring-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'bangpra-international-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'chatrium-golf-resort-soi-dao', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'chee-chan-golf-resort', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'crystal-bay-golf-resort', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'eastern-star-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'greenwood-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'kabinburi-sportclub', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'khao-kheow-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'mountain-shadow-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'pattana-golf-club-resort', locales: ['th', 'ja', 'ko', 'zh'] },
+  // Wave 2. (Historical note, kept because it is the reason the guard below
+  // exists: a spend limit killed these builders mid-edit, leaving th/ko written
+  // and ja absent. Those files were reverted to pristine rather than registered
+  // half-written — a registered tuple with a missing ja block advertises a
+  // translation via hreflang that does not exist. validate:i18n now fails a
+  // PARTIAL prose block outright. They were rewritten and are registered below.)
+  { region: 'pattaya', slug: 'pattavia-century-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'pattaya-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'pleasant-valley-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  // Batch 5 completion — Pattaya is now 25 of 25. These 8 are the 7 whose
+  // builders a spend limit killed mid-edit (reverted to pristine at the time,
+  // rewritten from scratch here) plus phoenix-gold-golf-club-pattaya, which an
+  // earlier revision wrongly excluded as a duplicate — see the retraction above.
+  { region: 'pattaya', slug: 'rayong-green-valley', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'siam-country-club-old-course', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'siam-country-club-plantation', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'siam-country-club-waterside', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'st-andrews-2000', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'the-emerald-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'treasure-hill-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'pattaya', slug: 'phoenix-gold-golf-club-pattaya', locales: ['th', 'ja', 'ko', 'zh'] },
 ]
 
 /**

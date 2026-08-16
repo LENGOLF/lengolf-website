@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl'
 // next/link, NOT the locale-aware i18n Link: the prefix decision is per
 // COURSE, not per locale, so it cannot be made here. Most course detail
 // pages are EN-only and a blanket locale prefix would 301 nearly every
-// roster link, but the 15 courses in COURSE_DETAIL_I18N do have th/ja pages
+// roster link, but the courses in COURSE_DETAIL_I18N do have th/ja/ko/zh pages
 // and must not be linked to English. The server resolves each href with
 // courseDetailHref and passes them in.
 import Link from 'next/link'

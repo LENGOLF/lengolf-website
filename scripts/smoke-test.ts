@@ -2593,7 +2593,7 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '/ja/golf-courses/bangkok/alpine-golf-club/',
   },
-  // ko/zh now have the same 15 course-detail translations as th/ja, so the
+  // All four locales now carry the same 50 course-detail translations, so the
   // NEGATIVE half of this invariant can no longer be "ko prefixes nothing" —
   // it has to name a course that is genuinely absent from COURSE_DETAIL_I18N.
   // Keeping only the positive half would leave an always-prefix regression

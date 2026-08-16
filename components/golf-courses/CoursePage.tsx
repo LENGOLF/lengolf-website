@@ -25,6 +25,21 @@ interface Props {
   faqs?: CourseFaqItem[]
 }
 
+/** Blank-line-delimited paragraphs, as ExplainerPage / ActivityPage / FaqPage all
+ *  do. Rendering a prose field as one raw string collapses every paragraph break
+ *  in HTML, so multi-paragraph prose ships as a single run-on block — 22 EN
+ *  courses in the three section fields (23 counting prose.overview, whose only
+ *  case is chiang-mai/hang-dong-golf-club) and, once this batch registered seven
+ *  of them, 28 localized pages too. The "21" this comment first carried was an
+ *  undercount; recount before quoting it forward.
+ *  Same class as the 36 run-on lists PR #90 fixed in renderParagraph().
+ *  The empty-segment filter is why this is a helper and not an inline split: no
+ *  course carries `\n\n\n` or a trailing blank line today, but one that did would
+ *  otherwise render a phantom empty <p> with a margin. */
+function splitParagraphs(content: string): string[] {
+  return content.split('\n\n').map((p) => p.trim()).filter(Boolean)
+}
+
 export default function CoursePage({ course, regionLabel, relatedCourses = [], crossLinks = [], faqs = [] }: Props) {
   // UI chrome comes from the GolfCourseDetail namespace, which now ships in
   // all five locales (ko/zh joined in the ko/zh course-detail batch, so this
@@ -161,10 +176,17 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
               </div>
             )}
 
-            {/* Overview prose */}
-            <p className="text-base leading-relaxed text-foreground/85">
-              {prose.overview}
-            </p>
+            {/* Overview prose. Split for the same reason the section cards below
+                are: this is the LEAD paragraph, above the fold, so leaving it on
+                the raw-string path was the more visible half of the same bug. */}
+            {splitParagraphs(prose.overview).map((paragraph, pIdx) => (
+              <p
+                key={pIdx}
+                className="text-base leading-relaxed text-foreground/85 [&:not(:first-of-type)]:mt-3"
+              >
+                {paragraph}
+              </p>
+            ))}
 
             {/* Stat strip */}
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -205,7 +227,16 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
                   <h2 className="mb-3 text-xs font-bold uppercase tracking-widest text-primary">
                     {s.label}
                   </h2>
-                  <p className="text-sm leading-relaxed text-foreground/80">{s.content}</p>
+                  {/* Same helper as the lead overview above — one split rule for
+                      every prose field, so the two paths cannot drift apart. */}
+                  {splitParagraphs(s.content).map((paragraph, pIdx) => (
+                    <p
+                      key={pIdx}
+                      className="text-sm leading-relaxed text-foreground/80 [&:not(:first-of-type)]:mt-3"
+                    >
+                      {paragraph}
+                    </p>
+                  ))}
                 </div>
               ))}
             </div>
