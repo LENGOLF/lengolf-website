@@ -137,6 +137,16 @@ const AS_OF_MARKERS: Record<Locale, string[]> = {
 // Locales whose tone forbids emoji + exclamation marks. Derived from the
 // glossary tone string (all of ja/ko/zh state "No exclamation marks. No emoji.";
 // verified by reading each glossary's `tone`). Scoped to ja/ko/zh per the task.
+//
+// th is DELIBERATELY absent, and the omission is not the tone filter's doing:
+// data/i18n-glossary/th.json states "No exclamation marks. No emoji." verbatim,
+// so seeding th here would admit it. Measured on PR #96: doing so turns 23
+// pre-existing messages/th.json strings red — ContactForm.thankYou, Blog.ctaTitle,
+// and ~20 FAQ answers — where "!" is idiomatic Thai marketing register. ZERO
+// course/guide prose entries fail, so the content corpus is already compliant.
+// Widening this is therefore a copy decision (should Thai UI microcopy drop its
+// exclamation marks?) that needs native QA, not a linter change. Until that is
+// settled, Thai emoji/exclamation is ungated — do not read a green run as proof.
 const NO_EMOJI_EXCL: Locale[] = (['ja', 'ko', 'zh'] as Locale[]).filter((l) =>
   /no exclamation/i.test(glossaries[l].tone)
 )
@@ -440,13 +450,20 @@ for (const region of readdirSync(COURSES_ROOT)) {
       // back to course.prose per field). What is never intentional is a PARTIAL
       // prose block: it means a writer stopped midway. That case renders English
       // body text under localized chrome while hreflang advertises a full
-      // translation, and nothing else catches it — the missing-BLOCK case is a
-      // hard 404 that dynamicParams already gates, smoke L2 only asserts 200 +
-      // <main>, and courseUnits() just yields fewer units, so a 3-of-5 block
-      // lints as three clean fields. Found by adversarial review after a spend
-      // limit killed 7 builders mid-edit and left exactly this shape on disk.
+      // translation. An OMITTED field is already a tsc error (GolfCourseProse
+      // declares all five required), but tsc does not run in CI's lint job and
+      // `satisfies` below does not force exhaustiveness, so this check earns its
+      // keep on the cases tsc cannot see: an empty or whitespace-only value.
+      // Nothing else catches those — the missing-BLOCK case is a hard 404 that
+      // dynamicParams already gates, smoke L2 only asserts 200 + <main>, and
+      // courseUnits() just yields fewer units, so a 3-of-5 block lints as three
+      // clean fields. Found by adversarial review after a spend limit killed 7
+      // builders mid-edit and left exactly this shape on disk.
+      // The .trim() is load-bearing: CoursePage falls back with `??`, not `||`,
+      // so a '   ' value BEATS the English fallback and renders an empty <p>
+      // under a localized <h2>. A bare truthiness test passes it silently.
       if (isRegistered && l?.prose) {
-        const missing = COURSE_PROSE_FIELDS.filter((f) => !l.prose?.[f])
+        const missing = COURSE_PROSE_FIELDS.filter((f) => !l.prose?.[f]?.trim())
         if (missing.length > 0) {
           add('error', locale, entryId, 'locales', 'course-prose-partial',
             `locales.${locale}.prose is PARTIAL — missing ${missing.join(', ')}. Ship all ${COURSE_PROSE_FIELDS.length} prose fields or none at all; a partial block renders English body text under a localized title while hreflang advertises a full translation`)
