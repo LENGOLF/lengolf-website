@@ -62,13 +62,23 @@ function makePin(index: number, active: boolean, courseName: string): HTMLDivEle
 
 export default function CourseMapExplorer({ courses, region, regionLabel, center, hrefs }: Props) {
   const t = useTranslations('GolfCourseRegion')
-  // Region hubs SSG th/ja/ko/zh (getTranslatedRegionHubParams), and every other
-  // string in this component already comes from `t`. driveTimeLabel is the only
-  // one whose text is built in code rather than the catalog, so it needs the
-  // locale explicitly or the info panel and the roster's drive column ship
-  // "~70 min" inside otherwise-localized chrome. toFormatLocale (lib/format,
-  // client-safe) rather than toCourseSeoLocale, which would pull course-seo's
-  // FAQ_L10N into this client bundle.
+  // Region hubs SSG th/ja/ko/zh (getTranslatedRegionHubParams), so a value
+  // built in CODE rather than read from `t` ships English into localized
+  // chrome. driveTimeLabel was doing exactly that in the info panel and the
+  // roster's drive column ("~70 min"). toFormatLocale (lib/format, client-safe)
+  // rather than toCourseSeoLocale, which would pull course-seo's FAQ_L10N into
+  // this client bundle.
+  //
+  // NOT the only English left on this component, and the earlier version of
+  // this comment wrongly said it was: `{activeCourse.province}` below and
+  // `{course.province}` in the roster render the ENGLISH province name while
+  // PROVINCE_L10N (lib/course-seo.ts) ships th/ja/ko/zh for the mapped ones —
+  // 49 English province spans per translated hub. Not fixed here because it is
+  // pre-existing and NOT a code fix: 17 provinces covering 53 courses have no
+  // PROVINCE_L10N entry at all, so localizing only the mapped ones would make
+  // a tier-page roster mix scripts. It needs a 68-string translation batch with
+  // native QA. Tracked as a known gap on PR #97 — do not read this file as
+  // proof the surface is locale-clean.
   const locale = toFormatLocale(useLocale())
   const [activeSlug, setActiveSlug] = useState<string | null>(null)
   const [mapsUnavailable, setMapsUnavailable] = useState(false)

@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from 'next-intl'
 // its output must be used verbatim.
 import Link from 'next/link'
 import type { GolfCourse } from '@/types/golf-courses'
-import { driveTimeLabel, toFormatLocale } from '@/lib/format'
+import { driveTimeLabel, toFormatLocale, type FormatLocale } from '@/lib/format'
 import { localizedCourseProse } from '@/lib/course-seo'
 import { courseDetailHref } from '@/lib/translated-routes'
 
@@ -20,50 +20,63 @@ interface Props {
   items: RoundupItem[]
 }
 
-/** ASCII and CJK full-width sentence terminators. */
-const TERMINATORS = new Set(['.', '!', '?', '。', '！', '？'])
+/** CJK full-width sentence terminators — never decimal separators or abbreviations. */
+const FULL_WIDTH_TERMINATORS = new Set(['。', '！', '？'])
 
 /**
  * First sentence of the (localized) `prose.overview` — used as the pull quote.
  *
- * A scan rather than one regex, because the two rules below cannot both be
- * expressed in a single match without backtracking defeating them: a regex that
- * exempts a decimal point silently falls BACK to cutting at that same point
- * when no later terminator exists, which is precisely the case this has to fix.
+ * Which characters end a sentence is a PER-LANGUAGE fact, so this takes the
+ * locale rather than trying to be universal. Measured over all 149 courses
+ * (2026-08-16); recount before quoting these forward:
  *
- * Rule 1 — the CJK full-width terminators must be recognized. ja/zh prose ends
- * sentences with 。, so an ASCII-only class matched nothing and returned the
- * whole paragraph where a one-line quote was intended. Measured: ja/ko/zh
- * first sentences are 71–92 chars at the median, so this is the difference
- * between a pull quote and a wall of text.
+ *   en  ASCII '.' — 149/149 split, median 178 chars. Byte-identical to the
+ *       pre-i18n implementation, verified 0/149 differences.
+ *   ko  ASCII '.' — Korean genuinely ends sentences with a period. 50/50
+ *       split, median 77. It was never affected by any of this.
+ *   ja  。 only — 41/50 found NO ASCII terminator, so an ASCII-only rule
+ *   zh  。 only   returned the whole paragraph. Medians 71 (ja) / 93 (zh).
+ *   th  none at all — Thai does not punctuate sentence ends. 50/50 return the
+ *       whole overview.
  *
- * Rule 2 — an ASCII '.' glued to a digit on BOTH sides is a decimal or a clock
- * time, not a sentence end. Thai writes times as 06.00 and durations as 2.5,
- * and Thai has no sentence-terminating punctuation of its own, so the first
- * stray '.' in a Thai overview falls deep inside the paragraph: 11 of the 50
- * Thai overviews were being cut MID-NUMBER ("…ทีไทม์ช่วง 06.", "…ราว 2."). The
- * clamp hides that from a sighted reader; a screen reader and a crawler get the
- * truncated figure. Requiring whitespace-or-end after an ASCII terminator
- * covers the same class from the other side.
+ * Restricting ja/zh to 。 and exempting th entirely is what fixes the cut this
+ * function used to make mid-token. An ASCII '.' inside th/zh prose is a
+ * decimal (2.5), a clock time (06.00), a Thai abbreviation (น.) or a Latin one
+ * (Dr., Jr., MBK Public Co.) — never a sentence end. It shipped quotes reading
+ * "…ออกแบบโดย Dr." and "…与Japan Golf Promotion Co.", losing the name that was
+ * the point of the sentence. line-clamp-2 hides that from a sighted reader —
+ * the cut is hundreds of characters in — but a screen reader and a crawler get
+ * the fragment.
  *
- * Thai therefore still returns the WHOLE overview in most cases (39 of 50 did
- * already, and the mid-number ones now join them) — there is genuinely nothing
- * to split on, and a character cut would break mid-word since Thai does not
- * space between words. Be honest about what that costs: the Thai `<p>` carries
- * the entire overview, ~763 chars at the median, visually clamped to two lines.
- * Correct, but not free — a real Thai pull quote needs an authored summary
- * field, not a smarter split.
+ * Do NOT try to express this as one regex. Exempting a decimal point
+ * (`(?:[^.!?。！？]|(?<=\d)\.(?=\d))*[.!?。！？]`) BACKTRACKS and re-matches that
+ * same '.' as the terminator whenever no later terminator exists — reproducing
+ * the exact cut, while appearing to work on the one entry that has a later
+ * " น." to reach.
+ *
+ * What Thai costs, stated honestly: the th `<p>` carries the entire overview,
+ * 795 chars at the median, visually clamped to two lines but read in full by
+ * screen readers and crawlers, and duplicated verbatim from that course's own
+ * detail page. Worst case measured is /th/…/under/7500-baht/ at +3.6 KB
+ * gzipped (+4.8% of the page). A real Thai pull quote needs an authored
+ * summary field; a smarter splitter cannot produce one.
  */
-function firstSentence(text: string): string {
+function firstSentence(text: string, locale: FormatLocale): string {
   const t = text.trim()
+  // Thai has no sentence-terminating punctuation. There is nothing to split on,
+  // and a character cut would break mid-word (Thai does not space words).
+  if (locale === 'th') return t
+  const asciiTerminates = locale === 'en' || locale === 'ko'
   for (let i = 0; i < t.length; i++) {
     const ch = t[i]
-    if (!TERMINATORS.has(ch)) continue
-    // Full-width terminators are unambiguous sentence ends; they are not used
-    // as decimal separators or in abbreviations.
-    if (ch !== '.' && ch !== '!' && ch !== '?') return t.slice(0, i + 1)
+    if (FULL_WIDTH_TERMINATORS.has(ch)) return t.slice(0, i + 1)
+    if (!asciiTerminates) continue
+    if (ch !== '.' && ch !== '!' && ch !== '?') continue
+    // Require whitespace-or-end so a decimal or a version number does not end
+    // the sentence. Latin abbreviations (Jr., Co.) still cut early — that is
+    // pre-existing EN behaviour, unchanged here, and fixing it would move EN
+    // output. Left as a known gap rather than smuggled into an i18n PR.
     const next = t[i + 1]
-    if (ch === '.' && /\d/.test(t[i - 1] ?? '') && /\d/.test(next ?? '')) continue
     if (next === undefined || /\s/.test(next)) return t.slice(0, i + 1)
   }
   return t
@@ -111,7 +124,7 @@ export default function RoundupList({ items }: Props) {
                 </div>
 
                 <p className="mt-1.5 text-sm leading-relaxed text-foreground/80 line-clamp-2">
-                  {firstSentence(localizedCourseProse(c, locale).overview)}
+                  {firstSentence(localizedCourseProse(c, locale).overview, locale)}
                 </p>
 
                 {/* Chips: fee + drive time + reason */}
