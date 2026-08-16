@@ -5201,6 +5201,124 @@ async function runLocalizedDriveTimeTests() {
   }
 }
 
+// ── P) EN-fallback pull quotes must match the EN page ────────────────
+//
+// A course with no translated `prose.overview` renders its ENGLISH overview on
+// a translated tier page — the documented per-field fallback. The pull quote
+// EXCERPTS that text, and excerpting is language-specific, so the excerpt must
+// be taken with the language of the TEXT, not of the page. PR #97 used the page
+// locale: on ja/zh (which split only on 。) English text has no terminator, so
+// the whole ~800-char paragraph shipped where ~165 chars had shipped before.
+//
+// The assertion is EQUALITY against the EN page rather than a length threshold,
+// and that choice is the whole design:
+//   - The EN page is an independent oracle. localizedOverview short-circuits on
+//     locale === 'en', so a locale-branch defect structurally cannot corrupt
+//     both sides of the comparison.
+//   - A length threshold CANNOT work. Thai correct output spans [68, 1042]
+//     because Thai has no sentence-terminating punctuation and correctly
+//     returns the whole overview; Thai buggy output spans [470, 1146]. The
+//     ranges overlap by 572 chars — no threshold separates them, and a blanket
+//     400-char rule fires on 5 of 5 correct Thai tier pages. Scoped to ja/ko/zh
+//     the separating window is [373, 470], both edges owned by editorial prose,
+//     which is one long English opening sentence away from firing on correct
+//     code. CLAUDE.md's checkScript note is the precedent for why that gets a
+//     gate switched off.
+// Measured red/green: 0 mismatches of 148 on the fixed tree, 111 of 148 on the
+// unfixed one — and it catches the Thai regression, which no length rule can.
+const FALLBACK_MIN_COMPARISONS = 100;
+
+async function runFallbackPullQuoteTests() {
+  console.log(
+    "\n\x1b[1mP) EN-fallback pull quotes match the EN page\x1b[0m",
+  );
+  const { getTranslatedPriceTierParams } = await import("../data/price-tiers");
+
+  // Pull quotes keyed by the course href on the card, so the two pages can be
+  // aligned per course rather than by position — the rosters are identically
+  // ordered today, but that is a derived top-12 and not something to depend on.
+  const quotesByCourse = async (path: string) => {
+    const res = await fetch(`${BASE}${path}`, { redirect: "follow" });
+    if (res.status !== 200) return null;
+    const markup = renderedMarkup(await res.text());
+    const out = new Map<string, string>();
+    for (const li of markup.split("<li>").slice(1)) {
+      const href = li.match(/href="([^"]*\/golf-courses\/[^"]+)"/)?.[1];
+      const quote = li.match(/line-clamp-2"[^>]*>([\s\S]*?)<\/p>/)?.[1];
+      if (!href || !quote) continue;
+      // Strip any locale prefix so /ja/golf-courses/x and /golf-courses/x match.
+      out.set(href.replace(/^\/[a-z]{2}(?=\/golf-courses\/)/, ""), quote.trim());
+    }
+    return out;
+  };
+
+  const enCache = new Map<string, Map<string, string> | null>();
+  let compared = 0;
+
+  for (const { locale, tier } of getTranslatedPriceTierParams() as {
+    locale: string;
+    tier: string;
+  }[]) {
+    const label = `/${locale}/golf-courses/under/${tier}/ EN-fallback quote fidelity`;
+    try {
+      const enPath = `/golf-courses/under/${tier}/`;
+      if (!enCache.has(enPath)) enCache.set(enPath, await quotesByCourse(enPath));
+      const en = enCache.get(enPath);
+      const loc = await quotesByCourse(`/${locale}/golf-courses/under/${tier}/`);
+      if (!en || !loc) {
+        fail(label, "could not fetch or parse the tier page (expected 200 + pull quotes)");
+        continue;
+      }
+      const bad: string[] = [];
+      for (const [href, enQuote] of en) {
+        const locQuote = loc.get(href);
+        if (locQuote === undefined) continue; // roster differs; not this check's business
+        // Equal means an EN-fallback slot excerpted identically on both pages —
+        // the passing case. A translated course SHOULD differ; that is the
+        // feature, not a defect, and is filtered out below.
+        if (locQuote === enQuote) {
+          compared++;
+          continue;
+        }
+        // Differs: either a real translation (fine) or a mis-excerpted EN
+        // fallback. Distinguish by asking whether the localized text is still
+        // English — an EN fallback that was excerpted with the wrong language
+        // stays English but comes out longer than the EN page's excerpt.
+        const asciiRatio =
+          (locQuote.match(/[A-Za-z]/g) ?? []).length / Math.max(locQuote.length, 1);
+        if (asciiRatio > 0.5 && locQuote.startsWith(enQuote.slice(0, 40))) {
+          compared++;
+          bad.push(`${href} (${locale}=${locQuote.length}ch vs en=${enQuote.length}ch)`);
+        }
+      }
+      if (bad.length > 0) {
+        fail(
+          label,
+          `${bad.length} English-fallback pull quote(s) differ from the EN page — the excerpt was taken with the PAGE locale instead of the text's: ${bad.slice(0, 3).join("; ")}`,
+        );
+      } else {
+        pass(label);
+      }
+    } catch (err) {
+      fail(`${label} fetch error`, String(err));
+    }
+  }
+
+  // Anti-vacuity with a real number: as translation coverage grows the
+  // EN-fallback set shrinks, and this section would otherwise pass by
+  // comparing nothing at all. Same trap PR #88's courseDetailHref negative
+  // assertion hit when a batch translated the course it was pinned to.
+  const label = `P compared >= ${FALLBACK_MIN_COMPARISONS} EN-fallback quotes`;
+  if (compared < FALLBACK_MIN_COMPARISONS) {
+    fail(
+      label,
+      `only ${compared} EN-fallback pull quotes were compared — either translation coverage grew (re-baseline this floor) or the selector stopped matching and the section is passing on an empty set`,
+    );
+  } else {
+    pass(label);
+  }
+}
+
 // ── Main ────────────────────────────────────────────────────────────
 
 async function main() {
@@ -5240,6 +5358,7 @@ async function main() {
   await runWayfindingTests();
   await runRegionCountTests();
   await runLocalizedDriveTimeTests();
+  await runFallbackPullQuoteTests();
 
   console.log(`\n\x1b[1m${passed} passed, ${failed} failed\x1b[0m`);
   if (failures.length > 0) {
