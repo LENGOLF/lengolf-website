@@ -26,9 +26,10 @@ export interface GoogleReviewsData {
 // stray space happens to sit mid-window, over-trims by a whole clause.
 const THAI_SCRIPT_RE = /[฀-๿]/
 
-// Detection is Thai-specific because getGoogleReviews() only ever returns Thai
-// or English text today. If another non-spaced script (ja/ko/zh) starts flowing
-// through here, extend detection rather than assuming the English branch is safe.
+// Detection is Thai-specific because today's callers only feed this Thai or
+// English text (Google reviews keyed by locale, or curated English quotes). If
+// a caller starts passing another non-spaced script (ja/ko/zh), extend
+// detection rather than assuming the English branch is safe for it.
 export function truncateReviewText(text: string, maxLen: number): string {
   if (text.length <= maxLen) return text
   if (THAI_SCRIPT_RE.test(text)) {
