@@ -55,9 +55,11 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
 
   // Localized prose with per-field EN fallback: a pilot course may ship
   // title/meta only (locales.<locale>.prose absent) — render EN prose under
-  // the localized chrome rather than blanking sections. Shared with
-  // RoundupList and the GolfCourse JSON-LD; see localizedCourseProse for why
-  // rental_cta_context is NOT part of it (it wants no EN fallback — see below).
+  // the localized chrome rather than blanking sections. Shared with the
+  // GolfCourse JSON-LD; RoundupList does NOT use this — it excerpts, so it
+  // needs localizedOverview, which also returns the language the text is
+  // actually in. See localizedCourseProse for why rental_cta_context is not
+  // part of it (it wants no EN fallback — see below).
   const L = locale === 'en' ? undefined : course.locales[locale]
   const prose = localizedCourseProse(course, locale)
 
