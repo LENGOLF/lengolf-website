@@ -31,16 +31,22 @@ interface BlogPostTranslation {
  */
 export type BlogLocale = 'en' | 'th' | 'ko' | 'ja' | 'zh'
 
-// Reading-speed constants. en/ko are space-delimited (Korean eojeols carry
-// spaces the way English words do, so a word count is meaningful); ja/zh/th
-// are not — a raw `split(' ')` on unspaced CJK/Thai text collapses the whole
-// article to a single "word", so every translated post rendered "1 min read"
-// regardless of length. Those three are measured by character count instead,
-// at conventional CJK/Thai reading-speed figures (chars/min, not words/min).
+// Reading-speed constants. `en` is space-delimited (a raw `split(' ')` word
+// count is meaningful); ja/zh/ko/th are not — a raw `split(' ')` on unspaced
+// CJK/Thai text collapses the whole article to a single "word", so every
+// translated post rendered "1 min read" regardless of length. Those four are
+// measured by character count instead, at conventional per-language reading
+// speeds (chars/min, not words/min). ko included: Korean IS space-delimited,
+// but only into eojeols (particle-attached phrase units, not English-shaped
+// words) — an eojeol count run through the English 200-words/min divisor
+// underestimates reading time by ~1.5-1.7x (measured against ko strings in
+// this repo), and a char count fits Hangul about as well as it fits Han
+// script, since both pack roughly one morpheme per character/syllable block.
 const WORDS_PER_MINUTE = 200
 const CHARS_PER_MINUTE: Partial<Record<BlogLocale, number>> = {
   ja: 500,
   zh: 500,
+  ko: 500,
   th: 700,
 }
 
