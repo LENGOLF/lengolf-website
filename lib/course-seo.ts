@@ -37,17 +37,50 @@ export function toCourseSeoLocale(l: string): CourseSeoLocale {
 }
 
 /**
+ * The overview PLUS the language it is actually in — `'en'` whenever the
+ * per-field fallback fired, regardless of the page locale.
+ *
+ * Any caller that SPLITS, TRUNCATES or EXCERPTS the text needs this rather than
+ * `localizedCourseProse(...).overview`, because those operations are
+ * language-specific. PR #97 shipped the bug this exists to prevent: the roundup
+ * pull quote asked `firstSentence` to split using the PAGE locale, so on a ja/zh
+ * page an untranslated course's ENGLISH overview went through the ja/zh branch,
+ * which only splits on `。`. English has none, so the whole paragraph shipped.
+ * On `/ja/golf-courses/under/3500-baht/` that hit 7 of the 12 pull quotes, which
+ * went from ~165 chars before #97 to ~800 after — a regression, not a fix.
+ * (Corpus-wide across the 99 EN-fallback courses the medians are 181 and 858;
+ * quote whichever population you mean, and say which.)
+ *
+ * Callers that merely RENDER the text whole — the CoursePage body, the
+ * GolfCourse JSON-LD `description` — do not care and should keep using
+ * `localizedCourseProse`.
+ *
+ * NOTE the truthiness test rather than `??`: an EMPTY-STRING localized overview
+ * falls back to EN here, where the three sibling fields in
+ * `localizedCourseProse` would keep the `''`. No such string exists today (all
+ * 149 courses × 4 locales censused), and returning an empty pull quote would be
+ * worse than an English one, but the two rules genuinely differ — do not
+ * describe them as identical.
+ */
+export function localizedOverview(
+  course: GolfCourse,
+  locale: CourseSeoLocale
+): { text: string; locale: CourseSeoLocale } {
+  const localized = locale === 'en' ? undefined : course.locales[locale]?.prose?.overview
+  return localized ? { text: localized, locale } : { text: course.prose.overview, locale: 'en' }
+}
+
+/**
  * A course's body prose in `locale`, with a PER-FIELD EN fallback: a pilot
  * course may ship title + meta_description only (`locales.<locale>.prose`
  * absent), or a partially translated prose object, and the page must render EN
  * prose under localized chrome rather than blanking a section.
  *
- * Single source for this resolution because it has three consumers on
- * different surfaces — the detail page body (CoursePage), the roundup pull
- * quote (RoundupList, which shipped the EN overview under localized links on
- * /{ja,ko,zh,th}/golf-courses/under/<tier>/), and the GolfCourse JSON-LD
- * `description` on the detail route. Duplicating it per call site is exactly
- * how the roundup site was missed.
+ * Single source for this resolution because it has two consumers on different
+ * surfaces — the detail page body (CoursePage) and the GolfCourse JSON-LD
+ * `description` on the detail route. Both render the text WHOLE. The roundup
+ * pull quote used to be a third consumer and is deliberately no longer one: it
+ * excerpts, so it needs `localizedOverview` above.
  *
  * `rental_cta_context` is DELIBERATELY excluded: CoursePage passes it to
  * RentalCtaBanner WITHOUT an EN fallback (`undefined` on a locale with no
@@ -60,7 +93,9 @@ export function localizedCourseProse(
 ): Omit<GolfCourseProse, 'rental_cta_context'> {
   const L = locale === 'en' ? undefined : course.locales[locale]
   return {
-    overview: L?.prose?.overview ?? course.prose.overview,
+    // Delegated so the two resolutions cannot drift. Differs from the siblings
+    // below on empty string only — see the localizedOverview docstring.
+    overview: localizedOverview(course, locale).text,
     layout_and_experience: L?.prose?.layout_and_experience ?? course.prose.layout_and_experience,
     tips: L?.prose?.tips ?? course.prose.tips,
     location_and_access: L?.prose?.location_and_access ?? course.prose.location_and_access,
