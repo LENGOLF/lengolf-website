@@ -11,6 +11,7 @@ import { buildRelatedLabels } from '@/lib/seo-links'
 import { getSiteFacts, getFactTokens } from '@/lib/site-facts'
 import { BOOKING_URL, BUSINESS_INFO, SOCIAL_LINKS } from '@/lib/constants'
 import { StarIcon } from '@/components/shared/StarRating'
+import { truncateReviewText } from '@/lib/google-reviews'
 import type { PriceGuideSeoPage } from '@/types/seo-pages'
 
 interface Props {
@@ -245,10 +246,7 @@ export default async function PriceGuidePageComponent({ data }: Props) {
             </h2>
             <div className="grid gap-5 sm:grid-cols-3">
               {content.curated_reviews.slice(0, 3).map((review) => {
-                const maxLen = 150
-                const truncated = review.text.length > maxLen
-                  ? review.text.slice(0, maxLen).replace(/\s+\S*$/, '') + '...'
-                  : review.text
+                const truncated = truncateReviewText(review.text, 150)
                 return (
                   <div key={review.reviewer_name} className="rounded-lg border border-border/60 bg-white p-5 shadow-sm">
                     <div className="mb-3 flex items-center gap-3">

@@ -21,6 +21,23 @@ export interface GoogleReviewsData {
   reviews: GoogleReview[]
 }
 
+// Thai script has no reliable inter-word spacing, so the English word-boundary
+// backoff (\s+\S*$) either cuts mid-word at an arbitrary byte offset or, when a
+// stray space happens to sit mid-window, over-trims by a whole clause.
+const THAI_SCRIPT_RE = /[฀-๿]/
+
+// Detection is Thai-specific because today's callers only feed this Thai or
+// English text (Google reviews keyed by locale, or curated English quotes). If
+// a caller starts passing another non-spaced script (ja/ko/zh), extend
+// detection rather than assuming the English branch is safe for it.
+export function truncateReviewText(text: string, maxLen: number): string {
+  if (text.length <= maxLen) return text
+  if (THAI_SCRIPT_RE.test(text)) {
+    return text.slice(0, maxLen) + '...'
+  }
+  return text.slice(0, maxLen).replace(/\s+\S*$/, '') + '...'
+}
+
 export async function getGoogleReviews(locale: string = 'en'): Promise<GoogleReviewsData | null> {
   try {
     const supabase = createClient()

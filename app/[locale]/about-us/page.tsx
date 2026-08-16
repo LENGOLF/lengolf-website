@@ -8,7 +8,7 @@ import BookingCTA from '@/components/shared/BookingCTA'
 import { storageUrl, SITE_URL, BUSINESS_INFO, SOCIAL_LINKS } from '@/lib/constants'
 import { getAlternates, getCanonical } from '@/lib/translated-routes'
 import { getFaqPageJsonLd, getAggregateRatingJsonLd, getBreadcrumbJsonLd } from '@/lib/jsonld'
-import { getGoogleReviews, type GoogleReview } from '@/lib/google-reviews'
+import { getGoogleReviews, truncateReviewText, type GoogleReview } from '@/lib/google-reviews'
 import FaqSection from '@/components/shared/FaqSection'
 import { StarIcon, StarRating } from '@/components/shared/StarRating'
 
@@ -36,10 +36,7 @@ const faqLinks: Record<string, { href: string; external?: boolean }> = {
 
 function ReviewCard({ review }: { review: GoogleReview }) {
   const initial = review.reviewer_name.charAt(0).toUpperCase()
-  const maxLen = 180
-  const truncated = review.text.length > maxLen
-    ? review.text.slice(0, maxLen).replace(/\s+\S*$/, '') + '...'
-    : review.text
+  const truncated = truncateReviewText(review.text, 180)
 
   return (
     <div className="rounded-lg border border-border/60 bg-white p-5 shadow-sm">
