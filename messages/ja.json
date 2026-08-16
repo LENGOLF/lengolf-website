@@ -1293,6 +1293,7 @@
     "chipDesigner": "設計：{designer}",
     "chipEst": "{year}年開場",
     "weekdayGreenFee": "平日グリーンフィー",
+    "weekendGreenFee": "週末グリーンフィー",
     "thb": "THB",
     "weekendFee": "週末：{price}THB",
     "closedPermanently": "このコースはすでに閉業しています。",
@@ -1346,6 +1347,7 @@
     "nudgeBodyNoRental": "このコースにはクラブレンタルがありませんが、LENGOLFなら借りられます。現行モデルのCallaway Paradym、Warbird、REVAのセットが<price>1日1,200THB</price>から。複数日割引あり、バンコク市内のホテルへお届けも可能です。",
     "seePackages": "パッケージを見る",
     "lowSeasonGreenFee": "ローシーズングリーンフィー",
+    "highSeasonGreenFee": "ハイシーズングリーンフィー",
     "highSeasonFee": "ハイシーズン：{price}THB",
     "lowSeason": "ローシーズン",
     "highSeason": "ハイシーズン"

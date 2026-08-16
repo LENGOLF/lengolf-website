@@ -33,7 +33,10 @@ export function pricesByDayOfWeek(c: FeeBasisSource): boolean {
  *
  * - `lower` / `upper` — bare basis words for a two-row fee table or a map popup
  *   (`GolfCourseDetail` and `GolfCourseRegion`).
- * - `lowerHeading` — the hero chip's heading over the lower rate.
+ * - `lowerHeading` / `upperHeading` — "<basis> green fee" noun phrases. `lowerHeading`
+ *   is the hero chip's heading over the lower rate; `upperHeading` has no visible
+ *   consumer today and exists for the schema.org `Offer.name` slot (see
+ *   `feeOfferNames`), where `upperInline` would inject a price into a label.
  * - `upperInline` — the hero chip's inline "{price} THB" line for the upper rate.
  * - `upperShort` — the abbreviated tag the region-hub roster puts after the upper
  *   rate, where the non-seasonal form is `wknd` rather than `weekend`.
@@ -46,6 +49,7 @@ export function feeLabelKeys(c: FeeBasisSource): {
   lower: 'weekday' | 'lowSeason'
   upper: 'weekend' | 'highSeason'
   lowerHeading: 'weekdayGreenFee' | 'lowSeasonGreenFee'
+  upperHeading: 'weekendGreenFee' | 'highSeasonGreenFee'
   upperInline: 'weekendFee' | 'highSeasonFee'
   upperShort: 'wknd' | 'highSeason'
 } {
@@ -54,6 +58,7 @@ export function feeLabelKeys(c: FeeBasisSource): {
         lower: 'lowSeason',
         upper: 'highSeason',
         lowerHeading: 'lowSeasonGreenFee',
+        upperHeading: 'highSeasonGreenFee',
         upperInline: 'highSeasonFee',
         upperShort: 'highSeason',
       }
@@ -61,10 +66,43 @@ export function feeLabelKeys(c: FeeBasisSource): {
         lower: 'weekday',
         upper: 'weekend',
         lowerHeading: 'weekdayGreenFee',
+        upperHeading: 'weekendGreenFee',
         upperInline: 'weekendFee',
         upperShort: 'wknd',
       }
 }
+
+/**
+ * Localized `Offer.name` pair for a course's two green-fee rates, e.g.
+ * `{ lower: '平日グリーンフィー', upper: '週末グリーンフィー' }`.
+ *
+ * Exists because the schema.org `Offer.name` on a course-detail page and the
+ * `Offer.description` on a price-tier roundup were built from `feeLabelsEn`,
+ * which this module's own docblock reserves for the EN-pinned routes — so every
+ * localized page shipped an English label inside `lang="ja"` structured data.
+ *
+ * `t` is a `GolfCourseDetail` translator (next-intl's `getTranslations`), passed
+ * in rather than resolved here so `lib/jsonld-courses.ts` stays sync and
+ * next-intl-free. EN composes byte-identically to the previous
+ * `` `${feeLabelsEn(c).lower} green fee` `` — `weekdayGreenFee` is already
+ * "Weekday green fee" — so this is a no-op for the EN-pinned surfaces.
+ */
+export function feeOfferNames(
+  c: FeeBasisSource,
+  t: (key: FeeHeadingKey) => string
+): { lower: string; upper: string } {
+  const keys = feeLabelKeys(c)
+  return { lower: t(keys.lowerHeading), upper: t(keys.upperHeading) }
+}
+
+/**
+ * The four heading keys, derived from `feeLabelKeys` so adding a basis can't
+ * leave this behind. Narrower than a next-intl namespace translator's key
+ * union, which is what makes a `getTranslations('GolfCourseDetail')` result
+ * assignable here under `strictFunctionTypes` (parameters are contravariant:
+ * a function accepting MORE keys satisfies one that will only ever pass four).
+ */
+type FeeHeadingKey = ReturnType<typeof feeLabelKeys>['lowerHeading' | 'upperHeading']
 
 /**
  * Plain-English label pair for the EN-only surfaces (`/compare/` spec table,

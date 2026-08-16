@@ -1296,6 +1296,7 @@
     "chipDesigner": "设计：{designer}",
     "chipEst": "{year}年开业",
     "weekdayGreenFee": "平日果岭费",
+    "weekendGreenFee": "周末果岭费",
     "thb": "泰铢",
     "weekendFee": "周末：{price}泰铢",
     "closedPermanently": "该球场已永久停止营业。",
@@ -1349,6 +1350,7 @@
     "nudgeBodyNoRental": "这家球场不提供球杆租借 — 但LENGOLF可以。现行款Callaway Paradym、Warbird与REVA整套球杆，<price>每日1,200泰铢</price>起，多日租借享折扣，并可送达您在曼谷的酒店。",
     "seePackages": "查看套餐",
     "lowSeasonGreenFee": "淡季果岭费",
+    "highSeasonGreenFee": "旺季果岭费",
     "highSeasonFee": "旺季：{price}泰铢",
     "lowSeason": "淡季",
     "highSeason": "旺季"

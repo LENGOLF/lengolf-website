@@ -1206,6 +1206,7 @@
     "chipDesigner": "ออกแบบโดย {designer}",
     "chipEst": "เปิดปี {year}",
     "weekdayGreenFee": "ค่ากรีนฟีวันธรรมดา",
+    "weekendGreenFee": "ค่ากรีนฟีวันหยุดสุดสัปดาห์",
     "thb": "บาท",
     "weekendFee": "วันหยุดสุดสัปดาห์: {price} บาท",
     "closedPermanently": "สนามนี้ปิดให้บริการถาวรแล้ว",
@@ -1259,6 +1260,7 @@
     "nudgeBodyNoRental": "สนามนี้ไม่มีบริการเช่าไม้กอล์ฟ — แต่เช่ากับ LENGOLF ได้ ชุดไม้กอล์ฟ Callaway Paradym, Warbird และ REVA รุ่นปัจจุบัน เริ่มต้น <price>1,200 บาท/วัน</price> พร้อมส่วนลดเมื่อเช่าหลายวันและบริการส่งถึงโรงแรมในกรุงเทพฯ",
     "seePackages": "ดูแพ็กเกจ",
     "lowSeasonGreenFee": "ค่ากรีนฟีโลว์ซีซัน",
+    "highSeasonGreenFee": "ค่ากรีนฟีไฮซีซัน",
     "highSeasonFee": "ไฮซีซัน: {price} บาท",
     "lowSeason": "โลว์ซีซัน",
     "highSeason": "ไฮซีซัน"

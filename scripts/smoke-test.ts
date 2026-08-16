@@ -58,6 +58,10 @@
 // otherwise a global script to the compiler).
 export {};
 
+// Type-only, so this stays a file with no *runtime* static imports: every
+// module here is still loaded lazily inside the section that needs it.
+import type { GolfCourse } from "../types/golf-courses";
+
 const BASE = process.argv[2] || "http://localhost:3000";
 
 // ── Test definitions ────────────────────────────────────────────────
@@ -4141,6 +4145,53 @@ async function runCourseDetailRegistryLivenessTests() {
   const { getRegisteredCourseDetailPaths, ALL_LOCALES } =
     await import("../lib/translated-routes");
 
+  // Structured-data language, asserted on the SAME fetch. getCourseDetailJsonLd
+  // set `description: c.prose.overview` unconditionally, so every one of these
+  // pages shipped an ENGLISH GolfCourse description under lang="ja"/"ko"/"zh"/
+  // "th" while the translated overview sat unused on disk. Nothing caught it:
+  // the markup is well-formed, the page renders, and `lang` is correct — only
+  // reading the emitted JSON tells you the prose is the wrong language.
+  const { loadCourseFiles } = await import("./course-files");
+  const { feeLabelKeys } = await import("../lib/course-fees");
+  const courseByPath = new Map<string, GolfCourse>();
+  for (const { course } of await loadCourseFiles()) {
+    courseByPath.set(`/golf-courses/${course.region}/${course.slug}`, course);
+  }
+  const catalogs: Record<string, Record<string, Record<string, string>>> = {};
+  for (const l of ["en", "th", "ja", "ko", "zh"]) {
+    catalogs[l] = require(`../messages/${l}.json`);
+  }
+  // Anti-vacuity: counted separately from `covered` because a course can be
+  // registered with title+meta only (prose still EN by design), and because a
+  // regression in courseByPath keying would silently skip every assertion.
+  let schemaChecked = 0;
+  // The Offer branch needs its OWN counter: it can go vacuous independently of
+  // the description branch (drop `makesOffer`, rename a catalog key) while
+  // schemaChecked stays at its full count and prints a pass.
+  let offerChecked = 0;
+  // Registered pairs whose locale ships no prose — legitimate, but counted so
+  // the floor below can be exact rather than a guessed margin.
+  let noProse = 0;
+
+  function golfCourseSchema(body: string): Record<string, any> | null {
+    // [\s\S] rather than the `s` flag: tsconfig.scripts.json targets below
+    // es2018, where dotAll is a compile error. `[^>]*` BEFORE `type=` too —
+    // pinning type as the first attribute means a future <script id=… type=…>
+    // silently matches nothing, and a check that finds no schema at all is
+    // indistinguishable from one that passes.
+    for (const m of body.matchAll(
+      /<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g,
+    )) {
+      try {
+        const j = JSON.parse(m[1]);
+        if (j["@type"] === "GolfCourse" || j["@type"] === "Place") return j;
+      } catch {
+        /* not this blob */
+      }
+    }
+    return null;
+  }
+
   // Same anti-vacuity guard as L3/L4/L5. L2 predates them and had none: if
   // getRegisteredCourseDetailPaths regressed to [], every locale would be
   // skipped, the section would print a header, assert nothing and read as a
@@ -4180,6 +4231,76 @@ async function runCourseDetailRegistryLivenessTests() {
             'served 200 without <main id="main-content">',
           );
         }
+
+        // ── JSON-LD language ──
+        const course = courseByPath.get(path);
+        const schema = golfCourseSchema(body);
+        if (!course) {
+          fail(
+            `L2 schema check could not resolve a course file for ${path}`,
+            "the registry path did not match any data/golf-courses/<region>/<slug>.ts — the assertions below would silently skip.",
+          );
+        } else if (!schema) {
+          fail(
+            `No GolfCourse/Place JSON-LD on ${target}`,
+            "getCourseDetailJsonLd output is missing or unparseable.",
+          );
+        } else {
+          const wantDesc = course.locales?.[locale]?.prose?.overview;
+          // Only assertable where the locale actually ships prose; a
+          // title+meta-only translation legitimately falls back to EN.
+          if (!wantDesc) {
+            noProse++;
+          } else {
+            schemaChecked++;
+            if (schema.description !== wantDesc) {
+              fail(
+                `JSON-LD description is not the '${locale}' text on ${target}`,
+                schema.description === course.prose.overview
+                  ? "it is the ENGLISH prose.overview — getCourseDetailJsonLd lost its locale (the defect this check exists for)."
+                  : `expected locales.${locale}.prose.overview, got: ${String(schema.description).slice(0, 80)}…`,
+              );
+            }
+          }
+          // Offer labels came from feeLabelsEn, which lib/course-fees.ts
+          // reserves for the EN-pinned routes. Localizing `description` without
+          // `offerNames` fixes the prose and leaves these English.
+          //
+          // BOTH slots are asserted. Checking only makesOffer[0] would exercise
+          // the pre-existing `lowerHeading` key and never touch weekendGreenFee
+          // /highSeasonGreenFee — i.e. the two keys this pass ADDS would have no
+          // guard at all, which is the half most likely to be wrong.
+          const keys = feeLabelKeys(course);
+          const wantOffers = [
+            catalogs[locale]?.GolfCourseDetail?.[keys.lowerHeading],
+            catalogs[locale]?.GolfCourseDetail?.[keys.upperHeading],
+          ];
+          // A course with a null weekday fee emits NO makesOffer at all, which
+          // is legitimate; one with only a weekday fee emits a single Offer.
+          // Anything else must match, and the expected label must EXIST — a
+          // renamed catalog key would otherwise turn `wantOffer` undefined and
+          // silently disarm the comparison (the `X && compare(X)` shape).
+          const gotOffers: unknown[] = Array.isArray(schema.makesOffer)
+            ? schema.makesOffer.map((o: Record<string, unknown>) => o?.name)
+            : [];
+          for (let i = 0; i < gotOffers.length; i++) {
+            const want = wantOffers[i];
+            if (want === undefined) {
+              fail(
+                `No '${locale}' catalog label for Offer[${i}] on ${target}`,
+                `GolfCourseDetail.${i === 0 ? keys.lowerHeading : keys.upperHeading} is missing from messages/${locale}.json — the label assertion would silently skip. next-intl would ship the literal key string into structured data.`,
+              );
+              continue;
+            }
+            offerChecked++;
+            if (gotOffers[i] !== want) {
+              fail(
+                `JSON-LD Offer[${i}] name is not the '${locale}' label on ${target}`,
+                `expected ${JSON.stringify(want)}, got ${JSON.stringify(gotOffers[i])}`,
+              );
+            }
+          }
+        }
       } catch (err) {
         fail(`${target} fetch error`, String(err));
       }
@@ -4198,6 +4319,40 @@ async function runCourseDetailRegistryLivenessTests() {
     );
   } else {
     pass(`L2 covered ${covered} registered course-detail path(s)`);
+  }
+
+  // Separate floors from `covered`: the liveness loop can be fully green while
+  // every schema assertion is skipped (a courseByPath keying regression, or
+  // golfCourseSchema failing to match the script tag). Without these, the
+  // language checks degrade to a no-op that still prints a pass.
+  //
+  // EXACT, not a margin: every registered pair either ships localized prose
+  // (asserted) or does not (counted in noProse), so the two must account for
+  // all of `covered`. A guessed floor like `< 100` against a true 200 would let
+  // two entire locales vanish silently.
+  if (schemaChecked + noProse !== covered) {
+    fail(
+      `L2 description check reached only ${schemaChecked + noProse} of ${covered} registered page(s)`,
+      `${schemaChecked} asserted + ${noProse} legitimately EN-fallback should equal ${covered}. A shortfall means pages are being skipped, not that they are correct.`,
+    );
+  } else {
+    pass(
+      `L2 asserted localized JSON-LD description on ${schemaChecked} course page(s)` +
+        (noProse > 0 ? ` (${noProse} EN-fallback by design)` : ""),
+    );
+  }
+
+  // The Offer floor cannot be exact — courses with a null weekday fee emit no
+  // makesOffer, and only some have a second rate — so it is a real number
+  // derived from the corpus rather than `> 0`. Today: 48 fee-bearing courses
+  // per locale x 4, each with 2 rates = ~380.
+  if (offerChecked < 300) {
+    fail(
+      `L2 Offer-label check ran on only ${offerChecked} label(s)`,
+      "expected 300+. A near-zero count means makesOffer is absent or the catalog lookup is failing, not that the labels are correct.",
+    );
+  } else {
+    pass(`L2 asserted localized JSON-LD Offer labels on ${offerChecked} label(s)`);
   }
 }
 
@@ -4621,6 +4776,89 @@ const wayfindingTests: {
   },
 ];
 
+// ── L6) Price-tier roundup ItemList language ─────────────────────────
+// `/golf-courses/under/<tier>/` is the ONLY roundup route that SSGs non-EN
+// locales, so it is the only place `golfCourseItem` emits into a translated
+// page — and it had no structured-data assertion of any kind: J2 is a static
+// registry set-diff and the routeTests entries check status + <main> only.
+// Deleting the `offerNames` argument from that route regresses every item to an
+// English `Offer.description` with every other gate green, which is exactly the
+// "shipped only the cheaper half" shape this repo keeps re-learning.
+//
+// Asserts membership in the locale's own label SET rather than per-course
+// equality: the roundup only ever emits the LOWER rate, whose basis is
+// per-course (a tier page really does mix seasonal and day-of-week courses), so
+// the valid answers are exactly that locale's two lower-basis labels.
+async function runPriceTierRoundupLanguageTests() {
+  console.log("\n\x1b[1mL6) Price-tier roundup ItemList language\x1b[0m");
+  const { getTranslatedPriceTierParams } = await import("../data/price-tiers");
+  const params = getTranslatedPriceTierParams() as {
+    locale: string;
+    tier: string;
+  }[];
+
+  let itemsChecked = 0;
+  for (const { locale, tier } of params) {
+    const target = `/${locale}/golf-courses/under/${tier}/`;
+    try {
+      const res = await fetch(`${BASE}${target}`, { redirect: "manual" });
+      if (res.status !== 200) {
+        fail(`Translated price-tier page not live: ${target}`, `got ${res.status}`);
+        continue;
+      }
+      const body = await res.text();
+      let list: Record<string, any> | null = null;
+      for (const m of body.matchAll(
+        /<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g,
+      )) {
+        try {
+          const j = JSON.parse(m[1]);
+          if (j["@type"] === "ItemList") list = j;
+        } catch {
+          /* not this blob */
+        }
+      }
+      if (!list || !Array.isArray(list.itemListElement)) {
+        fail(`No ItemList JSON-LD on ${target}`, "getCourseRoundupJsonLd output missing or unparseable.");
+        continue;
+      }
+      const cat = (require(`../messages/${locale}.json`) as Record<string, Record<string, string>>)
+        .GolfCourseDetail;
+      const allowed = [cat?.weekdayGreenFee, cat?.lowSeasonGreenFee];
+      if (allowed.some((v) => v === undefined)) {
+        fail(
+          `Missing '${locale}' green-fee labels for ${target}`,
+          "GolfCourseDetail.weekdayGreenFee / lowSeasonGreenFee absent — the assertion below would compare against undefined.",
+        );
+        continue;
+      }
+      for (const el of list.itemListElement) {
+        const desc = el?.item?.offers?.description;
+        if (desc === undefined) continue; // course with a null weekday fee
+        itemsChecked++;
+        if (!allowed.includes(desc)) {
+          fail(
+            `ItemList Offer.description is not a '${locale}' label on ${target}`,
+            `got ${JSON.stringify(desc)}, expected one of ${JSON.stringify(allowed)} — the route likely dropped its offerNames argument and fell back to the silent EN default.`,
+          );
+        }
+      }
+    } catch (err) {
+      fail(`${target} fetch error`, String(err));
+    }
+  }
+
+  // Real number, not `> 0`: 5 tiers x 4 locales, each listing up to 12 courses.
+  if (itemsChecked < 100) {
+    fail(
+      `L6 checked only ${itemsChecked} ItemList offer(s)`,
+      "expected 100+ (20 translated tier pages x up to 12 courses). A low count means the ItemList isn't being found, not that it is correct.",
+    );
+  } else {
+    pass(`L6 asserted localized ItemList Offer.description on ${itemsChecked} item(s)`);
+  }
+}
+
 async function runWayfindingTests() {
   console.log("\n\x1b[1mM) Wayfinding copy (BTS Chidlom = Exit 4)\x1b[0m");
   for (const t of wayfindingTests) {
@@ -4998,6 +5236,7 @@ async function main() {
   await runRegionHubRegistryLivenessTests();
   await runFaqRegistryLivenessTests();
   await runSeoSectionRegistryTests();
+  await runPriceTierRoundupLanguageTests();
   await runWayfindingTests();
   await runRegionCountTests();
   await runLocalizedDriveTimeTests();

@@ -8,6 +8,7 @@ import { getAlternates, getCanonical, getResolvedCanonical } from '@/lib/transla
 import { getRegionHubTranslation, getTranslatedCourseDetailParams } from '@/data/golf-courses-i18n'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd } from '@/lib/jsonld'
 import { getCourseDetailJsonLd } from '@/lib/jsonld-courses'
+import { feeOfferNames } from '@/lib/course-fees'
 import { getCourseTitle, getCourseDescription, getCourseFaqs, toCourseSeoLocale } from '@/lib/course-seo'
 import CoursePage from '@/components/golf-courses/CoursePage'
 import {
@@ -220,12 +221,16 @@ export default async function CoursePageRoute({ params }: Props) {
   // The `description` follows the page language for the same reason the FAQ
   // schema below does: this route SSGs th/ja/ko/zh, and the schema should not
   // describe a Japanese page in English.
+  // `offerNames` extends that to the green-fee Offer labels, which were still
+  // built from feeLabelsEn — a helper its own docblock reserves for the
+  // EN-pinned routes — so the description and the Offer beside it disagreed.
   const seoLocale = toCourseSeoLocale(locale)
   const courseJsonLd = getCourseDetailJsonLd(
     course,
     canonicalUrl,
     `${enUrl}opengraph-image/`,
-    seoLocale
+    seoLocale,
+    (c) => feeOfferNames(c, t)
   )
 
   // FAQPage schema mirrors the visible CourseFaq block — same source array,
