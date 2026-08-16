@@ -133,7 +133,7 @@ export default async function BlogPostPage({ params }: Props) {
   }
 
   const { post } = result
-  const readingTime = getReadingTime(post.content)
+  const readingTime = getReadingTime(post.content, locale as BlogLocale)
   const relatedPosts = await getRelatedPosts(slug, locale as BlogLocale, 3)
   const dateLocale = DATE_LOCALES[locale] ?? 'en-US'
 

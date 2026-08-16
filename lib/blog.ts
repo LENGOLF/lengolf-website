@@ -31,10 +31,28 @@ interface BlogPostTranslation {
  */
 export type BlogLocale = 'en' | 'th' | 'ko' | 'ja' | 'zh'
 
-export function getReadingTime(html: string): number {
+// Reading-speed constants. en/ko are space-delimited (Korean eojeols carry
+// spaces the way English words do, so a word count is meaningful); ja/zh/th
+// are not — a raw `split(' ')` on unspaced CJK/Thai text collapses the whole
+// article to a single "word", so every translated post rendered "1 min read"
+// regardless of length. Those three are measured by character count instead,
+// at conventional CJK/Thai reading-speed figures (chars/min, not words/min).
+const WORDS_PER_MINUTE = 200
+const CHARS_PER_MINUTE: Partial<Record<BlogLocale, number>> = {
+  ja: 500,
+  zh: 500,
+  th: 700,
+}
+
+export function getReadingTime(html: string, locale: BlogLocale = 'en'): number {
   const text = html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
-  const words = text.split(' ').length
-  return Math.max(1, Math.ceil(words / 200))
+  const charsPerMinute = CHARS_PER_MINUTE[locale]
+  if (charsPerMinute) {
+    const chars = text.replace(/\s+/g, '').length
+    return Math.max(1, Math.ceil(chars / charsPerMinute))
+  }
+  const words = text.split(' ').filter(Boolean).length
+  return Math.max(1, Math.ceil(words / WORDS_PER_MINUTE))
 }
 
 /** Overlay a translation's fields onto the English base row. */
