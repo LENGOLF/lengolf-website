@@ -73,7 +73,8 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
   // this comment wrongly said it was: `{activeCourse.province}` below and
   // `{course.province}` in the roster render the ENGLISH province name while
   // PROVINCE_L10N (lib/course-seo.ts) ships th/ja/ko/zh for the mapped ones —
-  // 49 English province spans per translated hub. Not fixed here because it is
+  // one English province span per roster row, so the bangkok hub alone ships 55
+  // of them under localized chrome. Not fixed here because it is
   // pre-existing and NOT a code fix: 17 provinces covering 53 courses have no
   // PROVINCE_L10N entry at all, so localizing only the mapped ones would make
   // a tier-page roster mix scripts. It needs a 68-string translation batch with
