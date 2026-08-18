@@ -12,6 +12,10 @@ export const course: GolfCourse = {
   // All-in package (caddie + cart included); base green fee not separable
   green_fee_weekday_thb: 1199,
   green_fee_weekend_thb: 1399,
+  // All-in package (green fee + caddie + cart), per this file's own prose in
+  // every locale. The weekday/weekend split above is real and its labels stay;
+  // this only stops generated copy calling the number a bare "green fee".
+  fee_is_package: true,
   caddie_fee_thb: null,
   cart_fee_thb: null,
   caddie_required: true,

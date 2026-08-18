@@ -13,6 +13,10 @@ export const course: GolfCourse = {
   // no standalone green fee is published anywhere current.
   green_fee_weekday_thb: 800,
   green_fee_weekend_thb: 800,
+  // All-in package (green fee + caddie + cart), per this file's own prose in
+  // every locale. The weekday/weekend split above is real and its labels stay;
+  // this only stops generated copy calling the number a bare "green fee".
+  fee_is_package: true,
   fees_verified_at: '2026-07-30',
   // Zero means INCLUDED. Both are inside the 800 THB all-in package — the prose
   // and the header comment above say so, and 300 + 500 = 800 would leave a zero
@@ -56,9 +60,12 @@ export const course: GolfCourse = {
   // omits the price, and CoursePage drops the fee line while keeping the
   // "Available" chip — so no information is lost, only an unverified number.
   //
-  // NOTE club_rental_available: true is itself unsourced in this file's prose.
-  // Left alone because nulling it would flip the FAQ to "not confirmed", which
-  // is a different claim, not a smaller one.
+  // club_rental_available: true above is CONFIRMED by the owner (2026-08-18) —
+  // rental is offered on-site; only the price could not be established. So the
+  // FAQ's "offers rental clubs on-site", with no figure, is exactly what is
+  // known. Do not null the availability flag to "tidy up" the missing price:
+  // that would flip the copy to "on-site club rental is not confirmed", which
+  // contradicts what the club told us.
   club_rental_fee_thb: null,
   club_rental_brands: null,
   schema_markup: "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"GolfCourse\",\n  \"name\": \"Hua Hin Korea Golf Club\",\n  \"url\": \"https://len.golf/golf-courses/hua-hin/korea-golf-club-hua-hin\",\n  \"description\": null,\n  \"address\": {\n    \"@type\": \"PostalAddress\",\n    \"addressLocality\": \"Pran Buri\",\n    \"addressRegion\": \"Prachuap Khiri Khan\",\n    \"addressCountry\": \"TH\"\n  },\n  \"geo\": {\n    \"@type\": \"GeoCoordinates\",\n    \"latitude\": 12.4332,\n    \"longitude\": 99.9767\n  },\n  \"telephone\": \"+66 63 218 6636\",\n  \"priceRange\": \"฿\",\n  \"sameAs\": [\n    \"https://maps.google.com/?q=12.4332,99.9767\",\n    \"https://www.facebook.com/HUAHINKOREAGOLFCLUB\"\n  ],\n  \"amenityFeature\": [\n    {\n      \"@type\": \"LocationFeatureSpecification\",\n      \"name\": \"Driving Range\",\n      \"value\": true\n    },\n    {\n      \"@type\": \"LocationFeatureSpecification\",\n      \"name\": \"Caddie Required\",\n      \"value\": true\n    },\n    {\n      \"@type\": \"LocationFeatureSpecification\",\n      \"name\": \"Golf Cart\",\n      \"value\": true\n    }\n  ]\n}",

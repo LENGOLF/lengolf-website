@@ -1,6 +1,7 @@
 import type { GolfCourse } from '@/types/golf-courses'
 
 type FeeBasisSource = Pick<GolfCourse, 'fee_is_seasonal'>
+type FeeCopySource = Pick<GolfCourse, 'fee_is_seasonal' | 'fee_is_package'>
 
 /**
  * `green_fee_weekday_thb` / `green_fee_weekend_thb` hold the LOWER and HIGHER of a
@@ -25,6 +26,28 @@ type FeeBasisSource = Pick<GolfCourse, 'fee_is_seasonal'>
  */
 export function pricesByDayOfWeek(c: FeeBasisSource): boolean {
   return !c.fee_is_seasonal
+}
+
+/**
+ * May generated copy call this course's rate a "green fee"?
+ *
+ * Deliberately SEPARATE from `pricesByDayOfWeek`, and not an extension of it.
+ * They answer different questions and a package course splits them:
+ * `kaeng-krachan` charges 1,199 on weekdays and 1,399 at weekends, so its
+ * weekday/weekend LABELS are correct and must keep rendering — but both numbers
+ * are all-in packages including caddie and shared cart, so calling either a
+ * "green fee" tells a reader the caddie and cart are extra. Overloading
+ * `pricesByDayOfWeek` would have silently changed labels on six surfaces where
+ * they are right.
+ *
+ * Used only by the two generated-copy gates in `lib/course-seo.ts` (the fee FAQ,
+ * which also ships as FAQPage structured data, and the meta description's fee
+ * line). Both SUPPRESS rather than relabel, which is the same thing they already
+ * do for `fee_is_seasonal` — the course's own prose states the price and what it
+ * covers, in every locale, so nothing is hidden from the reader.
+ */
+export function statesABareGreenFee(c: FeeCopySource): boolean {
+  return pricesByDayOfWeek(c) && !c.fee_is_package
 }
 
 /**

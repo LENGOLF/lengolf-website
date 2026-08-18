@@ -1,5 +1,5 @@
 import type { GolfCourse, GolfCourseProse } from '@/types/golf-courses'
-import { pricesByDayOfWeek } from '@/lib/course-fees'
+import { statesABareGreenFee } from '@/lib/course-fees'
 import {
   asOfMonthYear,
   COURSE_CONTENT_LOCALES,
@@ -179,7 +179,7 @@ export function getCourseDescription(course: GolfCourse, locale: CourseSeoLocale
   // Skip the "Weekday green fee" line when the course prices seasonally —
   // the number is a low-season price, not a weekday one (see fee_is_seasonal).
   const fee =
-    course.green_fee_weekday_thb && pricesByDayOfWeek(course)
+    course.green_fee_weekday_thb && statesABareGreenFee(course)
       ? ` Weekday green fee ~${thb(course.green_fee_weekday_thb)}.`
       : ''
   const drive =
@@ -684,7 +684,7 @@ export function getCourseFaqs(course: GolfCourse, locale: CourseSeoLocale = 'en'
   // fields are low/high season, and this FAQ ships as FAQPage structured data,
   // so emitting it would assert a day-of-week split that does not exist. The
   // prose carries the seasonal pricing instead.
-  if (course.green_fee_weekday_thb && pricesByDayOfWeek(course)) {
+  if (course.green_fee_weekday_thb && statesABareGreenFee(course)) {
     faqs.push({
       question: L.feeQuestion(name),
       answer: L.feeAnswer(
