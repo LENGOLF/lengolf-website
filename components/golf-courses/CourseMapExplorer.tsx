@@ -12,7 +12,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { ArrowRight, Clock, Flag, X, ExternalLink, MapPinOff } from 'lucide-react'
 import type { GolfCourse } from '@/types/golf-courses'
-import { formatFee, driveTimeLabel, toFormatLocale } from '@/lib/format'
+import { driveTimeLabel, toFormatLocale } from '@/lib/format'
 import { courseMapsUrl, hasTrustedCoordinates } from '@/lib/geo'
 import { loadMapsApi, BASE_MAP_OPTIONS } from '@/lib/maps-loader'
 import { pushMapUnavailable } from '@/lib/analytics'
@@ -269,13 +269,13 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
                     {activeCourse.green_fee_weekday_thb && (
                       <div className="flex items-center justify-between">
                         <span className="text-xs text-muted-foreground">{t(feeLabelKeys(activeCourse).lower)}</span>
-                        <span className="text-xs font-bold text-foreground">{formatFee(activeCourse.green_fee_weekday_thb)}</span>
+                        <span className="text-xs font-bold text-foreground">{activeCourse.green_fee_weekday_thb.toLocaleString('en-US')}<span className="ml-0.5 text-[10px] font-medium text-muted-foreground">{t('thb')}</span></span>
                       </div>
                     )}
                     {activeCourse.green_fee_weekend_thb && (
                       <div className="flex items-center justify-between">
                         <span className="text-xs text-muted-foreground">{t(feeLabelKeys(activeCourse).upper)}</span>
-                        <span className="text-xs font-bold text-foreground">{formatFee(activeCourse.green_fee_weekend_thb)}</span>
+                        <span className="text-xs font-bold text-foreground">{activeCourse.green_fee_weekend_thb.toLocaleString('en-US')}<span className="ml-0.5 text-[10px] font-medium text-muted-foreground">{t('thb')}</span></span>
                       </div>
                     )}
                   </div>

@@ -112,6 +112,17 @@ function golfCourseItem(
  *     change, not a one-line swap. Note `golfCourseItem` above has no such
  *     short-circuit, so ITS `addressLocality` is live English on localized tier
  *     pages; see the known-gaps list in the PR.
+ *   - `golfCourseItem`'s `url` — the same omission, and this list did not name
+ *     it until a review pass measured it: that builder emits an EN-pinned
+ *     `/golf-courses/<region>/<slug>/` while `RoundupList` links the same course
+ *     via `courseDetailHref`, which prefixes the locale when the course IS
+ *     translated. 100 of the 240 ItemList entries on the translated tier pages
+ *     therefore name an English URL for a course whose localized page the same
+ *     page advertises by hreflang. Fixing it needs the routing locale threaded
+ *     into `CourseOfferNames`' sibling position — deliberately out of scope
+ *     here, but a docblock that lists three of four English fields is worse
+ *     than none, which is the whole point of "enumerated field-by-field or not
+ *     at all".
  */
 export function getCourseDetailJsonLd(
   c: GolfCourse,

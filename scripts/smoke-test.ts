@@ -4861,11 +4861,25 @@ async function runPriceTierRoundupLanguageTests() {
       }
       const cat = (require(`../messages/${locale}.json`) as Record<string, Record<string, string>>)
         .GolfCourseDetail;
-      const allowed = [cat?.weekdayGreenFee, cat?.lowSeasonGreenFee];
+      // The roundup emits only the LOWER rate, so the valid answers are this
+      // locale's two lower-basis labels — PLUS the two package forms, because
+      // the tier route now resolves labels through `feeHeadings`. Omitting them
+      // was latent rather than harmless: neither package course is in a top-12
+      // roster today, so this stayed green, and would have gone red on whichever
+      // unrelated PR next shifted popularity. Same "fixed one of two sites"
+      // shape as the defect the package work exists to close — L2 got the
+      // branch, L6 did not.
+      const pkg = cat?.packageHeading;
+      const allowed = [
+        cat?.weekdayGreenFee,
+        cat?.lowSeasonGreenFee,
+        pkg && cat?.weekday ? pkg.replace("{basis}", cat.weekday) : undefined,
+        pkg && cat?.lowSeason ? pkg.replace("{basis}", cat.lowSeason) : undefined,
+      ];
       if (allowed.some((v) => v === undefined)) {
         fail(
-          `Missing '${locale}' green-fee labels for ${target}`,
-          "GolfCourseDetail.weekdayGreenFee / lowSeasonGreenFee absent — the assertion below would compare against undefined.",
+          `Missing '${locale}' fee labels for ${target}`,
+          "GolfCourseDetail.weekdayGreenFee / lowSeasonGreenFee / packageHeading / weekday / lowSeason absent — the assertion below would compare against undefined.",
         );
         continue;
       }
