@@ -2597,7 +2597,9 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '/ja/golf-courses/bangkok/alpine-golf-club/',
   },
-  // All four locales now carry the same 61 course-detail translations, so the
+  // All four locales now carry the same set of course-detail translations
+  // (COURSE_DETAIL_I18N is the source of truth; no count is repeated here
+  // precisely because a hardcoded one rots every batch), so the
   // NEGATIVE half of this invariant can no longer be "ko prefixes nothing" —
   // it has to name a course that is genuinely absent from COURSE_DETAIL_I18N.
   // Keeping only the positive half would leave an always-prefix regression
@@ -3187,8 +3189,9 @@ const thaiRedirectTests: ThaiRedirectTest[] = [
     label: "Untranslated TH near-station page (EN-only route must 301)",
   },
   // Course DETAIL pages build locale copies only for the triples in
-  // COURSE_DETAIL_I18N (those 200 and are covered by section L2, which is
-  // registry-derived). Every OTHER course detail must still 301 —
+  // COURSE_DETAIL_I18N (those triples are covered by section L2, which is
+  // registry-derived, so this comment carries no count to go stale).
+  // Every OTHER course detail must still 301 —
   // /th/golf-courses/bangkok/ 200s, but an untranslated 3-segment detail
   // below it may not. Canary for the [region]/[slug] locale restriction.
   //
