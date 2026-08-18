@@ -40,6 +40,63 @@ function count(s: string, re: RegExp) {
   return (s.match(new RegExp(re.source, 'g')) || []).length
 }
 
+/**
+ * PARTIAL-swap detection: the longest CONTIGUOUS run of script-bearing
+ * characters that are foreign to this locale.
+ *
+ * The dominance rules below catch a WHOLE-slot swap and miss a partial one — a
+ * Chinese first sentence with a correct Japanese tail outvotes itself. This
+ * catches that, and it works because quoted foreign terms are SHORT while a
+ * swapped sentence is long. Latin, digits and punctuation are skipped as
+ * neutral: they appear legitimately in every locale (addresses, brand names,
+ * yardages) and would otherwise break runs at random.
+ *
+ * Thresholds are measured against the whole shipped corpus, not guessed. Across
+ * all 1,708 strings the longest legitimate foreign run is 0 for th/ko/zh and
+ * 10 for ja (`高速道路国道号線経由`, an ordinary all-kanji phrase). So these
+ * floors sit far above real copy and far below a swapped sentence.
+ *
+ * CAVEAT if this is ever pointed at messages/*.json: that corpus DOES contain
+ * deliberate cross-script strings — `directions.grabTip` prints the venue name
+ * in Thai inside ja/ko/zh copy so a reader can show it to a taxi driver, and
+ * `스크린골프` is quoted as a term of art in th/zh. Re-measure before reusing
+ * these numbers there.
+ */
+const FOREIGN_RUN_MAX: Record<Loc, number> = { th: 12, ko: 12, zh: 12, ja: 25 }
+
+const SCRIPT = {
+  thai: (c: string) => /[\u0e00-\u0e7f]/.test(c),
+  hangul: (c: string) => /[\uac00-\ud7af\u1100-\u11ff]/.test(c),
+  kana: (c: string) => /[\u3040-\u30ff]/.test(c),
+  han: (c: string) => /[\u4e00-\u9fff]/.test(c),
+}
+const bearing = (c: string) =>
+  SCRIPT.thai(c) || SCRIPT.hangul(c) || SCRIPT.kana(c) || SCRIPT.han(c)
+
+/** Is this character foreign to `loc`? (Han is legal in ja — handled separately.) */
+const isForeign: Record<Loc, (c: string) => boolean> = {
+  th: (c) => SCRIPT.han(c) || SCRIPT.hangul(c) || SCRIPT.kana(c),
+  ko: (c) => SCRIPT.han(c) || SCRIPT.kana(c) || SCRIPT.thai(c),
+  zh: (c) => SCRIPT.kana(c) || SCRIPT.hangul(c) || SCRIPT.thai(c),
+  ja: (c) => SCRIPT.hangul(c) || SCRIPT.thai(c),
+}
+
+function longestForeignRun(loc: Loc, s: string): { len: number; text: string } {
+  let best = 0, cur = 0, bestTxt = '', curTxt = ''
+  const push = (ok: boolean, ch: string) => {
+    if (ok) { cur++; curTxt += ch; if (cur > best) { best = cur; bestTxt = curTxt } }
+    else { cur = 0; curTxt = '' }
+  }
+  for (const ch of s) {
+    // ja's partial-swap shape is a run of Han with NO kana in it: Han is legal
+    // Japanese, so only the ABSENCE of kana over a long stretch is the signal.
+    if (loc === 'ja') { if (SCRIPT.kana(ch)) { cur = 0; curTxt = '' } else if (SCRIPT.han(ch)) push(true, ch) ; continue }
+    if (!bearing(ch)) continue
+    push(isForeign[loc](ch), ch)
+  }
+  return { len: best, text: bestTxt }
+}
+
 /** Which scripts must NOT dominate a given locale's slot. */
 function judge(loc: Loc, s: string): string | null {
   const thai = count(s, COUNTERS.thai)
@@ -71,6 +128,10 @@ function judge(loc: Loc, s: string): string | null {
     if (kana > 0) return `${kana} kana characters in a zh slot — suspected ja text`
     if (hangul > 0) return `${hangul} Hangul characters in a zh slot — suspected ko text`
     if (thai > 8 && thai > han) return `Thai (${thai}) outnumbers Han (${han})`
+  }
+  const run = longestForeignRun(loc, s)
+  if (run.len >= FOREIGN_RUN_MAX[loc]) {
+    return `${run.len}-character foreign-script run — suspected PARTIAL slot swap: "${run.text.slice(0, 40)}"`
   }
   return null
 }
