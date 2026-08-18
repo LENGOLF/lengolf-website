@@ -14,17 +14,26 @@ export const course: GolfCourse = {
   green_fee_weekday_thb: 800,
   green_fee_weekend_thb: 800,
   fees_verified_at: '2026-07-30',
-  // Zero means INCLUDED, and that is the encoding SpecTable already reads: it
-  // renders `> 0` as the amount, `=== 0` as "Included", and null as "—" (no
-  // data). Both are inside the 800 THB all-in package — the prose and the
-  // header comment above say so, and 300 + 500 = 800 would leave a zero green
-  // fee, so they cannot have been surcharges. A first pass nulled them, which
-  // stopped the fee card billing 800 + 300 + 500 but then asserted "unknown"
-  // where this file asserts "included". NOTE this does not conflict with the
-  // CLAUDE.md rule about `caddie_fee_thb: 0` — that rule forbids INFERRING
-  // all-inclusiveness from a zero (seven courses carry it without being
-  // all-inclusive); it does not forbid encoding a genuine inclusion as zero,
-  // which is what SpecTable's "Included" branch already exists for.
+  // Zero means INCLUDED. Both are inside the 800 THB all-in package — the prose
+  // and the header comment above say so, and 300 + 500 = 800 would leave a zero
+  // green fee, so they cannot have been surcharges.
+  //
+  // Be precise about what this buys TODAY, because an earlier version of this
+  // comment overclaimed: SpecTable is the only renderer with an `=== 0` ->
+  // "Included" branch, and SpecTable renders ONLY on /compare/, whose pairs are
+  // each region's top 3. This course ranks 11th of 11 in hua-hin, so that
+  // branch never runs for it. CoursePage gates both rows on `> 0`, so 0 and
+  // null render identically here — nothing. The reader is told the package is
+  // all-in by the prose, in all five locales.
+  //
+  // 0 is still the right encoding: it is what this file actually asserts, it
+  // matches how eight other courses encode an included fee, and it becomes
+  // visibly correct if this course ever enters the region top 3 — where null
+  // would render "—" (no data) beside a rival's real number.
+  //
+  // This does not conflict with the CLAUDE.md rule about `caddie_fee_thb: 0`:
+  // that rule forbids INFERRING all-inclusiveness from a zero, not encoding a
+  // genuine one as zero.
   caddie_fee_thb: 0,
   cart_fee_thb: 0,
   caddie_required: true,
