@@ -49,6 +49,11 @@ jobs:
       # incident — a scraped Thai-national rate shipping as the visitor rate.
       - run: npm run validate:courses
       - run: npm run validate:course-slots
+      # ...and the same argument as validate:i18n:self-test above. The census
+      # counts strings VISITED, not checks APPLIED, so disarming every script
+      # detector prints a byte-identical "1708 strings · 0 problem(s) · OK".
+      # This step is the only thing that can tell those two runs apart.
+      - run: npm run validate:course-slots:self-test
       - run: npm run validate:fee-labels
 
       # Club spec-sheet parsers. rental_club_sets.variants[].spec is

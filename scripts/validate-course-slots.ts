@@ -6,14 +6,15 @@
  *
  * Catches, by construction:
  *   - whole-slot swap (a zh paragraph landing in the `th` field)
+ *   - PARTIAL slot swap (a zh sentence spliced into an otherwise-correct block)
  *   - a dead builder's partial block (th/ko written, ja absent)
  *   - whitespace-only / empty fields (which beat the EN fallback via `??`)
  *   - missing prose fields, or prose omitted entirely
  *
  * Usage: npm run validate:course-slots [-- <region> [slug ...]]
  *        (no args = every region with at least one translated course)
+ *        npm run validate:course-slots -- --self-test
  */
-import fs from 'node:fs'
 import path from 'node:path'
 import { COURSE_DETAIL_I18N } from '../data/golf-courses-i18n'
 
@@ -29,80 +30,131 @@ const PROSE_FIELDS = [
 
 type Loc = (typeof LOCALES)[number]
 
-const COUNTERS: Record<string, RegExp> = {
-  thai: /[฀-๿]/g,
-  hangul: /[가-힯ᄀ-ᇿ㄰-㆏]/g,
-  kana: /[぀-ゟ゠-ヿ]/g,
-  han: /[一-鿿]/g,
-}
-
-function count(s: string, re: RegExp) {
-  return (s.match(new RegExp(re.source, 'g')) || []).length
-}
-
 /**
- * PARTIAL-swap detection: the longest CONTIGUOUS run of script-bearing
- * characters that are foreign to this locale.
+ * Script membership, used by BOTH the dominance counters and the run detector.
+ * They were two separate range sets in the first version, which made a single
+ * `ㄱ` a hard error under one rule and invisible neutral punctuation under the
+ * other. One definition each, no drift.
  *
- * The dominance rules below catch a WHOLE-slot swap and miss a partial one — a
- * Chinese first sentence with a correct Japanese tail outvotes itself. This
- * catches that, and it works because quoted foreign terms are SHORT while a
- * swapped sentence is long. Latin, digits and punctuation are skipped as
- * neutral: they appear legitimately in every locale (addresses, brand names,
- * yardages) and would otherwise break runs at random.
- *
- * Thresholds are measured against the whole shipped corpus, not guessed. Across
- * all 1,708 strings the longest legitimate foreign run is 0 for th/ko/zh and
- * 10 for ja (`高速道路国道号線経由`, an ordinary all-kanji phrase). So these
- * floors sit far above real copy and far below a swapped sentence.
- *
- * CAVEAT if this is ever pointed at messages/*.json: that corpus DOES contain
- * deliberate cross-script strings — `directions.grabTip` prints the venue name
- * in Thai inside ja/ko/zh copy so a reader can show it to a taxi driver, and
- * `스크린골프` is quoted as a term of art in th/zh. Re-measure before reusing
- * these numbers there.
+ * `han` spans CJK Ext A and the compatibility block as well as the BMP core, so
+ * a rare character cannot slip past as "neutral". `kana` DELIBERATELY excludes
+ * U+30FB `・` and U+30FC `ー`: both are punctuation-class marks, and counting
+ * them as kana let a Chinese paragraph with a `・` every 20 characters satisfy
+ * ja's kana-presence rule and reset its Han runs.
  */
-const FOREIGN_RUN_MAX: Record<Loc, number> = { th: 12, ko: 12, zh: 12, ja: 25 }
-
 const SCRIPT = {
-  thai: (c: string) => /[\u0e00-\u0e7f]/.test(c),
-  hangul: (c: string) => /[\uac00-\ud7af\u1100-\u11ff]/.test(c),
-  kana: (c: string) => /[\u3040-\u30ff]/.test(c),
-  han: (c: string) => /[\u4e00-\u9fff]/.test(c),
+  thai: (c: string) => /[฀-๿]/u.test(c),
+  hangul: (c: string) => /[가-힯ᄀ-ᇿ㄰-㆏]/u.test(c),
+  kana: (c: string) => /[ぁ-ゟァ-ヺヽ-ヿ]/u.test(c),
+  han: (c: string) =>
+    /[㐀-䶿一-鿿豈-﫿]|[\u{20000}-\u{2ffff}]/u.test(c),
 }
 const bearing = (c: string) =>
   SCRIPT.thai(c) || SCRIPT.hangul(c) || SCRIPT.kana(c) || SCRIPT.han(c)
 
-/** Is this character foreign to `loc`? (Han is legal in ja — handled separately.) */
-const isForeign: Record<Loc, (c: string) => boolean> = {
-  th: (c) => SCRIPT.han(c) || SCRIPT.hangul(c) || SCRIPT.kana(c),
-  ko: (c) => SCRIPT.han(c) || SCRIPT.kana(c) || SCRIPT.thai(c),
-  zh: (c) => SCRIPT.kana(c) || SCRIPT.hangul(c) || SCRIPT.thai(c),
-  ja: (c) => SCRIPT.hangul(c) || SCRIPT.thai(c),
+function count(s: string, is: (c: string) => boolean) {
+  let n = 0
+  for (const ch of s) if (is(ch)) n++
+  return n
 }
 
-function longestForeignRun(loc: Loc, s: string): { len: number; text: string } {
-  let best = 0, cur = 0, bestTxt = '', curTxt = ''
-  const push = (ok: boolean, ch: string) => {
-    if (ok) { cur++; curTxt += ch; if (cur > best) { best = cur; bestTxt = curTxt } }
-    else { cur = 0; curTxt = '' }
-  }
+/**
+ * Clause boundaries. Runs do not cross these.
+ *
+ * This is what makes the run detector safe on ordinary CJK copy: a comma-listed
+ * kanji noun phrase (`練習場、宿泊施設、会議室、日本語対応受付…`) is not one
+ * 35-character run, it is four short ones. Without this the longest LEGITIMATE
+ * ja run in the shipped corpus is 10 and a plain three-item route list measures
+ * 24, so any threshold low enough to catch a splice also fired on real copy.
+ * With it the longest legitimate ja run drops to 7 (`野生動物保護区`) and
+ * th/ko/zh to 0 — measured over all 1,708 shipped strings, not assumed.
+ */
+const CLAUSE_BREAK = /[、。，．！？：；…「」『』（）〔〕【】〈〉《》・ー—―～〜／·]/u
+
+/**
+ * Longest CONTIGUOUS run of characters foreign to this locale.
+ *
+ * Quoted foreign terms are SHORT; a swapped sentence is long. Latin, digits and
+ * ASCII punctuation are skipped as NEUTRAL rather than breaking a run — they
+ * appear legitimately inside every locale's copy (addresses, brand names,
+ * yardages), so breaking on them would let `球场1位于2华欣3镇` smuggle a whole
+ * clause past in four-character pieces. Native script and clause punctuation do
+ * break runs.
+ */
+function longestRun(s: string, isForeign: (c: string) => boolean): { len: number; text: string } {
+  let best = 0
+  let cur = 0
+  let bestTxt = ''
+  let curTxt = ''
   for (const ch of s) {
-    // ja's partial-swap shape is a run of Han with NO kana in it: Han is legal
-    // Japanese, so only the ABSENCE of kana over a long stretch is the signal.
-    if (loc === 'ja') { if (SCRIPT.kana(ch)) { cur = 0; curTxt = '' } else if (SCRIPT.han(ch)) push(true, ch) ; continue }
-    if (!bearing(ch)) continue
-    push(isForeign[loc](ch), ch)
+    if (CLAUSE_BREAK.test(ch)) {
+      cur = 0
+      curTxt = ''
+      continue
+    }
+    if (isForeign(ch)) {
+      cur++
+      curTxt += ch
+      if (cur > best) {
+        best = cur
+        bestTxt = curTxt
+      }
+    } else if (bearing(ch)) {
+      cur = 0
+      curTxt = ''
+    }
+    // else: neutral (Latin/digit/ASCII punctuation) — neither extends nor breaks
   }
   return { len: best, text: bestTxt }
 }
 
-/** Which scripts must NOT dominate a given locale's slot. */
+/**
+ * Characters that are foreign to each locale's script.
+ *
+ * `ja` is listed here too — an EARLIER version returned before consulting this
+ * map for ja, which made a Thai sentence spliced into a ja block invisible up to
+ * 183 characters (ja's only Thai rule is a dominance test against total kana).
+ * Han is absent from the ja row because Han is legal Japanese; that case is the
+ * separate kana-free-run rule below.
+ */
+const FOREIGN: Record<Loc, (c: string) => boolean> = {
+  th: (c) => SCRIPT.han(c) || SCRIPT.hangul(c) || SCRIPT.kana(c),
+  ko: (c) => SCRIPT.han(c) || SCRIPT.kana(c) || SCRIPT.thai(c),
+  zh: (c) => SCRIPT.kana(c) || SCRIPT.hangul(c) || SCRIPT.thai(c),
+  ja: (c) => SCRIPT.thai(c) || SCRIPT.hangul(c),
+}
+
+/**
+ * Thresholds, measured against the whole shipped corpus rather than guessed.
+ *
+ * Longest LEGITIMATE run with clause-breaking on: `th 0 · ko 0 · zh 0 · ja 0`
+ * for these foreign sets. 8 therefore has the entire corpus beneath it.
+ *
+ * What it CATCHES, measured the same way: splicing any one of the 427 shipped
+ * zh strings into another locale produces a Han run of at least 8 (min 8,
+ * median 18), so a whole-string swap is caught 100% of the time; at the
+ * single-SENTENCE level 95% of zh sentences (1,550/1,639) clear 8, against 74%
+ * at 12. Lowering this from the first version's 12 to 8 strictly improved both
+ * sides — there was no legitimate run between 0 and 12 to protect.
+ */
+const FOREIGN_RUN_MAX: Record<Loc, number> = { th: 8, ko: 8, zh: 8, ja: 8 }
+
+/**
+ * ja needs its own rule because Han is legal Japanese: the signal is not foreign
+ * script but a long stretch of Han with NO kana in it. Legitimate maximum in the
+ * corpus is 7 (`野生動物保護区`), so 12 keeps five characters of headroom while
+ * still reaching three quarters of single zh sentences. A whole-slot zh→ja swap
+ * does not depend on this number at all — the kana-absence dominance rule below
+ * catches it outright.
+ */
+const JA_KANA_FREE_HAN_MAX = 12
+
+/** Whole-slot dominance, then partial-splice runs. */
 function judge(loc: Loc, s: string): string | null {
-  const thai = count(s, COUNTERS.thai)
-  const hangul = count(s, COUNTERS.hangul)
-  const kana = count(s, COUNTERS.kana)
-  const han = count(s, COUNTERS.han)
+  const thai = count(s, SCRIPT.thai)
+  const hangul = count(s, SCRIPT.hangul)
+  const kana = count(s, SCRIPT.kana)
+  const han = count(s, SCRIPT.han)
 
   if (loc === 'th') {
     if (thai === 0) return `no Thai characters at all (han=${han} kana=${kana} hangul=${hangul})`
@@ -120,24 +172,127 @@ function judge(loc: Loc, s: string): string | null {
     // only discriminator — this mirrors checkScript's ja-only kana rule.
     if (kana === 0 && han >= 15) return `${han} kanji and ZERO kana — suspected zh text in a ja slot`
     if (kana === 0) return `no kana at all (han=${han})`
-    if (hangul > 0) return `${hangul} Hangul characters in a ja slot`
     if (thai > 8 && thai > kana) return `Thai (${thai}) outnumbers kana (${kana})`
   }
   if (loc === 'zh') {
     if (han === 0) return `no Han characters at all (kana=${kana} hangul=${hangul} thai=${thai})`
+    // Zero tolerance, and it is an editorial rule rather than a heuristic:
+    // Chinese renders Japanese and Korean proper nouns in Han (東京 not とうきょう,
+    // 首爾/首尔 not 서울), so kana or Hangul in zh copy is either a splice or a
+    // quoted term of art. See the CAVEAT below before reusing this elsewhere —
+    // `messages/zh.json` DOES quote `스크린골프` legitimately.
     if (kana > 0) return `${kana} kana characters in a zh slot — suspected ja text`
     if (hangul > 0) return `${hangul} Hangul characters in a zh slot — suspected ko text`
     if (thai > 8 && thai > han) return `Thai (${thai}) outnumbers Han (${han})`
   }
-  const run = longestForeignRun(loc, s)
+
+  const run = longestRun(s, FOREIGN[loc])
   if (run.len >= FOREIGN_RUN_MAX[loc]) {
     return `${run.len}-character foreign-script run — suspected PARTIAL slot swap: "${run.text.slice(0, 40)}"`
+  }
+  if (loc === 'ja') {
+    const hanRun = longestRun(s, SCRIPT.han)
+    if (hanRun.len >= JA_KANA_FREE_HAN_MAX) {
+      return `${hanRun.len}-character kana-free Han run — suspected PARTIAL zh splice: "${hanRun.text.slice(0, 40)}"`
+    }
   }
   return null
 }
 
-const regionArg = process.argv[2]
-const slugArgs = process.argv.slice(3)
+/**
+ * CAVEAT — known false-positive shape, and what to do about it.
+ *
+ * These thresholds are calibrated on the COURSE corpus, where no locale quotes
+ * another's script. Two places in this repo legitimately do, and both would fail
+ * here: `directions.grabTip` in `data/faq-hub.ts` prints the venue address in
+ * THAI inside ja/ko/zh copy so a reader can show it to a taxi driver, and
+ * `messages/zh.json` quotes `스크린골프` as a term of art. `location_and_access`
+ * is exactly the field where a future batch would reach for the first pattern.
+ *
+ * If that happens the gate WILL go red, and the answer is to widen this file
+ * deliberately — an allowlist keyed on `<slug>:<locale>:<field>` — not to raise
+ * a threshold, which would disarm the check for every other slot. Note the
+ * asymmetry while it stands: a Thai address fails in ko and zh at 8 characters
+ * and now also fails in ja, where it previously passed unnoticed.
+ *
+ * Do NOT point these numbers at `messages/*.json` without re-measuring.
+ */
+
+// ---------------------------------------------------------------------------
+
+/**
+ * Self-test: proves each detector actually fires. A gate whose checks are all
+ * silently disabled prints a byte-identical success line to a healthy one —
+ * `if (true) return null` at the top of `judge()` passed the whole corpus with
+ * "0 problem(s)", because the counters count strings VISITED, not checks
+ * APPLIED. `validate:i18n` carries its own `--self-test` for the same reason.
+ */
+const SELF_TESTS: Array<{ name: string; loc: Loc; s: string; expect: boolean }> = [
+  // --- must FIRE ---
+  { name: 'whole zh paragraph in a th slot', loc: 'th', expect: true,
+    s: '这座球场位于华欣以南约二十公里，十八洞标准杆七十二，球道宽阔，果岭速度中等偏快。' },
+  { name: 'whole zh paragraph in a ja slot (kana-free)', loc: 'ja', expect: true,
+    s: '这座球场位于华欣以南约二十公里，十八洞标准杆七十二，球道宽阔，果岭速度中等偏快。' },
+  { name: 'whole ja paragraph in a zh slot', loc: 'zh', expect: true,
+    s: 'このコースはホアヒンの南に位置し、18ホールパー72のレイアウトです。' },
+  { name: 'whole ko paragraph in a zh slot', loc: 'zh', expect: true,
+    s: '이 코스는 후아힌 남쪽에 있으며 18홀 파 72 구성입니다.' },
+  { name: 'PARTIAL: zh clause spliced into a ja block', loc: 'ja', expect: true,
+    s: 'このコースはホアヒン中心部から車で約20分の場所にあります。球道宽阔果岭速度中等偏快十分适合。フェアウェイは広めです。' },
+  { name: 'PARTIAL: zh clause spliced into a th block', loc: 'th', expect: true,
+    s: 'สนามแห่งนี้อยู่ห่างจากตัวเมืองหัวหินประมาณ 20 นาที 球道宽阔果岭速度中等偏快 และมีแคดดี้บังคับ' },
+  { name: 'PARTIAL: Thai sentence spliced into a ja block', loc: 'ja', expect: true,
+    s: 'このコースはホアヒンの南にあります。สนามแห่งนี้มีแคดดี้บังคับและรถกอล์ฟ。フェアウェイは広めです。' },
+  { name: 'zh text bridged by ・ in a ja slot (must not fake kana)', loc: 'ja', expect: true,
+    s: '这座球场位于华欣以南・十八洞标准杆七十二・球道宽阔果岭速度・中等偏快十分适合' },
+  { name: 'Latin/digit interleaving must not break a run', loc: 'th', expect: true,
+    s: 'สนามกอล์ฟแห่งนี้ 球场1位于2华欣3镇4以5南6约7二8十9公里 เปิดทุกวัน' },
+
+  // --- must STAY SILENT (real shipped copy, or its shape) ---
+  { name: 'legit ja kanji compound run (corpus max, 7)', loc: 'ja', expect: false,
+    s: 'このコースは野生動物保護区に隣接しており、朝は鳥の声が聞こえます。フェアウェイは広めです。' },
+  { name: 'legit ja comma-listed kanji nouns', loc: 'ja', expect: false,
+    s: '施設は練習場、宿泊施設、会議室、日本語対応受付、送迎車両手配、貸切営業対応、団体競技運営を備えます。' },
+  { name: 'legit ja route list', loc: 'ja', expect: false,
+    s: 'アクセスは国道7号線経由、東部臨海工業地帯経由、空港高速道路経由の3通りです。' },
+  { name: 'legit th prose with Latin brand names and yardages', loc: 'th', expect: false,
+    s: 'สนามออกแบบโดย Jack Nicklaus ระยะ 7,100 หลา จากแท่นหลัง เปิดบริการทุกวัน ตั้งแต่ 06.00 น.' },
+  { name: 'legit ko prose with a Latin course name', loc: 'ko', expect: false,
+    s: 'Black Mountain Golf Club 코스는 후아힌 시내에서 차로 약 15분 거리에 있습니다.' },
+  { name: 'legit zh prose', loc: 'zh', expect: false,
+    s: '这座球场位于华欣以南约二十公里，十八洞标准杆七十二，球道宽阔，果岭速度中等偏快。' },
+]
+
+function selfTest(): never {
+  let failed = 0
+  for (const t of SELF_TESTS) {
+    const got = judge(t.loc, t.s) !== null
+    const ok = got === t.expect
+    if (!ok) failed++
+    console.log(
+      `  ${ok ? '✓' : '✗'} [${t.loc}] ${t.name} — expected ${t.expect ? 'FIRE' : 'silent'}, got ${got ? 'FIRE' : 'silent'}`
+    )
+    if (!ok && got) console.log(`      ${judge(t.loc, t.s)}`)
+  }
+  const fires = SELF_TESTS.filter((t) => t.expect).length
+  console.log(`\n${SELF_TESTS.length} self-tests (${fires} must fire, ${SELF_TESTS.length - fires} must stay silent) · ${failed} failed`)
+  if (fires < 8) {
+    console.log('FAIL: self-test suite has lost its positive cases')
+    process.exit(1)
+  }
+  if (failed > 0) process.exit(1)
+  console.log('OK — every detector fires on the shape it exists for, and stays silent on real copy')
+  process.exit(0)
+}
+
+// ---------------------------------------------------------------------------
+
+const args = process.argv.slice(2)
+if (args.includes('--self-test')) selfTest()
+
+const regionArg = args[0]
+const slugArgs = args.slice(1)
+const scoped = Boolean(regionArg)
 
 /**
  * The corpus is the REGISTRY, not the filesystem. A course with no locale
@@ -163,6 +318,18 @@ const corpus = registered.filter(
     (!regionArg || c.region === regionArg) && (slugArgs.length === 0 || slugArgs.includes(c.slug))
 )
 
+/**
+ * Absolute floors for an UNSCOPED run, so a shrinking registry cannot go green.
+ * Every other number here is registry-derived and therefore self-satisfying:
+ * `locales: []` on every entry yields "0/0 slots present · 0 problems · OK".
+ *
+ * These are a ratchet, not a description. Raise them when the corpus grows;
+ * lowering one has to be a deliberate edit with a reason, which is the whole
+ * point. Today: 61 courses, 244 slots, 1,708 strings.
+ */
+const MIN_COURSES = 61
+const MIN_STRINGS = 1708
+
 let problems = 0
 let checked = 0
 let slotsSeen = 0
@@ -170,9 +337,17 @@ let serpOnly = 0
 
 async function main() {
   for (const { region, slug, locales: promised } of corpus) {
-    const mod = await import(path.join(ROOT, 'data/golf-courses', region, `${slug}.ts`))
-    const course = mod.course
-    const locales = course.locales ?? {}
+    const file = path.join(ROOT, 'data/golf-courses', region, `${slug}.ts`)
+    let mod: { course?: Record<string, unknown> }
+    try {
+      mod = await import(file)
+    } catch {
+      console.log(`  ✗ ${slug}: registered in COURSE_DETAIL_I18N but ${region}/${slug}.ts does not load`)
+      problems++
+      continue
+    }
+    const course = mod.course as { locales?: Record<string, Record<string, string> & { prose?: Record<string, string> }> }
+    const locales = course?.locales ?? {}
     const missing: string[] = []
 
     for (const loc of promised as readonly Loc[]) {
@@ -225,8 +400,7 @@ async function main() {
   }
 
   // Anti-vacuity with real numbers, not `> 0` (CLAUDE.md: a gate that cannot
-  // fail is worse than no gate). Everything here is derived from what the
-  // REGISTRY promised, so it cannot be satisfied by examining less.
+  // fail is worse than no gate).
   const expectedSlots = corpus.reduce((a, c) => a + c.locales.length, 0)
   const proseBlocks = slotsSeen - serpOnly
   // Exact, not a floor: 2 strings per slot (title + meta) plus 5 more for every
@@ -241,14 +415,31 @@ async function main() {
     console.log('FAIL: empty corpus — nothing was examined')
     process.exit(1)
   }
+  // `slotsSeen` was printed but never asserted, and `expectedStrings` is derived
+  // FROM it — so skipping a whole locale in the loop reduced both sides together
+  // and the run stayed green with 61 slots and 427 strings silently absent.
+  if (slotsSeen !== expectedSlots) {
+    console.log(
+      `FAIL: the registry promises ${expectedSlots} locale slots but only ${slotsSeen} were examined — ` +
+        `${expectedSlots - slotsSeen} slot(s) went uncounted`
+    )
+    process.exit(1)
+  }
   if (checked !== expectedStrings) {
     console.log(`FAIL: expected exactly ${expectedStrings} strings, examined ${checked}`)
     process.exit(1)
   }
-  if (checked < expectedSlots * 2) {
+  if (!scoped && corpus.length < MIN_COURSES) {
     console.log(
-      `FAIL: every registered slot owes at least a title and a meta_description — ` +
-        `expected >= ${expectedSlots * 2} strings, examined ${checked}`
+      `FAIL: expected at least ${MIN_COURSES} registered courses, found ${corpus.length} — ` +
+        `the registry shrank, or this ratchet needs a deliberate edit`
+    )
+    process.exit(1)
+  }
+  if (!scoped && checked < MIN_STRINGS) {
+    console.log(
+      `FAIL: expected at least ${MIN_STRINGS} strings, examined ${checked} — ` +
+        `the corpus shrank, or this ratchet needs a deliberate edit`
     )
     process.exit(1)
   }

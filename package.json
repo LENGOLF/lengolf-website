@@ -15,6 +15,7 @@
     "validate:club-specs": "tsx scripts/validate-club-specs.ts",
     "validate:i18n:self-test": "tsx scripts/validate-i18n.ts --self-test",
     "validate:course-slots": "tsx scripts/validate-course-slots.ts",
+    "validate:course-slots:self-test": "tsx scripts/validate-course-slots.ts --self-test",
     "validate:courses": "tsx scripts/validate-courses.ts",
     "validate:hotels": "tsx scripts/validate-hotels.ts",
     "verify:coordinates": "tsx scripts/verify-course-coordinates.ts",
