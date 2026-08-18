@@ -73,3 +73,6 @@ wireframes/
 # Golf course pipeline intermediates (large JSON corpora — not source code)
 docs/course-guide/data/
 docs/course-guide/reports/
+
+# Scratch space for review/probe scripts — never part of a PR
+.probe/
