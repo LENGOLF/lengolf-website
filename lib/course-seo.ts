@@ -318,6 +318,23 @@ const PROVINCE_L10N: Record<string, Record<Exclude<CourseSeoLocale, 'en'>, strin
     ko: '쁘라찐부리주',
     zh: '巴真府',
   },
+  // Hua Hin batch. The stems here are NOT coined — the `hua-hin` block of
+  // REGION_HUB_I18N (data/golf-courses-i18n.ts) already ships both province
+  // names, and a course page sitting under that hub must not spell them
+  // differently (the 齐隆/奇隆 failure: two spellings of one place across one
+  // locale's pages). So ja takes the hub's プラチュアップキリカン (not a
+  // long-vowel プラチュワップキーリーカン), and zh takes the established
+  // exonyms 巴蜀府 / 佛丕府 rather than a transcription, per the 大城府 policy
+  // above. Only the morphology is normalized to this map's shape: the hub
+  // writes a bare conjoined phrase, whereas entries here carry the per-locale
+  // province suffix/prefix (จังหวัด / 県 / 주 / 府).
+  'Prachuap Khiri Khan': {
+    th: 'จังหวัดประจวบคีรีขันธ์',
+    ja: 'プラチュアップキリカン県',
+    ko: '쁘라추압키리칸주',
+    zh: '巴蜀府',
+  },
+  Phetchaburi: { th: 'จังหวัดเพชรบุรี', ja: 'ペッチャブリー県', ko: '펫차부리주', zh: '佛丕府' },
 }
 
 /** Whether a course's (English) province has localized names for the non-EN packs. */
