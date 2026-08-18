@@ -5193,7 +5193,11 @@ async function runLocalizedDriveTimeTests() {
 
   // Anti-vacuity: without this, a change that stopped rendering drive times
   // altogether would satisfy every negative assertion above and print green.
-  const label = `O localized drive-time markers present (>= ${DRIVE_TIME_MIN_MARKERS})`;
+  // The count goes in the label, not just in the failure message: a floor whose
+  // margin is invisible while green tells you it was breached only after it is
+  // too late to plan for. Reading "382/300" across builds shows the headroom
+  // shrinking; reading "✓" does not.
+  const label = `O localized drive-time markers present (${markerTotal} >= ${DRIVE_TIME_MIN_MARKERS})`;
   if (markerTotal < DRIVE_TIME_MIN_MARKERS) {
     fail(
       label,
@@ -5311,7 +5315,10 @@ async function runFallbackPullQuoteTests() {
   // EN-fallback set shrinks, and this section would otherwise pass by
   // comparing nothing at all. Same trap PR #88's courseDetailHref negative
   // assertion hit when a batch translated the course it was pinned to.
-  const label = `P compared >= ${FALLBACK_MIN_COMPARISONS} EN-fallback quotes`;
+  // Count in the label — see the note on section O's floor. This one matters
+  // more: the EN-fallback set SHRINKS with every translation batch, so the
+  // margin here is a countdown, and a green "✓" hides how much is left.
+  const label = `P compared ${compared} EN-fallback quotes (>= ${FALLBACK_MIN_COMPARISONS})`;
   if (compared < FALLBACK_MIN_COMPARISONS) {
     fail(
       label,
