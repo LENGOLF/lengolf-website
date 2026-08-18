@@ -1180,7 +1180,9 @@
     "openGuide": "เปิดคู่มือ",
     "close": "ปิด",
     "lowSeason": "โลว์ซีซัน",
-    "highSeason": "ไฮซีซัน"
+    "highSeason": "ไฮซีซัน",
+    "rates": "อัตราค่าบริการ",
+    "rosterRate": "อัตราค่าบริการ"
   },
   "GolfCoursePriceTier": {
     "metaDescription": "รวมสนามกอล์ฟใกล้กรุงเทพฯ ที่มีค่ากรีนฟีไม่เกิน ฿{amount} พร้อมสิ่งที่ควรรู้ก่อนจองในระดับราคานี้",
@@ -1263,7 +1265,9 @@
     "highSeasonGreenFee": "ค่ากรีนฟีไฮซีซัน",
     "highSeasonFee": "ไฮซีซัน: {price} บาท",
     "lowSeason": "โลว์ซีซัน",
-    "highSeason": "ไฮซีซัน"
+    "highSeason": "ไฮซีซัน",
+    "packageHeading": "แพ็กเกจ{basis}",
+    "rates": "อัตราค่าบริการ"
   },
   "ExplainerPage": {
     "guideLabel": "คู่มือ LENGOLF",

@@ -8,7 +8,7 @@ import { getAlternates, getCanonical, getResolvedCanonical } from '@/lib/transla
 import { getRegionHubTranslation, getTranslatedCourseDetailParams } from '@/data/golf-courses-i18n'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd } from '@/lib/jsonld'
 import { getCourseDetailJsonLd } from '@/lib/jsonld-courses'
-import { feeOfferNames } from '@/lib/course-fees'
+import { feeHeadings } from '@/lib/course-fees'
 import { getCourseTitle, getCourseDescription, getCourseFaqs, toCourseSeoLocale } from '@/lib/course-seo'
 import CoursePage from '@/components/golf-courses/CoursePage'
 import {
@@ -230,7 +230,7 @@ export default async function CoursePageRoute({ params }: Props) {
     canonicalUrl,
     `${enUrl}opengraph-image/`,
     seoLocale,
-    (c) => feeOfferNames(c, t)
+    (c) => feeHeadings(c, t)
   )
 
   // FAQPage schema mirrors the visible CourseFaq block — same source array,

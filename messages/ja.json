@@ -1267,7 +1267,9 @@
     "openGuide": "ガイドを開く",
     "close": "閉じる",
     "lowSeason": "ローシーズン",
-    "highSeason": "ハイシーズン"
+    "highSeason": "ハイシーズン",
+    "rates": "料金",
+    "rosterRate": "料金"
   },
   "GolfCoursePriceTier": {
     "metaDescription": "グリーンフィー฿{amount}以下で回れるバンコク近郊の上位ゴルフ場と、この価格帯で知っておきたいポイントをご紹介します。",
@@ -1350,7 +1352,9 @@
     "highSeasonGreenFee": "ハイシーズングリーンフィー",
     "highSeasonFee": "ハイシーズン：{price}THB",
     "lowSeason": "ローシーズン",
-    "highSeason": "ハイシーズン"
+    "highSeason": "ハイシーズン",
+    "packageHeading": "{basis}パッケージ",
+    "rates": "料金"
   },
   "ExplainerPage": {
     "guideLabel": "LENGOLFガイド",

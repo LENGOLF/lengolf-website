@@ -7,7 +7,7 @@ import { getBreadcrumbJsonLd } from '@/lib/jsonld'
 import { getCourseRoundupJsonLd } from '@/lib/jsonld-courses'
 import { PRICE_TIERS, getPriceTierTranslation, getTranslatedPriceTierParams } from '@/data/price-tiers'
 import { getCoursesUnderPrice, getPriceTierSlugs } from '@/lib/golf-courses-derived'
-import { pricesByDayOfWeek, feeOfferNames } from '@/lib/course-fees'
+import { pricesByDayOfWeek, feeHeadings } from '@/lib/course-fees'
 import RoundupList from '@/components/golf-courses/RoundupList'
 import CrossLinkBlock from '@/components/golf-courses/CrossLinkBlock'
 import RentalCtaBanner from '@/components/golf-courses/RentalCtaBanner'
@@ -94,7 +94,7 @@ export default async function CoursesUnderPricePage({ params }: Props) {
   // second translator alongside this page's own GolfCoursePriceTier one.
   const tDetail = await getTranslations('GolfCourseDetail')
   const listJsonLd = getCourseRoundupJsonLd(courses, canonicalUrl, title, (c) =>
-    feeOfferNames(c, tDetail)
+    feeHeadings(c, tDetail)
   )
 
   const otherTiers = PRICE_TIERS.filter((pt) => pt.slug !== tier)

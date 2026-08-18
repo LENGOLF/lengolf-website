@@ -4131,6 +4131,11 @@ async function runBlogRegistryLivenessTests() {
   }
 }
 
+/** How many Offer names a page's GolfCourse schema actually emitted. */
+function gotOffersCount(schema: Record<string, unknown>): number {
+  return Array.isArray(schema.makesOffer) ? schema.makesOffer.length : 0;
+}
+
 // ── L2) Course-detail translated registry liveness ──────────────────
 // Section L's shape, for the course-detail allowlist entries in
 // lib/translated-routes.ts. The dangerous drift direction is
@@ -4172,6 +4177,7 @@ async function runCourseDetailRegistryLivenessTests() {
   // the description branch (drop `makesOffer`, rename a catalog key) while
   // schemaChecked stays at its full count and prints a pass.
   let offerChecked = 0;
+  let packageOfferSeen = 0;
   // Registered pairs whose locale ships no prose — legitimate, but counted so
   // the floor below can be exact rather than a guessed margin.
   let noProse = 0;
@@ -4274,10 +4280,25 @@ async function runCourseDetailRegistryLivenessTests() {
           // /highSeasonGreenFee — i.e. the two keys this pass ADDS would have no
           // guard at all, which is the half most likely to be wrong.
           const keys = feeLabelKeys(course);
-          const wantOffers = [
-            catalogs[locale]?.GolfCourseDetail?.[keys.lowerHeading],
-            catalogs[locale]?.GolfCourseDetail?.[keys.upperHeading],
-          ];
+          const cat = catalogs[locale]?.GolfCourseDetail;
+          // A package course's two rates are all-in (caddie + shared cart), so
+          // its Offer names must be the BASIS word wrapped in `packageHeading`
+          // — "Weekday package" — not "<basis> green fee". The basis itself is
+          // still real and still asserted; only the noun changes. Without this
+          // branch, reverting `feeHeadings` to the old `lowerHeading` lookup
+          // leaves all ten CI checks green, which is how the identical
+          // `fee_is_seasonal` bug survived four rounds.
+          const pkgTpl = cat?.packageHeading;
+          const wantOffers = course.fee_is_package
+            ? [keys.lower, keys.upper].map((k) => {
+                const basis = cat?.[k];
+                // Deliberately undefined rather than a partial string: the
+                // `want === undefined` branch below fails loudly, whereas
+                // `?? ''` would silently assert against "  package".
+                return pkgTpl && basis ? pkgTpl.replace("{basis}", basis) : undefined;
+              })
+            : [cat?.[keys.lowerHeading], cat?.[keys.upperHeading]];
+          if (course.fee_is_package) packageOfferSeen += gotOffersCount(schema);
           // A course with a null weekday fee emits NO makesOffer at all, which
           // is legitimate; one with only a weekday fee emits a single Offer.
           // Anything else must match, and the expected label must EXIST — a
@@ -4356,6 +4377,19 @@ async function runCourseDetailRegistryLivenessTests() {
     );
   } else {
     pass(`L2 asserted localized JSON-LD Offer labels on ${offerChecked} label(s)`);
+  }
+
+  // Its own floor, because the package branch goes vacuous INDEPENDENTLY of the
+  // one above: 2 of 149 courses are packages, so the general Offer count stays
+  // in the hundreds while the branch that matters here drops to zero. Today:
+  // kaeng-krachan and korea-golf-club, 4 translated locales each, 2 rates each.
+  if (packageOfferSeen < 16) {
+    fail(
+      `L2 package-label check ran on only ${packageOfferSeen} Offer(s)`,
+      "expected 16+ (2 package courses x 4 locales x 2 rates). Zero means no course carries fee_is_package any more, or the registry dropped them — not that the labels are right.",
+    );
+  } else {
+    pass(`L2 asserted package (not green-fee) Offer labels on ${packageOfferSeen} Offer(s)`);
   }
 }
 

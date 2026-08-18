@@ -42,7 +42,8 @@ const COURSE_FEES_IMPORT_RE = /from\s+['"](@\/lib\/course-fees|\.\/course-fees|\
 /** A day-of-week basis word written as a literal (field names stripped first). */
 const BASIS_LITERAL_RE = /\b(weekday|weekend|wknd)\b/i
 /** The basis came from the single source of truth on this line — fine. */
-const COURSE_FEES_HELPER_RE = /feeLabelsEn|feeLabelKeys|feeBasisNoteEn|pricesByDayOfWeek|feeKeys\./
+const COURSE_FEES_HELPER_RE =
+  /feeLabelsEn|feeLabelKeys|feeBasisNoteEn|pricesByDayOfWeek|statesABareGreenFee|feeHeadings|feePanelHeadingKey|feeRosterHeadingKey|feeKeys\./
 /** A rendered label: a `label:` property, or a translation key passed to t(). */
 const LABEL_SHAPED_RE = /\blabel\s*:|(?:^|[^\w])t\(\s*['"`]/
 /** Explicit, reviewable justification for a guarded site. */

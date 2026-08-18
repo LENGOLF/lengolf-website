@@ -24,7 +24,11 @@ export type CourseOfferNames = (c: GolfCourse) => { lower: string; upper: string
  */
 const enOfferNames: CourseOfferNames = (c) => {
   const labels = feeLabelsEn(c)
-  return { lower: `${labels.lower} green fee`, upper: `${labels.upper} green fee` }
+  // A package course's rate covers the caddie and the cart, so the green-fee
+  // noun is a false claim about what the number buys. The BASIS stays — a
+  // package can still be cheaper on a weekday. See `feeHeadings`.
+  const noun = c.fee_is_package ? 'package' : 'green fee'
+  return { lower: `${labels.lower} ${noun}`, upper: `${labels.upper} ${noun}` }
 }
 
 /**

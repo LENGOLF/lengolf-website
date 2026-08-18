@@ -16,8 +16,15 @@ export const course: GolfCourse = {
   // every locale. The weekday/weekend split above is real and its labels stay;
   // this only stops generated copy calling the number a bare "green fee".
   fee_is_package: true,
-  caddie_fee_thb: null,
-  cart_fee_thb: null,
+  // Zero, not null: SpecTable's `=== 0` branch renders "Included" while null
+  // renders "—". The caddie and shared cart cost this golfer nothing on top of
+  // the package, so null was understating what the price buys — and it disagreed
+  // with korea-golf-club, the other package course, which already carried 0/0.
+  // Zero is the correct encoding of a genuine inclusion; what CLAUDE.md forbids
+  // is reading all-inclusiveness back OUT of a zero, which is what
+  // `fee_is_package` above exists for.
+  caddie_fee_thb: 0,
+  cart_fee_thb: 0,
   caddie_required: true,
   cart_required: false,
   driving_range: true,

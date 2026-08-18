@@ -1269,7 +1269,9 @@
     "openGuide": "가이드 열기",
     "close": "닫기",
     "lowSeason": "비수기",
-    "highSeason": "성수기"
+    "highSeason": "성수기",
+    "rates": "요금",
+    "rosterRate": "요금"
   },
   "GolfCoursePriceTier": {
     "metaDescription": "그린피 ฿{amount} 이하인 방콕 근교 상위 골프장과 이 가격대에서 알아 두어야 할 점을 소개합니다.",
@@ -1352,7 +1354,9 @@
     "highSeasonGreenFee": "성수기 그린피",
     "highSeasonFee": "성수기: {price}바트",
     "lowSeason": "비수기",
-    "highSeason": "성수기"
+    "highSeason": "성수기",
+    "packageHeading": "{basis} 패키지",
+    "rates": "요금"
   },
   "ExplainerPage": {
     "guideLabel": "LENGOLF 가이드",
