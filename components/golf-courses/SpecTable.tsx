@@ -36,6 +36,19 @@ const ROWS_HEAD: Row[] = [
  * own basis — otherwise the row renders "Weekday green fee: 2,800 THB (low season)",
  * which contradicts itself on a single line.
  */
+/**
+ * A bare em-dash in a two-column fee row is read as "this course has no such
+ * rate", not "we don't have the number". That misreads badly on the HIGHER-fee
+ * row of a seasonal course: the cell sits beside a filled `4,500 THB (weekend)`
+ * and implies the seasonal course charges no peak premium — the opposite of
+ * what its own prose says. Name the missing basis instead, so the blank reads
+ * as an unpublished figure. 23 courses carry a null upper fee, and this is the
+ * one surface that puts two of them side by side.
+ */
+function unpublished(c: GolfCourse, which: 'lower' | 'upper'): string {
+  return `— (${feeBasisNoteEn(c, which)} rate not published)`
+}
+
 function feeRows(a: GolfCourse, b: GolfCourse): Row[] {
   const mixedBasis = pricesByDayOfWeek(a) !== pricesByDayOfWeek(b)
   const shared = feeLabelsEn(a)
@@ -47,14 +60,14 @@ function feeRows(a: GolfCourse, b: GolfCourse): Row[] {
       cell: (c) =>
         c.green_fee_weekday_thb !== null
           ? `${c.green_fee_weekday_thb.toLocaleString('en-US')} THB${note(c, 'lower')}`
-          : '—',
+          : unpublished(c, 'lower'),
     },
     {
       label: mixedBasis ? 'Higher green fee' : `${shared.upper} green fee`,
       cell: (c) =>
         c.green_fee_weekend_thb !== null
           ? `${c.green_fee_weekend_thb.toLocaleString('en-US')} THB${note(c, 'upper')}`
-          : '—',
+          : unpublished(c, 'upper'),
     },
   ]
 }
