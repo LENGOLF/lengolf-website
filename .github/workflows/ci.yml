@@ -48,6 +48,7 @@ jobs:
       # carries a fees_verified_at attestation. Born from the Artitaya ฿400
       # incident — a scraped Thai-national rate shipping as the visitor rate.
       - run: npm run validate:courses
+      - run: npm run validate:course-slots
       - run: npm run validate:fee-labels
 
       # Club spec-sheet parsers. rental_club_sets.variants[].spec is

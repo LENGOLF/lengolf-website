@@ -12,10 +12,16 @@ export const course: GolfCourse = {
   green_fee_weekday_thb: 1600,
   green_fee_weekend_thb: 1600,
   caddie_fee_thb: 350,
-  // Prose quotes "1,600 THB walking or 2,400 THB with a cart", so this file
-  // asserts a cart of 2,400 - 1,600 = 800. 850 made the rendered fee card sum
-  // to 2,450, contradicting the prose two elements above it.
-  cart_fee_thb: 800,
+  // Nulled, not corrected. The prose publishes two totals — "1,600 THB walking
+  // or 2,400 THB with a cart (caddie compulsory at 350 THB)" — and no separate
+  // cart price; 800 appears nowhere in this file. An earlier pass here set 800
+  // by subtracting 1,600 from 2,400, which is a DERIVED figure, not a sourced
+  // one, and the prior commit had already reasoned that 2,400 may be a bundled
+  // rate rather than a sum. No new evidence arrived to overturn that. So the
+  // unsupported assertion is removed instead of replaced: the fee card drops
+  // the cart row and the reader takes the two totals from the prose, which is
+  // the only place this file actually states them.
+  cart_fee_thb: null,
   caddie_required: true,
   cart_required: false,
   driving_range: true,

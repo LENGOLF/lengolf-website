@@ -14,12 +14,19 @@ export const course: GolfCourse = {
   green_fee_weekday_thb: 800,
   green_fee_weekend_thb: 800,
   fees_verified_at: '2026-07-30',
-  // Inside the 800 THB all-in package (see the fee comment above), not a
-  // surcharge: the prose and the header comment both say the package covers
-  // caddie and cart, and 300 + 500 = 800 would leave a zero green fee. Nulled
-  // so the fee card and FAQ_L10N.caddieAnswer stop billing them on top.
-  caddie_fee_thb: null,
-  cart_fee_thb: null,
+  // Zero means INCLUDED, and that is the encoding SpecTable already reads: it
+  // renders `> 0` as the amount, `=== 0` as "Included", and null as "—" (no
+  // data). Both are inside the 800 THB all-in package — the prose and the
+  // header comment above say so, and 300 + 500 = 800 would leave a zero green
+  // fee, so they cannot have been surcharges. A first pass nulled them, which
+  // stopped the fee card billing 800 + 300 + 500 but then asserted "unknown"
+  // where this file asserts "included". NOTE this does not conflict with the
+  // CLAUDE.md rule about `caddie_fee_thb: 0` — that rule forbids INFERRING
+  // all-inclusiveness from a zero (seven courses carry it without being
+  // all-inclusive); it does not forbid encoding a genuine inclusion as zero,
+  // which is what SpecTable's "Included" branch already exists for.
+  caddie_fee_thb: 0,
+  cart_fee_thb: 0,
   caddie_required: true,
   cart_required: true,
   driving_range: true,
