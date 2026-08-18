@@ -47,7 +47,19 @@ export const course: GolfCourse = {
   drive_time_from_bangkok_min: 210,
   google_maps_url: null,
   club_rental_available: true,
-  club_rental_fee_thb: 1500,
+  // Removed rather than corrected: the owner could not confirm this figure with
+  // the club, and nothing in this file sources it. 1,500 was 1.88x the entire
+  // 800 THB all-in round, and it is the modal value of this field across the
+  // corpus (18 courses carry exactly 1500; only 3 of those state it in prose),
+  // which is what a default looks like rather than a measurement. With it null,
+  // FAQ_L10N.rentalAnswer still says rental is available on-site and simply
+  // omits the price, and CoursePage drops the fee line while keeping the
+  // "Available" chip — so no information is lost, only an unverified number.
+  //
+  // NOTE club_rental_available: true is itself unsourced in this file's prose.
+  // Left alone because nulling it would flip the FAQ to "not confirmed", which
+  // is a different claim, not a smaller one.
+  club_rental_fee_thb: null,
   club_rental_brands: null,
   schema_markup: "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"GolfCourse\",\n  \"name\": \"Hua Hin Korea Golf Club\",\n  \"url\": \"https://len.golf/golf-courses/hua-hin/korea-golf-club-hua-hin\",\n  \"description\": null,\n  \"address\": {\n    \"@type\": \"PostalAddress\",\n    \"addressLocality\": \"Pran Buri\",\n    \"addressRegion\": \"Prachuap Khiri Khan\",\n    \"addressCountry\": \"TH\"\n  },\n  \"geo\": {\n    \"@type\": \"GeoCoordinates\",\n    \"latitude\": 12.4332,\n    \"longitude\": 99.9767\n  },\n  \"telephone\": \"+66 63 218 6636\",\n  \"priceRange\": \"฿\",\n  \"sameAs\": [\n    \"https://maps.google.com/?q=12.4332,99.9767\",\n    \"https://www.facebook.com/HUAHINKOREAGOLFCLUB\"\n  ],\n  \"amenityFeature\": [\n    {\n      \"@type\": \"LocationFeatureSpecification\",\n      \"name\": \"Driving Range\",\n      \"value\": true\n    },\n    {\n      \"@type\": \"LocationFeatureSpecification\",\n      \"name\": \"Caddie Required\",\n      \"value\": true\n    },\n    {\n      \"@type\": \"LocationFeatureSpecification\",\n      \"name\": \"Golf Cart\",\n      \"value\": true\n    }\n  ]\n}",
   prose: {
