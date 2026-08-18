@@ -588,6 +588,22 @@ export const COURSE_DETAIL_I18N: {
   { region: 'pattaya', slug: 'the-emerald-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'pattaya', slug: 'treasure-hill-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'pattaya', slug: 'phoenix-gold-golf-club-pattaya', locales: ['th', 'ja', 'ko', 'zh'] },
+  // Batch 6 (2026-08) — the hua-hin sweep, completing the region's 11-course
+  // roster in all four locales. Selected by roster completion rather than
+  // per-course GSC demand: the hua-hin hub is already translated, so a
+  // partially-translated roster is exactly the mixed-language list this batch
+  // exists to eliminate.
+  { region: 'hua-hin', slug: 'black-mountain-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'hua-hin', slug: 'kaeng-krachan-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'hua-hin', slug: 'korea-golf-club-hua-hin', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'hua-hin', slug: 'lake-view-resort-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'hua-hin', slug: 'majestic-creek-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'hua-hin', slug: 'palm-hills-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'hua-hin', slug: 'pineapple-valley-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'hua-hin', slug: 'royal-hua-hin-golf-course', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'hua-hin', slug: 'sawang-resort-golf-course', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'hua-hin', slug: 'sea-pines-golf-resort', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'hua-hin', slug: 'springfield-royal-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
 ]
 
 /**
