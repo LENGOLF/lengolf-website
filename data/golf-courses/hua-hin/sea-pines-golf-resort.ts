@@ -24,7 +24,9 @@ export const course: GolfCourse = {
   drive_time_from_bangkok_min: 195,
   google_maps_url: null,
   club_rental_available: true,
-  club_rental_fee_thb: 1500,
+  // Prose: "Club rental is available on-site at 1,000 THB". Aligned to the
+  // only sourced statement in the file; 1500 was contradicted by every locale.
+  club_rental_fee_thb: 1000,
   club_rental_brands: null,
   schema_markup: "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"GolfCourse\",\n  \"name\": \"Sea Pines Golf Course\",\n  \"url\": \"https://len.golf/golf-courses/hua-hin/sea-pines-golf-resort\",\n  \"description\": null,\n  \"address\": {\n    \"@type\": \"PostalAddress\",\n    \"addressLocality\": \"Hua Hin\",\n    \"addressRegion\": \"Prachuap Khiri Khan\",\n    \"addressCountry\": \"TH\"\n  },\n  \"geo\": {\n    \"@type\": \"GeoCoordinates\",\n    \"latitude\": 12.5058,\n    \"longitude\": 99.9739\n  },\n  \"telephone\": \"+66 32 655988\",\n  \"priceRange\": \"฿฿\",\n  \"sameAs\": [\n    \"https://maps.google.com/?q=12.5058,99.9739\",\n    \"https://www.seapine.co.th\"\n  ],\n  \"amenityFeature\": [\n    {\n      \"@type\": \"LocationFeatureSpecification\",\n      \"name\": \"Driving Range\",\n      \"value\": false\n    },\n    {\n      \"@type\": \"LocationFeatureSpecification\",\n      \"name\": \"Caddie Required\",\n      \"value\": true\n    },\n    {\n      \"@type\": \"LocationFeatureSpecification\",\n      \"name\": \"Golf Cart\",\n      \"value\": false\n    }\n  ]\n}",
   prose: {

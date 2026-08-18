@@ -24,7 +24,11 @@ export const course: GolfCourse = {
   drive_time_from_bangkok_min: 170,
   google_maps_url: null,
   club_rental_available: true,
-  club_rental_fee_thb: 1500,
+  // Prose states 800 THB and calls it "one of the most affordable rates in Hua
+  // Hin". That comparative holds at 800 (2nd cheapest of the 11 hua-hin
+  // courses) and is false at 1500 (joint most expensive), so the prose is
+  // internally consistent and the old typed value contradicted the same file.
+  club_rental_fee_thb: 800,
   club_rental_brands: null,
   schema_markup: "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"GolfCourse\",\n  \"name\": \"Royal Hua Hin Golf Course\",\n  \"url\": \"https://len.golf/golf-courses/hua-hin/royal-hua-hin-golf-course\",\n  \"description\": null,\n  \"address\": {\n    \"@type\": \"PostalAddress\",\n    \"addressLocality\": \"Hua Hin\",\n    \"addressRegion\": \"Prachuap Khiri Khan\",\n    \"addressCountry\": \"TH\"\n  },\n  \"geo\": {\n    \"@type\": \"GeoCoordinates\",\n    \"latitude\": 12.5680,\n    \"longitude\": 99.9540\n  },\n  \"telephone\": \"+66 32 512475\",\n  \"priceRange\": \"฿฿\",\n  \"sameAs\": [\n    \"https://maps.google.com/?q=12.5680,99.9540\",\n    \"https://www.royalhuahingolfcourse.com\"\n  ],\n  \"amenityFeature\": [\n    {\n      \"@type\": \"LocationFeatureSpecification\",\n      \"name\": \"Driving Range\",\n      \"value\": true\n    },\n    {\n      \"@type\": \"LocationFeatureSpecification\",\n      \"name\": \"Caddie Required\",\n      \"value\": true\n    },\n    {\n      \"@type\": \"LocationFeatureSpecification\",\n      \"name\": \"Golf Cart\",\n      \"value\": false\n    }\n  ]\n}",
   prose: {

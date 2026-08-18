@@ -14,8 +14,12 @@ export const course: GolfCourse = {
   green_fee_weekday_thb: 800,
   green_fee_weekend_thb: 800,
   fees_verified_at: '2026-07-30',
-  caddie_fee_thb: 300,
-  cart_fee_thb: 500,
+  // Inside the 800 THB all-in package (see the fee comment above), not a
+  // surcharge: the prose and the header comment both say the package covers
+  // caddie and cart, and 300 + 500 = 800 would leave a zero green fee. Nulled
+  // so the fee card and FAQ_L10N.caddieAnswer stop billing them on top.
+  caddie_fee_thb: null,
+  cart_fee_thb: null,
   caddie_required: true,
   cart_required: true,
   driving_range: true,

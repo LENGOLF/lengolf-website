@@ -10,7 +10,14 @@ export const course: GolfCourse = {
   par: 72,
   year_opened: 2008,
   green_fee_weekday_thb: 3300,
-  green_fee_weekend_thb: 3300,
+  // Prose: "3,300 THB for a standard-season green fee" and "high-season rates
+  // (Nov-Mar) are higher than the standard rate". So 3,300 is the LOW-season
+  // rate and the high-season figure is not recorded anywhere in this file.
+  // fee_is_seasonal suppresses the generated weekday/weekend fee FAQ and the
+  // meta fee line; weekend stays null rather than repeating 3,300, which would
+  // assert a high-season rate the prose explicitly says is higher.
+  green_fee_weekend_thb: null,
+  fee_is_seasonal: true,
   caddie_fee_thb: 400,
   cart_fee_thb: 750,
   caddie_required: true,
