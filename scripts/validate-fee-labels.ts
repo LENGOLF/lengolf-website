@@ -42,12 +42,37 @@ const COURSE_FEES_IMPORT_RE = /from\s+['"](@\/lib\/course-fees|\.\/course-fees|\
 /** A day-of-week basis word written as a literal (field names stripped first). */
 const BASIS_LITERAL_RE = /\b(weekday|weekend|wknd)\b/i
 /** The basis came from the single source of truth on this line — fine. */
-const COURSE_FEES_HELPER_RE =
-  /feeLabelsEn|feeLabelKeys|feeBasisNoteEn|pricesByDayOfWeek|statesABareGreenFee|feeHeadings|feePanelHeadingKey|feeRosterHeadingKey|feeKeys\./
+const COURSE_FEES_HELPER_RE = /feeLabelsEn|feeLabelKeys|feeBasisNoteEn|pricesByDayOfWeek|feeKeys\./
 /** A rendered label: a `label:` property, or a translation key passed to t(). */
 const LABEL_SHAPED_RE = /\blabel\s*:|(?:^|[^\w])t\(\s*['"`]/
 /** Explicit, reviewable justification for a guarded site. */
 const FEE_BASIS_OK_RE = /fee-basis-ok:/
+
+/**
+ * THIRD rule — the NOUN, which is a separate claim from the basis.
+ *
+ * `fee_is_package` splits them: kaeng-krachan really does charge less on a
+ * weekday, so its basis labels are right, but both rates are all-in packages
+ * covering caddie and cart — so "Weekday green fee" tells a reader the caddie is
+ * extra. The two rules above model the basis ONLY, which is why reverting all
+ * four visible package-noun sites at once left this gate printing
+ * "no label-shaped site hardcodes a basis", exit 0. No other lint step reads
+ * `components/`, so the only guard on those four strings was a smoke assertion
+ * on `makesOffer[].name` — structured data, which no reader sees. Found by a
+ * guard-efficacy pass, reproduced by mutation.
+ *
+ * Any t()/label site naming a green-fee noun key must route through the
+ * package-aware helpers. Wider than the basis rule on purpose: it matches the
+ * key as a bare identifier too (`t(feeKeys.lowerHeading)`), because that form
+ * carries no quote and would slip past LABEL_SHAPED_RE.
+ */
+const NOUN_KEY_RE =
+  /\b(greenFees|rosterGreenFee|weekdayGreenFee|weekendGreenFee|lowSeasonGreenFee|highSeasonGreenFee|lowerHeading|upperHeading)\b/
+const NOUN_SITE_RE = /(?:^|[^\w])t\(|\blabel\s*:/
+/** The noun decision came from the single source of truth on this line — fine. */
+const NOUN_HELPER_RE = /feeHeadings|feePanelHeadingKey|feeRosterHeadingKey/
+/** Explicit, reviewable justification for a guarded noun site. */
+const FEE_NOUN_OK_RE = /fee-noun-ok:/
 
 /**
  * Files that read a fee field but never render a basis to a reader: sorting,
@@ -58,7 +83,7 @@ const NUMERIC_ONLY = new Set([
   'lib/golf-courses-derived.ts',
   'lib/course-fees.ts',
   // NOT the course-detail route: it renders no basis word to a human, but it
-  // now emits `Offer.name` basis labels into JSON-LD via feeOfferNames, and
+  // now emits `Offer.name` basis labels into JSON-LD via feeHeadings, and
   // structured data is read by crawlers. Exempting it would keep the gate green
   // against a future hardcoded 'Weekday green fee' in that same call.
   'app/[locale]/golf-courses/[region]/[slug]/opengraph-image.tsx',
@@ -152,6 +177,26 @@ for (const dir of SCAN_DIRS) {
           `    Line: ${line.trim().slice(0, 110)}`
       )
     })
+
+    // Per-SITE NOUN check. Same population, different claim — see NOUN_KEY_RE.
+    src.split('\n').forEach((line, i) => {
+      if (/^\s*(\/\/|\*|\/\*)/.test(line)) return // comment prose
+      if (!NOUN_SITE_RE.test(line)) return
+      const hit = line.match(NOUN_KEY_RE)
+      if (!hit) return
+      if (NOUN_HELPER_RE.test(line)) return // noun came from the helper
+      if (FEE_NOUN_OK_RE.test(line)) return // explicitly justified
+      errors.push(
+        `${rel}:${i + 1}: green-fee NOUN key '${hit[0]}' rendered without the\n` +
+          `    package decision. For a fee_is_package course the rate already includes the\n` +
+          `    caddie and cart, so calling it a green fee tells a reader they are extra.\n` +
+          `    Route it through lib/course-fees.ts (feeHeadings / feePanelHeadingKey /\n` +
+          `    feeRosterHeadingKey), or if this site genuinely cannot reach a package\n` +
+          `    course, append a justification comment:\n` +
+          `        // fee-noun-ok: <why this is safe>\n` +
+          `    Line: ${line.trim().slice(0, 110)}`
+      )
+    })
   }
 }
 
@@ -182,6 +227,6 @@ if (errors.length > 0) {
 
 console.log(
   `✅ validate-fee-labels: ${checked} file(s) evaluated (of ${matched} that read a fee ` +
-    `field, across ${scanned} scanned) — all route the basis decision through ` +
-    `lib/course-fees.ts, and no label-shaped site hardcodes a basis`
+    `field, across ${scanned} scanned) — all route the basis AND noun decisions ` +
+    `through lib/course-fees.ts, and no label-shaped site hardcodes either`
 )

@@ -113,7 +113,10 @@ function longestRun(s: string, isForeign: (c: string) => boolean): { len: number
  *
  * `ja` is listed here too — an EARLIER version returned before consulting this
  * map for ja, which made a Thai sentence spliced into a ja block invisible up to
- * 183 characters (ja's only Thai rule is a dominance test against total kana).
+ * the host slot's OWN kana count, because ja's only Thai rule is a dominance
+ * test against total kana. Measured across the 427 shipped ja strings that is
+ * 185 characters in `location_and_access` — the field the CAVEAT below names —
+ * and 510 at the corpus maximum.
  * Han is absent from the ja row because Han is legal Japanese; that case is the
  * separate kana-free-run rule below.
  */
@@ -226,12 +229,29 @@ function judge(loc: Loc, s: string): string | null {
  * `if (true) return null` at the top of `judge()` passed the whole corpus with
  * "0 problem(s)", because the counters count strings VISITED, not checks
  * APPLIED. `validate:i18n` carries its own `--self-test` for the same reason.
+ *
+ * `match` is why this suite is not just fire/silent, and it was added after a
+ * guard-efficacy pass disarmed each rule one at a time and the suite stayed
+ * green on 19 of 24 mutations. Cause: every positive case was ALSO caught by the
+ * foreign-run check, so the two layers masked each other and the dominance rules
+ * — which are load-bearing, not redundant — had no coverage at all. A
+ * comma-heavy zh sentence spliced into a th block is caught by `han > thai`
+ * dominance and NOT by the run check, because `，` is a clause break. Asserting
+ * the REASON means disarming one rule either silences its case or changes its
+ * message, and both go red.
  */
-const SELF_TESTS: Array<{ name: string; loc: Loc; s: string; expect: boolean }> = [
+const SELF_TESTS: Array<{ name: string; loc: Loc; s: string; expect: boolean; match?: RegExp }> = [
   // --- must FIRE ---
   { name: 'whole zh paragraph in a th slot', loc: 'th', expect: true,
     s: '这座球场位于华欣以南约二十公里，十八洞标准杆七十二，球道宽阔，果岭速度中等偏快。' },
+  // `match` pins the SPECIFIC rule. Detection here is redundant by design — the
+  // general `kana === 0` rule catches every zero-kana string — so the 15-kanji
+  // rule only sharpens the diagnosis from "no kana at all" to "suspected zh text
+  // in a ja slot". Without the match, disarming it is invisible; with it, the
+  // message change goes red. Redundant for detection is not redundant for the
+  // person reading the failure.
   { name: 'whole zh paragraph in a ja slot (kana-free)', loc: 'ja', expect: true,
+    match: /kanji and ZERO kana — suspected zh text/,
     s: '这座球场位于华欣以南约二十公里，十八洞标准杆七十二，球道宽阔，果岭速度中等偏快。' },
   { name: 'whole ja paragraph in a zh slot', loc: 'zh', expect: true,
     s: 'このコースはホアヒンの南に位置し、18ホールパー72のレイアウトです。' },
@@ -241,12 +261,50 @@ const SELF_TESTS: Array<{ name: string; loc: Loc; s: string; expect: boolean }> 
     s: 'このコースはホアヒン中心部から車で約20分の場所にあります。球道宽阔果岭速度中等偏快十分适合。フェアウェイは広めです。' },
   { name: 'PARTIAL: zh clause spliced into a th block', loc: 'th', expect: true,
     s: 'สนามแห่งนี้อยู่ห่างจากตัวเมืองหัวหินประมาณ 20 นาที 球道宽阔果岭速度中等偏快 และมีแคดดี้บังคับ' },
-  { name: 'PARTIAL: Thai sentence spliced into a ja block', loc: 'ja', expect: true,
-    s: 'このコースはホアヒンの南にあります。สนามแห่งนี้มีแคดดี้บังคับและรถกอล์ฟ。フェアウェイは広めです。' },
+  // The ja host is LONG on purpose. A short one lets `thai > 8 && thai > kana`
+  // dominance fire instead, so the case passes while `FOREIGN.ja` — the entry it
+  // exists to cover — is disarmed. That is exactly how it read before a
+  // guard-efficacy pass measured it: kana must outnumber the splice, or this is
+  // a dominance test wearing a run test's name. `match` pins which one fires.
+  { name: 'PARTIAL: Thai sentence spliced into a LONG ja block (isolates FOREIGN.ja)', loc: 'ja', expect: true,
+    match: /foreign-script run/,
+    s: 'このコースはホアヒンの中心部から車でおよそ20分の場所にあり、フェアウェイは全体に広めで、グリーンの速度は中程度に保たれています。'
+     + 'キャディーは必須で、カートは希望者のみとなります。练習場も併設されているため、ラウンド前の調整にも困りません。'
+     + 'สนามแห่งนี้มีแคดดี้บังคับ。'
+     + '朝の時間帯は風が穏やかで、初心者の方でも比較的スコアをまとめやすいでしょう。予約は前日までに済ませておくと安心です。' },
   { name: 'zh text bridged by ・ in a ja slot (must not fake kana)', loc: 'ja', expect: true,
     s: '这座球场位于华欣以南・十八洞标准杆七十二・球道宽阔果岭速度・中等偏快十分适合' },
   { name: 'Latin/digit interleaving must not break a run', loc: 'th', expect: true,
     s: 'สนามกอล์ฟแห่งนี้ 球场1位于2华欣3镇4以5南6约7二8十9公里 เปิดทุกวัน' },
+
+  // --- dominance rules, each isolated from the run check ---
+  // Clause punctuation every few characters keeps every run under 8, so ONLY the
+  // dominance rule named in `match` can fire. Disarm that rule and the case goes
+  // silent; disarm a different one and the message changes.
+  { name: 'DOMINANCE th: Han outnumbers Thai (all runs < 8)', loc: 'th', expect: true,
+    match: /Han \(\d+\) outnumbers Thai/,
+    s: 'สนาม 球场位于，果岭速度，球道宽阔，十分适合，交通方便，价格合理，风景优美' },
+  { name: 'DOMINANCE ko: Han outnumbers Hangul (all runs < 8)', loc: 'ko', expect: true,
+    match: /Han \(\d+\) outnumbers Hangul/,
+    s: '코스 球场位于，果岭速度，球道宽阔，十分适合，交通方便，价格合理，风景优美' },
+  { name: 'DOMINANCE ko: no Hangul at all', loc: 'ko', expect: true,
+    match: /no Hangul at all/,
+    s: 'สนามแห่งนี้อยู่ห่างจากตัวเมืองหัวหินประมาณ 20 นาที และมีแคดดี้บังคับ' },
+  { name: 'DOMINANCE zh: no Han at all', loc: 'zh', expect: true,
+    match: /no Han characters at all/,
+    s: 'สนามแห่งนี้อยู่ห่างจากตัวเมืองหัวหินประมาณ 20 นาที และมีแคดดี้บังคับ' },
+  { name: 'DOMINANCE zh: a single kana (run of 1, well under the floor)', loc: 'zh', expect: true,
+    match: /kana characters in a zh slot/,
+    s: '这座球场位于华欣以南、十八洞标准杆七十二、球道宽阔、果岭速度中等の球场' },
+  { name: 'DOMINANCE zh: a short Hangul quote (run of 3)', loc: 'zh', expect: true,
+    match: /Hangul characters in a zh slot/,
+    s: '这座球场位于华欣以南、十八洞标准杆七十二、球道宽阔、果岭速度中等、스크린' },
+  { name: 'DOMINANCE ja: no kana at all, under the 15-kanji bar', loc: 'ja', expect: true,
+    match: /no kana at all/,
+    s: '国道号線経由' },
+  { name: 'DOMINANCE th: no Thai at all', loc: 'th', expect: true,
+    match: /no Thai characters at all/,
+    s: 'Kaeng Krachan Country Club 27 holes par 72' },
 
   // --- must STAY SILENT (real shipped copy, or its shape) ---
   { name: 'legit ja kanji compound run (corpus max, 7)', loc: 'ja', expect: false,
@@ -266,18 +324,26 @@ const SELF_TESTS: Array<{ name: string; loc: Loc; s: string; expect: boolean }> 
 function selfTest(): never {
   let failed = 0
   for (const t of SELF_TESTS) {
-    const got = judge(t.loc, t.s) !== null
-    const ok = got === t.expect
+    const verdict = judge(t.loc, t.s)
+    const got = verdict !== null
+    // A case with `match` must fire for the RIGHT reason. Fire-only assertions
+    // let a second rule cover for a disarmed first one — see the docblock.
+    const reasonOk = !t.match || (verdict !== null && t.match.test(verdict))
+    const ok = got === t.expect && reasonOk
     if (!ok) failed++
     console.log(
-      `  ${ok ? '✓' : '✗'} [${t.loc}] ${t.name} — expected ${t.expect ? 'FIRE' : 'silent'}, got ${got ? 'FIRE' : 'silent'}`
+      `  ${ok ? '✓' : '✗'} [${t.loc}] ${t.name} — expected ${t.expect ? 'FIRE' : 'silent'}` +
+        `${t.match ? ` matching ${t.match.source}` : ''}, got ${got ? 'FIRE' : 'silent'}`
     )
-    if (!ok && got) console.log(`      ${judge(t.loc, t.s)}`)
+    if (!ok && got) console.log(`      ${verdict}`)
   }
   const fires = SELF_TESTS.filter((t) => t.expect).length
   console.log(`\n${SELF_TESTS.length} self-tests (${fires} must fire, ${SELF_TESTS.length - fires} must stay silent) · ${failed} failed`)
-  if (fires < 8) {
-    console.log('FAIL: self-test suite has lost its positive cases')
+  const reasoned = SELF_TESTS.filter((t) => t.match).length
+  if (fires < 8 || reasoned < 8) {
+    console.log(
+      `FAIL: self-test suite has lost its positive cases (${fires} firing, ${reasoned} reason-asserting; expected >= 8 of each)`
+    )
     process.exit(1)
   }
   if (failed > 0) process.exit(1)

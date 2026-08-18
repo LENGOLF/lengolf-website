@@ -16,10 +16,17 @@ export const course: GolfCourse = {
   // every locale. The weekday/weekend split above is real and its labels stay;
   // this only stops generated copy calling the number a bare "green fee".
   fee_is_package: true,
-  // Zero, not null: SpecTable's `=== 0` branch renders "Included" while null
-  // renders "—". The caddie and shared cart cost this golfer nothing on top of
-  // the package, so null was understating what the price buys — and it disagreed
-  // with korea-golf-club, the other package course, which already carried 0/0.
+  // Zero, not null: it asserts the truth — the caddie and shared cart cost this
+  // golfer nothing on top of the package — and it agrees with korea-golf-club,
+  // the other package course, which already carried 0/0.
+  //
+  // Do NOT justify this by "SpecTable renders 0 as Included": that branch never
+  // runs for THIS course. SpecTable is imported only by /compare/, whose pairs
+  // are each region's top 3, and this course ranks 6th of 11 in hua-hin.
+  // CoursePage gates both rows on `> 0` and caddieAnswer uses a falsy test, so
+  // 0 and null render identically everywhere it currently appears. The encoding
+  // is right; that particular argument for it was not — the same overclaim an
+  // earlier commit removed from korea-golf-club's twin comment.
   // Zero is the correct encoding of a genuine inclusion; what CLAUDE.md forbids
   // is reading all-inclusiveness back OUT of a zero, which is what
   // `fee_is_package` above exists for.
@@ -52,7 +59,7 @@ export const course: GolfCourse = {
       meta_description: `Kaeng Krachan Country Club: 27 holes including a Jack Nicklaus Mountain Course. All-in from 1,199 THB. Rent clubs from LENGOLF for your Hua Hin inland round.`,
     },
     th: {
-      title: `Kaeng Krachan Country Club เพชรบุรี — ค่ากรีนฟี รีวิวสนาม และเช่าไม้กอล์ฟ`,
+      title: `Kaeng Krachan Country Club เพชรบุรี — แพ็กเกจรวมทุกอย่าง รีวิวสนาม และเช่าไม้กอล์ฟ`,
       meta_description: `แพ็กเกจรวมทุกอย่างที่ Kaeng Krachan Country Club เริ่มต้น 1,199 บาทในวันธรรมดา รวมแคดดี้และรถกอล์ฟแบบใช้ร่วมกัน สนาม 27 หลุมพร้อม Jack Nicklaus Mountain Course ริมอุทยานแห่งชาติแก่งกระจาน และเช่าไม้กอล์ฟจากกรุงเทพฯ`,
       prose: {
         overview: `Kaeng Krachan Country Club & Resort เป็นหนึ่งในจุดหมายกอล์ฟที่มีทัศนียภาพน่าตื่นตาที่สุดในย่านหัวหิน ตั้งอยู่ลึกเข้าไปในแผ่นดิน 51 กิโลเมตรจากหัวหิน บนขอบอุทยานแห่งชาติแก่งกระจาน ซึ่งเป็นแหล่งมรดกโลกของยูเนสโก คอมเพล็กซ์ 27 หลุมแห่งนี้ผสมผสานเลย์เอาต์ 18 หลุมดั้งเดิมที่ออกแบบโดย Cherd Bunyaratavej สถาปนิกชาวไทย (เปิดในปี 1994) เข้ากับ Jack Nicklaus Mountain Course ขนาด 9 หลุมที่เพิ่มเข้ามาในปี 2008 ทั้งหมดรวมกันเป็นสนามที่ไล่ระดับตั้งแต่พื้นที่พาร์คแลนด์โปร่งโล่งไปจนถึงภูมิประเทศป่าดิบทึบ โดยเฉพาะลูปของ Nicklaus ที่มอบการเปลี่ยนระดับความสูงอันน่าตื่นเต้นและกรอบภาพของผืนป่าซึ่งหาได้ยากในระดับราคานี้ ตั้งแต่ปี 2023 สนามอยู่ภายใต้การบริหารของ Power Nine Group ซึ่งเสนอแพ็กเกจรวมทุกอย่างเริ่มต้นที่ 1,199 บาทในวันธรรมดา และ 1,399 บาทในวันเสาร์อาทิตย์ โดยรวมแคดดี้และรถกอล์ฟแบบใช้ร่วมกันไว้แล้ว การมีสนาม 9 หลุมที่ติดแบรนด์ Nicklaus จริง ธรรมชาติโดยรอบที่โดดเด่น และราคาที่เข้าถึงได้ ทำให้แก่งกระจานเป็นจุดหมายที่มีเอกลักษณ์สำหรับนักกอล์ฟที่พร้อมเดินทางเข้าสู่พื้นที่ตอนใน`,
@@ -63,7 +70,7 @@ export const course: GolfCourse = {
       },
     },
     ko: {
-      title: `Kaeng Krachan Country Club 그린피 — 27홀 코스 가이드와 클럽 대여`,
+      title: `Kaeng Krachan Country Club 올인클루시브 패키지 — 27홀 코스 가이드와 클럽 대여`,
       meta_description: `Kaeng Krachan Country Club 올인클루시브 패키지는 평일 1,199바트부터이고 캐디와 공유 카트가 포함돼요. Jack Nicklaus Mountain Course 9홀을 더한 27홀 구성과 Kaeng Krachan 국립공원 옆 입지, 방콕에서 챙겨 가는 LENGOLF 클럽 대여를 안내해요.`,
       prose: {
         overview: `Kaeng Krachan Country Club & Resort 코스는 후아힌 일대에서 경관이 가장 극적인 골프 목적지 가운데 하나예요. 후아힌에서 내륙으로 51km 들어간 Kaeng Krachan 국립공원 가장자리에 자리하고 있고, 이 국립공원은 유네스코 세계유산이에요. 27홀 규모의 이 복합 코스는 태국인 설계가 Cherd Bunyaratavej의 원래 18홀 레이아웃(1994년 개장)과 2008년에 더해진 Jack Nicklaus Mountain Course 9홀을 함께 갖추고 있습니다. 둘을 합치면 탁 트인 파크랜드부터 빽빽한 정글 지형까지 폭넓게 아우르는 시설이 되고, 특히 니클라우스 나인은 이 가격대에서는 좀처럼 만나기 어려운 극적인 고저 차와 숲의 프레이밍을 보여 줘요. 2023년부터는 Power Nine Group에서 코스를 운영하면서 평일 1,199바트, 주말 1,399바트부터 시작하는 올인클루시브 패키지를 내놓고 있어요. 캐디와 공유 카트가 요금에 포함됩니다. 진짜 니클라우스 브랜드를 단 9홀과 빼어난 자연 환경, 그리고 부담 없는 가격이 어우러져, 내륙까지 들어갈 마음이 있는 골퍼에게 Kaeng Krachan 코스는 남다른 목적지가 돼요.`,
@@ -74,7 +81,7 @@ export const course: GolfCourse = {
       },
     },
     zh: {
-      title: `Kaeng Krachan Country Club果岭费与球场攻略 — 27洞与球杆租借`,
+      title: `Kaeng Krachan Country Club全包套餐与球场攻略 — 27洞与球杆租借`,
       meta_description: `Kaeng Krachan Country Club全包套餐平日1,199泰铢起，已含球童与共享球车。27洞球场里有一组Jack Nicklaus Mountain Course九洞，紧邻Kaeng Krachan国家公园，另附从曼谷带上路的LENGOLF球杆租借。`,
       prose: {
         overview: `Kaeng Krachan Country Club & Resort是华欣一带景致最富戏剧性的高尔夫目的地之一。它坐落在距华欣内陆51公里处、Kaeng Krachan国家公园的边缘，这座国家公园是联合国教科文组织世界遗产。这处27洞球场把泰国设计师Cherd Bunyaratavej设计、1994年开放的原始18洞布局，与2008年增建的9洞Jack Nicklaus Mountain Course结合在一起。两者合起来，让这里从开阔的园林地形一路延伸到茂密的丛林地带，尤其是杰克·尼克劳斯（Jack Nicklaus）那一组九洞，呈现出在这个价位上很少见的巨大高低落差与林木框景。自2023年起，球场由Power Nine Group接手管理，推出全包套餐，平日1,199泰铢起、周末1,399泰铢起，已经含了球童与共享球车。一组货真价实挂着尼克劳斯品牌的九洞、出众的自然环境，再加上亲民的价格，让Kaeng Krachan成为愿意往内陆走一趟的球手眼中别具一格的目的地。`,
@@ -85,7 +92,7 @@ export const course: GolfCourse = {
       },
     },
     ja: {
-      title: `Kaeng Krachan Country Club（ペッチャブリー）— グリーンフィー・コース紹介・クラブレンタル`,
+      title: `Kaeng Krachan Country Club（ペッチャブリー）— オールインパッケージ・コース紹介・クラブレンタル`,
       meta_description: `オールインクルーシブのパッケージは平日1,199THBから、キャディーと乗り合いカート込み。Kaeng Krachan Country Clubはケーンクラチャン国立公園の際に広がる27ホールで、Jack Nicklaus Mountain Courseの9ホールを備えます。バンコクから手ぶらで向かえるLENGOLFのクラブレンタルもご案内します。`,
       prose: {
         overview: `Kaeng Krachan Country Club & Resortは、ホアヒン一帯でも屈指の劇的な景観を誇るゴルフデスティネーションです。ホアヒンから内陸へ51km入ったケーンクラチャン国立公園の際に位置し、この国立公園はユネスコ世界遺産に登録されています。27ホールの複合施設は、タイ人設計家Cherd Bunyaratavejによる当初の18ホールレイアウト（1994年開場）と、2008年に加わった9ホールのJack Nicklaus Mountain Courseで構成されます。両者を合わせると、開けたパークランドから密林の地形までを含む施設となり、とりわけNicklausのループは、この価格帯ではめったに味わえない大胆な高低差と森の額縁を届けてくれます。2023年からはPower Nine Groupが運営を担い、平日1,199THB、週末1,399THBからのオールインクルーシブパッケージを用意。キャディーと乗り合いカートが料金に含まれます。本物のNicklausブランドの9ホール、傑出した自然環境、そして手の届く価格。この組み合わせが、内陸まで足を延ばす気のあるゴルファーにとってKaeng Krachanを個性的な行き先にしています。`,

@@ -37,8 +37,11 @@ export function pricesByDayOfWeek(c: FeeBasisSource): boolean {
  * weekday/weekend LABELS are correct and must keep rendering — but both numbers
  * are all-in packages including caddie and shared cart, so calling either a
  * "green fee" tells a reader the caddie and cart are extra. Overloading
- * `pricesByDayOfWeek` would have silently changed labels on six surfaces where
- * they are right.
+ * `pricesByDayOfWeek` would have silently changed labels on eight surfaces where
+ * they are right — SpecTable, /near/, /compare/, /under/<tier>/,
+ * golf-courses-use-cases, the region map, AND (missing from the first count,
+ * which is the same one-site-short shape this predicate exists to prevent)
+ * `CoursePage`'s own fee-card rows and `enOfferNames` in jsonld-courses.
  *
  * Used only by the two generated-copy gates in `lib/course-seo.ts` (the fee FAQ,
  * which also ships as FAQPage structured data, and the meta description's fee
@@ -59,7 +62,7 @@ export function statesABareGreenFee(c: FeeCopySource): boolean {
  * - `lowerHeading` / `upperHeading` — "<basis> green fee" noun phrases. `lowerHeading`
  *   is the hero chip's heading over the lower rate; `upperHeading` has no visible
  *   consumer today and exists for the schema.org `Offer.name` slot (see
- *   `feeOfferNames`), where `upperInline` would inject a price into a label.
+ *   `feeHeadings`), where `upperInline` would inject a price into a label.
  * - `upperInline` — the hero chip's inline "{price} THB" line for the upper rate.
  * - `upperShort` — the abbreviated tag the region-hub roster puts after the upper
  *   rate, where the non-seasonal form is `wknd` rather than `weekend`.

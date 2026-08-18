@@ -54,7 +54,10 @@ export const course: GolfCourse = {
   // Removed rather than corrected: the owner could not confirm this figure with
   // the club, and nothing in this file sources it. 1,500 was 1.88x the entire
   // 800 THB all-in round, and it is the modal value of this field across the
-  // corpus (18 courses carry exactly 1500; only 3 of those state it in prose),
+  // corpus (17 courses carry exactly 1500, and exactly ONE of them —
+  // royal-bang-pa-in-golf-club — states a rental figure in prose, as a
+  // 1,500-1,700 range; an earlier version of this comment said 18 and 3, and
+  // the 3 counted files quoting 1,500 as a GREEN fee, not a rental),
   // which is what a default looks like rather than a measurement. With it null,
   // FAQ_L10N.rentalAnswer still says rental is available on-site and simply
   // omits the price, and CoursePage drops the fee line while keeping the
@@ -82,7 +85,7 @@ export const course: GolfCourse = {
       meta_description: `Play Hua Hin Korea Golf Club from just 800 THB all-in (green fee, caddie & cart). 18 holes, par 72. Rent clubs from LENGOLF before heading south from Bangkok.`,
     },
     th: {
-      title: `Hua Hin Korea Golf Club ปราณบุรี — ค่ากรีนฟี รีวิวสนาม และเช่าไม้กอล์ฟ`,
+      title: `Hua Hin Korea Golf Club ปราณบุรี — แพ็กเกจรวมทุกอย่าง รีวิวสนาม และเช่าไม้กอล์ฟ`,
       meta_description: `แพ็กเกจแบบรวมทุกอย่างที่ Hua Hin Korea Golf Club เริ่มต้น 800 บาท ครอบคลุมค่ากรีนฟี แคดดี้ และรถกอล์ฟ สนาม 18 หลุม พาร์ 72 ที่ปราณบุรี พร้อมบริการเช่าไม้กอล์ฟจาก LENGOLF ก่อนออกเดินทางจากกรุงเทพฯ`,
       prose: {
         overview: `Hua Hin Korea Golf Club เป็นหนึ่งในสนามกอล์ฟ 18 หลุมที่ราคาถูกที่สุดในประเทศไทย ด้วยแพ็กเกจแบบรวมทุกอย่างที่ประกาศไว้เพียง 800 บาท ครอบคลุมทั้งค่ากรีนฟี แคดดี้ และรถกอล์ฟ ซึ่งนับเป็นค่าออกรอบ 18 หลุมเต็มที่ถูกที่สุดแห่งหนึ่งเท่าที่หาได้ในประเทศไทย สนามแห่งนี้สร้างขึ้นครั้งแรกในปี 1992 ในชื่อ Milford Golf Club โดยนักออกแบบ Bob McFarland มีระยะ 6,614 หลาจากแท่นทีหลัง พาร์ 72 ตลอดหลายทศวรรษที่ผ่านมาสนามเปลี่ยนชื่อมาหลายครั้ง ทั้ง Milford Paradise, The Eagle Milford และ Hua Hin Seoul Country Club ก่อนที่ผู้บริหารชาวเกาหลีจะรีแบรนด์เป็น Hua Hin Korea Golf Club อย่างที่เป็นอยู่ในปัจจุบัน สนามตั้งอยู่ห่างจากตัวเมืองหัวหินลงไปทางใต้ราว 40 นาที ในอำเภอปราณบุรี จังหวัดประจวบคีรีขันธ์ อยู่ในหุบเขาชายฝั่งที่มีภูเขาโอบล้อม จึงให้ทัศนียภาพที่ดีเกินราคา สำหรับนักกอล์ฟที่มีงบจำกัด หรือผู้ที่อยากออกรอบสบาย ๆ โดยไม่ต้องกดดันแบบสนามระดับพรีเมียม ที่นี่ถือเป็นตัวเลือกที่ใช้ได้จริง แต่มาตรฐานการดูแลสนามอยู่ในระดับพอประมาณ ผู้ที่คุ้นเคยกับสภาพสนามที่ตัดแต่งอย่างประณีตควรตั้งความคาดหวังให้เหมาะสม`,
@@ -93,7 +96,7 @@ export const course: GolfCourse = {
       },
     },
     ko: {
-      title: `Hua Hin Korea Golf Club 그린피 — 800바트 올인클루시브 18홀 코스 가이드`,
+      title: `Hua Hin Korea Golf Club 올인클루시브 패키지 — 800바트 18홀 코스 가이드`,
       meta_description: `Hua Hin Korea Golf Club 공표 요금은 그린피와 캐디, 카트를 모두 포함한 800바트 올인클루시브 패키지예요. 쁘라추압키리칸주 Pran Buri에 자리한 18홀 파 72 코스 정보와, 방콕에서 미리 챙기는 LENGOLF 클럽 대여를 안내해요.`,
       prose: {
         overview: `Hua Hin Korea Golf Club 코스는 태국에서 가장 저렴한 18홀 골프장 가운데 하나예요. 공표 요금은 그린피와 캐디, 카트를 모두 포함한 800바트 올인클루시브 패키지로, 태국 어디를 둘러봐도 손에 꼽을 만큼 저렴한 18홀 풀 라운딩 가격입니다. 이 코스의 출발점은 1992년 Bob McFarland 설계로 문을 연 Milford Golf Club입니다. 뒤쪽 티에서 전장 6,614야드, 파 72 규모예요. 이후 수십 년 동안 Milford Paradise, The Eagle Milford, Hua Hin Seoul Country Club 등으로 이름이 여러 차례 바뀌었고, 한국계 경영진이 리브랜딩하면서 지금의 Hua Hin Korea Golf Club 이름으로 자리 잡았어요. 위치는 후아힌 시내에서 남쪽으로 차로 약 40분 떨어진 쁘라추압키리칸주 Pran Buri 지역이고, 산으로 둘러싸인 해안 골짜기에 자리해 가격에 비해 경관이 훌륭합니다. 예산을 빠듯하게 잡은 골퍼나, 고급 코스 특유의 부담 없이 가볍게 라운딩하고 싶은 분에게는 충분히 쓸 만한 선택이에요. 다만 관리 수준은 소박한 편이라, 잘 손질된 코스에 익숙하다면 기대치를 그에 맞춰 두는 편이 좋아요.`,
@@ -104,7 +107,7 @@ export const course: GolfCourse = {
       },
     },
     zh: {
-      title: `Hua Hin Korea Golf Club果岭费与球场攻略 — 800泰铢全包18洞`,
+      title: `Hua Hin Korea Golf Club全包套餐与球场攻略 — 800泰铢18洞`,
       meta_description: `Hua Hin Korea Golf Club公布价为800泰铢全包，含果岭费、球童与球车。这座18洞标准杆72的球场位于华欣以南的Pran Buri，另附从曼谷出发前就能备好的LENGOLF球杆租借。`,
       prose: {
         overview: `Hua Hin Korea Golf Club是泰国最便宜的18洞球场之一，公布的全包套餐只要800泰铢，果岭费、球童与球车全都包含在内——放眼全泰国，打满18洞的价格也很少低于这个数。这座球场最初于1992年以Milford Golf Club的名字开门，由Bob McFarland设计，后发球台量起6,614码，标准杆72。此后数十年里它几度易名，先后叫过Milford Paradise、The Eagle Milford与Hua Hin Seoul Country Club，直到韩资管理层将它更名为如今的Hua Hin Korea Golf Club。球场位于华欣镇以南约40分钟车程的巴蜀府Pran Buri，坐落在群山环抱的沿海谷地里，就这个价位而言景色相当出色。如果你预算吃紧，或者只想轻松打一场、不必承受高端球场的压力，这里是个可行的选择——但养护标准只算一般，习惯了精致草况的球友最好先把期待值放到合适的位置。`,
@@ -115,7 +118,7 @@ export const course: GolfCourse = {
       },
     },
     ja: {
-      title: `Hua Hin Korea Golf Club（ホアヒン）— グリーンフィー・コース紹介・クラブレンタル`,
+      title: `Hua Hin Korea Golf Club（ホアヒン）— オールインパッケージ・コース紹介・クラブレンタル`,
       meta_description: `公表料金はグリーンフィー・キャディー・カート込みで800THBのオールインパッケージ。Hua Hin Korea Golf Clubはホアヒンの南、プラチュアップキリカン県プランブリーにある18ホール・パー72のコースです。バンコクで用意できるLENGOLFのクラブレンタルもご案内します。`,
       prose: {
         overview: `Hua Hin Korea Golf Clubは、タイでもっとも安い18ホールコースのひとつです。公表されているグリーンフィー・キャディー・カート込みのオールインパッケージはわずか800THBで、フル18ホールのラウンド料金としてはタイ全土でも最安クラスに入ります。開場は1992年、当時の名称はMilford Golf Clubで、設計はBob McFarlandが手がけました。バックティーからの全長は6,614ヤード、パー72です。その後の数十年でMilford Paradise、The Eagle Milford、Hua Hin Seoul Country Clubと何度か名前が変わり、韓国系の経営陣によるリブランドを経て今のHua Hin Korea Golf Clubになりました。所在地はホアヒンの町から南へ車で約40分、プラチュアップキリカン県のプランブリー。山に囲まれた海沿いの谷あいに広がっており、料金を考えれば景観はかなり贅沢です。予算をできるだけ抑えたい方や、高級コース特有の緊張感なしに気軽に回りたい方には十分に現実的な選択肢といえます。ただし整備の水準は控えめで、手入れの行き届いたコンディションに慣れている方は期待値を調整しておくとよいでしょう。`,

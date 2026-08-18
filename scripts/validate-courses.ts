@@ -45,6 +45,7 @@ import { pathToFileURL } from 'url'
 import type { GolfCourse } from '../types/golf-courses'
 import { decimalPlaces, MIN_COORD_DECIMALS } from '../lib/geo'
 import { loadCourseFiles } from './course-files'
+import { getCourseTitle, type CourseSeoLocale } from '../lib/course-seo'
 
 const LOW_FEE_THRESHOLD = 600
 const ABS_FLOOR = 150
@@ -306,6 +307,8 @@ async function main() {
     }
   }
 
+  checkPackageNoun(courses)
+
   for (const w of warnings) console.log(`  ⚠ ${w}`)
   for (const e of errors) console.log(`  ✖ ${e}`)
 
@@ -314,6 +317,63 @@ async function main() {
     process.exit(1)
   }
   console.log(`\n✅ validate-courses: ${courses.length} courses pass fee-plausibility checks (${warnings.length} non-blocking warning(s))`)
+}
+
+/**
+ * A `fee_is_package` course's TITLE must not call its rate a green fee.
+ *
+ * Scoped to the title ON PURPOSE, and the scoping is the whole design. These
+ * courses' meta descriptions and prose legitimately contain the green-fee term,
+ * because they ENUMERATE what the package covers — "800 THB all-in (green fee,
+ * caddie & cart)" is true and is the most useful sentence on the page. A blanket
+ * "no green-fee term on a package course" rule would fire on all ten of those
+ * and get switched off. The title is different: it labels the page's price with
+ * a bare noun and no room for a qualifier.
+ *
+ * Both package courses shipped all five titles with the noun — the ko one read
+ * `그린피` and `올인클루시브` in the same string — while the fee FAQ and the meta
+ * fee line were correctly suppressed. That is the "enumerated field-by-field or
+ * not at all" failure, on the single most prominent field: the title is also the
+ * openGraph title and the internal cross-link anchor text via lib/seo-links.
+ *
+ * Checks the RENDERED title (`getCourseTitle`), not the stored one, because EN
+ * comes from a generator and the non-EN blocks are returned verbatim.
+ */
+const PACKAGE_NOUN_RE: Record<CourseSeoLocale, RegExp> = {
+  en: /green fee/i,
+  th: /ค่ากรีนฟี/,
+  ja: /グリーンフィー/,
+  ko: /그린피/,
+  zh: /果岭费/,
+}
+
+function checkPackageNoun(courses: { file: string; course: GolfCourse }[]) {
+  let checked = 0
+  let packages = 0
+  for (const { file, course } of courses) {
+    if (!course.fee_is_package) continue
+    packages++
+    for (const locale of Object.keys(PACKAGE_NOUN_RE) as CourseSeoLocale[]) {
+      if (locale !== 'en' && !course.locales[locale]?.title) continue
+      checked++
+      const title = getCourseTitle(course, locale)
+      if (PACKAGE_NOUN_RE[locale].test(title)) {
+        errors.push(
+          `${file}: fee_is_package course's ${locale} TITLE calls the rate a green fee — ` +
+            `the price already covers the caddie and cart, so the noun tells a searcher ` +
+            `they are extra. Title: "${title}"`
+        )
+      }
+    }
+  }
+  // Anti-vacuity: this guard is worth nothing if no course carries the flag, or
+  // if the locale blocks stop being read. Two package courses x 5 locales today.
+  if (packages > 0 && checked < packages * 5) {
+    errors.push(
+      `package-noun check examined only ${checked} title(s) across ${packages} package ` +
+        `course(s) — expected ${packages * 5}. A locale block stopped being read.`
+    )
+  }
 }
 
 main().catch((err) => {

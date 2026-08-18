@@ -11,7 +11,7 @@ import { localizedCourseProse, type CourseSeoLocale } from '@/lib/course-seo'
  * A FUNCTION rather than a resolved string pair because fee basis is per-course:
  * a seasonal course (low/high season) and a day-of-week course can appear in the
  * same roundup, so one pair resolved by the caller would mislabel whichever
- * disagrees with it. Localized callers build this from `feeOfferNames` in
+ * disagrees with it. Localized callers build this from `feeHeadings` in
  * lib/course-fees.ts; that indirection keeps this module sync and next-intl-free.
  */
 export type CourseOfferNames = (c: GolfCourse) => { lower: string; upper: string }

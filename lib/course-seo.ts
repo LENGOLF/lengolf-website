@@ -130,6 +130,19 @@ export function getCourseTitle(course: GolfCourse, locale: CourseSeoLocale = 'en
     return `${course.name} — Permanently Closed`
   }
   const handWritten = course.locales.en.title
+  // A package course must not advertise a "green fee" in the SERP either: its
+  // rate already covers the caddie and the cart, so the noun tells a searcher
+  // they are extra. Checked with the same reasoning as the closed-course guard
+  // directly above — the boilerplate titles all carry the claim, so honouring
+  // the hand-written escape hatch here would reintroduce exactly what is being
+  // removed. A hand-written EN title that avoids the noun is still honoured.
+  //
+  // This is the field the suppression in `getCourseDescription` and the fee FAQ
+  // missed, and it is the most prominent one: it is the <title>, the
+  // openGraph.title, and the internal cross-link anchor text via lib/seo-links.
+  if (course.fee_is_package && (!handWritten || BOILERPLATE_TITLE.test(handWritten) || /green fee/i.test(handWritten))) {
+    return `${course.name} — Golf Packages & Guide`
+  }
   if (handWritten && !BOILERPLATE_TITLE.test(handWritten)) return handWritten
   return `${course.name} — Green Fees & Guide`
 }

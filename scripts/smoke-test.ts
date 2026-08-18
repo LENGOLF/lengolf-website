@@ -4312,7 +4312,9 @@ async function runCourseDetailRegistryLivenessTests() {
             if (want === undefined) {
               fail(
                 `No '${locale}' catalog label for Offer[${i}] on ${target}`,
-                `GolfCourseDetail.${i === 0 ? keys.lowerHeading : keys.upperHeading} is missing from messages/${locale}.json — the label assertion would silently skip. next-intl would ship the literal key string into structured data.`,
+                course.fee_is_package
+                  ? `GolfCourseDetail.packageHeading or .${i === 0 ? keys.lower : keys.upper} is missing from messages/${locale}.json — the label assertion would silently skip. Naming lowerHeading/upperHeading here would send the reader to the wrong key: a package course composes its label from packageHeading + the BARE basis word.`
+                  : `GolfCourseDetail.${i === 0 ? keys.lowerHeading : keys.upperHeading} is missing from messages/${locale}.json — the label assertion would silently skip. next-intl would ship the literal key string into structured data.`,
               );
               continue;
             }
@@ -5243,7 +5245,7 @@ async function runLocalizedDriveTimeTests() {
   // altogether would satisfy every negative assertion above and print green.
   // The count goes in the label, not just in the failure message: a floor whose
   // margin is invisible while green tells you it was breached only after it is
-  // too late to plan for. Reading "382/300" across builds shows the headroom
+  // too late to plan for. Reading "717/300" across builds shows the headroom
   // shrinking; reading "✓" does not.
   const label = `O localized drive-time markers present (${markerTotal} >= ${DRIVE_TIME_MIN_MARKERS})`;
   if (markerTotal < DRIVE_TIME_MIN_MARKERS) {
