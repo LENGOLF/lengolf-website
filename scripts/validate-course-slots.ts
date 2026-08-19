@@ -16,6 +16,7 @@
  *        npm run validate:course-slots -- --self-test
  */
 import path from 'node:path'
+import { pathToFileURL } from 'node:url'
 import { COURSE_DETAIL_I18N } from '../data/golf-courses-i18n'
 
 const ROOT = process.cwd()
@@ -409,10 +410,16 @@ function selfTest(): never {
   // disarming the two rules they pinned left the suite green — the same
   // hollowness it was written to close, one level up.
   const distinctReasons = new Set(SELF_TESTS.filter((t) => t.match).map((t) => t.match!.source)).size
-  if (fires < 8 || reasoned < 8 || distinctReasons < 10) {
+  // distinctReasons is pinned AT the current count (14), not below it. At 10
+  // there were four units of slack, and "delete a rule together with the
+  // self-test case that pins it" is what an ordinary cleanup refactor does —
+  // four rules could go with both this script and its self-test staying green
+  // and byte-identical to a healthy run. Verified by mutation. Raise this line
+  // in the same commit that adds a reason; never lower it.
+  if (fires < 8 || reasoned < 8 || distinctReasons < 14) {
     console.log(
       `FAIL: self-test suite has lost coverage (${fires} firing, ${reasoned} reason-asserting, ` +
-        `${distinctReasons} distinct reasons; expected >= 8 / >= 8 / >= 10)`
+        `${distinctReasons} distinct reasons; expected >= 8 / >= 8 / >= 14)`
     )
     process.exit(1)
   }
@@ -476,9 +483,17 @@ async function main() {
     const file = path.join(ROOT, 'data/golf-courses', region, `${slug}.ts`)
     let mod: { course?: Record<string, unknown> }
     try {
-      mod = await import(file)
-    } catch {
+      // pathToFileURL, not the raw path: the ESM loader rejects a Windows
+      // absolute path ("Received protocol 'c:'"), so a bare `import(file)`
+      // makes this gate report all 61 courses as unloadable on the repo's
+      // documented dev platform while staying green on ubuntu CI. Same fix,
+      // same reason, as scripts/course-files.ts and scripts/validate-courses.ts.
+      mod = await import(pathToFileURL(file).href)
+    } catch (err) {
+      // Bind the error: an unbound `catch {}` here misdiagnosed a loader
+      // failure as a missing/broken data file and sent reviewers to data/.
       console.log(`  ✗ ${slug}: registered in COURSE_DETAIL_I18N but ${region}/${slug}.ts does not load`)
+      console.log(`      ${err instanceof Error ? err.message.split('\n')[0] : String(err)}`)
       problems++
       continue
     }

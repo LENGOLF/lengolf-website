@@ -336,7 +336,12 @@ for (const dir of SCAN_DIRS) {
 // 12 and printed a success line. A gate that cannot fail is worse than no gate;
 // this one could not fail for the exact breakage it was written to detect.
 // Found by an EM-simulation review, reproduced by mutation.
-const MIN_CHECKED = 8
+// Pinned AT the current population (10), not below it. At 8 there were two
+// units of slack, so adding the two most important label-rendering files
+// (SpecTable.tsx, CoursePage.tsx) to NUMERIC_ONLY silenced the gate for them
+// and still printed a success line — only the count in the message moved, and
+// nobody diffs a count. Same ratchet discipline as MIN_COURSES/MIN_STRINGS.
+const MIN_CHECKED = 10
 if (checked < MIN_CHECKED) {
   errors.push(
     `fee-label scan evaluated only ${checked} file(s) (expected >= ${MIN_CHECKED}) — ` +
