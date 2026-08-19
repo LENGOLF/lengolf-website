@@ -139,7 +139,7 @@ async function AirportPage({ locale, slug }: { locale: string; slug: string }) {
             <Plane className="h-3 w-3" /> {airport.iata} · Bangkok
           </div>
           <h1 className="text-3xl font-black leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
-            Golf Courses Near {airport.name} ({airport.iata}): Distances, Green Fees &amp; How to Book
+            Golf Courses Near {airport.name} ({airport.iata}): Distances, {feeNoun}s &amp; How to Book
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-white/75">
             {airport.intro}
@@ -161,7 +161,7 @@ async function AirportPage({ locale, slug }: { locale: string; slug: string }) {
           </h2>
           <p className="mb-4 text-xs italic text-muted-foreground">
             Distances are straight-line (as the crow flies) from the {airport.iata} terminal, not driving
-            distance or drive time, which depend on the expressway route and traffic. Green fees are the
+            distance or drive time, which depend on the expressway route and traffic. {feeNoun}s are the
             published starting rates from each course guide and are subject to change; confirm the current
             price (and any caddie/cart charges) with the course or your booking platform before you travel.
           </p>
@@ -237,7 +237,7 @@ async function AirportPage({ locale, slug }: { locale: string; slug: string }) {
               <span>
                 <strong className="text-foreground">Confirm the total, not just the green fee.</strong>{/* fee-noun-ok: advice TELLING the reader the green fee is not the total — the noun is the subject of the warning, not a label on a number */} Caddie
                 fees are usually compulsory and cart hire is often extra, so the on-the-day total can be well
-                above the starting green fee shown above.
+                above the starting {feeNoun.toLowerCase()} shown above.
               </span>
             </li>
             <li className="flex gap-2">
