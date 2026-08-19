@@ -4871,13 +4871,25 @@ async function runPriceTierRoundupLanguageTests() {
       // unrelated PR next shifted popularity. Same "fixed one of two sites"
       // shape as the defect the package work exists to close — L2 got the
       // branch, L6 did not.
+      // Per-COURSE, not a widened global set. The first version appended the two
+      // package forms to one `allowed` array shared by every item, which accepted
+      // "Weekday package" for any of the 148 NON-package courses — L2 got the
+      // per-course branch in the same commit and L6 did not.
       const pkg = cat?.packageHeading;
-      const allowed = [
-        cat?.weekdayGreenFee,
-        cat?.lowSeasonGreenFee,
-        pkg && cat?.weekday ? pkg.replace("{basis}", cat.weekday) : undefined,
-        pkg && cat?.lowSeason ? pkg.replace("{basis}", cat.lowSeason) : undefined,
-      ];
+      const allowedFor = (c: { fee_is_package?: boolean }) =>
+        c.fee_is_package
+          ? [
+              pkg && cat?.weekday ? pkg.replace("{basis}", cat.weekday) : undefined,
+              pkg && cat?.lowSeason ? pkg.replace("{basis}", cat.lowSeason) : undefined,
+            ]
+          : [cat?.weekdayGreenFee, cat?.lowSeasonGreenFee];
+      const allowed = [cat?.weekdayGreenFee, cat?.lowSeasonGreenFee];
+      const { loadCourseFiles: loadForL6 } = await import("./course-files");
+      const packageNames = new Set(
+        (await loadForL6())
+          .filter(({ course }) => course.fee_is_package)
+          .map(({ course }) => course.name),
+      );
       if (allowed.some((v) => v === undefined)) {
         fail(
           `Missing '${locale}' fee labels for ${target}`,
@@ -4889,10 +4901,11 @@ async function runPriceTierRoundupLanguageTests() {
         const desc = el?.item?.makesOffer?.[0]?.description;
         if (desc === undefined) continue; // course with a null weekday fee
         itemsChecked++;
-        if (!allowed.includes(desc)) {
+        const want = allowedFor({ fee_is_package: packageNames.has(el?.item?.name) });
+        if (!want.includes(desc)) {
           fail(
             `ItemList Offer.description is not a '${locale}' label on ${target}`,
-            `got ${JSON.stringify(desc)}, expected one of ${JSON.stringify(allowed)} — the route likely dropped its offerNames argument and fell back to the silent EN default.`,
+            `got ${JSON.stringify(desc)} for ${JSON.stringify(el?.item?.name)}, expected one of ${JSON.stringify(want)} — the route likely dropped its offerNames argument and fell back to the silent EN default.`,
           );
         }
       }

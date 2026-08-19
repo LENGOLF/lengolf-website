@@ -23,6 +23,10 @@ jobs:
 
       - run: npm ci
       - run: npm run lint
+      # `next build` does not typecheck scripts/. tsconfig.scripts.json covers
+      # exactly the validators above, so without this a broken gate ships as a
+      # type error nobody sees until it runs.
+      - run: npm run typecheck
       # Guards against wrong-prefix SEO cross-links (a FAQ slug linked as
       # /guide/… or vice-versa) shipping as live 404s. No server needed.
       - run: npm run validate:links
@@ -48,6 +52,10 @@ jobs:
       # carries a fees_verified_at attestation. Born from the Artitaya ฿400
       # incident — a scraped Thai-national rate shipping as the visitor rate.
       - run: npm run validate:courses
+      # checkPackageNoun fires on ZERO lines in healthy data, so a green
+      # corpus run proves nothing about it — and it is the only gate catching
+      # a package course whose title calls its all-in rate a green fee.
+      - run: npm run validate:courses:self-test
       - run: npm run validate:course-slots
       # ...and the same argument as validate:i18n:self-test above. The census
       # counts strings VISITED, not checks APPLIED, so disarming every script

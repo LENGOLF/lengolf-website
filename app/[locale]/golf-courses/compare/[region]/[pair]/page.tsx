@@ -242,7 +242,7 @@ export default async function CompareCoursesPage({ params }: Props) {
             {a.name} <span className="text-white/60">vs</span> {b.name}
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-white/75">
-            Side-by-side comparison of {a.name} and {b.name} — green fees, par, designer, drive time, and a
+            Side-by-side comparison of {a.name} and {b.name} — {feeNounEn([a, b]).toLowerCase()}s, par, designer, drive time, and a
             data-driven view of which course suits which kind of round.
           </p>
         </div>

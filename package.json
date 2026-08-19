@@ -17,6 +17,7 @@
     "validate:course-slots": "tsx scripts/validate-course-slots.ts",
     "validate:course-slots:self-test": "tsx scripts/validate-course-slots.ts --self-test",
     "validate:courses": "tsx scripts/validate-courses.ts",
+    "validate:courses:self-test": "tsx scripts/validate-courses.ts --self-test",
     "validate:hotels": "tsx scripts/validate-hotels.ts",
     "verify:coordinates": "tsx scripts/verify-course-coordinates.ts",
     "inventory": "tsx scripts/page-inventory.ts",

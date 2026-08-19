@@ -395,6 +395,55 @@ function checkPackageNoun(courses: { file: string; course: GolfCourse }[]) {
   }
 }
 
+/**
+ * `--self-test`. `checkPackageNoun` fires on ZERO lines in healthy data, so a
+ * green corpus run is not evidence it works — deleting its call, neutering
+ * PACKAGE_NOUN_RE, or reinstating the `packages > 0 &&` self-disarm all pass
+ * silently. It is also the only gate catching this branch's headline defect.
+ */
+const NOUN_SELF_TESTS: Array<{ name: string; locale: CourseSeoLocale; title: string; fire: boolean }> = [
+  { name: 'en bare noun', locale: 'en', title: 'X — Green Fees & Guide', fire: true },
+  { name: 'en closed form', locale: 'en', title: 'X — Greenfee & Guide', fire: true },
+  { name: 'en hyphenated', locale: 'en', title: 'X — Green-Fee & Guide', fire: true },
+  { name: 'th prefixed', locale: 'th', title: 'X — ค่ากรีนฟี รีวิวสนาม', fire: true },
+  { name: 'th BARE (glossary term)', locale: 'th', title: 'X — กรีนฟี 800 บาท', fire: true },
+  { name: 'ja katakana', locale: 'ja', title: 'X — グリーンフィー・コース紹介', fire: true },
+  { name: 'ja mixed kanji', locale: 'ja', title: 'X — グリーン費・コース紹介', fire: true },
+  { name: 'ko spaced', locale: 'ko', title: 'X 그린 피 — 코스 가이드', fire: true },
+  { name: 'ko closed', locale: 'ko', title: 'X 그린피 — 코스 가이드', fire: true },
+  { name: 'zh simplified', locale: 'zh', title: 'X果岭费与球场攻略', fire: true },
+  { name: 'zh TRADITIONAL', locale: 'zh', title: 'X果嶺費與球場攻略', fire: true },
+  { name: 'en package form is fine', locale: 'en', title: 'X — All-In Rates & Guide', fire: false },
+  { name: 'th package form is fine', locale: 'th', title: 'X — แพ็กเกจแบบรวมทุกอย่าง', fire: false },
+  { name: 'ja package form is fine', locale: 'ja', title: 'X — パッケージ料金・コース紹介', fire: false },
+  { name: 'ko package form is fine', locale: 'ko', title: 'X 올인클루시브 패키지', fire: false },
+  { name: 'zh package form is fine', locale: 'zh', title: 'X全包套餐与球场攻略', fire: false },
+]
+
+function selfTest(): never {
+  let failed = 0
+  for (const t of NOUN_SELF_TESTS) {
+    const got = PACKAGE_NOUN_RE[t.locale].test(t.title)
+    const ok = got === t.fire
+    if (!ok) failed++
+    console.log(`  ${ok ? '✓' : '✗'} [${t.locale}] ${t.name} — expected ${t.fire ? 'FIRE' : 'silent'}, got ${got ? 'FIRE' : 'silent'}`)
+  }
+  const fires = NOUN_SELF_TESTS.filter((t) => t.fire).length
+  const locales = new Set(NOUN_SELF_TESTS.map((t) => t.locale)).size
+  console.log(`\n${NOUN_SELF_TESTS.length} package-noun self-tests (${fires} must fire, across ${locales} locales) · ${failed} failed`)
+  // Pinned AT the current population, not below it — the mistake this very
+  // guard's own floor made and had corrected.
+  if (fires < 11 || locales < 5) {
+    console.log('FAIL: self-test suite has lost cases (need >= 11 firing across all 5 locales)')
+    process.exit(1)
+  }
+  if (failed > 0) process.exit(1)
+  console.log('OK — every locale\'s green-fee noun forms fire, and every package form stays silent')
+  process.exit(0)
+}
+
+if (process.argv.includes('--self-test')) selfTest()
+
 main().catch((err) => {
   console.error(err)
   process.exit(1)

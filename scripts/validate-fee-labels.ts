@@ -112,7 +112,6 @@ const NUMERIC_ONLY = new Set([
   // now emits `Offer.name` basis labels into JSON-LD via feeHeadings, and
   // structured data is read by crawlers. Exempting it would keep the gate green
   // against a future hardcoded 'Weekday green fee' in that same call.
-  'app/[locale]/golf-courses/[region]/[slug]/opengraph-image.tsx',
   'components/golf-courses/RoundupList.tsx',
 ])
 
@@ -139,7 +138,13 @@ function walk(dir: string, out: string[] = []): string[] {
 }
 
 /**
- * The two per-line rules, as pure functions so `--self-test` can prove they fire.
+ * The two per-line rules, as pure functions — and the corpus scan below CALLS
+ * THEM. That is the point: the first version exported these for `--self-test`
+ * and left the scan re-implementing both inline, so the self-test exercised a
+ * parallel copy. Disarming the real scan left the gate AND its self-test green
+ * and byte-identical, and the two copies had already drifted (this one strips
+ * comments; the inline one did not). A self-test against a second
+ * implementation is worse than none — it reports confidence it has not earned.
  *
  * Without this every rule self-disarmed with output byte-identical to a healthy
  * run: `NOUN_KEY_RE = /(?!)/`, `NOUN_SITE_RE = /(?!)/`, the whole noun block
@@ -265,26 +270,8 @@ for (const dir of SCAN_DIRS) {
     // that line, or carry an explicit `fee-basis-ok:` justification a reviewer
     // can challenge. Silence is what let this class survive three audits.
     src.split('\n').forEach((line, i) => {
-      // The field NAMES contain "weekday"/"weekend" — strip them, or every line
-      // that reads a fee matches itself.
-      const bare = line.replace(/green_fee_week(day|end)_thb/g, '')
-      // Only LABEL-shaped sites: a `label:` property or a translation key. That
-      // is the shape the historical defect took (a row label hardcoded next to
-      // a correctly-derived value). Deliberately NOT every basis word: variable
-      // and parameter names (`const weekday =`, `feeAnswer(name, weekday, …)`)
-      // and guarded prose templates are legitimate, and a gate that fires ~30
-      // times on correct code gets switched off, which protects nothing.
-      if (!LABEL_SHAPED_RE.test(bare)) return
-      // Only basis words written INSIDE a quoted string count. `weekday` as a
-      // local variable holding a number (`{weekday.toLocaleString()}`) is not a
-      // label — matching identifiers here produced a false positive on
-      // CourseMapExplorer's roster line.
-      const quoted = bare.match(/'[^']*'|"[^"]*"|`[^`]*`/g) ?? []
-      const offender = quoted.find((q) => BASIS_LITERAL_RE.test(q))
+      const offender = basisViolation(line)
       if (!offender) return
-      if (COURSE_FEES_HELPER_RE.test(bare)) return // basis came from the helper
-      if (FEE_BASIS_OK_RE.test(line)) return // explicitly justified
-      if (/^\s*(\/\/|\*|\/\*)/.test(line)) return // comment prose
       errors.push(
         `${rel}:${i + 1}: hardcoded fee basis in ${offender} in a\n` +
           `    fee-reading file. For a fee_is_seasonal course this asserts a day-of-week\n` +
@@ -297,23 +284,10 @@ for (const dir of SCAN_DIRS) {
 
     // Per-SITE NOUN check. Same population, different claim — see NOUN_KEY_RE.
     src.split('\n').forEach((line, i) => {
-      if (/^\s*(\/\/|\*|\/\*)/.test(line)) return // comment prose
-      const bare = stripComments(line)
-      if (!NOUN_SITE_RE.test(bare)) return
-      const hit = bare.match(NOUN_KEY_RE) ?? bare.match(NOUN_LITERAL_RE)
+      const hit = nounViolation(line)
       if (!hit) return
-      // The helper exemption does NOT apply when the noun is ALSO written out on
-      // the line. `t(feeRosterHeadingKey(c) ? 'rosterGreenFee' : 'rates')` names
-      // a helper and still hardcodes the noun in a branch that is always taken —
-      // the same escape hatch a previous commit removed from the basis rule and
-      // then recreated one rule over.
-      const nounIsWrittenOut =
-        /['"`][^'"`]*(green[\s-]?fees?|GreenFee|greenFees|rosterGreenFee)[^'"`]*['"`]/i.test(bare) ||
-        />[^<>{}]*green[\s-]?fees?\b/i.test(bare)
-      if (NOUN_HELPER_RE.test(bare) && !nounIsWrittenOut) return // came from the helper
-      if (FEE_NOUN_OK_RE.test(line)) return // explicitly justified
       errors.push(
-        `${rel}:${i + 1}: green-fee NOUN key '${hit[0]}' rendered without the\n` +
+        `${rel}:${i + 1}: green-fee NOUN key '${hit}' rendered without the\n` +
           `    package decision. For a fee_is_package course the rate already includes the\n` +
           `    caddie and cart, so calling it a green fee tells a reader they are extra.\n` +
           `    Route it through lib/course-fees.ts (feeHeadings / feePanelHeadingKey /\n` +
