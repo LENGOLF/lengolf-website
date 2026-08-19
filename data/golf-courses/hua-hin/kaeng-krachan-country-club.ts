@@ -26,9 +26,8 @@ export const course: GolfCourse = {
   // CoursePage gates both rows on `> 0` and caddieAnswer uses a falsy test, so
   // 0 and null render identically everywhere it currently appears. The encoding
   // is right; that particular argument for it was not — the same overclaim an
-  // earlier commit removed from korea-golf-club's twin comment.
-  // Zero is the correct encoding of a genuine inclusion; what CLAUDE.md forbids
-  // is reading all-inclusiveness back OUT of a zero, which is what
+  // earlier commit removed from korea-golf-club's twin comment. What CLAUDE.md
+  // forbids is reading all-inclusiveness back OUT of a zero, which is what
   // `fee_is_package` above exists for.
   caddie_fee_thb: 0,
   cart_fee_thb: 0,
@@ -92,7 +91,7 @@ export const course: GolfCourse = {
       },
     },
     ja: {
-      title: `Kaeng Krachan Country Club（ペッチャブリー）— オールインパッケージ・コース紹介・クラブレンタル`,
+      title: `Kaeng Krachan Country Club（ペッチャブリー）— パッケージ料金・コース紹介・クラブレンタル`,
       meta_description: `オールインクルーシブのパッケージは平日1,199THBから、キャディーと乗り合いカート込み。Kaeng Krachan Country Clubはケーンクラチャン国立公園の際に広がる27ホールで、Jack Nicklaus Mountain Courseの9ホールを備えます。バンコクから手ぶらで向かえるLENGOLFのクラブレンタルもご案内します。`,
       prose: {
         overview: `Kaeng Krachan Country Club & Resortは、ホアヒン一帯でも屈指の劇的な景観を誇るゴルフデスティネーションです。ホアヒンから内陸へ51km入ったケーンクラチャン国立公園の際に位置し、この国立公園はユネスコ世界遺産に登録されています。27ホールの複合施設は、タイ人設計家Cherd Bunyaratavejによる当初の18ホールレイアウト（1994年開場）と、2008年に加わった9ホールのJack Nicklaus Mountain Courseで構成されます。両者を合わせると、開けたパークランドから密林の地形までを含む施設となり、とりわけNicklausのループは、この価格帯ではめったに味わえない大胆な高低差と森の額縁を届けてくれます。2023年からはPower Nine Groupが運営を担い、平日1,199THB、週末1,399THBからのオールインクルーシブパッケージを用意。キャディーと乗り合いカートが料金に含まれます。本物のNicklausブランドの9ホール、傑出した自然環境、そして手の届く価格。この組み合わせが、内陸まで足を延ばす気のあるゴルファーにとってKaeng Krachanを個性的な行き先にしています。`,

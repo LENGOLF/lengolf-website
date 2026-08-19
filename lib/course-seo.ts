@@ -141,7 +141,7 @@ export function getCourseTitle(course: GolfCourse, locale: CourseSeoLocale = 'en
   // missed, and it is the most prominent one: it is the <title>, the
   // openGraph.title, and the internal cross-link anchor text via lib/seo-links.
   if (course.fee_is_package && (!handWritten || BOILERPLATE_TITLE.test(handWritten) || /green fee/i.test(handWritten))) {
-    return `${course.name} — Golf Packages & Guide`
+    return `${course.name} — All-In Rates & Guide`
   }
   if (handWritten && !BOILERPLATE_TITLE.test(handWritten)) return handWritten
   return `${course.name} — Green Fees & Guide`
