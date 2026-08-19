@@ -60,15 +60,28 @@ function golfCourseItem(
     }
   }
   if (c.green_fee_weekday_thb !== null) {
-    // Schema.org / Google Rich Results convention is for `price` to be a
-    // string ("1500"), not a number. The validator accepts both but warns
-    // on the numeric form; matches the existing pattern in `lib/jsonld.ts`.
-    item.offers = {
-      '@type': 'Offer',
-      price: String(c.green_fee_weekday_thb),
-      priceCurrency: 'THB',
-      description: offerNames(c).lower,
-    }
+    // `makesOffer`, not `offers`. GolfCourse -> SportsActivityLocation ->
+    // LocalBusiness -> (Organization, Place); `offers` is defined on
+    // Product/Service/Event/Trip/Demand and on NONE of those, while
+    // `makesOffer` is Organization's property. The sibling builder in this same
+    // file already emits `makesOffer` (see getCourseDetailJsonLd), so one course
+    // was described with two different property names depending on which page
+    // you crawled. Google reports the wrong one as an unknown property rather
+    // than rejecting the node, which is why it survived — up to 554 nodes across
+    // /compare/, /near/, /best-for/ and /under/<tier>/.
+    // Array form matches the sibling builder; smoke L6 reads makesOffer[0].
+    //
+    // `price` stays a STRING ("1500") per the schema.org / Google Rich Results
+    // convention — the validator accepts a number but warns on it; matches the
+    // existing pattern in `lib/jsonld.ts`.
+    item.makesOffer = [
+      {
+        '@type': 'Offer',
+        price: String(c.green_fee_weekday_thb),
+        priceCurrency: 'THB',
+        description: offerNames(c).lower,
+      },
+    ]
   }
   return item
 }

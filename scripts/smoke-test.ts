@@ -4886,7 +4886,7 @@ async function runPriceTierRoundupLanguageTests() {
         continue;
       }
       for (const el of list.itemListElement) {
-        const desc = el?.item?.offers?.description;
+        const desc = el?.item?.makesOffer?.[0]?.description;
         if (desc === undefined) continue; // course with a null weekday fee
         itemsChecked++;
         if (!allowed.includes(desc)) {
