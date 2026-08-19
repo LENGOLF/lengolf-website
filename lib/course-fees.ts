@@ -59,10 +59,12 @@ export function statesABareGreenFee(c: FeeCopySource): boolean {
  *
  * - `lower` / `upper` — bare basis words for a two-row fee table or a map popup
  *   (`GolfCourseDetail` and `GolfCourseRegion`).
- * - `lowerHeading` / `upperHeading` — "<basis> green fee" noun phrases. `lowerHeading`
- *   is the hero chip's heading over the lower rate; `upperHeading` has no visible
- *   consumer today and exists for the schema.org `Offer.name` slot (see
- *   `feeHeadings`), where `upperInline` would inject a price into a label.
+ * - `lowerHeading` / `upperHeading` — "<basis> green fee" noun phrases. NOTHING
+ *   should read these directly any more: they are the NON-PACKAGE branch of
+ *   `feeHeadings`, which is what the hero chip and the schema.org `Offer.name`
+ *   slot now call. Reading `lowerHeading` at a call site is how a package course
+ *   gets told its all-in rate is a green fee — `validate:fee-labels`' noun rule
+ *   exists to catch exactly that, and will flag it.
  * - `upperInline` — the hero chip's inline "{price} THB" line for the upper rate.
  * - `upperShort` — the abbreviated tag the region-hub roster puts after the upper
  *   rate, where the non-seasonal form is `wknd` rather than `weekend`.
