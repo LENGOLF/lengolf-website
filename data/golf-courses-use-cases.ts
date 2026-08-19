@@ -41,7 +41,7 @@ export const USE_CASE_RULES: Record<UseCase, UseCaseMeta> = {
     slug: 'beginners',
     title: 'Best Bangkok-Area Golf Courses for Beginners',
     framing:
-      'Beginner-friendly Thai courses share three things: an on-site driving range to warm up, a green fee that doesn’t make a bad first round expensive, and forgiving fairways that don’t punish a thin shot with a lost ball. These are our picks within 90 minutes of Bangkok.',
+      'Beginner-friendly Thai courses share three things: an on-site driving range to warm up, a green fee that doesn’t make a bad first round expensive, and forgiving fairways that don’t punish a thin shot with a lost ball. These are our picks within 90 minutes of Bangkok.', // fee-noun-ok: generic page framing about what to look for, not a label on any one course's rate
     predicate: (c) =>
       c.driving_range === true &&
       c.green_fee_weekday_thb !== null &&
@@ -117,7 +117,7 @@ export const USE_CASE_RULES: Record<UseCase, UseCaseMeta> = {
     slug: 'families',
     title: 'Best Bangkok-Area Golf Courses for Families',
     framing:
-      'Family-friendly Thai courses are the ones where carts aren’t mandatory (so a non-golfing partner or older child can walk along), the green fee doesn’t cross into trophy-course territory, and the layout is approachable enough for occasional golfers.',
+      'Family-friendly Thai courses are the ones where carts aren’t mandatory (so a non-golfing partner or older child can walk along), the green fee doesn’t cross into trophy-course territory, and the layout is approachable enough for occasional golfers.', // fee-noun-ok: generic page framing about what to look for, not a label on any one course's rate
     predicate: (c) =>
       c.cart_required === false &&
       c.green_fee_weekday_thb !== null &&

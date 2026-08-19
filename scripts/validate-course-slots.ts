@@ -114,9 +114,11 @@ function longestRun(s: string, isForeign: (c: string) => boolean): { len: number
  * `ja` is listed here too — an EARLIER version returned before consulting this
  * map for ja, which made a Thai sentence spliced into a ja block invisible up to
  * the host slot's OWN kana count, because ja's only Thai rule is a dominance
- * test against total kana. Measured across the 427 shipped ja strings that is
- * 185 characters in `location_and_access` — the field the CAVEAT below names —
- * and 510 at the corpus maximum.
+ * test against total kana. Measured across the 427 shipped ja strings under
+ * THIS FILE'S OWN `SCRIPT.kana` (which excludes `ー`) that ceiling is 171
+ * characters in `location_and_access` — the field the CAVEAT below names —
+ * and 479 at the corpus maximum. An earlier revision said 185/510, measured
+ * counting `ー` as kana, i.e. contradicting the SCRIPT docblock above it.
  * Han is absent from the ja row because Han is legal Japanese; that case is the
  * separate kana-free-run rule below.
  */
@@ -306,6 +308,68 @@ const SELF_TESTS: Array<{ name: string; loc: Loc; s: string; expect: boolean; ma
     match: /no Thai characters at all/,
     s: 'Kaeng Krachan Country Club 27 holes par 72' },
 
+  // --- the four dominance rules a guard-efficacy pass found UNCOVERED ---
+  // Each is clause-broken so every run stays under 8; only the named rule fires.
+  { name: 'DOMINANCE th: Hangul outnumbers Thai', loc: 'th', expect: true,
+    match: /Hangul \(\d+\) outnumbers Thai/,
+    s: 'ส 코스는、후아힌、남쪽에、있으며、파 72、구성이고、그린이、빠릅니다' },
+  { name: 'DOMINANCE ko: kana outnumbers Hangul', loc: 'ko', expect: true,
+    match: /kana \(\d+\) outnumbers Hangul/,
+    s: '코스 このこーすは、ほあひんの、みなみにあり、ぱーななじゅうに、ふぇあうぇいは、ひろめです' },
+  { name: 'DOMINANCE ja: Thai outnumbers kana', loc: 'ja', expect: true,
+    match: /Thai \(\d+\) outnumbers kana/,
+    s: 'の สนามกอล์ฟแห่งนี้ตั้งอยู่ทางทิศใต้ของหัวหินและมีแคดดี้บังคับทุกรอบการเล่น' },
+  { name: 'DOMINANCE zh: Thai outnumbers Han', loc: 'zh', expect: true,
+    match: /Thai \(\d+\) outnumbers Han/,
+    s: '球 สนามกอล์ฟแห่งนี้ตั้งอยู่ทางทิศใต้ของหัวหินและมีแคดดี้บังคับทุกรอบการเล่น' },
+
+  // --- FOREIGN map entries: one case per (locale, script) so a one-character
+  // edit to that map cannot go green. Eight of eleven had no coverage at all,
+  // including all three `ko` entries. Hosts are long enough that dominance
+  // cannot fire, so ONLY the run check can catch these.
+  { name: 'FOREIGN.th.hangul — Korean splice in long Thai', loc: 'th', expect: true,
+    match: /foreign-script run/,
+    s: 'สนามแห่งนี้อยู่ห่างจากตัวเมืองหัวหินประมาณ 20 นาที และมีแคดดี้บังคับทุกรอบ '
+     + 'พร้อมรถกอล์ฟให้เช่า สนามมีระยะ 7,100 หลาจากแท่นทีหลัง เปิดบริการทุกวันตั้งแต่เช้า '
+     + '이코스는후아힌남쪽에있으며 และมีสิ่งอำนวยความสะดวกครบครัน' },
+  { name: 'FOREIGN.th.kana — kana splice in long Thai', loc: 'th', expect: true,
+    match: /foreign-script run/,
+    s: 'สนามแห่งนี้อยู่ห่างจากตัวเมืองหัวหินประมาณ 20 นาที และมีแคดดี้บังคับทุกรอบ '
+     + 'พร้อมรถกอล์ฟให้เช่า สนามมีระยะ 7,100 หลาจากแท่นทีหลัง เปิดบริการทุกวันตั้งแต่เช้า '
+     + 'フェアウェイはひろめです และมีสิ่งอำนวยความสะดวกครบครัน' },
+  { name: 'FOREIGN.ko.han — zh splice in long Korean', loc: 'ko', expect: true,
+    match: /foreign-script run/,
+    s: '이 코스는 후아힌 시내에서 차로 약 20분 거리에 있으며, 캐디는 필수이고 카트는 선택입니다. '
+     + '전장은 뒤쪽 티에서 7,100야드에 이르고 페어웨이는 비교적 넓은 편이에요. '
+     + '球道宽阔果岭速度中等偏快十分适合 매일 아침부터 운영합니다.' },
+  { name: 'FOREIGN.ko.kana — kana splice in long Korean', loc: 'ko', expect: true,
+    match: /foreign-script run/,
+    s: '이 코스는 후아힌 시내에서 차로 약 20분 거리에 있으며, 캐디는 필수이고 카트는 선택입니다. '
+     + '전장은 뒤쪽 티에서 7,100야드에 이르고 페어웨이는 비교적 넓은 편이에요. '
+     + 'フェアウェイはひろめです 매일 아침부터 운영합니다.' },
+  { name: 'FOREIGN.ko.thai — Thai splice in long Korean', loc: 'ko', expect: true,
+    match: /foreign-script run/,
+    s: '이 코스는 후아힌 시내에서 차로 약 20분 거리에 있으며, 캐디는 필수이고 카트는 선택입니다. '
+     + '전장은 뒤쪽 티에서 7,100야드에 이르고 페어웨이는 비교적 넓은 편이에요. '
+     + 'สนามแห่งนี้มีแคดดี้บังคับ 매일 아침부터 운영합니다.' },
+  { name: 'FOREIGN.zh.thai — Thai splice in long Chinese', loc: 'zh', expect: true,
+    match: /foreign-script run/,
+    s: '这座球场位于华欣以南约二十公里，十八洞标准杆七十二，球道宽阔，果岭速度中等偏快，'
+     + '后九洞可以远眺泰国湾，球会每天清晨开放，球童为必须，球车可以选择。'
+     + 'สนามแห่งนี้มีแคดดี้บังคับ 十分适合安排一日行程。' },
+  { name: 'FOREIGN.ja.hangul — Korean splice in long Japanese', loc: 'ja', expect: true,
+    match: /foreign-script run/,
+    s: 'このコースはホアヒンの中心部から車でおよそ20分の場所にあり、フェアウェイは全体に広めで、'
+     + 'グリーンの速度は中程度に保たれています。キャディーは必須で、カートは希望者のみです。'
+     + '이코스는후아힌남쪽에있으며 朝の時間帯は風が穏やかです。' },
+
+  // CLAUSE_BREAK must not swallow whitespace: a space-separated splice is still
+  // a splice, and adding `\s` to that class silently destroys every run check.
+  { name: 'CLAUSE_BREAK: space-separated zh splice still caught', loc: 'th', expect: true,
+    match: /foreign-script run/,
+    s: 'สนามแห่งนี้อยู่ห่างจากตัวเมืองหัวหินประมาณ 20 นาที และมีแคดดี้บังคับทุกรอบ '
+     + '球道 宽阔 果岭 速度 中等 偏快 十分 适合 安排 一日 行程 十分 方便 而且 价格 合理 และมีสิ่งอำนวยความสะดวกครบครัน' },
+
   // --- must STAY SILENT (real shipped copy, or its shape) ---
   { name: 'legit ja kanji compound run (corpus max, 7)', loc: 'ja', expect: false,
     s: 'このコースは野生動物保護区に隣接しており、朝は鳥の声が聞こえます。フェアウェイは広めです。' },
@@ -340,9 +404,15 @@ function selfTest(): never {
   const fires = SELF_TESTS.filter((t) => t.expect).length
   console.log(`\n${SELF_TESTS.length} self-tests (${fires} must fire, ${SELF_TESTS.length - fires} must stay silent) · ${failed} failed`)
   const reasoned = SELF_TESTS.filter((t) => t.match).length
-  if (fires < 8 || reasoned < 8) {
+  // Count DISTINCT reasons, not cases. The first version's `reasoned >= 8`
+  // counted cases carrying a `match`, so deleting two dominance cases and then
+  // disarming the two rules they pinned left the suite green — the same
+  // hollowness it was written to close, one level up.
+  const distinctReasons = new Set(SELF_TESTS.filter((t) => t.match).map((t) => t.match!.source)).size
+  if (fires < 8 || reasoned < 8 || distinctReasons < 10) {
     console.log(
-      `FAIL: self-test suite has lost its positive cases (${fires} firing, ${reasoned} reason-asserting; expected >= 8 of each)`
+      `FAIL: self-test suite has lost coverage (${fires} firing, ${reasoned} reason-asserting, ` +
+        `${distinctReasons} distinct reasons; expected >= 8 / >= 8 / >= 10)`
     )
     process.exit(1)
   }

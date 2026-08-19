@@ -340,11 +340,19 @@ async function main() {
  * comes from a generator and the non-EN blocks are returned verbatim.
  */
 const PACKAGE_NOUN_RE: Record<CourseSeoLocale, RegExp> = {
-  en: /green fee/i,
-  th: /ค่ากรีนฟี/,
-  ja: /グリーンフィー/,
-  ko: /그린피/,
-  zh: /果岭费/,
+  // Every form must be listed, because this regex and `getCourseTitle`'s rewrite
+  // branch are NOT independent layers — the branch used the same `/green fee/i`,
+  // so a hand-written `Greenfee` or `Green-Fee` defeated both at once and shipped
+  // verbatim. Measured by mutation, not assumed.
+  en: /green[\s-]?fees?/i,
+  // th: `กรีนฟี` is the bare noun and the glossary's own term; `ค่ากรีนฟี` only
+  // adds the "cost of" prefix, so matching the prefixed form alone missed
+  // `กรีนฟี 800 บาท` — literally "green fee 800 baht" over an all-in package.
+  th: /กรีนฟี/,
+  // ja: `グリーン費` is the mixed katakana+kanji form; zh: `果嶺費` is Traditional.
+  ja: /グリーンフィ|グリーン費/,
+  ko: /그린\s?피/,
+  zh: /果岭费|果嶺費/,
 }
 
 function checkPackageNoun(courses: { file: string; course: GolfCourse }[]) {
@@ -366,9 +374,20 @@ function checkPackageNoun(courses: { file: string; course: GolfCourse }[]) {
       }
     }
   }
-  // Anti-vacuity: this guard is worth nothing if no course carries the flag, or
-  // if the locale blocks stop being read. Two package courses x 5 locales today.
-  if (packages > 0 && checked < packages * 5) {
+  // Anti-vacuity, and the FIRST version got it wrong in the exact way CLAUDE.md
+  // warns about: `packages > 0 && …` self-disarms. Delete `fee_is_package` from
+  // both courses and the whole check evaluates zero titles, exits 0 — while the
+  // rendered EN title silently regresses to "— Green Fees & Guide". The flag is
+  // optional on the type, so the deletion compiles. Needs an ABSOLUTE floor with
+  // a real number, which is the rule this guard was added to enforce.
+  const MIN_PACKAGE_COURSES = 2
+  if (packages < MIN_PACKAGE_COURSES) {
+    errors.push(
+      `package-noun check found only ${packages} fee_is_package course(s), expected at least ` +
+        `${MIN_PACKAGE_COURSES} — the flag was removed, or this ratchet needs a deliberate edit`
+    )
+  }
+  if (checked < packages * 5) {
     errors.push(
       `package-noun check examined only ${checked} title(s) across ${packages} package ` +
         `course(s) — expected ${packages * 5}. A locale block stopped being read.`

@@ -1,7 +1,7 @@
 import { Check, X } from 'lucide-react'
 import type { GolfCourse } from '@/types/golf-courses'
 import { driveTimeLabel } from '@/lib/format'
-import { pricesByDayOfWeek, feeLabelsEn, feeBasisNoteEn } from '@/lib/course-fees'
+import { pricesByDayOfWeek, feeLabelsEn, feeBasisNoteEn, feeNounEn } from '@/lib/course-fees'
 
 interface Props {
   a: GolfCourse
@@ -52,18 +52,21 @@ function unpublished(c: GolfCourse, which: 'lower' | 'upper'): string {
 function feeRows(a: GolfCourse, b: GolfCourse): Row[] {
   const mixedBasis = pricesByDayOfWeek(a) !== pricesByDayOfWeek(b)
   const shared = feeLabelsEn(a)
+  // Shared across BOTH columns, so a package on either side makes the green-fee
+  // noun wrong for the whole row.
+  const noun = feeNounEn([a, b])
   const note = (c: GolfCourse, which: 'lower' | 'upper') =>
     mixedBasis ? ` (${feeBasisNoteEn(c, which)})` : ''
   return [
     {
-      label: mixedBasis ? 'Lower green fee' : `${shared.lower} green fee`,
+      label: mixedBasis ? `Lower ${noun.toLowerCase()}` : `${shared.lower} ${noun.toLowerCase()}`,
       cell: (c) =>
         c.green_fee_weekday_thb !== null
           ? `${c.green_fee_weekday_thb.toLocaleString('en-US')} THB${note(c, 'lower')}`
           : unpublished(c, 'lower'),
     },
     {
-      label: mixedBasis ? 'Higher green fee' : `${shared.upper} green fee`,
+      label: mixedBasis ? `Higher ${noun.toLowerCase()}` : `${shared.upper} ${noun.toLowerCase()}`,
       cell: (c) =>
         c.green_fee_weekend_thb !== null
           ? `${c.green_fee_weekend_thb.toLocaleString('en-US')} THB${note(c, 'upper')}`

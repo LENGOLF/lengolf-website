@@ -191,6 +191,22 @@ type FeeLabelT = (
 ) => string
 
 /**
+ * The EN noun for a fee column shared across SEVERAL courses — "Green fee" when
+ * every course beneath it charges one, "Rate" when any of them prices an all-in
+ * package. The EN-pinned sibling of `feeRosterHeadingKey`, for `/compare/` and
+ * `/near/`, which never read a catalog.
+ *
+ * Both of those hardcoded the noun. Neither is reachable by a package course
+ * today — `/compare/` draws from each region's top 3 and `/near/` from a
+ * station's top 8, and the two package courses rank 6th and 11th of 11 in
+ * hua-hin — but that is a fact about current popularity scores, not a property
+ * of the code, and `/compare/` membership is derived and documented as fragile.
+ */
+export function feeNounEn(courses: readonly FeeCopySource[]): 'Green fee' | 'Rate' {
+  return courses.some((c) => c.fee_is_package) ? 'Rate' : 'Green fee'
+}
+
+/**
  * Plain-English label pair for the EN-only surfaces (`/compare/` spec table,
  * `/near/` station table, `/best-for/` use-case reasons). Those routes pin
  * `locale: 'en'` in `generateStaticParams`, so they never read a catalog.

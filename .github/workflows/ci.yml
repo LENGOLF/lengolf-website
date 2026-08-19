@@ -55,6 +55,12 @@ jobs:
       # This step is the only thing that can tell those two runs apart.
       - run: npm run validate:course-slots:self-test
       - run: npm run validate:fee-labels
+      # ...and the same argument again. Every rule in that file self-disarmed
+      # with byte-identical output, including the pre-existing basis rule — and
+      # the noun rule fires on ZERO lines in healthy code, so nothing it prints
+      # is evidence it works. This step is the only thing that can tell a
+      # working gate from a disarmed one.
+      - run: npm run validate:fee-labels:self-test
 
       # Club spec-sheet parsers. rental_club_sets.variants[].spec is
       # staff-authored free text held only in production, and /golf-club-specs/

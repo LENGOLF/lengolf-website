@@ -27,7 +27,7 @@ const enOfferNames: CourseOfferNames = (c) => {
   // A package course's rate covers the caddie and the cart, so the green-fee
   // noun is a false claim about what the number buys. The BASIS stays — a
   // package can still be cheaper on a weekday. See `feeHeadings`.
-  const noun = c.fee_is_package ? 'package' : 'green fee'
+  const noun = c.fee_is_package ? 'package' : 'green fee' // fee-noun-ok: this line IS the package decision
   return { lower: `${labels.lower} ${noun}`, upper: `${labels.upper} ${noun}` }
 }
 

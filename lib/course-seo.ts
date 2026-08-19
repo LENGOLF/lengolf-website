@@ -140,11 +140,11 @@ export function getCourseTitle(course: GolfCourse, locale: CourseSeoLocale = 'en
   // This is the field the suppression in `getCourseDescription` and the fee FAQ
   // missed, and it is the most prominent one: it is the <title>, the
   // openGraph.title, and the internal cross-link anchor text via lib/seo-links.
-  if (course.fee_is_package && (!handWritten || BOILERPLATE_TITLE.test(handWritten) || /green fee/i.test(handWritten))) {
+  if (course.fee_is_package && (!handWritten || BOILERPLATE_TITLE.test(handWritten) || /green fee/i.test(handWritten))) { // fee-noun-ok: this IS the package guard — the literal is the pattern it removes
     return `${course.name} — All-In Rates & Guide`
   }
   if (handWritten && !BOILERPLATE_TITLE.test(handWritten)) return handWritten
-  return `${course.name} — Green Fees & Guide`
+  return `${course.name} — Green Fees & Guide` // fee-noun-ok: the NON-package fallback; the package branch returns before this
 }
 
 /**
@@ -193,7 +193,7 @@ export function getCourseDescription(course: GolfCourse, locale: CourseSeoLocale
   // the number is a low-season price, not a weekday one (see fee_is_seasonal).
   const fee =
     course.green_fee_weekday_thb && statesABareGreenFee(course)
-      ? ` Weekday green fee ~${thb(course.green_fee_weekday_thb)}.`
+      ? ` Weekday green fee ~${thb(course.green_fee_weekday_thb)}.` // fee-noun-ok: whole clause is gated on statesABareGreenFee, so a package course never reaches it
       : ''
   const drive =
     course.drive_time_from_bangkok_min && course.drive_time_from_bangkok_min <= 240
@@ -369,9 +369,9 @@ const FAQ_L10N: Record<CourseSeoLocale, CourseFaqL10n> = {
     whereWasQuestion: (name) => `Where was ${name} located?`,
     whereWasAnswer: (name, km, province) =>
       `${name} was in ${province}, about ${km} km from central Bangkok.`,
-    feeQuestion: (name) => `How much is the green fee at ${name}?`,
+    feeQuestion: (name) => `How much is the green fee at ${name}?`, // fee-noun-ok: getCourseFaqs omits this whole FAQ unless statesABareGreenFee(course)
     feeAnswer: (name, weekday, weekend, verifiedAt) => {
-      let answer = `The weekday green fee at ${name} is around ${thb(weekday)}`
+      let answer = `The weekday green fee at ${name} is around ${thb(weekday)}` // fee-noun-ok: same suppression as feeQuestion above
       if (weekend) answer += `, and the weekend rate is around ${thb(weekend)}`
       if (verifiedAt) {
         // Long month ("July 2026"), unlike asOfMonthYear's short form — the
@@ -399,7 +399,7 @@ const FAQ_L10N: Record<CourseSeoLocale, CourseFaqL10n> = {
     caddieAnswer: (name, required, fee, tipIncluded) => {
       const feeNote = fee ? `, with a caddie fee of about ${thb(fee)} per round` : ''
       const tipNote = tipIncluded
-        ? ' The green fee is all-inclusive, so the caddie tip is already covered — no extra tipping is expected.'
+        ? ' The green fee is all-inclusive, so the caddie tip is already covered — no extra tipping is expected.' // fee-noun-ok: gated on caddie_tip_included, set only on nikanti, which is not a package course
         : ' Caddie tips (typically 300–500 THB) are customary on top.'
       return required
         ? `Yes — caddies are mandatory at ${name}${feeNote}.${tipNote}`

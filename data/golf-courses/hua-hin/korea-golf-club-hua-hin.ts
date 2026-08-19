@@ -54,10 +54,11 @@ export const course: GolfCourse = {
   // Removed rather than corrected: the owner could not confirm this figure with
   // the club, and nothing in this file sources it. 1,500 was 1.88x the entire
   // 800 THB all-in round, and it is the modal value of this field across the
-  // corpus (17 courses carry exactly 1500, and exactly ONE of them —
-  // royal-bang-pa-in-golf-club — states a rental figure in prose, as a
-  // 1,500-1,700 range; an earlier version of this comment said 18 and 3, and
-  // the 3 counted files quoting 1,500 as a GREEN fee, not a rental),
+  // corpus (17 courses carry exactly 1500, and TWO of them state a rental
+  // figure in prose: royal-bang-pa-in-golf-club as a 1,500-1,700 range and
+  // the-vintage-club as a flat "Club hire at 1,500 THB". Earlier versions of
+  // this comment said 18-and-3 and then 17-and-1; the 3 counted files quoting
+  // 1,500 as a GREEN fee, and the 1 missed the-vintage-club),
   // which is what a default looks like rather than a measurement. With it null,
   // FAQ_L10N.rentalAnswer still says rental is available on-site and simply
   // omits the price, and CoursePage drops the fee line while keeping the

@@ -68,11 +68,37 @@ const FEE_BASIS_OK_RE = /fee-basis-ok:/
  */
 const NOUN_KEY_RE =
   /\b(greenFees|rosterGreenFee|weekdayGreenFee|weekendGreenFee|lowSeasonGreenFee|highSeasonGreenFee|lowerHeading|upperHeading)\b/
-const NOUN_SITE_RE = /(?:^|[^\w])t\(|\blabel\s*:/
+/**
+ * The noun as ENGLISH TEXT, not a catalog key. The first version matched keys
+ * only, so `{'Weekday green fee'}` — the exact historical defect string — walked
+ * straight through as a bare JSX expression, as did `<th>Green fee (weekday)</th>`.
+ * Hyphen and closed forms included because `getCourseTitle`'s rewrite branch and
+ * this gate would otherwise share one `/green fee/i` and fail together.
+ */
+const NOUN_LITERAL_RE = /green[\s-]?fees?\b/i
+/**
+ * Translator calls, not just `t(`. The tier route names its translator
+ * `tDetail` and CoursePage declares `tShared`, so a `t\(`-only test could not
+ * fire on `/golf-courses/under/<tier>/` at all — the ONE roundup route that
+ * SSGs non-EN locales, i.e. precisely the surface the noun rule exists to
+ * protect. Proven by mutation: the same defect caught in CoursePage slipped
+ * silently in the tier route until this was widened.
+ */
+const NOUN_SITE_RE =
+  /(?:^|[^\w])t[A-Za-z0-9_]*\(|\blabel\s*:|>[^<>{}]*green[\s-]?fees?\b|['"`][^'"`]*green[\s-]?fees?\b/i
 /** The noun decision came from the single source of truth on this line — fine. */
 const NOUN_HELPER_RE = /feeHeadings|feePanelHeadingKey|feeRosterHeadingKey/
 /** Explicit, reviewable justification for a guarded noun site. */
 const FEE_NOUN_OK_RE = /fee-noun-ok:/
+/**
+ * Strip comments before testing. Without this a trailing
+ * `{/* was feeHeadings *\/}` on a CORRECT line fires the rule (a gate that
+ * fires on correct code gets switched off), and — the other direction — a
+ * helper named only inside a comment silently exempted a genuinely wrong line.
+ */
+function stripComments(line: string): string {
+  return line.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/\/\/.*$/, ' ')
+}
 
 /**
  * Files that read a fee field but never render a basis to a reader: sorting,
@@ -111,6 +137,97 @@ function walk(dir: string, out: string[] = []): string[] {
   }
   return out
 }
+
+/**
+ * The two per-line rules, as pure functions so `--self-test` can prove they fire.
+ *
+ * Without this every rule self-disarmed with output byte-identical to a healthy
+ * run: `NOUN_KEY_RE = /(?!)/`, `NOUN_SITE_RE = /(?!)/`, the whole noun block
+ * `if (true) return`, even `BASIS_LITERAL_RE = /(?!)/` — all exit 0 printing
+ * "all route the basis AND noun decisions through lib/course-fees.ts". Worse
+ * than the case CLAUDE.md already documents, because in healthy code the noun
+ * rule fires on ZERO lines, so nothing in the output is evidence it works.
+ */
+export function basisViolation(line: string): string | null {
+  const bare = stripComments(line).replace(/green_fee_week(day|end)_thb/g, '')
+  if (!LABEL_SHAPED_RE.test(bare)) return null
+  const quoted = bare.match(/'[^']*'|"[^"]*"|`[^`]*`/g) ?? []
+  const offender = quoted.find((q) => BASIS_LITERAL_RE.test(q))
+  if (!offender) return null
+  if (COURSE_FEES_HELPER_RE.test(bare)) return null
+  if (FEE_BASIS_OK_RE.test(line)) return null
+  if (/^\s*(\/\/|\*|\/\*)/.test(line)) return null
+  return offender
+}
+
+export function nounViolation(line: string): string | null {
+  if (/^\s*(\/\/|\*|\/\*)/.test(line)) return null
+  const bare = stripComments(line)
+  if (!NOUN_SITE_RE.test(bare)) return null
+  const hit = bare.match(NOUN_KEY_RE) ?? bare.match(NOUN_LITERAL_RE)
+  if (!hit) return null
+  const nounIsWrittenOut =
+    /['"`][^'"`]*(green[\s-]?fees?|GreenFee|greenFees|rosterGreenFee)[^'"`]*['"`]/i.test(bare) ||
+    />[^<>{}]*green[\s-]?fees?\b/i.test(bare)
+  if (NOUN_HELPER_RE.test(bare) && !nounIsWrittenOut) return null
+  if (FEE_NOUN_OK_RE.test(line)) return null
+  return hit[0]
+}
+
+const SELF_TESTS: Array<{ name: string; line: string; basis?: boolean; noun?: boolean }> = [
+  // --- BASIS rule ---
+  { name: 'hardcoded basis at a label site', basis: true, line: "      label: 'Weekday green fee'," },
+  { name: 'basis from the helper is fine', basis: false, line: '      label: `${feeLabelsEn(c).lower} rate`,' },
+  { name: 'fee-basis-ok: justification honoured', basis: false, line: "      label: 'Weekday rate', // fee-basis-ok: EN-pinned route" },
+  // --- NOUN rule: the four shapes a prior version missed ---
+  { name: 'noun key via t()', noun: true, line: "        {t('greenFees')}" },
+  { name: 'noun key via a NON-`t` translator (tDetail)', noun: true, line: '      const offerName = tDetail(feeLabelKeys(c).lowerHeading)' },
+  { name: 'noun key via tShared', noun: true, line: "        {tShared('greenFees')}" },
+  { name: 'bare heading key', noun: true, line: '        {t(feeKeys.lowerHeading)}' },
+  { name: 'English literal in a JSX expression', noun: true, line: "        {'Weekday green fee'}" },
+  { name: 'English literal as JSX text', noun: true, line: '        <th className="x">Green fee (weekday)</th>' },
+  { name: 'hyphenated literal', noun: true, line: "        label: 'Weekday Green-Fee'," },
+  { name: 'helper named but noun still hardcoded in a branch', noun: true,
+    line: "        {t(feeRosterHeadingKey(courses) ? 'rosterGreenFee' : 'rates')}" },
+  { name: 'helper named only in a trailing comment', noun: true,
+    line: "        {t('greenFees')} {/* was feeHeadings */}" },
+  // --- NOUN rule must STAY SILENT ---
+  { name: 'routed through the helper', noun: false, line: '        {t(feePanelHeadingKey(course))}' },
+  { name: 'routed through feeHeadings', noun: false, line: '        {feeHeadings(course, t).lower}' },
+  { name: 'correct line with a comment mentioning greenFees', noun: false,
+    line: "        {t('thb')} {/* not greenFees — unit only */}" },
+  { name: 'fee-noun-ok: justification honoured', noun: false,
+    line: "        {t('greenFees')} // fee-noun-ok: EN-pinned, no package course reachable" },
+  { name: 'unrelated t() call', noun: false, line: "        {t('caddie')}" },
+]
+
+function selfTest(): never {
+  let failed = 0
+  let basisCases = 0
+  let nounCases = 0
+  for (const t of SELF_TESTS) {
+    const which = t.basis !== undefined ? 'basis' : 'noun'
+    const want = t.basis ?? t.noun ?? false
+    const got = which === 'basis' ? basisViolation(t.line) !== null : nounViolation(t.line) !== null
+    if (which === 'basis') basisCases++
+    else nounCases++
+    const ok = got === want
+    if (!ok) failed++
+    console.log(`  ${ok ? '✓' : '✗'} [${which}] ${t.name} — expected ${want ? 'FIRE' : 'silent'}, got ${got ? 'FIRE' : 'silent'}`)
+  }
+  const firing = SELF_TESTS.filter((t) => t.basis || t.noun).length
+  console.log(`\n${SELF_TESTS.length} self-tests (${basisCases} basis, ${nounCases} noun; ${firing} must fire) · ${failed} failed`)
+  // Floors, so deleting cases cannot hollow the suite out.
+  if (basisCases < 3 || nounCases < 12 || firing < 10) {
+    console.log('FAIL: self-test suite has lost cases (need >= 3 basis, >= 12 noun, >= 10 firing)')
+    process.exit(1)
+  }
+  if (failed > 0) process.exit(1)
+  console.log('OK — both rules fire on the shapes they exist for, and stay silent on correct code')
+  process.exit(0)
+}
+
+if (process.argv.includes('--self-test')) selfTest()
 
 const errors: string[] = []
 let scanned = 0
@@ -181,10 +298,19 @@ for (const dir of SCAN_DIRS) {
     // Per-SITE NOUN check. Same population, different claim — see NOUN_KEY_RE.
     src.split('\n').forEach((line, i) => {
       if (/^\s*(\/\/|\*|\/\*)/.test(line)) return // comment prose
-      if (!NOUN_SITE_RE.test(line)) return
-      const hit = line.match(NOUN_KEY_RE)
+      const bare = stripComments(line)
+      if (!NOUN_SITE_RE.test(bare)) return
+      const hit = bare.match(NOUN_KEY_RE) ?? bare.match(NOUN_LITERAL_RE)
       if (!hit) return
-      if (NOUN_HELPER_RE.test(line)) return // noun came from the helper
+      // The helper exemption does NOT apply when the noun is ALSO written out on
+      // the line. `t(feeRosterHeadingKey(c) ? 'rosterGreenFee' : 'rates')` names
+      // a helper and still hardcodes the noun in a branch that is always taken —
+      // the same escape hatch a previous commit removed from the basis rule and
+      // then recreated one rule over.
+      const nounIsWrittenOut =
+        /['"`][^'"`]*(green[\s-]?fees?|GreenFee|greenFees|rosterGreenFee)[^'"`]*['"`]/i.test(bare) ||
+        />[^<>{}]*green[\s-]?fees?\b/i.test(bare)
+      if (NOUN_HELPER_RE.test(bare) && !nounIsWrittenOut) return // came from the helper
       if (FEE_NOUN_OK_RE.test(line)) return // explicitly justified
       errors.push(
         `${rel}:${i + 1}: green-fee NOUN key '${hit[0]}' rendered without the\n` +
