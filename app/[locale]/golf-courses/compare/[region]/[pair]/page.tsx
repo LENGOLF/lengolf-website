@@ -5,7 +5,7 @@ import { Link } from '@/i18n/navigation'
 import { SITE_URL } from '@/lib/constants'
 import { REGION_META, getCourseBySlug, type Region } from '@/lib/golf-courses'
 import { getBreadcrumbJsonLd } from '@/lib/jsonld'
-import { pricesByDayOfWeek, feeBasisNoteEn } from '@/lib/course-fees'
+import { pricesByDayOfWeek, feeBasisNoteEn, feeNounEn } from '@/lib/course-fees'
 import { getCourseComparisonJsonLd } from '@/lib/jsonld-courses'
 import {
   comparisonCrossLink,
@@ -52,7 +52,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const regionLabel = REGION_META[region as Region].label
   const title = `${a.name} vs ${b.name} — ${regionLabel} Golf Course Comparison`
-  const description = `Compare ${a.name} and ${b.name}: green fees, par, designer, drive time, and which course suits which kind of round. ${regionLabel}, Thailand.`
+  // Both courses are in scope here, so the noun can follow them: an all-in
+  // package on either side makes "green fees" wrong for the pair.
+  const description = `Compare ${a.name} and ${b.name}: ${feeNounEn([a, b]).toLowerCase()}s, par, designer, drive time, and which course suits which kind of round. ${regionLabel}, Thailand.`
   const canonicalUrl = `${SITE_URL}/golf-courses/compare/${region}/${pair}/`
 
   return {
@@ -240,7 +242,7 @@ export default async function CompareCoursesPage({ params }: Props) {
             {a.name} <span className="text-white/60">vs</span> {b.name}
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-white/75">
-            Side-by-side comparison of {a.name} and {b.name} — green fees, par, designer, drive time, and a
+            Side-by-side comparison of {a.name} and {b.name} — {feeNounEn([a, b]).toLowerCase()}s, par, designer, drive time, and a
             data-driven view of which course suits which kind of round.
           </p>
         </div>

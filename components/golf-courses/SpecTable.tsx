@@ -1,7 +1,7 @@
 import { Check, X } from 'lucide-react'
 import type { GolfCourse } from '@/types/golf-courses'
 import { driveTimeLabel } from '@/lib/format'
-import { pricesByDayOfWeek, feeLabelsEn, feeBasisNoteEn } from '@/lib/course-fees'
+import { pricesByDayOfWeek, feeLabelsEn, feeBasisNoteEn, feeNounEn } from '@/lib/course-fees'
 
 interface Props {
   a: GolfCourse
@@ -30,6 +30,19 @@ const ROWS_HEAD: Row[] = [
 ]
 
 /**
+ * A bare em-dash in a two-column fee row is read as "this course has no such
+ * rate", not "we don't have the number". That misreads badly on the HIGHER-fee
+ * row of a seasonal course: the cell sits beside a filled `4,500 THB (weekend)`
+ * and implies the seasonal course charges no peak premium — the opposite of
+ * what its own prose says. Name the missing basis instead, so the blank reads
+ * as an unpublished figure. 23 course files carry a null upper fee, and
+ * /compare/ is the one surface that puts two of them side by side.
+ */
+function unpublished(c: GolfCourse, which: 'lower' | 'upper'): string {
+  return `— (${feeBasisNoteEn(c, which)} rate not published)`
+}
+
+/**
  * The two fee rows share ONE label across both columns, so the label can only name
  * a basis when both courses price on the same one. Comparing a day-of-week course
  * against a seasonal one, the label stays basis-neutral and each cell carries its
@@ -39,22 +52,25 @@ const ROWS_HEAD: Row[] = [
 function feeRows(a: GolfCourse, b: GolfCourse): Row[] {
   const mixedBasis = pricesByDayOfWeek(a) !== pricesByDayOfWeek(b)
   const shared = feeLabelsEn(a)
+  // Shared across BOTH columns, so a package on either side makes the green-fee
+  // noun wrong for the whole row.
+  const noun = feeNounEn([a, b])
   const note = (c: GolfCourse, which: 'lower' | 'upper') =>
     mixedBasis ? ` (${feeBasisNoteEn(c, which)})` : ''
   return [
     {
-      label: mixedBasis ? 'Lower green fee' : `${shared.lower} green fee`,
+      label: mixedBasis ? `Lower ${noun.toLowerCase()}` : `${shared.lower} ${noun.toLowerCase()}`,
       cell: (c) =>
         c.green_fee_weekday_thb !== null
           ? `${c.green_fee_weekday_thb.toLocaleString('en-US')} THB${note(c, 'lower')}`
-          : '—',
+          : unpublished(c, 'lower'),
     },
     {
-      label: mixedBasis ? 'Higher green fee' : `${shared.upper} green fee`,
+      label: mixedBasis ? `Higher ${noun.toLowerCase()}` : `${shared.upper} ${noun.toLowerCase()}`,
       cell: (c) =>
         c.green_fee_weekend_thb !== null
           ? `${c.green_fee_weekend_thb.toLocaleString('en-US')} THB${note(c, 'upper')}`
-          : '—',
+          : unpublished(c, 'upper'),
     },
   ]
 }

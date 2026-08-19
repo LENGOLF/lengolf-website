@@ -1,5 +1,5 @@
 import type { GolfCourse, GolfCourseProse } from '@/types/golf-courses'
-import { pricesByDayOfWeek } from '@/lib/course-fees'
+import { statesABareGreenFee } from '@/lib/course-fees'
 import {
   asOfMonthYear,
   COURSE_CONTENT_LOCALES,
@@ -130,8 +130,21 @@ export function getCourseTitle(course: GolfCourse, locale: CourseSeoLocale = 'en
     return `${course.name} — Permanently Closed`
   }
   const handWritten = course.locales.en.title
+  // A package course must not advertise a "green fee" in the SERP either: its
+  // rate already covers the caddie and the cart, so the noun tells a searcher
+  // they are extra. Checked with the same reasoning as the closed-course guard
+  // directly above — the boilerplate titles all carry the claim, so honouring
+  // the hand-written escape hatch here would reintroduce exactly what is being
+  // removed. A hand-written EN title that avoids the noun is still honoured.
+  //
+  // This is the field the suppression in `getCourseDescription` and the fee FAQ
+  // missed, and it is the most prominent one: it is the <title>, the
+  // openGraph.title, and the internal cross-link anchor text via lib/seo-links.
+  if (course.fee_is_package && (!handWritten || BOILERPLATE_TITLE.test(handWritten) || /green fee/i.test(handWritten))) { // fee-noun-ok: this IS the package guard — the literal is the pattern it removes
+    return `${course.name} — All-In Rates & Guide`
+  }
   if (handWritten && !BOILERPLATE_TITLE.test(handWritten)) return handWritten
-  return `${course.name} — Green Fees & Guide`
+  return `${course.name} — Green Fees & Guide` // fee-noun-ok: the NON-package fallback; the package branch returns before this
 }
 
 /**
@@ -179,8 +192,8 @@ export function getCourseDescription(course: GolfCourse, locale: CourseSeoLocale
   // Skip the "Weekday green fee" line when the course prices seasonally —
   // the number is a low-season price, not a weekday one (see fee_is_seasonal).
   const fee =
-    course.green_fee_weekday_thb && pricesByDayOfWeek(course)
-      ? ` Weekday green fee ~${thb(course.green_fee_weekday_thb)}.`
+    course.green_fee_weekday_thb && statesABareGreenFee(course)
+      ? ` Weekday green fee ~${thb(course.green_fee_weekday_thb)}.` // fee-noun-ok: whole clause is gated on statesABareGreenFee, so a package course never reaches it
       : ''
   const drive =
     course.drive_time_from_bangkok_min && course.drive_time_from_bangkok_min <= 240
@@ -318,6 +331,23 @@ const PROVINCE_L10N: Record<string, Record<Exclude<CourseSeoLocale, 'en'>, strin
     ko: '쁘라찐부리주',
     zh: '巴真府',
   },
+  // Hua Hin batch. The stems here are NOT coined — the `hua-hin` block of
+  // REGION_HUB_I18N (data/golf-courses-i18n.ts) already ships both province
+  // names, and a course page sitting under that hub must not spell them
+  // differently (the 齐隆/奇隆 failure: two spellings of one place across one
+  // locale's pages). So ja takes the hub's プラチュアップキリカン (not a
+  // long-vowel プラチュワップキーリーカン), and zh takes the established
+  // exonyms 巴蜀府 / 佛丕府 rather than a transcription, per the 大城府 policy
+  // above. Only the morphology is normalized to this map's shape: the hub
+  // writes a bare conjoined phrase, whereas entries here carry the per-locale
+  // province suffix/prefix (จังหวัด / 県 / 주 / 府).
+  'Prachuap Khiri Khan': {
+    th: 'จังหวัดประจวบคีรีขันธ์',
+    ja: 'プラチュアップキリカン県',
+    ko: '쁘라추압키리칸주',
+    zh: '巴蜀府',
+  },
+  Phetchaburi: { th: 'จังหวัดเพชรบุรี', ja: 'ペッチャブリー県', ko: '펫차부리주', zh: '佛丕府' },
 }
 
 /** Whether a course's (English) province has localized names for the non-EN packs. */
@@ -339,9 +369,9 @@ const FAQ_L10N: Record<CourseSeoLocale, CourseFaqL10n> = {
     whereWasQuestion: (name) => `Where was ${name} located?`,
     whereWasAnswer: (name, km, province) =>
       `${name} was in ${province}, about ${km} km from central Bangkok.`,
-    feeQuestion: (name) => `How much is the green fee at ${name}?`,
+    feeQuestion: (name) => `How much is the green fee at ${name}?`, // fee-noun-ok: getCourseFaqs omits this whole FAQ unless statesABareGreenFee(course)
     feeAnswer: (name, weekday, weekend, verifiedAt) => {
-      let answer = `The weekday green fee at ${name} is around ${thb(weekday)}`
+      let answer = `The weekday green fee at ${name} is around ${thb(weekday)}` // fee-noun-ok: same suppression as feeQuestion above
       if (weekend) answer += `, and the weekend rate is around ${thb(weekend)}`
       if (verifiedAt) {
         // Long month ("July 2026"), unlike asOfMonthYear's short form — the
@@ -369,7 +399,7 @@ const FAQ_L10N: Record<CourseSeoLocale, CourseFaqL10n> = {
     caddieAnswer: (name, required, fee, tipIncluded) => {
       const feeNote = fee ? `, with a caddie fee of about ${thb(fee)} per round` : ''
       const tipNote = tipIncluded
-        ? ' The green fee is all-inclusive, so the caddie tip is already covered — no extra tipping is expected.'
+        ? ' The green fee is all-inclusive, so the caddie tip is already covered — no extra tipping is expected.' // fee-noun-ok: gated on caddie_tip_included, set only on nikanti, which is not a package course
         : ' Caddie tips (typically 300–500 THB) are customary on top.'
       return required
         ? `Yes — caddies are mandatory at ${name}${feeNote}.${tipNote}`
@@ -667,7 +697,7 @@ export function getCourseFaqs(course: GolfCourse, locale: CourseSeoLocale = 'en'
   // fields are low/high season, and this FAQ ships as FAQPage structured data,
   // so emitting it would assert a day-of-week split that does not exist. The
   // prose carries the seasonal pricing instead.
-  if (course.green_fee_weekday_thb && pricesByDayOfWeek(course)) {
+  if (course.green_fee_weekday_thb && statesABareGreenFee(course)) {
     faqs.push({
       question: L.feeQuestion(name),
       answer: L.feeAnswer(

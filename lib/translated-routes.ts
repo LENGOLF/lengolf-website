@@ -173,6 +173,21 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/pattaya/the-emerald-golf-club",
       "/golf-courses/pattaya/treasure-hill-golf-country-club",
       "/golf-courses/pattaya/phoenix-gold-golf-club-pattaya",
+      // Batch 6 (2026-08) — the hua-hin sweep. Completes hua-hin to 100% of
+      // its 11-course roster, so a locale reader on the (already-translated)
+      // hua-hin region hub no longer lands on a list where every course link
+      // 301s back to English.
+      "/golf-courses/hua-hin/black-mountain-golf-club",
+      "/golf-courses/hua-hin/kaeng-krachan-country-club",
+      "/golf-courses/hua-hin/korea-golf-club-hua-hin",
+      "/golf-courses/hua-hin/lake-view-resort-golf-club",
+      "/golf-courses/hua-hin/majestic-creek-country-club",
+      "/golf-courses/hua-hin/palm-hills-golf-club",
+      "/golf-courses/hua-hin/pineapple-valley-golf-club",
+      "/golf-courses/hua-hin/royal-hua-hin-golf-course",
+      "/golf-courses/hua-hin/sawang-resort-golf-course",
+      "/golf-courses/hua-hin/sea-pines-golf-resort",
+      "/golf-courses/hua-hin/springfield-royal-country-club",
       // Translated FAQ pages (data/faq-pages.ts entries with locale: 'th') —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -399,6 +414,21 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/pattaya/the-emerald-golf-club",
       "/golf-courses/pattaya/treasure-hill-golf-country-club",
       "/golf-courses/pattaya/phoenix-gold-golf-club-pattaya",
+      // Batch 6 (2026-08) — the hua-hin sweep. Completes hua-hin to 100% of
+      // its 11-course roster, so a locale reader on the (already-translated)
+      // hua-hin region hub no longer lands on a list where every course link
+      // 301s back to English.
+      "/golf-courses/hua-hin/black-mountain-golf-club",
+      "/golf-courses/hua-hin/kaeng-krachan-country-club",
+      "/golf-courses/hua-hin/korea-golf-club-hua-hin",
+      "/golf-courses/hua-hin/lake-view-resort-golf-club",
+      "/golf-courses/hua-hin/majestic-creek-country-club",
+      "/golf-courses/hua-hin/palm-hills-golf-club",
+      "/golf-courses/hua-hin/pineapple-valley-golf-club",
+      "/golf-courses/hua-hin/royal-hua-hin-golf-course",
+      "/golf-courses/hua-hin/sawang-resort-golf-course",
+      "/golf-courses/hua-hin/sea-pines-golf-resort",
+      "/golf-courses/hua-hin/springfield-royal-country-club",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -657,6 +687,21 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/pattaya/the-emerald-golf-club",
       "/golf-courses/pattaya/treasure-hill-golf-country-club",
       "/golf-courses/pattaya/phoenix-gold-golf-club-pattaya",
+      // Batch 6 (2026-08) — the hua-hin sweep. Completes hua-hin to 100% of
+      // its 11-course roster, so a locale reader on the (already-translated)
+      // hua-hin region hub no longer lands on a list where every course link
+      // 301s back to English.
+      "/golf-courses/hua-hin/black-mountain-golf-club",
+      "/golf-courses/hua-hin/kaeng-krachan-country-club",
+      "/golf-courses/hua-hin/korea-golf-club-hua-hin",
+      "/golf-courses/hua-hin/lake-view-resort-golf-club",
+      "/golf-courses/hua-hin/majestic-creek-country-club",
+      "/golf-courses/hua-hin/palm-hills-golf-club",
+      "/golf-courses/hua-hin/pineapple-valley-golf-club",
+      "/golf-courses/hua-hin/royal-hua-hin-golf-course",
+      "/golf-courses/hua-hin/sawang-resort-golf-course",
+      "/golf-courses/hua-hin/sea-pines-golf-resort",
+      "/golf-courses/hua-hin/springfield-royal-country-club",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -907,6 +952,21 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/pattaya/the-emerald-golf-club",
       "/golf-courses/pattaya/treasure-hill-golf-country-club",
       "/golf-courses/pattaya/phoenix-gold-golf-club-pattaya",
+      // Batch 6 (2026-08) — the hua-hin sweep. Completes hua-hin to 100% of
+      // its 11-course roster, so a locale reader on the (already-translated)
+      // hua-hin region hub no longer lands on a list where every course link
+      // 301s back to English.
+      "/golf-courses/hua-hin/black-mountain-golf-club",
+      "/golf-courses/hua-hin/kaeng-krachan-country-club",
+      "/golf-courses/hua-hin/korea-golf-club-hua-hin",
+      "/golf-courses/hua-hin/lake-view-resort-golf-club",
+      "/golf-courses/hua-hin/majestic-creek-country-club",
+      "/golf-courses/hua-hin/palm-hills-golf-club",
+      "/golf-courses/hua-hin/pineapple-valley-golf-club",
+      "/golf-courses/hua-hin/royal-hua-hin-golf-course",
+      "/golf-courses/hua-hin/sawang-resort-golf-course",
+      "/golf-courses/hua-hin/sea-pines-golf-resort",
+      "/golf-courses/hua-hin/springfield-royal-country-club",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.

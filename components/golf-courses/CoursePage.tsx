@@ -1,4 +1,4 @@
-import { feeLabelKeys } from '@/lib/course-fees'
+import { feeLabelKeys, feeHeadings, feePanelHeadingKey } from '@/lib/course-fees'
 import { MapPin, Clock, Phone, Globe, Check, X, ArrowRight } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { courseDetailHref } from '@/lib/translated-routes'
@@ -133,7 +133,7 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
             {/* Green fee highlight — shown when data is available */}
             {course.green_fee_weekday_thb && (
               <div className="shrink-0 rounded-2xl border border-white/15 bg-white/10 px-6 py-4 text-right backdrop-blur-sm">
-                <p className="text-xs font-semibold uppercase tracking-widest text-white/60">{t(feeKeys.lowerHeading)}</p>
+                <p className="text-xs font-semibold uppercase tracking-widest text-white/60">{feeHeadings(course, t).lower}</p>
                 <p className="mt-0.5 text-3xl font-black text-white">
                   {course.green_fee_weekday_thb.toLocaleString('en-US')}
                   <span className="ml-1 text-base font-semibold text-white/70">{t('thb')}</span>
@@ -397,7 +397,7 @@ export default function CoursePage({ course, regionLabel, relatedCourses = [], c
               <div className="overflow-hidden rounded-2xl border shadow-sm">
                 <div className="bg-primary px-5 py-3">
                   <h2 className="text-xs font-bold uppercase tracking-widest text-white/80">
-                    {t('greenFees')}
+                    {t(feePanelHeadingKey(course))}
                   </h2>
                 </div>
                 <div className="divide-y bg-white">

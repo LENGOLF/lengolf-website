@@ -37,6 +37,17 @@ export interface GolfCourse {
    * day-of-week split in FAQPage structured data.
    */
   fee_is_seasonal?: boolean
+  /**
+   * When true, green_fee_weekday_thb / green_fee_weekend_thb are ALL-IN package
+   * prices (green fee + caddie + cart), not bare green fees. Independent of
+   * fee_is_seasonal: a package course can still price by day of week, so its
+   * weekday/weekend labels stay correct and keep rendering. What this suppresses
+   * is generated copy that calls the number a "green fee" — the fee FAQ (which
+   * ships as FAQPage structured data) and the meta description's fee line — via
+   * `statesABareGreenFee` in lib/course-fees.ts. The prose states the price and
+   * what it covers in every locale, so the reader still gets it.
+   */
+  fee_is_package?: boolean
   caddie_fee_thb: number | null
   cart_fee_thb: number | null
   caddie_required: boolean

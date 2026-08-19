@@ -44,7 +44,8 @@
     { "term": "トワイライト", "use": "トワイライト", "avoid": [], "note": "twilight (rate)." },
     { "term": "ドライビングレンジ", "use": "ドライビングレンジ", "avoid": ["ドライビング レンジ"], "note": "driving range — no interior space." },
     { "term": "プロショップ", "use": "プロショップ", "avoid": ["プロ ショップ"], "note": "pro shop." },
-    { "term": "パッケージ", "use": "パッケージ", "avoid": ["パッケージング"], "note": "lesson package (also in `preferred`)." }
+    { "term": "パッケージ", "use": "パッケージ", "avoid": ["パッケージング"], "note": "lesson package (also in `preferred`)." },
+    { "term": "タイランド湾", "use": "タイランド湾", "avoid": ["タイ湾"], "note": "Gulf of Thailand — the standard ja exonym (シャム湾 is the historical alternate). タイ湾 is a minority clipping that reads as a back-formation from zh 泰国湾 / ko 태국만, which is how it got into REGION_HUB_I18N in the first place: it sat beside those two. The corpus shipped both forms until the hua-hin batch unified it (now 25/0). This avoid entry is safe for plain-substring matching because タイ湾 is NOT a substring of タイランド湾 — the characters are not contiguous (タイ|ランド|湾) — so it cannot false-positive on a correct string. That is unlike キャディ above, which IS a substring of its own use form and relies on the shielding logic." }
   ],
   "conventions": {
     "currency": {

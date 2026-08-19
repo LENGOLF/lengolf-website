@@ -2597,7 +2597,9 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '/ja/golf-courses/bangkok/alpine-golf-club/',
   },
-  // All four locales now carry the same 50 course-detail translations, so the
+  // All four locales now carry the same set of course-detail translations
+  // (COURSE_DETAIL_I18N is the source of truth; no count is repeated here
+  // precisely because a hardcoded one rots every batch), so the
   // NEGATIVE half of this invariant can no longer be "ko prefixes nothing" —
   // it has to name a course that is genuinely absent from COURSE_DETAIL_I18N.
   // Keeping only the positive half would leave an always-prefix regression
@@ -3187,8 +3189,9 @@ const thaiRedirectTests: ThaiRedirectTest[] = [
     label: "Untranslated TH near-station page (EN-only route must 301)",
   },
   // Course DETAIL pages build locale copies only for the triples in
-  // COURSE_DETAIL_I18N (those 200 and are covered by section L2, which is
-  // registry-derived). Every OTHER course detail must still 301 —
+  // COURSE_DETAIL_I18N (those triples are covered by section L2, which is
+  // registry-derived, so this comment carries no count to go stale).
+  // Every OTHER course detail must still 301 —
   // /th/golf-courses/bangkok/ 200s, but an untranslated 3-segment detail
   // below it may not. Canary for the [region]/[slug] locale restriction.
   //
@@ -4128,6 +4131,11 @@ async function runBlogRegistryLivenessTests() {
   }
 }
 
+/** How many Offer names a page's GolfCourse schema actually emitted. */
+function gotOffersCount(schema: Record<string, unknown>): number {
+  return Array.isArray(schema.makesOffer) ? schema.makesOffer.length : 0;
+}
+
 // ── L2) Course-detail translated registry liveness ──────────────────
 // Section L's shape, for the course-detail allowlist entries in
 // lib/translated-routes.ts. The dangerous drift direction is
@@ -4169,6 +4177,7 @@ async function runCourseDetailRegistryLivenessTests() {
   // the description branch (drop `makesOffer`, rename a catalog key) while
   // schemaChecked stays at its full count and prints a pass.
   let offerChecked = 0;
+  let packageOfferSeen = 0;
   // Registered pairs whose locale ships no prose — legitimate, but counted so
   // the floor below can be exact rather than a guessed margin.
   let noProse = 0;
@@ -4271,10 +4280,25 @@ async function runCourseDetailRegistryLivenessTests() {
           // /highSeasonGreenFee — i.e. the two keys this pass ADDS would have no
           // guard at all, which is the half most likely to be wrong.
           const keys = feeLabelKeys(course);
-          const wantOffers = [
-            catalogs[locale]?.GolfCourseDetail?.[keys.lowerHeading],
-            catalogs[locale]?.GolfCourseDetail?.[keys.upperHeading],
-          ];
+          const cat = catalogs[locale]?.GolfCourseDetail;
+          // A package course's two rates are all-in (caddie + shared cart), so
+          // its Offer names must be the BASIS word wrapped in `packageHeading`
+          // — "Weekday package" — not "<basis> green fee". The basis itself is
+          // still real and still asserted; only the noun changes. Without this
+          // branch, reverting `feeHeadings` to the old `lowerHeading` lookup
+          // leaves all ten CI checks green, which is how the identical
+          // `fee_is_seasonal` bug survived four rounds.
+          const pkgTpl = cat?.packageHeading;
+          const wantOffers = course.fee_is_package
+            ? [keys.lower, keys.upper].map((k) => {
+                const basis = cat?.[k];
+                // Deliberately undefined rather than a partial string: the
+                // `want === undefined` branch below fails loudly, whereas
+                // `?? ''` would silently assert against "  package".
+                return pkgTpl && basis ? pkgTpl.replace("{basis}", basis) : undefined;
+              })
+            : [cat?.[keys.lowerHeading], cat?.[keys.upperHeading]];
+          if (course.fee_is_package) packageOfferSeen += gotOffersCount(schema);
           // A course with a null weekday fee emits NO makesOffer at all, which
           // is legitimate; one with only a weekday fee emits a single Offer.
           // Anything else must match, and the expected label must EXIST — a
@@ -4288,7 +4312,9 @@ async function runCourseDetailRegistryLivenessTests() {
             if (want === undefined) {
               fail(
                 `No '${locale}' catalog label for Offer[${i}] on ${target}`,
-                `GolfCourseDetail.${i === 0 ? keys.lowerHeading : keys.upperHeading} is missing from messages/${locale}.json — the label assertion would silently skip. next-intl would ship the literal key string into structured data.`,
+                course.fee_is_package
+                  ? `GolfCourseDetail.packageHeading or .${i === 0 ? keys.lower : keys.upper} is missing from messages/${locale}.json — the label assertion would silently skip. Naming lowerHeading/upperHeading here would send the reader to the wrong key: a package course composes its label from packageHeading + the BARE basis word.`
+                  : `GolfCourseDetail.${i === 0 ? keys.lowerHeading : keys.upperHeading} is missing from messages/${locale}.json — the label assertion would silently skip. next-intl would ship the literal key string into structured data.`,
               );
               continue;
             }
@@ -4353,6 +4379,19 @@ async function runCourseDetailRegistryLivenessTests() {
     );
   } else {
     pass(`L2 asserted localized JSON-LD Offer labels on ${offerChecked} label(s)`);
+  }
+
+  // Its own floor, because the package branch goes vacuous INDEPENDENTLY of the
+  // one above: 2 of 149 courses are packages, so the general Offer count stays
+  // in the hundreds while the branch that matters here drops to zero. Today:
+  // kaeng-krachan and korea-golf-club, 4 translated locales each, 2 rates each.
+  if (packageOfferSeen < 16) {
+    fail(
+      `L2 package-label check ran on only ${packageOfferSeen} Offer(s)`,
+      "expected 16+ (2 package courses x 4 locales x 2 rates). Zero means no course carries fee_is_package any more, or the registry dropped them — not that the labels are right.",
+    );
+  } else {
+    pass(`L2 asserted package (not green-fee) Offer labels on ${packageOfferSeen} Offer(s)`);
   }
 }
 
@@ -4824,22 +4863,49 @@ async function runPriceTierRoundupLanguageTests() {
       }
       const cat = (require(`../messages/${locale}.json`) as Record<string, Record<string, string>>)
         .GolfCourseDetail;
+      // The roundup emits only the LOWER rate, so the valid answers are this
+      // locale's two lower-basis labels — PLUS the two package forms, because
+      // the tier route now resolves labels through `feeHeadings`. Omitting them
+      // was latent rather than harmless: neither package course is in a top-12
+      // roster today, so this stayed green, and would have gone red on whichever
+      // unrelated PR next shifted popularity. Same "fixed one of two sites"
+      // shape as the defect the package work exists to close — L2 got the
+      // branch, L6 did not.
+      // Per-COURSE, not a widened global set. The first version appended the two
+      // package forms to one `allowed` array shared by every item, which accepted
+      // "Weekday package" for any of the 148 NON-package courses — L2 got the
+      // per-course branch in the same commit and L6 did not.
+      const pkg = cat?.packageHeading;
+      const allowedFor = (c: { fee_is_package?: boolean }) =>
+        c.fee_is_package
+          ? [
+              pkg && cat?.weekday ? pkg.replace("{basis}", cat.weekday) : undefined,
+              pkg && cat?.lowSeason ? pkg.replace("{basis}", cat.lowSeason) : undefined,
+            ]
+          : [cat?.weekdayGreenFee, cat?.lowSeasonGreenFee];
       const allowed = [cat?.weekdayGreenFee, cat?.lowSeasonGreenFee];
+      const { loadCourseFiles: loadForL6 } = await import("./course-files");
+      const packageNames = new Set(
+        (await loadForL6())
+          .filter(({ course }) => course.fee_is_package)
+          .map(({ course }) => course.name),
+      );
       if (allowed.some((v) => v === undefined)) {
         fail(
-          `Missing '${locale}' green-fee labels for ${target}`,
-          "GolfCourseDetail.weekdayGreenFee / lowSeasonGreenFee absent — the assertion below would compare against undefined.",
+          `Missing '${locale}' fee labels for ${target}`,
+          "GolfCourseDetail.weekdayGreenFee / lowSeasonGreenFee / packageHeading / weekday / lowSeason absent — the assertion below would compare against undefined.",
         );
         continue;
       }
       for (const el of list.itemListElement) {
-        const desc = el?.item?.offers?.description;
+        const desc = el?.item?.makesOffer?.[0]?.description;
         if (desc === undefined) continue; // course with a null weekday fee
         itemsChecked++;
-        if (!allowed.includes(desc)) {
+        const want = allowedFor({ fee_is_package: packageNames.has(el?.item?.name) });
+        if (!want.includes(desc)) {
           fail(
             `ItemList Offer.description is not a '${locale}' label on ${target}`,
-            `got ${JSON.stringify(desc)}, expected one of ${JSON.stringify(allowed)} — the route likely dropped its offerNames argument and fell back to the silent EN default.`,
+            `got ${JSON.stringify(desc)} for ${JSON.stringify(el?.item?.name)}, expected one of ${JSON.stringify(want)} — the route likely dropped its offerNames argument and fell back to the silent EN default.`,
           );
         }
       }
@@ -5190,7 +5256,11 @@ async function runLocalizedDriveTimeTests() {
 
   // Anti-vacuity: without this, a change that stopped rendering drive times
   // altogether would satisfy every negative assertion above and print green.
-  const label = `O localized drive-time markers present (>= ${DRIVE_TIME_MIN_MARKERS})`;
+  // The count goes in the label, not just in the failure message: a floor whose
+  // margin is invisible while green tells you it was breached only after it is
+  // too late to plan for. Reading "717/300" across builds shows the headroom
+  // shrinking; reading "✓" does not.
+  const label = `O localized drive-time markers present (${markerTotal} >= ${DRIVE_TIME_MIN_MARKERS})`;
   if (markerTotal < DRIVE_TIME_MIN_MARKERS) {
     fail(
       label,
@@ -5308,7 +5378,10 @@ async function runFallbackPullQuoteTests() {
   // EN-fallback set shrinks, and this section would otherwise pass by
   // comparing nothing at all. Same trap PR #88's courseDetailHref negative
   // assertion hit when a batch translated the course it was pinned to.
-  const label = `P compared >= ${FALLBACK_MIN_COMPARISONS} EN-fallback quotes`;
+  // Count in the label — see the note on section O's floor. This one matters
+  // more: the EN-fallback set SHRINKS with every translation batch, so the
+  // margin here is a countdown, and a green "✓" hides how much is left.
+  const label = `P compared ${compared} EN-fallback quotes (>= ${FALLBACK_MIN_COMPARISONS})`;
   if (compared < FALLBACK_MIN_COMPARISONS) {
     fail(
       label,

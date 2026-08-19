@@ -14,7 +14,10 @@
     "validate:i18n": "tsx scripts/validate-i18n.ts",
     "validate:club-specs": "tsx scripts/validate-club-specs.ts",
     "validate:i18n:self-test": "tsx scripts/validate-i18n.ts --self-test",
+    "validate:course-slots": "tsx scripts/validate-course-slots.ts",
+    "validate:course-slots:self-test": "tsx scripts/validate-course-slots.ts --self-test",
     "validate:courses": "tsx scripts/validate-courses.ts",
+    "validate:courses:self-test": "tsx scripts/validate-courses.ts --self-test",
     "validate:hotels": "tsx scripts/validate-hotels.ts",
     "verify:coordinates": "tsx scripts/verify-course-coordinates.ts",
     "inventory": "tsx scripts/page-inventory.ts",
@@ -27,6 +30,7 @@
     "test:mobile:ui": "playwright test tests/landing-page-mobile.spec.ts --ui",
     "test:mobile:report": "playwright show-report",
     "validate:fee-labels": "tsx scripts/validate-fee-labels.ts",
+    "validate:fee-labels:self-test": "tsx scripts/validate-fee-labels.ts --self-test",
     "validate:pr-rigor": "tsx scripts/validate-pr-rigor.ts"
   },
   "dependencies": {

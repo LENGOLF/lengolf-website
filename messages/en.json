@@ -1180,7 +1180,9 @@
     "openGuide": "Open guide",
     "close": "Close",
     "lowSeason": "Low season",
-    "highSeason": "High season"
+    "highSeason": "High season",
+    "rates": "Rates",
+    "rosterRate": "Rate"
   },
   "GolfCoursePriceTier": {
     "metaDescription": "Top Bangkok-area golf courses with green fees under ฿{amount}, with what to expect at this price band.",
@@ -1263,7 +1265,9 @@
     "highSeasonGreenFee": "High season green fee",
     "highSeasonFee": "High season: {price} THB",
     "lowSeason": "Low season",
-    "highSeason": "High season"
+    "highSeason": "High season",
+    "packageHeading": "{basis} package",
+    "rates": "Rates"
   },
   "ExplainerPage": {
     "guideLabel": "LENGOLF Guide",

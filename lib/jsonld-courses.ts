@@ -11,7 +11,7 @@ import { localizedCourseProse, type CourseSeoLocale } from '@/lib/course-seo'
  * A FUNCTION rather than a resolved string pair because fee basis is per-course:
  * a seasonal course (low/high season) and a day-of-week course can appear in the
  * same roundup, so one pair resolved by the caller would mislabel whichever
- * disagrees with it. Localized callers build this from `feeOfferNames` in
+ * disagrees with it. Localized callers build this from `feeHeadings` in
  * lib/course-fees.ts; that indirection keeps this module sync and next-intl-free.
  */
 export type CourseOfferNames = (c: GolfCourse) => { lower: string; upper: string }
@@ -24,7 +24,11 @@ export type CourseOfferNames = (c: GolfCourse) => { lower: string; upper: string
  */
 const enOfferNames: CourseOfferNames = (c) => {
   const labels = feeLabelsEn(c)
-  return { lower: `${labels.lower} green fee`, upper: `${labels.upper} green fee` }
+  // A package course's rate covers the caddie and the cart, so the green-fee
+  // noun is a false claim about what the number buys. The BASIS stays — a
+  // package can still be cheaper on a weekday. See `feeHeadings`.
+  const noun = c.fee_is_package ? 'package' : 'green fee' // fee-noun-ok: this line IS the package decision
+  return { lower: `${labels.lower} ${noun}`, upper: `${labels.upper} ${noun}` }
 }
 
 /**
@@ -56,15 +60,28 @@ function golfCourseItem(
     }
   }
   if (c.green_fee_weekday_thb !== null) {
-    // Schema.org / Google Rich Results convention is for `price` to be a
-    // string ("1500"), not a number. The validator accepts both but warns
-    // on the numeric form; matches the existing pattern in `lib/jsonld.ts`.
-    item.offers = {
-      '@type': 'Offer',
-      price: String(c.green_fee_weekday_thb),
-      priceCurrency: 'THB',
-      description: offerNames(c).lower,
-    }
+    // `makesOffer`, not `offers`. GolfCourse -> SportsActivityLocation ->
+    // LocalBusiness -> (Organization, Place); `offers` is defined on
+    // Product/Service/Event/Trip/Demand and on NONE of those, while
+    // `makesOffer` is Organization's property. The sibling builder in this same
+    // file already emits `makesOffer` (see getCourseDetailJsonLd), so one course
+    // was described with two different property names depending on which page
+    // you crawled. Google reports the wrong one as an unknown property rather
+    // than rejecting the node, which is why it survived — up to 554 nodes across
+    // /compare/, /near/, /best-for/ and /under/<tier>/.
+    // Array form matches the sibling builder; smoke L6 reads makesOffer[0].
+    //
+    // `price` stays a STRING ("1500") per the schema.org / Google Rich Results
+    // convention — the validator accepts a number but warns on it; matches the
+    // existing pattern in `lib/jsonld.ts`.
+    item.makesOffer = [
+      {
+        '@type': 'Offer',
+        price: String(c.green_fee_weekday_thb),
+        priceCurrency: 'THB',
+        description: offerNames(c).lower,
+      },
+    ]
   }
   return item
 }
@@ -108,6 +125,17 @@ function golfCourseItem(
  *     change, not a one-line swap. Note `golfCourseItem` above has no such
  *     short-circuit, so ITS `addressLocality` is live English on localized tier
  *     pages; see the known-gaps list in the PR.
+ *   - `golfCourseItem`'s `url` — the same omission, and this list did not name
+ *     it until a review pass measured it: that builder emits an EN-pinned
+ *     `/golf-courses/<region>/<slug>/` while `RoundupList` links the same course
+ *     via `courseDetailHref`, which prefixes the locale when the course IS
+ *     translated. 100 of the 240 ItemList entries on the translated tier pages
+ *     therefore name an English URL for a course whose localized page the same
+ *     page advertises by hreflang. Fixing it needs the routing locale threaded
+ *     into `CourseOfferNames`' sibling position — deliberately out of scope
+ *     here, but a docblock that lists three of four English fields is worse
+ *     than none, which is the whole point of "enumerated field-by-field or not
+ *     at all".
  */
 export function getCourseDetailJsonLd(
   c: GolfCourse,

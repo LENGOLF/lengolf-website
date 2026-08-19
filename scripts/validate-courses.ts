@@ -45,6 +45,7 @@ import { pathToFileURL } from 'url'
 import type { GolfCourse } from '../types/golf-courses'
 import { decimalPlaces, MIN_COORD_DECIMALS } from '../lib/geo'
 import { loadCourseFiles } from './course-files'
+import { getCourseTitle, type CourseSeoLocale } from '../lib/course-seo'
 
 const LOW_FEE_THRESHOLD = 600
 const ABS_FLOOR = 150
@@ -306,6 +307,8 @@ async function main() {
     }
   }
 
+  checkPackageNoun(courses)
+
   for (const w of warnings) console.log(`  ⚠ ${w}`)
   for (const e of errors) console.log(`  ✖ ${e}`)
 
@@ -315,6 +318,131 @@ async function main() {
   }
   console.log(`\n✅ validate-courses: ${courses.length} courses pass fee-plausibility checks (${warnings.length} non-blocking warning(s))`)
 }
+
+/**
+ * A `fee_is_package` course's TITLE must not call its rate a green fee.
+ *
+ * Scoped to the title ON PURPOSE, and the scoping is the whole design. These
+ * courses' meta descriptions and prose legitimately contain the green-fee term,
+ * because they ENUMERATE what the package covers — "800 THB all-in (green fee,
+ * caddie & cart)" is true and is the most useful sentence on the page. A blanket
+ * "no green-fee term on a package course" rule would fire on all ten of those
+ * and get switched off. The title is different: it labels the page's price with
+ * a bare noun and no room for a qualifier.
+ *
+ * Both package courses shipped all five titles with the noun — the ko one read
+ * `그린피` and `올인클루시브` in the same string — while the fee FAQ and the meta
+ * fee line were correctly suppressed. That is the "enumerated field-by-field or
+ * not at all" failure, on the single most prominent field: the title is also the
+ * openGraph title and the internal cross-link anchor text via lib/seo-links.
+ *
+ * Checks the RENDERED title (`getCourseTitle`), not the stored one, because EN
+ * comes from a generator and the non-EN blocks are returned verbatim.
+ */
+const PACKAGE_NOUN_RE: Record<CourseSeoLocale, RegExp> = {
+  // Every form must be listed, because this regex and `getCourseTitle`'s rewrite
+  // branch are NOT independent layers — the branch used the same `/green fee/i`,
+  // so a hand-written `Greenfee` or `Green-Fee` defeated both at once and shipped
+  // verbatim. Measured by mutation, not assumed.
+  en: /green[\s-]?fees?/i,
+  // th: `กรีนฟี` is the bare noun and the glossary's own term; `ค่ากรีนฟี` only
+  // adds the "cost of" prefix, so matching the prefixed form alone missed
+  // `กรีนฟี 800 บาท` — literally "green fee 800 baht" over an all-in package.
+  th: /กรีนฟี/,
+  // ja: `グリーン費` is the mixed katakana+kanji form; zh: `果嶺費` is Traditional.
+  ja: /グリーンフィ|グリーン費/,
+  ko: /그린\s?피/,
+  zh: /果岭费|果嶺費/,
+}
+
+function checkPackageNoun(courses: { file: string; course: GolfCourse }[]) {
+  let checked = 0
+  let packages = 0
+  for (const { file, course } of courses) {
+    if (!course.fee_is_package) continue
+    packages++
+    for (const locale of Object.keys(PACKAGE_NOUN_RE) as CourseSeoLocale[]) {
+      if (locale !== 'en' && !course.locales[locale]?.title) continue
+      checked++
+      const title = getCourseTitle(course, locale)
+      if (PACKAGE_NOUN_RE[locale].test(title)) {
+        errors.push(
+          `${file}: fee_is_package course's ${locale} TITLE calls the rate a green fee — ` +
+            `the price already covers the caddie and cart, so the noun tells a searcher ` +
+            `they are extra. Title: "${title}"`
+        )
+      }
+    }
+  }
+  // Anti-vacuity, and the FIRST version got it wrong in the exact way CLAUDE.md
+  // warns about: `packages > 0 && …` self-disarms. Delete `fee_is_package` from
+  // both courses and the whole check evaluates zero titles, exits 0 — while the
+  // rendered EN title silently regresses to "— Green Fees & Guide". The flag is
+  // optional on the type, so the deletion compiles. Needs an ABSOLUTE floor with
+  // a real number, which is the rule this guard was added to enforce.
+  const MIN_PACKAGE_COURSES = 2
+  if (packages < MIN_PACKAGE_COURSES) {
+    errors.push(
+      `package-noun check found only ${packages} fee_is_package course(s), expected at least ` +
+        `${MIN_PACKAGE_COURSES} — the flag was removed, or this ratchet needs a deliberate edit`
+    )
+  }
+  if (checked < packages * 5) {
+    errors.push(
+      `package-noun check examined only ${checked} title(s) across ${packages} package ` +
+        `course(s) — expected ${packages * 5}. A locale block stopped being read.`
+    )
+  }
+}
+
+/**
+ * `--self-test`. `checkPackageNoun` fires on ZERO lines in healthy data, so a
+ * green corpus run is not evidence it works — deleting its call, neutering
+ * PACKAGE_NOUN_RE, or reinstating the `packages > 0 &&` self-disarm all pass
+ * silently. It is also the only gate catching this branch's headline defect.
+ */
+const NOUN_SELF_TESTS: Array<{ name: string; locale: CourseSeoLocale; title: string; fire: boolean }> = [
+  { name: 'en bare noun', locale: 'en', title: 'X — Green Fees & Guide', fire: true },
+  { name: 'en closed form', locale: 'en', title: 'X — Greenfee & Guide', fire: true },
+  { name: 'en hyphenated', locale: 'en', title: 'X — Green-Fee & Guide', fire: true },
+  { name: 'th prefixed', locale: 'th', title: 'X — ค่ากรีนฟี รีวิวสนาม', fire: true },
+  { name: 'th BARE (glossary term)', locale: 'th', title: 'X — กรีนฟี 800 บาท', fire: true },
+  { name: 'ja katakana', locale: 'ja', title: 'X — グリーンフィー・コース紹介', fire: true },
+  { name: 'ja mixed kanji', locale: 'ja', title: 'X — グリーン費・コース紹介', fire: true },
+  { name: 'ko spaced', locale: 'ko', title: 'X 그린 피 — 코스 가이드', fire: true },
+  { name: 'ko closed', locale: 'ko', title: 'X 그린피 — 코스 가이드', fire: true },
+  { name: 'zh simplified', locale: 'zh', title: 'X果岭费与球场攻略', fire: true },
+  { name: 'zh TRADITIONAL', locale: 'zh', title: 'X果嶺費與球場攻略', fire: true },
+  { name: 'en package form is fine', locale: 'en', title: 'X — All-In Rates & Guide', fire: false },
+  { name: 'th package form is fine', locale: 'th', title: 'X — แพ็กเกจแบบรวมทุกอย่าง', fire: false },
+  { name: 'ja package form is fine', locale: 'ja', title: 'X — パッケージ料金・コース紹介', fire: false },
+  { name: 'ko package form is fine', locale: 'ko', title: 'X 올인클루시브 패키지', fire: false },
+  { name: 'zh package form is fine', locale: 'zh', title: 'X全包套餐与球场攻略', fire: false },
+]
+
+function selfTest(): never {
+  let failed = 0
+  for (const t of NOUN_SELF_TESTS) {
+    const got = PACKAGE_NOUN_RE[t.locale].test(t.title)
+    const ok = got === t.fire
+    if (!ok) failed++
+    console.log(`  ${ok ? '✓' : '✗'} [${t.locale}] ${t.name} — expected ${t.fire ? 'FIRE' : 'silent'}, got ${got ? 'FIRE' : 'silent'}`)
+  }
+  const fires = NOUN_SELF_TESTS.filter((t) => t.fire).length
+  const locales = new Set(NOUN_SELF_TESTS.map((t) => t.locale)).size
+  console.log(`\n${NOUN_SELF_TESTS.length} package-noun self-tests (${fires} must fire, across ${locales} locales) · ${failed} failed`)
+  // Pinned AT the current population, not below it — the mistake this very
+  // guard's own floor made and had corrected.
+  if (fires < 11 || locales < 5) {
+    console.log('FAIL: self-test suite has lost cases (need >= 11 firing across all 5 locales)')
+    process.exit(1)
+  }
+  if (failed > 0) process.exit(1)
+  console.log('OK — every locale\'s green-fee noun forms fire, and every package form stays silent')
+  process.exit(0)
+}
+
+if (process.argv.includes('--self-test')) selfTest()
 
 main().catch((err) => {
   console.error(err)

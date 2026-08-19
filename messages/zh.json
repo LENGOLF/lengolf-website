@@ -1270,7 +1270,9 @@
     "openGuide": "打开指南",
     "close": "关闭",
     "lowSeason": "淡季",
-    "highSeason": "旺季"
+    "highSeason": "旺季",
+    "rates": "价格",
+    "rosterRate": "价格"
   },
   "GolfCoursePriceTier": {
     "metaDescription": "汇总果岭费不超过฿{amount}的曼谷周边优质高尔夫球场，并介绍这个价位段的注意事项。",
@@ -1353,7 +1355,9 @@
     "highSeasonGreenFee": "旺季果岭费",
     "highSeasonFee": "旺季：{price}泰铢",
     "lowSeason": "淡季",
-    "highSeason": "旺季"
+    "highSeason": "旺季",
+    "packageHeading": "{basis}套餐",
+    "rates": "价格"
   },
   "ExplainerPage": {
     "guideLabel": "LENGOLF指南",

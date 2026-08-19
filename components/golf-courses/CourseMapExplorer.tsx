@@ -1,5 +1,5 @@
 'use client'
-import { feeLabelKeys } from '@/lib/course-fees'
+import { feeLabelKeys, feePanelHeadingKey, feeRosterHeadingKey } from '@/lib/course-fees'
 
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
@@ -12,7 +12,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { ArrowRight, Clock, Flag, X, ExternalLink, MapPinOff } from 'lucide-react'
 import type { GolfCourse } from '@/types/golf-courses'
-import { formatFee, driveTimeLabel, toFormatLocale } from '@/lib/format'
+import { driveTimeLabel, toFormatLocale } from '@/lib/format'
 import { courseMapsUrl, hasTrustedCoordinates } from '@/lib/geo'
 import { loadMapsApi, BASE_MAP_OPTIONS } from '@/lib/maps-loader'
 import { pushMapUnavailable } from '@/lib/analytics'
@@ -265,17 +265,17 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
 
                 {(activeCourse.green_fee_weekday_thb || activeCourse.green_fee_weekend_thb) && (
                   <div className="mb-4 space-y-2 rounded-xl border border-[#003d22]/10 p-3">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t('greenFees')}</p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t(feePanelHeadingKey(activeCourse))}</p>
                     {activeCourse.green_fee_weekday_thb && (
                       <div className="flex items-center justify-between">
                         <span className="text-xs text-muted-foreground">{t(feeLabelKeys(activeCourse).lower)}</span>
-                        <span className="text-xs font-bold text-foreground">{formatFee(activeCourse.green_fee_weekday_thb)}</span>
+                        <span className="text-xs font-bold text-foreground">{activeCourse.green_fee_weekday_thb.toLocaleString('en-US')}<span className="ml-0.5 text-[10px] font-medium text-muted-foreground">{t('thb')}</span></span>
                       </div>
                     )}
                     {activeCourse.green_fee_weekend_thb && (
                       <div className="flex items-center justify-between">
                         <span className="text-xs text-muted-foreground">{t(feeLabelKeys(activeCourse).upper)}</span>
-                        <span className="text-xs font-bold text-foreground">{formatFee(activeCourse.green_fee_weekend_thb)}</span>
+                        <span className="text-xs font-bold text-foreground">{activeCourse.green_fee_weekend_thb.toLocaleString('en-US')}<span className="ml-0.5 text-[10px] font-medium text-muted-foreground">{t('thb')}</span></span>
                       </div>
                     )}
                   </div>
@@ -308,7 +308,7 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
         <div className="grid grid-cols-[32px_1fr_auto] items-center gap-3 border-b border-[#003d22]/10 bg-[#003d22] px-5 py-3 sm:grid-cols-[32px_1fr_140px_100px]">
           <span className="text-[10px] font-bold uppercase tracking-widest text-white/40">{t('rosterNum')}</span>
           <span className="text-[10px] font-bold uppercase tracking-widest text-white/40">{t('rosterCourse')}</span>
-          <span className="hidden text-right text-[10px] font-bold uppercase tracking-widest text-white/40 sm:block">{t('rosterGreenFee')}</span>
+          <span className="hidden text-right text-[10px] font-bold uppercase tracking-widest text-white/40 sm:block">{t(feeRosterHeadingKey(courses))}</span>
           <span className="text-right text-[10px] font-bold uppercase tracking-widest text-white/40">{t('rosterDrive')}</span>
         </div>
 

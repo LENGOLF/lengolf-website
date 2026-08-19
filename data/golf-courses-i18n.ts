@@ -116,25 +116,25 @@ export const REGION_HUB_I18N: Partial<
       label: 'ホアヒン',
       province: 'プラチュアップキリカン県・ペッチャブリー県',
       description:
-        'ホアヒンとチャアムには、タイでも名高いゴルフコースが集まっています。ゴルフダイジェストのトップ100に選ばれたブラックマウンテンから、世界ランキングにも名を連ねるパイナップルバレーまで、いずれも山並みとタイ湾を望むロケーションに広がっています。',
+        'ホアヒンとチャアムには、タイでも名高いゴルフコースが集まっています。ゴルフダイジェストのトップ100に選ばれたブラックマウンテンから、世界ランキングにも名を連ねるパイナップルバレーまで、多くは山並みを背にしたロケーションに広がり、一部のコースからはタイランド湾も望めます。',
     },
     ko: {
       label: '후아힌',
       province: '쁘라추압키리칸 및 펫차부리',
       description:
-        '후아힌과 차암에는 태국에서도 이름난 골프 코스가 모여 있습니다. 골프 다이제스트 100대 코스에 선정된 블랙 마운틴부터 세계 랭킹에 오른 파인애플 밸리까지, 모두 산맥과 태국만을 배경으로 펼쳐집니다.',
+        '후아힌과 차암에는 태국에서도 이름난 골프 코스가 모여 있습니다. 골프 다이제스트 100대 코스에 선정된 블랙 마운틴부터 세계 랭킹에 오른 파인애플 밸리까지, 대부분 산맥을 배경으로 펼쳐지며 일부 코스에서는 태국만이 내려다보입니다.',
     },
     zh: {
       label: '华欣',
       province: '巴蜀府及佛丕府',
       description:
-        '华欣与差安坐拥泰国一些最负盛名的高尔夫球场——从入选《高尔夫文摘》百佳榜的黑山球场，到跻身世界排名的菠萝谷球场，皆坐落于群山与泰国湾的环抱之中。',
+        '华欣与差安坐拥泰国一些最负盛名的高尔夫球场——从入选《高尔夫文摘》百佳榜的黑山球场，到跻身世界排名的菠萝谷球场，多数坐落于群山之间，部分球场还能远眺泰国湾。',
     },
     th: {
       label: 'หัวหิน',
       province: 'ประจวบคีรีขันธ์และเพชรบุรี',
       description:
-        'หัวหินและชะอำเป็นที่ตั้งของสนามกอล์ฟที่มีชื่อเสียงที่สุดแห่งหนึ่งของไทย ตั้งแต่ Black Mountain สนามที่ติดอันดับ Golf Digest Top 100 ไปจนถึง Pineapple Valley สนามที่ติดอันดับโลก โดยทุกสนามตั้งอยู่ท่ามกลางแนวเทือกเขาและอ่าวไทย',
+        'หัวหินและชะอำเป็นที่ตั้งของสนามกอล์ฟที่มีชื่อเสียงที่สุดแห่งหนึ่งของไทย ตั้งแต่ Black Mountain สนามที่ติดอันดับ Golf Digest Top 100 ไปจนถึง Pineapple Valley สนามที่ติดอันดับโลก โดยหลายสนามตั้งอยู่ท่ามกลางแนวเทือกเขา และบางสนามมองเห็นวิวอ่าวไทยได้',
     },
   },
   'chiang-mai': {
@@ -308,7 +308,7 @@ export const REGION_HUB_I18N: Partial<
       label: 'サムイ島',
       province: 'スラーターニー県',
       description:
-        'サムイ島のゴルフは、性格の異なる2つの体験に分かれます。ひとつは島で唯一のチャンピオンシップコース、サンティブリ・サムイ・カントリークラブ。山がちなパー72で、カートを運転するキャディーの同伴が必須、タイ湾の眺めとバンコクエアウェイズ・オープン開催の実績を備えています。もうひとつはカオソック近くのラチャプラパダム・ゴルフコースで、EGATが運営する政府系コースのなかでもタイ有数の景観を誇り、外国人ゴルファーもチャオラン貯水池のほとりで18ホールを約1,000THBでプレーできます。',
+        'サムイ島のゴルフは、性格の異なる2つの体験に分かれます。ひとつは島で唯一のチャンピオンシップコース、サンティブリ・サムイ・カントリークラブ。山がちなパー72で、カートを運転するキャディーの同伴が必須、タイランド湾の眺めとバンコクエアウェイズ・オープン開催の実績を備えています。もうひとつはカオソック近くのラチャプラパダム・ゴルフコースで、EGATが運営する政府系コースのなかでもタイ有数の景観を誇り、外国人ゴルファーもチャオラン貯水池のほとりで18ホールを約1,000THBでプレーできます。',
     },
     ko: {
       label: '코사무이',
@@ -588,6 +588,22 @@ export const COURSE_DETAIL_I18N: {
   { region: 'pattaya', slug: 'the-emerald-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'pattaya', slug: 'treasure-hill-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'pattaya', slug: 'phoenix-gold-golf-club-pattaya', locales: ['th', 'ja', 'ko', 'zh'] },
+  // Batch 6 (2026-08) — the hua-hin sweep, completing the region's 11-course
+  // roster in all four locales. Selected by roster completion rather than
+  // per-course GSC demand: the hua-hin hub is already translated, so a
+  // partially-translated roster is exactly the mixed-language list this batch
+  // exists to eliminate.
+  { region: 'hua-hin', slug: 'black-mountain-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'hua-hin', slug: 'kaeng-krachan-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'hua-hin', slug: 'korea-golf-club-hua-hin', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'hua-hin', slug: 'lake-view-resort-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'hua-hin', slug: 'majestic-creek-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'hua-hin', slug: 'palm-hills-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'hua-hin', slug: 'pineapple-valley-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'hua-hin', slug: 'royal-hua-hin-golf-course', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'hua-hin', slug: 'sawang-resort-golf-course', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'hua-hin', slug: 'sea-pines-golf-resort', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'hua-hin', slug: 'springfield-royal-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
 ]
 
 /**
