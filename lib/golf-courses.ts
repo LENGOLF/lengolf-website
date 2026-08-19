@@ -45,7 +45,7 @@ export const REGION_META: Record<Region, RegionMeta> = {
   'hua-hin': {
     label: 'Hua Hin',
     province: 'Prachuap Khiri Khan & Phetchaburi',
-    description: "Hua Hin and Cha-am are home to some of Thailand's most celebrated golf courses — from the Golf Digest top-100 Black Mountain to the world-ranked Pineapple Valley, set against a backdrop of mountain ranges, with Gulf of Thailand views from several.",
+    description: "Hua Hin and Cha-am are home to some of Thailand's most celebrated golf courses — from the Golf Digest top-100 Black Mountain to the world-ranked Pineapple Valley, set against a backdrop of mountain ranges, with Gulf of Thailand views from several of them.",
     courseCount: 11,
     center:   { lat: 12.570, lng:  99.96, zoom: 11 },
     pinColor: { bg: '#1e6091', text: '#ffffff' },
