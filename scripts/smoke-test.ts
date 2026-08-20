@@ -2630,6 +2630,34 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  // The four /compare/ pages the khao-yai/kanchanaburi top-3 reshuffle above
+  // actually FORMED (as opposed to the four it retired, which are covered by
+  // the redirect tests): Toscana Valley and Nichigo entering their region's
+  // top 3 doesn't just retire two pairs each, it creates two new ones each
+  // (new course vs each of the two courses it didn't displace). pr-rigor
+  // review flagged that nothing asserted these actually render — dynamicParams
+  // = false means a static-params miscalculation 404s them with CI otherwise
+  // green.
+  {
+    path: "/golf-courses/compare/khao-yai/khao-yai-golf-club-vs-toscana-valley-country-club/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/golf-courses/compare/khao-yai/life-privilege-country-club-vs-toscana-valley-country-club/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/golf-courses/compare/kanchanaburi/dragon-hills-golf-country-club-vs-nichigo-resort-country-club/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/golf-courses/compare/kanchanaburi/grand-prix-golf-club-vs-nichigo-resort-country-club/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
   // Re-regioned Bangkok → Khao Yai / Kanchanaburi (same 90-minute test).
   {
     path: "/golf-courses/khao-yai/toscana-valley-country-club/",
