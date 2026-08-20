@@ -2698,7 +2698,7 @@ const routeTests: RouteTest[] = [
   {
     path: "/golf-courses/compare/bangkok/alpine-golf-club-vs-royal-gems-golf-sports-club/",
     expectedStatus: [200],
-    contentMarker: '<main id="main-content">',
+    contentMarker: 'Golf Course Comparison',
   },
   // The four /compare/ pages the khao-yai/kanchanaburi top-3 reshuffle above
   // actually FORMED (as opposed to the four it retired, which are covered by
@@ -2711,22 +2711,37 @@ const routeTests: RouteTest[] = [
   {
     path: "/golf-courses/compare/khao-yai/khao-yai-golf-club-vs-toscana-valley-country-club/",
     expectedStatus: [200],
-    contentMarker: '<main id="main-content">',
+    contentMarker: 'Golf Course Comparison',
   },
   {
     path: "/golf-courses/compare/khao-yai/life-privilege-country-club-vs-toscana-valley-country-club/",
     expectedStatus: [200],
-    contentMarker: '<main id="main-content">',
+    contentMarker: 'Golf Course Comparison',
   },
   {
     path: "/golf-courses/compare/kanchanaburi/dragon-hills-golf-country-club-vs-nichigo-resort-country-club/",
     expectedStatus: [200],
-    contentMarker: '<main id="main-content">',
+    contentMarker: 'Golf Course Comparison',
   },
   {
     path: "/golf-courses/compare/kanchanaburi/grand-prix-golf-club-vs-nichigo-resort-country-club/",
     expectedStatus: [200],
-    contentMarker: '<main id="main-content">',
+    contentMarker: 'Golf Course Comparison',
+  },
+  // The remaining two pairs in these regions — the ones the reshuffle left
+  // untouched, so not "formed by" it, but the only two of the six with no 200
+  // assertion. Every top-3 MEMBER is already covered by the four above, so a
+  // membership change fails something either way; these close the narrower gap
+  // of a render throw specific to one course combination.
+  {
+    path: "/golf-courses/compare/khao-yai/khao-yai-golf-club-vs-life-privilege-country-club/",
+    expectedStatus: [200],
+    contentMarker: 'Golf Course Comparison',
+  },
+  {
+    path: "/golf-courses/compare/kanchanaburi/dragon-hills-golf-country-club-vs-grand-prix-golf-club/",
+    expectedStatus: [200],
+    contentMarker: 'Golf Course Comparison',
   },
   // Re-regioned Bangkok → Khao Yai / Kanchanaburi (same 90-minute test).
   {
