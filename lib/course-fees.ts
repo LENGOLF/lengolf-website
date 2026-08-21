@@ -198,9 +198,12 @@ type FeeLabelT = (
  *
  * Both of those hardcoded the noun. Neither is reachable by a package course
  * today — `/compare/` draws from each region's top 3 and `/near/` from a
- * station's top 8, and the two package courses rank 6th and 11th of 11 in
- * hua-hin — but that is a fact about current popularity scores, not a property
- * of the code, and `/compare/` membership is derived and documented as fragile.
+ * station's top 8, and none of the FOUR package courses reaches either set:
+ * kaeng-krachan and korea-golf-club rank 6th and 11th of 11 in hua-hin, and
+ * ubolratana-dam and wiang-ko-sai sit outside their own regions' top 3
+ * (recomputed when they were flagged) — but that is a fact about current
+ * popularity scores, not a property of the code, and `/compare/` membership is
+ * derived and documented as fragile.
  */
 export function feeNounEn(courses: readonly FeeCopySource[]): 'Green fee' | 'Rate' {
   return courses.some((c) => c.fee_is_package) ? 'Rate' : 'Green fee'

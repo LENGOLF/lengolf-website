@@ -4425,13 +4425,19 @@ async function runCourseDetailRegistryLivenessTests() {
   }
 
   // Its own floor, because the package branch goes vacuous INDEPENDENTLY of the
-  // one above: 2 of 149 courses are packages, so the general Offer count stays
+  // one above: 4 of 149 courses are packages, so the general Offer count stays
   // in the hundreds while the branch that matters here drops to zero. Today:
-  // kaeng-krachan and korea-golf-club, 4 translated locales each, 2 rates each.
-  if (packageOfferSeen < 16) {
+  // kaeng-krachan, korea-golf-club, ubolratana-dam and wiang-ko-sai, 4
+  // translated locales each, 2 rates each.
+  //
+  // RAISE THIS when a course gains fee_is_package. It was left at 16 when the
+  // count went 2 -> 4, which still passed while asserting half of what it
+  // measured — a floor below the true value is a guard that has quietly gone
+  // slack, and the whole reason this check carries a number rather than `> 0`.
+  if (packageOfferSeen < 32) {
     fail(
       `L2 package-label check ran on only ${packageOfferSeen} Offer(s)`,
-      "expected 16+ (2 package courses x 4 locales x 2 rates). Zero means no course carries fee_is_package any more, or the registry dropped them — not that the labels are right.",
+      "expected 32+ (4 package courses x 4 locales x 2 rates). Zero means no course carries fee_is_package any more, or the registry dropped them — not that the labels are right.",
     );
   } else {
     pass(`L2 asserted package (not green-fee) Offer labels on ${packageOfferSeen} Offer(s)`);
