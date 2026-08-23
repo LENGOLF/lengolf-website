@@ -157,15 +157,19 @@ const nextConfig = {
     // Information" heading. (It does NOT show opening hours there; those are
     // in the site-wide footer, so don't cite them as a reason.)
     //
-    // ONE form per source is enough, but not for the reason the sibling note
-    // on rootLocationRedirects gives. That note says "only the trailing-slash
-    // source ever matches", which prod disproves: /tournaments/ and
-    // /bangkok-golf-centre-vs-lengolf/ both redirect in ONE hop against
-    // sources written WITHOUT a slash. Next normalises the source PATTERN as
-    // well as the request, so the two spellings are the same rule and listing
-    // both is redundant. Do not act on that sibling note by deleting no-slash
-    // sources — blogRedirects, pageTypeRedirects, locationAreaRedirects and
-    // /tournaments are all no-slash and all work.
+    // ONE form per source is enough. Be precise about why, because the
+    // sibling note on rootLocationRedirects is half right and the wrong half
+    // is dangerous. Right: with trailingSlash: true a no-slash REQUEST is
+    // normalised to the slash form before this table is consulted, which is
+    // why /about costs two hops (measured). Wrong: "only the trailing-slash
+    // source ever matches" — Next normalises the source PATTERN too, so
+    // /tournaments/ matches the no-slash source /tournaments in ONE hop
+    // (measured on prod, likewise /bangkok-golf-centre-vs-lengolf/). The two
+    // spellings are therefore the SAME rule, and listing both is redundant
+    // rather than one of them being dead. Do not read that note as licence to
+    // delete no-slash sources: blogRedirects, pageTypeRedirects,
+    // locationAreaRedirects and /tournaments are no-slash ONLY, so deleting
+    // theirs removes the rule entirely.
     //
     // The locale forms are listed because they already resolve and would
     // otherwise land on ENGLISH: prod shows /th/about/ 301 -> /about/, which

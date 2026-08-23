@@ -2868,8 +2868,16 @@ const redirectTests: RedirectTest[] = [
   // four locales.
   { path: "/th/about/", expectedStatus: 308, expectedLocation: "/th/about-us/" },
   { path: "/ja/contact/", expectedStatus: 308, expectedLocation: "/ja/about-us/" },
+  // ko is covered too: one probe per RULE is the right axis, but a locale
+  // dropping /about-us from its registry is a per-LOCALE failure, and this
+  // sample is the only place these rules are asserted.
+  { path: "/ko/about/", expectedStatus: 308, expectedLocation: "/ko/about-us/" },
   // /privacy-policy/ is NOT a translated route, so this one correctly lands
   // on the unprefixed English page rather than /zh/privacy-policy/.
+  // MAINTENANCE TRAP: config redirects run BEFORE middleware, so if
+  // /privacy-policy ever gains locale entries in lib/translated-routes.ts,
+  // that locale keeps landing on English and this assertion keeps it green.
+  // Change the rule and this expectation together.
   { path: "/zh/privacy/", expectedStatus: 308, expectedLocation: "/privacy-policy/" },
   // Test with trailing slashes — trailingSlash:true causes a 308 hop first,
   // so we test the path that actually triggers the next.config.js redirect.
@@ -3638,7 +3646,19 @@ async function runSeoTests() {
       // un-stripped body would let a string that never renders satisfy the
       // check. The JSON-LD parse below deliberately uses the FULL body,
       // because that node lives inside a <script> tag.
-      const visible = body
+      // Scoped to <head> FIRST, then script-stripped. og: meta tags only ever
+      // live in head, and bounding the search there means nothing in <body>
+      // can affect this check: not the RSC flight payload (which mirrors the
+      // head and duplicated og:type), and not a malformed <script> further
+      // down. That matters because the strip is a text split, and an unclosed
+      // or self-closing <script> makes it discard everything after — and the
+      // og tags are always downstream of the first <script> in real markup, so
+      // a mis-strip is a FALSE FAILURE, not a false pass. Unreachable today
+      // (React escapes `<` in text and attributes; the only
+      // dangerouslySetInnerHTML sites are JSON.stringify'd JSON-LD and
+      // DOMPurify-sanitised post content) but cheap to bound.
+      const headEnd = body.indexOf("</head>");
+      const visible = (headEnd === -1 ? body : body.slice(0, headEnd))
         .split("<script")
         .map((chunk, i) => {
           if (i === 0) return chunk;
@@ -3712,25 +3732,44 @@ async function runSeoTests() {
               `WebSite publisher contactPoint.telephone is not Thai E.164: ${String(tel)}`,
             );
           }
-          // The two business nodes on this page must agree on the number.
-          // Reverting getLocalBusinessJsonLd().telephone to the local format
-          // restores the exact two-spellings-of-one-number defect the E.164
-          // change removed, and nothing else in the suite would notice.
-          // All 85 location_pages.schema_markup blobs already publish
-          // "+66966682335", so agreement here is agreement site-wide.
-          const businessLd = ldNodes.find(
+          // EVERY business node on the page that states a telephone must
+          // agree with the contactPoint. Reverting
+          // getLocalBusinessJsonLd().telephone to the local format restores
+          // the exact two-spellings-of-one-number defect the E.164 change
+          // removed, and nothing else in the suite would notice.
+          //
+          // Checked across ALL such nodes, not the first one found. A `.find()`
+          // is document-order dependent, and the order is not stable in a way
+          // worth relying on: the layout emits its EntertainmentBusiness at
+          // the top of <body>, but getAggregateRatingJsonLd() emits a SECOND,
+          // telephone-less EntertainmentBusiness on / and /about-us/, and a
+          // /location/<slug>/ page renders a THIRD node — the DB-sourced
+          // LocalBusiness from location_pages.schema_markup — which a
+          // first-match check would never compare. Nodes with no telephone
+          // are skipped rather than failed, because the rating node legitimately
+          // omits it. `@type` may be an array (lib/jsonld.ts already writes
+          // one), so membership is tested rather than equality.
+          const hasType = (node: Record<string, unknown>, t: string): boolean => {
+            const v = node["@type"];
+            return Array.isArray(v) ? v.includes(t) : v === t;
+          };
+          const businessNodes = ldNodes.filter(
             (node) =>
-              node["@type"] === "EntertainmentBusiness" ||
-              node["@type"] === "LocalBusiness",
+              (hasType(node, "EntertainmentBusiness") || hasType(node, "LocalBusiness")) &&
+              node.telephone,
           );
-          if (!businessLd) {
+          if (businessNodes.length === 0) {
             issues.push(
-              "no EntertainmentBusiness/LocalBusiness JSON-LD node to cross-check the phone against",
+              "no EntertainmentBusiness/LocalBusiness JSON-LD node with a telephone to cross-check against",
             );
-          } else if (businessLd.telephone !== tel) {
-            issues.push(
-              `telephone disagrees across JSON-LD nodes: business="${businessLd.telephone}" vs contactPoint="${String(tel)}"`,
-            );
+          } else {
+            for (const b of businessNodes) {
+              if (b.telephone !== tel) {
+                issues.push(
+                  `telephone disagrees across JSON-LD nodes: ${String(b["@type"])}="${b.telephone}" vs contactPoint="${String(tel)}"`,
+                );
+              }
+            }
           }
         }
       }
