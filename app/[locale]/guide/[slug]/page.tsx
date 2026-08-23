@@ -8,6 +8,7 @@ import { getExplainerPageJsonLd } from '@/lib/jsonld'
 import { getFactTokens, interpolateFacts } from '@/lib/site-facts'
 import ExplainerPageComponent from '@/components/guides/ExplainerPage'
 import type { ExplainerSeoPage, ExplainerContent } from '@/types/seo-pages'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 // Replace {{token}} placeholders (POS-backed price facts) throughout an
 // explainer page's user-visible strings. Applied at render + generateMetadata
@@ -87,12 +88,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
-    openGraph: {
+    openGraph: siteOpenGraph({
       title,
       description,
       url: getCanonical(locale, `/guide/${slug}/`),
       type: 'article',
-    },
+    }),
     alternates: {
       canonical: getCanonical(locale, `/guide/${slug}/`),
       ...(Object.keys(languages).length > 1 ? { languages } : {}),

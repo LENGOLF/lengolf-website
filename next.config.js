@@ -148,6 +148,50 @@ const nextConfig = {
       { source: '/:locale(th|ko|ja|zh)/rent-golf-clubs-bangkok/', destination: '/:locale/golf-course-club-rental/', permanent: true },
     ]
 
+    // Trust-anchor aliases: /about, /contact and /privacy are the names an
+    // agent or a person guesses before the fuller ones this site uses, and
+    // all three returned 404 (measured on prod 2026-08-23, root and
+    // locale-prefixed forms alike). /about-us/ is the right target for
+    // /contact/ rather than a stub: it renders <ContactInfo /> and
+    // <ContactForm /> — address, phone, email — under a "Contact
+    // Information" heading. (It does NOT show opening hours there; those are
+    // in the site-wide footer, so don't cite them as a reason.)
+    //
+    // ONE form per source is enough, but not for the reason the sibling note
+    // on rootLocationRedirects gives. That note says "only the trailing-slash
+    // source ever matches", which prod disproves: /tournaments/ and
+    // /bangkok-golf-centre-vs-lengolf/ both redirect in ONE hop against
+    // sources written WITHOUT a slash. Next normalises the source PATTERN as
+    // well as the request, so the two spellings are the same rule and listing
+    // both is redundant. Do not act on that sibling note by deleting no-slash
+    // sources — blogRedirects, pageTypeRedirects, locationAreaRedirects and
+    // /tournaments are all no-slash and all work.
+    //
+    // The locale forms are listed because they already resolve and would
+    // otherwise land on ENGLISH: prod shows /th/about/ 301 -> /about/, which
+    // with the root rule below would continue to /about-us/ and serve 200 in
+    // English, even though /about-us/ is translated in all four locales
+    // (lib/translated-routes.ts). A config redirect pre-empts that middleware
+    // 301 because redirects run before middleware. /privacy-policy/ is NOT a
+    // translated route, so its locale form correctly targets the unprefixed
+    // English page instead of /:locale/.
+    //
+    // TRAP, same shape as the /compare/ redirects below: redirects match
+    // BEFORE the filesystem. If anyone later adds app/[locale]/contact/ (or
+    // /about/, /privacy/), the page is unreachable behind its own redirect
+    // and redirectChainTests stays GREEN, because it only asserts the chain
+    // still ends at /about-us/. Delete the matching entry here when that
+    // happens, and add the new route to routeTests in scripts/smoke-test.ts,
+    // which DOES fail when a route's final path differs from its request.
+    const trustAnchorRedirects = [
+      { source: '/about/', destination: '/about-us/', permanent: true },
+      { source: '/contact/', destination: '/about-us/', permanent: true },
+      { source: '/privacy/', destination: '/privacy-policy/', permanent: true },
+      { source: '/:locale(th|ko|ja|zh)/about/', destination: '/:locale/about-us/', permanent: true },
+      { source: '/:locale(th|ko|ja|zh)/contact/', destination: '/:locale/about-us/', permanent: true },
+      { source: '/:locale(th|ko|ja|zh)/privacy/', destination: '/privacy-policy/', permanent: true },
+    ]
+
     // GSC 404s: content that lives under one section prefix was crawled under
     // the other (/faq/<guide-slug> and /guide/<faq-slug>). Current internal
     // links are clean (validate:links passes) — these are legacy URLs Google
@@ -183,6 +227,7 @@ const nextConfig = {
       ...locationAreaRedirects,
       ...rootLocationRedirects,
       ...rentalConsolidationRedirects,
+      ...trustAnchorRedirects,
       ...prefixCorrectionRedirects,
 
       // WordPress tag, category, and author archives -> blog listing

@@ -10,6 +10,7 @@ import { getAvailableUsedClubs } from '@/lib/clubs'
 import UsedClubsGrid from '@/components/clubs/UsedClubsGrid'
 import type { GridLabels } from '@/components/clubs/UsedClubsGrid'
 import { MessageCircle, MapPin, Camera, Search, Shield } from 'lucide-react'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 export const revalidate = 86400
 
@@ -30,7 +31,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       canonical: getCanonical(locale, '/second-hand-golf-clubs-bangkok/'),
       languages: getAlternates('/second-hand-golf-clubs-bangkok/'),
     },
-    openGraph: { images: [{ url: storageUrl('venue/venue-simulator-01.jpg'), alt: 'Second-hand golf clubs Bangkok' }] },
+    openGraph: siteOpenGraph({ images: [{ url: storageUrl('venue/venue-simulator-01.jpg'), alt: 'Second-hand golf clubs Bangkok' }] }),
     robots: { index: false, follow: false },
   }
 }

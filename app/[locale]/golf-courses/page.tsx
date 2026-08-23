@@ -11,6 +11,7 @@ import { BTS_STATIONS } from '@/data/bts-stations'
 import { AIRPORTS } from '@/data/airports'
 import { PRICE_TIERS } from '@/data/price-tiers'
 import { USE_CASES } from '@/data/golf-courses-use-cases'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 interface Props {
   params: Promise<{ locale: string }>
@@ -53,7 +54,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       canonical,
       ...(Object.keys(languages).length > 1 ? { languages } : {}),
     },
-    openGraph: { title, description, url: canonical, type: 'website' },
+    openGraph: siteOpenGraph({ title, description, url: canonical, type: 'website' }),
   }
 }
 

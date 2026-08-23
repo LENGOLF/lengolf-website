@@ -11,6 +11,7 @@ import { getFaqPageJsonLd, getAggregateRatingJsonLd, getBreadcrumbJsonLd } from 
 import { getGoogleReviews, truncateReviewText, type GoogleReview } from '@/lib/google-reviews'
 import FaqSection from '@/components/shared/FaqSection'
 import { StarIcon, StarRating } from '@/components/shared/StarRating'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
@@ -22,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       canonical: getCanonical(locale, '/about-us/'),
       languages: getAlternates('/about-us/'),
     },
-    openGraph: { images: [{ url: storageUrl('venue/venue-interior-01.jpg'), alt: 'LENGOLF interior' }] },
+    openGraph: siteOpenGraph({ images: [{ url: storageUrl('venue/venue-interior-01.jpg'), alt: 'LENGOLF interior' }] }),
   }
 }
 

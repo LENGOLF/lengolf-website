@@ -13,6 +13,7 @@ import {
   getFaqPageJsonLd,
   getBreadcrumbJsonLd,
 } from '@/lib/jsonld'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
@@ -27,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     alternates: {
       canonical: `${SITE_URL}${prefix}/corporate-golf-packages/`,
     },
-    openGraph: { images: [{ url: storageUrl('events/event-01.jpg'), alt: 'Corporate event at LENGOLF indoor golf' }] },
+    openGraph: siteOpenGraph({ images: [{ url: storageUrl('events/event-01.jpg'), alt: 'Corporate event at LENGOLF indoor golf' }] }),
   }
 }
 

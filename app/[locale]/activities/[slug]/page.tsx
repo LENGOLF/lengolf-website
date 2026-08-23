@@ -6,6 +6,7 @@ import { getAlternates, getCanonical } from '@/lib/translated-routes'
 import { getActivityPageJsonLd, getFaqPageJsonLd } from '@/lib/jsonld'
 import ActivityPageComponent from '@/components/activities/ActivityPage'
 import type { ActivityOccasionSeoPage } from '@/types/seo-pages'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>
@@ -31,12 +32,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: page.title,
     description: page.meta_description || undefined,
-    openGraph: {
+    openGraph: siteOpenGraph({
       title: page.title,
       description: page.meta_description || undefined,
       url: getCanonical(locale, `/activities/${slug}/`),
       type: 'website',
-    },
+    }),
     alternates: {
       canonical: getCanonical(locale, `/activities/${slug}/`),
       // Only emit hreflang once a translation actually exists — a lone

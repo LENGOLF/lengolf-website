@@ -12,6 +12,7 @@ import StickyBookCTA from '@/components/clubs/StickyBookCTA'
 import { getClubRentalPricingJsonLd, getClubRentalServiceJsonLd, getFaqPageJsonLd, getBreadcrumbJsonLd } from '@/lib/jsonld'
 import { getRentalClubPricing } from '@/lib/clubs'
 import FaqSection from '@/components/shared/FaqSection'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 export const revalidate = 3600
 
@@ -56,7 +57,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       canonical: getCanonical(locale, '/golf-club-rental/'),
       languages: getAlternates('/golf-club-rental/'),
     },
-    openGraph: { images: [{ url: storageUrl('venue/venue-simulator-01.jpg'), alt: 'Rent Callaway Warbird, REVA or Paradym golf clubs at LENGOLF Bangkok — free Standard set with every bay booking, Premium from 150 THB/hr' }] },
+    openGraph: siteOpenGraph({ images: [{ url: storageUrl('venue/venue-simulator-01.jpg'), alt: 'Rent Callaway Warbird, REVA or Paradym golf clubs at LENGOLF Bangkok — free Standard set with every bay booking, Premium from 150 THB/hr' }] }),
   }
 }
 

@@ -17,6 +17,7 @@ import { getRentalClubSetsForSpecSheet, setGallery } from '@/lib/clubs'
 import { parseVariantSpec, splitSpecEntry, splitClubPart, SPEC_ROWS } from '@/lib/club-specs'
 import type { RentalClubSet, SetVariantImage } from '@/lib/clubs'
 import type { SpecRow } from '@/lib/club-specs'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 const ImageLightbox = dynamic(() => import('@/components/shared/ImageLightbox'), { ssr: true })
 
@@ -93,7 +94,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     // photo of the bar interior. This sheet exists to be pasted into a LINE
     // chat, where that preview card is the entire first impression, so it
     // needs its own URL, its own locale, and a picture of actual clubs.
-    openGraph: {
+    openGraph: siteOpenGraph({
       title: t('metaTitle'),
       description: t('metaDescription'),
       url: canonical,
@@ -104,7 +105,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
           alt: 'Callaway Paradym Forged Carbon rental set — full bag',
         },
       ],
-    },
+    }),
   }
 }
 

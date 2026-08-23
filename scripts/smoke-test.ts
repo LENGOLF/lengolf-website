@@ -2854,6 +2854,23 @@ const routeTests: RouteTest[] = [
 
 // B) Redirect tests (representative sample of 60+ WordPress redirects)
 const redirectTests: RedirectTest[] = [
+  // Trust-anchor aliases (trustAnchorRedirects in next.config.js). These
+  // assert the STATUS, which redirectChainTests structurally cannot: that
+  // runner follows the chain and checks only the landing path, so flipping
+  // permanent:true -> false (308 -> 307) stays green while silently giving up
+  // the link-equity consolidation these aliases exist for.
+  { path: "/about/", expectedStatus: 308, expectedLocation: "/about-us/" },
+  { path: "/contact/", expectedStatus: 308, expectedLocation: "/about-us/" },
+  { path: "/privacy/", expectedStatus: 308, expectedLocation: "/privacy-policy/" },
+  // The locale forms must reach the LOCALISED page. Measured on prod before
+  // these rules existed: /th/about/ 301'd to /about/ and would then continue
+  // to a 200 ENGLISH /about-us/, even though /about-us/ is translated in all
+  // four locales.
+  { path: "/th/about/", expectedStatus: 308, expectedLocation: "/th/about-us/" },
+  { path: "/ja/contact/", expectedStatus: 308, expectedLocation: "/ja/about-us/" },
+  // /privacy-policy/ is NOT a translated route, so this one correctly lands
+  // on the unprefixed English page rather than /zh/privacy-policy/.
+  { path: "/zh/privacy/", expectedStatus: 308, expectedLocation: "/privacy-policy/" },
   // Test with trailing slashes — trailingSlash:true causes a 308 hop first,
   // so we test the path that actually triggers the next.config.js redirect.
   // Next.js uses 308 for permanent: true redirects.
@@ -3067,6 +3084,13 @@ const redirectChainTests: { path: string; finalPath: string }[] = [
     path: "/golf-courses/compare/khao-yai/khao-yai-golf-club-vs-rancho-charnvee-country-club",
     finalPath: "/golf-courses/khao-yai/",
   },
+  // Trust-anchor aliases — see trustAnchorRedirects in next.config.js. Probed
+  // in the no-slash form on purpose: that is the form an agent or a human
+  // types, and it has to survive the trailingSlash normalisation hop before
+  // the redirect table is consulted at all.
+  { path: "/about", finalPath: "/about-us/" },
+  { path: "/contact", finalPath: "/about-us/" },
+  { path: "/privacy", finalPath: "/privacy-policy/" },
 ];
 
 // C) Critical external link checks
@@ -3112,7 +3136,30 @@ const seoTests: SeoTest[] = [
   { path: "/ko/menu/", locale: "ko" },
   { path: "/ja/menu/", locale: "ja" },
   { path: "/zh/menu/", locale: "zh" },
+  // Added with the openGraph inheritance fix. These are page families that
+  // shipped with no og:type AND had no rendered assertion of any kind — six
+  // of the thirteen broken pages were unreachable from this list, including
+  // /about-us/, which the fix's own docblock names as a broken page.
+  { path: "/about-us/", locale: "en" },
+  { path: "/events/", locale: "en" },
+  { path: "/golf-club-rental/", locale: "en" },
+  { path: "/golf-course-club-rental/", locale: "en" },
+  { path: "/golf-club-specs/", locale: "en" },
+  { path: "/second-hand-golf-clubs-bangkok/", locale: "en" },
+  // A blog POST, not the hub: /blog/[slug] and /guide/[slug] are the only
+  // routes that emit og:type="article", so without one of them the
+  // allowlist's article arm is never exercised by any real page.
+  { path: "/blog/golf-simulator-in-bangkok/", locale: "en" },
 ];
+
+/**
+ * Anti-vacuity floor for section D. `seoTests` is a hand-maintained array
+ * with no derivation behind it, so trimming or emptying it would print a
+ * clean section having asserted nothing. CLAUDE.md requires "a minimum-input
+ * floor with a real number, not `> 0`" for exactly this; sections L2, L3, L4,
+ * L6, O and P all carry one and this section did not.
+ */
+const MIN_SEO_URLS = 33;
 
 // E) Thai redirect tests (untranslated Thai routes → 301 to English)
 interface ThaiRedirectTest {
@@ -3526,6 +3573,14 @@ async function runLinkTests() {
 
 async function runSeoTests() {
   console.log("\n\x1b[1mD) SEO sanity checks\x1b[0m");
+  if (seoTests.length < MIN_SEO_URLS) {
+    fail(
+      "D) seoTests corpus floor",
+      `only ${seoTests.length} URL(s) in seoTests, expected at least ${MIN_SEO_URLS} — ` +
+        `entries were removed, so a green section D below would be asserting less than ` +
+        `it claims`,
+    );
+  }
   for (const t of seoTests) {
     const label = `SEO ${t.path}`;
     try {
@@ -3567,6 +3622,117 @@ async function runSeoTests() {
       // JSON-LD exists
       if (!body.includes("application/ld+json")) {
         issues.push("missing JSON-LD");
+      }
+
+      // og:type and og:site_name. Next merges metadata per KEY, so any route
+      // segment that declares its own `openGraph` REPLACES the root layout's
+      // resolved object instead of extending it — silently dropping the
+      // site-wide `type` and `siteName`. All 30 page-level blocks shipped
+      // with no og:site_name, and the 13 that did not restate `type`
+      // themselves shipped with no og:type either (homepage, /golf/,
+      // /lessons/, /events/, /about-us/, /menu/, /blog/ …).
+      // lib/open-graph.ts#siteOpenGraph is the fix; this is the guard.
+      //
+      // These read <script>-STRIPPED markup, matching section M's convention:
+      // NextIntlClientProvider is handed the whole locale catalog, so an
+      // un-stripped body would let a string that never renders satisfy the
+      // check. The JSON-LD parse below deliberately uses the FULL body,
+      // because that node lives inside a <script> tag.
+      const visible = body
+        .split("<script")
+        .map((chunk, i) => {
+          if (i === 0) return chunk;
+          const end = chunk.indexOf("</script>");
+          return end === -1 ? "" : chunk.slice(end + "</script>".length);
+        })
+        .join("");
+      const ogTag = (prop: string): string | null => {
+        const tag = visible.match(new RegExp(`<meta[^>]*property="og:${prop}"[^>]*>`));
+        if (!tag) return null;
+        const content = tag[0].match(/content="([^"]*)"/);
+        return content ? content[1] : "";
+      };
+      const ogType = ogTag("type");
+      if (ogType === null) {
+        issues.push("missing og:type");
+      } else if (!["website", "article"].includes(ogType)) {
+        issues.push(`unexpected og:type: "${ogType}"`);
+      }
+      if (!ogTag("site_name")) {
+        issues.push("missing og:site_name");
+      }
+
+      // The WebSite node's publisher Organization is read for entity
+      // resolution, and it shipped with name/url/logo/sameAs — nothing to
+      // verify the business against or contact it by. The LOCALE layout
+      // (app/[locale]/layout.tsx, not the bare app/layout.tsx passthrough)
+      // emits this node unconditionally, and every page.tsx in the repo lives
+      // under it, so a miss here is never vacuous.
+      const ldNodes = body
+        .split("<script")
+        .filter((chunk) => chunk.includes("application/ld+json"))
+        .map((chunk) => {
+          const start = chunk.indexOf(">") + 1;
+          const end = chunk.indexOf("</script>");
+          if (start <= 0 || end < start) return null;
+          try {
+            return JSON.parse(chunk.slice(start, end));
+          } catch {
+            return null;
+          }
+        })
+        .filter((node) => node !== null);
+      const websiteLd = ldNodes.find((node) => node["@type"] === "WebSite");
+      if (!websiteLd) {
+        issues.push("no parseable WebSite JSON-LD node");
+      } else {
+        const pub = websiteLd.publisher;
+        if (!pub) {
+          issues.push("WebSite JSON-LD has no publisher");
+        } else {
+          if (!pub.address?.streetAddress) {
+            issues.push("WebSite publisher missing address.streetAddress");
+          }
+          if (!pub.contactPoint?.email) {
+            issues.push("WebSite publisher missing contactPoint.email");
+          }
+          // Assert the SHAPE, not truthiness. PHONE_E164 in lib/jsonld.ts is
+          // DERIVED ("+66" + phoneRaw minus its leading zero), so a change to
+          // phoneRaw's format silently yields "+66+66…" or "+6666…" — both
+          // truthy, both invalid E.164, and both would sail past a
+          // presence-only check.
+          const tel: unknown = pub.contactPoint?.telephone;
+          const isThaiE164 =
+            typeof tel === "string" &&
+            tel.startsWith("+66") &&
+            tel.length === 12 &&
+            [...tel.slice(3)].every((ch) => ch >= "0" && ch <= "9");
+          if (!isThaiE164) {
+            issues.push(
+              `WebSite publisher contactPoint.telephone is not Thai E.164: ${String(tel)}`,
+            );
+          }
+          // The two business nodes on this page must agree on the number.
+          // Reverting getLocalBusinessJsonLd().telephone to the local format
+          // restores the exact two-spellings-of-one-number defect the E.164
+          // change removed, and nothing else in the suite would notice.
+          // All 85 location_pages.schema_markup blobs already publish
+          // "+66966682335", so agreement here is agreement site-wide.
+          const businessLd = ldNodes.find(
+            (node) =>
+              node["@type"] === "EntertainmentBusiness" ||
+              node["@type"] === "LocalBusiness",
+          );
+          if (!businessLd) {
+            issues.push(
+              "no EntertainmentBusiness/LocalBusiness JSON-LD node to cross-check the phone against",
+            );
+          } else if (businessLd.telephone !== tel) {
+            issues.push(
+              `telephone disagrees across JSON-LD nodes: business="${businessLd.telephone}" vs contactPoint="${String(tel)}"`,
+            );
+          }
+        }
       }
 
       if (issues.length > 0) {

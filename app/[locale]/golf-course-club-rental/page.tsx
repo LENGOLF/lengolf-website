@@ -23,6 +23,7 @@ import {
   Target,
   GraduationCap,
 } from 'lucide-react'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 // Below-fold client components: defer to their own chunks so they don't
 // land in the initial JS bundle. `ssr: true` keeps the rendered markup
@@ -83,7 +84,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       canonical: getCanonical(locale, '/golf-course-club-rental/'),
       languages: getAlternates('/golf-course-club-rental/'),
     },
-    openGraph: { images: [{ url: storageUrl('golf/hero-course-rental.webp'), alt: 'Rent premium golf clubs for any Bangkok golf course — Callaway Paradym, Warbird, REVA from 1,200 THB/day' }] },
+    openGraph: siteOpenGraph({ images: [{ url: storageUrl('golf/hero-course-rental.webp'), alt: 'Rent premium golf clubs for any Bangkok golf course — Callaway Paradym, Warbird, REVA from 1,200 THB/day' }] }),
   }
 }
 

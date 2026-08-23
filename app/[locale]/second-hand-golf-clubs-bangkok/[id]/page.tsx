@@ -8,6 +8,7 @@ import { getUsedClubProductJsonLd, getBreadcrumbJsonLd } from '@/lib/jsonld'
 import ClubDetailGallery from '@/components/clubs/ClubDetailGallery'
 import ClubCard from '@/components/clubs/ClubCard'
 import { ArrowLeft, MessageCircle, Layers, User, Shield, Tag } from 'lucide-react'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 export const revalidate = 86400
 
@@ -41,9 +42,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
         th: `${SITE_URL}/th/second-hand-golf-clubs-bangkok/${id}/`,
       },
     },
-    openGraph: {
+    openGraph: siteOpenGraph({
       images: club.image_url ? [{ url: club.image_url, alt: title }] : [],
-    },
+    }),
     robots: { index: false, follow: false },
   }
 }

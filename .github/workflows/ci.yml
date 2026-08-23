@@ -78,6 +78,24 @@ jobs:
       # the classifier. Without this step the guard exists but never runs.
       - run: npm run validate:club-specs
 
+      # Metadata inheritance. Next merges page metadata per KEY, so a route
+      # that declares its own `openGraph` REPLACES the layout's object rather
+      # than extending it. All 30 page-level blocks had shipped with no
+      # og:site_name, and the 13 that did not restate `type` themselves
+      # shipped with no og:type either — the homepage among them, with lint,
+      # typecheck and all 24 smoke sections green. tsc cannot see it (both
+      # fields are optional), so this is the only static gate on it. It also
+      # guards `twitter` and `icons`, which share the identical
+      # wholesale-replacement hazard and are safe today only because no page
+      # has written the offending line yet.
+      - run: npm run validate:open-graph
+      # A green corpus run proves the walk still parses and the declaration
+      # count still matches — it does NOT prove the violation branches still
+      # fire. Disarming only the bare-object rule leaves the corpus run green,
+      # and this step is the only thing that tells those two apart. Same
+      # argument as validate:i18n:self-test above.
+      - run: npm run validate:open-graph:self-test
+
       - name: pr-rigor disclosure
         env:
           PR_BODY: ${{ github.event.pull_request.body }}

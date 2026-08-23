@@ -13,6 +13,7 @@ import { getEventsPricingJsonLd, getEventsServiceJsonLd, getFaqPageJsonLd, getBr
 import EventInquiryForm from '@/components/events/EventInquiryForm'
 import FloorPlanDialog from '@/components/events/FloorPlanDialog'
 import FaqSection from '@/components/shared/FaqSection'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 const faqLinks: Record<string, { href: string; external?: boolean }> = {
   'booking.len.golf': { href: 'https://booking.len.golf/', external: true },
@@ -32,7 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       canonical: getCanonical(locale, '/events/'),
       languages: getAlternates('/events/'),
     },
-    openGraph: { images: [{ url: storageUrl('events/event-01.jpg'), alt: 'Corporate event at LENGOLF indoor golf' }] },
+    openGraph: siteOpenGraph({ images: [{ url: storageUrl('events/event-01.jpg'), alt: 'Corporate event at LENGOLF indoor golf' }] }),
   }
 }
 

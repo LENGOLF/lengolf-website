@@ -11,6 +11,7 @@ import { getFaqPageJsonLd, getBreadcrumbJsonLd } from '@/lib/jsonld'
 import { getSeoPagesByType } from '@/lib/seo-pages'
 import { getFaqHubContent, type FaqHubQa } from '@/data/faq-hub'
 import type { FaqSeoPage } from '@/types/seo-pages'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 interface Props {
   params: Promise<{ locale: string }>
@@ -26,13 +27,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       canonical: getCanonical(locale, '/faq/'),
       languages: getAlternates('/faq/'),
     },
-    openGraph: {
+    openGraph: siteOpenGraph({
       title: c.metaTitle,
       description: c.metaDescription,
       url: getCanonical(locale, '/faq/'),
       type: 'website',
       locale: OG_LOCALES[locale as Locale] ?? OG_LOCALES.en,
-    },
+    }),
   }
 }
 

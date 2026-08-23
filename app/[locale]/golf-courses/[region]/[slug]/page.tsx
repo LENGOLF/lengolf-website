@@ -24,6 +24,7 @@ import { PRICE_TIERS } from '@/data/price-tiers'
 import { haversineKm } from '@/lib/geo'
 import { formatBaht } from '@/lib/format'
 import type { CrossLink } from '@/components/golf-courses/CrossLinkBlock'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 interface Props {
   params: Promise<{ locale: string; region: string; slug: string }>
@@ -80,12 +81,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       canonical: canonicalUrl,
       ...(Object.keys(languages).length > 1 ? { languages } : {}),
     },
-    openGraph: {
+    openGraph: siteOpenGraph({
       title,
       description,
       url: canonicalUrl,
       type: 'website',
-    },
+    }),
   }
 }
 

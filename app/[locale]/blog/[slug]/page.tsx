@@ -18,6 +18,7 @@ import { SITE_URL, SITE_NAME, BOOKING_URL, storageUrl } from '@/lib/constants'
 import { getBreadcrumbJsonLd } from '@/lib/jsonld'
 import ShareButtons from '@/components/blog/ShareButtons'
 import BackToTop from '@/components/blog/BackToTop'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>
@@ -88,14 +89,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       canonical: canonicalUrl,
       languages: blogPostAlternates(post.slug, locales),
     },
-    openGraph: {
+    openGraph: siteOpenGraph({
       title: post.meta_title || post.title,
       description: post.meta_description || post.excerpt || undefined,
       url: canonicalUrl,
       type: 'article',
       publishedTime: post.published_at || undefined,
       ...(post.featured_image && { images: [post.featured_image] }),
-    },
+    }),
   }
 }
 

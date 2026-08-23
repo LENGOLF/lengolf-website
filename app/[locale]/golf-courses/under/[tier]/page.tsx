@@ -11,6 +11,7 @@ import { pricesByDayOfWeek, feeHeadings } from '@/lib/course-fees'
 import RoundupList from '@/components/golf-courses/RoundupList'
 import CrossLinkBlock from '@/components/golf-courses/CrossLinkBlock'
 import RentalCtaBanner from '@/components/golf-courses/RentalCtaBanner'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 interface Props {
   params: Promise<{ locale: string; tier: string }>
@@ -55,7 +56,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       canonical,
       ...(Object.keys(languages).length > 1 ? { languages } : {}),
     },
-    openGraph: { title, description, url: canonical, type: 'website' },
+    openGraph: siteOpenGraph({ title, description, url: canonical, type: 'website' }),
   }
 }
 
