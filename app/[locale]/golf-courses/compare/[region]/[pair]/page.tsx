@@ -19,6 +19,7 @@ import CrossLinkBlock from '@/components/golf-courses/CrossLinkBlock'
 import RentalCtaBanner from '@/components/golf-courses/RentalCtaBanner'
 import { Flag } from 'lucide-react'
 import type { GolfCourse } from '@/types/golf-courses'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 interface Props {
   params: Promise<{ locale: string; region: string; pair: string }>
@@ -61,7 +62,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     alternates: { canonical: canonicalUrl },
-    openGraph: { title, description, url: canonicalUrl, type: 'website' },
+    openGraph: siteOpenGraph({ title, description, url: canonicalUrl, type: 'website' }),
   }
 }
 

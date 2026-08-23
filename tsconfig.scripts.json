@@ -11,6 +11,7 @@
     "scripts/validate-i18n.ts",
     "scripts/sync-blog-translated-slugs.ts",
     "scripts/smoke-test.ts",
+    "scripts/validate-open-graph.ts",
     "scripts/page-inventory.ts"
   ],
   "exclude": ["node_modules"]

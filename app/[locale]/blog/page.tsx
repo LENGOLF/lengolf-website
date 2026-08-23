@@ -9,6 +9,7 @@ import { storageUrl, SITE_URL, SITE_NAME, SOCIAL_LINKS, BUSINESS_INFO } from '@/
 import { getAlternates } from '@/lib/translated-routes'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd } from '@/lib/jsonld'
 import FaqSection from '@/components/shared/FaqSection'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
@@ -20,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       canonical: `${SITE_URL}${locale === 'en' ? '' : `/${locale}`}/blog/`,
       languages: getAlternates('/blog/'),
     },
-    openGraph: { images: [{ url: storageUrl('venue/venue-bar-01.jpg'), alt: 'LENGOLF blog — news and articles' }] },
+    openGraph: siteOpenGraph({ images: [{ url: storageUrl('venue/venue-bar-01.jpg'), alt: 'LENGOLF blog — news and articles' }] }),
   }
 }
 

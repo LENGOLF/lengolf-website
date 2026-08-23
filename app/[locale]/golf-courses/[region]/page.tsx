@@ -11,6 +11,7 @@ import { ArrowRight } from 'lucide-react'
 import CourseMapExplorer from '@/components/golf-courses/CourseMapExplorer'
 import CrossLinkBlock from '@/components/golf-courses/CrossLinkBlock'
 import { comparisonCrossLink, getComparisonPairs } from '@/lib/golf-courses-derived'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 interface Props {
   params: Promise<{ locale: string; region: string }>
@@ -72,7 +73,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       canonical,
       ...(Object.keys(languages).length > 1 ? { languages } : {}),
     },
-    openGraph: { title, description, url: canonical, type: 'website' },
+    openGraph: siteOpenGraph({ title, description, url: canonical, type: 'website' }),
   }
 }
 

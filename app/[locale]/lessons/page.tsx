@@ -13,6 +13,7 @@ import FaqSection from '@/components/shared/FaqSection'
 import ClickableImage from '@/components/shared/ClickableImage'
 import PricingTable from '@/components/shared/PricingTable'
 import CourseRentalCrossLink from '@/components/shared/CourseRentalCrossLink'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 const faqLinks: Record<string, { href: string; external?: boolean }> = {
   'booking.len.golf': { href: 'https://booking.len.golf/', external: true },
@@ -30,7 +31,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       canonical: getCanonical(locale, '/lessons/'),
       languages: getAlternates('/lessons/'),
     },
-    openGraph: { images: [{ url: storageUrl('lessons/promo-free-trial.jpg'), alt: 'Golf lessons with PGA Pro at LENGOLF' }] },
+    openGraph: siteOpenGraph({ images: [{ url: storageUrl('lessons/promo-free-trial.jpg'), alt: 'Golf lessons with PGA Pro at LENGOLF' }] }),
   }
 }
 

@@ -20,6 +20,58 @@ export function getPostalAddressJsonLd() {
   }
 }
 
+/**
+ * E.164 form of the venue phone, for machine-readable surfaces only.
+ *
+ * Derived from phoneRaw rather than written as a second literal that can
+ * drift. BUSINESS_INFO.phone is the human-facing Thai local format
+ * ("096-668-2335") that all visible copy and every tel: href still use.
+ *
+ * This is the format the rest of the site's structured data already
+ * publishes: all 85 rows of location_pages.schema_markup carry
+ * "telephone": "+66966682335" (queried 2026-08-23), byte-identical to what
+ * this derives. Before this change the layout's own EntertainmentBusiness
+ * node emitted the LOCAL format on those same 85 pages, so each one shipped
+ * two spellings of one number.
+ *
+ * NOTE the derivation is only correct while phoneRaw stays a 0-prefixed
+ * national number. A future '+66...' or '66...' or space-separated value
+ * would produce '+66+66...' / '+6666...' / a separator-bearing string, none
+ * of which is valid E.164. Smoke section D asserts the shape.
+ */
+const PHONE_E164 = `+66${BUSINESS_INFO.phoneRaw.replace(/^0/, '')}`
+
+/**
+ * Customer-service ContactPoint for the Organization publisher node below.
+ * It exists so a consumer reading the structured data can find a way to
+ * reach the business; /about-us/ carries the same email and the same phone
+ * NUMBER in visible copy, in the local format, and /contact/ 308s there.
+ *
+ * availableLanguage is en + th ONLY, and that is deliberate. It would be an
+ * overclaim to list ja/ko/zh on a ContactPoint whose channels are telephone
+ * and email: the site's own copy scopes those languages to LINE and email
+ * ("LINE @lengolf or email" in CourseClubRentalFaq.a11 across ja/ko/zh), the
+ * ja copy states in-store staff communicate mainly in English, and the EN
+ * faq-hub answer says replies come "in English and Thai". A LINE
+ * ContactPoint carrying the other three would be accurate; inventing phone
+ * support in five languages is not.
+ *
+ * No areaServed: a single-country value reads as "out of area" for the
+ * pre-arrival enquiries the ja/ko/zh landing pages exist to attract, and the
+ * four existing areaServed values in this file are all Place objects
+ * ({ '@type': 'City', name: 'Bangkok' }), so a bare 'TH' string would be a
+ * fifth spelling of the concept. Unbounded is both truer and cheaper.
+ */
+export function getContactPointJsonLd() {
+  return {
+    '@type': 'ContactPoint' as const,
+    contactType: 'customer service',
+    telephone: PHONE_E164,
+    email: BUSINESS_INFO.email,
+    availableLanguage: ['en', 'th'],
+  }
+}
+
 export function getLocalBusinessJsonLd() {
   return {
     '@context': 'https://schema.org',
@@ -27,7 +79,11 @@ export function getLocalBusinessJsonLd() {
     name: BUSINESS_INFO.name,
     legalName: BUSINESS_INFO.legalName,
     url: SITE_URL,
-    telephone: BUSINESS_INFO.phone,
+    // E.164, matching the Organization contactPoint below. Was the Thai
+    // local format ("096-668-2335") — fine for a human reading the page, but
+    // undiallable from abroad, and a second spelling of one number once
+    // contactPoint landed. Visible copy still uses BUSINESS_INFO.phone.
+    telephone: PHONE_E164,
     email: BUSINESS_INFO.email,
     address: getPostalAddressJsonLd(),
     geo: {
@@ -53,14 +109,41 @@ export function getWebSiteJsonLd() {
     '@type': 'WebSite',
     name: SITE_NAME,
     url: SITE_URL,
+    // The publisher Organization is a node consumers read for entity
+    // resolution. It carried name/url/logo/sameAs — so it already had the
+    // canonical reconciliation property, but nothing to verify the business
+    // against or contact it by. address + contactPoint add that, and both
+    // reuse the shared NAP helpers so they cannot drift from the
+    // EntertainmentBusiness node above.
+    //
+    // Known gap, named rather than fixed: no node in this file carries an
+    // '@id', so the thinner publisher Organizations elsewhere in the repo
+    // (/guide/, /blog/, /blog/[slug]) describe the same business with less
+    // detail and nothing ties them together. The in-repo nodes are NOT the
+    // whole set: each of the 85 /location/* pages also renders a DB-sourced
+    // LocalBusiness from location_pages.schema_markup — queried 2026-08-23,
+    // all 85 carry an address and none carries a contactPoint or an '@id' —
+    // so those pages ship THREE unlinked LENGOLF nodes each. An '@id' of
+    // `${SITE_URL}/#organization` referenced from the thin nodes is the fix
+    // that scales, and it has to reach the DB blobs too; adding NAP to each
+    // in-repo node is round one of a four-round pattern.
+    //
+    // Deliberately NO `description`: SITE_DESCRIPTION is English-only and
+    // this node renders on every ja/ko/zh/th page, so adding it would put an
+    // English blurb inside localized structured data — the defect class this
+    // repo keeps re-learning. Localizing it needs 4 translated strings with
+    // native QA, i.e. a translation batch, not a line here.
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,
+      legalName: BUSINESS_INFO.legalName,
       url: SITE_URL,
       logo: {
         '@type': 'ImageObject',
         url: storageUrl('branding/logo.png'),
       },
+      address: getPostalAddressJsonLd(),
+      contactPoint: getContactPointJsonLd(),
       sameAs: [SOCIAL_LINKS.facebook, SOCIAL_LINKS.instagram],
     },
   }

@@ -18,6 +18,7 @@ import { StarIcon } from '@/components/shared/StarRating'
 import JapanLandingPage from '@/components/home/JapanLandingPage'
 import KoreaLandingPage from '@/components/home/KoreaLandingPage'
 import ChinaLandingPage from '@/components/home/ChinaLandingPage'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 const BESPOKE_HOME_NAMESPACE: Record<string, string> = {
   ja: 'HomeJa',
@@ -39,10 +40,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       canonical: getCanonical(locale, '/'),
       languages: getAlternates('/'),
     },
-    openGraph: {
+    openGraph: siteOpenGraph({
       images: [{ url: storageUrl('venue/venue-simulator-01.jpg'), alt: 'LENGOLF indoor golf simulator in Bangkok' }],
       locale: OG_LOCALES[locale as Locale] ?? OG_LOCALES.en,
-    },
+    }),
   }
 }
 

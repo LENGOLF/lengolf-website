@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { getLocationBySlug, getAllLocationSlugs } from '@/lib/locations'
 import { SITE_URL } from '@/lib/constants'
 import LocationPageComponent from '@/components/location/LocationPage'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>
@@ -25,12 +26,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: page.h1_title,
     description: page.meta_description || undefined,
-    openGraph: {
+    openGraph: siteOpenGraph({
       title: page.h1_title,
       description: page.meta_description || undefined,
       url: `${SITE_URL}/location/${slug}/`,
       type: 'website',
-    },
+    }),
     alternates: {
       canonical: `${SITE_URL}/location/${slug}/`,
       // No Thai translation exists for location pages

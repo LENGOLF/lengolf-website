@@ -11,6 +11,7 @@ import { getSiteFacts } from '@/lib/site-facts'
 import { getAlternates, getCanonical, OG_LOCALES, type Locale } from '@/lib/translated-routes'
 import { getFoodMenuJsonLd, getFaqPageJsonLd, getBreadcrumbJsonLd } from '@/lib/jsonld'
 import { menuGroups, menuImages, type MenuSection } from '@/data/food-menu'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
@@ -22,10 +23,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       canonical: getCanonical(locale, '/menu/'),
       languages: getAlternates('/menu/'),
     },
-    openGraph: {
+    openGraph: siteOpenGraph({
       images: [{ url: storageUrl('menus/food-drinks-cover.jpg'), alt: 'Food and drinks at LENGOLF Bangkok' }],
       locale: OG_LOCALES[locale as Locale] ?? OG_LOCALES.en,
-    },
+    }),
   }
 }
 

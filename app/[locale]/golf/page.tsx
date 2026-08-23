@@ -15,6 +15,7 @@ import FaqSection from '@/components/shared/FaqSection'
 import ClickableImage from '@/components/shared/ClickableImage'
 import PricingTable from '@/components/shared/PricingTable'
 import CourseRentalCrossLink from '@/components/shared/CourseRentalCrossLink'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 const faqLinks: Record<string, { href: string; external?: boolean }> = {
   'booking.len.golf': { href: 'https://booking.len.golf/', external: true },
@@ -35,10 +36,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       canonical: getCanonical(locale, '/golf/'),
       languages: getAlternates('/golf/'),
     },
-    openGraph: {
+    openGraph: siteOpenGraph({
       images: [{ url: storageUrl('golf/driving-range.png'), alt: 'LENGOLF indoor golf simulator bay' }],
       locale: OG_LOCALES[locale as Locale] ?? OG_LOCALES.en,
-    },
+    }),
   }
 }
 

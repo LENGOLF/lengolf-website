@@ -13,6 +13,8 @@
     "validate:blog-slugs": "tsx scripts/sync-blog-translated-slugs.ts --check",
     "validate:i18n": "tsx scripts/validate-i18n.ts",
     "validate:club-specs": "tsx scripts/validate-club-specs.ts",
+    "validate:open-graph": "tsx scripts/validate-open-graph.ts",
+    "validate:open-graph:self-test": "tsx scripts/validate-open-graph.ts --self-test",
     "validate:i18n:self-test": "tsx scripts/validate-i18n.ts --self-test",
     "validate:course-slots": "tsx scripts/validate-course-slots.ts",
     "validate:course-slots:self-test": "tsx scripts/validate-course-slots.ts --self-test",

@@ -6,6 +6,7 @@ import { getAlternates, getCanonical } from '@/lib/translated-routes'
 import { getSeoFaqPageJsonLd } from '@/lib/jsonld'
 import FaqPageComponent from '@/components/faq/FaqPage'
 import type { FaqSeoPage } from '@/types/seo-pages'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>
@@ -35,12 +36,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: page.title,
     description: page.meta_description || undefined,
-    openGraph: {
+    openGraph: siteOpenGraph({
       title: page.title,
       description: page.meta_description || undefined,
       url: getCanonical(locale, `/faq/${slug}/`),
       type: 'website',
-    },
+    }),
     alternates: {
       canonical: getCanonical(locale, `/faq/${slug}/`),
       ...(Object.keys(languages).length > 1 ? { languages } : {}),

@@ -19,6 +19,7 @@ import RoundupList from '@/components/golf-courses/RoundupList'
 import CrossLinkBlock from '@/components/golf-courses/CrossLinkBlock'
 import RentalCtaBanner from '@/components/golf-courses/RentalCtaBanner'
 import { MapPin, Plane } from 'lucide-react'
+import { siteOpenGraph } from '@/lib/open-graph'
 
 interface Props {
   params: Promise<{ locale: string; station: string }>
@@ -57,7 +58,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       alternates: { canonical: canonicalUrl },
-      openGraph: { title, description, url: canonicalUrl, type: 'website' },
+      openGraph: siteOpenGraph({ title, description, url: canonicalUrl, type: 'website' }),
     }
   }
 
@@ -72,7 +73,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     alternates: { canonical: canonicalUrl },
-    openGraph: { title, description, url: canonicalUrl, type: 'website' },
+    openGraph: siteOpenGraph({ title, description, url: canonicalUrl, type: 'website' }),
   }
 }
 
