@@ -43,6 +43,20 @@
  * Smoke section D asserts the rendered artifact on 33 URLs. This runs with no
  * server and covers every declaration in app/.
  *
+ * SELF-TEST COVERAGE, stated honestly. A mutation pass (delete one rule, re-run
+ * --self-test) found eight rules that could be removed while every case stayed
+ * green, including two whose OWN named case passed for the wrong reason — with
+ * one side null the drift comparison fires, so the null-guard and the
+ * error-propagation were both dead weight. Those are now pinned by cases where
+ * drift cannot cover for them, plus `returned.length !== 1`, the message TEXT
+ * of three rules (a wrong diagnostic once went unnoticed for exactly this
+ * reason), the ternary descent, and the string-literal key arm. STILL
+ * uncovered by mutation, deliberately: `classify`'s helper-NAME identity check
+ * (the builder-call case is satisfied by the import check instead), `unwrap`'s
+ * `await` and `as` arms, and `main()` itself — its walk, pre-filter, layout
+ * exemption, inventory and exit code are exercised only by the real corpus.
+ * Do not read a green --self-test as proof those work.
+ *
  * Run: npx tsx scripts/validate-open-graph.ts [--self-test]
  */
 import ts from 'typescript'
@@ -81,8 +95,16 @@ export interface OgDefaults {
   siteName: string | null
 }
 
+/**
+ * ScriptKind follows the extension. It matters: in TSX, `<Foo>x` is JSX, not
+ * a type assertion, so forcing TSX would misparse an angle-bracket cast in
+ * one of the plain `.ts` files the walk covers (app/sitemap.ts, app/robots.ts,
+ * app/llms.txt/route.ts). Conversely an angle-bracket cast is ILLEGAL in .tsx,
+ * which is why every page file can only use `as` or `satisfies`.
+ */
 function parse(rel: string, src: string): ts.SourceFile {
-  return ts.createSourceFile(rel, src, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX)
+  const kind = rel.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS
+  return ts.createSourceFile(rel, src, ts.ScriptTarget.Latest, true, kind)
 }
 
 function lineOf(sf: ts.SourceFile, node: ts.Node): number {
@@ -96,12 +118,44 @@ function propName(p: ts.ObjectLiteralElementLike): string | null {
   return null
 }
 
-/** Direct (non-nested) property of an object literal, or null. */
+/**
+ * Direct (non-nested) property of an object literal, or null.
+ *
+ * Returns the LAST match, matching JS semantics — a duplicate key means the
+ * later one wins at runtime, and taking the first was the same "first match
+ * wins" shape that produced a silent wrong read in an earlier version of the
+ * helper-default extractor. `{ present: true }` is returned for a shorthand
+ * (`{ icon }`), because the field IS supplied even though there is no
+ * initializer to inspect.
+ */
 function directProp(obj: ts.ObjectLiteralExpression, name: string): ts.Expression | null {
+  let found: ts.Expression | null = null
   for (const p of obj.properties) {
-    if (ts.isPropertyAssignment(p) && propName(p) === name) return p.initializer
+    if (ts.isPropertyAssignment(p) && propName(p) === name) found = p.initializer
+    else if (ts.isShorthandPropertyAssignment(p) && p.name.text === name) found = p.name
   }
-  return null
+  return found
+}
+
+/** True if the literal contains a `...spread`, so absent keys cannot be proven absent. */
+function hasSpread(obj: ts.ObjectLiteralExpression): boolean {
+  return obj.properties.some((p) => ts.isSpreadAssignment(p))
+}
+
+/**
+ * True if the expression can actually carry a rendered value. Rejects the
+ * literals that look present and emit nothing: `undefined`, `null`, and a
+ * blank or whitespace-only string. An identifier or property access is
+ * accepted — a static reader cannot resolve it, and refusing them would fail
+ * the real layout, which writes `siteName: SITE_NAME`.
+ */
+function isMeaningfulValue(e: ts.Expression): boolean {
+  const n = unwrap(e)
+  if (n.kind === ts.SyntaxKind.NullKeyword) return false
+  if (ts.isIdentifier(n) && n.text === 'undefined') return false
+  if (ts.isStringLiteralLike(n)) return n.text.trim().length > 0
+  if (ts.isNumericLiteral(n)) return false
+  return true
 }
 
 /**
@@ -117,13 +171,30 @@ function normalise(e: ts.Expression): string {
   return `expr:${node.getText().trim()}`
 }
 
-/** Unwrap parens / `as X` / `await` to the expression that matters. */
+/**
+ * Unwrap the wrappers that do not change the value: parens, `as X`,
+ * `satisfies X`, an angle-bracket cast, a non-null `!`, and `await`.
+ *
+ * `satisfies` matters most: it is the idiomatic Next spelling
+ * (`export const metadata = {...} satisfies Metadata`), and omitting it made
+ * the gate report "generateMetadata returns a non-literal expression" on a
+ * file with no generateMetadata in it — a hard CI failure on correct code,
+ * with a diagnostic pointing at the wrong construct. `as Metadata`, the
+ * identical intent, passed. Keep this list ahead of the AST, not behind it.
+ */
 function unwrap(e: ts.Expression): ts.Expression {
   let node: ts.Expression = e
   for (;;) {
-    if (ts.isParenthesizedExpression(node) || ts.isAsExpression(node)) node = node.expression
-    else if (ts.isAwaitExpression(node)) node = node.expression
-    else return node
+    if (
+      ts.isParenthesizedExpression(node) ||
+      ts.isAsExpression(node) ||
+      ts.isSatisfiesExpression(node) ||
+      ts.isTypeAssertionExpression(node) ||
+      ts.isNonNullExpression(node) ||
+      ts.isAwaitExpression(node)
+    ) {
+      node = node.expression
+    } else return node
   }
 }
 
@@ -164,8 +235,39 @@ function metadataRoots(sf: ts.SourceFile): {
     } else opaque.push(n)
   }
 
+  // `export { gm as generateMetadata }` means the local `gm` IS the metadata
+  // factory. Collect those aliases first so the walk below recognises it.
+  const factoryNames = new Set<string>(['generateMetadata'])
+  for (const st of sf.statements) {
+    if (ts.isExportDeclaration(st) && st.exportClause && ts.isNamedExports(st.exportClause)) {
+      for (const el of st.exportClause.elements) {
+        if (el.name.text === 'generateMetadata' && el.propertyName) {
+          factoryNames.add(el.propertyName.text)
+        }
+      }
+    }
+  }
+
+  /** The function bodies reachable from an initializer, including through a
+   * wrapper call like `cache(async () => ({...}))`. */
+  const bodiesOf = (init: ts.Expression): ts.Node[] => {
+    const e = unwrap(init)
+    if (ts.isArrowFunction(e) || ts.isFunctionExpression(e)) return [e.body]
+    if (ts.isCallExpression(e)) {
+      return e.arguments.flatMap((a) => {
+        const arg = unwrap(a)
+        return ts.isArrowFunction(arg) || ts.isFunctionExpression(arg) ? [arg.body] : []
+      })
+    }
+    return []
+  }
+
   const visit = (node: ts.Node): void => {
-    if (ts.isVariableStatement(node)) {
+    // Module scope only. Any `const metadata` anywhere used to be treated as
+    // page metadata, so a local `const metadata = { twitter: 'handle' }` in a
+    // component body failed the gate. Scope, not export-ness, is the right
+    // discriminator: `export { metadata }` declares the const separately.
+    if (ts.isVariableStatement(node) && node.parent && ts.isSourceFile(node.parent)) {
       for (const d of node.declarationList.declarations) {
         if (ts.isIdentifier(d.name) && d.name.text === 'metadata' && d.initializer) {
           collect(d.initializer)
@@ -173,23 +275,31 @@ function metadataRoots(sf: ts.SourceFile): {
       }
     }
     const isGenerateMetadata =
-      (ts.isFunctionDeclaration(node) && node.name?.text === 'generateMetadata') ||
+      (ts.isFunctionDeclaration(node) && node.name && factoryNames.has(node.name.text)) ||
       (ts.isVariableDeclaration(node) &&
         ts.isIdentifier(node.name) &&
-        node.name.text === 'generateMetadata')
+        factoryNames.has(node.name.text))
     if (isGenerateMetadata) {
-      const body = ts.isFunctionDeclaration(node)
+      // A function EXPRESSION was previously invisible here, while
+      // extractHelperDefaults in this same file handled both forms — an
+      // internal inconsistency that made a whole metadata factory unaudited.
+      const bodies = ts.isFunctionDeclaration(node)
         ? node.body
-        : node.initializer && ts.isArrowFunction(node.initializer)
-          ? node.initializer.body
-          : undefined
-      if (body) {
+          ? [node.body]
+          : []
+        : (node as ts.VariableDeclaration).initializer
+          ? bodiesOf((node as ts.VariableDeclaration).initializer!)
+          : []
+      for (const body of bodies) {
         if (!ts.isBlock(body)) collect(body as ts.Expression)
         else {
           const scan = (n: ts.Node): void => {
             // Do not descend into nested functions: their returns are not
-            // generateMetadata's return.
-            if (ts.isFunctionLike(n) && n !== body.parent) return
+            // generateMetadata's return. (`scan` is seeded with forEachChild
+            // on the body, so the body itself is never passed in here — an
+            // earlier `&& n !== body.parent` clause was dead code that
+            // invited a reader to "repair" it.)
+            if (ts.isFunctionLike(n)) return
             if (ts.isReturnStatement(n) && n.expression) collect(n.expression)
             ts.forEachChild(n, scan)
           }
@@ -224,9 +334,16 @@ export function auditSource(rel: string, src: string): FileAudit {
   // so the false positives the old substring scan had are gone by
   // construction. Not root-scoped, because an `openGraph:` key outside
   // metadata would itself be worth reporting.
-  const ogNodes: ts.PropertyAssignment[] = []
+  // A SHORTHAND (`{ openGraph }`) counts too. It was previously invisible:
+  // zero declarations, zero problems, and because it was not counted the
+  // exact-count guard stayed green — a free bypass of the primary rule, in
+  // the very shape whose longhand sibling (`openGraph: og`) IS rejected.
+  const ogNodes: (ts.PropertyAssignment | ts.ShorthandPropertyAssignment)[] = []
   const findOg = (node: ts.Node): void => {
     if (ts.isPropertyAssignment(node) && propName(node) === 'openGraph') ogNodes.push(node)
+    else if (ts.isShorthandPropertyAssignment(node) && node.name.text === 'openGraph') {
+      ogNodes.push(node)
+    }
     ts.forEachChild(node, findOg)
   }
   findOg(sf)
@@ -234,7 +351,11 @@ export function auditSource(rel: string, src: string): FileAudit {
   for (const node of ogNodes) {
     declarations++
     const line = lineOf(sf, node)
-    const form = classify(node.initializer)
+    // A shorthand hands over whatever the identifier holds, which this gate
+    // cannot follow — classified as 'other' so it is rejected, not skipped.
+    const form: ValueForm = ts.isShorthandPropertyAssignment(node)
+      ? 'other'
+      : classify(node.initializer)
 
     if (isLayout) {
       if (form !== 'object') {
@@ -245,7 +366,10 @@ export function auditSource(rel: string, src: string): FileAudit {
         })
         continue
       }
-      const obj = unwrap(node.initializer) as ts.ObjectLiteralExpression
+      // form === 'object' implies a PropertyAssignment, so the narrow is safe.
+      const obj = unwrap(
+        (node as ts.PropertyAssignment).initializer
+      ) as ts.ObjectLiteralExpression
       layoutOpenGraphSeen = true
       const typeExpr = directProp(obj, 'type')
       const siteNameExpr = directProp(obj, 'siteName')
@@ -258,7 +382,11 @@ export function auditSource(rel: string, src: string): FileAudit {
           message: "root layout openGraph must set type: 'website' as a direct property",
         })
       }
-      if (!siteNameExpr || normalise(siteNameExpr) === 'str:') {
+      // Reject the values that LOOK present and emit nothing. Testing only
+      // for an empty string literal let `siteName: undefined`, `null`, `0`
+      // and `'   '` all pass — and `siteName: undefined` emits no
+      // og:site_name at all, which is the precise defect this gate exists for.
+      if (!siteNameExpr || !isMeaningfulValue(siteNameExpr)) {
         problems.push({
           file: rel,
           line,
@@ -297,10 +425,17 @@ export function auditSource(rel: string, src: string): FileAudit {
       if (
         ts.isImportDeclaration(st) &&
         ts.isStringLiteralLike(st.moduleSpecifier) &&
-        st.moduleSpecifier.text === HELPER_MODULE &&
+        // Accept the alias or an equivalent relative path — rejecting
+        // `../../lib/open-graph` was a false failure on a legitimate style.
+        (st.moduleSpecifier.text === HELPER_MODULE ||
+          st.moduleSpecifier.text.replace(/^[./]+/, '') === HELPER_MODULE.replace(/^@\//, '')) &&
         st.importClause?.namedBindings &&
         ts.isNamedImports(st.importClause.namedBindings) &&
-        st.importClause.namedBindings.elements.some((el) => el.name.text === HELPER_NAME)
+        // The EXPORTED name is what matters. Reading only the local name let
+        // `import { notTheHelper as siteOpenGraph }` satisfy the check.
+        st.importClause.namedBindings.elements.some(
+          (el) => (el.propertyName ?? el.name).text === HELPER_NAME
+        )
       ) {
         imported = true
       }
@@ -326,19 +461,22 @@ export function auditSource(rel: string, src: string): FileAudit {
       if (!init) continue
       const line = lineOf(sf, init)
       const obj = unwrap(init)
-      if (!ts.isObjectLiteralExpression(obj)) {
-        problems.push({
-          file: rel,
-          line,
-          message: `metadata ${key} must be a literal object so this gate can verify it restates \`${required}\``,
-        })
-        continue
-      }
+      // A non-object value is LEGAL Metadata and supplies the field on its
+      // own: `icons: '/images/favicon.png'` and `icons: [{ url }]` both set
+      // the icon, and demanding an object literal there was a hard CI failure
+      // on correct code. Nothing is dropped, so nothing to check.
+      if (!ts.isObjectLiteralExpression(obj)) continue
+      // A spread may supply the field from another module, so its absence
+      // cannot be proven. Skipping is the honest answer; erroring here was a
+      // false failure on `twitter: { ...BASE_TWITTER, title }`.
+      if (hasSpread(obj)) continue
       const field = directProp(obj, required)
       // The layout is the SUPPLIER: it must provide the field. A page is the
       // CONSUMER: it must restate it. Enforcing only the page half left the
       // premise unguarded — the layout could drop `card` with the gate green.
-      if (!field) {
+      // `card: undefined` counts as absent for the same reason it does on the
+      // layout's siteName: it looks present and emits nothing.
+      if (!field || !isMeaningfulValue(field)) {
         problems.push({
           file: rel,
           line,
@@ -559,6 +697,57 @@ function selfTest(): void {
     // --- structural bypass ---
     { name: 'generateMetadata returning a builder call is REPORTED', rel: P, src: 'export function generateMetadata() {\n  return pageMetadata("golf")\n}\n', problems: true, declarations: 0 },
     { name: 'generateMetadata returning an object literal is fine', rel: P, src: IMPORT + `export function generateMetadata() {\n  return { openGraph: ${HELPER_NAME}({ images: [1] }) }\n}\n`, problems: false, declarations: 1 },
+
+    // --- AST surface a prior version did not enumerate ---
+    { name: 'satisfies Metadata is NOT a false failure', rel: P, src: IMPORT + meta(`{ openGraph: ${HELPER_NAME}({ images: [1] }), twitter: { card: 'x' } } satisfies Metadata`), problems: false, declarations: 1 },
+    // Angle-bracket casts are illegal in .tsx (there `<Foo>` is JSX), so this
+    // case uses a plain .ts path — which is also what proves parse() picks
+    // ScriptKind by extension rather than forcing TSX everywhere.
+    { name: 'an angle-bracket cast in a .ts file is NOT a false failure', rel: 'app/sitemap.ts', src: IMPORT + meta(`<Metadata>{ openGraph: ${HELPER_NAME}({ images: [1] }) }`), problems: false, declarations: 1 },
+    { name: 'icons as a STRING is legal metadata, not a failure', rel: P, src: meta("{ icons: '/images/favicon.png' }"), problems: false, declarations: 0 },
+    { name: 'icons as an ARRAY is legal metadata, not a failure', rel: P, src: meta("{ icons: [{ url: '/a.png' }] }"), problems: false, declarations: 0 },
+    { name: 'twitter with a SPREAD cannot be disproven, so passes', rel: P, src: meta("{ twitter: { ...BASE, title: 'x' } }"), problems: false, declarations: 0 },
+    { name: 'icons shorthand { icon } satisfies the field', rel: P, src: meta('{ icons: { icon } }'), problems: false, declarations: 0 },
+    { name: 'twitter card: undefined does NOT satisfy the field', rel: P, src: meta('{ twitter: { card: undefined } }'), problems: true, declarations: 0 },
+    { name: 'SHORTHAND openGraph is counted AND rejected', rel: P, src: 'const openGraph = { images: [1] }\n' + meta("{ title: 'x', openGraph }"), problems: true, declarations: 1 },
+    { name: 'generateMetadata as a function EXPRESSION is audited', rel: P, src: "export const generateMetadata = async function () {\n  return { twitter: { title: 'x' } }\n}\n", problems: true, declarations: 0 },
+    { name: 'generateMetadata behind a wrapper call is audited', rel: P, src: "export const generateMetadata = cache(async () => ({ twitter: { title: 'x' } }))\n", problems: true, declarations: 0 },
+    { name: 'generateMetadata via an aliased export is audited', rel: P, src: "async function gm() {\n  return { twitter: { title: 'x' } }\n}\nexport { gm as generateMetadata }\n", problems: true, declarations: 0 },
+    { name: 'a LOCAL const metadata is not a metadata root', rel: P, src: "function Component() {\n  const metadata = { twitter: 'handle' }\n  return metadata\n}\n", problems: false, declarations: 0 },
+    { name: 'layout siteName: undefined is a violation', rel: LAYOUT, src: meta("{ openGraph: { type: 'website', siteName: undefined } }"), problems: true, declarations: 1 },
+    { name: 'layout siteName: whitespace is a violation', rel: LAYOUT, src: meta("{ openGraph: { type: 'website', siteName: '   ' } }"), problems: true, declarations: 1 },
+    { name: 'a DUPLICATE key takes the LAST value, as JS does', rel: LAYOUT, src: meta("{ openGraph: { type: 'website', siteName: SITE_NAME, siteName: undefined } }"), problems: true, declarations: 1 },
+    { name: 'an ALIASED import of another symbol does not satisfy', rel: P, src: `import { notTheHelper as ${HELPER_NAME} } from '${HELPER_MODULE}'\n` + meta(`{ openGraph: ${HELPER_NAME}({ images: [1] }) }`), problems: true, declarations: 1 },
+    { name: 'a RELATIVE import of the helper is accepted', rel: P, src: `import { ${HELPER_NAME} } from '../../lib/open-graph'\n` + meta(`{ openGraph: ${HELPER_NAME}({ images: [1] }) }`), problems: false, declarations: 1 },
+    // Pins two arms nothing else exercised: the ternary descent in
+    // metadataRoots (only ONE branch is missing `card`), and propName's
+    // string-literal key arm.
+    { name: 'a ternary metadata descends into BOTH branches', rel: P, src: meta("cond ? { twitter: { card: 'x' } } : { twitter: { title: 'y' } }"), problems: true, declarations: 0 },
+    { name: 'a STRING-literal openGraph key is counted', rel: P, src: meta("{ 'openGraph': { images: [1] } }"), problems: true, declarations: 1 },
+  ]
+
+  // Message text matters: a prior version reported "generateMetadata returns
+  // a non-literal" on a file with no generateMetadata, and no case noticed
+  // because none asserted the wording.
+  const messageCases: { name: string; rel: string; src: string; expect: string }[] = [
+    {
+      name: 'layout twitter names the LAYOUT, not the page',
+      rel: LAYOUT,
+      src: meta("{ openGraph: { type: 'website', siteName: SITE_NAME }, twitter: { title: 'x' } }"),
+      expect: 'root layout twitter must set',
+    },
+    {
+      name: 'page twitter names the PAGE, not the layout',
+      rel: P,
+      src: meta("{ twitter: { title: 'x' } }"),
+      expect: 'page-level twitter REPLACES',
+    },
+    {
+      name: 'a bare page object names the helper',
+      rel: P,
+      src: meta('{ openGraph: { images: [1] } }'),
+      expect: `wrapped in ${HELPER_NAME}(`,
+    },
   ]
 
   let failures = 0
@@ -578,6 +767,18 @@ function selfTest(): void {
       continue
     }
     console.log(`  ok   ${c.name}`)
+  }
+
+  for (const c of messageCases) {
+    const r = auditSource(c.rel, c.src)
+    const hit = r.problems.some((p) => p.message.includes(c.expect))
+    if (!hit) {
+      console.error(
+        `  FAIL [message] ${c.name}: no problem containing "${c.expect}"` +
+          (r.problems.length ? ` (got "${r.problems[0].message.slice(0, 70)}")` : ' (no problems)')
+      )
+      failures++
+    } else console.log(`  ok   [message] ${c.name}`)
   }
 
   // --- helper-default extraction ---
@@ -603,6 +804,19 @@ function selfTest(): void {
       name: 'two helper declarations is an error',
       src: `export function ${HELPER_NAME}(a) { return { type: a ?? 'website' } }\nexport function ${HELPER_NAME}(b) { return { type: b ?? 'website' } }\n`,
       want: { type: null, siteName: null, error: `expected exactly one ${HELPER_NAME} declaration in ${HELPER_FILE}, found 2` },
+    },
+    // These two pin `returned.length !== 1`, which nothing exercised. Both
+    // shapes are legitimate code, and without the guard `returned[0]` is
+    // undefined and directProp throws.
+    {
+      name: 'returning via an intermediate const is a loud error',
+      src: `export function ${HELPER_NAME}(og) {\n  const out = { ...og, type: 'website' }\n  return out\n}\n`,
+      want: { type: null, siteName: null, error: `expected ${HELPER_NAME} to return exactly one object literal, found 0` },
+    },
+    {
+      name: 'an early-return guard is a loud error',
+      src: `export function ${HELPER_NAME}(og) {\n  if (!og) return { type: 'website' }\n  return { ...og, type: og.type ?? 'website' }\n}\n`,
+      want: { type: null, siteName: null, error: `expected ${HELPER_NAME} to return exactly one object literal, found 2` },
     },
   ]
   for (const c of helperCases) {
@@ -632,6 +846,13 @@ function selfTest(): void {
     { name: 'quote-style difference is NOT drift', input: { ...base, layoutDefaults: { type: 'str:website', siteName: 'str:LENGOLF' }, helperDefaults: { type: 'str:website', siteName: 'str:LENGOLF', error: null } }, errors: false },
     { name: 'an unreadable default is an error, not a pass', input: { ...base, layoutDefaults: agreed, helperDefaults: { type: null, siteName: 'expr:SITE_NAME', error: null } }, errors: true },
     { name: 'a helper extraction error is an error', input: { ...base, layoutDefaults: agreed, helperDefaults: { type: null, siteName: null, error: 'boom' } }, errors: true },
+    // The two above passed for the WRONG REASON: with one side null the DRIFT
+    // comparison fires (null !== 'str:website'), so deleting the null-guard
+    // and the error-propagation left them green. These pin each rule where
+    // drift cannot cover for it — null on BOTH sides compares equal, and an
+    // error alongside agreeing defaults leaves drift silent.
+    { name: 'null on BOTH sides is still an error (drift cannot fire)', input: { ...base, layoutDefaults: { type: null, siteName: null }, helperDefaults: { type: null, siteName: null, error: null } }, errors: true },
+    { name: 'an extraction error with AGREEING defaults is still an error', input: { ...base, layoutDefaults: agreed, helperDefaults: { ...agreed, error: 'boom' } }, errors: true },
   ]
   for (const c of aggregates) {
     const got = auditAggregate(c.input).length > 0
@@ -641,7 +862,7 @@ function selfTest(): void {
     } else console.log(`  ok   [aggregate] ${c.name}`)
   }
 
-  const total = cases.length + helperCases.length + aggregates.length
+  const total = cases.length + messageCases.length + helperCases.length + aggregates.length
   if (failures > 0) {
     console.error(`\nself-test FAILED: ${failures} of ${total} case(s)`)
     process.exit(1)
