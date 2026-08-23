@@ -92,12 +92,20 @@ const nextConfig = {
     }))
 
     // Fix for GSC 404 errors: redirect root-level location pages to /location/ prefix
-    // NOTE: the no-slash variants below are DEAD. With trailingSlash: true,
-    // Next normalises /x to /x/ BEFORE consulting this table, so only the
-    // trailing-slash `source` ever matches and the request still costs two
-    // hops. Measured on a live server for both the course re-region and the
-    // retired /compare/ redirects. They are harmless but double the surface
-    // an editor must keep in sync, and a typo in the dead half is
+    // NOTE: the no-slash variants below are REDUNDANT — but not for the reason
+    // this note gave until 2026-08-23, and the difference matters. TRUE: with
+    // trailingSlash: true a no-slash REQUEST is normalised to /x/ before this
+    // table is consulted, so a slash-less inbound link costs two hops.
+    // WRONG, as this note used to say: "only the trailing-slash `source` ever
+    // matches". Next normalises the source PATTERN too, so /tournaments/
+    // matches the no-slash source /tournaments in ONE hop (measured on prod,
+    // likewise /bangkok-golf-centre-vs-lengolf/). The two spellings are the
+    // SAME rule, so listing both is redundant — NOT one of them being dead.
+    // Do not read this as licence to delete no-slash sources: blogRedirects,
+    // pageTypeRedirects, locationAreaRedirects and /tournaments are no-slash
+    // ONLY, and deleting theirs removes the rule entirely.
+    // The pairs below are harmless but double the surface
+    // an editor must keep in sync, and a typo in the redundant half is
     // undetectable — do not add more pairs on the belief that they help.
     // Outcome is asserted by redirectChainTests in scripts/smoke-test.ts,
     // which follows the no-slash form to its final landing path.
@@ -161,7 +169,8 @@ const nextConfig = {
     // sibling note on rootLocationRedirects is half right and the wrong half
     // is dangerous. Right: with trailingSlash: true a no-slash REQUEST is
     // normalised to the slash form before this table is consulted, which is
-    // why /about costs two hops (measured). Wrong: "only the trailing-slash
+    // why /about costs two hops (measured locally — the second hop is not on
+    // prod until this ships, so only the normalisation hop is observable there). Wrong: "only the trailing-slash
     // source ever matches" — Next normalises the source PATTERN too, so
     // /tournaments/ matches the no-slash source /tournaments in ONE hop
     // (measured on prod, likewise /bangkok-golf-centre-vs-lengolf/). The two

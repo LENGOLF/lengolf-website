@@ -3158,6 +3158,16 @@ const seoTests: SeoTest[] = [
   // routes that emit og:type="article", so without one of them the
   // allowlist's article arm is never exercised by any real page.
   { path: "/blog/golf-simulator-in-bangkok/", locale: "en" },
+  // A /location/ page, and it is load-bearing rather than decorative: it is
+  // the ONLY route that renders a third business node (the DB-sourced
+  // LocalBusiness from location_pages.schema_markup) alongside the layout's
+  // two. Without it, the telephone cross-check below iterates a set that has
+  // exactly one telephone-bearing node on every URL in this list, so widening
+  // it from .find() to a loop asserts nothing new. Measured on production,
+  // all 85 /location/ pages currently serve "096-668-2335" and
+  // "+66966682335" on the same page; this entry is what makes the suite see
+  // that class of disagreement.
+  { path: "/location/golf-near-sathorn/", locale: "en" },
 ];
 
 /**
@@ -3167,7 +3177,7 @@ const seoTests: SeoTest[] = [
  * floor with a real number, not `> 0`" for exactly this; sections L2, L3, L4,
  * L6, O and P all carry one and this section did not.
  */
-const MIN_SEO_URLS = 33;
+const MIN_SEO_URLS = 34;
 
 // E) Thai redirect tests (untranslated Thai routes → 301 to English)
 interface ThaiRedirectTest {
@@ -3653,10 +3663,20 @@ async function runSeoTests() {
       // down. That matters because the strip is a text split, and an unclosed
       // or self-closing <script> makes it discard everything after — and the
       // og tags are always downstream of the first <script> in real markup, so
-      // a mis-strip is a FALSE FAILURE, not a false pass. Unreachable today
-      // (React escapes `<` in text and attributes; the only
-      // dangerouslySetInnerHTML sites are JSON.stringify'd JSON-LD and
-      // DOMPurify-sanitised post content) but cheap to bound.
+      // a mis-strip is a FALSE FAILURE, not a false pass.
+      //
+      // Unreachable today, but be precise about why: React escapes `<` in
+      // text and attributes, and of the 86 dangerouslySetInnerHTML sites in
+      // tracked source, 85 are JSON.stringify'd JSON-LD or DOMPurify-sanitised
+      // post content. The 86th is the GTM bootstrap in app/[locale]/layout.tsx
+      // — the ONLY such site inside <head>, i.e. the region this now bounds to
+      // — and it is safe because its __html contains 'script' but never
+      // `<script`, and strategy="lazyOnload" keeps it out of the SSR'd head.
+      // Note also that JSON.stringify does NOT escape `<`, and
+      // location/[slug]/page.tsx stringifies arbitrary DB JSON into a script;
+      // that path is <body>-only, which is exactly what bounding removes.
+      // Bounding to <head> shrinks the risk surface; it does not eliminate the
+      // class, since 16 head scripts still precede the og tags.
       const headEnd = body.indexOf("</head>");
       const visible = (headEnd === -1 ? body : body.slice(0, headEnd))
         .split("<script")
@@ -3702,7 +3722,13 @@ async function runSeoTests() {
           }
         })
         .filter((node) => node !== null);
-      const websiteLd = ldNodes.find((node) => node["@type"] === "WebSite");
+      // Membership, not equality — `@type` may be an array, and applying that
+      // to only one of the two lookups in this block was an inconsistency.
+      const hasType = (node: Record<string, unknown>, t: string): boolean => {
+        const v = node["@type"];
+        return Array.isArray(v) ? v.includes(t) : v === t;
+      };
+      const websiteLd = ldNodes.find((node) => hasType(node, "WebSite"));
       if (!websiteLd) {
         issues.push("no parseable WebSite JSON-LD node");
       } else {
@@ -3747,12 +3773,8 @@ async function runSeoTests() {
           // LocalBusiness from location_pages.schema_markup — which a
           // first-match check would never compare. Nodes with no telephone
           // are skipped rather than failed, because the rating node legitimately
-          // omits it. `@type` may be an array (lib/jsonld.ts already writes
-          // one), so membership is tested rather than equality.
-          const hasType = (node: Record<string, unknown>, t: string): boolean => {
-            const v = node["@type"];
-            return Array.isArray(v) ? v.includes(t) : v === t;
-          };
+          // omits it. `@type` may be an array (lib/jsonld.ts:1192 writes one,
+          // though nested under `provider` and so not reached from here).
           const businessNodes = ldNodes.filter(
             (node) =>
               (hasType(node, "EntertainmentBusiness") || hasType(node, "LocalBusiness")) &&

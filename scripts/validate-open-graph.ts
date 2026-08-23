@@ -316,6 +316,15 @@ function metadataRoots(sf: ts.SourceFile): {
 export interface FileAudit {
   declarations: number
   layoutOpenGraphSeen: boolean
+  /**
+   * Which SIBLING_KEYS the layout actually declares. Tracked for the same
+   * reason as layoutOpenGraphSeen: a per-file pass cannot see an ABSENT key.
+   * Enforcing only "the layout's twitter must contain card" left the key
+   * itself droppable with the gate green — and since no page declares
+   * twitter, deleting the layout's would leave the whole site with no
+   * og twitter:card and nothing red anywhere.
+   */
+  layoutSiblingsSeen: string[]
   layoutDefaults: OgDefaults | null
   problems: Problem[]
 }
@@ -325,6 +334,7 @@ export function auditSource(rel: string, src: string): FileAudit {
   const sf = parse(rel, src)
   const isLayout = rel === LAYOUT
   let layoutOpenGraphSeen = false
+  const layoutSiblingsSeen = new Set<string>()
   let layoutDefaults: OgDefaults | null = null
   let declarations = 0
   let usesHelper = false
@@ -459,6 +469,7 @@ export function auditSource(rel: string, src: string): FileAudit {
     for (const [key, required] of Object.entries(SIBLING_KEYS)) {
       const init = directProp(root, key)
       if (!init) continue
+      if (isLayout) layoutSiblingsSeen.add(key)
       const line = lineOf(sf, init)
       const obj = unwrap(init)
       // A non-object value is LEGAL Metadata and supplies the field on its
@@ -499,7 +510,13 @@ export function auditSource(rel: string, src: string): FileAudit {
     })
   }
 
-  return { declarations, layoutOpenGraphSeen, layoutDefaults, problems }
+  return {
+    declarations,
+    layoutOpenGraphSeen,
+    layoutSiblingsSeen: [...layoutSiblingsSeen],
+    layoutDefaults,
+    problems,
+  }
 }
 
 /**
@@ -580,6 +597,7 @@ export function extractHelperDefaults(src: string): OgDefaults & { error: string
 export function auditAggregate(totals: {
   declarations: number
   layoutOpenGraphSeen: boolean
+  layoutSiblingsSeen?: string[]
   layoutDefaults?: OgDefaults | null
   helperDefaults?: (OgDefaults & { error?: string | null }) | null
   inventory?: Record<string, number>
@@ -605,6 +623,23 @@ export function auditAggregate(totals: {
             `${HELPER_FILE} says ${help[key]}. Pages that declare openGraph take the ` +
             `helper's value and the pages that omit it take the layout's, so the site ` +
             `would emit both.`
+        )
+      }
+    }
+  }
+
+  // Same shape as the openGraph rule below: a KEY going missing is invisible
+  // to a per-file scan, and the page-level "must restate the field" rule is
+  // premised on the layout supplying it. Enforcing only the field left the
+  // layout free to delete the whole object with the gate green — and since no
+  // page declares twitter today, that would remove twitter:card site-wide.
+  if (totals.layoutSiblingsSeen) {
+    for (const key of Object.keys(SIBLING_KEYS)) {
+      if (!totals.layoutSiblingsSeen.includes(key)) {
+        errors.push(
+          `${LAYOUT} declares no ${key} object. Every page inherits it, and the page-level ` +
+            `rule requiring ${SIBLING_KEYS[key]} to be restated assumes the layout supplies ` +
+            `it — so dropping the key silently removes it site-wide.`
         )
       }
     }
@@ -833,7 +868,11 @@ function selfTest(): void {
 
   // --- corpus-level rules ---
   const agreed: OgDefaults = { type: 'str:website', siteName: 'expr:SITE_NAME' }
-  const base = { declarations: EXPECTED_DECLARATIONS, layoutOpenGraphSeen: true }
+  const base = {
+    declarations: EXPECTED_DECLARATIONS,
+    layoutOpenGraphSeen: true,
+    layoutSiblingsSeen: Object.keys(SIBLING_KEYS),
+  }
   const aggregates: { name: string; input: Parameters<typeof auditAggregate>[0]; errors: boolean }[] = [
     { name: 'healthy corpus passes', input: { ...base }, errors: false },
     { name: 'layout openGraph absent is an error', input: { ...base, layoutOpenGraphSeen: false }, errors: true },
@@ -853,6 +892,9 @@ function selfTest(): void {
     // error alongside agreeing defaults leaves drift silent.
     { name: 'null on BOTH sides is still an error (drift cannot fire)', input: { ...base, layoutDefaults: { type: null, siteName: null }, helperDefaults: { type: null, siteName: null, error: null } }, errors: true },
     { name: 'an extraction error with AGREEING defaults is still an error', input: { ...base, layoutDefaults: agreed, helperDefaults: { ...agreed, error: 'boom' } }, errors: true },
+    { name: 'layout dropping the twitter KEY is an error', input: { ...base, layoutSiblingsSeen: ['icons'] }, errors: true },
+    { name: 'layout dropping the icons KEY is an error', input: { ...base, layoutSiblingsSeen: ['twitter'] }, errors: true },
+    { name: 'layout declaring both sibling keys passes', input: { ...base }, errors: false },
   ]
   for (const c of aggregates) {
     const got = auditAggregate(c.input).length > 0
@@ -881,6 +923,7 @@ function main(): void {
   const inventory: Record<string, number> = {}
   let declarations = 0
   let layoutOpenGraphSeen = false
+  let layoutSiblingsSeen: string[] = []
   let layoutDefaults: OgDefaults | null = null
   const helperDefaults = extractHelperDefaults(readFileSync(HELPER_FILE, 'utf8'))
 
@@ -901,6 +944,7 @@ function main(): void {
     const res = auditSource(rel, src)
     if (res.declarations > 0) inventory[rel] = res.declarations
     if (res.layoutOpenGraphSeen) layoutOpenGraphSeen = true
+    if (rel === LAYOUT) layoutSiblingsSeen = res.layoutSiblingsSeen
     if (res.layoutDefaults) layoutDefaults = res.layoutDefaults
     declarations += res.declarations
     problems.push(...res.problems)
@@ -910,6 +954,7 @@ function main(): void {
   const aggregateErrors = auditAggregate({
     declarations,
     layoutOpenGraphSeen,
+    layoutSiblingsSeen,
     layoutDefaults,
     helperDefaults,
     inventory,
