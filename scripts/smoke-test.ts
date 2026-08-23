@@ -2698,7 +2698,50 @@ const routeTests: RouteTest[] = [
   {
     path: "/golf-courses/compare/bangkok/alpine-golf-club-vs-royal-gems-golf-sports-club/",
     expectedStatus: [200],
-    contentMarker: '<main id="main-content">',
+    contentMarker: 'Golf Course Comparison',
+  },
+  // The four /compare/ pages the khao-yai/kanchanaburi top-3 reshuffle above
+  // actually FORMED (as opposed to the four it retired, which are covered by
+  // the redirect tests): Toscana Valley and Nichigo entering their region's
+  // top 3 doesn't just retire two pairs each, it creates two new ones each
+  // (new course vs each of the two courses it didn't displace). pr-rigor
+  // review flagged that nothing asserted these actually render — dynamicParams
+  // = false means a static-params miscalculation 404s them with CI otherwise
+  // green.
+  {
+    path: "/golf-courses/compare/khao-yai/khao-yai-golf-club-vs-toscana-valley-country-club/",
+    expectedStatus: [200],
+    contentMarker: 'Golf Course Comparison',
+  },
+  {
+    path: "/golf-courses/compare/khao-yai/life-privilege-country-club-vs-toscana-valley-country-club/",
+    expectedStatus: [200],
+    contentMarker: 'Golf Course Comparison',
+  },
+  {
+    path: "/golf-courses/compare/kanchanaburi/dragon-hills-golf-country-club-vs-nichigo-resort-country-club/",
+    expectedStatus: [200],
+    contentMarker: 'Golf Course Comparison',
+  },
+  {
+    path: "/golf-courses/compare/kanchanaburi/grand-prix-golf-club-vs-nichigo-resort-country-club/",
+    expectedStatus: [200],
+    contentMarker: 'Golf Course Comparison',
+  },
+  // The remaining two pairs in these regions — the ones the reshuffle left
+  // untouched, so not "formed by" it, but the only two of the six with no 200
+  // assertion. Every top-3 MEMBER is already covered by the four above, so a
+  // membership change fails something either way; these close the narrower gap
+  // of a render throw specific to one course combination.
+  {
+    path: "/golf-courses/compare/khao-yai/khao-yai-golf-club-vs-life-privilege-country-club/",
+    expectedStatus: [200],
+    contentMarker: 'Golf Course Comparison',
+  },
+  {
+    path: "/golf-courses/compare/kanchanaburi/dragon-hills-golf-country-club-vs-grand-prix-golf-club/",
+    expectedStatus: [200],
+    contentMarker: 'Golf Course Comparison',
   },
   // Re-regioned Bangkok → Khao Yai / Kanchanaburi (same 90-minute test).
   {
@@ -4382,13 +4425,19 @@ async function runCourseDetailRegistryLivenessTests() {
   }
 
   // Its own floor, because the package branch goes vacuous INDEPENDENTLY of the
-  // one above: 2 of 149 courses are packages, so the general Offer count stays
+  // one above: 4 of 149 courses are packages, so the general Offer count stays
   // in the hundreds while the branch that matters here drops to zero. Today:
-  // kaeng-krachan and korea-golf-club, 4 translated locales each, 2 rates each.
-  if (packageOfferSeen < 16) {
+  // kaeng-krachan, korea-golf-club, ubolratana-dam and wiang-ko-sai, 4
+  // translated locales each, 2 rates each.
+  //
+  // RAISE THIS when a course gains fee_is_package. It was left at 16 when the
+  // count went 2 -> 4, which still passed while asserting half of what it
+  // measured — a floor below the true value is a guard that has quietly gone
+  // slack, and the whole reason this check carries a number rather than `> 0`.
+  if (packageOfferSeen < 32) {
     fail(
       `L2 package-label check ran on only ${packageOfferSeen} Offer(s)`,
-      "expected 16+ (2 package courses x 4 locales x 2 rates). Zero means no course carries fee_is_package any more, or the registry dropped them — not that the labels are right.",
+      "expected 32+ (4 package courses x 4 locales x 2 rates). Zero means no course carries fee_is_package any more, or the registry dropped them — not that the labels are right.",
     );
   } else {
     pass(`L2 asserted package (not green-fee) Offer labels on ${packageOfferSeen} Offer(s)`);

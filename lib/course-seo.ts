@@ -348,6 +348,18 @@ const PROVINCE_L10N: Record<string, Record<Exclude<CourseSeoLocale, 'en'>, strin
     zh: '巴蜀府',
   },
   Phetchaburi: { th: 'จังหวัดเพชรบุรี', ja: 'ペッチャブリー県', ko: '펫차부리주', zh: '佛丕府' },
+  // Batch 7 — the Isan and Chiang Rai rosters. ZH follows the 大城府 exonym
+  // policy above: 孔敬 / 黎 / 乌隆他尼 / 廊开 / 清莱 / 帕 are the names
+  // Chinese-language sources use, not coined transcriptions. KO transcribes
+  // with the tense consonants the Korean standard for Thai calls for (콘깬).
+  // Every form here is the one the batch's own prose already uses, so no
+  // course page renders two spellings of its own province.
+  'Khon Kaen': { th: 'จังหวัดขอนแก่น', ja: 'コンケン県', ko: '콘깬주', zh: '孔敬府' },
+  Loei: { th: 'จังหวัดเลย', ja: 'ルーイ県', ko: '러이주', zh: '黎府' },
+  'Udon Thani': { th: 'จังหวัดอุดรธานี', ja: 'ウドンターニー県', ko: '우돈타니주', zh: '乌隆他尼府' },
+  'Nong Khai': { th: 'จังหวัดหนองคาย', ja: 'ノンカーイ県', ko: '농카이주', zh: '廊开府' },
+  'Chiang Rai': { th: 'จังหวัดเชียงราย', ja: 'チェンライ県', ko: '치앙라이주', zh: '清莱府' },
+  Phrae: { th: 'จังหวัดแพร่', ja: 'プレー県', ko: '프래주', zh: '帕府' },
 }
 
 /** Whether a course's (English) province has localized names for the non-EN packs. */

@@ -604,6 +604,24 @@ export const COURSE_DETAIL_I18N: {
   { region: 'hua-hin', slug: 'sawang-resort-golf-course', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'hua-hin', slug: 'sea-pines-golf-resort', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'hua-hin', slug: 'springfield-royal-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  // Batch 7 (2026-08) — Isan (6) and Chiang Rai (4), each region's FULL
+  // roster, taking both to 100% in all four locales. Same roster-completion
+  // rationale as the hua-hin sweep above, and the GSC demand agrees: within
+  // the untranslated set, dancoon (782 imp / 19 clk, 90d) and ubolratana-dam
+  // (571 / 24) were the two best click-earners on the whole site, and
+  // happy-city (253 / 1 at pos 7.4) the best impression-per-click gap in
+  // chiang-rai. Registering the full roster rather than the top pickings
+  // avoids the mixed-language hub list that partial coverage produces.
+  { region: 'isan', slug: 'dancoon-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'isan', slug: 'kumlung-ake-golf-course', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'isan', slug: 'royal-creek-golf-club-udon-thani', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'isan', slug: 'singha-park-khon-kaen', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'isan', slug: 'ubolratana-dam-golf-course', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'isan', slug: 'victory-park-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'chiang-rai', slug: 'happy-city-golf-resort', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'chiang-rai', slug: 'santiburi-country-club-chiang-rai', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'chiang-rai', slug: 'waterford-valley-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'chiang-rai', slug: 'wiang-ko-sai-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
 ]
 
 /**

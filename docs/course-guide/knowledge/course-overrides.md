@@ -266,9 +266,9 @@ feeds `prose.overview` into the `GolfCourse` schema, so it ships as structured d
 
 Three romanisations across three courses, deliberately **left alone**:
 
-- `Cherd Bunyaratavej / Jack Nicklaus Design` — kaeng-krachan-country-club
-- `Cherd Boonyarattanavej` — star-country-club
-- `Chird Boonyarattanevet` — bangkok-golf-club
+1. `Cherd Bunyaratavej / Jack Nicklaus Design` — kaeng-krachan-country-club
+2. `Cherd Boonyarattanavej` — star-country-club
+3. `Chird Boonyarattanevet` — bangkok-golf-club
 
 Almost certainly one Thai architect, and this is the same problem as
 [Attanan Yomchinda](#attanan-yomchinda) above — but it could not be resolved to that

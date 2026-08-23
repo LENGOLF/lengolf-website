@@ -188,6 +188,20 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/hua-hin/sawang-resort-golf-course",
       "/golf-courses/hua-hin/sea-pines-golf-resort",
       "/golf-courses/hua-hin/springfield-royal-country-club",
+      // Batch 7 (2026-08) — the Isan and Chiang Rai sweep. Completes both
+      // regions to 100% of their rosters (6 + 4), so a locale reader on
+      // either already-translated region hub no longer lands on a list where
+      // every course link 301s back to English.
+      "/golf-courses/isan/dancoon-golf-club",
+      "/golf-courses/isan/kumlung-ake-golf-course",
+      "/golf-courses/isan/royal-creek-golf-club-udon-thani",
+      "/golf-courses/isan/singha-park-khon-kaen",
+      "/golf-courses/isan/ubolratana-dam-golf-course",
+      "/golf-courses/isan/victory-park-golf-country-club",
+      "/golf-courses/chiang-rai/happy-city-golf-resort",
+      "/golf-courses/chiang-rai/santiburi-country-club-chiang-rai",
+      "/golf-courses/chiang-rai/waterford-valley-golf-club",
+      "/golf-courses/chiang-rai/wiang-ko-sai-golf-club",
       // Translated FAQ pages (data/faq-pages.ts entries with locale: 'th') —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -429,6 +443,20 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/hua-hin/sawang-resort-golf-course",
       "/golf-courses/hua-hin/sea-pines-golf-resort",
       "/golf-courses/hua-hin/springfield-royal-country-club",
+      // Batch 7 (2026-08) — the Isan and Chiang Rai sweep. Completes both
+      // regions to 100% of their rosters (6 + 4), so a locale reader on
+      // either already-translated region hub no longer lands on a list where
+      // every course link 301s back to English.
+      "/golf-courses/isan/dancoon-golf-club",
+      "/golf-courses/isan/kumlung-ake-golf-course",
+      "/golf-courses/isan/royal-creek-golf-club-udon-thani",
+      "/golf-courses/isan/singha-park-khon-kaen",
+      "/golf-courses/isan/ubolratana-dam-golf-course",
+      "/golf-courses/isan/victory-park-golf-country-club",
+      "/golf-courses/chiang-rai/happy-city-golf-resort",
+      "/golf-courses/chiang-rai/santiburi-country-club-chiang-rai",
+      "/golf-courses/chiang-rai/waterford-valley-golf-club",
+      "/golf-courses/chiang-rai/wiang-ko-sai-golf-club",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -702,6 +730,20 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/hua-hin/sawang-resort-golf-course",
       "/golf-courses/hua-hin/sea-pines-golf-resort",
       "/golf-courses/hua-hin/springfield-royal-country-club",
+      // Batch 7 (2026-08) — the Isan and Chiang Rai sweep. Completes both
+      // regions to 100% of their rosters (6 + 4), so a locale reader on
+      // either already-translated region hub no longer lands on a list where
+      // every course link 301s back to English.
+      "/golf-courses/isan/dancoon-golf-club",
+      "/golf-courses/isan/kumlung-ake-golf-course",
+      "/golf-courses/isan/royal-creek-golf-club-udon-thani",
+      "/golf-courses/isan/singha-park-khon-kaen",
+      "/golf-courses/isan/ubolratana-dam-golf-course",
+      "/golf-courses/isan/victory-park-golf-country-club",
+      "/golf-courses/chiang-rai/happy-city-golf-resort",
+      "/golf-courses/chiang-rai/santiburi-country-club-chiang-rai",
+      "/golf-courses/chiang-rai/waterford-valley-golf-club",
+      "/golf-courses/chiang-rai/wiang-ko-sai-golf-club",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -967,6 +1009,20 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/hua-hin/sawang-resort-golf-course",
       "/golf-courses/hua-hin/sea-pines-golf-resort",
       "/golf-courses/hua-hin/springfield-royal-country-club",
+      // Batch 7 (2026-08) — the Isan and Chiang Rai sweep. Completes both
+      // regions to 100% of their rosters (6 + 4), so a locale reader on
+      // either already-translated region hub no longer lands on a list where
+      // every course link 301s back to English.
+      "/golf-courses/isan/dancoon-golf-club",
+      "/golf-courses/isan/kumlung-ake-golf-course",
+      "/golf-courses/isan/royal-creek-golf-club-udon-thani",
+      "/golf-courses/isan/singha-park-khon-kaen",
+      "/golf-courses/isan/ubolratana-dam-golf-course",
+      "/golf-courses/isan/victory-park-golf-country-club",
+      "/golf-courses/chiang-rai/happy-city-golf-resort",
+      "/golf-courses/chiang-rai/santiburi-country-club-chiang-rai",
+      "/golf-courses/chiang-rai/waterford-valley-golf-club",
+      "/golf-courses/chiang-rai/wiang-ko-sai-golf-club",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
