@@ -88,6 +88,32 @@ already-shipped sibling entries of the same slug (for tone + field shape).
   an already-shipped locale entry (checklist "Fact-fidelity method").
 - **Preserve per-source divergences** — do NOT harmonize (e.g. caddie tip 100–200
   vs 200–300 THB across two pages is correct; add a header comment warning editors).
+- **A dropped hedge is a fabricated claim, and it is the easiest one to miss.**
+  EN "**one of** the best value options in the Chiang Rai lineup" rendered in ko as
+  `가장 좋은 선택지로 꼽힙니다` asserts the course IS the best — a superlative the
+  source never makes, in the closing sentence of `overview`, which also ships as
+  the GolfCourse JSON-LD `description`. Two of these shipped past a 12-agent pass
+  and every mechanical gate in PR #108. **Audit method:** grep the EN block for
+  `one of|among the|some of the`, then confirm each target carries its hedge —
+  `หนึ่งใน` (th) · `之一` (zh) · `屈指の`/`ひとつです` (ja) · `가운데 하나`/`손꼽히는`
+  (ko). Cross-locale comparison is the cheap tell: when three locales hedge and one
+  does not, the outlier is wrong. `validate:i18n`'s honesty check is scoped to
+  unscoped-claim *phrases*, not to hedge parity, so it is green on this.
+- **Check the EN source's geography against the attested coordinates BEFORE
+  translating it.** A translation batch is where latent EN errors go from 1 page to
+  5. PR #108 found `waterford-valley-golf-club` saying "40 minutes **south** of
+  Chiang Rai city" and "the **southern** part of Chiang Rai province" when its
+  `coordinates_verified_at` lat/lng put it 27.8 km out on a **59° bearing** (ENE) —
+  inside the very district the same sentence names. **Two cheap checks, both of
+  which caught it independently:** (a) compute the bearing from the province capital
+  to `latitude`/`longitude` and compare it to every compass word in the EN prose;
+  (b) read the route description for internal impossibility — "a direct drive south
+  through the Mae Lao and Wiang Chiang Rung districts" cannot be right, because Mae
+  Lao is southwest of Mueang Chiang Rai and Wiang Chiang Rung is northeast. Do NOT
+  reconcile a contradiction inside the translation: fix EN first, then mirror. Note
+  `schema_markup.geo` is NOT the oracle — it is stale on ~30 courses and is dead
+  data (`lib/jsonld-courses.ts` builds `geo` from the typed coordinates), so when
+  the blob and the typed coordinates disagree, trust the attested typed pair.
 - **`related_slugs` may only point at locale-translated targets.** NOT enforced by
   tooling (`validate:links` passes because the EN page resolves) — but the middleware
   301s locale readers to English, silently breaking the locale funnel. Check each
@@ -190,6 +216,25 @@ and external-link checks fail without real `.env.local` secrets and POS/network
 access — a small, stable set of smoke failures is expected locally. CI
 (`.github/workflows/ci.yml`, which has the secrets) is the real gate for those; the
 registry-consistency sections I/J and `validate:i18n` are pure and pass locally.
+
+---
+
+- **When a batch moves a count, grep for EVERY ratchet keyed to that count.**
+  Guards in this repo carry absolute floors so a shrinking corpus cannot go green,
+  and they are scattered across files. A batch that raises one and misses its
+  siblings leaves guards asserting less than they measure — PR #108 raised smoke
+  L2's package floor 16 → 32 and left `MIN_PACKAGE_COURSES = 2`
+  (`scripts/validate-courses.ts`) and `MIN_COURSES = 61` / `MIN_STRINGS = 1708`
+  (`scripts/validate-course-slots.ts`) standing against a true 4 / 71 / 1,988,
+  inside the same diff that fixed the first. Sweep with
+  `grep -rn "MIN_[A-Z_]* = [0-9]" scripts/` and reconcile each against the new
+  totals. **Verify each raised floor is EXACT** by re-running at true-value + 1 and
+  confirming it goes red; a floor you cannot make fail is not a ratchet.
+- **Recount the CLAUDE.md counters the batch invalidates** — registered courses /
+  slots / strings, unmapped provinces and their course span, and any remediation
+  sizing derived from them. And state what a counter counts: "FOUR courses now
+  price an all-in package" was false where "four courses now carry the flag" was
+  true, and the next session reads the wrong one as a closed set.
 
 ---
 
