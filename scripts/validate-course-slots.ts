@@ -68,7 +68,7 @@ function count(s: string, is: (c: string) => boolean) {
  * ja run in the shipped corpus is 10 and a plain three-item route list measures
  * 24, so any threshold low enough to catch a splice also fired on real copy.
  * With it the longest legitimate ja run drops to 7 (`野生動物保護区`) and
- * th/ko/zh to 0 — measured over all 1,708 shipped strings, not assumed.
+ * th/ko/zh to 0 — measured over the then-1,708-string corpus, not assumed.
  */
 const CLAUSE_BREAK = /[、。，．！？：；…「」『』（）〔〕【】〈〉《》・ー—―～〜／·]/u
 
@@ -468,10 +468,10 @@ const corpus = registered.filter(
  *
  * These are a ratchet, not a description. Raise them when the corpus grows;
  * lowering one has to be a deliberate edit with a reason, which is the whole
- * point. Today: 61 courses, 244 slots, 1,708 strings.
+ * point. Today: 71 courses, 284 slots, 1,988 strings.
  */
-const MIN_COURSES = 61
-const MIN_STRINGS = 1708
+const MIN_COURSES = 71
+const MIN_STRINGS = 1988
 
 let problems = 0
 let checked = 0
