@@ -11,13 +11,26 @@
  * 2026-08-23: of 30 page-level blocks, all 30 emitted no og:site_name and 13
  * emitted no og:type.
  *
- * `openGraph` is not the only key with that shape. The layout also sets
- * `twitter` (whose object holds only `card`, and X silently degrades a
- * missing card to a small preview) and `icons`. Both are guarded here, in
- * BOTH directions: a page must restate the field, and the layout must supply
- * it. `robots` is deliberately not guarded — the two second-hand-club pages
- * legitimately declare it and the layout's object holds only index/follow, so
- * nothing drops.
+ * SCOPE: `openGraph` ONLY. `twitter` and `icons` share the same per-key
+ * replacement mechanism, but guarding them from SOURCE was the wrong layer.
+ * Be precise about why, because the first version of this note overstated it.
+ * Next resolves `card = card || (images?.length ? 'summary_large_image' :
+ * 'summary')`, so `twitter: { title, images }` lands on the layout's exact
+ * value and the gate reddened on CORRECT code — that half was a false red.
+ * But `twitter: { title }` with no images resolves to `summary`
+ * permanently, so THAT half was a true red, and dropping the rule gives up a
+ * real check. The `icons` half was a false GREEN: the layout sets TWO fields
+ * (`icon` and `apple`) while the rule modelled one per key, so
+ * `icons: { icon }` passed while dropping `apple`.
+ *
+ * Both are now asserted on the RENDERED tag in smoke section D, where the
+ * resolver has already run and there is nothing to predict. The TRADE, stated
+ * plainly: the source rule read all 47 files under app/; section D fetches 34
+ * URLs, and 13 of the 31 openGraph declarations — the whole /golf-courses/
+ * tree among them — are not reachable from any of them. Coverage of the
+ * SUPPLIER (the layout, sole source of both keys) is complete; coverage of a
+ * future page-level declaration is not. Do not re-add a source-level version
+ * without reading Next's resolver first.
  *
  * WHY THE TYPESCRIPT AST, and not string scanning: this file previously used
  * a hand-rolled comment stripper plus brace counting. An adversarial pass
@@ -25,7 +38,9 @@
  * a phantom block comment and blanked the rest of the file — silently hiding
  * a real violation — while a quote inside a regex desynced the machine and
  * produced a hard error pointing at a comment. It was measurably corrupting
- * source in four files under scripts/. Brace counting had the same class of
+ * source in THREE files, all under scripts/ — and zero under app/, which is
+ * all this gate reads, so the argument for the AST is the future one: a regex
+ * literal landing in an app/ file. Brace counting had the same class of
  * bug: a stray `{` inside a string literal made the layout's openGraph block
  * swallow its sibling, so `type`/`siteName` were satisfied by an unrelated
  * object. Comments, strings, regexes and template nesting are all a real
@@ -40,22 +55,49 @@
  * that returns anything other than an object literal is reported, because
  * the gate cannot see inside it.
  *
- * Smoke section D asserts the rendered artifact on 34 URLs. This runs with no
- * server and covers every declaration in app/.
+ * Smoke section D asserts the rendered artifact (og:type, og:site_name,
+ * twitter:card) on 34 URLs. This runs with no server and covers every
+ * openGraph declaration in app/.
  *
- * SELF-TEST COVERAGE, stated honestly. A mutation pass (delete one rule, re-run
- * --self-test) found eight rules that could be removed while every case stayed
- * green, including two whose OWN named case passed for the wrong reason — with
- * one side null the drift comparison fires, so the null-guard and the
- * error-propagation were both dead weight. Those are now pinned by cases where
- * drift cannot cover for them, plus `returned.length !== 1`, the message TEXT
- * of three rules (a wrong diagnostic once went unnoticed for exactly this
- * reason), the ternary descent, and the string-literal key arm. STILL
- * uncovered by mutation, deliberately: `classify`'s helper-NAME identity check
- * (the builder-call case is satisfied by the import check instead), `unwrap`'s
- * `await` and `as` arms, and `main()` itself — its walk, pre-filter, layout
- * exemption, inventory and exit code are exercised only by the real corpus.
- * Do not read a green --self-test as proof those work.
+ * SELF-TEST COVERAGE, stated honestly. The printed total is the EXECUTED count
+ * with a declared-vs-executed mismatch as a hard failure, because the previous
+ * version derived it from array LENGTHS: a `break` in any loop ran zero cases
+ * and still printed the full total and exited 0.
+ *
+ * MIN_SELF_TEST_CASES is a FLOOR (`ran < MIN`), not an equality — unlike
+ * EXPECTED_DECLARATIONS, which is two-sided. Adding a case without raising it
+ * stays green; the paired `ran !== declared` check catches a broken loop, not
+ * an unraised floor. Do not describe it as exact.
+ *
+ * Two cases used to pass for the WRONG REASON and are now pinned where the
+ * covering mechanism cannot fire for them: the null-default guard (drift fires
+ * when one side is null, so null-on-BOTH-sides is the discriminating input) and
+ * the ternary descent (an undescended node is opaque, which looked identical to
+ * a descended one — the discriminating input is two literal branches, which
+ * must be GREEN).
+ *
+ * STILL uncovered by mutation. This list is MEASURED — 13 single-arm
+ * mutations, each run against both `--self-test` and the real corpus — and an
+ * earlier version of it was wrong twice over: it named three items where ten
+ * are uncovered, and it named two that are in fact PINNED. Ten went green in
+ * BOTH modes:
+ *   - `unwrap`: the parens, `as`, non-null and `await` arms. Its `satisfies`
+ *     and angle-bracket-cast arms are the two that ARE pinned (deleting either
+ *     turns --self-test red), which is the opposite of what the old text said.
+ *   - `isMeaningfulValue`: the `null` check and the numeric check.
+ *   - `classify`'s helper-NAME comparison (forcing it true stays green).
+ *   - `metadataRoots`' nested-function guard.
+ *   - the layout non-object-form report.
+ *   - the layout `type` wrong-VALUE compare (`!typeExpr` alone stays green).
+ * Plus `main()` itself, which is not a single arm: the walk, the pre-filter,
+ * the layout exemption, the inventory and the exit code are exercised only by
+ * the real corpus run. A green --self-test is not proof any of those work.
+ *
+ * The one that moved: `directProp`'s ShorthandPropertyAssignment arm was
+ * uncovered when the twitter/icons rule was deleted (its only pin was an icons
+ * case that went with it) and is pinned again by an explicit layout-shorthand
+ * case. Deleting the arm now turns --self-test red; the corpus alone does not
+ * catch it, because no file under app/ writes the field in shorthand.
  *
  * Run: npx tsx scripts/validate-open-graph.ts [--self-test]
  */
@@ -68,9 +110,6 @@ const LAYOUT = 'app/[locale]/layout.tsx'
 const HELPER_FILE = 'lib/open-graph.ts'
 const HELPER_NAME = 'siteOpenGraph'
 const HELPER_MODULE = '@/lib/open-graph'
-
-/** Layout key -> the single field it supplies that a page must restate. */
-const SIBLING_KEYS: Record<string, string> = { twitter: 'card', icons: 'icon' }
 
 /**
  * EXACT expected count, deliberately not a floor with slack. An earlier
@@ -88,7 +127,7 @@ const EXPECTED_DECLARATIONS = 31
  * EXECUTE. Raise it in the same commit that adds a case, exactly like
  * EXPECTED_DECLARATIONS above -- that friction is the point.
  */
-const MIN_SELF_TEST_CASES = 75
+const MIN_SELF_TEST_CASES = 60
 
 interface Problem {
   file: string
@@ -142,11 +181,6 @@ function directProp(obj: ts.ObjectLiteralExpression, name: string): ts.Expressio
     else if (ts.isShorthandPropertyAssignment(p) && p.name.text === name) found = p.name
   }
   return found
-}
-
-/** True if the literal contains a `...spread`, so absent keys cannot be proven absent. */
-function hasSpread(obj: ts.ObjectLiteralExpression): boolean {
-  return obj.properties.some((p) => ts.isSpreadAssignment(p))
 }
 
 /**
@@ -221,25 +255,26 @@ function classify(init: ts.Expression): ValueForm {
 }
 
 /**
- * The object literals that ARE page metadata: an exported `metadata` const,
- * and every object literal returned from `generateMetadata`. Returns the
- * opaque returns separately — a `generateMetadata` that hands back a call
- * result is a structural bypass, not a pass.
+ * Metadata roots this gate cannot read: a module-level `metadata` const or a
+ * `generateMetadata` that resolves to something other than an object
+ * literal. An object-literal root needs no reporting — the openGraph scan
+ * below is file-wide and finds its keys directly — so only the opaque ones
+ * are returned. The ternary descent matters for the GREEN case: without it,
+ * `metadata = cond ? {...} : {...}` would be reported as opaque, a false red
+ * on correct code.
  */
-function metadataRoots(sf: ts.SourceFile): {
-  objects: ts.ObjectLiteralExpression[]
-  opaque: ts.Node[]
-} {
-  const objects: ts.ObjectLiteralExpression[] = []
-  const opaque: ts.Node[] = []
+function metadataRoots(sf: ts.SourceFile): { opaque: { node: ts.Node; source: string }[] } {
+  const opaque: { node: ts.Node; source: string }[] = []
 
-  const collect = (e: ts.Expression): void => {
+  // `source` names the construct, so the diagnostic cannot say
+  // "generateMetadata" about a file that has none.
+  const collect = (e: ts.Expression, source: string): void => {
     const n = unwrap(e)
-    if (ts.isObjectLiteralExpression(n)) objects.push(n)
+    if (ts.isObjectLiteralExpression(n)) return
     else if (ts.isConditionalExpression(n)) {
-      collect(n.whenTrue)
-      collect(n.whenFalse)
-    } else opaque.push(n)
+      collect(n.whenTrue, source)
+      collect(n.whenFalse, source)
+    } else opaque.push({ node: n, source })
   }
 
   // `export { gm as generateMetadata }` means the local `gm` IS the metadata
@@ -277,7 +312,7 @@ function metadataRoots(sf: ts.SourceFile): {
     if (ts.isVariableStatement(node) && node.parent && ts.isSourceFile(node.parent)) {
       for (const d of node.declarationList.declarations) {
         if (ts.isIdentifier(d.name) && d.name.text === 'metadata' && d.initializer) {
-          collect(d.initializer)
+          collect(d.initializer, 'the module-level `metadata` const')
         }
       }
     }
@@ -298,7 +333,7 @@ function metadataRoots(sf: ts.SourceFile): {
           ? bodiesOf((node as ts.VariableDeclaration).initializer!)
           : []
       for (const body of bodies) {
-        if (!ts.isBlock(body)) collect(body as ts.Expression)
+        if (!ts.isBlock(body)) collect(body as ts.Expression, 'generateMetadata')
         else {
           const scan = (n: ts.Node): void => {
             // Do not descend into nested functions: their returns are not
@@ -307,7 +342,7 @@ function metadataRoots(sf: ts.SourceFile): {
             // earlier `&& n !== body.parent` clause was dead code that
             // invited a reader to "repair" it.)
             if (ts.isFunctionLike(n)) return
-            if (ts.isReturnStatement(n) && n.expression) collect(n.expression)
+            if (ts.isReturnStatement(n) && n.expression) collect(n.expression, 'generateMetadata')
             ts.forEachChild(n, scan)
           }
           ts.forEachChild(body, scan)
@@ -317,21 +352,12 @@ function metadataRoots(sf: ts.SourceFile): {
     ts.forEachChild(node, visit)
   }
   visit(sf)
-  return { objects, opaque }
+  return { opaque }
 }
 
 export interface FileAudit {
   declarations: number
   layoutOpenGraphSeen: boolean
-  /**
-   * Which SIBLING_KEYS the layout actually declares. Tracked for the same
-   * reason as layoutOpenGraphSeen: a per-file pass cannot see an ABSENT key.
-   * Enforcing only "the layout's twitter must contain card" left the key
-   * itself droppable with the gate green — and since no page declares
-   * twitter, deleting the layout's would leave the whole site with no
-   * og twitter:card and nothing red anywhere.
-   */
-  layoutSiblingsSeen: string[]
   layoutDefaults: OgDefaults | null
   problems: Problem[]
 }
@@ -341,7 +367,6 @@ export function auditSource(rel: string, src: string): FileAudit {
   const sf = parse(rel, src)
   const isLayout = rel === LAYOUT
   let layoutOpenGraphSeen = false
-  const layoutSiblingsSeen = new Set<string>()
   let layoutDefaults: OgDefaults | null = null
   let declarations = 0
   let usesHelper = false
@@ -468,59 +493,24 @@ export function auditSource(rel: string, src: string): FileAudit {
     }
   }
 
-  // --- twitter / icons: ROOT-SCOPED, because these are generic words. An
-  // unrelated `{ twitter: 'https://x.com/...' }` social-links object or a
-  // `{ icons: [Star] }` config is not metadata and must not be flagged.
-  const { objects, opaque } = metadataRoots(sf)
-  for (const root of objects) {
-    for (const [key, required] of Object.entries(SIBLING_KEYS)) {
-      const init = directProp(root, key)
-      if (!init) continue
-      if (isLayout) layoutSiblingsSeen.add(key)
-      const line = lineOf(sf, init)
-      const obj = unwrap(init)
-      // A non-object value is LEGAL Metadata and supplies the field on its
-      // own: `icons: '/images/favicon.png'` and `icons: [{ url }]` both set
-      // the icon, and demanding an object literal there was a hard CI failure
-      // on correct code. Nothing is dropped, so nothing to check.
-      if (!ts.isObjectLiteralExpression(obj)) continue
-      // A spread may supply the field from another module, so its absence
-      // cannot be proven. Skipping is the honest answer; erroring here was a
-      // false failure on `twitter: { ...BASE_TWITTER, title }`.
-      if (hasSpread(obj)) continue
-      const field = directProp(obj, required)
-      // The layout is the SUPPLIER: it must provide the field. A page is the
-      // CONSUMER: it must restate it. Enforcing only the page half left the
-      // premise unguarded — the layout could drop `card` with the gate green.
-      // `card: undefined` counts as absent for the same reason it does on the
-      // layout's siteName: it looks present and emits nothing.
-      if (!field || !isMeaningfulValue(field)) {
-        problems.push({
-          file: rel,
-          line,
-          message: isLayout
-            ? `root layout ${key} must set \`${required}\` — every page inherits this object, ` +
-              `and the page-level ${key} rule assumes the layout supplies it`
-            : `page-level ${key} REPLACES the root layout's ${key} object wholesale, so it ` +
-              `must restate \`${required}\` or the layout's value is silently dropped`,
-        })
-      }
-    }
-  }
-  for (const node of opaque) {
+  // A metadata root whose value this gate cannot read. Names the construct it
+  // actually found: the message used to say "generateMetadata returns a
+  // non-literal" on files containing no generateMetadata, which is the
+  // wrong-noun diagnostic this file has now produced twice.
+  const { opaque } = metadataRoots(sf)
+  for (const { node, source } of opaque) {
     problems.push({
       file: rel,
       line: lineOf(sf, node),
       message:
-        `generateMetadata returns a non-literal expression, so this gate cannot verify its ` +
-        `openGraph/twitter/icons. Return an object literal, or extend this validator.`,
+        `${source} resolves to a non-literal expression, so this gate cannot verify its ` +
+        `openGraph. Return or assign an object literal, or extend this validator.`,
     })
   }
 
   return {
     declarations,
     layoutOpenGraphSeen,
-    layoutSiblingsSeen: [...layoutSiblingsSeen],
     layoutDefaults,
     problems,
   }
@@ -604,7 +594,6 @@ export function extractHelperDefaults(src: string): OgDefaults & { error: string
 export function auditAggregate(totals: {
   declarations: number
   layoutOpenGraphSeen: boolean
-  layoutSiblingsSeen?: string[]
   layoutDefaults?: OgDefaults | null
   helperDefaults?: (OgDefaults & { error?: string | null }) | null
   inventory?: Record<string, number>
@@ -630,23 +619,6 @@ export function auditAggregate(totals: {
             `${HELPER_FILE} says ${help[key]}. Pages that declare openGraph take the ` +
             `helper's value and the pages that omit it take the layout's, so the site ` +
             `would emit both.`
-        )
-      }
-    }
-  }
-
-  // Same shape as the openGraph rule below: a KEY going missing is invisible
-  // to a per-file scan, and the page-level "must restate the field" rule is
-  // premised on the layout supplying it. Enforcing only the field left the
-  // layout free to delete the whole object with the gate green — and since no
-  // page declares twitter today, that would remove twitter:card site-wide.
-  if (totals.layoutSiblingsSeen) {
-    for (const key of Object.keys(SIBLING_KEYS)) {
-      if (!totals.layoutSiblingsSeen.includes(key)) {
-        errors.push(
-          `${LAYOUT} declares no ${key} object. Every page inherits it, and the page-level ` +
-            `rule requiring ${SIBLING_KEYS[key]} to be restated assumes the layout supplies ` +
-            `it — so dropping the key silently removes it site-wide.`
         )
       }
     }
@@ -723,18 +695,14 @@ function selfTest(): void {
     { name: 'layout missing siteName is a violation', rel: LAYOUT, src: meta("{ openGraph: { type: 'website' } }"), problems: true, declarations: 1 },
     { name: 'layout with an EMPTY siteName is a violation', rel: LAYOUT, src: meta("{ openGraph: { type: 'website', siteName: '' } }"), problems: true, declarations: 1 },
     { name: 'layout fields in a SIBLING object do not satisfy', rel: LAYOUT, src: meta("{ other: { type: 'website', siteName: 'x' }, openGraph: { images: [] } }"), problems: true, declarations: 1 },
+    // Pins directProp's ShorthandPropertyAssignment arm. Deleting that arm
+    // used to be caught by an icons case; removing the twitter/icons rule left
+    // it unpinned AND unexercised by the corpus (no app/ file writes siteName
+    // in shorthand). Verified: deleting the arm turns this case RED.
+    { name: 'layout siteName as a SHORTHAND satisfies the field', rel: LAYOUT, src: meta("{ openGraph: { type: 'website', siteName } }"), problems: false, declarations: 1 },
     { name: 'layout with DOUBLE-quoted website passes', rel: LAYOUT, src: meta('{ openGraph: { type: "website", siteName: SITE_NAME } }'), problems: false, declarations: 1 },
     { name: 'layout NESTED type does not satisfy', rel: LAYOUT, src: meta("{ openGraph: { images: [{ type: 'website' }], siteName: SITE_NAME } }"), problems: true, declarations: 1 },
 
-    // --- twitter / icons, both directions ---
-    { name: 'page twitter without card is a violation', rel: P, src: meta('{ twitter: { title: "x" } }'), problems: true, declarations: 0 },
-    { name: 'page twitter restating card passes', rel: P, src: meta('{ twitter: { card: "summary_large_image", title: "x" } }'), problems: false, declarations: 0 },
-    { name: 'page twitter with a NESTED card does not satisfy', rel: P, src: meta('{ twitter: { images: [{ card: 1 }] } }'), problems: true, declarations: 0 },
-    { name: 'LAYOUT twitter without card is a violation too', rel: LAYOUT, src: meta("{ openGraph: { type: 'website', siteName: SITE_NAME }, twitter: { title: 'x' } }"), problems: true, declarations: 1 },
-    { name: 'page icons without icon is a violation', rel: P, src: meta('{ icons: { apple: "/a.png" } }'), problems: true, declarations: 0 },
-    { name: 'page robots is NOT guarded', rel: P, src: meta('{ robots: { index: false, follow: false } }'), problems: false, declarations: 0 },
-    { name: 'an unrelated twitter social link is NOT metadata', rel: P, src: 'const social = { twitter: "https://x.com/lengolf", line: "x" }\n', problems: false, declarations: 0 },
-    { name: 'an unrelated icons array is NOT metadata', rel: P, src: 'const cfg = { icons: [Star, Heart] }\n', problems: false, declarations: 0 },
 
     // --- structural bypass ---
     { name: 'generateMetadata returning a builder call is REPORTED', rel: P, src: 'export function generateMetadata() {\n  return pageMetadata("golf")\n}\n', problems: true, declarations: 0 },
@@ -746,16 +714,16 @@ function selfTest(): void {
     // case uses a plain .ts path — which is also what proves parse() picks
     // ScriptKind by extension rather than forcing TSX everywhere.
     { name: 'an angle-bracket cast in a .ts file is NOT a false failure', rel: 'app/sitemap.ts', src: IMPORT + meta(`<Metadata>{ openGraph: ${HELPER_NAME}({ images: [1] }) }`), problems: false, declarations: 1 },
-    { name: 'icons as a STRING is legal metadata, not a failure', rel: P, src: meta("{ icons: '/images/favicon.png' }"), problems: false, declarations: 0 },
-    { name: 'icons as an ARRAY is legal metadata, not a failure', rel: P, src: meta("{ icons: [{ url: '/a.png' }] }"), problems: false, declarations: 0 },
-    { name: 'twitter with a SPREAD cannot be disproven, so passes', rel: P, src: meta("{ twitter: { ...BASE, title: 'x' } }"), problems: false, declarations: 0 },
-    { name: 'icons shorthand { icon } satisfies the field', rel: P, src: meta('{ icons: { icon } }'), problems: false, declarations: 0 },
-    { name: 'twitter card: undefined does NOT satisfy the field', rel: P, src: meta('{ twitter: { card: undefined } }'), problems: true, declarations: 0 },
     { name: 'SHORTHAND openGraph is counted AND rejected', rel: P, src: 'const openGraph = { images: [1] }\n' + meta("{ title: 'x', openGraph }"), problems: true, declarations: 1 },
-    { name: 'generateMetadata as a function EXPRESSION is audited', rel: P, src: "export const generateMetadata = async function () {\n  return { twitter: { title: 'x' } }\n}\n", problems: true, declarations: 0 },
-    { name: 'generateMetadata behind a wrapper call is audited', rel: P, src: "export const generateMetadata = cache(async () => ({ twitter: { title: 'x' } }))\n", problems: true, declarations: 0 },
-    { name: 'generateMetadata via an aliased export is audited', rel: P, src: "async function gm() {\n  return { twitter: { title: 'x' } }\n}\nexport { gm as generateMetadata }\n", problems: true, declarations: 0 },
-    { name: 'a LOCAL const metadata is not a metadata root', rel: P, src: "function Component() {\n  const metadata = { twitter: 'handle' }\n  return metadata\n}\n", problems: false, declarations: 0 },
+    // These three assert that the FORM is reached at all. The observable is an
+    // opaque (non-literal) return, since the tripwire that used to provide one
+    // is gone.
+    { name: 'generateMetadata as a function EXPRESSION is audited', rel: P, src: "export const generateMetadata = async function () {\n  return buildIt()\n}\n", problems: true, declarations: 0 },
+    { name: 'generateMetadata behind a wrapper call is audited', rel: P, src: "export const generateMetadata = cache(async () => buildIt())\n", problems: true, declarations: 0 },
+    { name: 'generateMetadata via an aliased export is audited', rel: P, src: "async function gm() {\n  return buildIt()\n}\nexport { gm as generateMetadata }\n", problems: true, declarations: 0 },
+    // Module scope, not export-ness, is the discriminator. A function-local
+    // `const metadata` is not a root, so its opaque value is not reported.
+    { name: 'a LOCAL const metadata is not a metadata root', rel: P, src: "function Component() {\n  const metadata = buildIt()\n  return metadata\n}\n", problems: false, declarations: 0 },
     { name: 'layout siteName: undefined is a violation', rel: LAYOUT, src: meta("{ openGraph: { type: 'website', siteName: undefined } }"), problems: true, declarations: 1 },
     { name: 'layout siteName: whitespace is a violation', rel: LAYOUT, src: meta("{ openGraph: { type: 'website', siteName: '   ' } }"), problems: true, declarations: 1 },
     { name: 'a DUPLICATE key takes the LAST value, as JS does', rel: LAYOUT, src: meta("{ openGraph: { type: 'website', siteName: SITE_NAME, siteName: undefined } }"), problems: true, declarations: 1 },
@@ -764,7 +732,9 @@ function selfTest(): void {
     // Pins two arms nothing else exercised: the ternary descent in
     // metadataRoots (only ONE branch is missing `card`), and propName's
     // string-literal key arm.
-    { name: 'a ternary metadata descends into BOTH branches', rel: P, src: meta("cond ? { twitter: { card: 'x' } } : { twitter: { title: 'y' } }"), problems: true, declarations: 0 },
+    // Descent is load-bearing in the GREEN direction now: without it the whole
+    // ConditionalExpression is opaque and this reds on correct code.
+    { name: 'a ternary of two literals is NOT opaque', rel: P, src: meta("cond ? { title: 'a' } : { title: 'b' }"), problems: false, declarations: 0 },
     { name: 'a STRING-literal openGraph key is counted', rel: P, src: meta("{ 'openGraph': { images: [1] } }"), problems: true, declarations: 1 },
     // The POSITIVE ternary case above cannot pin the descent by itself: with
     // metadataRoots' ConditionalExpression arm deleted the node becomes opaque,
@@ -772,24 +742,26 @@ function selfTest(): void {
     // rule it names was gone (measured). This negative twin discriminates --
     // both branches are complete, so it passes only if the descent really ran;
     // without the descent the node is opaque and this goes red.
-    { name: 'a ternary metadata with BOTH branches complete passes', rel: P, src: meta("cond ? { twitter: { card: 'x' } } : { twitter: { card: 'y' } }"), problems: false, declarations: 0 },
+    { name: 'a ternary with ONE opaque branch IS reported', rel: P, src: meta("cond ? { title: 'a' } : buildIt()"), problems: true, declarations: 0 },
   ]
 
   // Message text matters: a prior version reported "generateMetadata returns
   // a non-literal" on a file with no generateMetadata, and no case noticed
   // because none asserted the wording.
   const messageCases: { name: string; rel: string; src: string; expect: string }[] = [
+    // The wrong-noun guard. This diagnostic has twice said
+    // "generateMetadata" about a file containing none.
     {
-      name: 'layout twitter names the LAYOUT, not the page',
-      rel: LAYOUT,
-      src: meta("{ openGraph: { type: 'website', siteName: SITE_NAME }, twitter: { title: 'x' } }"),
-      expect: 'root layout twitter must set',
+      name: 'an opaque metadata const names the CONST, not generateMetadata',
+      rel: P,
+      src: meta("buildMetadata('golf')"),
+      expect: 'the module-level `metadata` const',
     },
     {
-      name: 'page twitter names the PAGE, not the layout',
+      name: 'an opaque generateMetadata names generateMetadata',
       rel: P,
-      src: meta("{ twitter: { title: 'x' } }"),
-      expect: 'page-level twitter REPLACES',
+      src: 'export function generateMetadata() {\n  return buildIt()\n}\n',
+      expect: 'generateMetadata resolves',
     },
     {
       name: 'a bare page object names the helper',
@@ -893,7 +865,6 @@ function selfTest(): void {
   const base = {
     declarations: EXPECTED_DECLARATIONS,
     layoutOpenGraphSeen: true,
-    layoutSiblingsSeen: Object.keys(SIBLING_KEYS),
   }
   const aggregates: { name: string; input: Parameters<typeof auditAggregate>[0]; errors: boolean }[] = [
     { name: 'healthy corpus passes', input: { ...base }, errors: false },
@@ -914,9 +885,6 @@ function selfTest(): void {
     // error alongside agreeing defaults leaves drift silent.
     { name: 'null on BOTH sides is still an error (drift cannot fire)', input: { ...base, layoutDefaults: { type: null, siteName: null }, helperDefaults: { type: null, siteName: null, error: null } }, errors: true },
     { name: 'an extraction error with AGREEING defaults is still an error', input: { ...base, layoutDefaults: agreed, helperDefaults: { ...agreed, error: 'boom' } }, errors: true },
-    { name: 'layout dropping the twitter KEY is an error', input: { ...base, layoutSiblingsSeen: ['icons'] }, errors: true },
-    { name: 'layout dropping the icons KEY is an error', input: { ...base, layoutSiblingsSeen: ['twitter'] }, errors: true },
-    { name: 'layout declaring both sibling keys passes', input: { ...base }, errors: false },
   ]
   for (const c of aggregates) {
     ran++
@@ -960,7 +928,6 @@ function main(): void {
   const inventory: Record<string, number> = {}
   let declarations = 0
   let layoutOpenGraphSeen = false
-  let layoutSiblingsSeen: string[] = []
   let layoutDefaults: OgDefaults | null = null
   const helperDefaults = extractHelperDefaults(readFileSync(HELPER_FILE, 'utf8'))
 
@@ -981,7 +948,6 @@ function main(): void {
     const res = auditSource(rel, src)
     if (res.declarations > 0) inventory[rel] = res.declarations
     if (res.layoutOpenGraphSeen) layoutOpenGraphSeen = true
-    if (rel === LAYOUT) layoutSiblingsSeen = res.layoutSiblingsSeen
     if (res.layoutDefaults) layoutDefaults = res.layoutDefaults
     declarations += res.declarations
     problems.push(...res.problems)
@@ -991,7 +957,6 @@ function main(): void {
   const aggregateErrors = auditAggregate({
     declarations,
     layoutOpenGraphSeen,
-    layoutSiblingsSeen,
     layoutDefaults,
     helperDefaults,
     inventory,
@@ -1007,8 +972,8 @@ function main(): void {
   console.log(
     `validate:open-graph OK — ${declarations} openGraph declaration(s) across ` +
       `${Object.keys(inventory).length} file(s); every page-level block routes through ` +
-      `${HELPER_NAME}() imported from ${HELPER_MODULE}, the layout and helper defaults ` +
-      `agree, and no page or layout drops twitter.card / icons.icon.`
+      `${HELPER_NAME}() imported from ${HELPER_MODULE}, and the layout and helper ` +
+      `defaults agree.`
   )
 }
 

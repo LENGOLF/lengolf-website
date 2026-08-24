@@ -3712,6 +3712,43 @@ async function runSeoTests() {
         issues.push("missing og:site_name");
       }
 
+      // twitter:card, asserted on the RENDERED tag. This replaces the static
+      // twitter/icons tripwire in validate:open-graph, which tried to predict
+      // Next's resolution from source and got it wrong in both directions:
+      // it reddened on `twitter: { title, images }` (Next resolves
+      // `card = card || (images?.length ? 'summary_large_image' : 'summary')`,
+      // so a page supplying images lands on the layout's exact value and
+      // nothing drops), and it passed `icons: { icon }` while silently
+      // dropping the layout's `apple`, because it modelled one field per key.
+      //
+      // The layout is the SOLE supplier of `card` site-wide, so checking the
+      // resolved output across these URLs is complete coverage for the half
+      // that matters: did the card survive to the page? A meta-name lookup,
+      // not property= — Twitter/X tags are `name="twitter:card"`.
+      // Matched the same way ogTag() does — whole tag first, then content —
+      // so attribute order cannot matter. The first version required
+      // name-before-content, an avoidable divergence from the idiom beside it.
+      const cardTag = visible.match(/<meta[^>]*name="twitter:card"[^>]*>/);
+      const cardValue = cardTag ? cardTag[0].match(/content="([^"]*)"/) : null;
+      if (!cardTag) {
+        issues.push("missing twitter:card");
+      } else if (!cardValue || cardValue[1] !== "summary_large_image") {
+        issues.push(
+          `twitter:card degraded to "${cardValue ? cardValue[1] : ""}" — the layout supplies summary_large_image`,
+        );
+      }
+
+      // Both icon links, for the same reason and to close the gap the static
+      // rule got backwards: the layout's `icons` sets `icon` AND `apple`, but
+      // the source-level rule modelled one field per key, so a page writing
+      // `icons: { icon }` passed while silently dropping `apple`. Asserting
+      // the rendered links needs no model of how many fields there are.
+      for (const rel_ of ["icon", "apple-touch-icon"]) {
+        if (!visible.match(new RegExp(`<link[^>]*rel="${rel_}"[^>]*>`))) {
+          issues.push(`missing <link rel="${rel_}">`);
+        }
+      }
+
       // The WebSite node's publisher Organization is read for entity
       // resolution, and it shipped with name/url/logo/sameAs — nothing to
       // verify the business against or contact it by. The LOCALE layout
