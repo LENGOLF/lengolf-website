@@ -3712,6 +3712,15 @@ async function runSeoTests() {
           return end === -1 ? "" : chunk.slice(end + "-->".length);
         })
         .join("");
+      // If a stripped construct STRADDLES the boundary it can take the real
+      // </head> with it; headEnd is then -1 and the fallback hands these
+      // assertions the whole document, so a <body> tag could satisfy them.
+      // Unreachable on this app's markup (no literal "<!--" anywhere under
+      // app/ components/ lib/ data/, React escapes "<", and nine live pages
+      // across every section-D shape produce byte-identical output under the
+      // old and new orderings) — recorded because the comment above used to
+      // claim flatly that nothing in <body> can affect this check, which is
+      // now conditional.
       const headEnd = stripped.indexOf("</head>");
       const visible = headEnd === -1 ? stripped : stripped.slice(0, headEnd);
       const ogTag = (prop: string): string | null => {

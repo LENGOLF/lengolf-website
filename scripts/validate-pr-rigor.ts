@@ -63,13 +63,28 @@ if (!body.trim()) {
   process.exit(1)
 }
 
-// EVERY occurrence, and the LOWEST wins. A first-match read was satisfied by
-// QUOTING the requirement — a body containing "the template requires a line of
-// the form `Independent review agents spawned: 3`" above a real line reading
-// 0 passed the floor while disclosing zero review. Taking the minimum is
-// robust to a decoy on either side of the real line, and a body stating one
-// number is unaffected.
-const matches = [...body.matchAll(DISCLOSURE_RE)]
+// Only occurrences in PROSE count. Code spans, fenced blocks and blockquotes
+// are where a body QUOTES the requirement, and quoting is what defeated the
+// first-match read: "the template requires a line of the form
+// `Independent review agents spawned: 3`" above a real line reading 0 passed
+// the floor while disclosing zero review.
+//
+// Taking the minimum of ALL occurrences was the first fix and it was wrong in
+// the opposite direction: a body explaining THIS change necessarily quotes
+// `... spawned: 0`, so the minimum was 0 and the gate reddened a correct,
+// self-documenting description — uncleárable by editing it, per the payload
+// caveat above. Prose-vs-code separates the two cases cleanly: the decoy is
+// backticked and the real line is not, in both bodies.
+//
+// The minimum is still applied to what survives, so two PROSE numbers cannot
+// be gamed by ordering.
+const prose = body
+  .replace(/```[\s\S]*?```/g, ' ')
+  .replace(/`[^`\n]*`/g, ' ')
+  .split(/\r?\n/)
+  .filter((l) => !/^\s*>/.test(l))
+  .join('\n')
+const matches = [...prose.matchAll(DISCLOSURE_RE)]
 
 if (matches.length === 0) {
   console.error(
@@ -85,7 +100,7 @@ if (matches.length === 0) {
 
 const counts = matches.map((m) => Number(m[1])).filter((n) => Number.isFinite(n))
 const count = counts.length > 0 ? Math.min(...counts) : NaN
-const quoted = matches.length > 1 ? ` (lowest of ${matches.length} occurrences)` : ''
+const quoted = matches.length > 1 ? ` (lowest of ${matches.length} prose occurrences)` : ''
 
 if (!Number.isFinite(count) || count < MIN_AGENTS) {
   console.error(

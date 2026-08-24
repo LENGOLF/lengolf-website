@@ -26,8 +26,10 @@
  * Both are now asserted on the RENDERED tag in smoke section D, where the
  * resolver has already run and there is nothing to predict. The TRADE, stated
  * plainly and without the inflation an earlier version of this paragraph
- * carried: the walk yields 47 files under app/, but only 33 reach the audit
- * (the rest are pre-filtered), and — the part that matters — NO page file
+ * carried: the walk yields 47 files under app/, of which 36 reach the audit
+ * (measured against THIS token list — the figure was 33 under the previous
+ * one, and quoting it forward after widening the filter was its own stale
+ * number), and — the part that matters — NO page file
  * declares `twitter` or `icons` today, only the layout. So nothing LIVE was
  * given up; what was given up is coverage of a hypothetical future page-level
  * declaration. Section D fetches 34 URLs, and 13 of the 31 openGraph
@@ -146,7 +148,7 @@ const EXPECTED_DECLARATIONS = 31
  * up; the docblock was right. Consequence worth knowing: adding a case without
  * raising this stays green, so raise it in the same commit that adds one.
  */
-const MIN_SELF_TEST_CASES = 73
+const MIN_SELF_TEST_CASES = 75
 
 interface Problem {
   file: string
@@ -209,6 +211,37 @@ function directProp(obj: ts.ObjectLiteralExpression, name: string): ts.Expressio
     else if (ts.isShorthandPropertyAssignment(p) && p.name.text === name) found = p.name
   }
   return found
+}
+
+/**
+ * The first SpreadAssignment appearing AFTER the last direct property named
+ * `name`, or null. That ordering is the whole point: a later key wins in JS,
+ * so a spread BEFORE the property is harmless and one AFTER it silently
+ * replaces the value the gate just verified.
+ *
+ * The first version of this check asked only "does the object declare the
+ * property at all?", justified in a comment reading "an explicit key wins over
+ * a spread at runtime". That is true only when the spread comes FIRST, and the
+ * comment was written without checking:
+ *   { openGraph: siteOpenGraph({...}), ...evil }  ->  evil.openGraph wins
+ * so an unwrapped openGraph reached the page — the exact defect this gate
+ * exists for — while the success line printed. Measured with node, not
+ * reasoned. Passing `name` also covers the layout's own object, where a
+ * trailing spread overrode `type`/`siteName` at their sole SUPPLIER.
+ */
+function spreadAfterLast(
+  obj: ts.ObjectLiteralExpression,
+  name: string
+): ts.SpreadAssignment | null {
+  let lastIdx = -1
+  obj.properties.forEach((p, i) => {
+    if (propName(p) === name) lastIdx = i
+  })
+  for (let i = lastIdx + 1; i < obj.properties.length; i++) {
+    const p = obj.properties[i]
+    if (ts.isSpreadAssignment(p)) return p
+  }
+  return null
 }
 
 /**
@@ -309,13 +342,13 @@ function metadataRoots(sf: ts.SourceFile): { opaque: { node: ts.Node; source: st
       // affected: an explicit key wins over a spread at runtime, so once the
       // root declares openGraph itself the normal rule applies and the spread
       // cannot smuggle one in.
-      const declaresOg = n.properties.some((p) => propName(p) === 'openGraph')
-      if (!declaresOg) {
-        const spread = n.properties.find((p) => ts.isSpreadAssignment(p))
-        if (spread) {
-          opaque.push({ node: spread, source: `${source} (spread)` })
-          return
-        }
+      // A spread AFTER the last openGraph key overrides it; one before does
+      // not. With no openGraph key at all, lastIdx is -1 and any spread
+      // qualifies — which is the spread-only case.
+      const overriding = spreadAfterLast(n, 'openGraph')
+      if (overriding) {
+        opaque.push({ node: overriding, source: `${source} (spread)` })
+        return
       }
       // An unresolvable computed key could be openGraph.
       const opaqueKey = n.properties.find(
@@ -467,6 +500,19 @@ export function auditSource(rel: string, src: string): FileAudit {
       layoutOpenGraphSeen = true
       const typeExpr = directProp(obj, 'type')
       const siteNameExpr = directProp(obj, 'siteName')
+      // Same class as the page-level spread hole, at the SUPPLIER. directProp
+      // reads direct properties only, so a trailing spread replaced both
+      // site-wide defaults with the gate green.
+      const clobbered = spreadAfterLast(obj, 'type') ?? spreadAfterLast(obj, 'siteName')
+      if (clobbered) {
+        problems.push({
+          file: rel,
+          line: lineOf(sf, clobbered),
+          message:
+            'root layout openGraph spreads a value AFTER its own type/siteName, ' +
+            'which overrides them at runtime — inline the fields instead',
+        })
+      }
       // Direct properties only: a stray brace inside a string used to make
       // the block swallow its sibling, so an unrelated object satisfied both.
       if (!typeExpr || normalise(typeExpr) !== 'str:website') {
@@ -796,15 +842,21 @@ function selfTest(): void {
     // ConditionalExpression is opaque and this reds on correct code.
     // --- pins for the four holes an adversarial pass opened up ---
     { name: 'a SPREAD-only metadata root is reported', rel: P, src: meta("{ ...buildMeta('golf') }"), problems: true, declarations: 0 },
+    { name: 'a spread AFTER the openGraph key is reported (it wins at runtime)', rel: P, src: IMPORT + meta(`{ openGraph: ${HELPER_NAME}({ images: [1] }), ...evil }`), problems: true, declarations: 1 },
+    { name: 'a layout spread AFTER its own fields is reported', rel: LAYOUT, src: meta("{ openGraph: { type: 'website', siteName: SITE_NAME, ...override } }"), problems: true, declarations: 1 },
     { name: 'a spread BESIDE an explicit openGraph is NOT a false failure', rel: P, src: IMPORT + meta(`{ ...base, openGraph: ${HELPER_NAME}({ images: [1] }) }`), problems: false, declarations: 1 },
     { name: 'a COMPUTED string openGraph key is counted AND rejected', rel: P, src: meta("{ ['openGraph']: { images: [1] } }"), problems: true, declarations: 1 },
     { name: 'an UNRESOLVABLE computed key is reported', rel: P, src: 'const K = "openGraph"\n' + meta('{ [K]: { images: [1] } }'), problems: true, declarations: 0 },
     { name: 'an ALIASED import beside a local shadow is REJECTED', rel: P, src: `import { ${HELPER_NAME} as _real } from '${HELPER_MODULE}'\nconst ${HELPER_NAME} = (o) => o\n` + meta(`{ openGraph: ${HELPER_NAME}({ images: [1] }) }`), problems: true, declarations: 1 },
-    // --- pins for mutations that survived a 58-mutation sweep. Each carries
-    // the IMPORT, deliberately: without it the missing-import check fires and
-    // covers for the rule under test, which is why the existing siblings at
-    // 'builder call is REJECTED' and 'SHORTHAND ... rejected' left these two
-    // free. Same trap as the null-on-both-sides aggregate cases below.
+    // --- pins for mutations that survived a 58-mutation sweep. The first TWO
+    // carry the IMPORT deliberately: without it the missing-import check fires
+    // and covers for the rule under test, which is why the existing siblings
+    // at 'builder call is REJECTED' and 'SHORTHAND ... rejected' left those
+    // two free. Same trap as the null-on-both-sides aggregate cases below.
+    // The rest do not need it and do not have it — a LAYOUT case takes the
+    // isLayout branch and never sets usesHelper, and openGraphFoo declares
+    // nothing. An earlier version of this comment said "each carries the
+    // IMPORT", which was true of two of eight.
     { name: 'a shorthand is rejected even WITH the helper imported', rel: P, src: IMPORT + 'const openGraph = { images: [1] }\n' + meta('{ openGraph }'), problems: true, declarations: 1 },
     { name: 'ANOTHER builder is rejected even WITH the helper imported', rel: P, src: IMPORT + meta('{ openGraph: someOtherBuilder({ images: [1] }) }'), problems: true, declarations: 1 },
     { name: 'layout with the WRONG og type is a violation', rel: LAYOUT, src: meta("{ openGraph: { type: 'article', siteName: SITE_NAME } }"), problems: true, declarations: 1 },
@@ -856,6 +908,13 @@ function selfTest(): void {
   // (measured). CI reads only the exit code, so nothing noticed.
   let ran = 0
   for (const c of cases) {
+    // ran++ sits after the EVALUATION but before the assertions, which is a
+    // narrower guarantee than the sibling validators' "after the comparison":
+    // this loop `continue`s on a real failure, and `ran !== declared` is
+    // checked before `failures > 0`, so counting later would misreport an
+    // ordinary failing case as HARNESS BROKEN. A `continue` placed BELOW this
+    // line still skips assertions silently — inherent to counting, and the
+    // reason --self-test is not evidence that a check still checks anything.
     const r = auditSource(c.rel, c.src)
     ran++
     if (r.declarations !== c.declarations) {
@@ -991,7 +1050,7 @@ self-test HARNESS BROKEN: ${declared} case(s) declared but ${ran} executed`)
     process.exit(1)
   }
   // A real number, not `> 0`, per the anti-vacuity rule in CLAUDE.md. Deleting
-  // cases must go red -- this file went 29 -> 45 -> 74 while silently dropping
+  // cases must go red -- this file went 29 -> 45 -> 75 while silently dropping
   // four, which a floor would have caught.
   if (ran < MIN_SELF_TEST_CASES) {
     console.error(`
