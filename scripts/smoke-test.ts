@@ -3714,17 +3714,25 @@ async function runSeoTests() {
 
       // twitter:card, asserted on the RENDERED tag. This replaces the static
       // twitter/icons tripwire in validate:open-graph, which tried to predict
-      // Next's resolution from source and got it wrong in both directions:
-      // it reddened on `twitter: { title, images }` (Next resolves
-      // `card = card || (images?.length ? 'summary_large_image' : 'summary')`,
-      // so a page supplying images lands on the layout's exact value and
-      // nothing drops), and it passed `icons: { icon }` while silently
-      // dropping the layout's `apple`, because it modelled one field per key.
+      // Next's resolution from source. Two of its three shapes were wrong,
+      // and the third was RIGHT — say so, because an earlier version of this
+      // comment wrote it off as "wrong in both directions":
+      //   - FALSE RED on `twitter: { title, images }`. Next resolves
+      //     `card = card || (images?.length ? 'summary_large_image' :
+      //     'summary')`, so a page supplying images lands on the layout's
+      //     exact value and nothing drops.
+      //   - TRUE RED on `twitter: { title }` with no images: that resolves
+      //     to `summary` permanently. Dropping the source rule gave up a real
+      //     check across all 47 files under app/.
+      //   - FALSE GREEN on `icons: { icon }`, which dropped the layout's
+      //     `apple` because the rule modelled one field per key.
       //
       // The layout is the SOLE supplier of `card` site-wide, so checking the
-      // resolved output across these URLs is complete coverage for the half
-      // that matters: did the card survive to the page? A meta-name lookup,
-      // not property= — Twitter/X tags are `name="twitter:card"`.
+      // resolved output here is complete coverage of the SUPPLIER. It is NOT
+      // complete coverage of a future page-level `twitter` declaration: 13 of
+      // the 31 openGraph declarations, the whole /golf-courses/ tree among
+      // them, are unreachable from any URL in this section. A meta-name
+      // lookup, not property= — Twitter/X tags are `name="twitter:card"`.
       // Matched the same way ogTag() does — whole tag first, then content —
       // so attribute order cannot matter. The first version required
       // name-before-content, an avoidable divergence from the idiom beside it.
