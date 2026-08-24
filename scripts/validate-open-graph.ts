@@ -83,6 +83,13 @@ const SIBLING_KEYS: Record<string, string> = { twitter: 'card', icons: 'icon' }
  */
 const EXPECTED_DECLARATIONS = 31
 
+/**
+ * Anti-vacuity floor for --self-test: the EXACT number of cases that must
+ * EXECUTE. Raise it in the same commit that adds a case, exactly like
+ * EXPECTED_DECLARATIONS above -- that friction is the point.
+ */
+const MIN_SELF_TEST_CASES = 75
+
 interface Problem {
   file: string
   line: number
@@ -759,6 +766,13 @@ function selfTest(): void {
     // string-literal key arm.
     { name: 'a ternary metadata descends into BOTH branches', rel: P, src: meta("cond ? { twitter: { card: 'x' } } : { twitter: { title: 'y' } }"), problems: true, declarations: 0 },
     { name: 'a STRING-literal openGraph key is counted', rel: P, src: meta("{ 'openGraph': { images: [1] } }"), problems: true, declarations: 1 },
+    // The POSITIVE ternary case above cannot pin the descent by itself: with
+    // metadataRoots' ConditionalExpression arm deleted the node becomes opaque,
+    // which also yields problems=true/declarations=0, so it printed ok while the
+    // rule it names was gone (measured). This negative twin discriminates --
+    // both branches are complete, so it passes only if the descent really ran;
+    // without the descent the node is opaque and this goes red.
+    { name: 'a ternary metadata with BOTH branches complete passes', rel: P, src: meta("cond ? { twitter: { card: 'x' } } : { twitter: { card: 'y' } }"), problems: false, declarations: 0 },
   ]
 
   // Message text matters: a prior version reported "generateMetadata returns
@@ -786,7 +800,13 @@ function selfTest(): void {
   ]
 
   let failures = 0
+  // Counts cases actually EXECUTED. The printed total used to be
+  // `cases.length + ...`, a literal derived from array LENGTHS -- so a `break`
+  // in any loop ran ZERO cases and still printed the full count and exited 0
+  // (measured). CI reads only the exit code, so nothing noticed.
+  let ran = 0
   for (const c of cases) {
+    ran++
     const r = auditSource(c.rel, c.src)
     if (r.declarations !== c.declarations) {
       console.error(`  FAIL ${c.name}: expected ${c.declarations} declaration(s), parsed ${r.declarations}`)
@@ -805,6 +825,7 @@ function selfTest(): void {
   }
 
   for (const c of messageCases) {
+    ran++
     const r = auditSource(c.rel, c.src)
     const hit = r.problems.some((p) => p.message.includes(c.expect))
     if (!hit) {
@@ -855,6 +876,7 @@ function selfTest(): void {
     },
   ]
   for (const c of helperCases) {
+    ran++
     const got = extractHelperDefaults(c.src)
     const ok =
       got.type === c.want.type &&
@@ -897,6 +919,7 @@ function selfTest(): void {
     { name: 'layout declaring both sibling keys passes', input: { ...base }, errors: false },
   ]
   for (const c of aggregates) {
+    ran++
     const got = auditAggregate(c.input).length > 0
     if (got !== c.errors) {
       console.error(`  FAIL [aggregate] ${c.name}: expected errors=${c.errors}, got ${got}`)
@@ -904,7 +927,21 @@ function selfTest(): void {
     } else console.log(`  ok   [aggregate] ${c.name}`)
   }
 
-  const total = cases.length + messageCases.length + helperCases.length + aggregates.length
+  const declared = cases.length + messageCases.length + helperCases.length + aggregates.length
+  const total = ran
+  if (ran !== declared) {
+    console.error(`
+self-test HARNESS BROKEN: ${declared} case(s) declared but ${ran} executed`)
+    process.exit(1)
+  }
+  // A real number, not `> 0`, per the anti-vacuity rule in CLAUDE.md. Deleting
+  // cases must go red -- this file went 29 -> 45 -> 74 while silently dropping
+  // four, which a floor would have caught.
+  if (ran < MIN_SELF_TEST_CASES) {
+    console.error(`
+self-test SHRANK: ${ran} case(s) ran, expected at least ${MIN_SELF_TEST_CASES}`)
+    process.exit(1)
+  }
   if (failures > 0) {
     console.error(`\nself-test FAILED: ${failures} of ${total} case(s)`)
     process.exit(1)
