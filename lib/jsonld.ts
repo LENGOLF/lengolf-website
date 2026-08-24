@@ -1,4 +1,4 @@
-import { SITE_URL, SITE_NAME, BUSINESS_INFO, SOCIAL_LINKS, storageUrl } from '@/lib/constants'
+import { SITE_URL, SITE_NAME, BUSINESS_INFO, SOCIAL_LINKS, PHONE_E164, storageUrl } from '@/lib/constants'
 import { relatedQuestionPath } from '@/lib/seo-links'
 import type { UsedClub } from '@/lib/clubs'
 import type { BayRateRow, MonthlyPackageRow, LessonPackage, EventPackage } from '@/data/pricing'
@@ -21,40 +21,68 @@ export function getPostalAddressJsonLd() {
 }
 
 /**
- * E.164 form of the venue phone, for machine-readable surfaces only.
- *
- * Derived from phoneRaw rather than written as a second literal that can
- * drift. BUSINESS_INFO.phone is the human-facing Thai local format
- * ("096-668-2335") that all visible copy and every tel: href still use.
- *
- * This is the format the rest of the site's structured data already
- * publishes: all 85 rows of location_pages.schema_markup carry
- * "telephone": "+66966682335" (queried 2026-08-23), byte-identical to what
- * this derives. Before this change the layout's own EntertainmentBusiness
- * node emitted the LOCAL format on those same 85 pages, so each one shipped
- * two spellings of one number.
- *
- * NOTE the derivation is only correct while phoneRaw stays a 0-prefixed
- * national number. A future '+66...' or '66...' or space-separated value
- * would produce '+66+66...' / '+6666...' / a separator-bearing string, none
- * of which is valid E.164. Smoke section D asserts the shape.
- */
-const PHONE_E164 = `+66${BUSINESS_INFO.phoneRaw.replace(/^0/, '')}`
-
-/**
- * Customer-service ContactPoint for the Organization publisher node below.
- * It exists so a consumer reading the structured data can find a way to
+ * Customer-service ContactPoints for the Organization publisher node below.
+ * They exist so a consumer reading the structured data can find a way to
  * reach the business; /about-us/ carries the same email and the same phone
  * NUMBER in visible copy, in the local format, and /contact/ 308s there.
  *
- * availableLanguage is en + th ONLY, and that is deliberate. It would be an
- * overclaim to list ja/ko/zh on a ContactPoint whose channels are telephone
- * and email: the site's own copy scopes those languages to LINE and email
- * ("LINE @lengolf or email" in CourseClubRentalFaq.a11 across ja/ko/zh), the
- * ja copy states in-store staff communicate mainly in English, and the EN
- * faq-hub answer says replies come "in English and Thai". A LINE
- * ContactPoint carrying the other three would be accurate; inventing phone
- * support in five languages is not.
+ * TWO nodes, split by channel, because the languages genuinely differ and a
+ * single node cannot state that. The previous single node carried telephone
+ * AND email under availableLanguage ['en','th'] — which contradicted the
+ * site's own copy on the same rendered page: CourseClubRentalFaq.a11 ships as
+ * FAQPage JSON-LD and names EMAIL as a channel answering in the reader's own
+ * language, in every catalog. Be precise about the shape: an earlier draft
+ * said "all five promise Korean, Japanese and Chinese" and only TWO do. en and
+ * th name all three languages ("email us and we'll respond in your language"
+ * is the EN wording, not a shared one); ja, ko and zh each promise only their
+ * OWN language. The union is identical and the conclusion is unchanged — every
+ * catalog offers email in its own language, so the email channel genuinely
+ * spans all five. So the structured data under-claimed email
+ * support in exactly the three languages the ja/ko/zh landing pages exist to
+ * attract, while sitting beside a node claiming the opposite.
+ *
+ * The en+th restriction is KEPT on the phone, but state the evidence
+ * honestly, because an earlier draft of this note claimed "no copy anywhere
+ * states telephone support in those languages" and that is FALSE. What the
+ * copy actually says, in three places that do not agree with each other:
+ *
+ *   - CourseClubRentalFaq.a11 (all 5): staff CAN assist in ko/ja/zh, and the
+ *     channels it names are LINE and EMAIL. Phone is not named.
+ *   - data/faq-hub.ts ctaSubtitle (ja/ko/zh): replies come in English and
+ *     Thai, with ja/ko/zh handled "on LINE @lengolf". It lists LINE, phone
+ *     and booking as channels and is SILENT on email — silence, not an
+ *     exclusion, which is why it does not contradict the email node below.
+ *   - CourseClubRental.contactLanguageNote (ja/ko/zh only): a bare
+ *     "日本語対応可" / "한국어로 답변 가능합니다" / "支持中文服务" rendered by
+ *     MultiChannelContact.tsx as the LAST element, directly beneath the phone
+ *     row. It is channel-agnostic, so a reader may well take it as covering
+ *     the phone number immediately above it.
+ *
+ * So: nothing affirmatively promises PHONE support in ja/ko/zh, and the two
+ * explicit statements both route those languages to LINE/email — which is why
+ * en+th stays. But the third string is genuinely ambiguous, so this is a
+ * best-supported reading of contradictory copy, NOT a settled fact. If the
+ * business does answer the phone in Japanese, widening this node is correct
+ * and the smoke assertion below must move with it. Flagged for an owner
+ * decision rather than silently cemented.
+ *
+ * The error the split fixes is narrower and is not in doubt: applying that
+ * (defensible) phone reasoning to the EMAIL channel too, where a11 names
+ * email explicitly in all five catalogs.
+ *
+ * LINE is not a third ContactPoint, but it is no longer absent either, and an
+ * earlier draft of this note was wrong about why. schema.org has no
+ * contactType or ContactPoint property that identifies a messaging account —
+ * true — but that note concluded LINE "could only be smuggled in as a bare
+ * url", which is false: sameAs is schema.org's documented mechanism for
+ * identifying an account elsewhere, and THIS NODE ALREADY USED IT for Facebook
+ * and Instagram. Since a11 names LINE FIRST in all five catalogs and
+ * data/faq-hub.ts routes ja/ko/zh to LINE specifically, leaving the primary
+ * non-English channel out of the structured data was a real gap, not a
+ * principled omission. SOCIAL_LINKS.lineProfile now sits in sameAs on both
+ * business nodes, by the identical mechanism. Note it is lineProfile, not
+ * line: sameAs wants a stable identity URL, and the CTA shortlink is
+ * rotatable. See the note in lib/constants.ts.
  *
  * No areaServed: a single-country value reads as "out of area" for the
  * pre-arrival enquiries the ja/ko/zh landing pages exist to attract, and the
@@ -63,13 +91,20 @@ const PHONE_E164 = `+66${BUSINESS_INFO.phoneRaw.replace(/^0/, '')}`
  * fifth spelling of the concept. Unbounded is both truer and cheaper.
  */
 export function getContactPointJsonLd() {
-  return {
-    '@type': 'ContactPoint' as const,
-    contactType: 'customer service',
-    telephone: PHONE_E164,
-    email: BUSINESS_INFO.email,
-    availableLanguage: ['en', 'th'],
-  }
+  return [
+    {
+      '@type': 'ContactPoint' as const,
+      contactType: 'customer service',
+      telephone: PHONE_E164,
+      availableLanguage: ['en', 'th'],
+    },
+    {
+      '@type': 'ContactPoint' as const,
+      contactType: 'customer service',
+      email: BUSINESS_INFO.email,
+      availableLanguage: ['en', 'th', 'ja', 'ko', 'zh'],
+    },
+  ]
 }
 
 export function getLocalBusinessJsonLd() {
@@ -97,7 +132,7 @@ export function getLocalBusinessJsonLd() {
       opens: '09:00',
       closes: '23:00',
     },
-    sameAs: [SOCIAL_LINKS.facebook, SOCIAL_LINKS.instagram],
+    sameAs: [SOCIAL_LINKS.facebook, SOCIAL_LINKS.instagram, SOCIAL_LINKS.lineProfile],
     image: storageUrl('branding/logo.png'),
     priceRange: '$$',
   }
@@ -143,8 +178,26 @@ export function getWebSiteJsonLd() {
         url: storageUrl('branding/logo.png'),
       },
       address: getPostalAddressJsonLd(),
+      // Scalar telephone/email in ADDITION to contactPoint. Google's guidance
+      // points this way, but do NOT quote it as if it covered this node: the
+      // sentence ("specify a primary phone number at the LocalBusiness level
+      // before using contactPoint") is scoped to LocalBusiness and to PHONE.
+      // This is an Organization. What actually licenses these two lines is
+      // schema.org: telephone and email are DIRECT properties of Organization,
+      // not inherited, so stating them here is well-formed regardless.
+      //
+      // This is not redundancy: contactPoint became an ARRAY when it split by
+      // channel, so `publisher.contactPoint.telephone` — a scalar read that
+      // worked before — now yields undefined. Conformant JSON-LD/RDF parsers
+      // are unaffected, but hand-rolled scrapers and LLM extractors reading
+      // the raw JSON are, and they do not get patched. This repo's own smoke
+      // test made exactly that mistake in the same commit. These two lines
+      // restore the scalar read with no loss, and the language nuance stays
+      // where only contactPoint can express it.
+      telephone: PHONE_E164,
+      email: BUSINESS_INFO.email,
       contactPoint: getContactPointJsonLd(),
-      sameAs: [SOCIAL_LINKS.facebook, SOCIAL_LINKS.instagram],
+      sameAs: [SOCIAL_LINKS.facebook, SOCIAL_LINKS.instagram, SOCIAL_LINKS.lineProfile],
     },
   }
 }
