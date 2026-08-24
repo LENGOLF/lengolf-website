@@ -40,7 +40,7 @@
  * that returns anything other than an object literal is reported, because
  * the gate cannot see inside it.
  *
- * Smoke section D asserts the rendered artifact on 33 URLs. This runs with no
+ * Smoke section D asserts the rendered artifact on 34 URLs. This runs with no
  * server and covers every declaration in app/.
  *
  * SELF-TEST COVERAGE, stated honestly. A mutation pass (delete one rule, re-run

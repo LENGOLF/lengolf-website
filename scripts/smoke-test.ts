@@ -3163,10 +3163,20 @@ const seoTests: SeoTest[] = [
   // LocalBusiness from location_pages.schema_markup) alongside the layout's
   // two. Without it, the telephone cross-check below iterates a set that has
   // exactly one telephone-bearing node on every URL in this list, so widening
-  // it from .find() to a loop asserts nothing new. Measured on production,
-  // all 85 /location/ pages currently serve "096-668-2335" and
-  // "+66966682335" on the same page; this entry is what makes the suite see
-  // that class of disagreement.
+  // it from .find() to a loop asserts nothing new.
+  //
+  // HISTORY, in the past tense on purpose: when this entry was added, all 85
+  // /location/ pages served the local format on the layout node and E.164 on
+  // the DB-sourced one -- two spellings of one number per indexed page. PR
+  // #109 deployed on 2026-08-24 and that is no longer true: re-measured across
+  // all 85, it is now 0/85 carrying both and 85/85 E.164 on every node. Do NOT
+  // restate this in the present tense; the check's VALUE is unchanged (this is
+  // still the only multi-node route) but its original evidence no longer
+  // reproduces.
+  //
+  // And do not read the check as guarding display format: it parses
+  // application/ld+json only. The 6 visible "096-668-2335" occurrences on this
+  // page (header, CTA, footer) are correct human copy and are invisible to it.
   { path: "/location/golf-near-sathorn/", locale: "en" },
 ];
 
@@ -3666,7 +3676,7 @@ async function runSeoTests() {
       // a mis-strip is a FALSE FAILURE, not a false pass.
       //
       // Unreachable today, but be precise about why: React escapes `<` in
-      // text and attributes, and of the 86 dangerouslySetInnerHTML sites in
+      // text and attributes, and of the 85 dangerouslySetInnerHTML sites in
       // tracked source, 85 are JSON.stringify'd JSON-LD or DOMPurify-sanitised
       // post content. The 86th is the GTM bootstrap in app/[locale]/layout.tsx
       // — the ONLY such site inside <head>, i.e. the region this now bounds to
