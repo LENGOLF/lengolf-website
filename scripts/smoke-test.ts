@@ -3757,9 +3757,13 @@ async function runSeoTests() {
       // The layout is the SOLE supplier of `card` site-wide, so checking the
       // resolved output here is complete coverage of the SUPPLIER. It is NOT
       // complete coverage of a future page-level `twitter` declaration: 13 of
-      // the 31 openGraph declarations, the whole /golf-courses/ tree among
-      // them, are unreachable from any URL in this section. A meta-name
-      // lookup, not property= — Twitter/X tags are `name="twitter:card"`.
+      // the 31 openGraph declarations are unreachable from any URL in this
+      // section — 8 of those 13 under /golf-courses/, the other 5 being
+      // activities, best, cost, hotels and second-hand-club detail. This was
+      // the FOURTH site of that sentence, and the two commits that "fixed the
+      // remaining sites" both edited this file without touching it. Grep the
+      // claim, not the diff. A meta-name lookup, not property= — Twitter/X
+      // tags are `name="twitter:card"`.
       // Matched the same way ogTag() does — whole tag first, then content —
       // so attribute order cannot matter. The first version required
       // name-before-content, an avoidable divergence from the idiom beside it.

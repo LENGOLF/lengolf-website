@@ -89,27 +89,33 @@
  * a descended one — the discriminating input is two literal branches, which
  * must be GREEN).
  *
- * STILL uncovered by mutation. This list is MEASURED — 13 single-arm mutations
- * here, corroborated by an independent 58-mutation sweep — and an earlier
- * version of it was INCOMPLETE: it named three of the ten. Note what it was
- * not: the correction that replaced it claimed the old text "named two that
- * are in fact PINNED" and had `satisfies`/angle-cast "backwards". That was
- * FABRICATED. The old text named `classify`'s helper-NAME check and
- * `unwrap`'s `await` and `as` arms — all three genuinely uncovered — and
- * never mentioned `satisfies` or the angle cast at all. Inventing a defect in
- * the thing you are correcting is worse than the incompleteness it replaced.
- * Ten mutations went green in BOTH modes:
- *   - `unwrap`: the parens, `as`, non-null and `await` arms. Its `satisfies`
- *     and angle-bracket-cast arms ARE pinned — deleting either turns
- *     --self-test red.
- *   - `isMeaningfulValue`: the `null` check and the numeric check.
- *   - `classify`'s helper-NAME comparison (forcing it true stays green).
+ * STILL uncovered by mutation. FIVE single-arm mutations go green in both
+ * modes, re-measured against THIS file:
+ *   - `unwrap`'s parens, `as`, non-null and `await` arms. Its `satisfies` and
+ *     angle-bracket-cast arms ARE pinned — deleting either turns --self-test
+ *     red.
  *   - `metadataRoots`' nested-function guard.
- *   - the layout non-object-form report.
- *   - the layout `type` wrong-VALUE compare (`!typeExpr` alone stays green).
  * Plus `main()` itself, which is not a single arm: the walk, the pre-filter,
  * the layout exemption, the inventory and the exit code are exercised only by
  * the real corpus run. A green --self-test is not proof any of those work.
+ *
+ * THIS PARAGRAPH IS ON ITS THIRD REVISION AND EACH ONE WAS WRONG DIFFERENTLY.
+ * Keep the history, because the failure mode is the point:
+ *   1. The original named four items — `classify`'s helper-NAME check,
+ *      `unwrap`'s `await` and `as` arms, and `main()`. All genuinely
+ *      uncovered at the time. It was INCOMPLETE, nothing more.
+ *   2. The correction claimed it "named two that are in fact PINNED" and had
+ *      `satisfies`/angle-cast "backwards". That was FABRICATED — the original
+ *      never mentioned either. Inventing a defect in the text you are
+ *      correcting is worse than the incompleteness it replaced.
+ *   3. The replacement listed TEN, which was true when measured and false when
+ *      committed: the same diff added self-test cases pinning five of them
+ *      (`isMeaningfulValue`'s null and numeric checks, `classify`'s
+ *      helper-NAME comparison, the layout non-object-form report, and the
+ *      layout `type` wrong-VALUE compare). A list of what is unpinned, written
+ *      in the commit that pins things, is stale by construction.
+ * So: re-run the mutations before editing this list. Do not adjust the number
+ * to match a memory of the last measurement.
  *
  * The one that moved: `directProp`'s ShorthandPropertyAssignment arm was
  * uncovered when the twitter/icons rule was deleted (its only pin was an icons

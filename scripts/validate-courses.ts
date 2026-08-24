@@ -435,8 +435,10 @@ function selfTest(): never {
     // Counters sit AFTER the comparison, deliberately. Incrementing first was
     // vacuous in a way the `break` this guard was written against does not
     // expose: a `continue` placed one line lower left
-    // `ran === SELF_TESTS.length` intact, so 2 of 35 assertions ran and the
-    // summary was byte-identical to a healthy run. `continue` is what an
+    // `ran === NOUN_SELF_TESTS.length` intact, so 1 of 16 assertions ran and
+    // the summary was byte-identical to a healthy run. (This comment was
+    // pasted from the 35-case suite in validate-course-slots.ts and quoted its
+    // numbers for a while.) `continue` is what an
     // ordinary refactor adds (a skip for a new shape, a locale filter). Count
     // what was CHECKED, not what the loop was handed.
     ran++
