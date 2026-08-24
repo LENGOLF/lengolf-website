@@ -46,10 +46,19 @@ const PRICING_API =
 // dedup, so without this wrapper each of those would hit the POS API separately
 // (~2× per guide page, and one extra per data getter). Cache lifetime is a
 // single request/render pass, so ISR revalidation still refreshes on schedule.
+//
+// The revalidate value here caps the ISR interval of every page that calls
+// this (home, /golf/, /guide/[slug], /cost/[slug], /activities/[slug],
+// /hotels/[slug], /best/[slug], /llms.txt — ~420 pages): Next.js sets a
+// route's effective revalidate to the shortest fetch-level revalidate used
+// during its render, overriding those pages' own (longer) declared interval.
+// Keep this at least as long as the longest page-level interval it feeds;
+// it was 300s until 2026-08-25, which forced all ~420 pages to regenerate
+// every 5 minutes and was the single largest driver of Vercel ISR-write cost.
 export const getPricingCatalog = perRequest(async (): Promise<PricingCatalog | null> => {
   try {
     const res = await fetch(PRICING_API, {
-      next: { revalidate: 300 },
+      next: { revalidate: 3600 },
       signal: AbortSignal.timeout(5000),
     })
     if (!res.ok) throw new Error(`Pricing API ${res.status}`)
