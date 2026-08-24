@@ -50,10 +50,16 @@ const PRICING_API =
 // The revalidate value here caps the ISR interval of every page that calls
 // this (home, /golf/, /guide/[slug], /cost/[slug], /activities/[slug],
 // /hotels/[slug], /best/[slug], /llms.txt — ~420 pages): Next.js sets a
-// route's effective revalidate to the shortest fetch-level revalidate used
-// during its render, overriding those pages' own (longer) declared interval.
-// Keep this at least as long as the longest page-level interval it feeds;
-// it was 300s until 2026-08-25, which forced all ~420 pages to regenerate
+// route's effective revalidate to the *shorter* of its own declared value
+// and every fetch-level revalidate used during its render — this fetch can
+// only shorten a page's interval, never lengthen it. Most of the ~420 pages
+// declare no revalidate of their own, so this value sets theirs outright;
+// home and /llms.txt declare 86400 and still get pulled down to this value
+// (known tradeoff, not a bug — raise further to relax that if daily-fresh
+// pricing on those two routes matters more than the extra cost saved).
+// A transient pricing-API failure at regen time can leave the fallback
+// catalog (see FALLBACK in site-facts.ts) live for up to this long.
+// It was 300s until 2026-08-25, which forced all ~420 pages to regenerate
 // every 5 minutes and was the single largest driver of Vercel ISR-write cost.
 export const getPricingCatalog = perRequest(async (): Promise<PricingCatalog | null> => {
   try {
