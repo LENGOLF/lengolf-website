@@ -3749,15 +3749,116 @@ async function runSeoTests() {
           if (!pub.address?.streetAddress) {
             issues.push("WebSite publisher missing address.streetAddress");
           }
-          if (!pub.contactPoint?.email) {
-            issues.push("WebSite publisher missing contactPoint.email");
+          // sameAs must carry all three official accounts. LINE is the
+          // channel the site names FIRST in every locale, and it was absent
+          // from the structured data entirely until this change -- so without
+          // an assertion the one behavioural change in that commit had zero
+          // coverage and could be reverted silently.
+          //
+          // Pinned to page.line.me, NOT the lin.ee CTA shortlink: sameAs is an
+          // identity claim and the shortlink is rotatable (reissuing it is
+          // routine in LINE OA Manager). If that ever legitimately changes,
+          // move SOCIAL_LINKS.lineProfile and this assertion together.
+          const sameAs: unknown = pub.sameAs;
+          const sameAsList = Array.isArray(sameAs) ? sameAs.map(String) : [];
+          for (const host of ["facebook.com", "instagram.com", "page.line.me"]) {
+            if (!sameAsList.some((u) => u.includes(host))) {
+              issues.push(
+                `WebSite publisher sameAs is missing ${host}: ${JSON.stringify(sameAs)}`,
+              );
+            }
           }
-          // Assert the SHAPE, not truthiness. PHONE_E164 in lib/jsonld.ts is
+          // contactPoint is an ARRAY of two nodes, split by channel: phone
+          // (en/th) and email (en/th/ja/ko/zh). Normalised here rather than
+          // indexed, so the assertions below survive a re-split without
+          // silently reading `undefined` off an array — which is exactly what
+          // `pub.contactPoint?.email` did the moment the split landed, i.e. it
+          // would have gone green while asserting nothing.
+          const contactPoints: Record<string, unknown>[] = Array.isArray(
+            pub.contactPoint,
+          )
+            ? pub.contactPoint
+            : pub.contactPoint
+              ? [pub.contactPoint]
+              : [];
+          // EVERY email-bearing node, not the first -- symmetric with the
+          // phone loop below. A `.find()` here passes green if a second,
+          // narrower email node is ever added beside a correct one.
+          const emailPoints = contactPoints.filter((c) => c.email);
+          if (emailPoints.length === 0) {
+            issues.push("WebSite publisher has no contactPoint carrying an email");
+          } else {
+            // The email channel must advertise all five site locales.
+            // CourseClubRentalFaq.a11 ships as FAQPage JSON-LD on the same
+            // rendered page and names EMAIL as a channel answering in the
+            // reader's OWN language, in every catalog. Be precise: only en and
+            // th name all three of Korean/Japanese/Chinese; ja, ko and zh each
+            // promise only their own. Same union, so the five-locale claim
+            // holds -- but do not restate the stronger version, which is the
+            // one this split exists to retract. Listing only en+th here
+            // contradicted the site's own structured data on the same page.
+            for (const emailPoint of emailPoints) {
+            const langs = emailPoint.availableLanguage;
+            const missing = ["en", "th", "ja", "ko", "zh"].filter(
+              (l) => !(Array.isArray(langs) && langs.includes(l)),
+            );
+            if (missing.length > 0) {
+              issues.push(
+                Array.isArray(langs)
+                  ? `email contactPoint.availableLanguage is missing ${missing.join("/")}: ${JSON.stringify(langs)}`
+                  : `email contactPoint.availableLanguage is not an array: ${JSON.stringify(langs)}`,
+              );
+            }
+            }
+          }
+          // The PHONE channel must NOT claim ja/ko/zh. Nothing affirmatively
+          // promises phone support in those languages and the two explicit
+          // statements (CourseClubRentalFaq.a11, data/faq-hub.ts ctaSubtitle)
+          // both route them to LINE/email -- but see the docblock on
+          // getContactPointJsonLd: CourseClubRental.contactLanguageNote renders
+          // a channel-agnostic "supported" line directly UNDER the phone row in
+          // ja/ko/zh, so this encodes a best-supported reading of contradictory
+          // copy, not a settled fact. If the owner rules that phone support in
+          // those languages is real, widen the node and this assertion TOGETHER.
+          // This is the matched half of
+          // the check above: without it, "fixing" the languages by widening
+          // every contactPoint would pass while inventing phone support in five
+          // languages.
+          // EVERY telephone-bearing point is checked, not the first. `.find()`
+          // here was self-disarming in the same shape this file fixes two
+          // blocks below: a pair like [{telephone, en, th}, {telephone,
+          // email, ...5}] satisfied both the email arm and this one while
+          // advertising five-language phone support on the second node.
+          const phonePoints = contactPoints.filter((c) => c.telephone);
+          if (phonePoints.length === 0) {
+            issues.push("WebSite publisher has no contactPoint carrying a telephone");
+          }
+          for (const p of phonePoints) {
+            const plangs = p.availableLanguage;
+            const overclaimed = ["ja", "ko", "zh"].filter(
+              (l) => Array.isArray(plangs) && plangs.includes(l),
+            );
+            if (overclaimed.length > 0) {
+              issues.push(
+                `phone contactPoint overclaims ${overclaimed.join("/")} telephone support: ${JSON.stringify(plangs)}`,
+              );
+            }
+          }
+          // Assert the SHAPE, not truthiness. PHONE_E164 in lib/constants.ts is
           // DERIVED ("+66" + phoneRaw minus its leading zero), so a change to
           // phoneRaw's format silently yields "+66+66…" or "+6666…" — both
           // truthy, both invalid E.164, and both would sail past a
           // presence-only check.
-          const tel: unknown = pub.contactPoint?.telephone;
+          //
+          // Checked on EVERY phone node. This read `phonePoints[0]` while the
+          // comment above claimed every point was checked -- true of the
+          // availableLanguage loop, false two lines later. Measured: a second
+          // phone node holding 'BROKEN', or reverted to the local format,
+          // passed GREEN. Not reachable today (exactly one telephone-bearing
+          // node ships) but it is the self-disarming shape this repo keeps
+          // re-learning, and the guard's own comment overstated its coverage.
+          for (const pp of phonePoints) {
+          const tel: unknown = pp.telephone;
           const isThaiE164 =
             typeof tel === "string" &&
             tel.startsWith("+66") &&
@@ -3768,6 +3869,18 @@ async function runSeoTests() {
               `WebSite publisher contactPoint.telephone is not Thai E.164: ${String(tel)}`,
             );
           }
+          }
+          // ...and every phone node must agree with the others. Shape-checking
+          // each one individually would still pass a pair that each held a
+          // DIFFERENT valid E.164 number, which is the same two-spellings
+          // defect one level down.
+          const telSet = new Set(phonePoints.map((p) => String(p.telephone)));
+          if (telSet.size > 1) {
+            issues.push(
+              `contactPoint nodes disagree on telephone: ${JSON.stringify([...telSet])}`,
+            );
+          }
+          const tel: unknown = phonePoints[0]?.telephone;
           // EVERY business node on the page that states a telephone must
           // agree with the contactPoint. Reverting
           // getLocalBusinessJsonLd().telephone to the local format restores
@@ -4002,6 +4115,39 @@ async function runLlmDiscoverabilityTests() {
     // here means a consumer skipped interpolateFacts (this leaked once).
     if (body.includes("{{"))
       issues.push("unresolved '{{' fact token in output");
+    // The phone here must be E.164, and BOTH directions are asserted. This
+    // file is a machine-readable contact record for AI agents, who are not
+    // assumed to be dialling from inside Thailand, so the Thai local format
+    // is undiallable and carries no country context. It shipped the local
+    // format on two lines until the PHONE_E164 move, and nothing in the suite
+    // would have noticed a revert: the checks above assert a heading, a link
+    // and the absence of '{{'.
+    //
+    // The NEGATIVE half is the load-bearing one. Presence of '+66966682335'
+    // alone stays green if a future edit prints BOTH forms, which is exactly
+    // the drift this is meant to stop -- and 'BUSINESS_INFO.phone' is one
+    // character away from PHONE_E164 at the call site. Visible on-page copy
+    // deliberately keeps the local format; this rule is scoped to this file.
+    if (!body.includes("+66966682335"))
+      issues.push("llms.txt does not publish the phone in E.164");
+    // Matches the local format in ANY spelling, not just the hyphenated one.
+    // BUSINESS_INFO.phoneRaw ("0966682335") is one property access from
+    // PHONE_E164 and is the other plausible mis-substitution -- equally
+    // undiallable from abroad, and a literal-string check sailed past it.
+    const localPhone = /0\s*9\s*6[\s.\-]*668[\s.\-]*2335/;
+    const localHit = body.match(localPhone);
+    if (localHit) {
+      // Echo the offending LINE, not just the fact. This body includes
+      // DB-sourced blog excerpts emitted raw, so a hit can be authored copy
+      // ("call us on 096-668-2335") rather than a call-site regression -- and
+      // a message naming only E.164 would send the reader to the wrong file.
+      const line =
+        body.split("\n").find((l) => localPhone.test(l))?.trim().slice(0, 120) ??
+        localHit[0];
+      issues.push(
+        `llms.txt publishes the Thai LOCAL phone format; this surface is machine-readable and must be E.164 only. Offending line: "${line}"`,
+      );
+    }
     if (issues.length > 0) fail("GET /llms.txt", issues.join("; "));
     else pass("GET /llms.txt (served as text, curated)");
   } catch (err) {

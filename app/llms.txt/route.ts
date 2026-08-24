@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { SITE_URL, BUSINESS_INFO, SOCIAL_LINKS, BOOKING_URL } from '@/lib/constants'
+import { SITE_URL, BUSINESS_INFO, SOCIAL_LINKS, BOOKING_URL, PHONE_E164 } from '@/lib/constants'
 import { getAllPosts } from '@/lib/blog'
 import { getSeoPagesByType } from '@/lib/seo-pages'
 import { getFactTokens, interpolateFacts } from '@/lib/site-facts'
@@ -80,7 +80,7 @@ export async function GET() {
   sections.push('# LENGOLF — Indoor Golf Simulator & Bar in Bangkok')
   sections.push(
     `> LENGOLF is an indoor golf simulator venue and bar at ${BUSINESS_INFO.address}. ` +
-      `Open ${BUSINESS_INFO.hours}. Phone ${BUSINESS_INFO.phone}. Book a bay at ${BOOKING_URL}. ` +
+      `Open ${BUSINESS_INFO.hours}. Phone ${PHONE_E164}. Book a bay at ${BOOKING_URL}. ` +
       'This file points AI assistants to the most useful pages on len.golf; the full URL list is in /sitemap.xml.'
   )
 
@@ -173,7 +173,14 @@ export async function GET() {
   sections.push(
     '## Contact\n' +
       `- Address: ${BUSINESS_INFO.address}\n` +
-      `- Phone: ${BUSINESS_INFO.phone}\n` +
+      // E.164, not BUSINESS_INFO.phone. This file is an explicitly
+      // machine-readable contact record for AI agents, whose readers are not
+      // assumed to be dialling from inside Thailand: the local format
+      // ("096-668-2335") is undiallable from abroad and carries no country
+      // context. Visible on-page copy, every tel: href, the header, the footer
+      // and the localized FAQ prose deliberately keep the local format and
+      // agree with each other on every page.
+      `- Phone: ${PHONE_E164}\n` +
       `- Email: ${BUSINESS_INFO.email}\n` +
       `- Hours: ${BUSINESS_INFO.hours}\n` +
       `- LINE: ${SOCIAL_LINKS.line}\n` +
