@@ -18,6 +18,7 @@
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { COURSE_DETAIL_I18N } from '../data/golf-courses-i18n'
+import { runSelfTest } from './self-test-harness'
 
 const ROOT = process.cwd()
 const LOCALES = ['th', 'ko', 'zh', 'ja'] as const
@@ -392,44 +393,33 @@ function selfTest(): never {
   // SELF_TESTS.filter(...) they measured cases DECLARED, and a `break` here ran
   // zero cases while every floor passed and the gate exited 0 (measured
   // 2026-08-24).
-  let ran = 0
-  let firesRan = 0
-  let reasonedRan = 0
-  const reasonsRan = new Set<string>()
-  for (const t of SELF_TESTS) {
+  // map() via runSelfTest: one verdict per case by construction, so there is no
+  // counter to place correctly and no declared-vs-executed check to maintain.
+  // Three placements of the old counter each left a skip shape one line away.
+  // The fire/locale/reason tallies below are derived from the case ARRAY, which
+  // is honest now that execution is structural: they guard case DELETION, and
+  // `examined` guards execution.
+  const result = runSelfTest('slot', SELF_TESTS, (t) => {
     const verdict = judge(t.loc, t.s)
     const got = verdict !== null
     // A case with `match` must fire for the RIGHT reason. Fire-only assertions
     // let a second rule cover for a disarmed first one — see the docblock.
     const reasonOk = !t.match || (verdict !== null && t.match.test(verdict))
     const ok = got === t.expect && reasonOk
-    // Counters sit AFTER the comparison, deliberately. Incrementing first was
-    // vacuous in a way the `break` this guard was written against does not
-    // expose: a `continue` placed one line lower left
-    // `ran === SELF_TESTS.length` intact, so 2 of 35 assertions ran and the
-    // summary was byte-identical to a healthy run. `continue` is what an
-    // ordinary refactor adds (a skip for a new shape, a locale filter). Count
-    // what was CHECKED, not what the loop was handed.
-    ran++
-    if (t.expect) firesRan++
-    if (t.match) {
-      reasonedRan++
-      reasonsRan.add(t.match.source)
+    return {
+      ok,
+      label:
+        `[${t.loc}] ${t.name} — expected ${t.expect ? 'FIRE' : 'silent'}` +
+        `${t.match ? ` matching ${t.match.source}` : ''}, got ${got ? 'FIRE' : 'silent'}`,
+      detail: !ok && got ? String(verdict) : undefined,
     }
-    if (!ok) failed++
-    console.log(
-      `  ${ok ? '✓' : '✗'} [${t.loc}] ${t.name} — expected ${t.expect ? 'FIRE' : 'silent'}` +
-        `${t.match ? ` matching ${t.match.source}` : ''}, got ${got ? 'FIRE' : 'silent'}`
-    )
-    if (!ok && got) console.log(`      ${verdict}`)
-  }
+  })
+  const ran = result.examined
+  failed = result.failures
+  const firesRan = SELF_TESTS.filter((t) => t.expect).length
+  const reasonedRan = SELF_TESTS.filter((t) => t.match).length
+  const reasonsRan = new Set(SELF_TESTS.filter((t) => t.match).map((t) => t.match!.source))
   console.log(`\n${ran} self-tests ran (${firesRan} must fire, ${ran - firesRan} must stay silent) · ${failed} failed`)
-  // Declared vs EXECUTED, first: a harness reporting what it declared cannot
-  // see itself running nothing.
-  if (ran !== SELF_TESTS.length) {
-    console.log(`FAIL: HARNESS BROKEN — ${SELF_TESTS.length} cases declared, ${ran} executed`)
-    process.exit(1)
-  }
   // Count DISTINCT reasons, not cases. The first version's `reasoned >= 8`
   // counted cases carrying a `match`, so deleting two dominance cases and then
   // disarming the two rules they pinned left the suite green — the same

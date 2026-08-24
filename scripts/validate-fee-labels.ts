@@ -34,6 +34,7 @@
  */
 import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
+import { runSelfTest } from './self-test-harness'
 
 const ROOT = process.cwd()
 const SCAN_DIRS = ['app', 'components', 'lib', 'data']
@@ -207,31 +208,28 @@ const SELF_TESTS: Array<{ name: string; line: string; basis?: boolean; noun?: bo
 ]
 
 function selfTest(): never {
-  let failed = 0
-  let basisCases = 0
-  let nounCases = 0
-  let firingRan = 0
-  for (const t of SELF_TESTS) {
-    const which = t.basis !== undefined ? 'basis' : 'noun'
-    const want = t.basis ?? t.noun ?? false
+  // map() via runSelfTest: one verdict per case by construction, so there is no
+  // counter to place correctly and no declared-vs-executed check to maintain.
+  // Three placements of the old counter each left a skip shape one line away.
+  // The basis/noun/firing tallies are derived from the case ARRAY, which is
+  // honest now that execution is structural: they guard case DELETION, while
+  // `examined` guards execution.
+  const whichOf = (t: (typeof SELF_TESTS)[number]) => (t.basis !== undefined ? 'basis' : 'noun')
+  const wantOf = (t: (typeof SELF_TESTS)[number]) => t.basis ?? t.noun ?? false
+  const result = runSelfTest('fee', SELF_TESTS, (t) => {
+    const which = whichOf(t)
+    const want = wantOf(t)
     const got = which === 'basis' ? basisViolation(t.line) !== null : nounViolation(t.line) !== null
-    const ok = got === want
-    // Counters sit AFTER the comparison, deliberately. Incrementing first was
-    // vacuous in a way the `break` this guard was written against does not
-    // expose: a `continue` placed one line lower left
-    // `ran === SELF_TESTS.length` intact, so 1 of 17 assertions ran and the
-    // summary was byte-identical to a healthy run. (This comment was pasted
-    // from the 35-case suite in validate-course-slots.ts and quoted its
-    // numbers for a while.) `continue` is what an
-    // ordinary refactor adds (a skip for a new shape, a locale filter). Count
-    // what was CHECKED, not what the loop was handed.
-    if (which === 'basis') basisCases++
-    else nounCases++
-    if (want) firingRan++
-    if (!ok) failed++
-    console.log(`  ${ok ? '✓' : '✗'} [${which}] ${t.name} — expected ${want ? 'FIRE' : 'silent'}, got ${got ? 'FIRE' : 'silent'}`)
-  }
-  const ran = basisCases + nounCases
+    return {
+      ok: got === want,
+      label: `[${which}] ${t.name} — expected ${want ? 'FIRE' : 'silent'}, got ${got ? 'FIRE' : 'silent'}`,
+    }
+  })
+  const failed = result.failures
+  const basisCases = SELF_TESTS.filter((t) => whichOf(t) === 'basis').length
+  const nounCases = SELF_TESTS.filter((t) => whichOf(t) === 'noun').length
+  const firingRan = SELF_TESTS.filter((t) => wantOf(t)).length
+  const ran = result.examined
   // EXECUTED, not declared. This was the one line in the block that still read
   // `SELF_TESTS.filter(...).length` while every counter beside it had been
   // converted — so a fully skipped loop printed "0 self-tests ran (0 basis,

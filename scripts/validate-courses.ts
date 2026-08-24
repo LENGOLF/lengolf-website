@@ -44,6 +44,7 @@ import path from 'path'
 import { pathToFileURL } from 'url'
 import type { GolfCourse } from '../types/golf-courses'
 import { decimalPlaces, MIN_COORD_DECIMALS } from '../lib/geo'
+import { runSelfTest } from './self-test-harness'
 import { loadCourseFiles } from './course-files'
 import { getCourseTitle, type CourseSeoLocale } from '../lib/course-seo'
 
@@ -426,27 +427,23 @@ function selfTest(): never {
   // NOUN_SELF_TESTS.filter(...) they measured cases DECLARED, and a break at
   // the top of this loop ran zero cases while the floors still passed and the
   // gate exited 0 (measured 2026-08-24).
-  let ran = 0
-  let firesRan = 0
-  const localesRan = new Set<string>()
-  for (const t of NOUN_SELF_TESTS) {
+  // map() via runSelfTest: one verdict per case by construction, so there is no
+  // counter to place correctly and no declared-vs-executed check to maintain.
+  // Three placements of the old counter each left a skip shape one line away.
+  // The fire/locale/reason tallies below are derived from the case ARRAY, which
+  // is honest now that execution is structural: they guard case DELETION, and
+  // `examined` guards execution.
+  const result = runSelfTest('noun', NOUN_SELF_TESTS, (t) => {
     const got = PACKAGE_NOUN_RE[t.locale].test(t.title)
-    const ok = got === t.fire
-    // Counters sit AFTER the comparison, deliberately. Incrementing first was
-    // vacuous in a way the `break` this guard was written against does not
-    // expose: a `continue` placed one line lower left
-    // `ran === NOUN_SELF_TESTS.length` intact, so 1 of 16 assertions ran and
-    // the summary was byte-identical to a healthy run. (This comment was
-    // pasted from the 35-case suite in validate-course-slots.ts and quoted its
-    // numbers for a while.) `continue` is what an
-    // ordinary refactor adds (a skip for a new shape, a locale filter). Count
-    // what was CHECKED, not what the loop was handed.
-    ran++
-    if (t.fire) firesRan++
-    localesRan.add(t.locale)
-    if (!ok) failed++
-    console.log(`  ${ok ? '✓' : '✗'} [${t.locale}] ${t.name} — expected ${t.fire ? 'FIRE' : 'silent'}, got ${got ? 'FIRE' : 'silent'}`)
-  }
+    return {
+      ok: got === t.fire,
+      label: `[${t.locale}] ${t.name} — expected ${t.fire ? 'FIRE' : 'silent'}, got ${got ? 'FIRE' : 'silent'}`,
+    }
+  })
+  const ran = result.examined
+  failed = result.failures
+  const firesRan = NOUN_SELF_TESTS.filter((t) => t.fire).length
+  const localesRan = new Set(NOUN_SELF_TESTS.map((t) => t.locale))
   console.log(`\n${ran} package-noun self-tests ran (${firesRan} must fire, across ${localesRan.size} locales) · ${failed} failed`)
   // Declared vs EXECUTED. A harness that reports what it declared cannot see
   // itself running nothing.

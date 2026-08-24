@@ -129,9 +129,13 @@ import ts from 'typescript'
 import { readFileSync, readdirSync } from 'fs'
 import { join, sep } from 'path'
 
-const APP_DIR = 'app'
-const LAYOUT = 'app/[locale]/layout.tsx'
-const HELPER_FILE = 'lib/open-graph.ts'
+// Overridable ONLY so scripts/validate-open-graph-contract.ts can run this
+// exact binary against a fixture tree and assert its EXIT CODE — the one thing
+// an in-process self-test structurally cannot check. CI runs this step with
+// none of these set, so the defaults are the real corpus.
+const APP_DIR = process.env.OG_APP_DIR ?? 'app'
+const LAYOUT = process.env.OG_LAYOUT ?? 'app/[locale]/layout.tsx'
+const HELPER_FILE = process.env.OG_HELPER_FILE ?? 'lib/open-graph.ts'
 const HELPER_NAME = 'siteOpenGraph'
 const HELPER_MODULE = '@/lib/open-graph'
 
@@ -144,7 +148,7 @@ const HELPER_MODULE = '@/lib/open-graph'
  * two. On mismatch the failure prints the per-file inventory, because "bump
  * the number" is the right advice only when you added a page.
  */
-const EXPECTED_DECLARATIONS = 31
+const EXPECTED_DECLARATIONS = Number(process.env.OG_EXPECTED_DECLARATIONS ?? 31)
 
 /**
  * Anti-vacuity floor for --self-test: the number of cases that must EXECUTE.
@@ -772,6 +776,65 @@ function walk(dir: string, out: string[] = []): string[] {
   return out
 }
 
+/**
+ * One case's outcome. The self-test harness is DATA -> VERDICT -> REPORT, and
+ * that shape is the anti-vacuity mechanism; there is no counter to keep honest.
+ *
+ * WHY, because three revisions of a mutable counter failed differently. A
+ * counter answers "how many loop iterations happened", which is not the
+ * question. Incremented at the top of the loop, a `break` disarmed the suite;
+ * moved after the evaluation, a `continue` one line lower did; moved after the
+ * comparison, a `continue` below THAT did. Every placement leaves a skip
+ * shape, because the loop body owns control flow.
+ *
+ * `Array.prototype.map` does not. It yields exactly one element per input, so
+ * the executed count is the input count BY CONSTRUCTION and cannot be
+ * overstated. `continue` is not even legal inside the judge (it is a function
+ * body, not a loop); the remaining escape is a bare `return`, which produces
+ * `undefined`, and `report()` rejects a verdict that is not well-formed. The
+ * external contract suite (scripts/validate-open-graph-contract.ts) covers
+ * what no in-process harness can: that the binary actually EXITS non-zero.
+ */
+interface Verdict {
+  ok: boolean
+  label: string
+  detail?: string
+}
+
+/**
+ * Print one group's verdicts. Returns BOTH the failure count and the number
+ * EXAMINED, because the floor has to be computed from what this function
+ * actually looked at. Reading it from the source arrays instead left
+ * `report('source', caseVerdicts.slice(0, 2))` green — the arrays were intact,
+ * so the total was intact, while 20 assertions went unreported. Found by
+ * mutation, which is the only way this class of hole ever shows up.
+ *
+ * Rejects a malformed verdict, which is what a short-circuited judge produces.
+ */
+function report(kind: string, verdicts: Verdict[]): { failures: number; examined: number } {
+  const bad = verdicts.findIndex(
+    (v) => !v || typeof v.ok !== 'boolean' || typeof v.label !== 'string'
+  )
+  if (bad !== -1) {
+    console.error(
+      `\nself-test HARNESS BROKEN: [${kind}] verdict #${bad} is not a verdict ` +
+        `(${JSON.stringify(verdicts[bad])}) — a judge returned early`
+    )
+    process.exit(1)
+  }
+  let failures = 0
+  let examined = 0
+  for (const v of verdicts) {
+    examined++
+    if (v.ok) console.log(`  ok   [${kind}] ${v.label}`)
+    else {
+      console.error(`  FAIL [${kind}] ${v.label}${v.detail ? ': ' + v.detail : ''}`)
+      failures++
+    }
+  }
+  return { failures, examined }
+}
+
 function selfTest(): void {
   const P = 'app/[locale]/x/page.tsx'
   const IMPORT = `import { ${HELPER_NAME} } from '${HELPER_MODULE}'\n`
@@ -907,50 +970,40 @@ function selfTest(): void {
     },
   ]
 
-  let failures = 0
-  // Counts cases actually EXECUTED. The printed total used to be
-  // `cases.length + ...`, a literal derived from array LENGTHS -- so a `break`
-  // in any loop ran ZERO cases and still printed the full count and exited 0
-  // (measured). CI reads only the exit code, so nothing noticed.
-  let ran = 0
-  for (const c of cases) {
-    // ran++ sits after the EVALUATION but before the assertions, which is a
-    // narrower guarantee than the sibling validators' "after the comparison":
-    // this loop `continue`s on a real failure, and `ran !== declared` is
-    // checked before `failures > 0`, so counting later would misreport an
-    // ordinary failing case as HARNESS BROKEN. A `continue` placed BELOW this
-    // line still skips assertions silently — inherent to counting, and the
-    // reason --self-test is not evidence that a check still checks anything.
+  const caseVerdicts: Verdict[] = cases.map((c) => {
     const r = auditSource(c.rel, c.src)
-    ran++
     if (r.declarations !== c.declarations) {
-      console.error(`  FAIL ${c.name}: expected ${c.declarations} declaration(s), parsed ${r.declarations}`)
-      failures++
-      continue
+      return {
+        ok: false,
+        label: c.name,
+        detail: `expected ${c.declarations} declaration(s), parsed ${r.declarations}`,
+      }
     }
     if (r.problems.length > 0 !== c.problems) {
-      console.error(
-        `  FAIL ${c.name}: expected problem=${c.problems}, got ${r.problems.length > 0}` +
-          (r.problems.length ? ` (${r.problems[0].message.slice(0, 70)})` : '')
-      )
-      failures++
-      continue
+      return {
+        ok: false,
+        label: c.name,
+        detail:
+          `expected problem=${c.problems}, got ${r.problems.length > 0}` +
+          (r.problems.length ? ` (${r.problems[0].message.slice(0, 70)})` : ''),
+      }
     }
-    console.log(`  ok   ${c.name}`)
-  }
+    return { ok: true, label: c.name }
+  })
 
-  for (const c of messageCases) {
+  const messageVerdicts: Verdict[] = messageCases.map((c) => {
     const r = auditSource(c.rel, c.src)
     const hit = r.problems.some((p) => p.message.includes(c.expect))
-    ran++
-    if (!hit) {
-      console.error(
-        `  FAIL [message] ${c.name}: no problem containing "${c.expect}"` +
-          (r.problems.length ? ` (got "${r.problems[0].message.slice(0, 70)}")` : ' (no problems)')
-      )
-      failures++
-    } else console.log(`  ok   [message] ${c.name}`)
-  }
+    return hit
+      ? { ok: true, label: c.name }
+      : {
+          ok: false,
+          label: c.name,
+          detail:
+            `no problem containing "${c.expect}"` +
+            (r.problems.length ? ` (got "${r.problems[0].message.slice(0, 70)}")` : ' (no problems)'),
+        }
+  })
 
   // --- helper-default extraction ---
   const helperCases: { name: string; src: string; want: OgDefaults & { error: string | null } }[] = [
@@ -1000,18 +1053,16 @@ function selfTest(): void {
       want: { type: null, siteName: null, error: `expected ${HELPER_NAME} to return exactly one object literal, found 2` },
     },
   ]
-  for (const c of helperCases) {
+  const helperVerdicts: Verdict[] = helperCases.map((c) => {
     const got = extractHelperDefaults(c.src)
-    ran++
     const ok =
       got.type === c.want.type &&
       got.siteName === c.want.siteName &&
       (c.want.error === null ? got.error === null : got.error === c.want.error)
-    if (!ok) {
-      console.error(`  FAIL [helper] ${c.name}: got ${JSON.stringify(got)}`)
-      failures++
-    } else console.log(`  ok   [helper] ${c.name}`)
-  }
+    return ok
+      ? { ok: true, label: c.name }
+      : { ok: false, label: c.name, detail: `got ${JSON.stringify(got)}` }
+  })
 
   // --- corpus-level rules ---
   const agreed: OgDefaults = { type: 'str:website', siteName: 'expr:SITE_NAME' }
@@ -1039,28 +1090,30 @@ function selfTest(): void {
     { name: 'null on BOTH sides is still an error (drift cannot fire)', input: { ...base, layoutDefaults: { type: null, siteName: null }, helperDefaults: { type: null, siteName: null, error: null } }, errors: true },
     { name: 'an extraction error with AGREEING defaults is still an error', input: { ...base, layoutDefaults: agreed, helperDefaults: { ...agreed, error: 'boom' } }, errors: true },
   ]
-  for (const c of aggregates) {
+  const aggregateVerdicts: Verdict[] = aggregates.map((c) => {
     const got = auditAggregate(c.input).length > 0
-    ran++
-    if (got !== c.errors) {
-      console.error(`  FAIL [aggregate] ${c.name}: expected errors=${c.errors}, got ${got}`)
-      failures++
-    } else console.log(`  ok   [aggregate] ${c.name}`)
-  }
+    return got === c.errors
+      ? { ok: true, label: c.name }
+      : { ok: false, label: c.name, detail: `expected errors=${c.errors}, got ${got}` }
+  })
 
-  const declared = cases.length + messageCases.length + helperCases.length + aggregates.length
-  const total = ran
-  if (ran !== declared) {
+  const groups = [
+    report('source', caseVerdicts),
+    report('message', messageVerdicts),
+    report('helper', helperVerdicts),
+    report('aggregate', aggregateVerdicts),
+  ]
+  const failures = groups.reduce((a, g) => a + g.failures, 0)
+
+  // The total is what report() EXAMINED, never the source arrays' lengths.
+  // map() already guarantees one verdict per case, so there is no
+  // declared-vs-executed check to maintain; this floor covers the two risks the
+  // shape cannot — deleting cases from the arrays (this file went 29 -> 45 ->
+  // 75 while silently dropping four), and passing report() a subset.
+  const total = groups.reduce((a, g) => a + g.examined, 0)
+  if (total < MIN_SELF_TEST_CASES) {
     console.error(`
-self-test HARNESS BROKEN: ${declared} case(s) declared but ${ran} executed`)
-    process.exit(1)
-  }
-  // A real number, not `> 0`, per the anti-vacuity rule in CLAUDE.md. Deleting
-  // cases must go red -- this file went 29 -> 45 -> 75 while silently dropping
-  // four, which a floor would have caught.
-  if (ran < MIN_SELF_TEST_CASES) {
-    console.error(`
-self-test SHRANK: ${ran} case(s) ran, expected at least ${MIN_SELF_TEST_CASES}`)
+self-test SHRANK: ${total} case(s) declared, expected at least ${MIN_SELF_TEST_CASES}`)
     process.exit(1)
   }
   if (failures > 0) {
