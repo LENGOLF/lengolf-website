@@ -422,18 +422,32 @@ const NOUN_SELF_TESTS: Array<{ name: string; locale: CourseSeoLocale; title: str
 
 function selfTest(): never {
   let failed = 0
+  // Counted INSIDE the loop, so they measure cases EXECUTED. Derived from
+  // NOUN_SELF_TESTS.filter(...) they measured cases DECLARED, and a break at
+  // the top of this loop ran zero cases while the floors still passed and the
+  // gate exited 0 (measured 2026-08-24).
+  let ran = 0
+  let firesRan = 0
+  const localesRan = new Set<string>()
   for (const t of NOUN_SELF_TESTS) {
+    ran++
+    if (t.fire) firesRan++
+    localesRan.add(t.locale)
     const got = PACKAGE_NOUN_RE[t.locale].test(t.title)
     const ok = got === t.fire
     if (!ok) failed++
     console.log(`  ${ok ? '✓' : '✗'} [${t.locale}] ${t.name} — expected ${t.fire ? 'FIRE' : 'silent'}, got ${got ? 'FIRE' : 'silent'}`)
   }
-  const fires = NOUN_SELF_TESTS.filter((t) => t.fire).length
-  const locales = new Set(NOUN_SELF_TESTS.map((t) => t.locale)).size
-  console.log(`\n${NOUN_SELF_TESTS.length} package-noun self-tests (${fires} must fire, across ${locales} locales) · ${failed} failed`)
+  console.log(`\n${ran} package-noun self-tests ran (${firesRan} must fire, across ${localesRan.size} locales) · ${failed} failed`)
+  // Declared vs EXECUTED. A harness that reports what it declared cannot see
+  // itself running nothing.
+  if (ran !== NOUN_SELF_TESTS.length) {
+    console.log(`FAIL: HARNESS BROKEN — ${NOUN_SELF_TESTS.length} cases declared, ${ran} executed`)
+    process.exit(1)
+  }
   // Pinned AT the current population, not below it — the mistake this very
   // guard's own floor made and had corrected.
-  if (fires < 11 || locales < 5) {
+  if (firesRan < 11 || localesRan.size < 5) {
     console.log('FAIL: self-test suite has lost cases (need >= 11 firing across all 5 locales)')
     process.exit(1)
   }

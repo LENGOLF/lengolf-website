@@ -388,7 +388,21 @@ const SELF_TESTS: Array<{ name: string; loc: Loc; s: string; expect: boolean; ma
 
 function selfTest(): never {
   let failed = 0
+  // Counted INSIDE the loop: these measure cases EXECUTED. Derived from
+  // SELF_TESTS.filter(...) they measured cases DECLARED, and a `break` here ran
+  // zero cases while every floor passed and the gate exited 0 (measured
+  // 2026-08-24).
+  let ran = 0
+  let firesRan = 0
+  let reasonedRan = 0
+  const reasonsRan = new Set<string>()
   for (const t of SELF_TESTS) {
+    ran++
+    if (t.expect) firesRan++
+    if (t.match) {
+      reasonedRan++
+      reasonsRan.add(t.match.source)
+    }
     const verdict = judge(t.loc, t.s)
     const got = verdict !== null
     // A case with `match` must fire for the RIGHT reason. Fire-only assertions
@@ -402,23 +416,27 @@ function selfTest(): never {
     )
     if (!ok && got) console.log(`      ${verdict}`)
   }
-  const fires = SELF_TESTS.filter((t) => t.expect).length
-  console.log(`\n${SELF_TESTS.length} self-tests (${fires} must fire, ${SELF_TESTS.length - fires} must stay silent) · ${failed} failed`)
-  const reasoned = SELF_TESTS.filter((t) => t.match).length
+  console.log(`\n${ran} self-tests ran (${firesRan} must fire, ${ran - firesRan} must stay silent) · ${failed} failed`)
+  // Declared vs EXECUTED, first: a harness reporting what it declared cannot
+  // see itself running nothing.
+  if (ran !== SELF_TESTS.length) {
+    console.log(`FAIL: HARNESS BROKEN — ${SELF_TESTS.length} cases declared, ${ran} executed`)
+    process.exit(1)
+  }
   // Count DISTINCT reasons, not cases. The first version's `reasoned >= 8`
   // counted cases carrying a `match`, so deleting two dominance cases and then
   // disarming the two rules they pinned left the suite green — the same
   // hollowness it was written to close, one level up.
-  const distinctReasons = new Set(SELF_TESTS.filter((t) => t.match).map((t) => t.match!.source)).size
+  const distinctReasons = reasonsRan.size
   // distinctReasons is pinned AT the current count (14), not below it. At 10
   // there were four units of slack, and "delete a rule together with the
   // self-test case that pins it" is what an ordinary cleanup refactor does —
   // four rules could go with both this script and its self-test staying green
   // and byte-identical to a healthy run. Verified by mutation. Raise this line
   // in the same commit that adds a reason; never lower it.
-  if (fires < 8 || reasoned < 8 || distinctReasons < 14) {
+  if (firesRan < 8 || reasonedRan < 8 || distinctReasons < 14) {
     console.log(
-      `FAIL: self-test suite has lost coverage (${fires} firing, ${reasoned} reason-asserting, ` +
+      `FAIL: self-test suite has lost coverage (${firesRan} firing, ${reasonedRan} reason-asserting, ` +
         `${distinctReasons} distinct reasons; expected >= 8 / >= 8 / >= 14)`
     )
     process.exit(1)

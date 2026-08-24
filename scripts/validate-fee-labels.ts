@@ -220,8 +220,13 @@ function selfTest(): never {
     if (!ok) failed++
     console.log(`  ${ok ? '✓' : '✗'} [${which}] ${t.name} — expected ${want ? 'FIRE' : 'silent'}, got ${got ? 'FIRE' : 'silent'}`)
   }
+  const ran = basisCases + nounCases
   const firing = SELF_TESTS.filter((t) => t.basis || t.noun).length
-  console.log(`\n${SELF_TESTS.length} self-tests (${basisCases} basis, ${nounCases} noun; ${firing} must fire) · ${failed} failed`)
+  console.log(`\n${ran} self-tests ran (${basisCases} basis, ${nounCases} noun; ${firing} must fire) · ${failed} failed`)
+  if (ran !== SELF_TESTS.length) {
+    console.log(`FAIL: HARNESS BROKEN — ${SELF_TESTS.length} cases declared, ${ran} executed`)
+    process.exit(1)
+  }
   // Floors, so deleting cases cannot hollow the suite out.
   if (basisCases < 3 || nounCases < 12 || firing < 10) {
     console.log('FAIL: self-test suite has lost cases (need >= 3 basis, >= 12 noun, >= 10 firing)')

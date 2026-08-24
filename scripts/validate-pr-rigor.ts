@@ -73,6 +73,46 @@ if (!Number.isFinite(count) || count < MIN_AGENTS) {
   process.exit(1)
 }
 
+/**
+ * SELF-REFUTATION check.
+ *
+ * The floor above is a grep for a number, and a number can pass it while the
+ * same body explains that the number is wrong. Observed on PR #110: the body
+ * said "Independent review agents spawned: 4" and, four lines later, "Two
+ * produced the original two commits". Authoring agents are not independent
+ * reviewers, so the honest count was 2 — below the floor — yet CI passed
+ * because it only ever read the digit.
+ *
+ * So: if the body admits that some of the counted agents WROTE the code, the
+ * disclosure has refuted itself and the number has to be restated.
+ *
+ * The pattern is derived from the sentence that actually slipped through —
+ * "Two produced the original two commits" — NOT from a guess at the phrasing.
+ * The first draft of this check required "<n> of them <verb>" and did not
+ * match that line at all: the subject is a bare quantity. Three anchors keep
+ * it from firing on ordinary prose: the quantity must be the clause SUBJECT,
+ * the verb is authorship-only (not "fixed" or "found"), and a code noun must
+ * follow. Verified against both real bodies — #110's fails, #109's passes.
+ */
+const SELF_REFUTATION_RE =
+  /(?:^|[.!?]\s+|\n)\s*(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten)\b[^.\n]{0,45}?\b(?:authored|produced|wrote|created)\b[^.\n]{0,70}?\b(?:commits?|code|changes?|fix|fixes|diff)\b/i
+
+const refutation = body.match(SELF_REFUTATION_RE)
+
+if (refutation) {
+  console.error(
+    `\n❌ validate-pr-rigor: the disclosure refutes itself.\n\n` +
+      `   It claims ${count} independent review agents, but the body also says:\n` +
+      `     "${refutation[0].trim()}"\n\n` +
+      '   An agent that AUTHORED the code is not an independent reviewer of it —\n' +
+      '   that is the whole mechanism the count exists to report. Restate the\n' +
+      '   number counting reviewers ONLY, and if that drops it below the floor,\n' +
+      `   raise it by running the missing pass rather than by editing the digit.\n`
+  )
+  process.exit(1)
+}
+
 console.log(
-  `✅ validate-pr-rigor: PR discloses ${count} independent review agents (floor ${MIN_AGENTS}).`
+  `✅ validate-pr-rigor: PR discloses ${count} independent review agents (floor ${MIN_AGENTS}), ` +
+    `with no self-refutation in the body.`
 )
