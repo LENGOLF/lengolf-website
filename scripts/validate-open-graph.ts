@@ -25,12 +25,18 @@
  *
  * Both are now asserted on the RENDERED tag in smoke section D, where the
  * resolver has already run and there is nothing to predict. The TRADE, stated
- * plainly: the source rule read all 47 files under app/; section D fetches 34
- * URLs, and 13 of the 31 openGraph declarations — the whole /golf-courses/
- * tree among them — are not reachable from any of them. Coverage of the
- * SUPPLIER (the layout, sole source of both keys) is complete; coverage of a
- * future page-level declaration is not. Do not re-add a source-level version
- * without reading Next's resolver first.
+ * plainly and without the inflation an earlier version of this paragraph
+ * carried: the walk yields 47 files under app/, but only 33 reach the audit
+ * (the rest are pre-filtered), and — the part that matters — NO page file
+ * declares `twitter` or `icons` today, only the layout. So nothing LIVE was
+ * given up; what was given up is coverage of a hypothetical future page-level
+ * declaration. Section D fetches 34 URLs, and 13 of the 31 openGraph
+ * declarations are unreachable from any of them; 8 of those 13 are under
+ * /golf-courses/ (measured), the other 5 being activities, best, cost, hotels
+ * and second-hand-club detail. Coverage of the SUPPLIER (the layout, sole
+ * source of both keys) is complete; coverage of a future page-level
+ * declaration is not. Do not re-add a source-level version without reading
+ * Next's resolver first.
  *
  * WHY THE TYPESCRIPT AST, and not string scanning: this file previously used
  * a hand-rolled comment stripper plus brace counting. An adversarial pass
@@ -55,14 +61,19 @@
  * that returns anything other than an object literal is reported, because
  * the gate cannot see inside it.
  *
- * Smoke section D asserts the rendered artifact (og:type, og:site_name,
- * twitter:card) on 34 URLs. This runs with no server and covers every
- * openGraph declaration in app/.
+ * Smoke section D asserts the rendered artifact — og:type, og:site_name,
+ * twitter:card, `<link rel="icon">` and `<link rel="apple-touch-icon">` — on
+ * 34 URLs. (This line listed three of the five until a claim audit caught it,
+ * in the same commit whose message named that exact omission elsewhere.)
+ * THIS gate runs with no server and covers every openGraph declaration in
+ * app/; section D does not — see the scope note above for the 13 it misses.
  *
  * SELF-TEST COVERAGE, stated honestly. The printed total is the EXECUTED count
- * with a declared-vs-executed mismatch as a hard failure, because the previous
- * version derived it from array LENGTHS: a `break` in any loop ran zero cases
- * and still printed the full total and exited 0.
+ * with a declared-vs-executed mismatch as a hard failure. Attribution, since
+ * an earlier version of this paragraph took credit for it: THIS file already
+ * had the executed counter and the mismatch failure before the branch that
+ * wrote this docblock — the array-LENGTHS repair landed in its four sibling
+ * validators, not here. What this file gained is the `continue` fix below.
  *
  * MIN_SELF_TEST_CASES is a FLOOR (`ran < MIN`), not an equality — unlike
  * EXPECTED_DECLARATIONS, which is two-sided. Adding a case without raising it
@@ -76,14 +87,19 @@
  * a descended one — the discriminating input is two literal branches, which
  * must be GREEN).
  *
- * STILL uncovered by mutation. This list is MEASURED — 13 single-arm
- * mutations, each run against both `--self-test` and the real corpus — and an
- * earlier version of it was wrong twice over: it named three items where ten
- * are uncovered, and it named two that are in fact PINNED. Ten went green in
- * BOTH modes:
+ * STILL uncovered by mutation. This list is MEASURED — 13 single-arm mutations
+ * here, corroborated by an independent 58-mutation sweep — and an earlier
+ * version of it was INCOMPLETE: it named three of the ten. Note what it was
+ * not: the correction that replaced it claimed the old text "named two that
+ * are in fact PINNED" and had `satisfies`/angle-cast "backwards". That was
+ * FABRICATED. The old text named `classify`'s helper-NAME check and
+ * `unwrap`'s `await` and `as` arms — all three genuinely uncovered — and
+ * never mentioned `satisfies` or the angle cast at all. Inventing a defect in
+ * the thing you are correcting is worse than the incompleteness it replaced.
+ * Ten mutations went green in BOTH modes:
  *   - `unwrap`: the parens, `as`, non-null and `await` arms. Its `satisfies`
- *     and angle-bracket-cast arms are the two that ARE pinned (deleting either
- *     turns --self-test red), which is the opposite of what the old text said.
+ *     and angle-bracket-cast arms ARE pinned — deleting either turns
+ *     --self-test red.
  *   - `isMeaningfulValue`: the `null` check and the numeric check.
  *   - `classify`'s helper-NAME comparison (forcing it true stays green).
  *   - `metadataRoots`' nested-function guard.
@@ -123,11 +139,14 @@ const HELPER_MODULE = '@/lib/open-graph'
 const EXPECTED_DECLARATIONS = 31
 
 /**
- * Anti-vacuity floor for --self-test: the EXACT number of cases that must
- * EXECUTE. Raise it in the same commit that adds a case, exactly like
- * EXPECTED_DECLARATIONS above -- that friction is the point.
+ * Anti-vacuity floor for --self-test: the number of cases that must EXECUTE.
+ * A FLOOR (`ran < MIN`), NOT an equality — unlike EXPECTED_DECLARATIONS
+ * above, which is two-sided. This comment used to say "the EXACT number ...
+ * exactly like EXPECTED_DECLARATIONS", contradicting the docblock sixty lines
+ * up; the docblock was right. Consequence worth knowing: adding a case without
+ * raising this stays green, so raise it in the same commit that adds one.
  */
-const MIN_SELF_TEST_CASES = 60
+const MIN_SELF_TEST_CASES = 73
 
 interface Problem {
   file: string
@@ -161,6 +180,15 @@ function propName(p: ts.ObjectLiteralElementLike): string | null {
   if (!p.name) return null
   if (ts.isIdentifier(p.name)) return p.name.text
   if (ts.isStringLiteralLike(p.name)) return p.name.text
+  // A computed key holding a string literal IS a string key. `{ ['openGraph']:
+  // ... }` was invisible and UNCOUNTED, so the exact-count guard stayed green
+  // for a new page — the same free bypass the shorthand arm was fixed for.
+  // A computed key this cannot resolve is handled in `metadataRoots`: it could
+  // BE openGraph, so the root is reported rather than silently accepted.
+  if (ts.isComputedPropertyName(p.name)) {
+    const e = unwrap(p.name.expression)
+    if (ts.isStringLiteralLike(e)) return e.text
+  }
   return null
 }
 
@@ -270,8 +298,32 @@ function metadataRoots(sf: ts.SourceFile): { opaque: { node: ts.Node; source: st
   // "generateMetadata" about a file that has none.
   const collect = (e: ts.Expression, source: string): void => {
     const n = unwrap(e)
-    if (ts.isObjectLiteralExpression(n)) return
-    else if (ts.isConditionalExpression(n)) {
+    if (ts.isObjectLiteralExpression(n)) {
+      // An object literal is transparent only if every key is VISIBLE. An
+      // unconditional `return` here made `return { ...buildMeta('golf') }`
+      // invisible: it IS an object literal, so the openGraph could arrive
+      // through the spread, unwrapped, with the declaration count unmoved.
+      // `return buildMeta('golf')` was reported; adding two dots evaded it.
+      //
+      // The idiomatic `{ ...base, openGraph: siteOpenGraph({...}) }` is NOT
+      // affected: an explicit key wins over a spread at runtime, so once the
+      // root declares openGraph itself the normal rule applies and the spread
+      // cannot smuggle one in.
+      const declaresOg = n.properties.some((p) => propName(p) === 'openGraph')
+      if (!declaresOg) {
+        const spread = n.properties.find((p) => ts.isSpreadAssignment(p))
+        if (spread) {
+          opaque.push({ node: spread, source: `${source} (spread)` })
+          return
+        }
+      }
+      // An unresolvable computed key could be openGraph.
+      const opaqueKey = n.properties.find(
+        (p) => p.name && ts.isComputedPropertyName(p.name) && propName(p) === null
+      )
+      if (opaqueKey) opaque.push({ node: opaqueKey, source: `${source} (computed key)` })
+      return
+    } else if (ts.isConditionalExpression(n)) {
       collect(n.whenTrue, source)
       collect(n.whenFalse, source)
     } else opaque.push({ node: n, source })
@@ -476,7 +528,15 @@ export function auditSource(rel: string, src: string): FileAudit {
         // The EXPORTED name is what matters. Reading only the local name let
         // `import { notTheHelper as siteOpenGraph }` satisfy the check.
         st.importClause.namedBindings.elements.some(
-          (el) => (el.propertyName ?? el.name).text === HELPER_NAME
+          // BOTH names must be the helper. The EXPORTED one, so
+          // `notTheHelper as siteOpenGraph` cannot satisfy it — and the LOCAL
+          // binding, so `siteOpenGraph as _real` sitting beside a local
+          // `const siteOpenGraph = (o) => o` cannot either. That shape passed
+          // while the success line asserted every block "routes through
+          // siteOpenGraph() imported from @/lib/open-graph": the import
+          // existed, and nothing tied it to the call site.
+          (el) =>
+            (el.propertyName ?? el.name).text === HELPER_NAME && el.name.text === HELPER_NAME
         )
       ) {
         imported = true
@@ -734,6 +794,24 @@ function selfTest(): void {
     // string-literal key arm.
     // Descent is load-bearing in the GREEN direction now: without it the whole
     // ConditionalExpression is opaque and this reds on correct code.
+    // --- pins for the four holes an adversarial pass opened up ---
+    { name: 'a SPREAD-only metadata root is reported', rel: P, src: meta("{ ...buildMeta('golf') }"), problems: true, declarations: 0 },
+    { name: 'a spread BESIDE an explicit openGraph is NOT a false failure', rel: P, src: IMPORT + meta(`{ ...base, openGraph: ${HELPER_NAME}({ images: [1] }) }`), problems: false, declarations: 1 },
+    { name: 'a COMPUTED string openGraph key is counted AND rejected', rel: P, src: meta("{ ['openGraph']: { images: [1] } }"), problems: true, declarations: 1 },
+    { name: 'an UNRESOLVABLE computed key is reported', rel: P, src: 'const K = "openGraph"\n' + meta('{ [K]: { images: [1] } }'), problems: true, declarations: 0 },
+    { name: 'an ALIASED import beside a local shadow is REJECTED', rel: P, src: `import { ${HELPER_NAME} as _real } from '${HELPER_MODULE}'\nconst ${HELPER_NAME} = (o) => o\n` + meta(`{ openGraph: ${HELPER_NAME}({ images: [1] }) }`), problems: true, declarations: 1 },
+    // --- pins for mutations that survived a 58-mutation sweep. Each carries
+    // the IMPORT, deliberately: without it the missing-import check fires and
+    // covers for the rule under test, which is why the existing siblings at
+    // 'builder call is REJECTED' and 'SHORTHAND ... rejected' left these two
+    // free. Same trap as the null-on-both-sides aggregate cases below.
+    { name: 'a shorthand is rejected even WITH the helper imported', rel: P, src: IMPORT + 'const openGraph = { images: [1] }\n' + meta('{ openGraph }'), problems: true, declarations: 1 },
+    { name: 'ANOTHER builder is rejected even WITH the helper imported', rel: P, src: IMPORT + meta('{ openGraph: someOtherBuilder({ images: [1] }) }'), problems: true, declarations: 1 },
+    { name: 'layout with the WRONG og type is a violation', rel: LAYOUT, src: meta("{ openGraph: { type: 'article', siteName: SITE_NAME } }"), problems: true, declarations: 1 },
+    { name: 'layout openGraph as a NON-object is a violation', rel: LAYOUT, src: meta('{ openGraph: buildOg() }'), problems: true, declarations: 1 },
+    { name: 'layout siteName: null is a violation', rel: LAYOUT, src: meta("{ openGraph: { type: 'website', siteName: null } }"), problems: true, declarations: 1 },
+    { name: 'layout siteName: 0 is a violation', rel: LAYOUT, src: meta("{ openGraph: { type: 'website', siteName: 0 } }"), problems: true, declarations: 1 },
+    { name: 'openGraphFoo is NOT an openGraph declaration', rel: P, src: meta('{ openGraphFoo: { images: [1] } }'), problems: false, declarations: 0 },
     { name: 'a ternary of two literals is NOT opaque', rel: P, src: meta("cond ? { title: 'a' } : { title: 'b' }"), problems: false, declarations: 0 },
     { name: 'a STRING-literal openGraph key is counted', rel: P, src: meta("{ 'openGraph': { images: [1] } }"), problems: true, declarations: 1 },
     // The POSITIVE ternary case above cannot pin the descent by itself: with
@@ -778,8 +856,8 @@ function selfTest(): void {
   // (measured). CI reads only the exit code, so nothing noticed.
   let ran = 0
   for (const c of cases) {
-    ran++
     const r = auditSource(c.rel, c.src)
+    ran++
     if (r.declarations !== c.declarations) {
       console.error(`  FAIL ${c.name}: expected ${c.declarations} declaration(s), parsed ${r.declarations}`)
       failures++
@@ -797,9 +875,9 @@ function selfTest(): void {
   }
 
   for (const c of messageCases) {
-    ran++
     const r = auditSource(c.rel, c.src)
     const hit = r.problems.some((p) => p.message.includes(c.expect))
+    ran++
     if (!hit) {
       console.error(
         `  FAIL [message] ${c.name}: no problem containing "${c.expect}"` +
@@ -842,14 +920,24 @@ function selfTest(): void {
       want: { type: null, siteName: null, error: `expected ${HELPER_NAME} to return exactly one object literal, found 0` },
     },
     {
+      // Pins the `??` requirement. Without it the read returns the normalised
+      // EXPRESSION for a non-`??` value, so `type: own.type` would report
+      // 'expr:own.type' as the site-wide default and the drift comparison
+      // against the layout would fire with a nonsense message instead of the
+      // honest "unreadable" null.
+      name: 'a default with NO ?? fallback reads as null, not as the expression',
+      src: `export function ${HELPER_NAME}(og) {\n  return { ...og, type: own.type, siteName: own.siteName ?? SITE_NAME }\n}\n`,
+      want: { type: null, siteName: 'expr:SITE_NAME', error: null },
+    },
+    {
       name: 'an early-return guard is a loud error',
       src: `export function ${HELPER_NAME}(og) {\n  if (!og) return { type: 'website' }\n  return { ...og, type: og.type ?? 'website' }\n}\n`,
       want: { type: null, siteName: null, error: `expected ${HELPER_NAME} to return exactly one object literal, found 2` },
     },
   ]
   for (const c of helperCases) {
-    ran++
     const got = extractHelperDefaults(c.src)
+    ran++
     const ok =
       got.type === c.want.type &&
       got.siteName === c.want.siteName &&
@@ -887,8 +975,8 @@ function selfTest(): void {
     { name: 'an extraction error with AGREEING defaults is still an error', input: { ...base, layoutDefaults: agreed, helperDefaults: { ...agreed, error: 'boom' } }, errors: true },
   ]
   for (const c of aggregates) {
-    ran++
     const got = auditAggregate(c.input).length > 0
+    ran++
     if (got !== c.errors) {
       console.error(`  FAIL [aggregate] ${c.name}: expected errors=${c.errors}, got ${got}`)
       failures++
@@ -938,9 +1026,18 @@ function main(): void {
     // one defect a token pre-filter cannot see.
     if (
       rel !== LAYOUT &&
+      // BOTH metadata tokens are needed, and neither subsumes the other:
+      // `'generateMetadata'.includes('metadata')` is FALSE — capital M. The
+      // lowercase token is what the opaque-root rule needs, because
+      // `export const metadata = buildMeta('x')` carries no `openGraph` token at
+      // all, so the file that rule exists for never reached it while the very
+      // same source passed to auditSource directly WAS reported. The first
+      // attempt at this fix dropped `generateMetadata` on the strength of that
+      // false subsumption and silently re-opened the hole for every
+      // generateMetadata file — measured, not reasoned: the spread exploit went
+      // back to exit 0. `twitter`/`icons` went with the rule that read them.
       !src.includes('openGraph') &&
-      !src.includes('twitter') &&
-      !src.includes('icons') &&
+      !src.includes('metadata') &&
       !src.includes('generateMetadata')
     ) {
       continue

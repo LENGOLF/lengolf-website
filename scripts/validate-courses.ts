@@ -430,11 +430,18 @@ function selfTest(): never {
   let firesRan = 0
   const localesRan = new Set<string>()
   for (const t of NOUN_SELF_TESTS) {
+    const got = PACKAGE_NOUN_RE[t.locale].test(t.title)
+    const ok = got === t.fire
+    // Counters sit AFTER the comparison, deliberately. Incrementing first was
+    // vacuous in a way the `break` this guard was written against does not
+    // expose: a `continue` placed one line lower left
+    // `ran === SELF_TESTS.length` intact, so 2 of 35 assertions ran and the
+    // summary was byte-identical to a healthy run. `continue` is what an
+    // ordinary refactor adds (a skip for a new shape, a locale filter). Count
+    // what was CHECKED, not what the loop was handed.
     ran++
     if (t.fire) firesRan++
     localesRan.add(t.locale)
-    const got = PACKAGE_NOUN_RE[t.locale].test(t.title)
-    const ok = got === t.fire
     if (!ok) failed++
     console.log(`  ${ok ? '✓' : '✗'} [${t.locale}] ${t.name} — expected ${t.fire ? 'FIRE' : 'silent'}, got ${got ? 'FIRE' : 'silent'}`)
   }

@@ -3687,15 +3687,33 @@ async function runSeoTests() {
       // that path is <body>-only, which is exactly what bounding removes.
       // Bounding to <head> shrinks the risk surface; it does not eliminate the
       // class, since 16 head scripts still precede the og tags.
-      const headEnd = body.indexOf("</head>");
-      const visible = (headEnd === -1 ? body : body.slice(0, headEnd))
+      // ORDER IS LOAD-BEARING, and the first version had it backwards. Finding
+      // "</head>" first meant a head <script> whose STRING contained "</head>"
+      // truncated the bound to that point, and all five checks false-failed on
+      // a correct page. Strip scripts first, then bound: the strip removes the
+      // only construct that can carry a fake terminator.
+      //
+      // HTML comments go too. A commented-out
+      // <!-- <meta name="twitter:card" ...> --> satisfied every one of these
+      // checks, which is a false PASS — the one direction the rest of this
+      // section is careful to avoid.
+      const stripped = body
         .split("<script")
         .map((chunk, i) => {
           if (i === 0) return chunk;
           const end = chunk.indexOf("</script>");
           return end === -1 ? "" : chunk.slice(end + "</script>".length);
         })
+        .join("")
+        .split("<!--")
+        .map((chunk, i) => {
+          if (i === 0) return chunk;
+          const end = chunk.indexOf("-->");
+          return end === -1 ? "" : chunk.slice(end + "-->".length);
+        })
         .join("");
+      const headEnd = stripped.indexOf("</head>");
+      const visible = headEnd === -1 ? stripped : stripped.slice(0, headEnd);
       const ogTag = (prop: string): string | null => {
         const tag = visible.match(new RegExp(`<meta[^>]*property="og:${prop}"[^>]*>`));
         if (!tag) return null;

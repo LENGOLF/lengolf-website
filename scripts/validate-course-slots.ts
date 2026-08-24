@@ -397,18 +397,25 @@ function selfTest(): never {
   let reasonedRan = 0
   const reasonsRan = new Set<string>()
   for (const t of SELF_TESTS) {
-    ran++
-    if (t.expect) firesRan++
-    if (t.match) {
-      reasonedRan++
-      reasonsRan.add(t.match.source)
-    }
     const verdict = judge(t.loc, t.s)
     const got = verdict !== null
     // A case with `match` must fire for the RIGHT reason. Fire-only assertions
     // let a second rule cover for a disarmed first one — see the docblock.
     const reasonOk = !t.match || (verdict !== null && t.match.test(verdict))
     const ok = got === t.expect && reasonOk
+    // Counters sit AFTER the comparison, deliberately. Incrementing first was
+    // vacuous in a way the `break` this guard was written against does not
+    // expose: a `continue` placed one line lower left
+    // `ran === SELF_TESTS.length` intact, so 2 of 35 assertions ran and the
+    // summary was byte-identical to a healthy run. `continue` is what an
+    // ordinary refactor adds (a skip for a new shape, a locale filter). Count
+    // what was CHECKED, not what the loop was handed.
+    ran++
+    if (t.expect) firesRan++
+    if (t.match) {
+      reasonedRan++
+      reasonsRan.add(t.match.source)
+    }
     if (!ok) failed++
     console.log(
       `  ${ok ? '✓' : '✗'} [${t.loc}] ${t.name} — expected ${t.expect ? 'FIRE' : 'silent'}` +
@@ -434,10 +441,14 @@ function selfTest(): never {
   // four rules could go with both this script and its self-test staying green
   // and byte-identical to a healthy run. Verified by mutation. Raise this line
   // in the same commit that adds a reason; never lower it.
-  if (firesRan < 8 || reasonedRan < 8 || distinctReasons < 14) {
+  // firesRan and reasonedRan sat at 8 against true values of 29 and 22 — 21
+  // and 14 units of slack, i.e. two thirds of the firing cases could be
+  // deleted with this green. Pinned AT the true values now, like
+  // distinctReasons beside them. Raise all three when adding cases.
+  if (firesRan < 29 || reasonedRan < 22 || distinctReasons < 14) {
     console.log(
       `FAIL: self-test suite has lost coverage (${firesRan} firing, ${reasonedRan} reason-asserting, ` +
-        `${distinctReasons} distinct reasons; expected >= 8 / >= 8 / >= 14)`
+        `${distinctReasons} distinct reasons; expected >= 29 / >= 22 / >= 14)`
     )
     process.exit(1)
   }
