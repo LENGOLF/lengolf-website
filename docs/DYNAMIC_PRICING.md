@@ -1,13 +1,13 @@
 # Dynamic Pricing — Website Implementation
 
-The website fetches live prices from the forms app's shared pricing API instead of using hardcoded values. Prices update automatically via ISR (5-minute revalidation). If the API is unreachable, hardcoded fallback values are used and a console warning is logged.
+The website fetches live prices from the forms app's shared pricing API instead of using hardcoded values. Prices update automatically via ISR (1-hour revalidation as of 2026-08-25; was 5 minutes, which forced ~420 pages that call this fetch to regenerate every 5 minutes regardless of their own longer declared interval — see the comment in `lib/pricing.ts`). If the API is unreachable, hardcoded fallback values are used and a console warning is logged.
 
 ## Architecture
 
 ```
 Forms App (POS product catalog)
   └─ GET /api/pricing (public, cached 5 min)
-       └─ Website (Next.js ISR, revalidate: 300s)
+       └─ Website (Next.js ISR, revalidate: 3600s)
             ├─ lib/pricing.ts          → fetch helper + types
             ├─ data/pricing.ts         → async getters with fallback
             ├─ lib/jsonld.ts           → parameterized JSON-LD generators
@@ -36,7 +36,7 @@ Override URL via `NEXT_PUBLIC_PRICING_API_URL` env var (defaults to the above).
 getPricingCatalog(): Promise<PricingCatalog | null>
 ```
 
-- Fetches from the API with `next: { revalidate: 300 }` (ISR 5-min)
+- Fetches from the API with `next: { revalidate: 3600 }` (ISR 1-hour)
 - 5-second timeout via `AbortSignal.timeout(5000)` to prevent blocking renders
 - Returns `null` on failure (network error, timeout, non-200, malformed JSON)
 - Logs `console.warn('[pricing] Failed to fetch...')` on failure
