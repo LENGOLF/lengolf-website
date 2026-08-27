@@ -47,6 +47,15 @@ const SHEET_LOCALES = ALL_LOCALES.filter(
 /** Endonyms, so a Thai reader sees "ไทย" rather than "Thai". */
 const LOCALE_SWITCH_LABEL: Record<string, string> = { en: 'EN', th: 'ไทย', ja: '日本語', ko: '한국어', zh: '中文' }
 
+/**
+ * Filler for a spec cell the owner's sheet records no value for.
+ *
+ * Defined once because it is written in the table AND compared against when the
+ * mobile card drops empty facts — two literals that must agree, and silently
+ * produce a card full of blank rows if they ever drift.
+ */
+const NO_VALUE = '-'
+
 /** Legal links the stripped site footer would otherwise have carried. */
 const LEGAL_LINKS = [
   { href: '/privacy-policy', key: 'privacy' },
@@ -102,7 +111,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       images: [
         {
           url: storageUrl('clubs/premium-plus/2.png'),
-          alt: 'Callaway Paradym Forged Carbon rental set — full bag',
+          alt: 'Callaway Paradym Forged Carbon rental set, full bag',
         },
       ],
     }),
@@ -511,7 +520,7 @@ function SetBlock({
               const hits = c.parts.filter((p) => p.row === row).map((p) => splitClubPart(p.text))
               const join = (vals: (string | null)[]) => {
                 const seen = [...new Set(vals.filter((v): v is string => !!v))]
-                return seen.length > 0 ? seen.join(' · ') : '—'
+                return seen.length > 0 ? seen.join(' · ') : NO_VALUE
               }
               return {
                 spec: join(hits.map((h) => h.spec)),
@@ -530,7 +539,7 @@ function SetBlock({
                     the device this sheet is actually opened on, and the
                     previous nowrap-plus-scroll only stopped the text breaking
                     — it did not make the table readable. Values that are just
-                    an em dash are dropped rather than shown as empty rows. */}
+                    NO_VALUE are dropped rather than shown as empty rows. */}
                 <div className="space-y-2 sm:hidden">
                   {rows.map((row) => {
                     const v = cells(row)
@@ -547,7 +556,7 @@ function SetBlock({
                         <p className="mt-0.5 font-semibold">{v.spec}</p>
                         <dl className="mt-2 space-y-1 text-sm">
                           {facts
-                            .filter(([, value]) => value !== '—')
+                            .filter(([, value]) => value !== NO_VALUE)
                             .map(([k, value]) => (
                               <div key={k} className="flex gap-2">
                                 <dt className="shrink-0 text-muted-foreground">{k}</dt>
@@ -563,7 +572,7 @@ function SetBlock({
                 <div className="hidden overflow-x-auto rounded-lg border border-primary/20 sm:block">
                   <table className="w-auto min-w-full border-collapse text-sm">
                     <caption className="sr-only">
-                      {t('fullSpecsCaption', { name: `${setShortName(set.name)} — ${label}` })}
+                      {t('fullSpecsCaption', { name: `${setShortName(set.name)}, ${label}` })}
                     </caption>
                     <thead>
                       <tr className="bg-primary/5 text-left [&>th]:whitespace-nowrap">
@@ -582,7 +591,7 @@ function SetBlock({
                             <th scope="row" className="px-3 py-2.5 text-left font-semibold">{rowLabel(row)}</th>
                             <td className="px-3 py-2.5 text-muted-foreground">{v.spec}</td>
                             <td className="px-3 py-2.5 text-muted-foreground">{v.shaft}</td>
-                            {/* Em dash where the owner's sheet records no
+                            {/* NO_VALUE where the owner's sheet records no
                                 weight (steel irons, both wedge sets). */}
                             <td className="px-3 py-2.5 text-muted-foreground">{v.weight}</td>
                             <td className="px-3 py-2.5 text-muted-foreground">{v.flex}</td>
@@ -606,7 +615,7 @@ function SetBlock({
             {noteVariants.map((v) => (
               <li key={v.key} className="text-sm text-muted-foreground">
                 <span className="font-semibold text-foreground">{v.label ?? v.key}</span>
-                {v.spec ? <> — {v.spec}</> : null}
+                {v.spec ? <>: {v.spec}</> : null}
               </li>
             ))}
           </ul>
