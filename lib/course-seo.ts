@@ -360,6 +360,13 @@ const PROVINCE_L10N: Record<string, Record<Exclude<CourseSeoLocale, 'en'>, strin
   'Nong Khai': { th: 'จังหวัดหนองคาย', ja: 'ノンカーイ県', ko: '농카이주', zh: '廊开府' },
   'Chiang Rai': { th: 'จังหวัดเชียงราย', ja: 'チェンライ県', ko: '치앙라이주', zh: '清莱府' },
   Phrae: { th: 'จังหวัดแพร่', ja: 'プレー県', ko: '프래주', zh: '帕府' },
+  // Batch 8 — the Chiang Mai roster. Three of its twelve courses sit in
+  // Lamphun, not Chiang Mai. Same policy as every batch above: ZH takes the
+  // established exonym (what Chinese-language sources actually use for Lamphun);
+  // a coined transcription would be unidiomatic and unsearchable. KO transcribes
+  // per the Korean standard for Thai. Both forms are the ones this batch's own
+  // prose uses, so no course page renders two spellings of its own province.
+  Lamphun: { th: 'จังหวัดลำพูน', ja: 'ランプーン県', ko: '람푼주', zh: '南奔府' },
 }
 
 /** Whether a course's (English) province has localized names for the non-EN packs. */

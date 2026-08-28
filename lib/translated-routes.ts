@@ -202,6 +202,17 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/chiang-rai/santiburi-country-club-chiang-rai",
       "/golf-courses/chiang-rai/waterford-valley-golf-club",
       "/golf-courses/chiang-rai/wiang-ko-sai-golf-club",
+      "/golf-courses/chiang-mai/alpine-golf-resort-chiang-mai",
+      "/golf-courses/chiang-mai/chiangmai-highlands-golf",
+      "/golf-courses/chiang-mai/chiangmai-inthanon-golf",
+      "/golf-courses/chiang-mai/gassan-khuntan-golf-resort",
+      "/golf-courses/chiang-mai/gassan-lake-city-golf-club",
+      "/golf-courses/chiang-mai/gassan-panorama-golf-club",
+      "/golf-courses/chiang-mai/hang-dong-golf-club",
+      "/golf-courses/chiang-mai/mae-jo-golf-club",
+      "/golf-courses/chiang-mai/north-hill-chiang-mai",
+      "/golf-courses/chiang-mai/royal-chiang-mai-golf-club",
+      "/golf-courses/chiang-mai/summit-green-valley-chiangmai",
       // Translated FAQ pages (data/faq-pages.ts entries with locale: 'th') —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -457,6 +468,17 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/chiang-rai/santiburi-country-club-chiang-rai",
       "/golf-courses/chiang-rai/waterford-valley-golf-club",
       "/golf-courses/chiang-rai/wiang-ko-sai-golf-club",
+      "/golf-courses/chiang-mai/alpine-golf-resort-chiang-mai",
+      "/golf-courses/chiang-mai/chiangmai-highlands-golf",
+      "/golf-courses/chiang-mai/chiangmai-inthanon-golf",
+      "/golf-courses/chiang-mai/gassan-khuntan-golf-resort",
+      "/golf-courses/chiang-mai/gassan-lake-city-golf-club",
+      "/golf-courses/chiang-mai/gassan-panorama-golf-club",
+      "/golf-courses/chiang-mai/hang-dong-golf-club",
+      "/golf-courses/chiang-mai/mae-jo-golf-club",
+      "/golf-courses/chiang-mai/north-hill-chiang-mai",
+      "/golf-courses/chiang-mai/royal-chiang-mai-golf-club",
+      "/golf-courses/chiang-mai/summit-green-valley-chiangmai",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -744,6 +766,17 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/chiang-rai/santiburi-country-club-chiang-rai",
       "/golf-courses/chiang-rai/waterford-valley-golf-club",
       "/golf-courses/chiang-rai/wiang-ko-sai-golf-club",
+      "/golf-courses/chiang-mai/alpine-golf-resort-chiang-mai",
+      "/golf-courses/chiang-mai/chiangmai-highlands-golf",
+      "/golf-courses/chiang-mai/chiangmai-inthanon-golf",
+      "/golf-courses/chiang-mai/gassan-khuntan-golf-resort",
+      "/golf-courses/chiang-mai/gassan-lake-city-golf-club",
+      "/golf-courses/chiang-mai/gassan-panorama-golf-club",
+      "/golf-courses/chiang-mai/hang-dong-golf-club",
+      "/golf-courses/chiang-mai/mae-jo-golf-club",
+      "/golf-courses/chiang-mai/north-hill-chiang-mai",
+      "/golf-courses/chiang-mai/royal-chiang-mai-golf-club",
+      "/golf-courses/chiang-mai/summit-green-valley-chiangmai",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -1023,6 +1056,17 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/chiang-rai/santiburi-country-club-chiang-rai",
       "/golf-courses/chiang-rai/waterford-valley-golf-club",
       "/golf-courses/chiang-rai/wiang-ko-sai-golf-club",
+      "/golf-courses/chiang-mai/alpine-golf-resort-chiang-mai",
+      "/golf-courses/chiang-mai/chiangmai-highlands-golf",
+      "/golf-courses/chiang-mai/chiangmai-inthanon-golf",
+      "/golf-courses/chiang-mai/gassan-khuntan-golf-resort",
+      "/golf-courses/chiang-mai/gassan-lake-city-golf-club",
+      "/golf-courses/chiang-mai/gassan-panorama-golf-club",
+      "/golf-courses/chiang-mai/hang-dong-golf-club",
+      "/golf-courses/chiang-mai/mae-jo-golf-club",
+      "/golf-courses/chiang-mai/north-hill-chiang-mai",
+      "/golf-courses/chiang-mai/royal-chiang-mai-golf-club",
+      "/golf-courses/chiang-mai/summit-green-valley-chiangmai",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.

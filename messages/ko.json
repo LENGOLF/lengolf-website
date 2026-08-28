@@ -1282,7 +1282,10 @@
     "topCoursesHeading": "그린피 ฿{amount} 이하 상위 {count}개 코스",
     "roundupReason": "평일 {price}바트부터",
     "otherPriceBands": "다른 가격대",
-    "roundupReasonSeasonal": "비수기 {price}바트부터"
+    "roundupReasonSeasonal": "비수기 {price}바트부터",
+    "metaDescriptionRate": "요금 ฿{amount} 이하인 방콕 근교 상위 골프장과 이 가격대에서 알아 두어야 할 점을 소개합니다.",
+    "eyebrowBadgeRate": "요금 · ฿{amount} 이하",
+    "topCoursesHeadingRate": "요금 ฿{amount} 이하 상위 {count}개 코스"
   },
   "GolfCourseShared": {
     "feeFrom": "{price}바트부터",

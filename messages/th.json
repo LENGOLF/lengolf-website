@@ -1193,7 +1193,10 @@
     "topCoursesHeading": "{count} สนามอันดับต้น ค่ากรีนฟีไม่เกิน ฿{amount}",
     "roundupReason": "เริ่มต้น {price} บาท (วันธรรมดา)",
     "otherPriceBands": "ช่วงราคาอื่น ๆ",
-    "roundupReasonSeasonal": "เริ่มต้น {price} บาท (โลว์ซีซัน)"
+    "roundupReasonSeasonal": "เริ่มต้น {price} บาท (โลว์ซีซัน)",
+    "metaDescriptionRate": "รวมสนามกอล์ฟใกล้กรุงเทพฯ ที่มีอัตราค่าบริการไม่เกิน ฿{amount} พร้อมสิ่งที่ควรรู้ก่อนจองในระดับราคานี้",
+    "eyebrowBadgeRate": "อัตราค่าบริการ · ไม่เกิน ฿{amount}",
+    "topCoursesHeadingRate": "{count} สนามอันดับต้น อัตราค่าบริการไม่เกิน ฿{amount}"
   },
   "GolfCourseShared": {
     "feeFrom": "เริ่มต้น {price} บาท",

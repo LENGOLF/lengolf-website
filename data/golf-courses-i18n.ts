@@ -622,6 +622,21 @@ export const COURSE_DETAIL_I18N: {
   { region: 'chiang-rai', slug: 'santiburi-country-club-chiang-rai', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'chiang-rai', slug: 'waterford-valley-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'chiang-rai', slug: 'wiang-ko-sai-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  // Batch 8 (2026-08) — chiang-mai roster completion: 1/12 -> 12/12.
+  // GSC: th/ja/ko native-script demand on the chiang-mai hub (14 imp) and the
+  // /guide/golf-courses-chiang-mai/ funnel (th 13 imp, ko 4 imp). Six of these
+  // carry fee_is_package, so their non-EN titles use the package noun.
+  { region: 'chiang-mai', slug: 'alpine-golf-resort-chiang-mai', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'chiang-mai', slug: 'chiangmai-highlands-golf', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'chiang-mai', slug: 'chiangmai-inthanon-golf', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'chiang-mai', slug: 'gassan-khuntan-golf-resort', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'chiang-mai', slug: 'gassan-lake-city-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'chiang-mai', slug: 'gassan-panorama-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'chiang-mai', slug: 'hang-dong-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'chiang-mai', slug: 'mae-jo-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'chiang-mai', slug: 'north-hill-chiang-mai', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'chiang-mai', slug: 'royal-chiang-mai-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'chiang-mai', slug: 'summit-green-valley-chiangmai', locales: ['th', 'ja', 'ko', 'zh'] },
 ]
 
 /**

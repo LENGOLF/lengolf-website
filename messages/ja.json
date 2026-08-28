@@ -1280,7 +1280,10 @@
     "topCoursesHeading": "グリーンフィー฿{amount}以下の上位{count}コース",
     "roundupReason": "平日{price}THB〜",
     "otherPriceBands": "その他の価格帯",
-    "roundupReasonSeasonal": "ローシーズン{price}THB〜"
+    "roundupReasonSeasonal": "ローシーズン{price}THB〜",
+    "metaDescriptionRate": "料金฿{amount}以下で回れるバンコク近郊の上位ゴルフ場と、この価格帯で知っておきたいポイントをご紹介します。",
+    "eyebrowBadgeRate": "料金 · ฿{amount}以下",
+    "topCoursesHeadingRate": "料金฿{amount}以下の上位{count}コース"
   },
   "GolfCourseShared": {
     "feeFrom": "{price}THB〜",
