@@ -4796,36 +4796,39 @@ async function runCourseDetailRegistryLivenessTests() {
 
   // The Offer floor cannot be exact — courses with a null weekday fee emit no
   // makesOffer, and only some have a second rate — so it is a real number
-  // derived from the corpus rather than `> 0`. Measured at 600: 82 registered
-  // courses x 4 locales, each emitting one Offer per non-null rate. This sat at
+  // derived from the corpus rather than `> 0`. Measured at 688: 94 registered
+  // courses x 4 locales, each emitting one Offer per non-null rate — NOT a clean
+  // product, because rajpruek-club (batch 9, a private club) has BOTH fees null
+  // and so emits no makesOffer at all. This sat at
   // 300 against a true 516 and then 600 — HALF the value it measured — while
   // packageOfferSeen 19 lines below was being raised in the same commit. That
   // is the "raise one ratchet, miss its sibling" shape CLAUDE.md documents,
   // reproduced inside the file that documents it. Re-derive on every batch.
-  if (offerChecked < 600) {
+  if (offerChecked < 688) {
     fail(
       `L2 Offer-label check ran on only ${offerChecked} label(s)`,
-      "expected 600+ (82 registered courses x 4 locales x their non-null rates). A low count means makesOffer is absent or the catalog lookup is failing, not that the labels are correct.",
+      "expected 688+ (94 registered courses x 4 locales x their non-null rates; rajpruek-club contributes 0, both its fees being null). A low count means makesOffer is absent or the catalog lookup is failing, not that the labels are correct.",
     );
   } else {
     pass(`L2 asserted localized JSON-LD Offer labels on ${offerChecked} label(s)`);
   }
 
   // Its own floor, because the package branch goes vacuous INDEPENDENTLY of the
-  // one above: 10 of 149 courses are packages, so the general Offer count stays
+  // one above: 12 of 149 courses are packages, so the general Offer count stays
   // in the hundreds while the branch that matters here drops to zero. Today:
-  // all 10 are registered, 9 emit 2 rates and alpine-golf-resort-chiang-mai
-  // emits 1 (null weekend fee), so 9*2*4 + 1*4 = 76. Re-derive, do not assume
-  // a courses x locales x rates product.
+  // all 12 are registered, 11 emit 2 rates and alpine-golf-resort-chiang-mai
+  // emits 1 (null weekend fee), so 11*2*4 + 1*4 = 92. Re-derive, do not assume
+  // a courses x locales x rates product. (Batch 9 took this 76 -> 92 by flagging
+  // bangkok/artitaya-country-club and bangkok/prime-city-golf-club.)
   //
   // RAISE THIS when a course gains fee_is_package. It was left at 16 when the
   // count went 2 -> 4, which still passed while asserting half of what it
   // measured — a floor below the true value is a guard that has quietly gone
   // slack, and the whole reason this check carries a number rather than `> 0`.
-  if (packageOfferSeen < 76) {
+  if (packageOfferSeen < 92) {
     fail(
       `L2 package-label check ran on only ${packageOfferSeen} Offer(s)`,
-      "expected 76+ (10 package courses x 4 locales; 9 emit 2 rates and alpine-golf-resort-chiang-mai emits 1, its weekend fee being null). Zero means no course carries fee_is_package any more, or the registry dropped them — not that the labels are right.",
+      "expected 92+ (12 package courses x 4 locales; 11 emit 2 rates and alpine-golf-resort-chiang-mai emits 1, its weekend fee being null). Zero means no course carries fee_is_package any more, or the registry dropped them — not that the labels are right.",
     );
   } else {
     pass(`L2 asserted package (not green-fee) Offer labels on ${packageOfferSeen} Offer(s)`);
@@ -5771,7 +5774,32 @@ async function runLocalizedDriveTimeTests() {
 //     gate switched off.
 // Measured red/green: 0 mismatches of 148 on the fixed tree, 111 of 148 on the
 // unfixed one — and it catches the Thai regression, which no length rule can.
-const FALLBACK_MIN_COMPARISONS = 100;
+// COUNTDOWN, not a ratchet — this is the one floor in the file that moves DOWN.
+// It counts (course, locale) pairs on the 20 translated tier pages where the
+// course has NO translated prose.overview, so the EN fallback fires and there is
+// something to compare. Every translation batch REMOVES comparisons, so unlike
+// MIN_COURSES/packageOfferSeen this number shrinks and the floor must be lowered
+// deliberately rather than raised.
+//
+// Today: 96. Batch 9 (bangkok tranche) took it 120 -> 96: five of its twelve
+// courses occupy six tier-roster slots (windsor-park + bangsai in 1500,
+// the-vintage in 2500, royal-golf + royal-lakeside in 3500, royal-golf again in
+// 5000) x 4 locales = 24 comparisons retired. The previous floor of 100 sat
+// ABOVE the new true value, so section P would have failed CI on a correct tree.
+//
+// Pinned AT the true value on purpose, same discipline as the ratchets above: a
+// floor below the population is a guard gone slack, and here it would also hide
+// the fact that this check is being consumed. The cost is that the next batch
+// which translates a tier-roster course turns section P red — that is the
+// intended forcing function, not a bug. Re-derive, do not guess.
+//
+// WHEN THIS APPROACHES ZERO: the check has run out of subjects and must be
+// re-scoped, not deleted. The defect it guards (an excerpt taken with the PAGE's
+// locale instead of the TEXT's) still exists; it just stops being observable on
+// tier pages once every rostered course is translated. The re-scope is to point
+// it at a surface that still has untranslated courses — the region hubs, whose
+// rosters are the full region roster rather than a derived top-12.
+const FALLBACK_MIN_COMPARISONS = 96;
 
 async function runFallbackPullQuoteTests() {
   console.log(

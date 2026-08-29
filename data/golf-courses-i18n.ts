@@ -637,6 +637,47 @@ export const COURSE_DETAIL_I18N: {
   { region: 'chiang-mai', slug: 'north-hill-chiang-mai', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'chiang-mai', slug: 'royal-chiang-mai-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'chiang-mai', slug: 'summit-green-valley-chiangmai', locales: ['th', 'ja', 'ko', 'zh'] },
+  // Batch 9 (2026-08) — bangkok tranche, 9/55 -> 21/55. NOT roster completion,
+  // and the GSC data is why. Over 90 days the bangkok course pages drew 3,799
+  // impressions (537 native-script) across 42 pages; the two remaining 0%
+  // regions drew 48 (khao-yai, 1 native) and 8 (kanchanaburi, 1 native). A
+  // khao-yai sweep would have completed a roster to serve ~1 native-script
+  // impression a quarter, so this takes the top untranslated bangkok pages by
+  // impressions instead.
+  //
+  // Two courses that outrank every entry below are deliberately EXCLUDED:
+  // `suvarnabhumi-golf-country-club` (1,808 imp — the largest untranslated
+  // course page on the site) and `phoenix-gold-golf-country-club` (6 imp) are
+  // the SAME physical course under two slugs. Same designer, same 36 holes,
+  // same 999/1,199 rates, same Nong Chok district, and the Phoenix Gold file's
+  // own prose says it is "the renamed Suvarnabhumi Golf & Country Club — the
+  // same Nong Chok facility". Their coordinates also disagree by ~7 km, so one
+  // is wrong. Translating either would quadruple a duplicate-content page;
+  // the slug merge is its own PR.
+  //
+  // `bangpoo-golf-sports-club` (9 imp) was dropped by the pre-flight bearing
+  // check: its prose says "40 km south of central Bangkok" three times, but its
+  // coordinates compute to ESE (119 deg, 61 deg off) and sit ~24 km east of the
+  // Mueang Samut Prakan address the same file states. Needs verify:coordinates,
+  // not a translation.
+  //
+  // `royal-dusit-golf-club` (5 imp) is excluded permanently: operational_status
+  // is `permanently_closed`.
+  //
+  // artitaya and prime-city gained fee_is_package in this batch, so their
+  // non-EN titles use the package noun.
+  { region: 'bangkok', slug: 'artitaya-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'bangsai-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'killien-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'krisda-city-golf-hills', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'muang-ake-vista-golf-course', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'northern-rangsit-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'prime-city-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'rajpruek-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'royal-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'royal-lakeside-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'the-vintage-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'windsor-park-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
 ]
 
 /**

@@ -367,6 +367,26 @@ const PROVINCE_L10N: Record<string, Record<Exclude<CourseSeoLocale, 'en'>, strin
   // per the Korean standard for Thai. Both forms are the ones this batch's own
   // prose uses, so no course page renders two spellings of its own province.
   Lamphun: { th: 'จังหวัดลำพูน', ja: 'ランプーン県', ko: '람푼주', zh: '南奔府' },
+  // Batch 9 — the Bangkok tranche. The `bangkok` hub spans ten provinces, and
+  // these were the only two its newly-translated courses reach that had no
+  // entry yet. Same policy as every batch above: ZH takes the established
+  // exonym Chinese-language sources actually use (那空那育 / 北柳), not a coined
+  // transcription; KO transcribes per the Korean standard for Thai with the
+  // closed 주 suffix. WATCH THE ZH PAIR: 北柳府 is Chachoengsao and 北榄府 is
+  // Samut Prakan — two different provinces in this same hub whose exonyms
+  // differ by one character, and both render on Bangkok-region course pages.
+  'Nakhon Nayok': {
+    th: 'จังหวัดนครนายก',
+    ja: 'ナコンナヨック県',
+    ko: '나콘나욕주',
+    zh: '那空那育府',
+  },
+  Chachoengsao: {
+    th: 'จังหวัดฉะเชิงเทรา',
+    ja: 'チャチューンサオ県',
+    ko: '차층사오주',
+    zh: '北柳府',
+  },
 }
 
 /** Whether a course's (English) province has localized names for the non-EN packs. */
