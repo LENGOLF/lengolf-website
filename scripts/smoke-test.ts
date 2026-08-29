@@ -4796,31 +4796,36 @@ async function runCourseDetailRegistryLivenessTests() {
 
   // The Offer floor cannot be exact — courses with a null weekday fee emit no
   // makesOffer, and only some have a second rate — so it is a real number
-  // derived from the corpus rather than `> 0`. Today: 48 fee-bearing courses
-  // per locale x 4, each with 2 rates = ~380.
-  if (offerChecked < 300) {
+  // derived from the corpus rather than `> 0`. Measured at 600: 82 registered
+  // courses x 4 locales, each emitting one Offer per non-null rate. This sat at
+  // 300 against a true 516 and then 600 — HALF the value it measured — while
+  // packageOfferSeen 19 lines below was being raised in the same commit. That
+  // is the "raise one ratchet, miss its sibling" shape CLAUDE.md documents,
+  // reproduced inside the file that documents it. Re-derive on every batch.
+  if (offerChecked < 600) {
     fail(
       `L2 Offer-label check ran on only ${offerChecked} label(s)`,
-      "expected 300+. A near-zero count means makesOffer is absent or the catalog lookup is failing, not that the labels are correct.",
+      "expected 600+ (82 registered courses x 4 locales x their non-null rates). A low count means makesOffer is absent or the catalog lookup is failing, not that the labels are correct.",
     );
   } else {
     pass(`L2 asserted localized JSON-LD Offer labels on ${offerChecked} label(s)`);
   }
 
   // Its own floor, because the package branch goes vacuous INDEPENDENTLY of the
-  // one above: 4 of 149 courses are packages, so the general Offer count stays
+  // one above: 10 of 149 courses are packages, so the general Offer count stays
   // in the hundreds while the branch that matters here drops to zero. Today:
-  // kaeng-krachan, korea-golf-club, ubolratana-dam and wiang-ko-sai, 4
-  // translated locales each, 2 rates each.
+  // all 10 are registered, 9 emit 2 rates and alpine-golf-resort-chiang-mai
+  // emits 1 (null weekend fee), so 9*2*4 + 1*4 = 76. Re-derive, do not assume
+  // a courses x locales x rates product.
   //
   // RAISE THIS when a course gains fee_is_package. It was left at 16 when the
   // count went 2 -> 4, which still passed while asserting half of what it
   // measured — a floor below the true value is a guard that has quietly gone
   // slack, and the whole reason this check carries a number rather than `> 0`.
-  if (packageOfferSeen < 32) {
+  if (packageOfferSeen < 76) {
     fail(
       `L2 package-label check ran on only ${packageOfferSeen} Offer(s)`,
-      "expected 32+ (4 package courses x 4 locales x 2 rates). Zero means no course carries fee_is_package any more, or the registry dropped them — not that the labels are right.",
+      "expected 76+ (10 package courses x 4 locales; 9 emit 2 rates and alpine-golf-resort-chiang-mai emits 1, its weekend fee being null). Zero means no course carries fee_is_package any more, or the registry dropped them — not that the labels are right.",
     );
   } else {
     pass(`L2 asserted package (not green-fee) Offer labels on ${packageOfferSeen} Offer(s)`);
@@ -5269,6 +5274,7 @@ async function runPriceTierRoundupLanguageTests() {
   }[];
 
   let itemsChecked = 0;
+  let packageItemsSeen = 0;
   for (const { locale, tier } of params) {
     const target = `/${locale}/golf-courses/under/${tier}/`;
     try {
@@ -5298,11 +5304,14 @@ async function runPriceTierRoundupLanguageTests() {
       // The roundup emits only the LOWER rate, so the valid answers are this
       // locale's two lower-basis labels — PLUS the two package forms, because
       // the tier route now resolves labels through `feeHeadings`. Omitting them
-      // was latent rather than harmless: neither package course is in a top-12
-      // roster today, so this stayed green, and would have gone red on whichever
-      // unrelated PR next shifted popularity. Same "fixed one of two sites"
-      // shape as the defect the package work exists to close — L2 got the
-      // branch, L6 did not.
+      // was latent rather than harmless. It is no longer latent: the chiang-mai
+      // batch flagged royal-chiang-mai-golf-club and gassan-khuntan-golf-resort,
+      // both of which sit in the /under/5000-baht/ top 12, so this branch now
+      // decides 8 real items (2 courses x 4 locales). Before that batch it
+      // decided ZERO — the four older package courses are all cheap enough to
+      // miss every translated tier roster. Same "fixed one of two sites" shape
+      // as the defect the package work exists to close — L2 got the branch,
+      // L6 did not, and L6 also went without the floor below.
       // Per-COURSE, not a widened global set. The first version appended the two
       // package forms to one `allowed` array shared by every item, which accepted
       // "Weekday package" for any of the 148 NON-package courses — L2 got the
@@ -5317,6 +5326,14 @@ async function runPriceTierRoundupLanguageTests() {
           : [cat?.weekdayGreenFee, cat?.lowSeasonGreenFee];
       const allowed = [cat?.weekdayGreenFee, cat?.lowSeasonGreenFee];
       const { loadCourseFiles: loadForL6 } = await import("./course-files");
+      // Keyed on course.name because that is what the ItemList emits. KNOWN
+      // HAZARD: names are not unique — "Phoenix Gold Golf & Country Club" maps
+      // to two slugs (bangkok/phoenix-gold-golf-country-club and
+      // pattaya/phoenix-gold-golf-club-pattaya). Neither carries fee_is_package
+      // today, so this is sound; if either ever gains the flag, the OTHER is
+      // misclassified as a package course and this section goes falsely red.
+      // The sound key is el.item.url, which carries the slug — switch to it if
+      // a Phoenix Gold course is ever flagged.
       const packageNames = new Set(
         (await loadForL6())
           .filter(({ course }) => course.fee_is_package)
@@ -5333,7 +5350,9 @@ async function runPriceTierRoundupLanguageTests() {
         const desc = el?.item?.makesOffer?.[0]?.description;
         if (desc === undefined) continue; // course with a null weekday fee
         itemsChecked++;
-        const want = allowedFor({ fee_is_package: packageNames.has(el?.item?.name) });
+        const isPackage = packageNames.has(el?.item?.name);
+        if (isPackage) packageItemsSeen++;
+        const want = allowedFor({ fee_is_package: isPackage });
         if (!want.includes(desc)) {
           fail(
             `ItemList Offer.description is not a '${locale}' label on ${target}`,
@@ -5354,6 +5373,30 @@ async function runPriceTierRoundupLanguageTests() {
     );
   } else {
     pass(`L6 asserted localized ItemList Offer.description on ${itemsChecked} item(s)`);
+  }
+
+  // Its own floor, for the same reason L2 carries one: the package branch goes
+  // vacuous INDEPENDENTLY of the count above. 10 of 149 courses are packages
+  // and only two reach a translated tier roster, so itemsChecked stays in the
+  // hundreds while the branch that matters here drops to zero.
+  //
+  // FOUR, not the true value of 8, and that is deliberate — this is the one
+  // ratchet in the repo that must NOT be pinned exact. The roster is a derived
+  // top 12 and CLAUDE.md warns specifically against pinning to it. Today the
+  // two package courses sit at #8 (royal-chiang-mai, 6,600) and #11
+  // (gassan-khuntan, 6,000) against #13 at 5,850 — a 150-point margin, so a
+  // fee correction of +151 THB or more anywhere in the 5,501-6,000 band (or a
+  // new course) displaces it. An exact 8 would then red on a PR that changed
+  // nothing about labels, with a message reading like a label regression. 4 = one
+  // course x 4 locales still proves the branch is not vacuous, and
+  // royal-chiang-mai's 750-point margin is what actually holds it up.
+  if (packageItemsSeen < 4) {
+    fail(
+      `L6 package-label branch ran on only ${packageItemsSeen} item(s)`,
+      "expected 4+ (at least one fee_is_package course in a translated tier roster x 4 locales). Zero means no package course reaches one any more, or packageNames stopped matching on course.name — not that the labels are right.",
+    );
+  } else {
+    pass(`L6 asserted package (not green-fee) ItemList labels on ${packageItemsSeen} item(s)`);
   }
 }
 

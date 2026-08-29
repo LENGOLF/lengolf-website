@@ -1283,7 +1283,10 @@
     "topCoursesHeading": "果岭费฿{amount}以下的{count}座精选球场",
     "roundupReason": "平日{price}泰铢起",
     "otherPriceBands": "其他价格区间",
-    "roundupReasonSeasonal": "淡季{price}泰铢起"
+    "roundupReasonSeasonal": "淡季{price}泰铢起",
+    "metaDescriptionRate": "汇总价格不超过฿{amount}的曼谷周边优质高尔夫球场，并介绍这个价位段的注意事项。",
+    "eyebrowBadgeRate": "价格 · ฿{amount}以下",
+    "topCoursesHeadingRate": "价格฿{amount}以下的{count}座精选球场"
   },
   "GolfCourseShared": {
     "feeFrom": "{price}泰铢起",

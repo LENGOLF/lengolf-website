@@ -7,7 +7,7 @@ import { getBreadcrumbJsonLd } from '@/lib/jsonld'
 import { getCourseRoundupJsonLd } from '@/lib/jsonld-courses'
 import { PRICE_TIERS, getPriceTierTranslation, getTranslatedPriceTierParams } from '@/data/price-tiers'
 import { getCoursesUnderPrice, getPriceTierSlugs } from '@/lib/golf-courses-derived'
-import { pricesByDayOfWeek, feeHeadings } from '@/lib/course-fees'
+import { pricesByDayOfWeek, feeHeadings, tierChromeKeys } from '@/lib/course-fees'
 import RoundupList from '@/components/golf-courses/RoundupList'
 import CrossLinkBlock from '@/components/golf-courses/CrossLinkBlock'
 import RentalCtaBanner from '@/components/golf-courses/RentalCtaBanner'
@@ -41,7 +41,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = tr?.title ?? meta.title
   const amount = meta.thb.toLocaleString('en-US')
   const t = await getTranslations({ locale, namespace: 'GolfCoursePriceTier' })
-  const description = t('metaDescription', { amount })
+  // Same roster the page renders, so the meta noun cannot disagree with the H2.
+  const description = t(tierChromeKeys(await getCoursesUnderPrice(meta.thb, 12)).meta, { amount })
   const path = `/golf-courses/under/${tier}/`
   const canonical = getCanonical(locale, path)
 
@@ -71,6 +72,7 @@ export default async function CoursesUnderPricePage({ params }: Props) {
   if (courses.length === 0) notFound()
 
   const t = await getTranslations('GolfCoursePriceTier')
+  const chrome = tierChromeKeys(courses)
   const tr = getPriceTierTranslation(tier, locale)
   const title = tr?.title ?? meta.title
   const framing = tr?.framing ?? meta.framing
@@ -118,7 +120,7 @@ export default async function CoursesUnderPricePage({ params }: Props) {
             <span className="text-white/70">{t('breadcrumbCurrent', { amount })}</span>
           </nav>
           <div className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-white/80 backdrop-blur-sm">
-            {t('eyebrowBadge', { amount })}
+            {t(chrome.eyebrow, { amount })}
           </div>
           <h1 className="text-3xl font-black leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
             {title}
@@ -146,7 +148,7 @@ export default async function CoursesUnderPricePage({ params }: Props) {
 
         <section>
           <h2 className="mb-4 text-xs font-bold uppercase tracking-widest text-primary">
-            {t('topCoursesHeading', { count: courses.length, amount })}
+            {t(chrome.heading, { count: courses.length, amount })}
           </h2>
           <RoundupList
             items={courses.map((c) => ({

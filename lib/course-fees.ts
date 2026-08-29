@@ -176,6 +176,52 @@ export function feeRosterHeadingKey(
 }
 
 /**
+ * PAGE-LEVEL chrome keys for `/golf-courses/under/<tier>/`, by the same rule as
+ * `feeRosterHeadingKey` one level up: a shared header may only name the noun when
+ * EVERY course beneath it agrees.
+ *
+ * The tier roster is a derived top 12 spanning regions, so one package course in
+ * it makes "green fee under X" false for that row — and the chrome sits directly
+ * above the list. This went live with the chiang-mai batch, which flagged
+ * `royal-chiang-mai-golf-club` (#8) and `gassan-khuntan-golf-resort` (#11) in
+ * `/under/5000-baht/`; before it, no package course reached ANY tier roster, so
+ * the hardcoded noun was latent-but-correct. Exactly the shape CLAUDE.md records
+ * as round 4 of the fee_is_package saga — the cheap per-course string was fixed
+ * and the prominent shared header was not.
+ *
+ * `validate:fee-labels` was structurally blind here — its SCAN_DIRS are
+ * app/components/lib/data and these strings live in `messages/*.json`, so the
+ * NOUN_LITERAL_RE half cannot see them. Closed by adding `eyebrowBadge`,
+ * `topCoursesHeading` AND `metaDescription` to NOUN_KEY_RE, which matches the
+ * CALL SITE instead: reverting ANY of the three t() calls back to its literal
+ * key now fails the gate (each mutation-tested red, fixed form green). An
+ * earlier version of this sentence said "guarded" while covering two of the
+ * three — the closing review caught the meta call regressing with all CI
+ * green, which is why the third key is listed by name rather than as "etc".
+ *
+ * `metaDescription` in NOUN_KEY_RE is a GENERIC key name, unlike the other
+ * nine: a future fee-reading page with a legitimate t('metaDescription') call
+ * will be flagged. That is the designed behaviour, not a false positive to
+ * engineer away — the gate's own escape hatch (`// fee-noun-ok: <why>`) is
+ * the documented answer, and today zero of the 11 scanned files hit it.
+ *
+ * STILL UNSWEPT, named so it does not read as covered: `GolfCourseHub`'s
+ * budget heading AND its metaTitle name the noun on `/golf-courses/` directly
+ * above the link to `/under/5000-baht/`, whose roster this very function
+ * concedes is not green-fee-only. Defensible (the tier filters on
+ * `green_fee_weekday_thb`) but not swept.
+ */
+export function tierChromeKeys(courses: readonly FeeCopySource[]): {
+  eyebrow: 'eyebrowBadge' | 'eyebrowBadgeRate'
+  heading: 'topCoursesHeading' | 'topCoursesHeadingRate'
+  meta: 'metaDescription' | 'metaDescriptionRate'
+} {
+  return courses.some((c) => c.fee_is_package)
+    ? { eyebrow: 'eyebrowBadgeRate', heading: 'topCoursesHeadingRate', meta: 'metaDescriptionRate' }
+    : { eyebrow: 'eyebrowBadge', heading: 'topCoursesHeading', meta: 'metaDescription' }
+}
+
+/**
  * The heading and bare-basis keys, derived from `feeLabelKeys` so adding a basis
  * can't leave this behind, plus the package template. One signature with
  * optional values rather than overloads: a `getTranslations('GolfCourseDetail')`
@@ -196,14 +242,31 @@ type FeeLabelT = (
  * package. The EN-pinned sibling of `feeRosterHeadingKey`, for `/compare/` and
  * `/near/`, which never read a catalog.
  *
- * Both of those hardcoded the noun. Neither is reachable by a package course
- * today — `/compare/` draws from each region's top 3 and `/near/` from a
- * station's top 8, and none of the FOUR package courses reaches either set:
- * kaeng-krachan and korea-golf-club rank 6th and 11th of 11 in hua-hin, and
- * ubolratana-dam and wiang-ko-sai sit outside their own regions' top 3
- * (recomputed when they were flagged) — but that is a fact about current
- * popularity scores, not a property of the code, and `/compare/` membership is
- * derived and documented as fragile.
+ * Both of those hardcoded the noun. That was once justified by "no package
+ * course reaches either set" — and the fragility warning attached to it has
+ * now cashed in. The chiang-mai batch took the flag from FOUR courses to TEN,
+ * and `royal-chiang-mai-golf-club` and `gassan-khuntan-golf-resort` rank #1
+ * and #2 in chiang-mai, so ALL THREE of that region's `/compare/` pairs now
+ * contain a package course and DO reach `feeNounEn`. It returns 'Rate' for
+ * them, which is correct — the noun is handled. `/near/` is still unreached
+ * (8 stations + 2 airports, zero package courses), but treat that as today's
+ * popularity scores rather than a property of the code.
+ *
+ * The BASIS is a separate, still-open problem: `gassan-khuntan`,
+ * `royal-chiang-mai` and `summit-green-valley` price by SEASON in their prose
+ * while typed as equal weekday/weekend pairs with no `fee_is_seasonal`, so
+ * `pricesByDayOfWeek()` calls them day-of-week courses. It is live on TWO
+ * surfaces, not one: the compare route's day-of-week bullets, AND the
+ * `/under/<tier>/` roster row, which picks `roundupReason` over
+ * `roundupReasonSeasonal` and renders "Weekday from 4,800 THB" in all five
+ * locales under a header `tierChromeKeys` has just made noun-neutral.
+ *
+ * Setting the flag is NOT the fix and must not be done casually: with
+ * weekday === weekend it would render "Low season 4,200", asserting a
+ * low-season price all three sources explicitly decline to state ("confirm
+ * low-season pricing — rates may be lower"). The two-slot model cannot express
+ * "one known rate, high season only". Needs an owner ruling or a third
+ * predicate, not a drive-by flag. Predates the chiang-mai batch.
  */
 export function feeNounEn(courses: readonly FeeCopySource[]): 'Green fee' | 'Rate' {
   return courses.some((c) => c.fee_is_package) ? 'Rate' : 'Green fee'

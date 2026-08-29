@@ -1193,7 +1193,10 @@
     "topCoursesHeading": "Top {count} courses, green fee under ฿{amount}",
     "roundupReason": "Weekday from {price} THB.",
     "otherPriceBands": "Other price bands",
-    "roundupReasonSeasonal": "Low season from {price} THB."
+    "roundupReasonSeasonal": "Low season from {price} THB.",
+    "metaDescriptionRate": "Top Bangkok-area golf courses with rates under ฿{amount}, with what to expect at this price band.",
+    "eyebrowBadgeRate": "Rate · Under ฿{amount}",
+    "topCoursesHeadingRate": "Top {count} courses, rate under ฿{amount}"
   },
   "GolfCourseShared": {
     "feeFrom": "from {price} THB",

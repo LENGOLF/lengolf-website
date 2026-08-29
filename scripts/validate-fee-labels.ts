@@ -67,7 +67,7 @@ const FEE_BASIS_OK_RE = /fee-basis-ok:/
  * carries no quote and would slip past LABEL_SHAPED_RE.
  */
 const NOUN_KEY_RE =
-  /\b(greenFees|rosterGreenFee|weekdayGreenFee|weekendGreenFee|lowSeasonGreenFee|highSeasonGreenFee|lowerHeading|upperHeading)\b/
+  /\b(greenFees|rosterGreenFee|weekdayGreenFee|weekendGreenFee|lowSeasonGreenFee|highSeasonGreenFee|lowerHeading|upperHeading|eyebrowBadge|topCoursesHeading|metaDescription)\b/
 /**
  * The noun as ENGLISH TEXT, not a catalog key. The first version matched keys
  * only, so `{'Weekday green fee'}` — the exact historical defect string — walked
@@ -315,7 +315,7 @@ for (const dir of SCAN_DIRS) {
 // (SpecTable.tsx, CoursePage.tsx) to NUMERIC_ONLY silenced the gate for them
 // and still printed a success line — only the count in the message moved, and
 // nobody diffs a count. Same ratchet discipline as MIN_COURSES/MIN_STRINGS.
-const MIN_CHECKED = 10
+const MIN_CHECKED = 11
 if (checked < MIN_CHECKED) {
   errors.push(
     `fee-label scan evaluated only ${checked} file(s) (expected >= ${MIN_CHECKED}) — ` +
