@@ -12,6 +12,12 @@
     "scripts/sync-blog-translated-slugs.ts",
     "scripts/smoke-test.ts",
     "scripts/validate-open-graph.ts",
+    "scripts/validate-open-graph-contract.ts",
+    "scripts/self-test-harness.ts",
+    "scripts/validate-courses.ts",
+    "scripts/validate-course-slots.ts",
+    "scripts/validate-fee-labels.ts",
+    "scripts/validate-pr-rigor.ts",
     "scripts/page-inventory.ts"
   ],
   "exclude": ["node_modules"]

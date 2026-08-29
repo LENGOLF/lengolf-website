@@ -1129,7 +1129,14 @@ checkNamespaceParity(uiCatalogs, SSG_UI_NAMESPACES)
 // Run: npx tsx scripts/validate-i18n.ts --self-test
 if (process.argv.includes('--self-test')) {
   let ok = true
+  // Assertions EXECUTED. This block is a flat sequence with no array behind
+  // it, so there was no count and no floor at all: deleting assert() lines
+  // silently reduced coverage while it still printed ALL SELF-TESTS PASS.
+  // Raise MIN_ASSERTIONS in the same commit that adds one; never lower it.
+  const MIN_ASSERTIONS = 70
+  let asserted = 0
   const assert = (label: string, cond: boolean) => {
+    asserted++
     ok &&= cond
     console.log(`${cond ? 'PASS' : 'FAIL'}  ${label}`)
   }
@@ -1421,7 +1428,13 @@ if (process.argv.includes('--self-test')) {
   assert('fullwidth digit: ５ matches', FULLWIDTH_DIGIT_RE.test('料金は５00'))
   assert('fullwidth digit: half-width ignored', !FULLWIDTH_DIGIT_RE.test('料金は500'))
 
-  console.log(ok ? '\nALL SELF-TESTS PASS' : '\nSELF-TEST FAILURES')
+  if (asserted < MIN_ASSERTIONS) {
+    console.log(
+      `\nFAIL: self-test suite has lost assertions (${asserted} ran, expected >= ${MIN_ASSERTIONS})`
+    )
+    process.exit(1)
+  }
+  console.log(ok ? `\nALL ${asserted} SELF-TESTS PASS` : '\nSELF-TEST FAILURES')
   process.exit(ok ? 0 : 1)
 }
 

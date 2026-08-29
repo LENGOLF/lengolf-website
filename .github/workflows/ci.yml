@@ -95,6 +95,16 @@ jobs:
       # and this step is the only thing that tells those two apart. Same
       # argument as validate:i18n:self-test above.
       - run: npm run validate:open-graph:self-test
+      # And this step is the only one that proves the gate EXITS non-zero.
+      # Neither run above can: the corpus run exits 0 because the corpus is
+      # good, and --self-test never calls main(), so dropping problems.length
+      # from main()'s failure arithmetic printed every ERROR line and exited 0
+      # with both of them green (measured). It also runs --self-test against a
+      # deliberately mutated copy of the gate, which is the only check that
+      # notices a harness reporting success it did not earn — a hardcoded
+      # failure count, or a judge returning a fabricated passing verdict. Nine
+      # corpus fixtures plus two self-test fixtures, one child process each.
+      - run: npm run validate:open-graph:contract
 
       - name: pr-rigor disclosure
         env:

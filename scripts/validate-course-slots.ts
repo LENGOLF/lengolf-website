@@ -18,6 +18,7 @@
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { COURSE_DETAIL_I18N } from '../data/golf-courses-i18n'
+import { runSelfTest } from './self-test-harness'
 
 const ROOT = process.cwd()
 const LOCALES = ['th', 'ko', 'zh', 'ja'] as const
@@ -388,38 +389,56 @@ const SELF_TESTS: Array<{ name: string; loc: Loc; s: string; expect: boolean; ma
 
 function selfTest(): never {
   let failed = 0
-  for (const t of SELF_TESTS) {
+  // Counted INSIDE the loop: these measure cases EXECUTED. Derived from
+  // SELF_TESTS.filter(...) they measured cases DECLARED, and a `break` here ran
+  // zero cases while every floor passed and the gate exited 0 (measured
+  // 2026-08-24).
+  // map() via runSelfTest: one verdict per case by construction, so there is no
+  // counter to place correctly and no declared-vs-executed check to maintain.
+  // Three placements of the old counter each left a skip shape one line away.
+  // The fire/locale/reason tallies below are derived from the case ARRAY, which
+  // is honest now that execution is structural: they guard case DELETION, and
+  // `examined` guards execution.
+  const result = runSelfTest('slot', SELF_TESTS, (t) => {
     const verdict = judge(t.loc, t.s)
     const got = verdict !== null
     // A case with `match` must fire for the RIGHT reason. Fire-only assertions
     // let a second rule cover for a disarmed first one — see the docblock.
     const reasonOk = !t.match || (verdict !== null && t.match.test(verdict))
     const ok = got === t.expect && reasonOk
-    if (!ok) failed++
-    console.log(
-      `  ${ok ? '✓' : '✗'} [${t.loc}] ${t.name} — expected ${t.expect ? 'FIRE' : 'silent'}` +
-        `${t.match ? ` matching ${t.match.source}` : ''}, got ${got ? 'FIRE' : 'silent'}`
-    )
-    if (!ok && got) console.log(`      ${verdict}`)
-  }
-  const fires = SELF_TESTS.filter((t) => t.expect).length
-  console.log(`\n${SELF_TESTS.length} self-tests (${fires} must fire, ${SELF_TESTS.length - fires} must stay silent) · ${failed} failed`)
-  const reasoned = SELF_TESTS.filter((t) => t.match).length
+    return {
+      ok,
+      label:
+        `[${t.loc}] ${t.name} — expected ${t.expect ? 'FIRE' : 'silent'}` +
+        `${t.match ? ` matching ${t.match.source}` : ''}, got ${got ? 'FIRE' : 'silent'}`,
+      detail: !ok && got ? String(verdict) : undefined,
+    }
+  })
+  const ran = result.examined
+  failed = result.failures
+  const firesRan = SELF_TESTS.filter((t) => t.expect).length
+  const reasonedRan = SELF_TESTS.filter((t) => t.match).length
+  const reasonsRan = new Set(SELF_TESTS.filter((t) => t.match).map((t) => t.match!.source))
+  console.log(`\n${ran} self-tests ran (${firesRan} must fire, ${ran - firesRan} must stay silent) · ${failed} failed`)
   // Count DISTINCT reasons, not cases. The first version's `reasoned >= 8`
   // counted cases carrying a `match`, so deleting two dominance cases and then
   // disarming the two rules they pinned left the suite green — the same
   // hollowness it was written to close, one level up.
-  const distinctReasons = new Set(SELF_TESTS.filter((t) => t.match).map((t) => t.match!.source)).size
+  const distinctReasons = reasonsRan.size
   // distinctReasons is pinned AT the current count (14), not below it. At 10
   // there were four units of slack, and "delete a rule together with the
   // self-test case that pins it" is what an ordinary cleanup refactor does —
   // four rules could go with both this script and its self-test staying green
   // and byte-identical to a healthy run. Verified by mutation. Raise this line
   // in the same commit that adds a reason; never lower it.
-  if (fires < 8 || reasoned < 8 || distinctReasons < 14) {
+  // firesRan and reasonedRan sat at 8 against true values of 29 and 22 — 21
+  // and 14 units of slack, i.e. two thirds of the firing cases could be
+  // deleted with this green. Pinned AT the true values now, like
+  // distinctReasons beside them. Raise all three when adding cases.
+  if (firesRan < 29 || reasonedRan < 22 || distinctReasons < 14) {
     console.log(
-      `FAIL: self-test suite has lost coverage (${fires} firing, ${reasoned} reason-asserting, ` +
-        `${distinctReasons} distinct reasons; expected >= 8 / >= 8 / >= 14)`
+      `FAIL: self-test suite has lost coverage (${firesRan} firing, ${reasonedRan} reason-asserting, ` +
+        `${distinctReasons} distinct reasons; expected >= 29 / >= 22 / >= 14)`
     )
     process.exit(1)
   }

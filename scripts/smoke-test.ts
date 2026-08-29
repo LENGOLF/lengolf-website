@@ -3687,15 +3687,42 @@ async function runSeoTests() {
       // that path is <body>-only, which is exactly what bounding removes.
       // Bounding to <head> shrinks the risk surface; it does not eliminate the
       // class, since 16 head scripts still precede the og tags.
-      const headEnd = body.indexOf("</head>");
-      const visible = (headEnd === -1 ? body : body.slice(0, headEnd))
+      // ORDER IS LOAD-BEARING, and the first version had it backwards. Finding
+      // "</head>" first meant a head <script> whose STRING contained "</head>"
+      // truncated the bound to that point, and all five checks false-failed on
+      // a correct page. Strip scripts first, then bound: the strip removes the
+      // only construct that can carry a fake terminator.
+      //
+      // HTML comments go too. A commented-out
+      // <!-- <meta name="twitter:card" ...> --> satisfied every one of these
+      // checks, which is a false PASS — the one direction the rest of this
+      // section is careful to avoid.
+      const stripped = body
         .split("<script")
         .map((chunk, i) => {
           if (i === 0) return chunk;
           const end = chunk.indexOf("</script>");
           return end === -1 ? "" : chunk.slice(end + "</script>".length);
         })
+        .join("")
+        .split("<!--")
+        .map((chunk, i) => {
+          if (i === 0) return chunk;
+          const end = chunk.indexOf("-->");
+          return end === -1 ? "" : chunk.slice(end + "-->".length);
+        })
         .join("");
+      // If a stripped construct STRADDLES the boundary it can take the real
+      // </head> with it; headEnd is then -1 and the fallback hands these
+      // assertions the whole document, so a <body> tag could satisfy them.
+      // Unreachable on this app's markup (no literal "<!--" anywhere under
+      // app/ components/ lib/ data/, React escapes "<", and nine live pages
+      // across every section-D shape produce byte-identical output under the
+      // old and new orderings) — recorded because the comment above used to
+      // claim flatly that nothing in <body> can affect this check, which is
+      // now conditional.
+      const headEnd = stripped.indexOf("</head>");
+      const visible = headEnd === -1 ? stripped : stripped.slice(0, headEnd);
       const ogTag = (prop: string): string | null => {
         const tag = visible.match(new RegExp(`<meta[^>]*property="og:${prop}"[^>]*>`));
         if (!tag) return null;
@@ -3710,6 +3737,55 @@ async function runSeoTests() {
       }
       if (!ogTag("site_name")) {
         issues.push("missing og:site_name");
+      }
+
+      // twitter:card, asserted on the RENDERED tag. This replaces the static
+      // twitter/icons tripwire in validate:open-graph, which tried to predict
+      // Next's resolution from source. Two of its three shapes were wrong,
+      // and the third was RIGHT — say so, because an earlier version of this
+      // comment wrote it off as "wrong in both directions":
+      //   - FALSE RED on `twitter: { title, images }`. Next resolves
+      //     `card = card || (images?.length ? 'summary_large_image' :
+      //     'summary')`, so a page supplying images lands on the layout's
+      //     exact value and nothing drops.
+      //   - TRUE RED on `twitter: { title }` with no images: that resolves
+      //     to `summary` permanently. Dropping the source rule gave up a real
+      //     check across all 47 files under app/.
+      //   - FALSE GREEN on `icons: { icon }`, which dropped the layout's
+      //     `apple` because the rule modelled one field per key.
+      //
+      // The layout is the SOLE supplier of `card` site-wide, so checking the
+      // resolved output here is complete coverage of the SUPPLIER. It is NOT
+      // complete coverage of a future page-level `twitter` declaration: 13 of
+      // the 31 openGraph declarations are unreachable from any URL in this
+      // section — 8 of those 13 under /golf-courses/, the other 5 being
+      // activities, best, cost, hotels and second-hand-club detail. This was
+      // the FOURTH site of that sentence, and the two commits that "fixed the
+      // remaining sites" both edited this file without touching it. Grep the
+      // claim, not the diff. A meta-name lookup, not property= — Twitter/X
+      // tags are `name="twitter:card"`.
+      // Matched the same way ogTag() does — whole tag first, then content —
+      // so attribute order cannot matter. The first version required
+      // name-before-content, an avoidable divergence from the idiom beside it.
+      const cardTag = visible.match(/<meta[^>]*name="twitter:card"[^>]*>/);
+      const cardValue = cardTag ? cardTag[0].match(/content="([^"]*)"/) : null;
+      if (!cardTag) {
+        issues.push("missing twitter:card");
+      } else if (!cardValue || cardValue[1] !== "summary_large_image") {
+        issues.push(
+          `twitter:card degraded to "${cardValue ? cardValue[1] : ""}" — the layout supplies summary_large_image`,
+        );
+      }
+
+      // Both icon links, for the same reason and to close the gap the static
+      // rule got backwards: the layout's `icons` sets `icon` AND `apple`, but
+      // the source-level rule modelled one field per key, so a page writing
+      // `icons: { icon }` passed while silently dropping `apple`. Asserting
+      // the rendered links needs no model of how many fields there are.
+      for (const rel_ of ["icon", "apple-touch-icon"]) {
+        if (!visible.match(new RegExp(`<link[^>]*rel="${rel_}"[^>]*>`))) {
+          issues.push(`missing <link rel="${rel_}">`);
+        }
       }
 
       // The WebSite node's publisher Organization is read for entity

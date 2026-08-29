@@ -12,6 +12,23 @@
  * requires writing an explicit number a reviewer can challenge, instead of
  * saying nothing.
  *
+ * SCOPE, and it is deliberately narrow: this gate proves only that a NUMBER is
+ * present and >= the floor. It cannot prove the agents ran, and it does not try
+ * to read the surrounding prose. A self-refutation check that did was added and
+ * then REMOVED after two independent review passes measured it: it fired on 8
+ * of 10 honest sentences — including "Six agents wrote no code", which asserts
+ * independence, and "Two rounds produced the fixes", which is this repo's own
+ * idiom — while missing 22 of 25 rephrasings that meant exactly what the body
+ * it was built from meant (synonyms for the verb, passive voice, a leading
+ * "- " bullet, a line break inside the clause). A body reading "I spawned zero
+ * independent agents" passed it. Combined with the payload caveat below, each
+ * false red costs a forced commit and a full CI round-trip, and this repo's own
+ * rule is that a gate firing on correct code gets switched off. DO NOT re-add a
+ * prose-reading version: judging whether a paragraph concedes authorship is not
+ * a regex's job. If the count needs to be trustworthy, the mechanism has to be
+ * evidence the reviewer cannot author — not a better pattern over the same
+ * self-attested sentence.
+ *
  * CAVEAT: `github.event.pull_request.body` is captured in the event payload, so
  * editing a PR description does NOT re-trigger this check and re-running the job
  * replays the stale body. Push a commit to re-evaluate. (Observed on PR #93: the
@@ -23,7 +40,7 @@
  * and a disabled gate protects nothing.
  */
 const MIN_AGENTS = 3
-const DISCLOSURE_RE = /Independent review agents spawned:\s*(\d+)/i
+const DISCLOSURE_RE = /Independent review agents spawned:\s*(\d+)/gi
 
 const body = process.env.PR_BODY ?? ''
 const isPullRequest = process.env.GITHUB_EVENT_NAME === 'pull_request'
@@ -46,9 +63,30 @@ if (!body.trim()) {
   process.exit(1)
 }
 
-const match = body.match(DISCLOSURE_RE)
+// Only occurrences in PROSE count. Code spans, fenced blocks and blockquotes
+// are where a body QUOTES the requirement, and quoting is what defeated the
+// first-match read: "the template requires a line of the form
+// `Independent review agents spawned: 3`" above a real line reading 0 passed
+// the floor while disclosing zero review.
+//
+// Taking the minimum of ALL occurrences was the first fix and it was wrong in
+// the opposite direction: a body explaining THIS change necessarily quotes
+// `... spawned: 0`, so the minimum was 0 and the gate reddened a correct,
+// self-documenting description — uncleárable by editing it, per the payload
+// caveat above. Prose-vs-code separates the two cases cleanly: the decoy is
+// backticked and the real line is not, in both bodies.
+//
+// The minimum is still applied to what survives, so two PROSE numbers cannot
+// be gamed by ordering.
+const prose = body
+  .replace(/```[\s\S]*?```/g, ' ')
+  .replace(/`[^`\n]*`/g, ' ')
+  .split(/\r?\n/)
+  .filter((l) => !/^\s*>/.test(l))
+  .join('\n')
+const matches = [...prose.matchAll(DISCLOSURE_RE)]
 
-if (!match) {
+if (matches.length === 0) {
   console.error(
     '\n❌ validate-pr-rigor: PR body is missing the pr-rigor disclosure line.\n\n' +
       '   Add, verbatim and honestly:\n' +
@@ -60,11 +98,13 @@ if (!match) {
   process.exit(1)
 }
 
-const count = Number(match[1])
+const counts = matches.map((m) => Number(m[1])).filter((n) => Number.isFinite(n))
+const count = counts.length > 0 ? Math.min(...counts) : NaN
+const quoted = matches.length > 1 ? ` (lowest of ${matches.length} prose occurrences)` : ''
 
 if (!Number.isFinite(count) || count < MIN_AGENTS) {
   console.error(
-    `\n❌ validate-pr-rigor: disclosure says "${match[0]}" — below the ${MIN_AGENTS}-agent floor.\n\n` +
+    `\n❌ validate-pr-rigor: disclosure says "${count}"${quoted} — below the ${MIN_AGENTS}-agent floor.\n\n` +
       '   pr-rigor expects 3-6 finders on deliberately distinct angles, plus the\n' +
       '   role passes (claim audit, guard efficacy, native-QA, release-readiness).\n' +
       '   If the review genuinely was smaller, say so in the PR and raise the count\n' +

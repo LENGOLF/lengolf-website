@@ -34,6 +34,7 @@
  */
 import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
+import { runSelfTest } from './self-test-harness'
 
 const ROOT = process.cwd()
 const SCAN_DIRS = ['app', 'components', 'lib', 'data']
@@ -207,24 +208,42 @@ const SELF_TESTS: Array<{ name: string; line: string; basis?: boolean; noun?: bo
 ]
 
 function selfTest(): never {
-  let failed = 0
-  let basisCases = 0
-  let nounCases = 0
-  for (const t of SELF_TESTS) {
-    const which = t.basis !== undefined ? 'basis' : 'noun'
-    const want = t.basis ?? t.noun ?? false
+  // map() via runSelfTest: one verdict per case by construction, so there is no
+  // counter to place correctly and no declared-vs-executed check to maintain.
+  // Three placements of the old counter each left a skip shape one line away.
+  // The basis/noun/firing tallies are derived from the case ARRAY, which is
+  // honest now that execution is structural: they guard case DELETION, while
+  // `examined` guards execution.
+  const whichOf = (t: (typeof SELF_TESTS)[number]) => (t.basis !== undefined ? 'basis' : 'noun')
+  const wantOf = (t: (typeof SELF_TESTS)[number]) => t.basis ?? t.noun ?? false
+  const result = runSelfTest('fee', SELF_TESTS, (t) => {
+    const which = whichOf(t)
+    const want = wantOf(t)
     const got = which === 'basis' ? basisViolation(t.line) !== null : nounViolation(t.line) !== null
-    if (which === 'basis') basisCases++
-    else nounCases++
-    const ok = got === want
-    if (!ok) failed++
-    console.log(`  ${ok ? '✓' : '✗'} [${which}] ${t.name} — expected ${want ? 'FIRE' : 'silent'}, got ${got ? 'FIRE' : 'silent'}`)
+    return {
+      ok: got === want,
+      label: `[${which}] ${t.name} — expected ${want ? 'FIRE' : 'silent'}, got ${got ? 'FIRE' : 'silent'}`,
+    }
+  })
+  const failed = result.failures
+  const basisCases = SELF_TESTS.filter((t) => whichOf(t) === 'basis').length
+  const nounCases = SELF_TESTS.filter((t) => whichOf(t) === 'noun').length
+  const firingRan = SELF_TESTS.filter((t) => wantOf(t)).length
+  const ran = result.examined
+  // EXECUTED, not declared. This was the one line in the block that still read
+  // `SELF_TESTS.filter(...).length` while every counter beside it had been
+  // converted — so a fully skipped loop printed "0 self-tests ran (0 basis,
+  // 0 noun; 10 must fire)", mixing an executed 0 with a declared 10.
+  const firing = firingRan
+  console.log(`\n${ran} self-tests ran (${basisCases} basis, ${nounCases} noun; ${firing} must fire) · ${failed} failed`)
+  if (ran !== SELF_TESTS.length) {
+    console.log(`FAIL: HARNESS BROKEN — ${SELF_TESTS.length} cases declared, ${ran} executed`)
+    process.exit(1)
   }
-  const firing = SELF_TESTS.filter((t) => t.basis || t.noun).length
-  console.log(`\n${SELF_TESTS.length} self-tests (${basisCases} basis, ${nounCases} noun; ${firing} must fire) · ${failed} failed`)
   // Floors, so deleting cases cannot hollow the suite out.
-  if (basisCases < 3 || nounCases < 12 || firing < 10) {
-    console.log('FAIL: self-test suite has lost cases (need >= 3 basis, >= 12 noun, >= 10 firing)')
+  // nounCases sat at 12 against a true 14. Pinned at the true values.
+  if (basisCases < 3 || nounCases < 14 || firing < 10) {
+    console.log('FAIL: self-test suite has lost cases (need >= 3 basis, >= 14 noun, >= 10 firing)')
     process.exit(1)
   }
   if (failed > 0) process.exit(1)
