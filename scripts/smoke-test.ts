@@ -5375,7 +5375,7 @@ async function runPriceTierRoundupLanguageTests() {
   // Real number, not `> 0`: 5 tiers x 4 locales, each listing 12 courses = 240.
   // Raised 100 -> 240 by batch 9. It had sat at 100 against a true 240 — slack by
   // 140, i.e. more than half the population could vanish while this printed a
-  // success line. That is the identical shape the L2 comment ~500 lines below
+  // success line. That is the identical shape the L2 comment ~570 lines above
   // calls out by name ("sat at 300 against a true 516 — HALF the value it
   // measured"), reproduced 24 lines above the L6 floor that WAS being maintained.
   // Every tier's roster is a full 12 today, so this is an exact product; if a
