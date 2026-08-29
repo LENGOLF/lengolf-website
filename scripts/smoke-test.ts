@@ -4798,8 +4798,12 @@ async function runCourseDetailRegistryLivenessTests() {
   // makesOffer, and only some have a second rate — so it is a real number
   // derived from the corpus rather than `> 0`. Measured at 688: 94 registered
   // courses x 4 locales, each emitting one Offer per non-null rate — NOT a clean
-  // product, because rajpruek-club (batch 9, a private club) has BOTH fees null
-  // and so emits no makesOffer at all. This sat at
+  // product. Of the 94, **twelve** are exceptions: FOUR emit no makesOffer at all
+  // (both fees null — amata-spring-country-club, st-andrews-2000,
+  // kumlung-ake-golf-course, rajpruek-club) and EIGHT emit a single Offer (null
+  // weekend fee). So 82*2 + 8*1 = 172 per locale, x4 = 688. An earlier version of
+  // this comment named only rajpruek-club, which is one of the twelve — a reader
+  // re-deriving from it gets 744, not 688. This sat at
   // 300 against a true 516 and then 600 — HALF the value it measured — while
   // packageOfferSeen 19 lines below was being raised in the same commit. That
   // is the "raise one ratchet, miss its sibling" shape CLAUDE.md documents,
@@ -4807,7 +4811,7 @@ async function runCourseDetailRegistryLivenessTests() {
   if (offerChecked < 688) {
     fail(
       `L2 Offer-label check ran on only ${offerChecked} label(s)`,
-      "expected 688+ (94 registered courses x 4 locales x their non-null rates; rajpruek-club contributes 0, both its fees being null). A low count means makesOffer is absent or the catalog lookup is failing, not that the labels are correct.",
+      "expected 688 (82 registered courses emit 2 Offers, 8 emit 1, and 4 emit none — 172 per locale x 4). A low count means makesOffer is absent or the catalog lookup is failing, not that the labels are correct.",
     );
   } else {
     pass(`L2 asserted localized JSON-LD Offer labels on ${offerChecked} label(s)`);
@@ -5368,20 +5372,30 @@ async function runPriceTierRoundupLanguageTests() {
     }
   }
 
-  // Real number, not `> 0`: 5 tiers x 4 locales, each listing up to 12 courses.
-  if (itemsChecked < 100) {
+  // Real number, not `> 0`: 5 tiers x 4 locales, each listing 12 courses = 240.
+  // Raised 100 -> 240 by batch 9. It had sat at 100 against a true 240 — slack by
+  // 140, i.e. more than half the population could vanish while this printed a
+  // success line. That is the identical shape the L2 comment ~500 lines below
+  // calls out by name ("sat at 300 against a true 516 — HALF the value it
+  // measured"), reproduced 24 lines above the L6 floor that WAS being maintained.
+  // Every tier's roster is a full 12 today, so this is an exact product; if a
+  // tier ever holds fewer than 12 qualifying courses, re-derive rather than
+  // lowering it blindly.
+  if (itemsChecked < 240) {
     fail(
       `L6 checked only ${itemsChecked} ItemList offer(s)`,
-      "expected 100+ (20 translated tier pages x up to 12 courses). A low count means the ItemList isn't being found, not that it is correct.",
+      "expected 240 (20 translated tier pages x 12 courses). A low count means the ItemList isn't being found, not that it is correct.",
     );
   } else {
     pass(`L6 asserted localized ItemList Offer.description on ${itemsChecked} item(s)`);
   }
 
   // Its own floor, for the same reason L2 carries one: the package branch goes
-  // vacuous INDEPENDENTLY of the count above. 10 of 149 courses are packages
-  // and only two reach a translated tier roster, so itemsChecked stays in the
-  // hundreds while the branch that matters here drops to zero.
+  // vacuous INDEPENDENTLY of the count above. 12 of 149 courses are packages
+  // and only two reach a translated tier roster, so itemsChecked stays at 240
+  // while the branch that matters here drops to zero. (Batch 9 took the package
+  // count 10 -> 12; neither of its two additions reaches a tier roster, so the
+  // true value below is unchanged at 8.)
   //
   // FOUR, not the true value of 8, and that is deliberate — this is the one
   // ratchet in the repo that must NOT be pinned exact. The roster is a derived
