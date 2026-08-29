@@ -213,6 +213,24 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/chiang-mai/north-hill-chiang-mai",
       "/golf-courses/chiang-mai/royal-chiang-mai-golf-club",
       "/golf-courses/chiang-mai/summit-green-valley-chiangmai",
+      // Batch 9 (2026-08) — bangkok tranche, 9/55 -> 21/55, picked by GSC
+      // impressions rather than roster completion. See COURSE_DETAIL_I18N in
+      // data/golf-courses-i18n.ts for the demand numbers and for why
+      // suvarnabhumi/phoenix-gold (duplicate course, two slugs), bangpoo
+      // (coordinates contradict its own address) and royal-dusit (closed) are
+      // excluded despite outranking several entries here.
+      "/golf-courses/bangkok/artitaya-country-club",
+      "/golf-courses/bangkok/bangsai-country-club",
+      "/golf-courses/bangkok/killien-golf-club",
+      "/golf-courses/bangkok/krisda-city-golf-hills",
+      "/golf-courses/bangkok/muang-ake-vista-golf-course",
+      "/golf-courses/bangkok/northern-rangsit-golf-club",
+      "/golf-courses/bangkok/prime-city-golf-club",
+      "/golf-courses/bangkok/rajpruek-club",
+      "/golf-courses/bangkok/royal-golf-country-club",
+      "/golf-courses/bangkok/royal-lakeside-golf-club",
+      "/golf-courses/bangkok/the-vintage-club",
+      "/golf-courses/bangkok/windsor-park-golf-club",
       // Translated FAQ pages (data/faq-pages.ts entries with locale: 'th') —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -479,6 +497,24 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/chiang-mai/north-hill-chiang-mai",
       "/golf-courses/chiang-mai/royal-chiang-mai-golf-club",
       "/golf-courses/chiang-mai/summit-green-valley-chiangmai",
+      // Batch 9 (2026-08) — bangkok tranche, 9/55 -> 21/55, picked by GSC
+      // impressions rather than roster completion. See COURSE_DETAIL_I18N in
+      // data/golf-courses-i18n.ts for the demand numbers and for why
+      // suvarnabhumi/phoenix-gold (duplicate course, two slugs), bangpoo
+      // (coordinates contradict its own address) and royal-dusit (closed) are
+      // excluded despite outranking several entries here.
+      "/golf-courses/bangkok/artitaya-country-club",
+      "/golf-courses/bangkok/bangsai-country-club",
+      "/golf-courses/bangkok/killien-golf-club",
+      "/golf-courses/bangkok/krisda-city-golf-hills",
+      "/golf-courses/bangkok/muang-ake-vista-golf-course",
+      "/golf-courses/bangkok/northern-rangsit-golf-club",
+      "/golf-courses/bangkok/prime-city-golf-club",
+      "/golf-courses/bangkok/rajpruek-club",
+      "/golf-courses/bangkok/royal-golf-country-club",
+      "/golf-courses/bangkok/royal-lakeside-golf-club",
+      "/golf-courses/bangkok/the-vintage-club",
+      "/golf-courses/bangkok/windsor-park-golf-club",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -777,6 +813,24 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/chiang-mai/north-hill-chiang-mai",
       "/golf-courses/chiang-mai/royal-chiang-mai-golf-club",
       "/golf-courses/chiang-mai/summit-green-valley-chiangmai",
+      // Batch 9 (2026-08) — bangkok tranche, 9/55 -> 21/55, picked by GSC
+      // impressions rather than roster completion. See COURSE_DETAIL_I18N in
+      // data/golf-courses-i18n.ts for the demand numbers and for why
+      // suvarnabhumi/phoenix-gold (duplicate course, two slugs), bangpoo
+      // (coordinates contradict its own address) and royal-dusit (closed) are
+      // excluded despite outranking several entries here.
+      "/golf-courses/bangkok/artitaya-country-club",
+      "/golf-courses/bangkok/bangsai-country-club",
+      "/golf-courses/bangkok/killien-golf-club",
+      "/golf-courses/bangkok/krisda-city-golf-hills",
+      "/golf-courses/bangkok/muang-ake-vista-golf-course",
+      "/golf-courses/bangkok/northern-rangsit-golf-club",
+      "/golf-courses/bangkok/prime-city-golf-club",
+      "/golf-courses/bangkok/rajpruek-club",
+      "/golf-courses/bangkok/royal-golf-country-club",
+      "/golf-courses/bangkok/royal-lakeside-golf-club",
+      "/golf-courses/bangkok/the-vintage-club",
+      "/golf-courses/bangkok/windsor-park-golf-club",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
@@ -1067,6 +1121,24 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/chiang-mai/north-hill-chiang-mai",
       "/golf-courses/chiang-mai/royal-chiang-mai-golf-club",
       "/golf-courses/chiang-mai/summit-green-valley-chiangmai",
+      // Batch 9 (2026-08) — bangkok tranche, 9/55 -> 21/55, picked by GSC
+      // impressions rather than roster completion. See COURSE_DETAIL_I18N in
+      // data/golf-courses-i18n.ts for the demand numbers and for why
+      // suvarnabhumi/phoenix-gold (duplicate course, two slugs), bangpoo
+      // (coordinates contradict its own address) and royal-dusit (closed) are
+      // excluded despite outranking several entries here.
+      "/golf-courses/bangkok/artitaya-country-club",
+      "/golf-courses/bangkok/bangsai-country-club",
+      "/golf-courses/bangkok/killien-golf-club",
+      "/golf-courses/bangkok/krisda-city-golf-hills",
+      "/golf-courses/bangkok/muang-ake-vista-golf-course",
+      "/golf-courses/bangkok/northern-rangsit-golf-club",
+      "/golf-courses/bangkok/prime-city-golf-club",
+      "/golf-courses/bangkok/rajpruek-club",
+      "/golf-courses/bangkok/royal-golf-country-club",
+      "/golf-courses/bangkok/royal-lakeside-golf-club",
+      "/golf-courses/bangkok/the-vintage-club",
+      "/golf-courses/bangkok/windsor-park-golf-club",
       // Translated FAQ pages (data/faq-pages.ts entries with this locale) —
       // must stay in sync with the data file; the smoke-test registry-
       // consistency check (section I) enforces it, mirroring the guide check.
