@@ -47,6 +47,20 @@ const SHEET_LOCALES = ALL_LOCALES.filter(
 /** Endonyms, so a Thai reader sees "ไทย" rather than "Thai". */
 const LOCALE_SWITCH_LABEL: Record<string, string> = { en: 'EN', th: 'ไทย', ja: '日本語', ko: '한국어', zh: '中文' }
 
+/**
+ * Rendered in a spec cell the owner's sheet records no value for.
+ *
+ * Only the DESKTOP TABLE ever shows it. The mobile card drops a factless row
+ * instead, so this string must never be the thing that decides which — an
+ * earlier cut had `cells()` bake the filler into its return value and had the
+ * card recognise emptiness by comparing against it, which meant two spellings
+ * had to agree forever. They drifted within a day.
+ *
+ * So emptiness stays STRUCTURAL: `cells()` returns null, each surface decides
+ * how to present it, and there is no comparison left to get wrong.
+ */
+const NO_VALUE = '-'
+
 /** Legal links the stripped site footer would otherwise have carried. */
 const LEGAL_LINKS = [
   { href: '/privacy-policy', key: 'privacy' },
@@ -102,7 +116,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       images: [
         {
           url: storageUrl('clubs/premium-plus/2.png'),
-          alt: 'Callaway Paradym Forged Carbon rental set — full bag',
+          alt: 'Callaway Paradym Forged Carbon rental set, full bag',
         },
       ],
     }),
@@ -125,7 +139,7 @@ export default async function GolfClubSpecsPage({ params }: { params: Promise<{ 
   // the last good render instead of caching the blank one.
   if (sets.length === 0) {
     throw new Error(
-      'golf-club-specs: no rental club sets returned. Refusing to render an empty spec sheet — ' +
+      'golf-club-specs: no rental club sets returned. Refusing to render an empty spec sheet. ' +
         'check the rental_club_sets query and Supabase availability.'
     )
   }
@@ -509,9 +523,12 @@ function SetBlock({
             const rows = SPEC_ROWS.filter((row) => c.parts.some((p) => p.row === row))
             const cells = (row: SpecRow) => {
               const hits = c.parts.filter((p) => p.row === row).map((p) => splitClubPart(p.text))
+              // Returns null rather than the filler: see NO_VALUE. The caller
+              // that wants a dash asks for one; the caller that wants to drop
+              // the row tests for null.
               const join = (vals: (string | null)[]) => {
                 const seen = [...new Set(vals.filter((v): v is string => !!v))]
-                return seen.length > 0 ? seen.join(' · ') : '—'
+                return seen.length > 0 ? seen.join(' · ') : null
               }
               return {
                 spec: join(hits.map((h) => h.spec)),
@@ -528,13 +545,14 @@ function SetBlock({
                 {/* Phones get one card per club instead of a five-column table.
                     Sideways-scrolling a table to read a spec is miserable on
                     the device this sheet is actually opened on, and the
-                    previous nowrap-plus-scroll only stopped the text breaking
-                    — it did not make the table readable. Values that are just
-                    an em dash are dropped rather than shown as empty rows. */}
+                    previous nowrap-plus-scroll only stopped the text breaking,
+                    it did not make the table readable. Facts the sheet records
+                    no value for are dropped here rather than shown as empty
+                    rows, which is why cells() reports them as null. */}
                 <div className="space-y-2 sm:hidden">
                   {rows.map((row) => {
                     const v = cells(row)
-                    const facts: [string, string][] = [
+                    const facts: [string, string | null][] = [
                       [t('colShaft'), v.shaft],
                       [t('colWeight'), v.weight],
                       [t('colFlex'), v.flex],
@@ -544,10 +562,10 @@ function SetBlock({
                         <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                           {rowLabel(row)}
                         </p>
-                        <p className="mt-0.5 font-semibold">{v.spec}</p>
+                        <p className="mt-0.5 font-semibold">{v.spec ?? NO_VALUE}</p>
                         <dl className="mt-2 space-y-1 text-sm">
                           {facts
-                            .filter(([, value]) => value !== '—')
+                            .filter((f): f is [string, string] => f[1] !== null)
                             .map(([k, value]) => (
                               <div key={k} className="flex gap-2">
                                 <dt className="shrink-0 text-muted-foreground">{k}</dt>
@@ -563,7 +581,7 @@ function SetBlock({
                 <div className="hidden overflow-x-auto rounded-lg border border-primary/20 sm:block">
                   <table className="w-auto min-w-full border-collapse text-sm">
                     <caption className="sr-only">
-                      {t('fullSpecsCaption', { name: `${setShortName(set.name)} — ${label}` })}
+                      {t('fullSpecsCaption', { name: `${setShortName(set.name)}, ${label}` })}
                     </caption>
                     <thead>
                       <tr className="bg-primary/5 text-left [&>th]:whitespace-nowrap">
@@ -580,12 +598,14 @@ function SetBlock({
                         return (
                           <tr key={row} className="border-t border-primary/15 [&>*]:whitespace-nowrap">
                             <th scope="row" className="px-3 py-2.5 text-left font-semibold">{rowLabel(row)}</th>
-                            <td className="px-3 py-2.5 text-muted-foreground">{v.spec}</td>
-                            <td className="px-3 py-2.5 text-muted-foreground">{v.shaft}</td>
-                            {/* Em dash where the owner's sheet records no
-                                weight (steel irons, both wedge sets). */}
-                            <td className="px-3 py-2.5 text-muted-foreground">{v.weight}</td>
-                            <td className="px-3 py-2.5 text-muted-foreground">{v.flex}</td>
+                            <td className="px-3 py-2.5 text-muted-foreground">{v.spec ?? NO_VALUE}</td>
+                            <td className="px-3 py-2.5 text-muted-foreground">{v.shaft ?? NO_VALUE}</td>
+                            {/* Weight is by far the sparsest column: the Warbird
+                                records none at all (10 of 10 cells empty), and
+                                neither Paradym wedge set has one. Only this
+                                table shows the filler — the card drops the row. */}
+                            <td className="px-3 py-2.5 text-muted-foreground">{v.weight ?? NO_VALUE}</td>
+                            <td className="px-3 py-2.5 text-muted-foreground">{v.flex ?? NO_VALUE}</td>
                           </tr>
                         )
                       })}
@@ -606,7 +626,7 @@ function SetBlock({
             {noteVariants.map((v) => (
               <li key={v.key} className="text-sm text-muted-foreground">
                 <span className="font-semibold text-foreground">{v.label ?? v.key}</span>
-                {v.spec ? <> — {v.spec}</> : null}
+                {v.spec ? <>: {v.spec}</> : null}
               </li>
             ))}
           </ul>
