@@ -5474,31 +5474,27 @@ async function runPriceTierRoundupLanguageTests() {
     // vacuous INDEPENDENTLY of the count above, so itemsChecked stays at 240 while
     // the branch that matters here drops to zero.
     //
-    // DELIBERATELY NOT EXACT, and that decision survives - but its ARITHMETIC was
-    // stale and is corrected here. The previous text said "12 of 149 courses are
-    // packages", "only two reach a translated tier roster", and "the true value
-    // below is unchanged at 8". All three are now wrong: 19 of 149 carry the flag,
-    // and SEVEN reach a tier roster (rachakram in under/2500; cascata and lam-luk-ka
-    // in under/3500; toscana-valley and royal-bang-pa-in in BOTH under/5000 and
-    // under/7500; plus royal-chiang-mai and gassan-khuntan), for an analytically
-    // derived ~9 items per locale = ~36.
+    // MEASURED, not derived. CI run 33289945032 printed `packageItemsSeen = 36`,
+    // confirming the offline derivation exactly: seven package courses reach a
+    // translated tier roster (rachakram in under/2500; cascata and lam-luk-ka in
+    // under/3500; toscana-valley and royal-bang-pa-in in BOTH under/5000 and
+    // under/7500; royal-chiang-mai and gassan-khuntan), = 9 items per locale x 4.
+    // The previous text here said "12 of 149 courses are packages", "only two reach
+    // a translated tier roster" and "the true value below is unchanged at 8" - all
+    // three were stale, and the floor sat at 4 against a true 36.
     //
-    // Why not pin 36: the roster is a derived top 12, and CLAUDE.md warns against
-    // pinning to it - a fee correction elsewhere can displace a course and red a PR
-    // that changed nothing about labels. That argument was calibrated when the
-    // population was 8 held up by ONE course's margin; at ~36 across four tiers and
-    // seven courses it no longer justifies a floor of 4, which would print a success
-    // line while ~89% of what it measures vanished.
-    //
-    // 16 = four courses x 4 locales: comfortably above any single displacement, far
-    // below the derived value. NOTE: ~36 is an OFFLINE derivation (replicating
-    // popularityScore / getCoursesUnderPrice); this suite could not be run locally
-    // because it needs a built server. Read the real `packageItemsSeen` from the
-    // first CI run and ratchet this to a measured number.
-  if (packageItemsSeen < 16) {
+    // 28, NOT 36, and unlike every other ratchet in this repo that is deliberate.
+    // The roster is a derived top 12 and CLAUDE.md warns against pinning to it: a
+    // fee correction elsewhere can displace a course and red a PR that changed
+    // nothing about labels. 28 = 36 minus the largest single course's contribution
+    // (toscana-valley and royal-bang-pa-in each hold 2 tiers x 4 locales = 8), so no
+    // ONE displacement can false-red it, while it still asserts 78% of the measured
+    // value instead of the 11% a floor of 4 asserted. Re-measure from the CI log
+    // when the package set changes; do not raise it to the true value.
+  if (packageItemsSeen < 28) {
     fail(
       `L6 package-label branch ran on only ${packageItemsSeen} item(s)`,
-      "expected 16+ (at least four fee_is_package courses in translated tier rosters x 4 locales; analytically ~36 today). Zero means no package course reaches one any more, or packageNames stopped matching on course.name — not that the labels are right.",
+      "expected 28+ (measured 36 today: seven fee_is_package courses across four translated tier rosters; floored one course-contribution below true so a roster displacement cannot false-red). Zero means no package course reaches one any more, or packageNames stopped matching on course.name — not that the labels are right.",
     );
   } else {
     pass(`L6 asserted package (not green-fee) ItemList labels on ${packageItemsSeen} item(s)`);
