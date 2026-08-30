@@ -428,7 +428,11 @@ function checkPackageNoun(courses: { file: string; course: GolfCourse }[]) {
   // stating an all-in rate in its own EN prose matching its typed green_fee pair.
   // Untranslated is the load-bearing word: they contribute 1 title each, not 5,
   // which is why the expectation below is registry-derived rather than `x 5`.
-  const MIN_PACKAGE_COURSES = 19
+  // Then 19 -> 21: khao-yai/rancho-charnvee-country-club (caddie bundled per prose
+  // stated three times; cart genuinely optional and extra, so cart_fee_thb keeps
+  // its 600) and khao-yai/forest-hills-country-club (typed pair is the
+  // booking-platform package, and its caddie_fee_thb held a TIP typed as a fee).
+  const MIN_PACKAGE_COURSES = 21
   if (packages < MIN_PACKAGE_COURSES) {
     errors.push(
       `package-noun check found only ${packages} fee_is_package course(s), expected at least ` +

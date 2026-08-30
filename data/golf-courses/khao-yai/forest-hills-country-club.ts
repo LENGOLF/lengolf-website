@@ -11,9 +11,24 @@ export const course: GolfCourse = {
   year_opened: 1993,
   green_fee_weekday_thb: 1350,
   green_fee_weekend_thb: 1600,
+  // The typed pair is the BOOKING-PLATFORM PACKAGE, not a bare green fee: prose says
+  // "packages run around 1,350 THB weekdays and 1,600 THB weekends all-in, including
+  // caddie and a single-rider cart", and fees_verified_at attests it. The file used to
+  // mix two pricing paths - package green fee beside walk-in caddie/cart - which is
+  // what made this look ambiguous. It is not: one path, typed consistently.
+  fee_is_package: true,
   fees_verified_at: '2026-07-30',
-  caddie_fee_thb: 400,
-  cart_fee_thb: 500,
+  // Was 400, which was a TIP typed as a FEE - this file's own prose says twice that
+  // "a caddie tip of 400 THB is the customary minimum ON TOP". Identical to the
+  // gassan-khuntan blocker the chiang-mai native-QA pass found. Caddies are
+  // mandatory here and the package covers them, so the fee is zero and the tip
+  // stays extra (caddie_tip_included deliberately unset).
+  caddie_fee_thb: 0,
+  // Was 500, the WALK-IN cart rate. The typed green fee above is the package rate,
+  // which includes a single-rider cart, so the typed fields must describe that same
+  // pricing path or the card contradicts its own heading. The 500 walk-in figure
+  // survives in the prose, where it is correctly framed as the alternative.
+  cart_fee_thb: 0,
   caddie_required: true,
   cart_required: false,
   driving_range: true,
