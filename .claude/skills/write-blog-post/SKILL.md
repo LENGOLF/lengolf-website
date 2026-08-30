@@ -17,11 +17,16 @@ Follow these steps in order. Do NOT skip the research phase.
 
 Before writing, check what already exists to avoid overlap:
 
-```
-!`npx -y supabase-mcp-server 2>/dev/null || true`
-```
+Query the `blog_posts` table for existing titles and slugs so you don't duplicate
+an existing post. Read `lib/blog.ts` for the query helpers; the table is reachable
+only server-side (see the Supabase rules in CLAUDE.md).
 
-Query the `blog_posts` table for existing titles and slugs to ensure you're not duplicating content.
+**Do not shell out to `npx -y <name>` to do this.** The line that used to sit here
+invoked `supabase-mcp-server`, which does not exist on npm (the real package is the
+scoped `@supabase/mcp-server-supabase`). `npx -y` installs and executes without
+confirmation, so an unregistered name is a squat vector on a machine whose
+`.env.local` holds `SUPABASE_SERVICE_ROLE_KEY` - and `2>/dev/null || true` made the
+failure invisible, so this step silently did nothing.
 
 ### 2. Research the Topic
 
@@ -67,7 +72,7 @@ VALUES (
   'post-slug-here',
   'A 1-2 sentence excerpt that makes someone want to read the full article.',
   '<p>HTML content here...</p>',
-  'SEO Title | LENGOLF',  -- under 60 chars
+  'SEO Title',             -- under 60 chars; NO '| LENGOLF' (see below)
   'Meta description for search results.',  -- under 160 chars
   NOW(),
   'published'
@@ -76,12 +81,33 @@ VALUES (
 
 - **slug**: lowercase, hyphenated, no special characters
 - **excerpt**: 1-2 sentences, no HTML, compelling
-- **meta_title**: under 60 characters, include primary keyword
+- **meta_title**: under 60 characters, include primary keyword. **Never append
+  `| LENGOLF`.** The root layout sets `title.template = '%s | LENGOLF'`, and the
+  blog route returns `post.meta_title` as a plain string, so the brand is appended
+  for you. Writing it yourself ships `... | LENGOLF | LENGOLF` - live on 9 of 27
+  posts today because this block previously told you to.
 - **meta_description**: under 160 characters, include a call-to-action or key benefit
+
+### 5. Redeploy, or the post 404s
+
+`app/[locale]/blog/[slug]/page.tsx` sets `dynamicParams = false`, so the route
+serves only the slugs `generateStaticParams` produced at build time. `revalidate`
+refreshes pages that were already built; it never adds new ones. **A post inserted
+into the DB is unreachable at its own URL until a redeploy regenerates the params.**
+
+Push any commit to `main` (an empty one is enough) and confirm the new URL returns
+200 before telling anyone it is live. Smoke section L exists to catch exactly this
+data-ahead-of-deploy state.
 
 ## LENGOLF Facts (verified)
 
 Use these when referencing LENGOLF — do not embellish:
+
+**These are a convenience copy. `lib/site-facts.ts` is the single source of truth**
+(it says so in its own header) and already holds the opening hours, location and
+max-players-per-bay. Check it before trusting anything below: the 10 AM opening
+time this file shipped with was drift from exactly that module, and a copy that
+cannot drift is better than a copy that is currently right.
 
 - **Name:** LENGOLF
 - **Location:** The Mercury Ville @ BTS Chidlom, Floor 4, Bangkok
