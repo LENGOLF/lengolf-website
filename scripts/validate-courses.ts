@@ -428,11 +428,18 @@ function checkPackageNoun(courses: { file: string; course: GolfCourse }[]) {
   // stating an all-in rate in its own EN prose matching its typed green_fee pair.
   // Untranslated is the load-bearing word: they contribute 1 title each, not 5,
   // which is why the expectation below is registry-derived rather than `x 5`.
-  // Then 19 -> 21: khao-yai/rancho-charnvee-country-club (caddie bundled per prose
-  // stated three times; cart genuinely optional and extra, so cart_fee_thb keeps
-  // its 600) and khao-yai/forest-hills-country-club (typed pair is the
-  // booking-platform package, and its caddie_fee_thb held a TIP typed as a fee).
-  const MIN_PACKAGE_COURSES = 21
+  // Then 19 -> 20: khao-yai/forest-hills-country-club only. Its typed pair is the
+  // booking-platform package ("all-in, including caddie and a single-rider cart"),
+  // and its caddie_fee_thb held a TIP typed as a fee.
+  //
+  // khao-yai/rancho-charnvee-country-club was flagged here and REVERTED before merge.
+  // It is caddie-bundled-but-cart-extra (cart 600), which CLAUDE.md records as an
+  // OPEN OWNER RULING and warns against pre-empting. Nineteen courses share that
+  // shape - thana-city, hang-dong, krisda-city, muang-ake-vista and fifteen more -
+  // and flagging exactly one of them resolves the ruling in one direction for one
+  // course while widening the split. It also rendered a false title: getCourseTitle's
+  // package branch emits "All-In Rates", and a 600 THB cart is +57% on that rate.
+  const MIN_PACKAGE_COURSES = 20
   if (packages < MIN_PACKAGE_COURSES) {
     errors.push(
       `package-noun check found only ${packages} fee_is_package course(s), expected at least ` +

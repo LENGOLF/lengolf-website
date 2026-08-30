@@ -13,21 +13,26 @@ export const course: GolfCourse = {
   green_fee_weekend_thb: 1600,
   // The typed pair is the BOOKING-PLATFORM PACKAGE, not a bare green fee: prose says
   // "packages run around 1,350 THB weekdays and 1,600 THB weekends all-in, including
-  // caddie and a single-rider cart", and fees_verified_at attests it. The file used to
+  // caddie and a single-rider cart". (fees_verified_at attests the fee VALUES; no
+  // field records what a rate includes, so it is not evidence of the package.) The file used to
   // mix two pricing paths - package green fee beside walk-in caddie/cart - which is
   // what made this look ambiguous. It is not: one path, typed consistently.
   fee_is_package: true,
   fees_verified_at: '2026-07-30',
   // Was 400, which was a TIP typed as a FEE - this file's own prose says twice that
   // "a caddie tip of 400 THB is the customary minimum ON TOP". Identical to the
-  // gassan-khuntan blocker the chiang-mai native-QA pass found. Caddies are
+  // hang-dong correction in the chiang-mai batch (68b12ca), where a 200 THB tip was
+  // likewise typed as a fee. NOT gassan-khuntan, which an earlier draft miscited. Caddies are
   // mandatory here and the package covers them, so the fee is zero and the tip
   // stays extra (caddie_tip_included deliberately unset).
   caddie_fee_thb: 0,
-  // Was 500, the WALK-IN cart rate. The typed green fee above is the package rate,
-  // which includes a single-rider cart, so the typed fields must describe that same
-  // pricing path or the card contradicts its own heading. The 500 walk-in figure
-  // survives in the prose, where it is correctly framed as the alternative.
+  // Was 500. The typed green fee above is the booking-platform package rate, which
+  // includes a single-rider cart, so the typed fields must describe that same
+  // pricing path or the card contradicts its own heading. The 500 is the cart
+  // price off that package; `layout_and_experience` is reworded in this commit to
+  // say so, because it previously stated the figure with NO pricing-path framing
+  // at all - directly under a card headed "Rates". An earlier draft of this
+  // comment claimed the prose already framed it; that was false.
   cart_fee_thb: 0,
   caddie_required: true,
   cart_required: false,
@@ -45,7 +50,7 @@ export const course: GolfCourse = {
   schema_markup: "{\"@context\":\"https://schema.org\",\"@type\":\"GolfCourse\",\"name\":\"Forest Hills Country Club\",\"url\":\"https://len.golf/golf-courses/khao-yai/forest-hills-country-club\",\"description\":null,\"address\":{\"@type\":\"PostalAddress\",\"addressLocality\":\"Muak Lek\",\"addressRegion\":\"Saraburi\",\"addressCountry\":\"TH\"},\"geo\":{\"@type\":\"GeoCoordinates\",\"latitude\":14.58863,\"longitude\":101.193251},\"telephone\":\"+66 36 343200\",\"priceRange\":\"฿\",\"sameAs\":[\"https://maps.google.com/?q=14.58863,101.193251\"],\"amenityFeature\":[{\"@type\":\"LocationFeatureSpecification\",\"name\":\"Driving Range\",\"value\":true},{\"@type\":\"LocationFeatureSpecification\",\"name\":\"Caddie Required\",\"value\":true},{\"@type\":\"LocationFeatureSpecification\",\"name\":\"Golf Cart\",\"value\":false}]}",
   prose: {
     overview: `Forest Hills Country Club — today marketed as Sir James Country Club, named after Sir James Richard Holt — is a 27-hole resort course in Muak Lek district, Saraburi province, sitting along the Mittraphap Road corridor approximately 90 minutes northeast of Bangkok. Designed by John William Rogers and Pichai Vichupas and opened in 1993, the course offers an accessible day-trip proposition: current booking-platform packages run around 1,350 THB weekdays and 1,600 THB weekends all-in, including caddie and a single-rider cart. A customary caddie tip (400 THB minimum) applies on top. The 27-hole layout provides enough variety for a full day or multiple-round visit, and the on-site hotel — a 4-star property with over 100 rooms — makes Forest Hills a practical choice for groups or golfers who prefer to stay overnight rather than drive back to Bangkok.`,
-    layout_and_experience: `The 27-hole parkland layout is divided into three nine-hole loops, allowing golfers to play any combination of 18 holes across a mature, tree-lined landscape. Rogers and Vichupas's design works with the natural terrain of the Muak Lek valley, incorporating water features and strategic bunkering that reward accuracy off the tee and precision on approach. Caddies are mandatory and carry genuine value on a layout with 27 holes, where local knowledge of green speeds and pin positions is helpful. A golf cart is available at 500 THB for those who prefer not to walk. The driving range on-site allows a proper warm-up, and club rental at 600 THB makes the course fully accessible for visiting golfers travelling without equipment.`,
+    layout_and_experience: `The 27-hole parkland layout is divided into three nine-hole loops, allowing golfers to play any combination of 18 holes across a mature, tree-lined landscape. Rogers and Vichupas's design works with the natural terrain of the Muak Lek valley, incorporating water features and strategic bunkering that reward accuracy off the tee and precision on approach. Caddies are mandatory and carry genuine value on a layout with 27 holes, where local knowledge of green speeds and pin positions is helpful. Off that package, a golf cart is 500 THB for those who prefer not to walk. The driving range on-site allows a proper warm-up, and club rental at 600 THB makes the course fully accessible for visiting golfers travelling without equipment.`,
     tips: `Booking-platform packages (around 1,350 THB weekday / 1,600 THB weekend, caddie and cart included) are usually the best deal — compare them against the walk-in rate before you go. A caddie tip of 400 THB is the customary minimum on top. Because the course has 27 holes, clarify which 18-hole combination is in play on your visit, as some loops may see heavier traffic on weekends. The Muak Lek location places it close to other Khao Yai-corridor courses, making it possible to combine with a round at a nearby venue for a multi-course weekend itinerary.`,
     location_and_access: `Forest Hills Country Club is located at 195 Moo 3, Mittraphap Road, Muak Lek district, Saraburi province — approximately 150 km northeast of Bangkok at around the 150-kilometre mark along the Mittraphap Road (Highway 2). The drive from Bangkok takes approximately 90 minutes, making it one of the closer options in the Khao Yai/Pak Chong corridor. The Mittraphap Road runs directly through the area, so navigation is straightforward. There is no direct public bus service to the course gate; private car or hired vehicle is the standard approach from Bangkok.`,
     rental_cta_context: `Forest Hills Country Club offers club rental at 600 THB per round, and golfers travelling from Bangkok can also arrange a rental set through LENGOLF near BTS Chidlom before heading northeast to Muak Lek.`,

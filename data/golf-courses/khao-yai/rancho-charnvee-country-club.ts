@@ -11,17 +11,7 @@ export const course: GolfCourse = {
   year_opened: 2010,
   green_fee_weekday_thb: 1050,
   green_fee_weekend_thb: 1850,
-  // Package covering green fee + caddie, NOT cart. The cart is explicitly
-  // "optional" at 600 THB in this file's own prose and stays a real charge, so
-  // cart_fee_thb keeps its value and SpecTable renders it beside an "Included"
-  // caddie. Same shape as isan/ubolratana-dam and chiang-rai/wiang-ko-sai, which
-  // bundle the caddie only - except those have no cart to bundle and this does.
-  fee_is_package: true,
-  // Zero, not null: EN prose states caddie inclusion THREE times - "the caddie fee
-  // bundled into the green fee", "Green fees from 1,050 - caddie included", and
-  // "The caddie is included in the green fee; no separate payment at the desk".
-  // The 400 THB tip is customary and separate, so caddie_tip_included stays unset.
-  caddie_fee_thb: 0,
+  caddie_fee_thb: null,
   cart_fee_thb: 600,
   caddie_required: true,
   cart_required: false,
