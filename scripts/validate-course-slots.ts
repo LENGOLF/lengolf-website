@@ -495,9 +495,12 @@ const corpus = registered.filter(
  * reader trusts. (It was then raised 82/2,296 -> 94/2,632 by batch 9, the
  * bangkok tranche; this line was REPLACED, not appended to, because a
  * previous fix left two contradictory "Today:" lines in one docblock.)
+ * Batch 10 (khao-yai, the region's full 12-course roster) raised them again,
+ * 94/2,632 -> 106/2,968. Both re-derived from the validator's own output on
+ * the applied tree, not incremented by hand.
  */
-const MIN_COURSES = 94
-const MIN_STRINGS = 2632
+const MIN_COURSES = 106
+const MIN_STRINGS = 2968
 
 let problems = 0
 let checked = 0

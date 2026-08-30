@@ -379,7 +379,7 @@ function checkPackageNoun(courses: { file: string; course: GolfCourse }[]) {
   // `promised.get()` miss, `?? 0` swallows it, and the expectation collapses from
   // 67 to 19 while `checked` stays 67 - green. `packages * 5` could not degrade
   // that way; this can, so it is ratcheted explicitly.
-  const MIN_REGISTRY_ENTRIES = 94
+  const MIN_REGISTRY_ENTRIES = 106
   if (promised.size < MIN_REGISTRY_ENTRIES) {
     errors.push(
       `package-noun check read only ${promised.size} COURSE_DETAIL_I18N entries, expected at least ` +

@@ -678,6 +678,26 @@ export const COURSE_DETAIL_I18N: {
   { region: 'bangkok', slug: 'royal-lakeside-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'bangkok', slug: 'the-vintage-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'bangkok', slug: 'windsor-park-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  // Batch 10 (2026-08) - khao-yai, the region's FULL roster (12 of 12).
+  // Picked because khao-yai was the only region still at 0% translated and
+  // holds the largest untranslated non-duplicate page on the site
+  // (mountain-creek-golf-resort, 44 imp / 90d at pos 17.1). The region HUB
+  // was already translated in all four locales, so every one of its roster
+  // links pointed at an English course page - a broken funnel this closes.
+  // The bangkok tail was measured and is exhausted: the best untranslated
+  // bangkok course draws 5 impressions a quarter.
+  { region: 'khao-yai', slug: 'bonanza-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'khao-yai', slug: 'forest-hills-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'khao-yai', slug: 'friendship-meadows-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'khao-yai', slug: 'khao-yai-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'khao-yai', slug: 'kirimaya-golf-course', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'khao-yai', slug: 'life-privilege-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'khao-yai', slug: 'mountain-creek-golf-resort', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'khao-yai', slug: 'rancho-charnvee-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'khao-yai', slug: 'rooks-korat-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'khao-yai', slug: 'royal-hills-golf-resort', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'khao-yai', slug: 'seoul-siam-resort-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'khao-yai', slug: 'toscana-valley-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
 ]
 
 /**
