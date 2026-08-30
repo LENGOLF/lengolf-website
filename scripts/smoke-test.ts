@@ -4895,7 +4895,7 @@ async function runCourseDetailRegistryLivenessTests() {
 
     // Its own floor, because the package branch goes vacuous INDEPENDENTLY of the
     // one above: the general Offer count stays in the hundreds while the branch that
-    // matters here drops to zero. Today 19 of 149 courses carry fee_is_package, but
+    // matters here drops to zero. Today 20 of 149 courses carry fee_is_package, but
     // this corpus is REGISTRY-derived, so only the 12 in COURSE_DETAIL_I18N reach it.
     // 11 emit 2 rates and alpine-golf-resort-chiang-mai emits 1 (null weekend fee),
     // so 11*2*4 + 1*4 = 92. Re-derive, do not assume a courses x locales x rates
