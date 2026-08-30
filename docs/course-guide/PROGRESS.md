@@ -55,7 +55,7 @@ Pipeline run: 2026-04-16
 | 8 | Krungthep Kreetha Sports Club | approved | ✅ /golf-courses/bangkok/krungthep-kreetha-sports-club/ |
 | 9 | The RG City Golf Club | approved (review_required) | ✅ /golf-courses/bangkok/royal-gems-golf-sports-club/ |
 | 10 | Summit Windmill Golf Club | approved — weekday 3,000 / weekend 4,000 THB | ✅ /golf-courses/bangkok/summit-windmill-golf-club/ |
-| 11 | Phoenix Gold Golf & Country Club | approved — weekend 3,500 THB | ✅ /golf-courses/bangkok/phoenix-gold-golf-country-club/ |
+| 11 | Phoenix Gold Golf & Country Club | approved — weekend 3,500 THB *(historical: that rack rate is the **Pattaya** sister course's. This course renamed to "Phoenix Gold Golf Bangkok" on 2026-08-30 when row 8 merged into it; its live rate is 999 wd / 1,199 we incl. caddie, cart 600.)* | ✅ /golf-courses/bangkok/phoenix-gold-golf-country-club/ |
 
 **Outstanding:** Phone verification and GPS coordinates for most courses — tracked in `data/data-gaps.md`.
 

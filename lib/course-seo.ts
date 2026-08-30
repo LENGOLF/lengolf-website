@@ -155,8 +155,16 @@ export function getCourseTitle(course: GolfCourse, locale: CourseSeoLocale = 'en
  * never by falling back to `locales.en.meta_description`, 59/148 of which
  * share one boilerplate tail verbatim ("<name> green fees, course overview,
  * tips, and how to arrange golf club rentals delivered to your Bangkok
- * hotel") - the shape this generator exists to replace. Re-measured
- * 2026-08-30; the previous 77/149 was stale in both terms.
+ * hotel") - the shape this generator exists to replace. Re-measured 2026-08-30.
+ *
+ * Be careful retiring the previous "77/149", because an earlier version of this
+ * sentence called it "stale in both terms" and that is FALSE. Measured at the
+ * commit that wrote it, the broader "green fees, course overview" boilerplate
+ * FAMILY really was 77 of 149 (75 of 148 today). It was an accurate measurement
+ * of a LOOSER predicate, stale only in its denominator — not an error. The 59
+ * here counts the strict "identical modulo the name" form, which was 61/149
+ * then. Two different predicates, both correctly measured; do not record the
+ * old one as a mistake.
  */
 export function getCourseDescription(course: GolfCourse, locale: CourseSeoLocale = 'en'): string {
   // Non-EN descriptions are hand-written data, not generated — so the 165-char

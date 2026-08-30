@@ -2630,8 +2630,13 @@ const routeTests: RouteTest[] = [
     contentAbsent: '/zh/golf-courses/bangkok/lakewood-country-club',
   },
   // Same invariant on the top-level hub, whose map (HubMapExplorer) links
-  // every one of the 148 courses. The region-hub pair above only proves the
-  // per-region roster; an always-prefix regression puts 148 wrong hrefs on
+  // 147 of the 148 courses — NOT all 148, and the difference is load-bearing:
+  // HubMapExplorer.tsx drops any course failing hasTrustedCoordinates() before
+  // it builds a marker, and 1 of the 148 has null coordinates
+  // (kanchanaburi/woo-sung-castle-hill). 148 is the size of the `hrefs` map the
+  // server hands the component, not the link count — see the same measurement
+  // in lib/translated-routes.ts. The region-hub pair above only proves the
+  // per-region roster; an always-prefix regression puts 147 wrong hrefs on
   // THIS page, and the four '/xx/golf-courses/' routeTests above assert only
   // <main id="main-content">, so they all still pass. Separate entries rather
   // than extra fields: RouteTest carries one marker each, and the <main>
@@ -3025,8 +3030,12 @@ const redirectTests: RedirectTest[] = [
   // dynamicParams=false, so the page redirect above does NOT cover it. This
   // URL shape is the one the course page hand-builds as the GolfCourse JSON-LD
   // `image` (`${enUrl}opengraph-image/`), i.e. the one the retired page
-  // published externally — the <meta og:image> is a different, locale-prefixed
-  // and content-hashed URL that no redirect source can usefully target.
+  // published externally. The <meta og:image> is a DIFFERENT URL — Next emits
+  // it locale-prefixed and content-hashed (/en/…/opengraph-image?<hash>) — and
+  // no `source` targets it directly, because of the /en prefix rather than the
+  // query. It is covered transitively all the same: localePrefix 'as-needed'
+  // 307s /en/… to the unprefixed path, which the rule then 308s. See the
+  // matching note in next.config.js; do not restate this as "uncovered".
   {
     path: "/golf-courses/bangkok/suvarnabhumi-golf-country-club/opengraph-image/",
     expectedStatus: 308,
@@ -3097,9 +3106,13 @@ const redirectTests: RedirectTest[] = [
 //     → 308 /golf-courses/bangkok/kumlung-ake-golf-course/   (normalisation)
 //     → 308 /golf-courses/isan/kumlung-ake-golf-course/      (the redirect)
 //
-// i.e. still two hops, and the configured destination on the no-slash entry is
-// never read. The trailing-slash entries are the live ones; the no-slash ones
-// are dead config.
+// i.e. still two hops. Be careful with the next sentence, because this comment
+// asserted its OPPOSITE until 2026-08-30 and next.config.js had already
+// measured the truth on prod twice: Next normalises the source PATTERN too
+// (modifyRouteRegex appends an optional trailing slash), so a no-slash
+// `source` matches BOTH spellings. The two forms are therefore the SAME rule
+// and listing both is REDUNDANT — it is not the case that "the trailing-slash
+// entry is the live one and the no-slash one is dead config".
 //
 // These assertions deliberately test the OUTCOME (follow to the end) rather
 // than either hop, so they hold whichever way the dead entries are cleaned up,
@@ -3589,7 +3602,7 @@ async function runRedirectTests() {
       } else if (landed !== t.finalPath) {
         fail(
           label,
-          `chain ended at ${landed}, expected ${t.finalPath} — a slash-less inbound link no longer reaches the destination (the TRAILING-SLASH source in next.config.js is the live one; the no-slash twin is dead config and cannot cover for it)`,
+          `chain ended at ${landed}, expected ${t.finalPath} — a slash-less inbound link no longer reaches the destination. Check next.config.js: a no-slash source matches BOTH spellings (Next appends an optional trailing slash to the source pattern), so deleting the no-slash entry removes the rule outright rather than leaving its twin to cover it.`,
         );
       } else {
         pass(label);

@@ -17,6 +17,13 @@ import type { GolfCourse } from '@/types/golf-courses'
  * L6 call site in scripts/smoke-test.ts; distinguishing the two names removes
  * the content half of it, and L6 now keys on the item URL for the guard half.
  *
+ * PROVENANCE FOR EVERY SEARCH FIGURE BELOW, stated once: they come from
+ * `marketing.gsc_query_daily` in Supabase over the 90 days to 2026-08-30, and
+ * are NOT reproducible from this tree. Do not re-quote them forward as facts
+ * about a later window. (This docblock carried six of them unlabelled until
+ * 2026-08-30, while the PR that added them claimed they were labelled wherever
+ * they appear.)
+ *
  * Naming note for future editors. The former CLUB name is kept in the title,
  * meta and prose on purpose: "suvarnabhumi golf and country club" is the only
  * query that has ever converted on this page (67 impressions, all 4 of its
@@ -65,13 +72,39 @@ export const course: GolfCourse = {
   // today and correct for the day the course enters a pair.
   //
   // NOT fee_is_package: the cart is charged separately at 600. That is the
-  // caddie-bundled-but-cart-extra shape still awaiting an owner ruling, and the
-  // corpus is consistent — hang-dong (0/300) and thana-city (0/800) are the
-  // only other courses in this shape and neither is flagged, while all 20
-  // flagged courses have cart_fee_thb 0 or no cart (re-derived after PR #119
-  // flagged forest-hills, which is caddie 0 / cart 0 — the clean package
-  // shape, so the precedent this deferral rests on is unchanged).
-  // See CLAUDE.md.
+  // caddie-bundled-but-cart-extra shape still awaiting an owner ruling.
+  //
+  // STATE THE PREDICATE, because this comment said "hang-dong (0/300) and
+  // thana-city (0/800) are the only other courses in this shape" and that is
+  // true only under a NARROWER reading than CLAUDE.md's. Under `caddie_fee_thb
+  // === 0 && cart > 0` there are exactly three courses (this one, thana-city,
+  // hang-dong) and none is flagged. Under CLAUDE.md's own documented sweep
+  // (`caddie in {0, null} + cart > 0`) there are NINETEEN, of which eighteen
+  // are other courses. Both were measured 2026-08-30; the narrow set is not
+  // the corpus, and CLAUDE.md calls this ruling "the single most expensive
+  // thing here to miss".
+  //
+  // ENUMERATE THE COST, because a partial list invites the same "fixed
+  // everywhere" error CLAUDE.md records four rounds of. While the flag is off,
+  // SIX rendered surfaces call this caddie-inclusive 999 a "green fee":
+  // (1) the <title>, which is also og:title and the internal cross-link anchor
+  // text; (2) the hero price chip eyebrow; (3) the fee-card heading;
+  // (4) the generated meta description; (5) the fee FAQ, which also ships as
+  // FAQPage JSON-LD; and (6) both makesOffer nodes in the GolfCourse JSON-LD.
+  // statesABareGreenFee() is true here, so nothing suppresses any of them.
+  //
+  // What holds under EITHER reading, and is the actual basis for deferring:
+  // all 20 fee_is_package courses have cart_fee_thb 0 or no cart — zero
+  // exceptions, re-derived after PR #119 flagged forest-hills (caddie 0 /
+  // cart 0, the clean package shape). Flagging a cart-extra course would be
+  // the first of its kind. See CLAUDE.md.
+  //
+  // NOTE THE COUPLING before resolving the ruling: getCourseTitle's package
+  // branch fires on `fee_is_package && /green fee/i.test(handWritten)`, and
+  // the hand-written title below matches that regex. Flagging this course
+  // therefore replaces the title with "— All-In Rates & Guide" and DELETES
+  // the "(formerly Suvarnabhumi Golf & Country Club)" parenthetical — the one
+  // string this file argues carries the page's only converting query.
   caddie_fee_thb: 0,
   // Both merged sources' prose state 600; the Phoenix Gold file had it null
   // while its own `tips` said "carts 600 THB", so this closes a data gap rather
@@ -120,7 +153,13 @@ export const course: GolfCourse = {
   distance_from_bangkok_km: 55,
   drive_time_from_bangkok_min: 70,
   google_maps_url: null,
-  schema_markup: "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"GolfCourse\",\n  \"name\": \"Phoenix Gold Golf Bangkok\",\n  \"url\": \"https://len.golf/golf-courses/bangkok/phoenix-gold-golf-country-club\",\n  \"description\": null,\n  \"address\": {\n    \"@type\": \"PostalAddress\",\n    \"streetAddress\": \"54 Moo 5, Suwinthawong Road\",\n    \"addressLocality\": \"Nong Chok, Bangkok\",\n    \"postalCode\": \"10530\",\n    \"addressCountry\": \"TH\"\n  },\n  \"geo\": {\n    \"@type\": \"GeoCoordinates\",\n    \"latitude\": 13.786383,\n    \"longitude\": 100.891548\n  },\n  \"priceRange\": \"฿฿\",\n  \"sameAs\": [\n    \"https://www.phoenixgoldgolf.com/\"\n  ],\n  \"amenityFeature\": [\n    {\n      \"@type\": \"LocationFeatureSpecification\",\n      \"name\": \"Driving Range\",\n      \"value\": true\n    },\n    {\n      \"@type\": \"LocationFeatureSpecification\",\n      \"name\": \"Caddie Required\",\n      \"value\": true\n    },\n    {\n      \"@type\": \"LocationFeatureSpecification\",\n      \"name\": \"Golf Cart\",\n      \"value\": false\n    }\n  ]\n}",
+  // Only `address` from this legacy blob ships. lib/jsonld-courses.ts reads
+  // `parsed.address` and rebuilds everything else from typed fields, so the
+  // `name`, `url`, `geo` and `priceRange` below are DEAD — kept consistent so
+  // a future reader is not misled, not because they render. (`priceRange` was
+  // corrected "฿฿" -> "฿" on 2026-08-30 to match what the builder actually
+  // emits for a 999 THB fee; the blob value had never shipped either way.)
+  schema_markup: "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"GolfCourse\",\n  \"name\": \"Phoenix Gold Golf Bangkok\",\n  \"url\": \"https://len.golf/golf-courses/bangkok/phoenix-gold-golf-country-club\",\n  \"description\": null,\n  \"address\": {\n    \"@type\": \"PostalAddress\",\n    \"streetAddress\": \"54 Moo 5, Suwinthawong Road\",\n    \"addressLocality\": \"Nong Chok, Bangkok\",\n    \"postalCode\": \"10530\",\n    \"addressCountry\": \"TH\"\n  },\n  \"geo\": {\n    \"@type\": \"GeoCoordinates\",\n    \"latitude\": 13.786383,\n    \"longitude\": 100.891548\n  },\n  \"priceRange\": \"฿\",\n  \"sameAs\": [\n    \"https://www.phoenixgoldgolf.com/\"\n  ],\n  \"amenityFeature\": [\n    {\n      \"@type\": \"LocationFeatureSpecification\",\n      \"name\": \"Driving Range\",\n      \"value\": true\n    },\n    {\n      \"@type\": \"LocationFeatureSpecification\",\n      \"name\": \"Caddie Required\",\n      \"value\": true\n    },\n    {\n      \"@type\": \"LocationFeatureSpecification\",\n      \"name\": \"Golf Cart\",\n      \"value\": false\n    }\n  ]\n}",
   prose: {
     overview: `Phoenix Gold Golf Bangkok — opened in 1993 as President Country Club, later known as Suvarnabhumi Golf & Country Club, and now trading under the Phoenix Gold brand shared with its Pattaya sister course — is a 36-hole Robert Trent Jones Jr. design in Nong Chok, on the eastern fringe of Bangkok. Trent Jones Jr. designed three courses in the Bangkok area and this is the most expansive: four nine-hole championship loops offering multiple combination plays, each with a distinct character so that no two rounds repeat. The setting is genuinely rural: paddy fields, marshland and tall reeds provide an agricultural backdrop that feels far removed from the city despite sitting inside Bangkok's administrative boundaries, and the wetland supports a notable population of migratory birds and fish. At booking-platform rates of roughly 999 THB weekday including the caddie, with the cart charged separately, it is one of the cheapest Trent Jones designs in the Bangkok region.`,
     layout_and_experience: `The four nines (playable in North/East/West/South combinations) extend to 7,059 yards at par 72 from the gold tees, with a slope of 128 and a rating of 73 — figures that confirm genuine challenge. Trent Jones Jr.'s Bangkok courses are known for large, fast greens, and Phoenix Gold follows that pattern. Fairways are wider and tree coverage sparser than on many Bangkok layouts, creating broad vistas across the rural landscape and honest sight lines that expose wayward drives. Water is woven throughout in the form of marshland, channels and ponds, giving the layout a links-adjacent feel unusual for an inland Bangkok course, and the open ground means the wind is a real factor. Dog-legs and carries over water demand strategic tee shots on the more demanding holes, and the Bermuda rough punishes a miss. The Jones design's characteristic risk-and-reward par-5s and exacting par-3s provide the highlight holes, and the course still plays fairly for a broad range of handicaps. The 36-hole scale means early morning tee times are generally available even on weekends, without the congestion common at central city venues. The Hole-In-One coffee shop on site is a pleasant post-round stop.`,
@@ -144,9 +183,15 @@ export const course: GolfCourse = {
       // converts on this page ("suvarnabhumi golf and country club", pos ~13.9,
       // all 4 of the page's clicks). It is spelled out rather than abbreviated
       // to "G&CC" for two reasons: the converting query IS the full phrase, and
-      // a census of the 148 EN titles found nine carrying a former/alternate
-      // name in parentheses — "(formerly Banyan Golf Club)", "(now Wang Noi
-      // Prestige Golf & Country Club)" — and all nine spell it out. At 90
+      // a census of the 148 RENDERED EN titles (getCourseTitle, not the
+      // locales.en.title field — only 3 of those carry a parenthetical) finds
+      // nine with one — "(formerly Banyan Golf Club)", "(now Wang Noi Prestige
+      // Golf & Country Club)" — every one spelled out, none abbreviated.
+      // Count honestly: nine INCLUDES this title, so the pre-existing
+      // precedent is eight, and one of those eight
+      // ("Panurangsi Golf Club (Royal Thai Army)") names an operator rather
+      // than a former name. The conclusion survives either way; the number
+      // should not be re-quoted as nine independent precedents. At 90
       // characters this sits under the corpus maximum of 95. Be honest about
       // the trade: Google truncates around 60 characters, which falls INSIDE
       // the parenthetical, so the visible tail is "…Suvarnabhumi Golf & Coun".

@@ -496,7 +496,10 @@ export const COURSE_DETAIL_I18N: {
   { region: 'chiang-mai', slug: 'lanna-golf-course', locales: ['th', 'ja', 'ko', 'zh'] },
   // Batch 2 (2026-08) — top course pages by GSC impressions (90d) within
   // regions whose hubs are translated for both locales. Suvarnabhumi (1,319
-  // imp) deliberately excluded pending the Phoenix Gold slug merge.
+  // imp as measured for THIS batch) was excluded pending the Phoenix Gold slug
+  // merge. That merge landed 2026-08-30 and the slug now 308s to
+  // bangkok/phoenix-gold-golf-country-club, which is still deliberately
+  // untranslated — see the Batch 9 note below for why.
   { region: 'bangkok', slug: 'pinehurst-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'bangkok', slug: 'siam-country-club-bangkok', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'bangkok', slug: 'ayutthaya-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
@@ -509,7 +512,7 @@ export const COURSE_DETAIL_I18N: {
   // Nikanti (~1,400 imp across guide + name queries), Royal Gems ("the rg
   // city golf club" 110 imp + TH ราคา queries), Burapha (JPN-geo demand),
   // Laem Chabang ("laem chabang international country club prices" 70 imp).
-  // Suvarnabhumi still excluded — see the Batch 2 note above.
+  // Suvarnabhumi was still excluded at this batch — see the Batch 2 note above.
   { region: 'bangkok', slug: 'alpine-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'bangkok', slug: 'nikanti-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'bangkok', slug: 'royal-gems-golf-sports-club', locales: ['th', 'ja', 'ko', 'zh'] },

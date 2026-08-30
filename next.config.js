@@ -341,26 +341,43 @@ const nextConfig = {
       // the identically-generated Don Mueang page holds position ~14.6). The
       // 67 impressions and all 4 clicks that were genuinely branded pass
       // through this 308.
+      //
+      // IF THIS MERGE IS EVER UNDONE, DELETE ALL FOUR RULES BELOW FIRST.
+      // Redirects match BEFORE the filesystem, so restoring the data file and
+      // its index entry without removing these leaves the resurrected page
+      // unreachable behind its own 308 — with every CI check green. That is
+      // the same reverse trap CLAUDE.md documents for the /compare/ pairs.
       { source: '/golf-courses/bangkok/suvarnabhumi-golf-country-club', destination: '/golf-courses/bangkok/phoenix-gold-golf-country-club/', permanent: true },
       { source: '/golf-courses/bangkok/suvarnabhumi-golf-country-club/', destination: '/golf-courses/bangkok/phoenix-gold-golf-country-club/', permanent: true },
       // The OG-image child route is a SEPARATE generateStaticParams route
       // (app/[locale]/golf-courses/[region]/[slug]/opengraph-image.tsx, also
       // dynamicParams=false), so the page rule above does not cover it.
       //
-      // TWO different URLs exist for that image and only one is matchable here.
-      // Next's file convention emits the <meta og:image> locale-prefixed and
-      // content-hashed (/en/…/opengraph-image?<hash>), which a `source` cannot
-      // usefully target. But the schema.org `image` is hand-built at
+      // TWO different URLs exist for that image, and BOTH end up covered —
+      // but by different routes, so state them separately rather than
+      // collapsing them.
+      //
+      // (1) The schema.org `image`, hand-built at
       // app/[locale]/golf-courses/[region]/[slug]/page.tsx as
-      // `${enUrl}opengraph-image/` — unprefixed, trailing slash — and
-      // scripts/smoke-test.ts asserts exactly that shape returns 200. The
-      // retired page published that URL in its GolfCourse JSON-LD, so the rule
-      // below does cover the one that was committed to externally.
-      // (An earlier revision of this comment claimed no `source` could match
-      // and dropped the rule. That was measured off the meta tag only, and a
-      // redirect `source` matches the pathname anyway - the query is never part
-      // of it. The four earlier re-region redirects above still leave their OG
-      // children uncovered; this is the first that does not.)
+      // `${enUrl}opengraph-image/` — unprefixed, trailing slash. That is the
+      // shape the retired page published in its GolfCourse JSON-LD, and the
+      // rule below matches it DIRECTLY. scripts/smoke-test.ts pins it.
+      //
+      // (2) The <meta og:image>, which Next's file convention emits
+      // locale-prefixed and content-hashed (/en/…/opengraph-image?<hash>).
+      // No `source` here targets it directly — the obstacle is the /en
+      // PREFIX, not the query (a redirect `source` matches the pathname
+      // only; the query is never part of it). It is still covered
+      // TRANSITIVELY: localePrefix is 'as-needed' in i18n/routing.ts, so
+      // next-intl 307s /en/… to the unprefixed path, which this rule then
+      // 308s. Verified on prod against a live course page: the chain is
+      // 307 -> 308 -> 200.
+      //
+      // Do not restate this as "the meta URL is uncovered". An earlier
+      // revision said exactly that, concluded no `source` could match, and
+      // DROPPED the rule — which is how the JSON-LD URL lost its redirect.
+      // The four earlier re-region redirects above still leave their OG
+      // children uncovered; this is the first that does not.
       { source: '/golf-courses/bangkok/suvarnabhumi-golf-country-club/opengraph-image', destination: '/golf-courses/bangkok/phoenix-gold-golf-country-club/opengraph-image/', permanent: true },
       { source: '/golf-courses/bangkok/suvarnabhumi-golf-country-club/opengraph-image/', destination: '/golf-courses/bangkok/phoenix-gold-golf-country-club/opengraph-image/', permanent: true },
 

@@ -61,6 +61,12 @@ export interface CourseGeoFields {
  * 2026-08-30: ZERO do — all 148 files now carry `google_maps_url: null`, so this
  * guard is defensive rather than load-bearing. Keep it: the field is nullable and
  * nothing stops a future import from repopulating it with synthesized links.
+ *
+ * Note the SCOPE, because "zero" invites the wrong generalisation: that is a fact
+ * about the `google_maps_url` FIELD only. Synthesized `?q=<lat>,<lng>` links are
+ * still live elsewhere — 71 of the 148 files carry one inside
+ * `schema_markup.sameAs`, which ships in the GolfCourse JSON-LD and which this
+ * guard never sees. Retiring those is separate work.
  */
 function isCoordinateQueryUrl(url: string): boolean {
   return /[?&]q=-?\d+(\.\d+)?,-?\d+(\.\d+)?$/.test(url)
