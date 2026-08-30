@@ -11,8 +11,14 @@ export const course: GolfCourse = {
   year_opened: 2009,
   green_fee_weekday_thb: 5000,
   green_fee_weekend_thb: 6000,
-  caddie_fee_thb: null,
-  cart_fee_thb: null,
+  // All-in package per this file's own EN prose: the posted rate bundles the
+  // caddie (and cart where the course has one). Stops generated copy calling
+  // the number a bare "green fee", which would tell a reader they pay extra.
+  fee_is_package: true,
+  // Zero, not null: EN prose states "The all-inclusive rate (green fee, caddie,
+  // cart) is approximately 5,000 THB weekday and 6,000 THB weekend".
+  caddie_fee_thb: 0,
+  cart_fee_thb: 0,
   caddie_required: true,
   cart_required: true,
   driving_range: true,

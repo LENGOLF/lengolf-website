@@ -4893,22 +4893,26 @@ async function runCourseDetailRegistryLivenessTests() {
     pass(`L2 asserted localized JSON-LD Offer labels on ${offerChecked} label(s)`);
   }
 
-  // Its own floor, because the package branch goes vacuous INDEPENDENTLY of the
-  // one above: 12 of 149 courses are packages, so the general Offer count stays
-  // in the hundreds while the branch that matters here drops to zero. Today:
-  // all 12 are registered, 11 emit 2 rates and alpine-golf-resort-chiang-mai
-  // emits 1 (null weekend fee), so 11*2*4 + 1*4 = 92. Re-derive, do not assume
-  // a courses x locales x rates product. (Batch 9 took this 76 -> 92 by flagging
-  // bangkok/artitaya-country-club and bangkok/prime-city-golf-club.)
-  //
-  // RAISE THIS when a course gains fee_is_package. It was left at 16 when the
-  // count went 2 -> 4, which still passed while asserting half of what it
-  // measured — a floor below the true value is a guard that has quietly gone
-  // slack, and the whole reason this check carries a number rather than `> 0`.
+    // Its own floor, because the package branch goes vacuous INDEPENDENTLY of the
+    // one above: the general Offer count stays in the hundreds while the branch that
+    // matters here drops to zero. Today 19 of 149 courses carry fee_is_package, but
+    // this corpus is REGISTRY-derived, so only the 12 in COURSE_DETAIL_I18N reach it.
+    // 11 emit 2 rates and alpine-golf-resort-chiang-mai emits 1 (null weekend fee),
+    // so 11*2*4 + 1*4 = 92. Re-derive, do not assume a courses x locales x rates
+    // product. (Batch 9 took this 76 -> 92 via artitaya-country-club and
+    // prime-city-golf-club.)
+    //
+    // RAISE THIS when a course gains fee_is_package AND IS REGISTERED for
+    // translation. That qualifier is load-bearing and the previous text lacked it:
+    // the batch flagging seven UNTRANSLATED courses (12 -> 19) moved this floor by
+    // ZERO, and following the old unqualified instruction would have set it above the
+    // true value and turned CI red on a correct tree. A floor below the true value is
+    // a slack guard; a floor above it is a false red. Derive from the registry, not
+    // from the flag count.
   if (packageOfferSeen < 92) {
     fail(
       `L2 package-label check ran on only ${packageOfferSeen} Offer(s)`,
-      "expected 92+ (12 package courses x 4 locales; 11 emit 2 rates and alpine-golf-resort-chiang-mai emits 1, its weekend fee being null). Zero means no course carries fee_is_package any more, or the registry dropped them — not that the labels are right.",
+      "expected 92+ (12 REGISTERED package courses x 4 locales; 11 emit 2 rates and alpine-golf-resort-chiang-mai emits 1, its weekend fee being null). Zero means no course carries fee_is_package any more, or the registry dropped them — not that the labels are right.",
     );
   } else {
     pass(`L2 asserted package (not green-fee) Offer labels on ${packageOfferSeen} Offer(s)`);
@@ -5466,27 +5470,31 @@ async function runPriceTierRoundupLanguageTests() {
     pass(`L6 asserted localized ItemList Offer.description on ${itemsChecked} item(s)`);
   }
 
-  // Its own floor, for the same reason L2 carries one: the package branch goes
-  // vacuous INDEPENDENTLY of the count above. 12 of 149 courses are packages
-  // and only two reach a translated tier roster, so itemsChecked stays at 240
-  // while the branch that matters here drops to zero. (Batch 9 took the package
-  // count 10 -> 12; neither of its two additions reaches a tier roster, so the
-  // true value below is unchanged at 8.)
-  //
-  // FOUR, not the true value of 8, and that is deliberate — this is the one
-  // ratchet in the repo that must NOT be pinned exact. The roster is a derived
-  // top 12 and CLAUDE.md warns specifically against pinning to it. Today the
-  // two package courses sit at #8 (royal-chiang-mai, 6,600) and #11
-  // (gassan-khuntan, 6,000) against #13 at 5,850 — a 150-point margin, so a
-  // fee correction of +151 THB or more anywhere in the 5,501-6,000 band (or a
-  // new course) displaces it. An exact 8 would then red on a PR that changed
-  // nothing about labels, with a message reading like a label regression. 4 = one
-  // course x 4 locales still proves the branch is not vacuous, and
-  // royal-chiang-mai's 750-point margin is what actually holds it up.
-  if (packageItemsSeen < 4) {
+    // Its own floor, for the same reason L2 carries one: the package branch goes
+    // vacuous INDEPENDENTLY of the count above, so itemsChecked stays at 240 while
+    // the branch that matters here drops to zero.
+    //
+    // MEASURED, not derived. CI run 33289945032 printed `packageItemsSeen = 36`,
+    // confirming the offline derivation exactly: seven package courses reach a
+    // translated tier roster (rachakram in under/2500; cascata and lam-luk-ka in
+    // under/3500; toscana-valley and royal-bang-pa-in in BOTH under/5000 and
+    // under/7500; royal-chiang-mai and gassan-khuntan), = 9 items per locale x 4.
+    // The previous text here said "12 of 149 courses are packages", "only two reach
+    // a translated tier roster" and "the true value below is unchanged at 8" - all
+    // three were stale, and the floor sat at 4 against a true 36.
+    //
+    // 28, NOT 36, and unlike every other ratchet in this repo that is deliberate.
+    // The roster is a derived top 12 and CLAUDE.md warns against pinning to it: a
+    // fee correction elsewhere can displace a course and red a PR that changed
+    // nothing about labels. 28 = 36 minus the largest single course's contribution
+    // (toscana-valley and royal-bang-pa-in each hold 2 tiers x 4 locales = 8), so no
+    // ONE displacement can false-red it, while it still asserts 78% of the measured
+    // value instead of the 11% a floor of 4 asserted. Re-measure from the CI log
+    // when the package set changes; do not raise it to the true value.
+  if (packageItemsSeen < 28) {
     fail(
       `L6 package-label branch ran on only ${packageItemsSeen} item(s)`,
-      "expected 4+ (at least one fee_is_package course in a translated tier roster x 4 locales). Zero means no package course reaches one any more, or packageNames stopped matching on course.name — not that the labels are right.",
+      "expected 28+ (measured 36 today: seven fee_is_package courses across four translated tier rosters; floored one course-contribution below true so a roster displacement cannot false-red). Zero means no package course reaches one any more, or packageNames stopped matching on course.name — not that the labels are right.",
     );
   } else {
     pass(`L6 asserted package (not green-fee) ItemList labels on ${packageItemsSeen} item(s)`);
