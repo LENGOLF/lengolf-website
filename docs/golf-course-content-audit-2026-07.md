@@ -169,9 +169,10 @@ of Search Console data.
     verified 2026-08-30.** Both airport pages are already in the main hub's
     proximity grid (`app/[locale]/golf-courses/page.tsx` renders
     `Object.values(AIRPORTS)` beside the BTS block), and both are reachable
-    from `/golf-club-rental`, `/golf-course-club-rental` and the
-    `related_slugs` of `best-golf-courses-near-bangkok` plus each airport's
-    own transfer guide. `near/suvarnabhumi-airport` in fact carries MORE
+    from `/golf-course-club-rental`, the `related_slugs` of
+    `best-golf-courses-near-bangkok`, and each airport's own transfer guide;
+    `/golf-club-rental` links Suvarnabhumi only, not both.
+    `near/suvarnabhumi-airport` in fact carries MORE
     inbound internal links than `near/don-mueang-airport`, which is precisely
     why linking could be ruled out as the reason for its zero impressions —
     see item 8.

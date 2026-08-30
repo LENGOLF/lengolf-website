@@ -5412,7 +5412,7 @@ async function runPriceTierRoundupLanguageTests() {
       // L6 did not, and L6 also went without the floor below.
       // Per-COURSE, not a widened global set. The first version appended the two
       // package forms to one `allowed` array shared by every item, which accepted
-      // "Weekday package" for any of the 148 NON-package courses — L2 got the
+      // "Weekday package" for any of the 129 NON-package courses — L2 got the
       // per-course branch in the same commit and L6 did not.
       const pkg = cat?.packageHeading;
       const allowedFor = (c: { fee_is_package?: boolean }) =>
@@ -5471,7 +5471,7 @@ async function runPriceTierRoundupLanguageTests() {
         if (!want.includes(desc)) {
           fail(
             `ItemList Offer.description is not a '${locale}' label on ${target}`,
-            `got ${JSON.stringify(desc)} for ${JSON.stringify(el?.item?.name)}, expected one of ${JSON.stringify(want)} — the route likely dropped its offerNames argument and fell back to the silent EN default.`,
+            `got ${JSON.stringify(desc)} for ${JSON.stringify(el?.item?.name)}, expected one of ${JSON.stringify(want)} — either the route dropped its offerNames argument and fell back to the silent EN default, or el.item.url stopped matching packageUrlPaths (check golfCourseItem's url expression in lib/jsonld-courses.ts, trailing slash included), which misclassifies every course at once.`,
           );
         }
       }

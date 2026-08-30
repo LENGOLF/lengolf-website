@@ -104,7 +104,9 @@ export function localizedCourseProse(
 
 const thb = formatBaht
 
-// The two boilerplate suffixes shared by 134/149 hand-written titles.
+// The two boilerplate suffixes shared by 144/148 hand-written titles
+// (re-measured 2026-08-30 against BOILERPLATE_TITLE itself; the previous
+// 134/149 was already wrong before the duplicate-course merge moved it).
 const BOILERPLATE_TITLE = /—\s*Green Fees, Course Guide & (?:Golf )?Club Rentals\s*$/
 
 /**
@@ -150,8 +152,11 @@ export function getCourseTitle(course: GolfCourse, locale: CourseSeoLocale = 'en
 /**
  * Data-driven meta description, unique per course. When the assembled string
  * runs long it degrades by dropping clauses (drive time, then designer) —
- * never by falling back to `locales.en.meta_description`, 77/149 of which
- * are the identical boilerplate this generator exists to replace.
+ * never by falling back to `locales.en.meta_description`, 59/148 of which
+ * share one boilerplate tail verbatim ("<name> green fees, course overview,
+ * tips, and how to arrange golf club rentals delivered to your Bangkok
+ * hotel") - the shape this generator exists to replace. Re-measured
+ * 2026-08-30; the previous 77/149 was stale in both terms.
  */
 export function getCourseDescription(course: GolfCourse, locale: CourseSeoLocale = 'en'): string {
   // Non-EN descriptions are hand-written data, not generated — so the 165-char
@@ -223,7 +228,7 @@ export interface CourseFaqItem {
  * Answers deliberately hedge on prices ("around", "confirm when booking")
  * because fees in data/golf-courses/ are point-in-time snapshots. The
  * club-rental answer mentions LENGOLF without quoting a price so a Supabase
- * pricing change can't silently desync 149 static pages.
+ * pricing change can't silently desync 148 static pages.
  *
  * Both the visible block and the FAQPage JSON-LD receive the SAME array from
  * the route, so they cannot diverge across locales either.

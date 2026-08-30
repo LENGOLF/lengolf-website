@@ -282,7 +282,7 @@ Pipeline run: 2026-04-20
 | 5 | Artitaya Country Club | `artitaya-country-club` | ✅ /golf-courses/bangkok/artitaya-country-club/ |
 | 6 | Rajpruek Club | `rajpruek-club` | ✅ /golf-courses/bangkok/rajpruek-club/ |
 | 7 | Lakewood Country Club | `lakewood-country-club` | ✅ /golf-courses/bangkok/lakewood-country-club/ |
-| 8 | Suvarnabhumi Golf & Country Club | `suvarnabhumi-golf-country-club` | ✅ /golf-courses/bangkok/suvarnabhumi-golf-country-club/ |
+| 8 | Suvarnabhumi Golf & Country Club | `suvarnabhumi-golf-country-club` | ⛔ MERGED 2026-08-30 into `phoenix-gold-golf-country-club` (same Nong Chok course); slug 308s |
 | 9 | Windsor Park & Golf Club | `windsor-park-golf-club` | ✅ /golf-courses/bangkok/windsor-park-golf-club/ |
 | 10 | Cascata Golf Club | `cascata-golf-club` | ✅ /golf-courses/bangkok/cascata-golf-club/ |
 | 11 | Kiarti Thanee Country Club | `kiarti-thanee-country-club` | ✅ /golf-courses/bangkok/kiarti-thanee-country-club/ |

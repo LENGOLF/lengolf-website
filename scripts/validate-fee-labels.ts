@@ -323,7 +323,8 @@ for (const dir of SCAN_DIRS) {
 // worse than no gate. If the walker or the pattern breaks, this goes red rather
 // than printing a reassuring zero.
 // The floor MUST count evaluated files, not matched ones. The first version
-// gated on `matched` (163), which is dominated by the 148 per-course data files
+// gated on `matched` (163 when that was measured; 162 today), which is
+// dominated by the 148 per-course data files
 // that are skipped on the very next line — so pruning SCAN_DIRS to ['data'],
 // i.e. the walker breaking for every real code file, still cleared a floor of
 // 12 and printed a success line. A gate that cannot fail is worse than no gate;

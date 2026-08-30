@@ -637,7 +637,8 @@ export const COURSE_DETAIL_I18N: {
   { region: 'chiang-mai', slug: 'north-hill-chiang-mai', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'chiang-mai', slug: 'royal-chiang-mai-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'chiang-mai', slug: 'summit-green-valley-chiangmai', locales: ['th', 'ja', 'ko', 'zh'] },
-  // Batch 9 (2026-08) — bangkok tranche, 9/55 -> 21/55. NOT roster completion,
+  // Batch 9 (2026-08) — bangkok tranche, 9 -> 21 of the then-55 bangkok courses
+  // (54 since the 2026-08-30 duplicate-course merge). NOT roster completion,
   // and the GSC data is why. Over 90 days the bangkok course pages drew 3,799
   // impressions (537 native-script) across 42 pages; the two remaining 0%
   // regions drew 48 (khao-yai, 1 native) and 8 (kanchanaburi, 1 native). A

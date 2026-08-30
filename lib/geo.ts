@@ -53,9 +53,14 @@ export interface CourseGeoFields {
 
 /**
  * A stored `google_maps_url` that is just `?q=<lat>,<lng>` carries no more
- * information than the coordinates themselves — 75 of the 149 course files
- * hold exactly that, synthesized from the same (sometimes wrong) numbers. It
- * must not be treated as an independently-sourced place link.
+ * information than the coordinates themselves, synthesized from the same
+ * (sometimes wrong) numbers. It must not be treated as an independently-sourced
+ * place link.
+ *
+ * This docblock said "75 of the 149 course files hold exactly that". Re-measured
+ * 2026-08-30: ZERO do — all 148 files now carry `google_maps_url: null`, so this
+ * guard is defensive rather than load-bearing. Keep it: the field is nullable and
+ * nothing stops a future import from repopulating it with synthesized links.
  */
 function isCoordinateQueryUrl(url: string): boolean {
   return /[?&]q=-?\d+(\.\d+)?,-?\d+(\.\d+)?$/.test(url)

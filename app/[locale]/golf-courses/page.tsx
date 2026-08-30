@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'GolfCourseHub' })
   const totalCourses = Object.values(REGION_META).reduce((sum, r) => sum + r.courseCount, 0)
   const title = t('metaTitle')
-  // {count} is used by the TH description (149-course claim stays derived from
+  // {count} is used by the TH description (148-course claim stays derived from
   // REGION_META, never a hardcoded literal); the EN string ignores it.
   const description = t('metaDescription', { count: totalCourses })
   const canonical = getCanonical(locale, '/golf-courses/')

@@ -59,8 +59,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const seoLocale = toCourseSeoLocale(locale)
 
   // Titles/descriptions are generated from structured fields (lib/course-seo)
-  // instead of the per-file locales.en strings: 134/149 of those shared one
-  // boilerplate suffix long enough to guarantee SERP truncation, and 77/149
+  // instead of the per-file locales.en strings: 144/148 of those shared one
+  // boilerplate suffix long enough to guarantee SERP truncation, and 59/148
   // descriptions were verbatim identical modulo the course name. For non-EN
   // locales the generators prefer the hand-written course.locales.<locale>
   // strings and fall back to the EN behavior while translation is in flight.

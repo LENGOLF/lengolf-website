@@ -343,6 +343,18 @@ const nextConfig = {
       // through this 308.
       { source: '/golf-courses/bangkok/suvarnabhumi-golf-country-club', destination: '/golf-courses/bangkok/phoenix-gold-golf-country-club/', permanent: true },
       { source: '/golf-courses/bangkok/suvarnabhumi-golf-country-club/', destination: '/golf-courses/bangkok/phoenix-gold-golf-country-club/', permanent: true },
+      // KNOWN GAP, deliberately not redirected. The OG-image child route is a
+      // SEPARATE generateStaticParams route (app/[locale]/golf-courses/[region]/
+      // [slug]/opengraph-image.tsx, also dynamicParams=false), so the rule above
+      // does not cover it and the retired page's og:image is now a hard 404.
+      // A redirect was drafted and REMOVED after measuring the real URL: Next
+      // emits it locale-prefixed and content-hashed —
+      // /en/golf-courses/<region>/<slug>/opengraph-image?<hash> — so an
+      // unprefixed, unhashed `source` matches nothing. Shipping it would have
+      // been dead config that reads as coverage. The four earlier re-region
+      // redirects above leave their OG children uncovered too, so this matches
+      // convention; closing it properly means a locale-aware source pattern and
+      // should be done for all five at once, not just this one.
 
       // Fallout of the two re-regions above. /golf-courses/compare/<region>/
       // <pair> is DERIVED from each region's top 3 by popularityScore, and the

@@ -214,7 +214,8 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/chiang-mai/north-hill-chiang-mai",
       "/golf-courses/chiang-mai/royal-chiang-mai-golf-club",
       "/golf-courses/chiang-mai/summit-green-valley-chiangmai",
-      // Batch 9 (2026-08) — bangkok tranche, 9/55 -> 21/55, picked by GSC
+      // Batch 9 (2026-08) — bangkok tranche, 9 -> 21 of the then-55 bangkok
+      // courses (54 since the 2026-08-30 duplicate-course merge), picked by GSC
       // impressions rather than roster completion. See COURSE_DETAIL_I18N in
       // data/golf-courses-i18n.ts for the demand numbers and for why
       // suvarnabhumi/phoenix-gold (duplicate course, two slugs), bangpoo
@@ -499,7 +500,8 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/chiang-mai/north-hill-chiang-mai",
       "/golf-courses/chiang-mai/royal-chiang-mai-golf-club",
       "/golf-courses/chiang-mai/summit-green-valley-chiangmai",
-      // Batch 9 (2026-08) — bangkok tranche, 9/55 -> 21/55, picked by GSC
+      // Batch 9 (2026-08) — bangkok tranche, 9 -> 21 of the then-55 bangkok
+      // courses (54 since the 2026-08-30 duplicate-course merge), picked by GSC
       // impressions rather than roster completion. See COURSE_DETAIL_I18N in
       // data/golf-courses-i18n.ts for the demand numbers and for why
       // suvarnabhumi/phoenix-gold (duplicate course, two slugs), bangpoo
@@ -816,7 +818,8 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/chiang-mai/north-hill-chiang-mai",
       "/golf-courses/chiang-mai/royal-chiang-mai-golf-club",
       "/golf-courses/chiang-mai/summit-green-valley-chiangmai",
-      // Batch 9 (2026-08) — bangkok tranche, 9/55 -> 21/55, picked by GSC
+      // Batch 9 (2026-08) — bangkok tranche, 9 -> 21 of the then-55 bangkok
+      // courses (54 since the 2026-08-30 duplicate-course merge), picked by GSC
       // impressions rather than roster completion. See COURSE_DETAIL_I18N in
       // data/golf-courses-i18n.ts for the demand numbers and for why
       // suvarnabhumi/phoenix-gold (duplicate course, two slugs), bangpoo
@@ -1125,7 +1128,8 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/chiang-mai/north-hill-chiang-mai",
       "/golf-courses/chiang-mai/royal-chiang-mai-golf-club",
       "/golf-courses/chiang-mai/summit-green-valley-chiangmai",
-      // Batch 9 (2026-08) — bangkok tranche, 9/55 -> 21/55, picked by GSC
+      // Batch 9 (2026-08) — bangkok tranche, 9 -> 21 of the then-55 bangkok
+      // courses (54 since the 2026-08-30 duplicate-course merge), picked by GSC
       // impressions rather than roster completion. See COURSE_DETAIL_I18N in
       // data/golf-courses-i18n.ts for the demand numbers and for why
       // suvarnabhumi/phoenix-gold (duplicate course, two slugs), bangpoo
@@ -1465,10 +1469,13 @@ export function getRegisteredCourseDetailPaths(locale: string): string[] {
  * hubs from 20 to 56:
  *   - the hub map prefixed every href, so on /ko/ and /zh/ — which have zero
  *     course-detail translations — every rendered link 301'd to English. That
- *     is 132 links, not 149: HubMapExplorer drops any course failing
- *     hasTrustedCoordinates() before it ever builds a marker, and 17 of the
- *     149 fail (4 with null coordinates, 13 with an axis below 3dp). 149 is the size
- *     of the `hrefs` map the server hands the component, not the link count;
+ *     is 147 links, not 148: HubMapExplorer drops any course failing
+ *     hasTrustedCoordinates() before it ever builds a marker, and 1 of the
+ *     148 fails (null coordinates). 148 is the size
+ *     of the `hrefs` map the server hands the component, not the link count.
+ *     (Re-measured 2026-08-30. The previous "132 / 149 / 17 (4 null, 13 below
+ *     3dp)" predated the coordinate-verification sweeps, which have since
+ *     stamped all but one course);
  *   - the region map prefixed none, so the 15 courses that DO have th/ja
  *     pages sent a Japanese reader to the English one.
  * Resolving per course on the server fixes both and keeps TRANSLATED_ROUTES
