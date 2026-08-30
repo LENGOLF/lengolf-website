@@ -58,7 +58,7 @@ export function toCourseSeoLocale(l: string): CourseSeoLocale {
  * NOTE the truthiness test rather than `??`: an EMPTY-STRING localized overview
  * falls back to EN here, where the three sibling fields in
  * `localizedCourseProse` would keep the `''`. No such string exists today (all
- * 149 courses × 4 locales censused), and returning an empty pull quote would be
+ * 148 courses × 4 locales censused, 2026-08-30), and returning an empty pull quote would be
  * worse than an English one, but the two rules genuinely differ — do not
  * describe them as identical.
  */

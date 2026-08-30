@@ -3021,6 +3021,17 @@ const redirectTests: RedirectTest[] = [
     expectedStatus: 308,
     expectedLocation: "/golf-courses/bangkok/phoenix-gold-golf-country-club/",
   },
+  // The OG-image child route is its own generateStaticParams route with
+  // dynamicParams=false, so the page redirect above does NOT cover it. This
+  // URL shape is the one the course page hand-builds as the GolfCourse JSON-LD
+  // `image` (`${enUrl}opengraph-image/`), i.e. the one the retired page
+  // published externally — the <meta og:image> is a different, locale-prefixed
+  // and content-hashed URL that no redirect source can usefully target.
+  {
+    path: "/golf-courses/bangkok/suvarnabhumi-golf-country-club/opengraph-image/",
+    expectedStatus: 308,
+    expectedLocation: "/golf-courses/bangkok/phoenix-gold-golf-country-club/opengraph-image/",
+  },
 
   // Compare pairs retired by those two re-regions. The pair set is derived
   // from each region's top 3 and the route is dynamicParams=false, so without

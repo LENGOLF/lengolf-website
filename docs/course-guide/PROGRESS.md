@@ -486,7 +486,7 @@ Pipeline run: 2026-04-21
 
 ## Phase 3 — complete
 
-All planned Phase 3 batches have now been processed (Batches 1–7). 14 regions live; 149 courses published. Remaining low-priority courses (Bhumibol Dam, Khao Laem, Naraihill, etc.) are documented in `data-gaps.md` as candidates for future phone verification.
+All planned Phase 3 batches have now been processed (Batches 1–7). 14 regions live; 148 courses published (149 until the 2026-08-30 duplicate-course merge). Remaining low-priority courses (Bhumibol Dam, Khao Laem, Naraihill, etc.) are documented in `data-gaps.md` as candidates for future phone verification.
 
 ---
 
@@ -512,7 +512,7 @@ Run each region through the full pipeline (Stages 1–5) in order.
 | Region index page `/golf-courses/bangkok/` | High | ✅ Done | Lists all Bangkok courses with fee + distance |
 | Hub page `/golf-courses/` | High | ✅ Done | Landing page linking to all regions + coming-soon teasers |
 | Smoke tests — hub + region indexes | Low | ✅ Done | Hub, Bangkok, Pattaya, Hua Hin, Phuket indexes + course detail routes in CI |
-| Internal linking — course pages | High | ✅ Done | Each course page now carries 10 unique internal links: 5 pre-existing footer/sidebar links + "Plan Your Trip" sidebar card (3 new links: `/golf-in-thailand-guide`, `/cost/how-much-does-golf-cost-bangkok`, `/lessons`) + "More [Region] courses" section (up to 3 sibling course cards + region index "View all" link). Guide page (`/golf-in-thailand-guide`) updated: 5 featured course rows now link to `/golf-courses/` pages; "Full guide" link replaced with "Browse all Bangkok courses" + "All 149 Thailand courses" links; 7 new HubCards added for the hub and 6 region pages. |
+| Internal linking — course pages | High | ✅ Done | Each course page now carries 10 unique internal links: 5 pre-existing footer/sidebar links + "Plan Your Trip" sidebar card (3 new links: `/golf-in-thailand-guide`, `/cost/how-much-does-golf-cost-bangkok`, `/lessons`) + "More [Region] courses" section (up to 3 sibling course cards + region index "View all" link). Guide page (`/golf-in-thailand-guide`) updated: 5 featured course rows now link to `/golf-courses/` pages; "Full guide" link replaced with "Browse all Bangkok courses" + "All {totalCourses} Thailand courses" links (the count is derived at render time, 148 today); 7 new HubCards added for the hub and 6 region pages. |
 | GPS coordinates + Google Maps URLs | Medium | Pending | All 11 Bangkok courses approximate — see `data-gaps.md` |
 | Phone number verification | Medium | Pending | 9 courses missing — see `data-gaps.md` |
 | Multilingual pages (KO / ZH / JA) | Phase 2 | Pending | Infrastructure in place (`locales` field), content not written |
