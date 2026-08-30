@@ -67,8 +67,11 @@ export const course: GolfCourse = {
   // NOT fee_is_package: the cart is charged separately at 600. That is the
   // caddie-bundled-but-cart-extra shape still awaiting an owner ruling, and the
   // corpus is consistent — hang-dong (0/300) and thana-city (0/800) are the
-  // only other courses in this shape and neither is flagged, while all 19
-  // flagged courses have cart_fee_thb 0 or no cart. See CLAUDE.md.
+  // only other courses in this shape and neither is flagged, while all 20
+  // flagged courses have cart_fee_thb 0 or no cart (re-derived after PR #119
+  // flagged forest-hills, which is caddie 0 / cart 0 — the clean package
+  // shape, so the precedent this deferral rests on is unchanged).
+  // See CLAUDE.md.
   caddie_fee_thb: 0,
   // Both merged sources' prose state 600; the Phoenix Gold file had it null
   // while its own `tips` said "carts 600 THB", so this closes a data gap rather

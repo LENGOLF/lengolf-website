@@ -4917,7 +4917,7 @@ async function runCourseDetailRegistryLivenessTests() {
 
     // Its own floor, because the package branch goes vacuous INDEPENDENTLY of the
     // one above: the general Offer count stays in the hundreds while the branch that
-    // matters here drops to zero. Today 19 of 148 courses carry fee_is_package, but
+    // matters here drops to zero. Today 20 of 148 courses carry fee_is_package, but
     // this corpus is REGISTRY-derived, so only the 12 in COURSE_DETAIL_I18N reach it.
     // 11 emit 2 rates and alpine-golf-resort-chiang-mai emits 1 (null weekend fee),
     // so 11*2*4 + 1*4 = 92. Re-derive, do not assume a courses x locales x rates
@@ -5423,7 +5423,7 @@ async function runPriceTierRoundupLanguageTests() {
       // L6 did not, and L6 also went without the floor below.
       // Per-COURSE, not a widened global set. The first version appended the two
       // package forms to one `allowed` array shared by every item, which accepted
-      // "Weekday package" for any of the 129 NON-package courses — L2 got the
+      // "Weekday package" for any of the 128 NON-package courses — L2 got the
       // per-course branch in the same commit and L6 did not.
       const pkg = cat?.packageHeading;
       const allowedFor = (c: { fee_is_package?: boolean }) =>

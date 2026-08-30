@@ -130,7 +130,7 @@ export function feeLabelKeys(c: FeeBasisSource): {
  * in rather than resolved here so `lib/jsonld-courses.ts` stays sync and
  * next-intl-free. For a non-package course EN composes byte-identically to the
  * pre-existing `` `${feeLabelsEn(c).lower} green fee` `` — `weekdayGreenFee` is
- * already "Weekday green fee" — so this is a no-op for all 129 of them.
+ * already "Weekday green fee" — so this is a no-op for all 128 of them.
  */
 export function feeHeadings(
   c: FeeCopySource,
