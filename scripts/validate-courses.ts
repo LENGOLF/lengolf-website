@@ -358,25 +358,55 @@ const PACKAGE_NOUN_RE: Record<CourseSeoLocale, RegExp> = {
 }
 
 function checkPackageNoun(courses: { file: string; course: GolfCourse }[]) {
-  // slug -> how many non-EN locales the REGISTRY promises for that course.
-  // Independent of each course file's own `locales` blocks, which is exactly what
-  // makes it a usable oracle below.
+  // `<region>/<slug>` -> how many non-EN locales the REGISTRY promises.
+  //
+  // Keyed on the PAIR, not the bare slug, because (region, slug) is this repo's
+  // runtime identity: getCourseBySlug imports `@/data/golf-courses/${region}/${slug}`
+  // and the URL is /golf-courses/<region>/<slug>. Nothing forbids two regions from
+  // holding the same slug, and `new Map()` is last-writer-wins, so a slug-only key
+  // silently collapses them. Demonstrated, not theorised: duplicating
+  // `wiang-ko-sai-golf-club` into a second region bought 6 units of slack in
+  // `expectedTitles` - enough to blank ALL FOUR non-EN titles on an unrelated course
+  // with this guard still green, where blanking ONE goes red at baseline.
+  //
+  // `file` is already exactly `<region>/<slug>.ts` (scripts/course-files.ts), so
+  // stripping the extension yields the key directly.
   const promised = new Map<string, number>(
-    COURSE_DETAIL_I18N.map((e) => [e.slug, e.locales.length])
+    COURSE_DETAIL_I18N.map((e) => [`${e.region}/${e.slug}`, e.locales.length])
   )
+  // The registry is the oracle, so its own integrity needs a floor. Without one an
+  // emptied registry / renamed export / drifted key shape makes every
+  // `promised.get()` miss, `?? 0` swallows it, and the expectation collapses from
+  // 67 to 19 while `checked` stays 67 - green. `packages * 5` could not degrade
+  // that way; this can, so it is ratcheted explicitly.
+  const MIN_REGISTRY_ENTRIES = 94
+  if (promised.size < MIN_REGISTRY_ENTRIES) {
+    errors.push(
+      `package-noun check read only ${promised.size} COURSE_DETAIL_I18N entries, expected at least ` +
+        `${MIN_REGISTRY_ENTRIES} - the registry is unreadable or its key shape drifted, which would ` +
+        `silently lower the title expectation rather than failing`
+    )
+  }
   let checked = 0
+  let judged = 0
   let packages = 0
   let expectedTitles = 0
   for (const { file, course } of courses) {
     if (!course.fee_is_package) continue
     packages++
     // 1 for EN (always generated) + the non-EN locales the registry promises.
-    expectedTitles += 1 + (promised.get(path.basename(file, '.ts')) ?? 0)
+    expectedTitles += 1 + (promised.get(file.replace(/\.ts$/, '')) ?? 0)
     for (const locale of Object.keys(PACKAGE_NOUN_RE) as CourseSeoLocale[]) {
       if (locale !== 'en' && !course.locales[locale]?.title) continue
       checked++
       const title = getCourseTitle(course, locale)
-      if (PACKAGE_NOUN_RE[locale].test(title)) {
+      const hit = PACKAGE_NOUN_RE[locale].test(title)
+      // Counted AFTER the regex actually ran. `checked` alone answers "how many
+      // iterations began", which a `continue` one line lower satisfies while
+      // evaluating zero regexes - a counter measuring visits rather than checks is
+      // the documented failure mode of validate-course-slots.
+      judged++
+      if (hit) {
         errors.push(
           `${file}: fee_is_package course's ${locale} TITLE calls the rate a green fee — ` +
             `the price already covers the caddie and cart, so the noun tells a searcher ` +
@@ -391,9 +421,13 @@ function checkPackageNoun(courses: { file: string; course: GolfCourse }[]) {
   // rendered EN title silently regresses to "— Green Fees & Guide". The flag is
   // optional on the type, so the deletion compiles. Needs an ABSOLUTE floor with
   // a real number, which is the rule this guard was added to enforce.
-  // Today: 12 (batch 9 added bangkok/artitaya-country-club and
-  // bangkok/prime-city-golf-club, each stating an all-in rate in its own EN
-  // prose that matches its typed green_fee pair exactly).
+  // Today: 19. Batch 9 took it to 12 (bangkok/artitaya-country-club,
+  // bangkok/prime-city-golf-club); this batch added seven UNTRANSLATED courses -
+  // cascata, krungthep-kreetha, lam-luk-ka, rachakram and royal-bang-pa-in
+  // (bangkok), dragon-hills (kanchanaburi) and toscana-valley (khao-yai) - each
+  // stating an all-in rate in its own EN prose matching its typed green_fee pair.
+  // Untranslated is the load-bearing word: they contribute 1 title each, not 5,
+  // which is why the expectation below is registry-derived rather than `x 5`.
   const MIN_PACKAGE_COURSES = 19
   if (packages < MIN_PACKAGE_COURSES) {
     errors.push(
@@ -412,19 +446,44 @@ function checkPackageNoun(courses: { file: string; course: GolfCourse }[]) {
   // not 5. The registry states what is promised; the loop counts what was read. A
   // locale block that stops being read while the registry still lists it still goes
   // red, which is the regression this guard exists for.
-  if (checked < expectedTitles) {
+  // EQUALITY, not `<`. An inequality leaves every `checked > expected` state green,
+  // and that is not hypothetical: deleting a registry entry while the course file
+  // keeps its locale blocks gives 67 vs 63 and PASSED - the exact registry/data
+  // disagreement this oracle is supposed to catch. Measured, not reasoned.
+  if (checked !== expectedTitles) {
     errors.push(
-      `package-noun check examined only ${checked} title(s) across ${packages} package ` +
-        `course(s) — expected ${expectedTitles} from COURSE_DETAIL_I18N. A locale block stopped being read.`
+      `package-noun check examined ${checked} title(s) across ${packages} package ` +
+        `course(s) - expected exactly ${expectedTitles} from COURSE_DETAIL_I18N. ` +
+        `Fewer means a locale block stopped being read; more means the registry lost ` +
+        `an entry the course file still carries.`
+    )
+  }
+  // `checked` counts iterations that BEGAN; `judged` counts regexes that actually
+  // RAN. Without this, `continue` placed immediately after `checked++` keeps every
+  // counter honest and every floor satisfied while evaluating zero regexes - gate
+  // AND self-test both green. Measured.
+  if (judged !== checked) {
+    errors.push(
+      `package-noun check began ${checked} title(s) but judged only ${judged} - ` +
+        `titles are being counted without being tested`
     )
   }
 }
 
 /**
  * `--self-test`. `checkPackageNoun` fires on ZERO lines in healthy data, so a
- * green corpus run is not evidence it works — deleting its call, neutering
- * PACKAGE_NOUN_RE, or reinstating the `packages > 0 &&` self-disarm all pass
- * silently. It is also the only gate catching this branch's headline defect.
+ * green corpus run is not evidence it works. It is also the only gate catching this
+ * branch's headline defect.
+ *
+ * SCOPE, stated honestly because the previous version of this docblock overstated
+ * it. These cases cover `PACKAGE_NOUN_RE` ONLY - that each locale's regex fires on
+ * the noun and stays silent on a correct title. They do NOT cover
+ * `checkPackageNoun` itself: measured, an early `return` at the top of that
+ * function, or commenting out its call site, leaves BOTH the corpus run and this
+ * self-test green. What catches those is the corpus floor (`MIN_PACKAGE_COURSES`);
+ * the `continue`-after-`checked++` shape is caught only by `judged !== checked`.
+ * Catching a deleted CALL would need a child-process contract suite of the kind
+ * only validate-open-graph has.
  */
 const NOUN_SELF_TESTS: Array<{ name: string; locale: CourseSeoLocale; title: string; fire: boolean }> = [
   { name: 'en bare noun', locale: 'en', title: 'X — Green Fees & Guide', fire: true },

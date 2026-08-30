@@ -242,15 +242,22 @@ type FeeLabelT = (
  * package. The EN-pinned sibling of `feeRosterHeadingKey`, for `/compare/` and
  * `/near/`, which never read a catalog.
  *
- * Both of those hardcoded the noun. That was once justified by "no package
- * course reaches either set" — and the fragility warning attached to it has
- * now cashed in. The chiang-mai batch took the flag from FOUR courses to TEN,
- * and `royal-chiang-mai-golf-club` and `gassan-khuntan-golf-resort` rank #1
- * and #2 in chiang-mai, so ALL THREE of that region's `/compare/` pairs now
- * contain a package course and DO reach `feeNounEn`. It returns 'Rate' for
- * them, which is correct — the noun is handled. `/near/` is still unreached
- * (8 stations + 2 airports, zero package courses), but treat that as today's
- * popularity scores rather than a property of the code.
+ * Both of those hardcoded the noun. That was once justified by "no package course
+ * reaches either set" - and the fragility warning attached to it has now cashed in
+ * TWICE. The chiang-mai batch took the flag from FOUR courses to TEN and put
+ * `royal-chiang-mai-golf-club` and `gassan-khuntan-golf-resort` at #1 and #2 in
+ * chiang-mai, so all three of that region's `/compare/` pairs reach `feeNounEn`.
+ *
+ * The untranslated-package batch then took it to NINETEEN and falsified the second
+ * half of the old note, which read "`/near/` is still unreached (8 stations + 2
+ * airports, zero package courses)". `krungthep-kreetha-sports-club` is #8 from
+ * Suvarnabhumi, so `/golf-courses/near/suvarnabhumi-airport/` now reaches this
+ * function. Scope precisely, because the obvious reading is wrong: `feeNounEn` is
+ * called ONLY from `AirportPage`. `StationPage` renders a `RoundupList` with no fee
+ * noun, so the 8 BTS station pages are NOT affected - one airport page is.
+ *
+ * It returns 'Rate' for all of them, which is correct; the noun is handled. Treat
+ * reachability as today's popularity scores rather than a property of the code.
  *
  * The BASIS is a separate, still-open problem: `gassan-khuntan`,
  * `royal-chiang-mai` and `summit-green-valley` price by SEASON in their prose

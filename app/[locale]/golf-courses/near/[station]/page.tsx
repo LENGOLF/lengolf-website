@@ -48,11 +48,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const airport = AIRPORTS[station]
   if (airport) {
-    // Page chrome naming the directory's SUBJECT, not a label on one course's
-    // number; generateMetadata does not load the roster, so the noun cannot
-    // follow it. Same known gap as GolfCourseRegion.metaTitle — see the PR body.
-    const title = `Golf Courses Near ${airport.name} (${airport.iata}): Distances & Green Fees` // fee-noun-ok: page chrome, roster not in scope
-    const description = `Golf courses ranked by straight-line distance from ${airport.name} (${airport.iata}), with green fees, club-rental availability, and how to book your round.` // fee-noun-ok: page chrome, roster not in scope
+    // Title/H1 agreement, by construction. This block used to hardcode "Green
+    // Fees" behind a fee-noun-ok escape hatch, on the reasoning that
+    // "generateMetadata does not load the roster, so the noun cannot follow it".
+    // That was a description of what this function did, not a constraint - it is
+    // async, and AirportPage computes the noun from the same roster call. The
+    // escape hatch was harmless only while no package course reached an airport
+    // roster; flagging krungthep-kreetha (#8 from Suvarnabhumi) ended that, and
+    // the page would have shipped "Green Fees" in its SERP title above an H1 and
+    // table headers reading "Rates". Deriving it here keeps the two in sync
+    // whatever the roster does next.
+    const metaItems = await getCoursesNearAirport(station, 8)
+    const metaNoun = feeNounEn(metaItems.map(({ course }) => course))
+    const title = `Golf Courses Near ${airport.name} (${airport.iata}): Distances & ${metaNoun}s`
+    const description = `Golf courses ranked by straight-line distance from ${airport.name} (${airport.iata}), with ${metaNoun.toLowerCase()}s, club-rental availability, and how to book your round.`
     const canonicalUrl = `${SITE_URL}/golf-courses/near/${station}/`
     return {
       title,
