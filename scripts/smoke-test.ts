@@ -5980,8 +5980,25 @@ async function runFallbackPullQuoteTests() {
       const href = li.match(/href="([^"]*\/golf-courses\/[^"]+)"/)?.[1];
       const quote = li.match(/line-clamp-2"[^>]*>([\s\S]*?)<\/p>/)?.[1];
       if (!href || !quote) continue;
+      // DECODE before comparing. These quotes come out of raw markup, and this
+      // check does two things that entity encoding silently breaks: it measures
+      // LENGTH and it compares a 40-character PREFIX. A course name containing
+      // "&" renders as "&amp;", which adds 4 characters and — the part that
+      // actually bit — shifts the first point of divergence past the 40-char
+      // window. rancho-charnvee's zh quote opens
+      // "Rancho Charnvee Resort &amp; Country Club是一座…" against EN's
+      // "…Country Club is an…": decoded they diverge at index 38 and the guard
+      // correctly stands down, but encoded both sides share the first 40 chars
+      // ("…Country Clu") and the guard fired on correct Chinese copy.
+      const decoded = quote
+        .replace(/&amp;/g, "&")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&quot;/g, '"')
+        .replace(/&#x27;|&#39;/g, "'")
+        .replace(/&nbsp;/g, " ");
       // Strip any locale prefix so /ja/golf-courses/x and /golf-courses/x match.
-      out.set(href.replace(/^\/[a-z]{2}(?=\/golf-courses\/)/, ""), quote.trim());
+      out.set(href.replace(/^\/[a-z]{2}(?=\/golf-courses\/)/, ""), decoded.trim());
     }
     return out;
   };
