@@ -146,9 +146,10 @@ const TRANSLATED_ROUTES: Record<
       // phoenix-gold-golf-club-pattaya IS included. An earlier revision of this
       // comment claimed it was half of a duplicate and had to be held back;
       // that was wrong. Per docs/golf-course-content-audit-2026-07.md item 8
-      // the merge pair is bangkok/suvarnabhumi-golf-country-club <->
+      // the merge pair was bangkok/suvarnabhumi-golf-country-club <->
       // bangkok/phoenix-gold-golf-country-club (one 36-hole course in Nong
-      // Chok), and pattaya/phoenix-gold-golf-club-pattaya "is the genuine
+      // Chok) — merged 2026-08-30, the suvarnabhumi slug now 308s to phoenix
+      // gold — and pattaya/phoenix-gold-golf-club-pattaya "is the genuine
       // Pattaya sister". Differing holes/province/coordinates are evidence of
       // two DIFFERENT clubs; the shared website is common ownership.
       "/golf-courses/pattaya/amata-spring-country-club",
@@ -430,9 +431,10 @@ const TRANSLATED_ROUTES: Record<
       // phoenix-gold-golf-club-pattaya IS included. An earlier revision of this
       // comment claimed it was half of a duplicate and had to be held back;
       // that was wrong. Per docs/golf-course-content-audit-2026-07.md item 8
-      // the merge pair is bangkok/suvarnabhumi-golf-country-club <->
+      // the merge pair was bangkok/suvarnabhumi-golf-country-club <->
       // bangkok/phoenix-gold-golf-country-club (one 36-hole course in Nong
-      // Chok), and pattaya/phoenix-gold-golf-club-pattaya "is the genuine
+      // Chok) — merged 2026-08-30, the suvarnabhumi slug now 308s to phoenix
+      // gold — and pattaya/phoenix-gold-golf-club-pattaya "is the genuine
       // Pattaya sister". Differing holes/province/coordinates are evidence of
       // two DIFFERENT clubs; the shared website is common ownership.
       "/golf-courses/pattaya/amata-spring-country-club",
@@ -746,9 +748,10 @@ const TRANSLATED_ROUTES: Record<
       // phoenix-gold-golf-club-pattaya IS included. An earlier revision of this
       // comment claimed it was half of a duplicate and had to be held back;
       // that was wrong. Per docs/golf-course-content-audit-2026-07.md item 8
-      // the merge pair is bangkok/suvarnabhumi-golf-country-club <->
+      // the merge pair was bangkok/suvarnabhumi-golf-country-club <->
       // bangkok/phoenix-gold-golf-country-club (one 36-hole course in Nong
-      // Chok), and pattaya/phoenix-gold-golf-club-pattaya "is the genuine
+      // Chok) — merged 2026-08-30, the suvarnabhumi slug now 308s to phoenix
+      // gold — and pattaya/phoenix-gold-golf-club-pattaya "is the genuine
       // Pattaya sister". Differing holes/province/coordinates are evidence of
       // two DIFFERENT clubs; the shared website is common ownership.
       "/golf-courses/pattaya/amata-spring-country-club",
@@ -1054,9 +1057,10 @@ const TRANSLATED_ROUTES: Record<
       // phoenix-gold-golf-club-pattaya IS included. An earlier revision of this
       // comment claimed it was half of a duplicate and had to be held back;
       // that was wrong. Per docs/golf-course-content-audit-2026-07.md item 8
-      // the merge pair is bangkok/suvarnabhumi-golf-country-club <->
+      // the merge pair was bangkok/suvarnabhumi-golf-country-club <->
       // bangkok/phoenix-gold-golf-country-club (one 36-hole course in Nong
-      // Chok), and pattaya/phoenix-gold-golf-club-pattaya "is the genuine
+      // Chok) — merged 2026-08-30, the suvarnabhumi slug now 308s to phoenix
+      // gold — and pattaya/phoenix-gold-golf-club-pattaya "is the genuine
       // Pattaya sister". Differing holes/province/coordinates are evidence of
       // two DIFFERENT clubs; the shared website is common ownership.
       "/golf-courses/pattaya/amata-spring-country-club",

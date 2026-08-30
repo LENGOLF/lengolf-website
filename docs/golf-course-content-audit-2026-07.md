@@ -140,18 +140,41 @@ of Search Console data.
    (`getAlternates` in lib/translated-routes.ts).
 7. **Titles of `under/*` and `best-for/*`** say "Bangkok-Area" but lists pull
    from all 14 regions — either filter by distance or retitle.
-8. **Phoenix Gold / Suvarnabhumi merge** — web research (2026-07-30) confirmed
-   `bangkok/suvarnabhumi-golf-country-club` and
-   `bangkok/phoenix-gold-golf-country-club` are the SAME 36-hole RTJ Jr.
+8. ~~**Phoenix Gold / Suvarnabhumi merge**~~ — **DONE 2026-08-30.** Web
+   research (2026-07-30) confirmed `bangkok/suvarnabhumi-golf-country-club`
+   and `bangkok/phoenix-gold-golf-country-club` were the SAME 36-hole RTJ Jr.
    course in Nong Chok (ex-President CC, renamed Phoenix Gold Golf Bangkok).
-   Both pages' fees/prose are now aligned and truthful, but one slug should
-   301 to the other (needs a next.config redirect + index/sitemap removal +
-   GSC awareness — the suvarnabhumi slug carries the search traffic).
-   `pattaya/phoenix-gold-golf-club-pattaya` is the genuine Pattaya sister.
+   The Phoenix Gold slug survives (current trading name); the suvarnabhumi
+   slug 308s to it, and its index/sitemap entries are gone.
+   `pattaya/phoenix-gold-golf-club-pattaya` is the genuine Pattaya sister and
+   was untouched.
+
+   Two things this item did not anticipate, both measured at merge time and
+   worth carrying forward. (a) The retired slug's traffic was NOT the asset it
+   looks like: of 1,792 impressions/90d, 1,720 were "golf near Suvarnabhumi
+   airport" intent sitting at position ~37 with ZERO clicks; only 67 were
+   branded, and those carried all 4 of the page's clicks. (b) That page was
+   CANNIBALISING `/golf-courses/near/suvarnabhumi-airport/`, which has never
+   recorded a single impression, while the identically generated Don Mueang
+   page — same launch date (PR #59, 2026-07-19), same template, FEWER inbound
+   internal links — reached position ~14.6 on 635 impressions. Every in-repo
+   lever for the airport page was already correct (sitemap, hub grid,
+   generated title, inbound links from the cannibalising guide), so the
+   duplicate course page was the only remaining explanation. **Whether the
+   merge frees that page is the thing to re-measure next**, in
+   `marketing.gsc_query_daily`, grouped by page for the airport queries.
 9. **llms.txt**: list region hubs for EN (currently non-EN only) and consider
    listing course pages for AI-crawler discovery.
-10. **Airport pages** (`near/suvarnabhumi-airport`, `near/don-mueang-airport`)
-    are linked only from each other — add them to the main hub's station grid.
+10. ~~**Airport pages** linked only from each other~~ — **STALE as written,
+    verified 2026-08-30.** Both airport pages are already in the main hub's
+    proximity grid (`app/[locale]/golf-courses/page.tsx` renders
+    `Object.values(AIRPORTS)` beside the BTS block), and both are reachable
+    from `/golf-club-rental`, `/golf-course-club-rental` and the
+    `related_slugs` of `best-golf-courses-near-bangkok` plus each airport's
+    own transfer guide. `near/suvarnabhumi-airport` in fact carries MORE
+    inbound internal links than `near/don-mueang-airport`, which is precisely
+    why linking could be ruled out as the reason for its zero impressions —
+    see item 8.
 
 ## Notes for future edits
 

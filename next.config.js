@@ -326,6 +326,24 @@ const nextConfig = {
       { source: '/golf-courses/bangkok/nichigo-resort-country-club', destination: '/golf-courses/kanchanaburi/nichigo-resort-country-club/', permanent: true },
       { source: '/golf-courses/bangkok/nichigo-resort-country-club/', destination: '/golf-courses/kanchanaburi/nichigo-resort-country-club/', permanent: true },
 
+      // Duplicate-course merge (2026-08). `suvarnabhumi-golf-country-club` and
+      // `phoenix-gold-golf-country-club` described the SAME 36-hole Robert
+      // Trent Jones Jr. facility in Nong Chok under two names — each file's own
+      // prose said so, and the audit at docs/golf-course-content-audit-2026-07.md
+      // item 8 confirmed it by web research. The Phoenix Gold slug survives
+      // because that is the club's current trading name.
+      //
+      // The retired URL was the site's largest course page (1,792 impressions /
+      // 90d), so this redirect carries real equity — but 96% of those were
+      // "golf near Suvarnabhumi airport" queries ranking at position ~37 with
+      // ZERO clicks, which this page was absorbing away from
+      // /golf-courses/near/suvarnabhumi-airport/ (never once impressed, while
+      // the identically-generated Don Mueang page holds position ~14.6). The
+      // 67 impressions and all 4 clicks that were genuinely branded pass
+      // through this 308.
+      { source: '/golf-courses/bangkok/suvarnabhumi-golf-country-club', destination: '/golf-courses/bangkok/phoenix-gold-golf-country-club/', permanent: true },
+      { source: '/golf-courses/bangkok/suvarnabhumi-golf-country-club/', destination: '/golf-courses/bangkok/phoenix-gold-golf-country-club/', permanent: true },
+
       // Fallout of the two re-regions above. /golf-courses/compare/<region>/
       // <pair> is DERIVED from each region's top 3 by popularityScore, and the
       // route sets dynamicParams = false, so a pair that drops out of the top 3

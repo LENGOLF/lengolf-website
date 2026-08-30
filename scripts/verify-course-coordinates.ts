@@ -20,7 +20,7 @@
  * Do NOT reuse NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY if it is HTTP-referrer
  * restricted (it should be) — referrer-locked keys reject server calls.
  *
- * Costs money per request (Places Text Search is billed). 149 lookups is
+ * Costs money per request (Places Text Search is billed). 148 lookups is
  * cents, but --write is the only mutating mode and it is opt-in.
  */
 
@@ -115,7 +115,7 @@ async function main() {
   // run reports the course as handled while the file is unchanged. Track it.
   const writeFailed: string[] = []
 
-  // Places lookups run through a bounded pool: ~149 serial round-trips cost
+  // Places lookups run through a bounded pool: ~148 serial round-trips cost
   // 1-1.5 min of wall time and a single hung response stalls the batch, while
   // 8 in flight stays far below Places QPS quotas. File writes stay in the
   // sequential loop below.

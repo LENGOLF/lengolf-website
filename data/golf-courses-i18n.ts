@@ -552,10 +552,10 @@ export const COURSE_DETAIL_I18N: {
   // duplication when they are proof of two DIFFERENT clubs under common
   // ownership (hence the shared website).
   // docs/golf-course-content-audit-2026-07.md item 8 is the primary source: the
-  // merge pair is bangkok/suvarnabhumi-golf-country-club <->
+  // merge pair was bangkok/suvarnabhumi-golf-country-club <->
   // bangkok/phoenix-gold-golf-country-club (one 36-hole RTJ Jr. course in Nong
-  // Chok), and pattaya/phoenix-gold-golf-club-pattaya "is the genuine Pattaya
-  // sister".
+  // Chok), merged 2026-08-30 — and pattaya/phoenix-gold-golf-club-pattaya "is
+  // the genuine Pattaya sister".
   { region: 'pattaya', slug: 'amata-spring-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'pattaya', slug: 'bangpra-international-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'pattaya', slug: 'chatrium-golf-resort-soi-dao', locales: ['th', 'ja', 'ko', 'zh'] },
@@ -645,15 +645,17 @@ export const COURSE_DETAIL_I18N: {
   // impression a quarter, so this takes the top untranslated bangkok pages by
   // impressions instead.
   //
-  // Two courses that outrank every entry below are deliberately EXCLUDED:
-  // `suvarnabhumi-golf-country-club` (1,808 imp — the largest untranslated
-  // course page on the site) and `phoenix-gold-golf-country-club` (6 imp) are
-  // the SAME physical course under two slugs. Same designer, same 36 holes,
-  // same 999/1,199 rates, same Nong Chok district, and the Phoenix Gold file's
-  // own prose says it is "the renamed Suvarnabhumi Golf & Country Club — the
-  // same Nong Chok facility". Their coordinates also disagree by ~7 km, so one
-  // is wrong. Translating either would quadruple a duplicate-content page;
-  // the slug merge is its own PR.
+  // The duplicate-slug exclusion recorded here has been RESOLVED (2026-08-30):
+  // `suvarnabhumi-golf-country-club` and `phoenix-gold-golf-country-club` were
+  // the same 36-hole Nong Chok course under two slugs, and the former now 308s
+  // to the latter (next.config.js). The ~7 km coordinate disagreement was the
+  // tell, and Google Places settled it — BOTH stored pairs were drift.
+  //
+  // The surviving `phoenix-gold-golf-country-club` is still untranslated, and
+  // that is deliberate rather than pending: the demand this page carried was
+  // English and Thai "golf near Suvarnabhumi airport" intent, which belongs to
+  // /golf-courses/near/suvarnabhumi-airport/, not to a four-locale batch. Its
+  // own branded query volume (67 imp / 90d) does not justify one yet.
   //
   // `bangpoo-golf-sports-club` (9 imp) was dropped by the pre-flight bearing
   // check: its prose says "40 km south of central Bangkok" three times, but its

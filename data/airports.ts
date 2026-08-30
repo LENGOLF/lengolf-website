@@ -4,11 +4,17 @@
  * richer, booking-intent copy because airport searchers arrive with a clear
  * "book golf near the airport" intent rather than a hotel-district context.
  *
- * Coordinates are the official terminal coordinates for each airport. They are
- * consistent with the airport references already in the course prose — e.g.
- * data/golf-courses/bangkok/suvarnabhumi-golf-country-club.ts places that
- * course "east of Suvarnabhumi Airport", and it sits at 13.816, 100.865,
- * north-east of the BKK terminal below.
+ * Coordinates are the official terminal coordinates for each airport, and are
+ * the anchor for the haversine roster on each proximity page.
+ *
+ * This docblock used to cite bangkok/suvarnabhumi-golf-country-club.ts as
+ * corroboration ("east of Suvarnabhumi Airport ... 13.816, 100.865"). That
+ * file no longer exists — it was merged into
+ * bangkok/phoenix-gold-golf-country-club.ts on 2026-08-30 as a duplicate of
+ * the same Nong Chok course — and the coordinates it quoted were themselves
+ * 4.37 km of drift. Do not treat course prose as a check on these values:
+ * verified against Google Places, that course sits 18.66 km from the BKK
+ * terminal and does not make this airport's nearest eight.
  *
  * `guideHref` links to the matching arrival-transfer guide in
  * data/explainer-pages.ts (both slugs are published English guides).
