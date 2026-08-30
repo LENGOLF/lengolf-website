@@ -116,7 +116,7 @@ function golfCourseItem(
  *     weaker: EN `statHoles`/`statPar` are byte-identical to the hardcoded
  *     'Holes'/'Par', so localizing it is free — it is simply out of scope here.
  *   - `address.addressLocality` — NOT because the derived branch below is hard
- *     to localize, but because it is never reached: all 149 course files carry a
+ *     to localize, but because it is never reached: all 148 course files carry a
  *     `schema_markup.address` object, so `legacyAddress` wins for every course
  *     and `addressLocality: c.province` is currently dead code. The English
  *     locality that actually ships comes from the legacy blob (28 of which

@@ -49,7 +49,6 @@ const index = {
     'subhapruek-golf-course',
     'summit-windmill-golf-club',
     'suwan-golf-country-club',
-    'suvarnabhumi-golf-country-club',
     'thai-country-club',
     'thanont-golf-view-sports-club',
     'thana-city-golf-sports-club',

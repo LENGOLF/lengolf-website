@@ -30,7 +30,7 @@ export const REGION_META: Record<Region, RegionMeta> = {
     label: 'Bangkok',
     province: 'Bangkok & surrounding provinces',
     description: "Bangkok and its surrounding provinces are home to some of Thailand's finest golf courses — from championship-grade layouts in Pathum Thani to accessible resort courses within 90 minutes of the city centre.",
-    courseCount: 55,
+    courseCount: 54,
     center:   { lat: 13.750, lng: 100.52, zoom: 10 },
     pinColor: { bg: '#005a32', text: '#ffffff' },
   },

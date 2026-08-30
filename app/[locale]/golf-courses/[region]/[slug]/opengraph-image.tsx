@@ -7,7 +7,7 @@ import { ogCard, OG_SIZE } from '@/lib/og-card'
 
 export const size = OG_SIZE
 export const contentType = 'image/png'
-// A module-level const shared by all 149 courses, so it cannot name a
+// A module-level const shared by all 148 courses, so it cannot name a
 // course-specific noun — the same rule as a shared column header. It said
 // "green fees" and shipped as the social card's alt text on the two package
 // courses; un-exempting this file from NUMERIC_ONLY is what surfaced it.

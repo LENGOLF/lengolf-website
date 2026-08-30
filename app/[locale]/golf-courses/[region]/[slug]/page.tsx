@@ -59,8 +59,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const seoLocale = toCourseSeoLocale(locale)
 
   // Titles/descriptions are generated from structured fields (lib/course-seo)
-  // instead of the per-file locales.en strings: 134/149 of those shared one
-  // boilerplate suffix long enough to guarantee SERP truncation, and 77/149
+  // instead of the per-file locales.en strings: 144/148 of those shared one
+  // boilerplate suffix long enough to guarantee SERP truncation, and 59/148
   // descriptions were verbatim identical modulo the course name. For non-EN
   // locales the generators prefer the hand-written course.locales.<locale>
   // strings and fall back to the EN behavior while translation is in flight.
@@ -71,7 +71,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   // Only emit hreflang when a translation actually exists — a lone
   // self-referential hreflang="en" cluster is audit noise (matches the
-  // sitemap). The 146 untranslated courses keep a bare EN canonical.
+  // sitemap). The 54 untranslated courses keep a bare EN canonical.
   const languages = getAlternates(path)
 
   return {
@@ -150,7 +150,7 @@ export default async function CoursePageRoute({ params }: Props) {
     nearestStationLink = {
       label: `Best courses near ${nearest.station.name} BTS`,
       href: `/golf-courses/near/${nearest.station.slug}`,
-      description: `${nearest.km.toFixed(1)} km from ${nearest.station.name} — closest station to ${course.name}.`,
+      description: `${nearest.km.toFixed(1)} km from ${nearest.station.name} in a straight line — closest station to ${course.name}.`,
     }
   }
 
