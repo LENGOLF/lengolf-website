@@ -11,6 +11,10 @@ export const course: GolfCourse = {
   year_opened: 1969,
   green_fee_weekday_thb: 2850,
   green_fee_weekend_thb: 3300,
+  // All-in package per this file's own EN prose: the posted rate bundles the
+  // caddie (and cart where the course has one). Stops generated copy calling
+  // the number a bare "green fee", which would tell a reader they pay extra.
+  fee_is_package: true,
   caddie_fee_thb: 0,
   cart_fee_thb: 0,
   caddie_required: true,

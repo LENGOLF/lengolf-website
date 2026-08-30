@@ -13,9 +13,16 @@ export const course: GolfCourse = {
   // promotion page updated Mar 2026. Thai nationals pay less (dual pricing).
   green_fee_weekday_thb: 1560,
   green_fee_weekend_thb: 1750,
+  // All-in package per this file's own EN prose: the posted rate bundles the
+  // caddie (and cart where the course has one). Stops generated copy calling
+  // the number a bare "green fee", which would tell a reader they pay extra.
+  fee_is_package: true,
   fees_verified_at: '2026-07-30',
-  caddie_fee_thb: 300,
-  cart_fee_thb: 700,
+  // Zero, not null: the comment on green_fee_weekday_thb above already calls
+  // 1,560/1,750 the "official foreigner all-in rate (green fee + caddie + cart)".
+  // These were 300 and 700, contradicting that comment two lines up.
+  caddie_fee_thb: 0,
+  cart_fee_thb: 0,
   caddie_required: false,
   cart_required: false,
   driving_range: true,

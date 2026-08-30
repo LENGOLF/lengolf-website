@@ -47,6 +47,7 @@ import { decimalPlaces, MIN_COORD_DECIMALS } from '../lib/geo'
 import { runSelfTest } from './self-test-harness'
 import { loadCourseFiles } from './course-files'
 import { getCourseTitle, type CourseSeoLocale } from '../lib/course-seo'
+import { COURSE_DETAIL_I18N } from '../data/golf-courses-i18n'
 
 const LOW_FEE_THRESHOLD = 600
 const ABS_FLOOR = 150
@@ -357,11 +358,20 @@ const PACKAGE_NOUN_RE: Record<CourseSeoLocale, RegExp> = {
 }
 
 function checkPackageNoun(courses: { file: string; course: GolfCourse }[]) {
+  // slug -> how many non-EN locales the REGISTRY promises for that course.
+  // Independent of each course file's own `locales` blocks, which is exactly what
+  // makes it a usable oracle below.
+  const promised = new Map<string, number>(
+    COURSE_DETAIL_I18N.map((e) => [e.slug, e.locales.length])
+  )
   let checked = 0
   let packages = 0
+  let expectedTitles = 0
   for (const { file, course } of courses) {
     if (!course.fee_is_package) continue
     packages++
+    // 1 for EN (always generated) + the non-EN locales the registry promises.
+    expectedTitles += 1 + (promised.get(path.basename(file, '.ts')) ?? 0)
     for (const locale of Object.keys(PACKAGE_NOUN_RE) as CourseSeoLocale[]) {
       if (locale !== 'en' && !course.locales[locale]?.title) continue
       checked++
@@ -384,17 +394,28 @@ function checkPackageNoun(courses: { file: string; course: GolfCourse }[]) {
   // Today: 12 (batch 9 added bangkok/artitaya-country-club and
   // bangkok/prime-city-golf-club, each stating an all-in rate in its own EN
   // prose that matches its typed green_fee pair exactly).
-  const MIN_PACKAGE_COURSES = 12
+  const MIN_PACKAGE_COURSES = 19
   if (packages < MIN_PACKAGE_COURSES) {
     errors.push(
       `package-noun check found only ${packages} fee_is_package course(s), expected at least ` +
         `${MIN_PACKAGE_COURSES} — the flag was removed, or this ratchet needs a deliberate edit`
     )
   }
-  if (checked < packages * 5) {
+  // The expectation MUST come from a source independent of the counting predicate
+  // above, or the guard self-disarms: derive it from the same
+  // `course.locales[locale]?.title` test and checked === expected by construction,
+  // so it can never fail.
+  //
+  // `packages * 5` was that independent source, and was right while every flagged
+  // course was also translated. Flagging a course that is NOT in COURSE_DETAIL_I18N
+  // broke the premise: it ships an EN title only, so its true contribution is 1,
+  // not 5. The registry states what is promised; the loop counts what was read. A
+  // locale block that stops being read while the registry still lists it still goes
+  // red, which is the regression this guard exists for.
+  if (checked < expectedTitles) {
     errors.push(
       `package-noun check examined only ${checked} title(s) across ${packages} package ` +
-        `course(s) — expected ${packages * 5}. A locale block stopped being read.`
+        `course(s) — expected ${expectedTitles} from COURSE_DETAIL_I18N. A locale block stopped being read.`
     )
   }
 }
