@@ -496,7 +496,10 @@ export const COURSE_DETAIL_I18N: {
   { region: 'chiang-mai', slug: 'lanna-golf-course', locales: ['th', 'ja', 'ko', 'zh'] },
   // Batch 2 (2026-08) — top course pages by GSC impressions (90d) within
   // regions whose hubs are translated for both locales. Suvarnabhumi (1,319
-  // imp) deliberately excluded pending the Phoenix Gold slug merge.
+  // imp as measured for THIS batch) was excluded pending the Phoenix Gold slug
+  // merge. That merge landed 2026-08-30 and the slug now 308s to
+  // bangkok/phoenix-gold-golf-country-club, which is still deliberately
+  // untranslated — see the Batch 9 note below for why.
   { region: 'bangkok', slug: 'pinehurst-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'bangkok', slug: 'siam-country-club-bangkok', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'bangkok', slug: 'ayutthaya-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
@@ -509,7 +512,7 @@ export const COURSE_DETAIL_I18N: {
   // Nikanti (~1,400 imp across guide + name queries), Royal Gems ("the rg
   // city golf club" 110 imp + TH ราคา queries), Burapha (JPN-geo demand),
   // Laem Chabang ("laem chabang international country club prices" 70 imp).
-  // Suvarnabhumi still excluded — see the Batch 2 note above.
+  // Suvarnabhumi was still excluded at this batch — see the Batch 2 note above.
   { region: 'bangkok', slug: 'alpine-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'bangkok', slug: 'nikanti-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'bangkok', slug: 'royal-gems-golf-sports-club', locales: ['th', 'ja', 'ko', 'zh'] },
@@ -552,10 +555,10 @@ export const COURSE_DETAIL_I18N: {
   // duplication when they are proof of two DIFFERENT clubs under common
   // ownership (hence the shared website).
   // docs/golf-course-content-audit-2026-07.md item 8 is the primary source: the
-  // merge pair is bangkok/suvarnabhumi-golf-country-club <->
+  // merge pair was bangkok/suvarnabhumi-golf-country-club <->
   // bangkok/phoenix-gold-golf-country-club (one 36-hole RTJ Jr. course in Nong
-  // Chok), and pattaya/phoenix-gold-golf-club-pattaya "is the genuine Pattaya
-  // sister".
+  // Chok), merged 2026-08-30 — and pattaya/phoenix-gold-golf-club-pattaya "is
+  // the genuine Pattaya sister".
   { region: 'pattaya', slug: 'amata-spring-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'pattaya', slug: 'bangpra-international-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'pattaya', slug: 'chatrium-golf-resort-soi-dao', locales: ['th', 'ja', 'ko', 'zh'] },
@@ -637,7 +640,8 @@ export const COURSE_DETAIL_I18N: {
   { region: 'chiang-mai', slug: 'north-hill-chiang-mai', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'chiang-mai', slug: 'royal-chiang-mai-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'chiang-mai', slug: 'summit-green-valley-chiangmai', locales: ['th', 'ja', 'ko', 'zh'] },
-  // Batch 9 (2026-08) — bangkok tranche, 9/55 -> 21/55. NOT roster completion,
+  // Batch 9 (2026-08) — bangkok tranche, 9 -> 21 of the then-55 bangkok courses
+  // (54 since the 2026-08-30 duplicate-course merge). NOT roster completion,
   // and the GSC data is why. Over 90 days the bangkok course pages drew 3,799
   // impressions (537 native-script) across 42 pages; the two remaining 0%
   // regions drew 48 (khao-yai, 1 native) and 8 (kanchanaburi, 1 native). A
@@ -645,15 +649,17 @@ export const COURSE_DETAIL_I18N: {
   // impression a quarter, so this takes the top untranslated bangkok pages by
   // impressions instead.
   //
-  // Two courses that outrank every entry below are deliberately EXCLUDED:
-  // `suvarnabhumi-golf-country-club` (1,808 imp — the largest untranslated
-  // course page on the site) and `phoenix-gold-golf-country-club` (6 imp) are
-  // the SAME physical course under two slugs. Same designer, same 36 holes,
-  // same 999/1,199 rates, same Nong Chok district, and the Phoenix Gold file's
-  // own prose says it is "the renamed Suvarnabhumi Golf & Country Club — the
-  // same Nong Chok facility". Their coordinates also disagree by ~7 km, so one
-  // is wrong. Translating either would quadruple a duplicate-content page;
-  // the slug merge is its own PR.
+  // The duplicate-slug exclusion recorded here has been RESOLVED (2026-08-30):
+  // `suvarnabhumi-golf-country-club` and `phoenix-gold-golf-country-club` were
+  // the same 36-hole Nong Chok course under two slugs, and the former now 308s
+  // to the latter (next.config.js). The ~7 km coordinate disagreement was the
+  // tell, and Google Places settled it — BOTH stored pairs were drift.
+  //
+  // The surviving `phoenix-gold-golf-country-club` is still untranslated, and
+  // that is deliberate rather than pending: the demand this page carried was
+  // English and Thai "golf near Suvarnabhumi airport" intent, which belongs to
+  // /golf-courses/near/suvarnabhumi-airport/, not to a four-locale batch. Its
+  // own branded query volume (67 imp / 90d) does not justify one yet.
   //
   // `bangpoo-golf-sports-club` (9 imp) was dropped by the pre-flight bearing
   // check: its prose says "40 km south of central Bangkok" three times, but its

@@ -2210,7 +2210,7 @@ const routeTests: RouteTest[] = [
   },
   // Generated OG cards (lib/og-card.tsx) — the course JSON-LD references the
   // detail-page card as its schema image, so a broken OG route silently
-  // breaks structured data on all 149 pages without these checks.
+  // breaks structured data on all 148 pages without these checks.
   {
     path: "/golf-courses/opengraph-image/",
     expectedStatus: [200],
@@ -2630,8 +2630,13 @@ const routeTests: RouteTest[] = [
     contentAbsent: '/zh/golf-courses/bangkok/lakewood-country-club',
   },
   // Same invariant on the top-level hub, whose map (HubMapExplorer) links
-  // every one of the 149 courses. The region-hub pair above only proves the
-  // per-region roster; an always-prefix regression puts 149 wrong hrefs on
+  // 147 of the 148 courses — NOT all 148, and the difference is load-bearing:
+  // HubMapExplorer.tsx drops any course failing hasTrustedCoordinates() before
+  // it builds a marker, and 1 of the 148 has null coordinates
+  // (kanchanaburi/woo-sung-castle-hill). 148 is the size of the `hrefs` map the
+  // server hands the component, not the link count — see the same measurement
+  // in lib/translated-routes.ts. The region-hub pair above only proves the
+  // per-region roster; an always-prefix regression puts 147 wrong hrefs on
   // THIS page, and the four '/xx/golf-courses/' routeTests above assert only
   // <main id="main-content">, so they all still pass. Separate entries rather
   // than extra fields: RouteTest carries one marker each, and the <main>
@@ -3010,6 +3015,32 @@ const redirectTests: RedirectTest[] = [
     expectedStatus: 308,
     expectedLocation: "/golf-courses/kanchanaburi/nichigo-resort-country-club/",
   },
+  // Duplicate-course merge (2026-08): suvarnabhumi-golf-country-club and
+  // phoenix-gold-golf-country-club described the same 36-hole Nong Chok course.
+  // The retired slug carried 1,792 impressions / 90d — the largest course page
+  // on the site — so this 308 is load-bearing for real equity, not tidy-up.
+  // Status is asserted explicitly: a drop to 307 would quietly stop
+  // consolidating that equity while the landing path still looked right.
+  {
+    path: "/golf-courses/bangkok/suvarnabhumi-golf-country-club/",
+    expectedStatus: 308,
+    expectedLocation: "/golf-courses/bangkok/phoenix-gold-golf-country-club/",
+  },
+  // The OG-image child route is its own generateStaticParams route with
+  // dynamicParams=false, so the page redirect above does NOT cover it. This
+  // URL shape is the one the course page hand-builds as the GolfCourse JSON-LD
+  // `image` (`${enUrl}opengraph-image/`), i.e. the one the retired page
+  // published externally. The <meta og:image> is a DIFFERENT URL — Next emits
+  // it locale-prefixed and content-hashed (/en/…/opengraph-image?<hash>) — and
+  // no `source` targets it directly, because of the /en prefix rather than the
+  // query. It is covered transitively all the same: localePrefix 'as-needed'
+  // 307s /en/… to the unprefixed path, which the rule then 308s. See the
+  // matching note in next.config.js; do not restate this as "uncovered".
+  {
+    path: "/golf-courses/bangkok/suvarnabhumi-golf-country-club/opengraph-image/",
+    expectedStatus: 308,
+    expectedLocation: "/golf-courses/bangkok/phoenix-gold-golf-country-club/opengraph-image/",
+  },
 
   // Compare pairs retired by those two re-regions. The pair set is derived
   // from each region's top 3 and the route is dynamicParams=false, so without
@@ -3075,9 +3106,13 @@ const redirectTests: RedirectTest[] = [
 //     → 308 /golf-courses/bangkok/kumlung-ake-golf-course/   (normalisation)
 //     → 308 /golf-courses/isan/kumlung-ake-golf-course/      (the redirect)
 //
-// i.e. still two hops, and the configured destination on the no-slash entry is
-// never read. The trailing-slash entries are the live ones; the no-slash ones
-// are dead config.
+// i.e. still two hops. Be careful with the next sentence, because this comment
+// asserted its OPPOSITE until 2026-08-30 and next.config.js had already
+// measured the truth on prod twice: Next normalises the source PATTERN too
+// (modifyRouteRegex appends an optional trailing slash), so a no-slash
+// `source` matches BOTH spellings. The two forms are therefore the SAME rule
+// and listing both is REDUNDANT — it is not the case that "the trailing-slash
+// entry is the live one and the no-slash one is dead config".
 //
 // These assertions deliberately test the OUTCOME (follow to the end) rather
 // than either hop, so they hold whichever way the dead entries are cleaned up,
@@ -3567,7 +3602,7 @@ async function runRedirectTests() {
       } else if (landed !== t.finalPath) {
         fail(
           label,
-          `chain ended at ${landed}, expected ${t.finalPath} — a slash-less inbound link no longer reaches the destination (the TRAILING-SLASH source in next.config.js is the live one; the no-slash twin is dead config and cannot cover for it)`,
+          `chain ended at ${landed}, expected ${t.finalPath} — a slash-less inbound link no longer reaches the destination. Check next.config.js: a no-slash source matches BOTH spellings (Next appends an optional trailing slash to the source pattern), so deleting the no-slash entry removes the rule outright rather than leaving its twin to cover it.`,
         );
       } else {
         pass(label);
@@ -4896,7 +4931,7 @@ async function runCourseDetailRegistryLivenessTests() {
 
     // Its own floor, because the package branch goes vacuous INDEPENDENTLY of the
     // one above: the general Offer count stays in the hundreds while the branch that
-    // matters here drops to zero. Today 20 of 149 courses carry fee_is_package, but
+    // matters here drops to zero. Today 20 of 148 courses carry fee_is_package, but
     // this corpus is REGISTRY-derived, so only the 14 in COURSE_DETAIL_I18N reach it.
     // 13 emit 2 rates and alpine-golf-resort-chiang-mai emits 1 (null weekend fee),
     // so 13*2*4 + 1*4 = 108. Re-derive, do not assume a courses x locales x rates
@@ -5404,7 +5439,7 @@ async function runPriceTierRoundupLanguageTests() {
       // L6 did not, and L6 also went without the floor below.
       // Per-COURSE, not a widened global set. The first version appended the two
       // package forms to one `allowed` array shared by every item, which accepted
-      // "Weekday package" for any of the 148 NON-package courses — L2 got the
+      // "Weekday package" for any of the 128 NON-package courses — L2 got the
       // per-course branch in the same commit and L6 did not.
       const pkg = cat?.packageHeading;
       const allowedFor = (c: { fee_is_package?: boolean }) =>
@@ -5416,18 +5451,25 @@ async function runPriceTierRoundupLanguageTests() {
           : [cat?.weekdayGreenFee, cat?.lowSeasonGreenFee];
       const allowed = [cat?.weekdayGreenFee, cat?.lowSeasonGreenFee];
       const { loadCourseFiles: loadForL6 } = await import("./course-files");
-      // Keyed on course.name because that is what the ItemList emits. KNOWN
-      // HAZARD: names are not unique — "Phoenix Gold Golf & Country Club" maps
-      // to two slugs (bangkok/phoenix-gold-golf-country-club and
-      // pattaya/phoenix-gold-golf-club-pattaya). Neither carries fee_is_package
-      // today, so this is sound; if either ever gains the flag, the OTHER is
-      // misclassified as a package course and this section goes falsely red.
-      // The sound key is el.item.url, which carries the slug — switch to it if
-      // a Phoenix Gold course is ever flagged.
-      const packageNames = new Set(
+      // Keyed on the item URL PATH, which carries the slug and is therefore
+      // unique. This used to key on course.name with a documented hazard
+      // attached: names are not unique — bangkok/phoenix-gold-golf-country-club
+      // and pattaya/phoenix-gold-golf-club-pattaya both shipped the name
+      // "Phoenix Gold Golf & Country Club", so flagging either fee_is_package
+      // would have misclassified the OTHER and reddened this section falsely.
+      // The 2026-08-30 duplicate-course merge renamed the Bangkok course to
+      // "Phoenix Gold Golf Bangkok", which happens to break that specific
+      // collision — but a name collision is not a property anything enforces,
+      // so the guard now uses the key that cannot collide rather than relying
+      // on the corpus staying lucky.
+      //
+      // Path, not the full URL: golfCourseItem builds it from SITE_URL, which
+      // need not equal the BASE this smoke run is pointed at.
+      const packageUrlPaths = new Set(
         (await loadForL6())
           .filter(({ course }) => course.fee_is_package)
-          .map(({ course }) => course.name),
+          // Same expression golfCourseItem uses to build the url it emits.
+          .map(({ course }) => `/golf-courses/${course.region}/${course.slug}/`),
       );
       if (allowed.some((v) => v === undefined)) {
         fail(
@@ -5440,13 +5482,23 @@ async function runPriceTierRoundupLanguageTests() {
         const desc = el?.item?.makesOffer?.[0]?.description;
         if (desc === undefined) continue; // course with a null weekday fee
         itemsChecked++;
-        const isPackage = packageNames.has(el?.item?.name);
+        const itemPath = (() => {
+          const u = el?.item?.url;
+          if (typeof u !== "string") return undefined;
+          try {
+            return new URL(u).pathname;
+          } catch {
+            return undefined;
+          }
+        })();
+        const isPackage =
+          itemPath !== undefined && packageUrlPaths.has(itemPath);
         if (isPackage) packageItemsSeen++;
         const want = allowedFor({ fee_is_package: isPackage });
         if (!want.includes(desc)) {
           fail(
             `ItemList Offer.description is not a '${locale}' label on ${target}`,
-            `got ${JSON.stringify(desc)} for ${JSON.stringify(el?.item?.name)}, expected one of ${JSON.stringify(want)} — the route likely dropped its offerNames argument and fell back to the silent EN default.`,
+            `got ${JSON.stringify(desc)} for ${JSON.stringify(el?.item?.name)}, expected one of ${JSON.stringify(want)} — either the route dropped its offerNames argument and fell back to the silent EN default, or el.item.url stopped matching packageUrlPaths (check golfCourseItem's url expression in lib/jsonld-courses.ts, trailing slash included), which misclassifies every course at once.`,
           );
         }
       }
@@ -5497,7 +5549,7 @@ async function runPriceTierRoundupLanguageTests() {
   if (packageItemsSeen < 28) {
     fail(
       `L6 package-label branch ran on only ${packageItemsSeen} item(s)`,
-      "expected 28+ (measured 36 today: seven fee_is_package courses across four translated tier rosters; floored one course-contribution below true so a roster displacement cannot false-red). Zero means no package course reaches one any more, or packageNames stopped matching on course.name — not that the labels are right.",
+      "expected 28+ (measured 36 today: seven fee_is_package courses across four translated tier rosters; floored one course-contribution below true so a roster displacement cannot false-red). Zero means no package course reaches one any more, or packageUrlPaths stopped matching el.item.url's pathname — not that the labels are right.",
     );
   } else {
     pass(`L6 asserted package (not green-fee) ItemList labels on ${packageItemsSeen} item(s)`);

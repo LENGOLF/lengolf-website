@@ -55,7 +55,7 @@ Pipeline run: 2026-04-16
 | 8 | Krungthep Kreetha Sports Club | approved | ✅ /golf-courses/bangkok/krungthep-kreetha-sports-club/ |
 | 9 | The RG City Golf Club | approved (review_required) | ✅ /golf-courses/bangkok/royal-gems-golf-sports-club/ |
 | 10 | Summit Windmill Golf Club | approved — weekday 3,000 / weekend 4,000 THB | ✅ /golf-courses/bangkok/summit-windmill-golf-club/ |
-| 11 | Phoenix Gold Golf & Country Club | approved — weekend 3,500 THB | ✅ /golf-courses/bangkok/phoenix-gold-golf-country-club/ |
+| 11 | Phoenix Gold Golf & Country Club | approved — weekend 3,500 THB *(historical: that rack rate is the **Pattaya** sister course's. This course renamed to "Phoenix Gold Golf Bangkok" on 2026-08-30 when row 8 merged into it; its live rate is 999 wd / 1,199 we incl. caddie, cart 600.)* | ✅ /golf-courses/bangkok/phoenix-gold-golf-country-club/ |
 
 **Outstanding:** Phone verification and GPS coordinates for most courses — tracked in `data/data-gaps.md`.
 
@@ -282,7 +282,7 @@ Pipeline run: 2026-04-20
 | 5 | Artitaya Country Club | `artitaya-country-club` | ✅ /golf-courses/bangkok/artitaya-country-club/ |
 | 6 | Rajpruek Club | `rajpruek-club` | ✅ /golf-courses/bangkok/rajpruek-club/ |
 | 7 | Lakewood Country Club | `lakewood-country-club` | ✅ /golf-courses/bangkok/lakewood-country-club/ |
-| 8 | Suvarnabhumi Golf & Country Club | `suvarnabhumi-golf-country-club` | ✅ /golf-courses/bangkok/suvarnabhumi-golf-country-club/ |
+| 8 | Suvarnabhumi Golf & Country Club | `suvarnabhumi-golf-country-club` | ⛔ MERGED 2026-08-30 into `phoenix-gold-golf-country-club` (same Nong Chok course); slug 308s |
 | 9 | Windsor Park & Golf Club | `windsor-park-golf-club` | ✅ /golf-courses/bangkok/windsor-park-golf-club/ |
 | 10 | Cascata Golf Club | `cascata-golf-club` | ✅ /golf-courses/bangkok/cascata-golf-club/ |
 | 11 | Kiarti Thanee Country Club | `kiarti-thanee-country-club` | ✅ /golf-courses/bangkok/kiarti-thanee-country-club/ |
@@ -486,7 +486,7 @@ Pipeline run: 2026-04-21
 
 ## Phase 3 — complete
 
-All planned Phase 3 batches have now been processed (Batches 1–7). 14 regions live; 149 courses published. Remaining low-priority courses (Bhumibol Dam, Khao Laem, Naraihill, etc.) are documented in `data-gaps.md` as candidates for future phone verification.
+All planned Phase 3 batches have now been processed (Batches 1–7). 14 regions live; 148 courses published (149 until the 2026-08-30 duplicate-course merge). Remaining low-priority courses (Bhumibol Dam, Khao Laem, Naraihill, etc.) are documented in `data-gaps.md` as candidates for future phone verification.
 
 ---
 
@@ -512,7 +512,7 @@ Run each region through the full pipeline (Stages 1–5) in order.
 | Region index page `/golf-courses/bangkok/` | High | ✅ Done | Lists all Bangkok courses with fee + distance |
 | Hub page `/golf-courses/` | High | ✅ Done | Landing page linking to all regions + coming-soon teasers |
 | Smoke tests — hub + region indexes | Low | ✅ Done | Hub, Bangkok, Pattaya, Hua Hin, Phuket indexes + course detail routes in CI |
-| Internal linking — course pages | High | ✅ Done | Each course page now carries 10 unique internal links: 5 pre-existing footer/sidebar links + "Plan Your Trip" sidebar card (3 new links: `/golf-in-thailand-guide`, `/cost/how-much-does-golf-cost-bangkok`, `/lessons`) + "More [Region] courses" section (up to 3 sibling course cards + region index "View all" link). Guide page (`/golf-in-thailand-guide`) updated: 5 featured course rows now link to `/golf-courses/` pages; "Full guide" link replaced with "Browse all Bangkok courses" + "All 149 Thailand courses" links; 7 new HubCards added for the hub and 6 region pages. |
+| Internal linking — course pages | High | ✅ Done | Each course page now carries 10 unique internal links: 5 pre-existing footer/sidebar links + "Plan Your Trip" sidebar card (3 new links: `/golf-in-thailand-guide`, `/cost/how-much-does-golf-cost-bangkok`, `/lessons`) + "More [Region] courses" section (up to 3 sibling course cards + region index "View all" link). Guide page (`/golf-in-thailand-guide`) updated: 5 featured course rows now link to `/golf-courses/` pages; "Full guide" link replaced with "Browse all Bangkok courses" + "All {totalCourses} Thailand courses" links (the count is derived at render time, 148 today); 7 new HubCards added for the hub and 6 region pages. |
 | GPS coordinates + Google Maps URLs | Medium | Pending | All 11 Bangkok courses approximate — see `data-gaps.md` |
 | Phone number verification | Medium | Pending | 9 courses missing — see `data-gaps.md` |
 | Multilingual pages (KO / ZH / JA) | Phase 2 | Pending | Infrastructure in place (`locales` field), content not written |

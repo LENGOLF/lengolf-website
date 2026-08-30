@@ -211,7 +211,7 @@ These links need to be added to existing site pages as courses are published. Th
 The guide page has been updated with the following `/golf-courses/` links:
 
 - 5 featured course rows in the "Courses worth putting on your list" section now link directly to their course pages: Black Mountain → `/golf-courses/hua-hin/black-mountain-golf-club`, Pineapple Valley (formerly Banyan) → `/golf-courses/hua-hin/pineapple-valley-golf-club`, Nikanti → `/golf-courses/bangkok/nikanti-golf-club`, Alpine → `/golf-courses/bangkok/alpine-golf-club`, Thai Country Club → `/golf-courses/bangkok/thai-country-club`.
-- The former "Full guide: best golf courses near Bangkok" link has been replaced with two links: "Browse all Bangkok courses" → `/golf-courses/bangkok/` and "All 149 Thailand courses" → `/golf-courses/`.
+- The former "Full guide: best golf courses near Bangkok" link has been replaced with two links: "Browse all Bangkok courses" → `/golf-courses/bangkok/` and "All {totalCourses} Thailand courses" → `/golf-courses/` (the count is derived from REGION_META at render time, so it tracks the corpus automatically - it read 149 when this was written and 148 since the 2026-08-30 duplicate-course merge).
 - 7 new HubCards added to the Stage 1 Plan grid linking to `/golf-courses/` (hub) and 6 region pages: bangkok, pattaya, hua-hin, phuket, chiang-mai, khao-yai.
 
 This creates full reciprocal linking with the outbound links added to course pages (section 2).

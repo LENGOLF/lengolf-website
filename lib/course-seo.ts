@@ -58,7 +58,7 @@ export function toCourseSeoLocale(l: string): CourseSeoLocale {
  * NOTE the truthiness test rather than `??`: an EMPTY-STRING localized overview
  * falls back to EN here, where the three sibling fields in
  * `localizedCourseProse` would keep the `''`. No such string exists today (all
- * 149 courses × 4 locales censused), and returning an empty pull quote would be
+ * 148 courses × 4 locales censused, 2026-08-30), and returning an empty pull quote would be
  * worse than an English one, but the two rules genuinely differ — do not
  * describe them as identical.
  */
@@ -104,7 +104,9 @@ export function localizedCourseProse(
 
 const thb = formatBaht
 
-// The two boilerplate suffixes shared by 134/149 hand-written titles.
+// The two boilerplate suffixes shared by 144/148 hand-written titles
+// (re-measured 2026-08-30 against BOILERPLATE_TITLE itself; the previous
+// 134/149 was already wrong before the duplicate-course merge moved it).
 const BOILERPLATE_TITLE = /—\s*Green Fees, Course Guide & (?:Golf )?Club Rentals\s*$/
 
 /**
@@ -150,8 +152,19 @@ export function getCourseTitle(course: GolfCourse, locale: CourseSeoLocale = 'en
 /**
  * Data-driven meta description, unique per course. When the assembled string
  * runs long it degrades by dropping clauses (drive time, then designer) —
- * never by falling back to `locales.en.meta_description`, 77/149 of which
- * are the identical boilerplate this generator exists to replace.
+ * never by falling back to `locales.en.meta_description`, 59/148 of which
+ * share one boilerplate tail verbatim ("<name> green fees, course overview,
+ * tips, and how to arrange golf club rentals delivered to your Bangkok
+ * hotel") - the shape this generator exists to replace. Re-measured 2026-08-30.
+ *
+ * Be careful retiring the previous "77/149", because an earlier version of this
+ * sentence called it "stale in both terms" and that is FALSE. Measured at the
+ * commit that wrote it, the broader "green fees, course overview" boilerplate
+ * FAMILY really was 77 of 149 (75 of 148 today). It was an accurate measurement
+ * of a LOOSER predicate, stale only in its denominator — not an error. The 59
+ * here counts the strict "identical modulo the name" form, which was 61/149
+ * then. Two different predicates, both correctly measured; do not record the
+ * old one as a mistake.
  */
 export function getCourseDescription(course: GolfCourse, locale: CourseSeoLocale = 'en'): string {
   // Non-EN descriptions are hand-written data, not generated — so the 165-char
@@ -223,7 +236,7 @@ export interface CourseFaqItem {
  * Answers deliberately hedge on prices ("around", "confirm when booking")
  * because fees in data/golf-courses/ are point-in-time snapshots. The
  * club-rental answer mentions LENGOLF without quoting a price so a Supabase
- * pricing change can't silently desync 149 static pages.
+ * pricing change can't silently desync 148 static pages.
  *
  * Both the visible block and the FAQPage JSON-LD receive the SAME array from
  * the route, so they cannot diverge across locales either.

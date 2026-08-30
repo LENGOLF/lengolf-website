@@ -43,7 +43,7 @@ interface Props {
 /**
  * Satellite-view map of the course, displayed live through the Maps JS API
  * (per Google ToS — imagery is never stored or screenshotted). Golfers get
- * an aerial look at the actual layout on all ~145 course pages with
+ * an aerial look at the actual layout on all 147 course pages with
  * coordinates, with zero photo licensing.
  *
  * Initialisation is gated on an IntersectionObserver: the map sits below the
@@ -75,7 +75,7 @@ export default function CourseSatelliteMap({
 
   // Report the keyless case exactly once, like the two explorer maps do.
   // Without this, a dropped Maps key silently blanks the LARGEST surface
-  // (~145 course pages) while the 15 hub pages fire `map_unavailable` — the
+  // (147 course pages) while the 15 hub pages fire `map_unavailable` — the
   // dashboard would read as a minor partial outage instead of a total one.
   useEffect(() => {
     if (!enabled) pushMapUnavailable('course_satellite', 'no_key')

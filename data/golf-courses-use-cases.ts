@@ -5,7 +5,7 @@ import { pricesByDayOfWeek, feeLabelsEn } from '@/lib/course-fees'
  * Use-case taxonomy for /golf-courses/best-for/[use-case]/ pages.
  *
  * Per-decision (workstream A): tags live in this derivation file and are
- * NOT added as fields on the GolfCourse type. This keeps the 149 course
+ * NOT added as fields on the GolfCourse type. This keeps the 148 course
  * data files untouched and makes use-case rules easy to revise.
  *
  * Each rule is deterministic and reads only from existing GolfCourse fields

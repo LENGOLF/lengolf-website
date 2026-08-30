@@ -3,7 +3,7 @@
  *
  * Born from a real incident: Artitaya Country Club shipped with a ฿400
  * weekday green fee — a scraped Thai-national/promo rate presented as the
- * standard visitor rate. Fees are the single most-read fact on the 149
+ * standard visitor rate. Fees are the single most-read fact on the 148
  * course pages (hero, sidebar, FAQ, JSON-LD offers), so implausible values
  * must not ship silently.
  *
