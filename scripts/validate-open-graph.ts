@@ -32,8 +32,8 @@
  * number), and — the part that matters — NO page file
  * declares `twitter` or `icons` today, only the layout. So nothing LIVE was
  * given up; what was given up is coverage of a hypothetical future page-level
- * declaration. Section D fetches 34 URLs, and 13 of the 31 openGraph
- * declarations are unreachable from any of them; 8 of those 13 are under
+ * declaration. Section D fetches 35 URLs, and 12 of the 31 openGraph
+ * declarations are unreachable from any of them; 7 of those 12 are under
  * /golf-courses/ (measured), the other 5 being activities, best, cost, hotels
  * and second-hand-club detail. Coverage of the SUPPLIER (the layout, sole
  * source of both keys) is complete; coverage of a future page-level
@@ -65,7 +65,8 @@
  *
  * Smoke section D asserts the rendered artifact — og:type, og:site_name,
  * twitter:card, `<link rel="icon">` and `<link rel="apple-touch-icon">` — on
- * 34 URLs. (This line listed three of the five until a claim audit caught it,
+ * 35 URLs, plus og:title on the entries that pin a <title> needle. (This line
+ * listed three of the five until a claim audit caught it,
  * in the same commit whose message named that exact omission elsewhere.)
  * THIS gate runs with no server and covers every openGraph declaration in
  * app/; section D does not — see the scope note above for the 13 it misses.
