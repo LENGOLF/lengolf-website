@@ -3842,7 +3842,32 @@ async function runSeoTests() {
     );
   }
   for (const required of REQUIRED_TITLE_ASSERTIONS) {
-    const entry = seoTests.find((t) => t.path === required.path);
+    // `filter`, not `find`. `find` takes the FIRST match, so a duplicate entry
+    // for the same path placed BEFORE the real one is read instead of it —
+    // measured: a duplicate ahead of it false-reds, one after it goes green
+    // with the assertion silently answered by the wrong object. A path in this
+    // list must appear exactly once.
+    const matches = seoTests.filter((t) => t.path === required.path);
+    if (matches.length > 1) {
+      fail(
+        "D) seoTests title-assertion floor",
+        `${required.path} appears ${matches.length} times in seoTests — the floor ` +
+          `below resolves one of them and the others are unchecked; keep pinned ` +
+          `paths unique`,
+      );
+    }
+    const entry = matches[0];
+    if (entry?.titleContains && !entry.titleContains.why.trim()) {
+      // The design's premise is that needle and reason travel together, and
+      // only the needle was enforced. A blank `why` leaves the failure message
+      // as a bare string mismatch, which is precisely the state that gets a
+      // pinned assertion deleted by the next person who trips it.
+      fail(
+        "D) seoTests title-assertion floor",
+        `${required.path} has a blank titleContains.why — the needle survives but the ` +
+          `reason a maintainer needs in order to act on the failure does not`,
+      );
+    }
     if (!entry) {
       fail(
         "D) seoTests title-assertion floor",
@@ -3869,6 +3894,8 @@ async function runSeoTests() {
       );
     }
   }
+  let titleNeedlesJudged = 0;
+
   for (const t of seoTests) {
     const label = `SEO ${t.path}`;
     try {
@@ -3883,7 +3910,6 @@ async function runSeoTests() {
       } else if (langMatch[1] !== t.locale) {
         issues.push(`lang="${langMatch[1]}", expected "${t.locale}"`);
       }
-
       // <title> exists and is non-empty, no "undefined" or "404"
       const titleMatch = body.match(/<title>([^<]*)<\/title>/);
       if (!titleMatch || !titleMatch[1].trim()) {
@@ -3902,6 +3928,30 @@ async function runSeoTests() {
               `"${renderedTitle}". ${t.titleContains.why}`,
           );
         }
+        // Counted where the comparison actually HAPPENS, not where the entry is
+        // read — the L6 idiom from #122. Neither floor above can see a SKIPPED
+        // assertion: measured, `} else if (false && t.titleContains) {` ran zero
+        // comparisons and printed a byte-identical green section, because
+        // REQUIRED_TITLE_ASSERTIONS inspects the DATA and never whether the
+        // check ran. The equality after the loop is what closes that.
+        titleNeedlesJudged++;
+      }
+
+      // The pinned URL must be the URL asserted. This loop fetches with
+      // `redirect: "follow"`, so an entry pointing at a slug that 308s asserts
+      // the needle on the DESTINATION while claiming to cover the source —
+      // measured: pointing this entry at the retired
+      // /golf-courses/bangkok/suvarnabhumi-golf-country-club/ (which 308s here)
+      // went green. Bounded damage, since the needle must still appear
+      // somewhere, but it can assert about the wrong URL. Section A carries the
+      // same guard at its own fetch. Scoped to titleContains entries on
+      // purpose: the other 34 entries have followed redirects since they were
+      // written, and silently changing that is a different PR.
+      if (t.titleContains && res.redirected) {
+        issues.push(
+          `redirected to ${res.url} — a pinned-title entry must resolve directly, ` +
+            `or it asserts its needle against a different page than the one it names`,
+        );
       }
 
       // <meta name="description"> exists
@@ -4300,6 +4350,40 @@ async function runSeoTests() {
     } catch (err) {
       fail(label, `fetch error: ${(err as Error).message}`);
     }
+  }
+
+  // Did the needle comparisons actually RUN? Neither floor above can see a
+  // skipped assertion — they inspect the DATA. Measured: replacing the branch
+  // condition with `false && t.titleContains` evaluated zero comparisons and
+  // printed a byte-identical green section. This is the same shape #122 fixed
+  // in L6 (`judged !== itemsChecked`) and that checkPackageNoun fixes with
+  // `judged !== checked`.
+  //
+  // EQUALITY, not a floor, for the reason L6 records: a floor passes every
+  // `judged > expected` state, so it cannot tell "ran more than planned" from
+  // "the plan changed underneath it".
+  //
+  // Expected is derived from `seoTests` rather than from
+  // REQUIRED_TITLE_ASSERTIONS, so it also covers an UNPINNED titleContains
+  // entry. That makes it independently satisfiable at zero — drop every
+  // `titleContains` and both sides are 0 — which is exactly what the
+  // REQUIRED_TITLE_ASSERTIONS floor above rejects. The two compose; neither is
+  // sufficient alone.
+  const titleNeedlesExpected = seoTests.filter((t) => t.titleContains).length;
+  if (titleNeedlesJudged !== titleNeedlesExpected) {
+    fail(
+      "D) seoTests title-assertion coverage",
+      `${titleNeedlesExpected} entr(ies) declare a titleContains but only ` +
+        `${titleNeedlesJudged} needle comparison(s) ran — the assertions were SKIPPED, ` +
+        `not merely failed. Look for an early exit or a disarmed condition between the ` +
+        `<title> match and the needle comparison. If the run is already red with a fetch ` +
+        `error or a missing <title> on one of those URLs, prefer that diagnosis: those ` +
+        `branches legitimately bypass the comparison, and they report separately.`,
+    );
+  } else {
+    pass(
+      `D) judged every one of the ${titleNeedlesExpected} pinned <title> needle(s)`,
+    );
   }
 }
 
