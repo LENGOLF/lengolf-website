@@ -34,7 +34,8 @@
     "test:mobile:report": "playwright show-report",
     "validate:fee-labels": "tsx scripts/validate-fee-labels.ts",
     "validate:fee-labels:self-test": "tsx scripts/validate-fee-labels.ts --self-test",
-    "validate:pr-rigor": "tsx scripts/validate-pr-rigor.ts"
+    "validate:pr-rigor": "tsx scripts/validate-pr-rigor.ts",
+    "validate:pr-rigor:self-test": "tsx scripts/validate-pr-rigor.ts --self-test"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.92.0",

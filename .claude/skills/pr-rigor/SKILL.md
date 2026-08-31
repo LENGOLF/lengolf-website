@@ -143,6 +143,28 @@ and is the natural instinct.
    another commit afterwards to re-evaluate. Editing the body and hitting re-run
    is the one thing that cannot work.
 
+**The floor is tiered, and the tier is not yours to declare.** A PR that changes
+only documentation — `.md` files outside `.github/` — takes a floor of **1**.
+Everything else takes **3**. The gate derives that from the PR's changed paths,
+which is data you cannot write into the body; an author-declared "this one is
+small" would collapse the gate to "state any number", which is the failure it
+exists to prevent. Every unknown resolves to the strict floor: a missing file
+list, a missing count, or a list that disagrees with the payload's own count all
+take 3.
+
+A documentation-only PR gets a REDUCED pass, not a skipped one. The pass that
+matters most there is the **claim audit** — a false claim in CLAUDE.md or in a
+skill is read as fact by the next session, which is why the role passes above
+call it worse than a bug.
+
+**Size is deliberately not the criterion**, and it was measured before being
+rejected. Over the last 40 merged PRs a "<= 50 lines" rule would have exempted
+#119 (43 lines, 4 files), whose review pass is what caught `rancho-charnvee`
+being flagged in error, plus #101 (32 lines) and #103 (37), both subtle locale
+defects live on translated pages. In this repo a small diff is not a low-risk
+one. What correlates is whether the PR can change rendered output or gate
+behaviour at all, which is a path property.
+
 **Verify locally before you push.** This is the only step in the `lint` job that
 cannot be checked by running the repo alone — it needs `PR_BODY` and
 `GITHUB_EVENT_NAME` from the environment. Against an existing PR:
@@ -177,10 +199,11 @@ Post as a PR comment, in this order:
 
 The disclosure above is self-attested by the party with the incentive to skip it,
 which is why `npm run validate:pr-rigor` exists: CI fails the `lint` job when the
-PR body carries no prose disclosure line with N >= 3 — prose being load-bearing,
-per Required disclosure above. It cannot
-prove the agents ran — it makes *silent omission* impossible, forcing an explicit
-claim that a reviewer can then challenge. This gate was added because the very
+PR body carries no prose disclosure line at or above the floor for that PR — 1
+for a documentation-only change, 3 for everything else, with prose and the tier
+both load-bearing, per Required disclosure above. It cannot prove the agents ran
+— it makes *silent omission* impossible, forcing an explicit claim that a
+reviewer can then challenge. This gate was added because the very
 first PR to carry this skill (#93) shipped without the disclosure it mandates.
 
 ## Anti-patterns this gate exists to stop
