@@ -108,21 +108,62 @@ disposition, plus rendered output per site, is.
 
 ## Required disclosure
 
-Every pr-rigor verdict — in the PR comment and in any statement to the user —
-carries this line, filled in honestly:
+Every pr-rigor verdict — in the PR body, in the PR comment, and in any statement
+to the user — carries this line, filled in honestly, on a line of its own:
 
-```
 Independent review agents spawned: N
-```
 
 plus an explicit statement of whether it was a real multi-agent pass or an
 inline self-read. If N is 0, you may not report a verdict at all.
+
+**That line is written above as plain prose, and that is not a formatting
+accident — it is the only form the gate accepts.** In the PR body, do not wrap it
+in a fenced code block, do not put it in backticks, and do not set it behind a
+`>` blockquote. `scripts/validate-pr-rigor.ts` strips fenced blocks, inline code
+spans and blockquoted lines from the body *before* matching, deliberately: a body
+that QUOTES the requirement in backticks was the decoy that defeated the gate's
+original first-match read (see the long comment above the `prose` const in that
+file). A quoted line is therefore not a disclosure — it is precisely the shape
+the gate was hardened to ignore.
+
+Measured on PR #123's real body, whose disclosure is present, correct and reads
+6 — prose exits 0; the identical body with that one line fenced, backticked or
+blockquoted exits 1 with *"PR body is missing the pr-rigor disclosure line"*, all
+three. PR #123 lost a full CI round to the fenced form, which reads as emphasis
+and is the natural instinct.
+
+**Two traps here, and they are independent — you can hit either one alone.**
+
+1. **Form.** Plain prose, in the PR **body**. The gate reads
+   `github.event.pull_request.body`; it never sees PR comments, so a verdict
+   posted only as a comment leaves the body bare and the gate red.
+2. **Ordering.** It reads that body from the **event payload**, so editing the
+   description does not re-trigger the check and re-running the job replays the
+   stale body. Write the line into the body BEFORE the final push, or push
+   another commit afterwards to re-evaluate. Editing the body and hitting re-run
+   is the one thing that cannot work.
+
+**Verify locally before you push.** This is the only step in the `lint` job that
+cannot be checked by running the repo alone — it needs `PR_BODY` and
+`GITHUB_EVENT_NAME` from the environment. Against an existing PR:
+
+```bash
+PR_BODY="$(gh pr view <N> --json body --jq .body)" GITHUB_EVENT_NAME=pull_request npm run validate:pr-rigor
+```
+
+Before the PR exists, run it against the draft body you are about to post:
+
+```bash
+PR_BODY="$(cat pr-body.md)" GITHUB_EVENT_NAME=pull_request npm run validate:pr-rigor
+```
 
 ## Report format
 
 Post as a PR comment, in this order:
 
 1. **Disclosure** — agent count, angles, and whether anything was a self-read.
+   The count line belongs in the PR **body** as prose as well as in this comment
+   — the gate reads the body only. See Required disclosure above.
 2. **The ones that mattered** — defects that would have shipped, with impact.
 3. **Also fixed** — lower-severity findings applied.
 4. **Confirmed clean** — what was checked and held, so the reader knows the
@@ -136,7 +177,8 @@ Post as a PR comment, in this order:
 
 The disclosure above is self-attested by the party with the incentive to skip it,
 which is why `npm run validate:pr-rigor` exists: CI fails the `lint` job when the
-PR body has no `Independent review agents spawned: N` line with N >= 3. It cannot
+PR body carries no prose disclosure line with N >= 3 — prose being load-bearing,
+per Required disclosure above. It cannot
 prove the agents ran — it makes *silent omission* impossible, forcing an explicit
 claim that a reviewer can then challenge. This gate was added because the very
 first PR to carry this skill (#93) shipped without the disclosure it mandates.
