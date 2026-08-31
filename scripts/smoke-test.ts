@@ -4692,12 +4692,13 @@ async function runLlmDiscoverabilityTests() {
     fail("Sitemap unique URLs", `fetch error: ${(err as Error).message}`);
   }
 
-  // 6) Every page advertises llms.txt via an HTTP Link header (next.config.js
-  // headers()). A header, not a <head> tag, because Next merges metadata per
-  // KEY and page-level `alternates` (canonical) would silently replace a
-  // layout-level alternates.types — the og:site_name failure shape. Assert on
-  // the homepage; the config source pattern is /:path* so one URL stands for
-  // all.
+  // 6) Every page advertises llms.txt via an HTTP Link header, appended in
+  // middleware.ts (withLlmsLink). Middleware, not next.config headers() and
+  // not metadata: next-intl's middleware sets its own `link` header (hreflang)
+  // which REPLACES a config-attached Link on the same response — measured —
+  // and page-level `alternates` (canonical) would per-key-replace a
+  // layout-level alternates.types, the og:site_name failure shape. Assert on
+  // the homepage; every page route flows through the same middleware return.
   try {
     const res = await fetch(`${BASE}/`, { redirect: "follow" });
     const link = res.headers.get("link") || "";
