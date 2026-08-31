@@ -3255,12 +3255,24 @@ const seoTests: SeoTest[] = [
   // slug here. After that merge the slug, the H1 and the name all read "Phoenix
   // Gold Golf Bangkok", and getCourseDescription ALWAYS generates the EN
   // description — it never reads locales.en.meta_description — so the
-  // parenthetical in the hand-written locales.en.title is the last surviving
-  // carrier of the former club name on the page. Per the GSC figures in that
-  // file's docblock (marketing.gsc_query_daily, 90 days to 2026-08-30, NOT
-  // reproducible from this tree and not to be re-quoted forward as a fact about
-  // a later window), "suvarnabhumi golf and country club" is the one query that
-  // has ever converted here.
+  // parenthetical in the hand-written locales.en.title is the only carrier of
+  // the former club name in the page's SERP METADATA: the <title>, and the
+  // og:title derived from it. Per the GSC figures in that file's docblock
+  // (marketing.gsc_query_daily, 90 days to 2026-08-30, NOT reproducible from
+  // this tree and not to be re-quoted forward as a fact about a later window),
+  // "suvarnabhumi golf and country club" is the one query that has ever
+  // converted here.
+  //
+  // SCOPE THAT CLAIM CAREFULLY, because the first version of this comment said
+  // "the last surviving carrier of the former club name ON THE PAGE" and that
+  // is FALSE — caught by review, measured against rendered markup. The former
+  // name also ships in visible body copy twice (prose.overview "later known as
+  // Suvarnabhumi Golf & Country Club", prose.tips "older listings still use
+  // …") and inside the GolfCourse JSON-LD description, which is prose.overview.
+  // What the <title> uniquely holds is the SERP surface: the generated meta
+  // description carries no former name (verified against the rendered page).
+  // So deleting this string does not erase the term from the document — it
+  // removes it from the one surface the converting query is matched against.
   //
   // WHY IT NEEDED A *SMOKE* GUARD. Mutation-tested during the PR #120 review:
   // blanking locales.en.title drops the parenthetical and ALL SEVEN server-free
@@ -3280,10 +3292,14 @@ const seoTests: SeoTest[] = [
     titleContains: {
       needle: "formerly Suvarnabhumi Golf & Country Club",
       why:
-        "That parenthetical is the last place this page carries the club's former name " +
-        "(getCourseDescription always generates the EN description and never reads " +
-        "locales.en.meta_description), and per the GSC window in the course file's " +
-        "docblock it is the page's only converting query. TWO edits delete it, and both " +
+        "That parenthetical is the only carrier of the club's former name in this page's " +
+        "SERP metadata — the <title> and the og:title derived from it — because " +
+        "getCourseDescription always generates the EN description and never reads " +
+        "locales.en.meta_description. (The name does still ship in body prose and in the " +
+        "GolfCourse JSON-LD description, so this is not the last mention in the document; " +
+        "it is the last one on the surface the query is matched against.) Per the GSC " +
+        "window in the course file's docblock it is the page's only converting query. " +
+        "TWO edits delete it, and both " +
         "go green on every server-free gate: (a) blanking locales.en.title in " +
         "data/golf-courses/bangkok/phoenix-gold-golf-country-club.ts, which falls " +
         "through to the generated '<name> — Green Fees & Guide'; and (b) setting " +
