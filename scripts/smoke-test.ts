@@ -3271,49 +3271,84 @@ const seoTests: SeoTest[] = [
   // …") and inside the GolfCourse JSON-LD description, which is prose.overview.
   // What the <title> uniquely holds is the SERP surface: the generated meta
   // description carries no former name (verified against the rendered page).
-  // So deleting this string does not erase the term from the document — it
-  // removes it from the one surface the converting query is matched against.
+  // So deleting this string does not erase the term from the document. It
+  // removes it from the SERP metadata — the highest-weighted surface, and the
+  // one the snippet is built from. Not "the only surface matched against":
+  // search engines match body copy too, and this page's body carries the term
+  // twice. That weaker claim is the true one.
   //
-  // WHY IT NEEDED A *SMOKE* GUARD. Mutation-tested during the PR #120 review:
-  // blanking locales.en.title drops the parenthetical and ALL SEVEN server-free
-  // gates stay green. validate:course-slots is registry-scoped and this course
-  // is absent from COURSE_DETAIL_I18N, so it never reads the field;
-  // validate:courses lints fees and rosters; validate:i18n lints the non-EN
-  // catalogs. Nothing reads a rendered EN <title>, and no routeTests entry
-  // pinned this page either. Section D is the only place the assertion can live.
+  // WHY THIS PAGE AND NOT A GENERAL RULE. This is the argument the first draft
+  // missed, and it is the strongest one. Nine of the 148 rendered EN titles
+  // carry a parenthetical, but EIGHT of them carry it inside `course.name`,
+  // which every branch of getCourseTitle interpolates — so for those eight the
+  // parenthetical survives the package branch, the closed branch and the
+  // generated fallback alike, and losing it takes a RENAME, which also moves
+  // the H1, the region roster, /compare/, /near/ and the JSON-LD name. A loud
+  // edit, not a silent one. phoenix-gold is the only course carrying its
+  // parenthetical in the DISCARDABLE locales.en.title. So this is not one
+  // instance of a class with unguarded siblings — on the EN corpus there is no
+  // sibling. (There is one in the NON-EN corpus, and it is already broken:
+  // /ja/golf-courses/hua-hin/pineapple-valley-golf-club/ renders （ホアヒン）
+  // where th/ko/zh render their "formerly Banyan Golf Club" equivalent. Out of
+  // scope here — it needs a ja translation decision and native QA — and named
+  // in the PR's known gaps rather than silently fixed.)
+  //
+  // WHY IT NEEDED A *SMOKE* GUARD. Mutation-tested during the PR #120 review
+  // and re-measured here: blanking locales.en.title drops the parenthetical
+  // and every server-free check stays green. Derive that set rather than
+  // trusting a number — earlier drafts of this comment said "ALL SEVEN" and
+  // the lint job runs SEVENTEEN steps (16 runnable locally; validate:pr-rigor
+  // reads the PR body from the event payload). The reason none of them catches
+  // it: validate:course-slots is registry-scoped and this course is absent
+  // from COURSE_DETAIL_I18N; validate:courses lints fees, rosters and the
+  // package noun, never a required substring; validate:i18n reads the non-EN
+  // catalogs. No routeTests or seoTests entry pinned this page either.
+  //
+  // BE HONEST ABOUT THE ALTERNATIVE, because the first draft said "section D
+  // is the only place the assertion can live" and that is FALSE.
+  // scripts/validate-courses.ts already imports getCourseTitle and calls it per
+  // course in checkPackageNoun, server-free, in the fast lint job — a source
+  // level variant of this assertion could live there and would catch both data
+  // level deletions with ~90s feedback instead of a build plus a server. What
+  // it could NOT do is prove the value still REACHES the rendered tag: if
+  // generateMetadata stopped calling getCourseTitle, or the title template
+  // mangled it, only a fetch notices. This is a claim about SERP metadata, so
+  // it is asserted on the shipped metadata. Both would be better than one.
   //
   // SECOND-ORDER BENEFIT, stated as a side effect and not as the reason: this
-  // is also the first URL in seoTests under /golf-courses/, a tree CLAUDE.md
-  // names as holding 8 of the 13 openGraph declarations unreachable from this
-  // section. It closes one of those eight, not the gap.
+  // is the first URL in seoTests under /golf-courses/. Before it, 13 of the 31
+  // openGraph declarations under app/ were unreachable from this section, 8 of
+  // them under /golf-courses/; after it, 12 and 7 (re-derived, not decremented
+  // by hand). It closes one of those eight, not the gap.
   {
     path: "/golf-courses/bangkok/phoenix-gold-golf-country-club/",
     locale: "en",
     titleContains: {
       needle: "formerly Suvarnabhumi Golf & Country Club",
       why:
-        "That parenthetical is the only carrier of the club's former name in this page's " +
-        "SERP metadata — the <title> and the og:title derived from it — because " +
-        "getCourseDescription always generates the EN description and never reads " +
-        "locales.en.meta_description. (The name does still ship in body prose and in the " +
-        "GolfCourse JSON-LD description, so this is not the last mention in the document; " +
-        "it is the last one on the surface the query is matched against.) Per the GSC " +
-        "window in the course file's docblock it is the page's only converting query. " +
-        "TWO edits delete it, and both " +
-        "go green on every server-free gate: (a) blanking locales.en.title in " +
-        "data/golf-courses/bangkok/phoenix-gold-golf-country-club.ts, which falls " +
-        "through to the generated '<name> — Green Fees & Guide'; and (b) setting " +
-        "fee_is_package on that course — getCourseTitle's package branch fires on " +
-        "fee_is_package && /green fee/i.test(handWritten), and the hand-written title " +
-        "matches that regex, so it returns '<name> — All-In Rates & Guide'. (b) is the " +
-        "live one: this course sits in the open caddie-bundled-but-cart-extra owner " +
-        "ruling (caddie 0, cart 600), so resolving that ruling in favour of the flag is " +
-        "a REAL trade rather than a mistake — but it costs this string, so take it " +
-        "deliberately. To keep BOTH, give the course a hand-written EN title that omits " +
-        "the words 'green fee': getCourseTitle honours such a title verbatim even when " +
-        "fee_is_package is set (lib/course-seo.ts, the branch immediately after the " +
-        "package guard). Otherwise accept the loss and delete this assertion in the " +
-        "same commit, with the reason in the message.",
+        "This page's <title> is the only carrier of the club's former name in its SERP " +
+        "metadata, and per the GSC window in the course file's docblock that name is the " +
+        "page's only converting query. See the comment above this entry for the evidence; " +
+        "what you need in order to act is below. AT LEAST SIX edits delete this string, " +
+        "and this guard catches all six because it asserts the rendered output rather " +
+        "than a cause — so do not assume the two named here are what happened. The two " +
+        "LIVE risks: (a) blanking locales.en.title, which falls through to the generated " +
+        "'<name> — Green Fees & Guide'; and (b) setting fee_is_package, where " +
+        "getCourseTitle's package branch fires on /green fee/i against the hand-written " +
+        "title and returns '<name> — All-In Rates & Guide'. (b) is the one to expect: " +
+        "this course sits in the open caddie-bundled-but-cart-extra owner ruling " +
+        "(caddie 0, cart 600), so flagging it is a REAL trade, not a mistake — but it " +
+        "costs this string. TO KEEP BOTH, give the course a hand-written EN title that " +
+        "omits the words 'green fee': getCourseTitle honours such a title verbatim even " +
+        "with the flag set (lib/course-seo.ts, the branch after the package guard; " +
+        "verified by mutation). The other four causes, none of them named above: " +
+        "operational_status 'permanently_closed'; a rewritten title that simply drops " +
+        "the parenthetical; a title given the '— Green Fees, Course Guide & Golf Club " +
+        "Rentals' suffix, which BOILERPLATE_TITLE then discards; and widening " +
+        "BOILERPLATE_TITLE in lib/course-seo.ts — a cross-file edit nobody would make " +
+        "with a Bangkok course file open. If the loss is deliberate, delete this " +
+        "assertion and its REQUIRED_TITLE_ASSERTIONS entry in the same commit, with the " +
+        "reason in the message.",
     },
   },
 ];
@@ -3324,26 +3359,56 @@ const seoTests: SeoTest[] = [
  * clean section having asserted nothing. CLAUDE.md requires "a minimum-input
  * floor with a real number, not `> 0`" for exactly this; sections L2, L3, L4,
  * L6, O and P all carry one and this section did not.
+ *
+ * SCOPE: this counts URLs and nothing else. Section D now has TWO floors —
+ * see REQUIRED_TITLE_ASSERTIONS below for the one guarding the <title>
+ * assertions, which this constant provably does not cover: deleting the
+ * pinned entry and adding any other URL holds this count at 35.
  */
 const MIN_SEO_URLS = 35;
 
 /**
- * Anti-vacuity for the `titleContains` assertion(s) in `seoTests`.
+ * Anti-vacuity for the `titleContains` assertions in `seoTests`. Two-sided by
+ * design, in the idiom of EXPECTED_DECLARATIONS in validate-open-graph.ts:
+ * weakening the guard has to be done in two places, which makes it a decision
+ * rather than a slip.
  *
- * MIN_SEO_URLS alone does NOT cover them. It counts URLs, so deleting the
- * phoenix-gold entry and adding any other URL in the same commit keeps the
- * count at 35 and the title assertion silently disappears — a green section D
- * asserting strictly less than it did. A COUNT of titleContains entries has the
- * same hole one level down (swap the needle onto a different page). So this
- * pins the PATHS whose <title> must stay asserted, which is the only shape that
- * catches deletion, substitution and blanking alike.
+ * Each escalation below was found by mutation, and each one passed the guard
+ * that preceded it:
  *
- * `includes("")` is always true, so a blanked needle is checked separately
- * below and fails rather than passing vacuously.
+ *   - MIN_SEO_URLS alone does not cover this at all. It counts URLs, so
+ *     deleting the phoenix-gold entry and adding any other URL in the same
+ *     commit holds the count at 35 and the title assertion vanishes with
+ *     section D green.
+ *   - A COUNT of titleContains entries has the same hole one level down: swap
+ *     the needle onto a different page.
+ *   - Pinning the PATH alone still passes a needle BLANKED in place, because
+ *     `includes("")` is true everywhere.
+ *   - Pinning the path and requiring a non-blank needle still passes a needle
+ *     WEAKENED in place. Measured: `needle: "Phoenix Gold"` goes green while
+ *     the parenthetical is gone, because `course.name` is "Phoenix Gold Golf
+ *     Bangkok" and EVERY getCourseTitle fallback interpolates it. That is the
+ *     cheapest of the bypasses, so the needle STRING is pinned here too.
+ *
+ * KNOWN LIMIT, stated rather than implied: this pins what must be asserted, not
+ * that the assertion is sufficient. A needle that is present but no longer
+ * load-bearing (say the parenthetical is reworded and both sides updated
+ * together) is a deliberate two-file edit and is out of scope by construction.
  */
-const REQUIRED_TITLE_ASSERTION_PATHS = [
-  "/golf-courses/bangkok/phoenix-gold-golf-country-club/",
+const REQUIRED_TITLE_ASSERTIONS: { path: string; needle: string }[] = [
+  {
+    path: "/golf-courses/bangkok/phoenix-gold-golf-country-club/",
+    needle: "formerly Suvarnabhumi Golf & Country Club",
+  },
 ];
+
+/**
+ * ...and a floor on the floor. An emptied REQUIRED_TITLE_ASSERTIONS iterates
+ * zero times and every check below passes while asserting nothing — the
+ * empty-input vacuity path CLAUDE.md names explicitly, and the one shape the
+ * two-sided pin above cannot catch on its own.
+ */
+const MIN_TITLE_ASSERTIONS = 1;
 
 // E) Thai redirect tests (untranslated Thai routes → 301 to English)
 interface ThaiRedirectTest {
@@ -3765,23 +3830,42 @@ async function runSeoTests() {
         `it claims`,
     );
   }
-  // Every path in REQUIRED_TITLE_ASSERTION_PATHS must still be in seoTests AND
-  // still carry a non-blank needle. Both halves are needed: the first catches a
-  // deleted or renamed entry, the second catches a needle emptied to "" — which
-  // `includes()` would answer true for on every page in the corpus.
-  for (const required of REQUIRED_TITLE_ASSERTION_PATHS) {
-    const entry = seoTests.find((t) => t.path === required);
+  // The title-assertion floor. Checked before any fetch, so a network failure
+  // cannot skip it, and `fail()` accumulates rather than throwing, so every arm
+  // below reports independently.
+  if (REQUIRED_TITLE_ASSERTIONS.length < MIN_TITLE_ASSERTIONS) {
+    fail(
+      "D) seoTests title-assertion floor",
+      `REQUIRED_TITLE_ASSERTIONS holds ${REQUIRED_TITLE_ASSERTIONS.length} entr(ies), ` +
+        `expected at least ${MIN_TITLE_ASSERTIONS} — an emptied list iterates zero times ` +
+        `and every check below passes while asserting nothing`,
+    );
+  }
+  for (const required of REQUIRED_TITLE_ASSERTIONS) {
+    const entry = seoTests.find((t) => t.path === required.path);
     if (!entry) {
       fail(
         "D) seoTests title-assertion floor",
-        `${required} is no longer in seoTests — its <title> assertion is gone, so a ` +
+        `${required.path} is no longer in seoTests — its <title> assertion is gone, so a ` +
           `green section D below is asserting less than it claims`,
       );
     } else if (!entry.titleContains?.needle.trim()) {
       fail(
         "D) seoTests title-assertion floor",
-        `${required} no longer carries a non-blank titleContains.needle — an empty ` +
+        `${required.path} no longer carries a non-blank titleContains.needle — an empty ` +
           `needle passes includes() on every page, i.e. the assertion is vacuous`,
+      );
+    } else if (entry.titleContains.needle !== required.needle) {
+      // The two-sided half. A needle weakened IN PLACE — e.g. to "Phoenix Gold",
+      // which every getCourseTitle fallback still contains because it is part of
+      // course.name — passes the non-blank check above and goes green while the
+      // string this exists to protect is gone. Measured, not reasoned.
+      fail(
+        "D) seoTests title-assertion floor",
+        `${required.path} asserts needle "${entry.titleContains.needle}" but ` +
+          `REQUIRED_TITLE_ASSERTIONS pins "${required.needle}". If the change is ` +
+          `deliberate, update both; if not, this is the assertion being weakened in ` +
+          `place, which no other check here would catch`,
       );
     }
   }
@@ -3927,6 +4011,27 @@ async function runSeoTests() {
         issues.push("missing og:site_name");
       }
 
+      // og:title carries the same needle, for the entries that pin one. The
+      // `why` text asserts the <title> assertion covers "the og:title derived
+      // from it" — and that derivation is real (this route passes ONE `title`
+      // const to both `title` and `siteOpenGraph({ title })`) but it holds by
+      // shared source, not by construction. Nothing in the suite asserted
+      // og:title at all before this. One extra check on a fetch already being
+      // made turns the claim into something the gate proves.
+      if (t.titleContains && titleMatch) {
+        const ogTitle = ogTag("title");
+        if (ogTitle === null) {
+          issues.push("missing og:title");
+        } else if (!decodeEntities(ogTitle).includes(t.titleContains.needle)) {
+          issues.push(
+            `og:title no longer contains "${t.titleContains.needle}" — got ` +
+              `"${decodeEntities(ogTitle)}". The <title> and og:title come from one ` +
+              `source on this route, so they should fail together; only one failing ` +
+              `means that shared derivation broke`,
+          );
+        }
+      }
+
       // twitter:card, asserted on the RENDERED tag. This replaces the static
       // twitter/icons tripwire in validate:open-graph, which tried to predict
       // Next's resolution from source. Two of its three shapes were wrong,
@@ -3944,10 +4049,14 @@ async function runSeoTests() {
       //
       // The layout is the SOLE supplier of `card` site-wide, so checking the
       // resolved output here is complete coverage of the SUPPLIER. It is NOT
-      // complete coverage of a future page-level `twitter` declaration: 13 of
+      // complete coverage of a future page-level `twitter` declaration: 12 of
       // the 31 openGraph declarations are unreachable from any URL in this
-      // section — 8 of those 13 under /golf-courses/, the other 5 being
-      // activities, best, cost, hotels and second-hand-club detail. This was
+      // section — 7 of those 12 under /golf-courses/, the other 5 being
+      // activities, best, cost, hotels and second-hand-club detail. (Was 13 and
+      // 8 until the phoenix-gold entry made the course-detail route reachable;
+      // re-derived, not decremented by hand. That entry's own comment warns
+      // about this sentence, so it was updated in the same commit — this was
+      // the FIFTH site.) This was
       // the FOURTH site of that sentence, and the two commits that "fixed the
       // remaining sites" both edited this file without touching it. Grep the
       // claim, not the diff. A meta-name lookup, not property= — Twitter/X
