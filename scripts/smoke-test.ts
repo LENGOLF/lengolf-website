@@ -87,6 +87,40 @@ interface LinkTest {
 interface SeoTest {
   path: string;
   locale: "en" | "th" | "ja" | "ko" | "zh";
+  /**
+   * Optional: a substring the rendered <title> must contain, paired with the
+   * reason it must. The two travel together on purpose — a bare needle invites
+   * a future editor to delete it as an unexplained magic string, which is the
+   * exact way the assertion below would be lost.
+   *
+   * Write the needle the way a HUMAN reads it: it is compared against an
+   * entity-DECODED title (see decodeEntities), so an ampersand is written "&".
+   */
+  titleContains?: { needle: string; why: string };
+}
+
+/**
+ * Decode the entities React's text escaper emits, so a `titleContains` needle
+ * can be written in its human spelling.
+ *
+ * Load-bearing, not defensive. React escapes `&` in text, so a course title
+ * containing an ampersand renders as `Golf &amp; Country Club`, and a raw
+ * `includes("Golf & Country Club")` would be a guaranteed FALSE RED on correct
+ * markup. Verified against the live server rather than reasoned about, because
+ * this is exactly the class of "predict what the framework emits" mistake
+ * CLAUDE.md records four revisions of under the validate:open-graph bullet.
+ *
+ * `&amp;` is decoded LAST. Decoding it first turns `&amp;lt;` into `&lt;` and
+ * then into `<`, resurrecting markup the page had correctly escaped twice.
+ */
+function decodeEntities(s: string): string {
+  return s
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#x27;/g, "'")
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, "&");
 }
 
 interface NotFoundTest {
@@ -3213,6 +3247,59 @@ const seoTests: SeoTest[] = [
   // application/ld+json only. The 6 visible "096-668-2335" occurrences on this
   // page (header, CTA, footer) are correct human copy and are invisible to it.
   { path: "/location/golf-near-sathorn/", locale: "en" },
+  // The first /golf-courses/<region>/<slug>/ URL in this section, and the only
+  // entry anywhere in the suite that pins a specific <title> string.
+  //
+  // WHY A TITLE ASSERTION AT ALL. PR #120 (dda11dc) merged the duplicate
+  // bangkok/suvarnabhumi-golf-country-club into this file and 308'd the retired
+  // slug here. After that merge the slug, the H1 and the name all read "Phoenix
+  // Gold Golf Bangkok", and getCourseDescription ALWAYS generates the EN
+  // description — it never reads locales.en.meta_description — so the
+  // parenthetical in the hand-written locales.en.title is the last surviving
+  // carrier of the former club name on the page. Per the GSC figures in that
+  // file's docblock (marketing.gsc_query_daily, 90 days to 2026-08-30, NOT
+  // reproducible from this tree and not to be re-quoted forward as a fact about
+  // a later window), "suvarnabhumi golf and country club" is the one query that
+  // has ever converted here.
+  //
+  // WHY IT NEEDED A *SMOKE* GUARD. Mutation-tested during the PR #120 review:
+  // blanking locales.en.title drops the parenthetical and ALL SEVEN server-free
+  // gates stay green. validate:course-slots is registry-scoped and this course
+  // is absent from COURSE_DETAIL_I18N, so it never reads the field;
+  // validate:courses lints fees and rosters; validate:i18n lints the non-EN
+  // catalogs. Nothing reads a rendered EN <title>, and no routeTests entry
+  // pinned this page either. Section D is the only place the assertion can live.
+  //
+  // SECOND-ORDER BENEFIT, stated as a side effect and not as the reason: this
+  // is also the first URL in seoTests under /golf-courses/, a tree CLAUDE.md
+  // names as holding 8 of the 13 openGraph declarations unreachable from this
+  // section. It closes one of those eight, not the gap.
+  {
+    path: "/golf-courses/bangkok/phoenix-gold-golf-country-club/",
+    locale: "en",
+    titleContains: {
+      needle: "formerly Suvarnabhumi Golf & Country Club",
+      why:
+        "That parenthetical is the last place this page carries the club's former name " +
+        "(getCourseDescription always generates the EN description and never reads " +
+        "locales.en.meta_description), and per the GSC window in the course file's " +
+        "docblock it is the page's only converting query. TWO edits delete it, and both " +
+        "go green on every server-free gate: (a) blanking locales.en.title in " +
+        "data/golf-courses/bangkok/phoenix-gold-golf-country-club.ts, which falls " +
+        "through to the generated '<name> — Green Fees & Guide'; and (b) setting " +
+        "fee_is_package on that course — getCourseTitle's package branch fires on " +
+        "fee_is_package && /green fee/i.test(handWritten), and the hand-written title " +
+        "matches that regex, so it returns '<name> — All-In Rates & Guide'. (b) is the " +
+        "live one: this course sits in the open caddie-bundled-but-cart-extra owner " +
+        "ruling (caddie 0, cart 600), so resolving that ruling in favour of the flag is " +
+        "a REAL trade rather than a mistake — but it costs this string, so take it " +
+        "deliberately. To keep BOTH, give the course a hand-written EN title that omits " +
+        "the words 'green fee': getCourseTitle honours such a title verbatim even when " +
+        "fee_is_package is set (lib/course-seo.ts, the branch immediately after the " +
+        "package guard). Otherwise accept the loss and delete this assertion in the " +
+        "same commit, with the reason in the message.",
+    },
+  },
 ];
 
 /**
@@ -3222,7 +3309,25 @@ const seoTests: SeoTest[] = [
  * floor with a real number, not `> 0`" for exactly this; sections L2, L3, L4,
  * L6, O and P all carry one and this section did not.
  */
-const MIN_SEO_URLS = 34;
+const MIN_SEO_URLS = 35;
+
+/**
+ * Anti-vacuity for the `titleContains` assertion(s) in `seoTests`.
+ *
+ * MIN_SEO_URLS alone does NOT cover them. It counts URLs, so deleting the
+ * phoenix-gold entry and adding any other URL in the same commit keeps the
+ * count at 35 and the title assertion silently disappears — a green section D
+ * asserting strictly less than it did. A COUNT of titleContains entries has the
+ * same hole one level down (swap the needle onto a different page). So this
+ * pins the PATHS whose <title> must stay asserted, which is the only shape that
+ * catches deletion, substitution and blanking alike.
+ *
+ * `includes("")` is always true, so a blanked needle is checked separately
+ * below and fails rather than passing vacuously.
+ */
+const REQUIRED_TITLE_ASSERTION_PATHS = [
+  "/golf-courses/bangkok/phoenix-gold-golf-country-club/",
+];
 
 // E) Thai redirect tests (untranslated Thai routes → 301 to English)
 interface ThaiRedirectTest {
@@ -3644,6 +3749,26 @@ async function runSeoTests() {
         `it claims`,
     );
   }
+  // Every path in REQUIRED_TITLE_ASSERTION_PATHS must still be in seoTests AND
+  // still carry a non-blank needle. Both halves are needed: the first catches a
+  // deleted or renamed entry, the second catches a needle emptied to "" — which
+  // `includes()` would answer true for on every page in the corpus.
+  for (const required of REQUIRED_TITLE_ASSERTION_PATHS) {
+    const entry = seoTests.find((t) => t.path === required);
+    if (!entry) {
+      fail(
+        "D) seoTests title-assertion floor",
+        `${required} is no longer in seoTests — its <title> assertion is gone, so a ` +
+          `green section D below is asserting less than it claims`,
+      );
+    } else if (!entry.titleContains?.needle.trim()) {
+      fail(
+        "D) seoTests title-assertion floor",
+        `${required} no longer carries a non-blank titleContains.needle — an empty ` +
+          `needle passes includes() on every page, i.e. the assertion is vacuous`,
+      );
+    }
+  }
   for (const t of seoTests) {
     const label = `SEO ${t.path}`;
     try {
@@ -3665,6 +3790,18 @@ async function runSeoTests() {
         issues.push("missing or empty <title>");
       } else if (/undefined|404|Page Not Found/i.test(titleMatch[1])) {
         issues.push(`bad title: "${titleMatch[1]}"`);
+      } else if (t.titleContains) {
+        // Entity-decoded before comparing: React escapes "&" in text, so a
+        // course title carrying an ampersand renders as "Golf &amp; Country
+        // Club" and comparing against the raw markup would false-fail on
+        // correct output. The needle is written the way a human reads it.
+        const renderedTitle = decodeEntities(titleMatch[1]);
+        if (!renderedTitle.includes(t.titleContains.needle)) {
+          issues.push(
+            `<title> no longer contains "${t.titleContains.needle}" — got ` +
+              `"${renderedTitle}". ${t.titleContains.why}`,
+          );
+        }
       }
 
       // <meta name="description"> exists
