@@ -5397,6 +5397,7 @@ async function runPriceTierRoundupLanguageTests() {
 
   let itemsChecked = 0;
   let packageItemsSeen = 0;
+  let judged = 0;
   for (const { locale, tier } of params) {
     const target = `/${locale}/golf-courses/under/${tier}/`;
     try {
@@ -5492,7 +5493,48 @@ async function runPriceTierRoundupLanguageTests() {
           itemPath !== undefined && packageUrlPaths.has(itemPath);
         if (isPackage) packageItemsSeen++;
         const want = allowedFor({ fee_is_package: isPackage });
-        if (!want.includes(desc)) {
+        const labelOk = want.includes(desc);
+        // Counted AFTER the comparison actually ran. Both counters above answer
+        // "how many items were VISITED", which is not the question - mutation-
+        // tested during the PR #120 review, a `continue` one line below
+        // `packageItemsSeen++` leaves itemsChecked at 240 and packageItemsSeen at
+        // 36, evaluates ZERO label comparisons, prints both pass lines and exits
+        // GREEN with byte-identical output. It also catches a PARTIAL skip that
+        // neither floor can see by construction: skipping ja alone measured
+        // 240 visited / 180 judged with both floors still printing their true
+        // 240 and 36.
+        //
+        // `judged !== checked` in checkPackageNoun (scripts/validate-courses.ts)
+        // is the ONE sibling in this repo that closes this hole. Do NOT read
+        // validate-course-slots.ts as a second one - an earlier version of this
+        // comment did, and it is backwards: that file's `checked++` is the FIRST
+        // statement of its field loop (line 554) and both its oracles compare
+        // visits against registry-derived expectations, so a `continue` one line
+        // below it runs ZERO judges with byte-identical output and exit 0, and
+        // its --self-test does not help because that exercises judge() directly
+        // and never main()'s loop. Measured, not reasoned. It is an INSTANCE of
+        // this hole; checkPackageNoun's own comment already calls it the victim.
+        //
+        // SCOPE, measured rather than asserted. This catches a skip placed
+        // between `itemsChecked++` and `judged++`. It does NOT catch: a skip
+        // before `itemsChecked++` (both counters stay level, the equality holds,
+        // and it is the 240 floor that reds); a skip between `judged++` and the
+        // `if` below, which evaluates the predicate and discards it; or any
+        // falsification of the predicate rather than a skip of it - pinning
+        // `labelOk` true, writing `if (false && !labelOk)`, or widening `want`
+        // to accept both bases all stay GREEN with a real label defect live in
+        // the data. That last one is not hypothetical: the comment ~30 lines
+        // above records it having shipped once. A counter can only ever prove a
+        // comparison RAN, never that it discriminates; only a contract suite of
+        // the kind scripts/validate-open-graph-contract.ts has can do that, and
+        // nothing guards this assertion's own body either. Do not read this fix
+        // as closing the class - a repo-wide sweep on 2026-08-31 found this
+        // shape in a dozen-odd other gates, of which TWO are confirmed by
+        // mutation: L2's `offerChecked++` (line 4858, 688 assertions) and
+        // validate-course-slots.ts:554 (2,632). See CLAUDE.md for the rest,
+        // which are candidates rather than measurements.
+        judged++;
+        if (!labelOk) {
           fail(
             `ItemList Offer.description is not a '${locale}' label on ${target}`,
             `got ${JSON.stringify(desc)} for ${JSON.stringify(el?.item?.name)}, expected one of ${JSON.stringify(want)} — either the route dropped its offerNames argument and fell back to the silent EN default, or el.item.url stopped matching packageUrlPaths (check golfCourseItem's url expression in lib/jsonld-courses.ts, trailing slash included), which misclassifies every course at once.`,
@@ -5550,6 +5592,37 @@ async function runPriceTierRoundupLanguageTests() {
     );
   } else {
     pass(`L6 asserted package (not green-fee) ItemList labels on ${packageItemsSeen} item(s)`);
+  }
+
+  // Neither floor above can see a SKIPPED assertion, and that is not a
+  // hypothetical: mutation-tested during the PR #120 review, a `continue` placed
+  // one line below `packageItemsSeen++` left itemsChecked at its true 240 and
+  // packageItemsSeen at its true 36, evaluated ZERO label comparisons, printed
+  // both pass lines above and exited GREEN with byte-identical output. A floor
+  // sitting outside the loop is necessary but NOT sufficient — it constrains how
+  // many items were VISITED, and an item can be visited without being tested.
+  //
+  // EQUALITY, not a floor, and the difference is measured: giving `judged` a
+  // second increment site sends it to 480 against 240, which `!==` reds and
+  // `<` passes. Same reasoning as `judged !== checked` in checkPackageNoun,
+  // which is likewise an unreachable-overshoot equality. Do NOT cite that
+  // gate's `checked !== expectedTitles` as the precedent instead: overshoot
+  // there is REACHABLE and was measured at 67 vs 63, so it is a different
+  // argument for the same operator.
+  //
+  // THIS CHECK HAS NO TEETH OF ITS OWN: (0, 0) satisfies it. All of its
+  // non-vacuity is inherited from `itemsChecked < 240` 50 lines above, so
+  // lowering or deleting that floor silently degrades this to nothing. The
+  // pass line is gated on a non-empty run accordingly - it otherwise printed
+  // "judged every one of the 0 offer(s)" inside an already-red run, which is a
+  // success line asserting nothing.
+  if (judged !== itemsChecked) {
+    fail(
+      `L6 visited ${itemsChecked} ItemList offer(s) but judged only ${judged}`,
+      "offers are being counted without being compared to a label — the two floors above are satisfied by items that were merely visited, so a shortfall here means the assertions were SKIPPED, not that the labels are wrong. Look for an early exit (`continue`/`break`/`return`/a throw) between `itemsChecked++` and `judged++` — that is the whole span this equality guards. If the run is already red with a fetch error, prefer that diagnosis: a throw landing between the two counters reaches here as well.",
+    );
+  } else if (itemsChecked > 0) {
+    pass(`L6 judged every one of the ${itemsChecked} offer(s) it counted`);
   }
 }
 
