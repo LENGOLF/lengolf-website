@@ -752,6 +752,7 @@ export function getSeoFaqPageJsonLd(
   page: {
     title: string
     slug: string
+    updated_at: string
     content: {
       answer_intro: string
       answer_body: string
@@ -801,6 +802,12 @@ export function getSeoFaqPageJsonLd(
     '@id': `${SITE_URL}${localePrefix}/faq/${page.slug}/`,
     url: `${SITE_URL}${localePrefix}/faq/${page.slug}/`,
     inLanguage: locale,
+    // Freshness signal for answer engines, which discount undated Q&A when the
+    // question is price- or time-sensitive. Valid here: FAQPage ⊂ WebPage ⊂
+    // CreativeWork. Do NOT copy this onto getPriceGuidePageJsonLd — its top
+    // node is Product, which is not a CreativeWork and has no dateModified;
+    // cost pages carry their date in the sitemap <lastmod> instead.
+    dateModified: page.updated_at,
     mainEntity: [mainQuestion, ...relatedQuestions],
   }
 }

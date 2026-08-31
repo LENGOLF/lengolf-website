@@ -1,0 +1,76 @@
+# Push changed-content URLs to IndexNow (the index behind ChatGPT Search /
+# Copilot) on every merge to main. Precision over coverage, v1:
+#
+#   data/golf-courses/<region>/<slug>.ts  -> that course's URL (exact mapping)
+#   any other change under data/          -> the fixed key-page list below
+#   nothing content-shaped changed        -> job exits without calling the API
+#     (scripts/indexnow-ping.ts hard-fails on an empty list by design — the
+#     decision to skip lives HERE, visibly, not in a silent script no-op)
+#
+# Deliberately NOT mapped per-slug for data/faq-pages.ts etc.: deriving which
+# slugs changed would mean parsing TS diffs in shell. The key-page list covers
+# the high-value surfaces; per-slug precision can come later if this earns it.
+name: IndexNow
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/**'
+      - 'messages/**'
+      - 'app/llms.txt/**'
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Need the pushed range to diff; a merge commit's first parent is
+          # the previous main tip.
+          fetch-depth: 2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Derive changed URLs
+        id: derive
+        run: |
+          BASE="https://www.len.golf"
+          CHANGED=$(git diff --name-only HEAD^ HEAD -- 'data/**' 'messages/**' 'app/llms.txt/**')
+          echo "changed files:"; echo "$CHANGED"
+          URLS=""
+          # Exact mapping: course files -> course URLs
+          COURSE_URLS=$(echo "$CHANGED" | grep -E '^data/golf-courses/[a-z-]+/[a-z0-9-]+\.ts$' \
+            | grep -v '/index\.ts$' \
+            | sed -E "s|^data/golf-courses/([a-z-]+)/([a-z0-9-]+)\.ts$|$BASE/golf-courses/\1/\2/|" || true)
+          URLS="$COURSE_URLS"
+          # Anything else content-shaped -> fixed key-page list
+          OTHER=$(echo "$CHANGED" | grep -vE '^data/golf-courses/[a-z-]+/[a-z0-9-]+\.ts$' || true)
+          if [ -n "$OTHER" ]; then
+            URLS="$URLS
+          $BASE/
+          $BASE/golf/
+          $BASE/lessons/
+          $BASE/events/
+          $BASE/menu/
+          $BASE/faq/
+          $BASE/golf-club-rental/
+          $BASE/golf-course-club-rental/
+          $BASE/golf-courses/
+          $BASE/llms.txt"
+          fi
+          URLS=$(echo "$URLS" | sed 's/^[[:space:]]*//' | grep -E '^https://' | sort -u || true)
+          echo "urls to ping:"; echo "$URLS"
+          {
+            echo "urls<<EOF"
+            echo "$URLS"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Ping IndexNow
+        if: steps.derive.outputs.urls != ''
+        run: |
+          # shellcheck disable=SC2086
+          npx tsx scripts/indexnow-ping.ts ${{ steps.derive.outputs.urls }}

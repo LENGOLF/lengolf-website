@@ -4691,6 +4691,103 @@ async function runLlmDiscoverabilityTests() {
   } catch (err) {
     fail("Sitemap unique URLs", `fetch error: ${(err as Error).message}`);
   }
+
+  // 6) Every page advertises llms.txt via an HTTP Link header (next.config.js
+  // headers()). A header, not a <head> tag, because Next merges metadata per
+  // KEY and page-level `alternates` (canonical) would silently replace a
+  // layout-level alternates.types — the og:site_name failure shape. Assert on
+  // the homepage; the config source pattern is /:path* so one URL stands for
+  // all.
+  try {
+    const res = await fetch(`${BASE}/`, { redirect: "follow" });
+    const link = res.headers.get("link") || "";
+    const issues: string[] = [];
+    if (!link.includes("/llms.txt>"))
+      issues.push(`Link header missing llms.txt (got: "${link.slice(0, 120)}")`);
+    if (!/rel="?alternate"?/.test(link))
+      issues.push('Link header missing rel="alternate"');
+    if (issues.length > 0) fail("llms.txt Link header", issues.join("; "));
+    else pass("llms.txt Link header (advertised on every route)");
+  } catch (err) {
+    fail("llms.txt Link header", `fetch error: ${(err as Error).message}`);
+  }
+
+  // 7) IndexNow key file: exactly one 32-hex .txt in public/, its stem equals
+  // the KEY constant in scripts/indexnow-ping.ts, and the server returns it
+  // with the stem as its body (that equality is IndexNow's own ownership
+  // check). Drift between the script's KEY and the served file is the silent
+  // failure mode: the API accepts the ping with HTTP 200 and then discards it
+  // during async key validation, so nothing else can ever go red.
+  try {
+    const fs = await import("fs");
+    const path = await import("path");
+    const pubDir = path.join(__dirname, "..", "public");
+    const keyFiles = fs
+      .readdirSync(pubDir)
+      .filter((f) => /^[0-9a-f]{32}\.txt$/.test(f));
+    const issues: string[] = [];
+    if (keyFiles.length !== 1) {
+      issues.push(`expected exactly 1 IndexNow key file in public/, found ${keyFiles.length}`);
+    } else {
+      const stem = keyFiles[0].replace(/\.txt$/, "");
+      const script = fs.readFileSync(
+        path.join(__dirname, "indexnow-ping.ts"),
+        "utf-8",
+      );
+      const keyMatch = script.match(/const KEY = '([0-9a-f]{32})'/);
+      if (!keyMatch) issues.push("indexnow-ping.ts KEY constant not found");
+      else if (keyMatch[1] !== stem)
+        issues.push(`KEY in indexnow-ping.ts (${keyMatch[1]}) != public/ key file (${stem})`);
+      const res = await fetch(`${BASE}/${keyFiles[0]}`, { redirect: "manual" });
+      if (res.status !== 200) issues.push(`GET /${keyFiles[0]} returned ${res.status}`);
+      else if ((await res.text()).trim() !== stem)
+        issues.push(`served key file body != key`);
+    }
+    if (issues.length > 0) fail("IndexNow key file", issues.join("; "));
+    else pass("IndexNow key file (served, matches ping script)");
+  } catch (err) {
+    fail("IndexNow key file", `error: ${(err as Error).message}`);
+  }
+
+  // 8) FAQ pages carry dateModified in their FAQPage JSON-LD — the freshness
+  // signal answer engines use to trust price-sensitive Q&A. Parse the node,
+  // don't substring the page: a dateModified in some OTHER node must not
+  // satisfy a check about this one.
+  try {
+    const res = await fetch(`${BASE}/faq/can-i-rent-golf-clubs-in-bangkok/`, {
+      redirect: "follow",
+    });
+    const body = await res.text();
+    const blocks = [
+      ...body.matchAll(
+        /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g,
+      ),
+    ].map((m) => m[1]);
+    const faqNode = blocks
+      .map((b) => {
+        try {
+          return JSON.parse(b);
+        } catch {
+          return null;
+        }
+      })
+      .find((n) => n && n["@type"] === "FAQPage");
+    if (!faqNode) {
+      fail("FAQ dateModified", "no FAQPage JSON-LD node found");
+    } else if (
+      typeof faqNode.dateModified !== "string" ||
+      !/^\d{4}-\d{2}-\d{2}/.test(faqNode.dateModified)
+    ) {
+      fail(
+        "FAQ dateModified",
+        `FAQPage.dateModified missing or not ISO: ${JSON.stringify(faqNode.dateModified)}`,
+      );
+    } else {
+      pass(`FAQ dateModified (FAQPage node dated ${faqNode.dateModified.slice(0, 10)})`);
+    }
+  } catch (err) {
+    fail("FAQ dateModified", `fetch error: ${(err as Error).message}`);
+  }
 }
 
 // ── I) Translated-guide/FAQ registry consistency ─────────────────────

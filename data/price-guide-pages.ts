@@ -7,7 +7,12 @@ import {
   getEventPackagesData,
 } from '@/data/pricing'
 
-const now = new Date().toISOString()
+// Pinned to this file's last real content edit — bump when copy changes.
+// Was `new Date().toISOString()`, which stamped every entry with the BUILD
+// time: the sitemap now trusts per-entry updated_at for <lastmod>, and a
+// build-time value would churn every URL's date on every deploy while
+// attesting freshness no one verified (see getAllSeoPageSlugsWithDates).
+const now = "2026-08-12T00:00:00.000Z"
 
 // ── Dynamic price tokens ──
 // Flat map of the key price strings used across all price guide pages.

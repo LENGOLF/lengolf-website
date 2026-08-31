@@ -47,6 +47,24 @@ export async function getAllSeoPageSlugs(
     .map((p) => p.slug)
 }
 
+/**
+ * Slug + per-entry edit date for the sitemap's <lastmod>. EN only: the
+ * sitemap lists the EN canonical URL (translations ride along as hreflang
+ * alternates), so the EN entry's updated_at is the one that dates the URL.
+ * updated_at values are hand-maintained ISO literals in the data files —
+ * NEVER a build-time new Date(), which would churn <lastmod> every deploy
+ * (see the `reviewed` comment in app/sitemap.ts).
+ */
+export async function getAllSeoPageSlugsWithDates(
+  pageType: SeoPageType
+): Promise<{ slug: string; updated_at: string }[]> {
+  const pages = PAGE_DATA_MAP[pageType]
+  if (!pages) return []
+  return pages
+    .filter((p) => p.status === 'published' && p.locale === 'en')
+    .map((p) => ({ slug: p.slug, updated_at: p.updated_at }))
+}
+
 export async function getSeoPageBySlug(
   slug: string,
   pageType: SeoPageType,

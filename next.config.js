@@ -42,6 +42,23 @@ const nextConfig = {
   async headers() {
     return [
       {
+        // Advertise the curated AI-assistant site map (app/llms.txt/route.ts)
+        // on every page. An HTTP header rather than a <head> tag because Next
+        // merges route metadata per KEY: `alternates` is declared page-level
+        // on most routes (canonical), so a layout-level alternates.types would
+        // be silently REPLACED on exactly those pages — the og:site_name trap
+        // (see validate:open-graph in CLAUDE.md) all over again. One header
+        // here covers every route with nothing to keep in sync.
+        source: "/:path*",
+        headers: [
+          {
+            key: "Link",
+            value:
+              '<https://www.len.golf/llms.txt>; rel="alternate"; type="text/plain"; title="LLM-friendly site map"',
+          },
+        ],
+      },
+      {
         source: "/:path*.(ico|svg|png|jpg|jpeg|gif|webp)",
         headers: [
           { key: "Cache-Control", value: "public, max-age=31536000, immutable" },

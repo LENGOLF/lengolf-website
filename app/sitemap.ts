@@ -3,7 +3,7 @@ import { SITE_URL, CONTENT_LAST_UPDATED } from '@/lib/constants'
 import { getAlternates } from '@/lib/translated-routes'
 import { getPostSlugsWithDates, getPostLocalesMap } from '@/lib/blog'
 import { getAllLocationSlugs } from '@/lib/locations'
-import { getAllSeoPageSlugs } from '@/lib/seo-pages'
+import { getAllSeoPageSlugsWithDates } from '@/lib/seo-pages'
 import { REGION_META, getAllCourseParams } from '@/lib/golf-courses'
 import {
   getComparisonPairs,
@@ -17,33 +17,44 @@ import { USE_CASES } from '@/data/golf-courses-use-cases'
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Stable "last reviewed" date for content without a real per-item edit date.
   // Using a constant (not `new Date()`) keeps <lastmod> meaningful — it changes only
-  // when a human bumps CONTENT_LAST_UPDATED, not on every ISR rebuild. Blog posts are
-  // the one source with a genuine DB updated_at, so they use it; SEO pages are static
-  // TS data whose `updated_at` is a build-time `new Date()`, so they use the constant
-  // too (trusting it would reintroduce the per-deploy churn this rewrite removes).
+  // when a human bumps CONTENT_LAST_UPDATED, not on every ISR rebuild. Blog posts
+  // have a genuine DB updated_at; the six SEO-page sections have hand-pinned
+  // per-entry updated_at literals (their `const now` used to be a build-time
+  // `new Date()` — pinned when the sitemap started trusting them). Location,
+  // course and derived pages have no per-entry date yet, so they stay on the
+  // constant.
   const reviewed = CONTENT_LAST_UPDATED
+
+  // Per-entry dates and the site-wide review date are BOTH claims; emit the
+  // later one. An entry untouched since March but reviewed in July is honestly
+  // "current as of July" — while an entry edited after the last review must
+  // not be dragged back to it. ISO-string inputs only; no Date.now() here.
+  const laterOf = (entryDate: string | undefined, floor: string): string =>
+    entryDate && new Date(entryDate).getTime() > new Date(floor).getTime()
+      ? entryDate
+      : floor
 
   const [
     blogEntries,
     locationSlugs,
-    activitySlugs,
-    faqSlugs,
-    hotelSlugs,
-    costSlugs,
-    explainerSlugs,
-    bestOfSlugs,
+    activityEntries,
+    faqEntries,
+    hotelEntries,
+    costEntries,
+    explainerEntries,
+    bestOfEntries,
     courseParams,
     comparisonPairs,
     postLocalesMap,
   ] = await Promise.all([
     getPostSlugsWithDates(),
     getAllLocationSlugs(),
-    getAllSeoPageSlugs('activity_occasion'),
-    getAllSeoPageSlugs('faq'),
-    getAllSeoPageSlugs('hotel_concierge'),
-    getAllSeoPageSlugs('price_guide'),
-    getAllSeoPageSlugs('explainer'),
-    getAllSeoPageSlugs('best_of_listicle'),
+    getAllSeoPageSlugsWithDates('activity_occasion'),
+    getAllSeoPageSlugsWithDates('faq'),
+    getAllSeoPageSlugsWithDates('hotel_concierge'),
+    getAllSeoPageSlugsWithDates('price_guide'),
+    getAllSeoPageSlugsWithDates('explainer'),
+    getAllSeoPageSlugsWithDates('best_of_listicle'),
     getAllCourseParams(),
     getComparisonPairs(),
     getPostLocalesMap(),
@@ -106,7 +117,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.5,
   }))
 
-  const activityPages: MetadataRoute.Sitemap = activitySlugs.map((slug) => {
+  const activityPages: MetadataRoute.Sitemap = activityEntries.map(({ slug, updated_at }) => {
     // Emit hreflang alternates only for activities with translations
     // (registered in lib/translated-routes.ts) — EN-only pages stay plain.
     // Replaces a hand-maintained languages map that hardcoded a lone
@@ -115,66 +126,66 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const languages = getAlternates(`/activities/${slug}/`)
     return {
       url: `${SITE_URL}/activities/${slug}/`,
-      lastModified: reviewed,
+      lastModified: laterOf(updated_at, reviewed),
       changeFrequency: 'monthly' as const,
       priority: 0.6,
       ...(Object.keys(languages).length > 1 ? { alternates: { languages } } : {}),
     }
   })
 
-  const faqPageEntries: MetadataRoute.Sitemap = faqSlugs.map((slug) => {
+  const faqPageEntries: MetadataRoute.Sitemap = faqEntries.map(({ slug, updated_at }) => {
     // Emit hreflang alternates only for FAQs with translations
     // (registered in lib/translated-routes.ts) — EN-only FAQs stay plain.
     const languages = getAlternates(`/faq/${slug}/`)
     return {
       url: `${SITE_URL}/faq/${slug}/`,
-      lastModified: reviewed,
+      lastModified: laterOf(updated_at, reviewed),
       changeFrequency: 'monthly' as const,
       priority: 0.6,
       ...(Object.keys(languages).length > 1 ? { alternates: { languages } } : {}),
     }
   })
 
-  const hotelPages: MetadataRoute.Sitemap = hotelSlugs.map((slug) => {
+  const hotelPages: MetadataRoute.Sitemap = hotelEntries.map(({ slug, updated_at }) => {
     const languages = getAlternates(`/hotels/${slug}/`)
     return {
       url: `${SITE_URL}/hotels/${slug}/`,
-      lastModified: reviewed,
+      lastModified: laterOf(updated_at, reviewed),
       changeFrequency: 'monthly' as const,
       priority: 0.6,
       ...(Object.keys(languages).length > 1 ? { alternates: { languages } } : {}),
     }
   })
 
-  const costPages: MetadataRoute.Sitemap = costSlugs.map((slug) => {
+  const costPages: MetadataRoute.Sitemap = costEntries.map(({ slug, updated_at }) => {
     const languages = getAlternates(`/cost/${slug}/`)
     return {
       url: `${SITE_URL}/cost/${slug}/`,
-      lastModified: reviewed,
+      lastModified: laterOf(updated_at, reviewed),
       changeFrequency: 'monthly' as const,
       priority: 0.6,
       ...(Object.keys(languages).length > 1 ? { alternates: { languages } } : {}),
     }
   })
 
-  const explainerPageEntries: MetadataRoute.Sitemap = explainerSlugs.map((slug) => {
+  const explainerPageEntries: MetadataRoute.Sitemap = explainerEntries.map(({ slug, updated_at }) => {
     // Emit hreflang alternates only for guides with translations
     // (registered in lib/translated-routes.ts) — EN-only guides stay plain.
     const languages = getAlternates(`/guide/${slug}/`)
     return {
       url: `${SITE_URL}/guide/${slug}/`,
-      lastModified: reviewed,
+      lastModified: laterOf(updated_at, reviewed),
       changeFrequency: 'monthly' as const,
       priority: 0.6,
       ...(Object.keys(languages).length > 1 ? { alternates: { languages } } : {}),
     }
   })
 
-  const bestOfPageEntries: MetadataRoute.Sitemap = bestOfSlugs.map((slug) => {
+  const bestOfPageEntries: MetadataRoute.Sitemap = bestOfEntries.map(({ slug, updated_at }) => {
     const languages = getAlternates(`/best/${slug}/`)
     return {
       url: `${SITE_URL}/best/${slug}/`,
-      lastModified: reviewed,
+      lastModified: laterOf(updated_at, reviewed),
       changeFrequency: 'monthly' as const,
       priority: 0.6,
       ...(Object.keys(languages).length > 1 ? { alternates: { languages } } : {}),
