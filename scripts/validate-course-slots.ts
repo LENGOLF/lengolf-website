@@ -487,7 +487,7 @@ const corpus = registered.filter(
  *
  * These are a ratchet, not a description. Raise them when the corpus grows;
  * lowering one has to be a deliberate edit with a reason, which is the whole
- * point. Today: 94 courses, 376 slots, 2,632 strings.
+ * point. Today: 106 courses, 424 slots, 2,968 strings.
  *
  * This line shipped STALE in the commit that raised the two constants below
  * from 71/1,988 - a docblock two lines from the values it describes. Update
