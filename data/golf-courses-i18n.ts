@@ -685,8 +685,13 @@ export const COURSE_DETAIL_I18N: {
   { region: 'bangkok', slug: 'the-vintage-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'bangkok', slug: 'windsor-park-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   // Batch 10 (2026-08) - khao-yai, the region's FULL roster (12 of 12).
-  // Picked because khao-yai was the only region still at 0% translated and
-  // holds the largest untranslated non-duplicate page on the site
+  // Picked because khao-yai was the LARGEST of the three regions still at 0%
+  // translated - khao-yai 12 files, kanchanaburi 8, north-misc 1 - so it
+  // repairs the most funnel per batch. (An earlier version of this comment
+  // said khao-yai was "the only region still at 0% translated", which is
+  // FALSE and was verified so against origin/main: all three had zero entries
+  // in every locale array of TRANSLATED_ROUTES. Do not read it forward.)
+  // It also holds the largest untranslated non-duplicate page on the site
   // (mountain-creek-golf-resort, 44 imp / 90d at pos 17.1). The region HUB
   // was already translated in all four locales, so every one of its roster
   // links pointed at an English course page - a broken funnel this closes.
