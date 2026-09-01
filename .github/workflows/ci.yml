@@ -13,6 +13,15 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    # Explicit, because the pr-rigor step calls `gh api .../pulls/<n>/files` to
+    # derive its agent floor. On a repo whose default GITHUB_TOKEN is
+    # contents-only that call fails, and the step's `|| true` would degrade
+    # EVERY PR to the strict floor — safe, but the docs-only tier would then
+    # silently never fire and nobody would know why. Naming both scopes makes
+    # the dependency visible instead of inherited.
+    permissions:
+      contents: read
+      pull-requests: read
     steps:
       - uses: actions/checkout@v4
 
@@ -106,10 +115,58 @@ jobs:
       # corpus fixtures plus two self-test fixtures, one child process each.
       - run: npm run validate:open-graph:contract
 
+      # The agent floor is TIERED, and the tier is derived from the PR's changed
+      # paths — data the author cannot write into the body, which is the same
+      # constraint the gate's docblock states for the count itself. A
+      # documentation-only PR takes a floor of 1; everything else takes 3.
+      #
+      # PATHS, NOT SIZE. Measured over the last 40 merged PRs, a "<= 50 lines"
+      # rule would have exempted #119 (43 lines / 4 files), whose review pass is
+      # what caught rancho-charnvee being flagged in error, plus #101 (32) and
+      # #103 (37), both subtle locale defects live on translated pages. Small
+      # diff does not mean low risk here.
+      #
+      # `|| true` on the gh call is deliberate: an API hiccup must degrade to the
+      # STRICT floor, not fail the step and not relax it. The gate cross-checks
+      # this list against the payload's own changed_files count and falls back to
+      # strict on any disagreement, so a truncated page cannot read as docs-only.
+      #
+      # `previous_filename` is emitted alongside `filename` because a RENAME is
+      # reported as ONE entry naming only the DESTINATION. Without it,
+      # `lib/course-fees.ts -> lib/course-fees.md` classified as docs-only while
+      # deleting a build-critical module — confirmed by review, not theorised.
+      # Emitting both names deliberately pushes the line count above
+      # `changed_files`, so the gate's cross-check sends any PR containing a
+      # rename to the strict floor. That is the intended outcome: renames are
+      # rare, and "strict" is the right answer to an ambiguous one.
       - name: pr-rigor disclosure
         env:
+          GH_TOKEN: ${{ github.token }}
           PR_BODY: ${{ github.event.pull_request.body }}
-        run: npm run validate:pr-rigor
+          PR_CHANGED_FILES_COUNT: ${{ github.event.pull_request.changed_files }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          if [ -n "$PR_NUMBER" ]; then
+            PR_CHANGED_PATHS="$(gh api --paginate "repos/${{ github.repository }}/pulls/$PR_NUMBER/files" --jq '.[] | .filename, (.previous_filename // empty)' || true)"
+            export PR_CHANGED_PATHS
+          fi
+          npm run validate:pr-rigor
+      # The tier above is a decision, and a decision can be silently wrong in a
+      # way the corpus run cannot show: a classifier stuck at "everything is
+      # docs" relaxes every PR to 1 and still prints a healthy success line.
+      # This drives isDocPath/resolveFloor through the real functions on
+      # synthetic paths, pinning both directions.
+      - run: npm run validate:pr-rigor:self-test
+      # ...and this step is the only one that proves the gate's EXIT CODE is
+      # right, which neither run above can. --self-test exits before the gate
+      # body ever executes, so it covers the classifier and nothing downstream:
+      # review measured `count < decision.floor` -> `count < DOCS_FLOOR`, and a
+      # deleted process.exit(1) on the below-floor branch, BOTH leaving the two
+      # steps above green while every PR in the repo relaxed to floor 1. Spawns
+      # the real gate as a child process against 16 env fixtures, plus
+      # --self-test against 5 deliberately disarmed copies with an unmutated
+      # control. Same argument as validate:open-graph:contract.
+      - run: npm run validate:pr-rigor:contract
 
       # Hotel-concierge distances: the SAME distance to LENGOLF is stated in
       # hotel_distance_m (hero, walkability band, CTA) and in the

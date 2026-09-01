@@ -38,6 +38,12 @@ unrelated `next/font` failure.)
 
 ## Structure
 
+**A documentation-only PR runs a REDUCED version of this**, and the gate enforces
+it at a floor of 1 rather than 3 — see Required disclosure below for what counts
+as documentation and why the tier is derived rather than declared. The pass to
+keep in that case is the **claim audit**: prose is where a false claim lands, and
+this file's own role-pass section calls that worse than a bug.
+
 ### 1. Finder agents — 3–6, on deliberately DISTINCT angles
 
 Run in **parallel**, all **read-only**. Give each the diff range, the PR's own
@@ -108,37 +114,119 @@ disposition, plus rendered output per site, is.
 
 ## Required disclosure
 
-Every pr-rigor verdict — in the PR comment and in any statement to the user —
-carries this line, filled in honestly:
+Every pr-rigor verdict — in the PR body, in the PR comment, and in any statement
+to the user — carries this line, filled in honestly, on a line of its own:
 
-```
 Independent review agents spawned: N
-```
 
 plus an explicit statement of whether it was a real multi-agent pass or an
 inline self-read. If N is 0, you may not report a verdict at all.
+
+**That line is written above as plain prose, and that is not a formatting
+accident.** `scripts/validate-pr-rigor.ts` strips exactly three shapes before
+matching — triple-backtick fences, single-line backtick spans, and `>`-prefixed
+lines — and prose is what survives all three. (Be precise about that, because an
+earlier draft of this sentence said "the only form the gate accepts" and review
+measured it FALSE: a 4-space-indented code block, a `~~~` tilde fence and an
+UNCLOSED triple-backtick fence are all invisible to the stripper and pass. The
+advice is right; the absolute was not. Do not rely on those three — they pass by
+omission, not by design.) In the PR body, do not wrap the line
+in a fenced code block, do not put it in backticks, and do not set it behind a
+`>` blockquote. `scripts/validate-pr-rigor.ts` strips fenced blocks, inline code
+spans and blockquoted lines from the body *before* matching, deliberately: a body
+that QUOTES the requirement in backticks was the decoy that defeated the gate's
+original first-match read (see the long comment above the `prose` const in that
+file). A quoted line is therefore not a disclosure — it is precisely the shape
+the gate was hardened to ignore.
+
+Measured on PR #123's real body, whose disclosure is present, correct and reads
+6 — prose exits 0; the identical body with that one line fenced, backticked or
+blockquoted exits 1 with *"PR body is missing the pr-rigor disclosure line"*, all
+three. PR #123 lost a full CI round to the fenced form, which reads as emphasis
+and is the natural instinct.
+
+**Two traps here, and they are independent — you can hit either one alone.**
+
+1. **Form.** Plain prose, in the PR **body**. The gate reads
+   `github.event.pull_request.body`; it never sees PR comments, so a verdict
+   posted only as a comment leaves the body bare and the gate red.
+2. **Ordering.** It reads that body from the **event payload**, so editing the
+   description does not re-trigger the check and re-running the job replays the
+   stale body. Write the line into the body BEFORE the final push, or push
+   another commit afterwards to re-evaluate. Editing the body and hitting re-run
+   is the one thing that cannot work.
+
+**The floor is tiered, and the tier is not yours to declare.** A PR that changes
+only documentation — `.md` files outside `.github/` — takes a floor of **1**.
+Everything else takes **3**. The gate derives that from the PR's changed paths,
+which is data you cannot write into the body; an author-declared "this one is
+small" would collapse the gate to "state any number", which is the failure it
+exists to prevent. Every unknown resolves to the strict floor: a missing file
+list, a missing count, or a list that disagrees with the payload's own count all
+take 3.
+
+A documentation-only PR gets a REDUCED pass, not a skipped one. The pass that
+matters most there is the **claim audit** — a false claim in CLAUDE.md or in a
+skill is read as fact by the next session, which is why the role passes above
+call it worse than a bug.
+
+**Size is deliberately not the criterion**, and it was measured before being
+rejected. Over the last 40 merged PRs a "<= 50 lines" rule would have exempted
+#119 (43 lines, 4 files), whose review pass is what caught `rancho-charnvee`
+being flagged in error, plus #101 (32 lines) and #103 (37), both subtle locale
+defects live on translated pages. In this repo a small diff is not a low-risk
+one. What correlates is whether the PR can change rendered output or gate
+behaviour at all, which is a path property.
+
+**Verify locally before you push.** This is the only step in the `lint` job that
+cannot be checked by running the repo alone — it needs `PR_BODY` and
+`GITHUB_EVENT_NAME` from the environment. Against an existing PR:
+
+```bash
+PR_BODY="$(gh pr view <N> --json body --jq .body)" GITHUB_EVENT_NAME=pull_request npm run validate:pr-rigor
+```
+
+**Both commands above omit the tier**, so they resolve to the STRICT floor of 3
+— the safe direction, but not the one a documentation-only PR will hit in CI. Add
+the two env vars CI derives to reproduce the real floor:
+
+```bash
+PR_CHANGED_PATHS="$(git diff --name-only origin/main...HEAD)" PR_CHANGED_FILES_COUNT="$(git diff --name-only origin/main...HEAD | wc -l)" PR_BODY="$(cat pr-body.md)" GITHUB_EVENT_NAME=pull_request npm run validate:pr-rigor
+```
+
+Before the PR exists, run it against the draft body you are about to post:
+
+```bash
+PR_BODY="$(cat pr-body.md)" GITHUB_EVENT_NAME=pull_request npm run validate:pr-rigor
+```
 
 ## Report format
 
 Post as a PR comment, in this order:
 
 1. **Disclosure** — agent count, angles, and whether anything was a self-read.
+   The count line belongs in the PR **body** as prose as well as in this comment
+   — the gate reads the body only. See Required disclosure above.
 2. **The ones that mattered** — defects that would have shipped, with impact.
 3. **Also fixed** — lower-severity findings applied.
 4. **Confirmed clean** — what was checked and held, so the reader knows the
    coverage, not just the failures.
 5. **Known gaps, not fixed here** — with the reason. Latent-but-unreachable
    issues belong here, named, rather than omitted.
-6. **Gate** — `lint · typecheck · validate:links · validate:i18n · validate:courses
-   · validate:hotels` + smoke count + CI conclusion.
+6. **Gate** — the `lint` job's steps, the smoke count, and the CI conclusion.
+   Do not hand-copy the step list: it was stale here for months, naming six gates
+   against a real nineteen. Derive it with
+   `awk '/^  lint:/,/^  build-and-smoke:/' .github/workflows/ci.yml | grep -v '^ *#' | grep -oE "npm run [a-zA-Z0-9:_-]+"`.
 
 ## Enforcement
 
 The disclosure above is self-attested by the party with the incentive to skip it,
 which is why `npm run validate:pr-rigor` exists: CI fails the `lint` job when the
-PR body has no `Independent review agents spawned: N` line with N >= 3. It cannot
-prove the agents ran — it makes *silent omission* impossible, forcing an explicit
-claim that a reviewer can then challenge. This gate was added because the very
+PR body carries no prose disclosure line at or above the floor for that PR — 1
+for a documentation-only change, 3 for everything else, with prose and the tier
+both load-bearing, per Required disclosure above. It cannot prove the agents ran
+— it makes *silent omission* impossible, forcing an explicit claim that a
+reviewer can then challenge. This gate was added because the very
 first PR to carry this skill (#93) shipped without the disclosure it mandates.
 
 ## Anti-patterns this gate exists to stop
