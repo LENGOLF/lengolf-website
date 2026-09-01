@@ -273,7 +273,15 @@ function judgeCase(c: Case): Verdict {
  * unrelated reason (a syntax error, a bad import) would look like a pass.
  */
 function disarmContract(): Verdict[] {
-  const original = readFileSync(GATE, 'utf8')
+  // NORMALISED TO LF before any anchor is matched. Two of the mutations below
+  // span a line break, and the repo checks out CRLF on Windows
+  // (core.autocrlf=true) while CI runs LF — so a raw read made those anchors
+  // miss locally and match in CI, i.e. the suite would have been GREEN on the
+  // machine that never ran them and RED on the one that did. Caught by the
+  // anchor guard in the loop, which is the reason that guard reports a failure
+  // rather than skipping quietly. The mutant is a scratch file fed to tsx, so
+  // writing LF is harmless.
+  const original = readFileSync(GATE, 'utf8').replace(/\r\n/g, '\n')
   const out: Verdict[] = []
   try {
     writeFileSync(MUTANT, original)
