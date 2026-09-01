@@ -7,7 +7,12 @@ import {
   getEventPackagesData,
 } from '@/data/pricing'
 
-const now = new Date().toISOString()
+// Pinned to this file's last real content edit — bump when copy changes.
+// Was `new Date().toISOString()`, which stamped every entry with the BUILD
+// time: the sitemap now trusts per-entry updated_at for <lastmod>, and a
+// build-time value would churn every URL's date on every deploy while
+// attesting freshness no one verified (see getAllSeoPageSlugsWithDates).
+const now = "2026-08-12T00:00:00.000Z"
 
 export const faqPages: FaqSeoPage[] = [
   {
@@ -2752,8 +2757,8 @@ export const faqPages: FaqSeoPage[] = [
     category: 'visa-entry',
     locale: 'en',
     related_slugs: ['/golf-in-thailand-guide', '/faq/thailand-entry-requirements-golfers', '/guide/suvarnabhumi-airport-to-bangkok-golf'],
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+    created_at: now,
+    updated_at: now,
     content: {
       answer_intro: `For most visitors, a golf holiday in Thailand requires nothing more than a standard tourist entry — there is no special golf visa or sports permit. The key question is simply which entry pathway applies to your passport: visa exemption, visa on arrival, or e-Visa.`,
       answer_body: `**Disclaimer:** Visa rules change frequently. All information below reflects the situation as of early 2026 and is provided as general guidance only. Always verify your specific requirements with your nearest Thai embassy or the official Thai immigration website before booking travel.\n\n**The Three Entry Pathways**\n\n1. **Visa Exemption** — many nationalities can enter Thailand without applying for any visa in advance. Golf holidays fall comfortably within the activities permitted under tourist entry. Do not rely on any list you find online for exemption eligibility — check the Thai Ministry of Foreign Affairs website directly.\n\n2. **Visa on Arrival (VOA)** — nationalities not covered by visa exemption may be eligible for a VOA at designated international airports including Suvarnabhumi (BKK) and Don Mueang (DMK). You will need a photo, evidence of onward travel, proof of sufficient funds, and payment in Thai baht at the counter. VOA queues can be long at peak times — factor this into your arrival planning if you have an early tee time.\n\n3. **e-Visa** — Thailand's e-Visa system allows eligible nationalities to apply online before departing via the official Thai e-Visa portal at thaievisa.go.th.\n\n**Before You Travel**\n\n- Confirm your entry pathway at the Thai Ministry of Foreign Affairs website or your country's Thai embassy\n- Ensure at least 6 months passport validity from your date of entry\n- Carry your return or onward flight confirmation\n- Check whether your entry type permits re-entry if crossing into a neighbouring country\n\n**At the Airport**\n\nAs of May 2025, the paper TM6 arrival card has been replaced by the Thailand Digital Arrival Card (TDAC). Most foreign visitors must complete this online within 72 hours before their flight — free at tdac.immigration.go.th. You will receive a QR code to present at the immigration counter.\n\n**Practical Tips for Golf Tourists**\n\n- No golf-specific visa exists — standard tourist entry covers all golf activities at public courses, private clubs, and indoor simulators like LENGOLF in Bangkok\n- Travelling with your own clubs is common and generally uncomplicated; there is no duty on personal-use equipment brought for your trip\n- Book tee times in advance — visa and entry logistics aside, early booking is the main practical consideration\n\n**Official Sources:** Thai Ministry of Foreign Affairs (mfa.go.th) · Thai Immigration Bureau (immigration.go.th) · Thailand e-Visa Portal (thaievisa.go.th)`,
@@ -2948,8 +2953,8 @@ export const faqPages: FaqSeoPage[] = [
     category: 'visa-entry',
     locale: 'en',
     related_slugs: ['/golf-in-thailand-guide', '/faq/thailand-visa-guide-golf-tourists'],
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+    created_at: now,
+    updated_at: now,
     content: {
       answer_intro: `Thailand's entry requirements for golf tourists in 2026 are straightforward — there are no COVID-era restrictions, no golf-specific permits, and no special customs requirements for personal-use clubs. The main thing to complete before flying is the Thailand Digital Arrival Card (TDAC), which replaced the old paper TM6 form in May 2025.`,
       answer_body: `**Disclaimer:** Entry requirements can change without notice. Always verify current rules with the Thai Immigration Bureau (immigration.go.th) or your nearest Thai embassy before travel.\n\n**Pre-Flight Checklist**\n\n1. **Valid passport** — Thai immigration recommends at least 6 months validity beyond your intended departure date\n2. **Onward or return ticket** — evidence of onward travel is standard practice at immigration\n3. **Accommodation details** — hotel name and address for your first night\n4. **Proof of funds** — carry a bank card and some cash; specific amounts are at the officer's discretion\n5. **Travel / health insurance** — not mandatory but strongly recommended, especially for sports activities\n6. **TDAC completed** — Thailand Digital Arrival Card must be submitted online within 72 hours before your flight at tdac.immigration.go.th (free; generates a QR code for immigration)\n\n**What's Changed Since COVID**\n\nThailand removed all pandemic-era entry restrictions in 2022. As of 2026: no vaccination proof required, no pre-arrival health declarations, no testing on arrival. The main procedural change since COVID is the TDAC replacing the paper TM6 arrival card from May 2025.\n\n**Golf Equipment at Customs**\n\nTravelling through Suvarnabhumi (BKK) or Don Mueang (DMK) with a full set of clubs is routine — no special declaration or permit is required for personal-use equipment. If you are bringing brand-new clubs in retail packaging or high-value items, declare them to be safe. Renting at the course is a straightforward alternative; rental sets (including Callaway) are available at most Bangkok-area courses and at LENGOLF.\n\n**Health and Travel Insurance**\n\nNot a mandatory entry requirement, but strongly recommended. Check that your policy covers golf-related injuries and includes medical evacuation if you are travelling from a distant country.\n\n**Official Sources:** Thai Immigration Bureau (immigration.go.th) · Thai Customs Department (customs.go.th) · TDAC portal (tdac.immigration.go.th)`,

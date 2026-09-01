@@ -14,7 +14,10 @@ import type { ExplainerSeoPage } from "@/types/seo-pages";
 // in scope; a few out-of-scope entries (exp-1, exp-3, gg-thailand-golf-trip-
 // cost) still carry static LENGOLF bay-rate literals.
 
-const now = "2026-03-28T00:00:00.000Z";
+// Pinned to this file's last real content edit — bump when copy changes.
+// (The other five SEO data files carry the same convention; this one was
+// already a literal rather than a build-time new Date().)
+const now = "2026-08-13T00:00:00.000Z";
 
 export const explainerPages: ExplainerSeoPage[] = [
   // ─── Page 1: What Is a Golf Simulator and How Does It Work? ───

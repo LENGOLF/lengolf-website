@@ -94,7 +94,13 @@ export const PHONE_E164 = `+66${BUSINESS_INFO.phoneRaw.replace(/^0/, '')}`
  * the sitemap reports a stable, honest lastModified instead of a churning build
  * timestamp. Data-backed pages (blog, SEO pages) use their own updated_at instead.
  */
-export const CONTENT_LAST_UPDATED = '2026-07-11'
+// Bump on each substantial content pass — the sitemap emits this as <lastmod>
+// for every URL with no per-entry date. 2026-08-30 = the Nong Chok merge
+// (#120), the last commit that touched data/ content before this constant was
+// set. Six SEO-page sections now carry per-entry updated_at instead (see
+// getAllSeoPageSlugsWithDates), so this floor governs mainly location, course
+// and derived pages.
+export const CONTENT_LAST_UPDATED = '2026-08-30'
 
 export const SOCIAL_LINKS = {
   facebook: 'https://www.facebook.com/lengolf.bkk',
