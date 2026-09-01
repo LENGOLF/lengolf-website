@@ -35,7 +35,8 @@
     "validate:fee-labels": "tsx scripts/validate-fee-labels.ts",
     "validate:fee-labels:self-test": "tsx scripts/validate-fee-labels.ts --self-test",
     "validate:pr-rigor": "tsx scripts/validate-pr-rigor.ts",
-    "validate:pr-rigor:self-test": "tsx scripts/validate-pr-rigor.ts --self-test"
+    "validate:pr-rigor:self-test": "tsx scripts/validate-pr-rigor.ts --self-test",
+    "validate:pr-rigor:contract": "tsx scripts/validate-pr-rigor-contract.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.92.0",

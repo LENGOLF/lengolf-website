@@ -57,11 +57,38 @@ const DISCLOSURE_RE = /Independent review agents spawned:\s*(\d+)/gi
  * `.github/` is excluded even for `.md`, because that tree is executable
  * configuration: a PR editing `ci.yml` is editing the gates themselves, which
  * is the last thing that should ride a reduced floor.
+ *
+ * `.claude/` is excluded for the SAME reason, and the reason is sharper there:
+ * this gate exists to enforce a requirement DEFINED by
+ * `.claude/skills/pr-rigor/SKILL.md`. Left as documentation, a PR rewriting the
+ * review procedure to permit a zero-agent verdict would need one agent to
+ * merge — the classifier declining to apply its own stated principle to the
+ * other half of the gate. Measured before adopting, so it is not free-floating
+ * caution: of the last 40 merged PRs the tier relaxes exactly two (#102, #104),
+ * both single-file CLAUDE.md edits, and none was `.claude/`-only. Excluding
+ * `.claude/` therefore costs none of the feature's measured benefit.
+ *
+ * CLAUDE.md itself stays relaxed deliberately. It is 100% of that benefit, and
+ * its exposure is bounded by floor 1 being a real pass rather than no pass.
  */
 export function isDocPath(raw: string): boolean {
   const path = raw.trim().replace(/\\/g, '/').replace(/^\.\//, '')
   if (!path) return false
-  if (path.startsWith('.github/')) return false
+  // A `..` segment makes every prefix check below meaningless:
+  // `x/../.github/PULL_REQUEST_TEMPLATE.md` starts with neither `.github/` nor
+  // `.claude/` and would classify as documentation. Refuse rather than resolve
+  // — the API emits normalized paths, so this only ever fires on a surprise,
+  // and the safe answer to a surprise is the strict floor.
+  if (path.split('/').some((seg) => seg === '..')) return false
+  // Case-INSENSITIVE, to match the `i` on the extension test below. Comparing
+  // the prefixes case-sensitively while accepting `.MD` meant
+  // `.GitHub/PULL_REQUEST_TEMPLATE.md` classified as documentation while
+  // `.github/...` did not. Inert in practice — Actions only reads the lowercase
+  // path — but the docblock above states the exclusion as a property, and a
+  // property with a casing hole is not one.
+  const lower = path.toLowerCase()
+  if (lower.startsWith('.github/')) return false
+  if (lower.startsWith('.claude/')) return false
   return /\.md$/i.test(path)
 }
 
@@ -105,9 +132,14 @@ export function resolveFloor(
     return full('no changed-file count in the event payload to cross-check against')
   }
   if (payloadCount !== paths.length) {
+    // EQUALITY, not `<`. A list SHORTER than the count is truncated pagination;
+    // a list LONGER than it means duplicate or synthesised entries, and `>`
+    // would trust exactly that direction. Both are untrusted, so both are named
+    // here — the message used to say only "truncated", which made the
+    // longer-list case read as a message bug rather than a guard.
     return full(
       `changed-file list has ${paths.length} path(s) but the payload counts ${payloadCount} ` +
-        '— possible truncated pagination, so not trusted'
+        '— truncated pagination or duplicated entries, so not trusted'
     )
   }
 
@@ -160,7 +192,6 @@ const SELF_TESTS: readonly Case[] = [
   { kind: 'path', name: 'root markdown', path: 'CLAUDE.md', want: true },
   { kind: 'path', name: 'readme', path: 'README.md', want: true },
   { kind: 'path', name: 'docs tree', path: 'docs/architecture.md', want: true },
-  { kind: 'path', name: 'skill file', path: '.claude/skills/pr-rigor/SKILL.md', want: true },
   { kind: 'path', name: 'uppercase extension', path: 'docs/README.MD', want: true },
   { kind: 'path', name: 'windows separators', path: 'docs\\i18n-review-checklist.md', want: true },
   { kind: 'path', name: 'leading ./', path: './CLAUDE.md', want: true },
@@ -178,17 +209,78 @@ const SELF_TESTS: readonly Case[] = [
     path: '.github/PULL_REQUEST_TEMPLATE.md',
     want: false,
   },
-  { kind: 'path', name: 'empty path', path: '   ', want: false },
+  {
+    kind: 'path',
+    name: 'the review procedure itself is NOT docs',
+    path: '.claude/skills/pr-rigor/SKILL.md',
+    want: false,
+  },
+  {
+    kind: 'path',
+    name: 'any other skill under .claude',
+    path: '.claude/skills/write-blog-post/SKILL.md',
+    want: false,
+  },
+  // NOTE the name: this proves the RESULT, not the `if (!path)` guard. `'   '`
+  // fails the `.md$` test anyway, so it stays green with the guard and the
+  // `.trim()` both deleted — measured. Kept because the result matters; renamed
+  // so it stops advertising coverage it does not have.
+  { kind: 'path', name: 'whitespace-only path is not docs (result, not guard)', path: '   ', want: false },
+  // Casing: the prefix exclusions must be as case-insensitive as `.md` is.
+  {
+    kind: 'path',
+    name: 'uppercase .GitHub is still excluded',
+    path: '.GitHub/PULL_REQUEST_TEMPLATE.md',
+    want: false,
+  },
+  {
+    kind: 'path',
+    name: 'uppercase .Claude is still excluded',
+    path: '.Claude/skills/pr-rigor/SKILL.md',
+    want: false,
+  },
   { kind: 'path', name: 'markdown-ish but not markdown', path: 'docs/notes.markdown', want: false },
+  // The two below are the ONLY cases that exercise the `$` anchor in /\.md$/i.
+  // `docs/notes.markdown` above reads as anchor coverage and is not: it contains
+  // no `.md` substring at all (`.mar…`), so it fails on the letters and would
+  // still fail with the anchor deleted. Both of these contain `.md` and must
+  // still be code.
+  { kind: 'path', name: 'mdx is not md', path: 'docs/page.mdx', want: false },
+  { kind: 'path', name: 'md in the middle of a filename', path: 'lib/foo.md.ts', want: false },
+  {
+    kind: 'path',
+    name: 'a .. segment defeats every prefix check',
+    path: 'x/../.github/PULL_REQUEST_TEMPLATE.md',
+    want: false,
+  },
 
   // --- resolveFloor --------------------------------------------------------
   {
     kind: 'floor',
     name: 'all docs -> relaxed',
-    paths: ['CLAUDE.md', '.claude/skills/pr-rigor/SKILL.md'],
+    paths: ['CLAUDE.md', 'docs/architecture.md'],
     count: 2,
     want: DOCS_FLOOR,
     wantWhy: 'are documentation',
+  },
+  {
+    // The gate's own rulebook must not merge on a reduced pass.
+    kind: 'floor',
+    name: 'the review procedure alone -> strict',
+    paths: ['.claude/skills/pr-rigor/SKILL.md'],
+    count: 1,
+    want: FULL_FLOOR,
+    wantWhy: 'non-documentation file(s) changed',
+  },
+  {
+    // Pins `!==` against `>`: a list LONGER than the payload count must not be
+    // trusted either. With `>` this case goes green while duplicates relax.
+    kind: 'floor',
+    name: 'list longer than the payload count -> strict',
+    paths: ['CLAUDE.md', 'CLAUDE.md'],
+    count: 1,
+    want: FULL_FLOOR,
+    wantWhy: 'but the payload counts',
   },
   {
     kind: 'floor',
@@ -236,7 +328,7 @@ const SELF_TESTS: readonly Case[] = [
     paths: ['CLAUDE.md', 'README.md'],
     count: 132,
     want: FULL_FLOOR,
-    wantWhy: 'truncated pagination',
+    wantWhy: 'but the payload counts',
   },
   {
     kind: 'floor',
@@ -266,6 +358,20 @@ function selfTest(): never {
     }
   })
 
+  // The floors are the CONSTANTS UNDER TEST, so they may not also be the ORACLE.
+  // Every case writes `want: FULL_FLOOR` / `want: DOCS_FLOOR`, which appear on
+  // both sides of `got.floor === c.want` and therefore cancel: setting
+  // FULL_FLOOR = 0 left this suite BYTE-IDENTICALLY green while the real gate
+  // passed a code PR disclosing ZERO agents. Measured, not reasoned — it is the
+  // total collapse of the gate, green in both CI steps. Literals here are the
+  // only thing outside that loop.
+  if (FULL_FLOOR !== 3 || DOCS_FLOOR !== 1) {
+    console.log(
+      `FAIL: floors moved — FULL_FLOOR=${FULL_FLOOR} (want 3), DOCS_FLOOR=${DOCS_FLOOR} (want 1)`
+    )
+    process.exit(1)
+  }
+
   const ran = result.examined
   const pathCases = SELF_TESTS.filter((c) => c.kind === 'path').length
   const floorCases = SELF_TESTS.filter((c) => c.kind === 'floor').length
@@ -290,10 +396,10 @@ function selfTest(): never {
     process.exit(1)
   }
   // Floors at their true values, so deleting cases cannot hollow the suite out.
-  if (pathCases < 17 || floorCases < 8 || strictCases < 16 || relaxCases < 9) {
+  if (pathCases < 23 || floorCases < 10 || strictCases < 25 || relaxCases < 8) {
     console.log(
       'FAIL: self-test suite has lost cases ' +
-        '(need >= 17 path, >= 8 floor, >= 16 strict, >= 9 relaxing)'
+        '(need >= 23 path, >= 10 floor, >= 25 strict, >= 8 relaxing)'
     )
     process.exit(1)
   }
@@ -304,7 +410,19 @@ function selfTest(): never {
   process.exit(0)
 }
 
-if (process.argv.includes('--self-test')) selfTest()
+if (process.argv.includes('--self-test')) {
+  selfTest()
+  // Unreachable while selfTest() is `never`, and that is exactly why it is here.
+  // If any future edit lets it RETURN — an early `return`, a commented-out call,
+  // a refactor that drops the `never` — control falls through into the gate body
+  // below, which no-ops because the self-test step passes no PR_BODY, and the
+  // step exits 0. Measured both shapes: a disarmed suite printed
+  // "no PR context — skipping" and CI stayed green.
+  console.error(
+    '\n❌ validate-pr-rigor: --self-test was requested but did not run to completion.\n'
+  )
+  process.exit(1)
+}
 
 // ---------------------------------------------------------------------------
 // Gate
@@ -344,7 +462,10 @@ const payloadCount =
 
 const decision = resolveFloor(changedPaths, payloadCount)
 
-// Printed on EVERY run, pass or fail. A relaxation nobody can see in the log is
+// Printed on every run that REACHES A FLOOR DECISION — so both verdicts below,
+// but not the no-PR-context skip or the empty-body failure, which return above
+// this line. (The comment used to claim "EVERY run, pass or fail", which review
+// measured false on those two paths.) A relaxation nobody can see in the log is
 // one nobody audits, and this is the half of the gate an author does not write.
 console.log(`ℹ️  validate-pr-rigor: floor ${decision.floor} (${decision.mode}) — ${decision.why}.`)
 
@@ -380,8 +501,14 @@ if (matches.length === 0) {
       '   are stripped before matching, because a body that QUOTES the requirement\n' +
       '   is the decoy this gate was hardened against — so a correct line inside a\n' +
       '   fence reads as absent. (PR #123 lost a CI round to exactly that.)\n\n' +
-      `   N must be >= ${decision.floor} independent finder/role agents on DISTINCT angles\n` +
-      `   (${decision.mode}: ${decision.why}).\n` +
+      // Branches on the tier for the same reason the below-floor message does:
+      // at floor 1 "agents on DISTINCT angles" is incoherent advice, since one
+      // agent cannot be on several.
+      `   N must be >= ${decision.floor} independent ` +
+      (decision.floor === 1
+        ? 'review agent — the claim audit is the one that\n   matters most on documentation'
+        : 'finder/role agents on DISTINCT angles') +
+      `\n   (${decision.mode}: ${decision.why}).\n` +
       '   An inline /code-review with zero agents spawned is not a review, and a\n' +
       '   verdict reported from one is invalid — see .claude/skills/pr-rigor/SKILL.md\n'
   )

@@ -3297,7 +3297,7 @@ const seoTests: SeoTest[] = [
   // and re-measured here: blanking locales.en.title drops the parenthetical
   // and every server-free check stays green. Derive that set rather than
   // trusting a number — earlier drafts of this comment said "ALL SEVEN" and
-  // the lint job runs EIGHTEEN steps (17 runnable locally; validate:pr-rigor
+  // the lint job runs NINETEEN steps (18 runnable locally; validate:pr-rigor
   // reads the PR body from the event payload). The reason none of them catches
   // it: validate:course-slots is registry-scoped and this course is absent
   // from COURSE_DETAIL_I18N; validate:courses lints fees, rosters and the

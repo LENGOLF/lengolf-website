@@ -38,6 +38,12 @@ unrelated `next/font` failure.)
 
 ## Structure
 
+**A documentation-only PR runs a REDUCED version of this**, and the gate enforces
+it at a floor of 1 rather than 3 — see Required disclosure below for what counts
+as documentation and why the tier is derived rather than declared. The pass to
+keep in that case is the **claim audit**: prose is where a false claim lands, and
+this file's own role-pass section calls that worse than a bug.
+
 ### 1. Finder agents — 3–6, on deliberately DISTINCT angles
 
 Run in **parallel**, all **read-only**. Give each the diff range, the PR's own
@@ -117,7 +123,14 @@ plus an explicit statement of whether it was a real multi-agent pass or an
 inline self-read. If N is 0, you may not report a verdict at all.
 
 **That line is written above as plain prose, and that is not a formatting
-accident — it is the only form the gate accepts.** In the PR body, do not wrap it
+accident.** `scripts/validate-pr-rigor.ts` strips exactly three shapes before
+matching — triple-backtick fences, single-line backtick spans, and `>`-prefixed
+lines — and prose is what survives all three. (Be precise about that, because an
+earlier draft of this sentence said "the only form the gate accepts" and review
+measured it FALSE: a 4-space-indented code block, a `~~~` tilde fence and an
+UNCLOSED triple-backtick fence are all invisible to the stripper and pass. The
+advice is right; the absolute was not. Do not rely on those three — they pass by
+omission, not by design.) In the PR body, do not wrap the line
 in a fenced code block, do not put it in backticks, and do not set it behind a
 `>` blockquote. `scripts/validate-pr-rigor.ts` strips fenced blocks, inline code
 spans and blockquoted lines from the body *before* matching, deliberately: a body
@@ -173,6 +186,14 @@ cannot be checked by running the repo alone — it needs `PR_BODY` and
 PR_BODY="$(gh pr view <N> --json body --jq .body)" GITHUB_EVENT_NAME=pull_request npm run validate:pr-rigor
 ```
 
+**Both commands above omit the tier**, so they resolve to the STRICT floor of 3
+— the safe direction, but not the one a documentation-only PR will hit in CI. Add
+the two env vars CI derives to reproduce the real floor:
+
+```bash
+PR_CHANGED_PATHS="$(git diff --name-only origin/main...HEAD)" PR_CHANGED_FILES_COUNT="$(git diff --name-only origin/main...HEAD | wc -l)" PR_BODY="$(cat pr-body.md)" GITHUB_EVENT_NAME=pull_request npm run validate:pr-rigor
+```
+
 Before the PR exists, run it against the draft body you are about to post:
 
 ```bash
@@ -192,8 +213,10 @@ Post as a PR comment, in this order:
    coverage, not just the failures.
 5. **Known gaps, not fixed here** — with the reason. Latent-but-unreachable
    issues belong here, named, rather than omitted.
-6. **Gate** — `lint · typecheck · validate:links · validate:i18n · validate:courses
-   · validate:hotels` + smoke count + CI conclusion.
+6. **Gate** — the `lint` job's steps, the smoke count, and the CI conclusion.
+   Do not hand-copy the step list: it was stale here for months, naming six gates
+   against a real nineteen. Derive it with
+   `awk '/^  lint:/,/^  build-and-smoke:/' .github/workflows/ci.yml | grep -v '^ *#' | grep -oE "npm run [a-zA-Z0-9:_-]+"`.
 
 ## Enforcement
 

@@ -130,6 +130,15 @@ jobs:
       # STRICT floor, not fail the step and not relax it. The gate cross-checks
       # this list against the payload's own changed_files count and falls back to
       # strict on any disagreement, so a truncated page cannot read as docs-only.
+      #
+      # `previous_filename` is emitted alongside `filename` because a RENAME is
+      # reported as ONE entry naming only the DESTINATION. Without it,
+      # `lib/course-fees.ts -> lib/course-fees.md` classified as docs-only while
+      # deleting a build-critical module — confirmed by review, not theorised.
+      # Emitting both names deliberately pushes the line count above
+      # `changed_files`, so the gate's cross-check sends any PR containing a
+      # rename to the strict floor. That is the intended outcome: renames are
+      # rare, and "strict" is the right answer to an ambiguous one.
       - name: pr-rigor disclosure
         env:
           GH_TOKEN: ${{ github.token }}
@@ -138,7 +147,7 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           if [ -n "$PR_NUMBER" ]; then
-            PR_CHANGED_PATHS="$(gh api --paginate "repos/${{ github.repository }}/pulls/$PR_NUMBER/files" --jq '.[].filename' || true)"
+            PR_CHANGED_PATHS="$(gh api --paginate "repos/${{ github.repository }}/pulls/$PR_NUMBER/files" --jq '.[] | .filename, (.previous_filename // empty)' || true)"
             export PR_CHANGED_PATHS
           fi
           npm run validate:pr-rigor
@@ -148,6 +157,16 @@ jobs:
       # This drives isDocPath/resolveFloor through the real functions on
       # synthetic paths, pinning both directions.
       - run: npm run validate:pr-rigor:self-test
+      # ...and this step is the only one that proves the gate's EXIT CODE is
+      # right, which neither run above can. --self-test exits before the gate
+      # body ever executes, so it covers the classifier and nothing downstream:
+      # review measured `count < decision.floor` -> `count < DOCS_FLOOR`, and a
+      # deleted process.exit(1) on the below-floor branch, BOTH leaving the two
+      # steps above green while every PR in the repo relaxed to floor 1. Spawns
+      # the real gate as a child process against 16 env fixtures, plus
+      # --self-test against 5 deliberately disarmed copies with an unmutated
+      # control. Same argument as validate:open-graph:contract.
+      - run: npm run validate:pr-rigor:contract
 
       # Hotel-concierge distances: the SAME distance to LENGOLF is stated in
       # hotel_distance_m (hero, walkability band, CTA) and in the
