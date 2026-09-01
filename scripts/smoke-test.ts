@@ -4699,18 +4699,60 @@ async function runLlmDiscoverabilityTests() {
   // and page-level `alternates` (canonical) would per-key-replace a
   // layout-level alternates.types, the og:site_name failure shape. Assert on
   // the homepage; every page route flows through the same middleware return.
-  try {
-    const res = await fetch(`${BASE}/`, { redirect: "follow" });
-    const link = res.headers.get("link") || "";
-    const issues: string[] = [];
-    if (!link.includes("/llms.txt>"))
-      issues.push(`Link header missing llms.txt (got: "${link.slice(0, 120)}")`);
-    if (!/rel="?alternate"?/.test(link))
-      issues.push('Link header missing rel="alternate"');
-    if (issues.length > 0) fail("llms.txt Link header", issues.join("; "));
-    else pass("llms.txt Link header (advertised on every route)");
-  } catch (err) {
-    fail("llms.txt Link header", `fetch error: ${(err as Error).message}`);
+  // TWO fetches, because middleware.ts has two decorated return paths and one
+  // URL cannot cover both. `/` takes the ordinary return; an untranslated path
+  // requested by a non-English browser takes the /en-fallback REWRITE branch,
+  // whose response carries no next-intl hreflang Link at all. Asserting only
+  // `/` left that branch unguarded: deleting its withLlmsLink() call kept every
+  // gate green while stripping the header from every page a ja/ko/zh/th browser
+  // sees on an untranslated route (measured by mutation).
+  //
+  // Attributes are asserted on the llms ENTRY, not on the whole header. The
+  // header is a comma-join of next-intl's hreflang entries plus ours, and every
+  // hreflang entry carries rel="alternate" — so a whole-header regex passed
+  // even with our link removed entirely, and would pass with our link stripped
+  // of its rel or pointed at the wrong host.
+  const llmsLinkChecks: { label: string; url: string; headers?: Record<string, string> }[] = [
+    { label: "/", url: `${BASE}/` },
+    {
+      label: "/golf-in-thailand-guide/ (Accept-Language: ja -> /en rewrite)",
+      url: `${BASE}/golf-in-thailand-guide/`,
+      headers: { "Accept-Language": "ja-JP,ja;q=0.9" },
+    },
+  ];
+  for (const check of llmsLinkChecks) {
+    try {
+      const res = await fetch(check.url, {
+        redirect: "follow",
+        headers: check.headers,
+      });
+      const link = res.headers.get("link") || "";
+      const issues: string[] = [];
+      // Split on the entry boundary: ", " only where the next entry opens "<".
+      const entry = link
+        .split(/,\s*(?=<)/)
+        .find((e) => e.includes("/llms.txt>"));
+      if (!entry) {
+        issues.push(
+          `no llms.txt entry in Link header (got: "${link.slice(0, 140)}")`,
+        );
+      } else {
+        if (!entry.includes("<https://www.len.golf/llms.txt>"))
+          issues.push(`llms entry points at the wrong URL: "${entry}"`);
+        if (!/rel="?alternate"?/.test(entry))
+          issues.push(`llms entry missing rel="alternate": "${entry}"`);
+        if (!/type="?text\/plain"?/.test(entry))
+          issues.push(`llms entry missing type="text/plain": "${entry}"`);
+      }
+      if (issues.length > 0)
+        fail(`llms.txt Link header ${check.label}`, issues.join("; "));
+      else pass(`llms.txt Link header ${check.label}`);
+    } catch (err) {
+      fail(
+        `llms.txt Link header ${check.label}`,
+        `fetch error: ${(err as Error).message}`,
+      );
+    }
   }
 
   // 7) IndexNow key file: exactly one 32-hex .txt in public/, its stem equals

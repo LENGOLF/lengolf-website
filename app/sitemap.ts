@@ -25,14 +25,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // constant.
   const reviewed = CONTENT_LAST_UPDATED
 
-  // Per-entry dates and the site-wide review date are BOTH claims; emit the
-  // later one. An entry untouched since March but reviewed in July is honestly
-  // "current as of July" — while an entry edited after the last review must
-  // not be dragged back to it. ISO-string inputs only; no Date.now() here.
-  const laterOf = (entryDate: string | undefined, floor: string): string =>
-    entryDate && new Date(entryDate).getTime() > new Date(floor).getTime()
-      ? entryDate
-      : floor
+  // A section WITH a per-entry date emits it verbatim; `reviewed` is only the
+  // fallback for entries that have none.
+  //
+  // This deliberately does NOT take the later of the two. A `<lastmod>` is a
+  // last-MODIFIED claim, not a last-reviewed one, and flooring the entry date
+  // to the review date broke that in both directions: it told crawlers a FAQ
+  // page edited 2026-08-12 had changed on 2026-08-30, and it contradicted the
+  // page's own schema.org `dateModified` (which is the raw entry date) on all
+  // 78 EN FAQ + guide URLs. It also made the per-entry dates inert — measured,
+  // 0 of 114 entries beat the floor — so the feature would have shipped doing
+  // nothing while reading as if it worked.
+  const entryDate = (date: string | undefined, fallback: string): string =>
+    date || fallback
 
   const [
     blogEntries,
@@ -126,7 +131,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const languages = getAlternates(`/activities/${slug}/`)
     return {
       url: `${SITE_URL}/activities/${slug}/`,
-      lastModified: laterOf(updated_at, reviewed),
+      lastModified: entryDate(updated_at, reviewed),
       changeFrequency: 'monthly' as const,
       priority: 0.6,
       ...(Object.keys(languages).length > 1 ? { alternates: { languages } } : {}),
@@ -139,7 +144,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const languages = getAlternates(`/faq/${slug}/`)
     return {
       url: `${SITE_URL}/faq/${slug}/`,
-      lastModified: laterOf(updated_at, reviewed),
+      lastModified: entryDate(updated_at, reviewed),
       changeFrequency: 'monthly' as const,
       priority: 0.6,
       ...(Object.keys(languages).length > 1 ? { alternates: { languages } } : {}),
@@ -150,7 +155,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const languages = getAlternates(`/hotels/${slug}/`)
     return {
       url: `${SITE_URL}/hotels/${slug}/`,
-      lastModified: laterOf(updated_at, reviewed),
+      lastModified: entryDate(updated_at, reviewed),
       changeFrequency: 'monthly' as const,
       priority: 0.6,
       ...(Object.keys(languages).length > 1 ? { alternates: { languages } } : {}),
@@ -161,7 +166,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const languages = getAlternates(`/cost/${slug}/`)
     return {
       url: `${SITE_URL}/cost/${slug}/`,
-      lastModified: laterOf(updated_at, reviewed),
+      lastModified: entryDate(updated_at, reviewed),
       changeFrequency: 'monthly' as const,
       priority: 0.6,
       ...(Object.keys(languages).length > 1 ? { alternates: { languages } } : {}),
@@ -174,7 +179,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const languages = getAlternates(`/guide/${slug}/`)
     return {
       url: `${SITE_URL}/guide/${slug}/`,
-      lastModified: laterOf(updated_at, reviewed),
+      lastModified: entryDate(updated_at, reviewed),
       changeFrequency: 'monthly' as const,
       priority: 0.6,
       ...(Object.keys(languages).length > 1 ? { alternates: { languages } } : {}),
@@ -185,7 +190,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const languages = getAlternates(`/best/${slug}/`)
     return {
       url: `${SITE_URL}/best/${slug}/`,
-      lastModified: laterOf(updated_at, reviewed),
+      lastModified: entryDate(updated_at, reviewed),
       changeFrequency: 'monthly' as const,
       priority: 0.6,
       ...(Object.keys(languages).length > 1 ? { alternates: { languages } } : {}),

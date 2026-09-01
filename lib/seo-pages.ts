@@ -36,17 +36,6 @@ export const ROUTE_PREFIX_TO_TYPE: Record<string, SeoPageType> = {
   hotels: 'hotel_concierge',
 }
 
-export async function getAllSeoPageSlugs(
-  pageType: SeoPageType,
-  locale: string = 'en'
-): Promise<string[]> {
-  const pages = PAGE_DATA_MAP[pageType]
-  if (!pages) return []
-  return pages
-    .filter((p) => p.status === 'published' && p.locale === locale)
-    .map((p) => p.slug)
-}
-
 /**
  * Slug + per-entry edit date for the sitemap's <lastmod>. EN only: the
  * sitemap lists the EN canonical URL (translations ride along as hreflang
@@ -54,6 +43,12 @@ export async function getAllSeoPageSlugs(
  * updated_at values are hand-maintained ISO literals in the data files —
  * NEVER a build-time new Date(), which would churn <lastmod> every deploy
  * (see the `reviewed` comment in app/sitemap.ts).
+ *
+ * This REPLACED a slug-only `getAllSeoPageSlugs(pageType, locale)`; the
+ * sitemap was its only caller. Deliberately not kept alongside as a
+ * convenience overload — two helpers differing only in whether they carry the
+ * date is an invitation for a future call site to pick the one that silently
+ * drops it. Route params come from getAllSeoPageParams, which is unaffected.
  */
 export async function getAllSeoPageSlugsWithDates(
   pageType: SeoPageType

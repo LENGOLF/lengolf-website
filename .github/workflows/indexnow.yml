@@ -46,8 +46,16 @@ jobs:
             | grep -v '/index\.ts$' \
             | sed -E "s|^data/golf-courses/([a-z-]+)/([a-z0-9-]+)\.ts$|$BASE/golf-courses/\1/\2/|" || true)
           URLS="$COURSE_URLS"
-          # Anything else content-shaped -> fixed key-page list
+          # Anything else content-shaped -> fixed key-page list. Subtract the
+          # files that actually PRODUCED a course URL, not everything matching
+          # the course-path shape: a region index.ts matches that shape but is
+          # filtered out by the grep -v above, so subtracting the shape left a
+          # push touching only index.ts files pinging nothing at all.
           OTHER=$(echo "$CHANGED" | grep -vE '^data/golf-courses/[a-z-]+/[a-z0-9-]+\.ts$' || true)
+          if echo "$CHANGED" | grep -qE '^data/golf-courses/[a-z-]+/index\.ts$'; then
+            OTHER="$OTHER
+          data/golf-courses/index-changed"
+          fi
           if [ -n "$OTHER" ]; then
             URLS="$URLS
           $BASE/
@@ -71,6 +79,13 @@ jobs:
 
       - name: Ping IndexNow
         if: steps.derive.outputs.urls != ''
+        env:
+          # Through the ENVIRONMENT, never interpolated into the shell text.
+          # `npx tsx script.ts ${{ ...outputs.urls }}` looked right and was a
+          # hard failure: the value is newline-separated, so the expansion
+          # pasted a multi-line block into the run script and every URL after
+          # the first ran as its own command (exit 127), pinging exactly one
+          # URL per push. It is also the injection surface — keep it in env.
+          URLS: ${{ steps.derive.outputs.urls }}
         run: |
-          # shellcheck disable=SC2086
-          npx tsx scripts/indexnow-ping.ts ${{ steps.derive.outputs.urls }}
+          printf '%s\n' "$URLS" | xargs npx tsx scripts/indexnow-ping.ts

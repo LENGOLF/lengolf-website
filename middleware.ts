@@ -2,6 +2,7 @@ import createMiddleware from 'next-intl/middleware'
 import { routing } from './i18n/routing'
 import { hasTranslationForLocale } from './lib/translated-routes'
 import { NextRequest, NextResponse } from 'next/server'
+import { SITE_URL } from './lib/constants'
 
 const intlMiddleware = createMiddleware(routing)
 
@@ -17,9 +18,11 @@ const LOCALE_PREFIXES = ['th', 'ko', 'ja', 'zh'] as const
 // see validate:open-graph in CLAUDE.md). Appending on the middleware's own
 // response is the one spot that composes with the hreflang header instead of
 // fighting it. Absolute URL: the header names one canonical file regardless
-// of which host/port served the page.
+// of which host/port served the page. SITE_URL is imported rather than
+// duplicated — lib/constants.ts has no imports of its own, so it is safe in
+// the edge bundle.
 const LLMS_LINK_HEADER =
-  '<https://www.len.golf/llms.txt>; rel="alternate"; type="text/plain"; title="LLM-friendly site map"'
+  `<${SITE_URL}/llms.txt>; rel="alternate"; type="text/plain"; title="LLM-friendly site map"`
 
 function withLlmsLink(response: NextResponse): NextResponse {
   response.headers.append('link', LLMS_LINK_HEADER)
@@ -110,10 +113,14 @@ export const config = {
   matcher: [
     // `txt` is in the extension list so static text files in public/ (the
     // IndexNow ownership key, any future verification file) bypass locale
-    // handling — without it the key file 301'd into the locale tree and
-    // 404'd, which IndexNow's async key validation reads as "not the owner"
-    // while the ping API still returns 200. robots/llms stay name-listed too:
-    // they are route handlers, not public files, and the names document that.
+    // handling. Without it the key file went INTO the locale tree and 404'd —
+    // by which of two paths depends on the client: a cookie-less crawler was
+    // REWRITTEN to /en/<key>.txt/, while a browser carrying a NEXT_LOCALE
+    // cookie got a 307 to /<locale>/<key>.txt/ first. Either way IndexNow's
+    // async key validation reads the 404 as "not the owner" while the ping API
+    // has already returned 200, so nothing surfaces the failure. robots/llms
+    // stay name-listed too: they are route handlers, not public files, and the
+    // names document that.
     '/((?!_next/static|_next/image|_next/data|api/|favicon\\.ico|sitemap\\.xml|robots\\.txt|llms\\.txt|images/.*|.*\\.(?:png|jpg|jpeg|gif|svg|ico|webp|woff2?|ttf|css|js|map|txt)$).*)',
   ],
 }
