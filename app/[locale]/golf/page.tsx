@@ -43,7 +43,16 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-// Revalidate every hour so promotion changes propagate from DB
+// Revalidate every hour so promotion changes propagate from DB.
+//
+// The hour buys PROMOTIONS, not prices, and since 2026-09-04 that distinction
+// matters: getWebsitePromotions is a Supabase call outside Next's Data Cache,
+// so it really is re-read hourly — but the bay rates and packages this page
+// also renders come from lib/pricing.ts, whose fetch is cached for 30 days.
+// So this page regenerates 24x more often than its siblings while serving
+// prices of exactly the same age, and can show a promo added an hour ago
+// beside a rate from four weeks ago. Deliberate: promo freshness is worth the
+// writes on five pages. Do not "fix" it by shortening the pricing fetch.
 export const revalidate = 3600
 
 const locationLinks = [

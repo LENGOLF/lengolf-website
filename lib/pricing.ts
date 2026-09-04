@@ -70,22 +70,105 @@ const PRICING_API =
 //
 // TWO CONSEQUENCES OF A LONG INTERVAL. Read both before shortening it back.
 //
-// 1. There is NO on-demand purge in this repo — no revalidateTag, no
-//    revalidatePath anywhere. Vercel's Data Cache also persists across
-//    deployments (unlike the Full Route Cache), so shipping a deploy does NOT
-//    refresh these prices. To force a refresh: purge the Data Cache from the
-//    Vercel project settings, or change PRICING_API / this value. If prices
-//    ever need to propagate on a business timescale, the right fix is a
-//    revalidateTag call fired from lengolf-forms when a price changes — not a
-//    shorter timer, which pays the full ISR cost every day to catch a change
-//    that happens a few times a year.
+// 1. A DEPLOY MUST NOT BE RELIED ON TO REFRESH THESE PRICES, and there is no
+//    on-demand purge in this repo — no revalidateTag, no revalidatePath
+//    anywhere. Verified against Vercel's Data Cache docs rather than assumed:
+//    "Cached data persists across deployments unless you explicitly
+//    invalidate it." That is the opposite of the Full Route Cache, which a
+//    deploy DOES flush — which is exactly why this is easy to get wrong.
 //
-// 2. A transient pricing-API failure at regeneration time makes this return
-//    null, and the page renders the pinned FALLBACK figures (see
-//    site-facts.ts). Those are last-known-good, not wrong, and the failure
-//    itself is NOT cached — Next only stores successful responses, so the next
-//    regeneration retries. The exposure is therefore bounded by the calling
-//    PAGE's own revalidate (86400), not by this value.
+//    Stated as "must not be relied on" rather than "does not", because the
+//    honest answer is NON-DETERMINISTIC and an earlier draft of this comment
+//    overstated it. `next build` prerenders these ~566 pages, and that build
+//    reads .next/cache/fetch-cache, which Vercel restores from the BUILD
+//    cache — a separate thing from the runtime Data Cache. So a build whose
+//    build-cache is cold or was cleared re-fetches and re-pins prices for the
+//    next 30 days, while a build that restores it does not. Never plan a price
+//    change around a deploy: it might land, and you cannot tell which.
+//
+//    To force a refresh, either bump this value / PRICING_API (a code change,
+//    so it ships like anything else), or purge manually:
+//      Vercel project -> CDN -> Caches -> Purge cache -> All content
+//      -> "Runtime and Data Cache".
+//
+//    MIND THE BLAST RADIUS ON THAT PURGE. This team is on Pro, where "all
+//    projects in your team share a single cache" per environment — so purging
+//    to refresh len.golf pricing also drops the Data Cache for lengolf-forms,
+//    lengolf-booking-new and lengolf-accounting. It is not a per-project
+//    button, and the docs warn about exactly this.
+//
+//    Countervailing nuance, so the 30 days is not read as a hard floor: the
+//    shared cache has a fixed size and evicts least-recently-used entries, so
+//    a low-traffic entry can be dropped and refetched well before its interval
+//    expires. 30 days is a ceiling on staleness, not a guarantee of it.
+//
+//    If prices ever need to propagate on a business timescale, the right fix
+//    is a revalidateTag call fired from lengolf-forms when a price changes —
+//    not a shorter timer, which pays the full ISR cost every day to catch a
+//    change that happens a few times a year.
+//
+// 2. A pricing-API failure makes this return null and the page renders the
+//    pinned FALLBACK figures (site-facts.ts) — last-known-good, not wrong.
+//    How LONG that lasts depends on how the API failed, and the two cases are
+//    genuinely different. An earlier draft of this comment claimed "the
+//    failure itself is NOT cached" for all of them, which is FALSE and is the
+//    reason the shape check below exists.
+//
+//    NOT cached, self-heals on the next regeneration: a network error, an
+//    abort from the 5s signal, or any non-200 status. Next's store gate is
+//    `res.status === 200` (patch-fetch.js), so these never reach the cache and
+//    exposure is bounded by the calling PAGE's revalidate (86400).
+//
+//    CACHED FOR THE FULL 30 DAYS: a 200 whose BODY is wrong — an HTML error or
+//    login page from an upstream Vercel app, or valid JSON of the wrong shape.
+//    The gate is the status code alone and is evaluated before anything reads
+//    the body, so the bad response is stored, and every regeneration for the
+//    next 30 days replays it. At the old 3600 this self-healed within an hour;
+//    the 30-day value multiplies that window 720x, which is precisely why it
+//    could not be raised without validating the payload.
+const isArray = (v: unknown): v is unknown[] => Array.isArray(v)
+
+/**
+ * Does this payload carry the fields consumers dereference WITHOUT a guard?
+ *
+ * This exists because `res.json()` was previously cast straight to
+ * PricingCatalog with no validation, and consumers then reached into it
+ * unguarded: `catalog.bayRates.morning` (site-facts.ts), `catalog.coaching`,
+ * `catalog.packages`, `catalog.mixedPackages`, `catalog.events`
+ * (data/pricing.ts). A 200 carrying `{}` or `{"error":...}` is TRUTHY, so it
+ * sails past every `if (!catalog) return FALLBACK` guard and then throws a
+ * TypeError at render — a 500 on every one of the ~566 pricing-dependent
+ * pages, served from a cache entry that now lives 30 days.
+ *
+ * Returning null instead routes those payloads down the same path as a network
+ * failure: the pinned FALLBACK figures render. The poisoned entry still occupies
+ * the Data Cache for its full interval (nothing here can evict it — see
+ * consequence #1), but the pages serve real last-known-good prices instead of
+ * an error.
+ *
+ * Deliberately NOT required: `clubRental`, `drinksAndGolf` and `fetchedAt`.
+ * Every consumer of those already guards them (`catalog.clubRental?.course ??
+ * []`, `catalog.fetchedAt ?? null`), and demanding them here would reject a
+ * payload the existing code handles correctly. The rule is: require exactly
+ * what is dereferenced unguarded, no more.
+ */
+function isPricingCatalog(value: unknown): value is PricingCatalog {
+  if (typeof value !== 'object' || value === null) return false
+  const c = value as Record<string, unknown>
+
+  const bayRates = c.bayRates
+  if (typeof bayRates !== 'object' || bayRates === null) return false
+  const b = bayRates as Record<string, unknown>
+  if (!isArray(b.morning) || !isArray(b.afternoon) || !isArray(b.evening)) return false
+
+  return (
+    isArray(c.coaching) &&
+    isArray(c.packages) &&
+    isArray(c.mixedPackages) &&
+    isArray(c.events)
+  )
+}
+
 export const getPricingCatalog = perRequest(async (): Promise<PricingCatalog | null> => {
   try {
     const res = await fetch(PRICING_API, {
@@ -93,7 +176,21 @@ export const getPricingCatalog = perRequest(async (): Promise<PricingCatalog | n
       signal: AbortSignal.timeout(5000),
     })
     if (!res.ok) throw new Error(`Pricing API ${res.status}`)
-    return await res.json()
+
+    // Parse and shape-check separately: a 200 carrying HTML throws HERE, and
+    // that throw must not be mistaken for an unreachable API. Both land in the
+    // same catch, but the messages have to tell them apart in the logs.
+    const payload: unknown = await res.json()
+    if (!isPricingCatalog(payload)) {
+      throw new Error(
+        `Pricing API returned 200 with an unusable body (keys: ${
+          typeof payload === 'object' && payload !== null
+            ? Object.keys(payload).join(',') || '<none>'
+            : typeof payload
+        })`
+      )
+    }
+    return payload
   } catch (err) {
     console.warn('[pricing] Failed to fetch pricing catalog, using fallback defaults:', err)
     return null
