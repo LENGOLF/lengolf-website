@@ -41,6 +41,21 @@ function shortlistGuideForRegion(locale: string, region: string): string | null 
   return GUIDE_BY_REGION[region] ?? null
 }
 
+// An unknown region must 404 at the ROUTING layer rather than rendering on
+// demand and caching that 404 permanently. Same mechanism and the same prod
+// measurement as the six SEO slug segments — /golf-courses/<junk>/ was
+// confirmed to mint a permanent ISR entry on 2026-09-04.
+//
+// [region] is the unbounded surface here. The sibling hub at ../page.tsx
+// varies only by [locale], which next-intl already bounds (an invented prefix
+// serves the static /404 with no prerender header, verified the same day), so
+// it deliberately does NOT get this flag.
+//
+// No URL that serves 200 today changes: generateStaticParams below builds EN
+// for every region plus each translated region hub, and untranslated locale
+// URLs 301 to English via the middleware.
+export const dynamicParams = false
+
 export async function generateStaticParams() {
   // EN builds every region; other locales build only regions with a published
   // translation (untranslated locale URLs 301 to English via the middleware).

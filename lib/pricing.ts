@@ -47,24 +47,49 @@ const PRICING_API =
 // (~2× per guide page, and one extra per data getter). Cache lifetime is a
 // single request/render pass, so ISR revalidation still refreshes on schedule.
 //
-// The revalidate value here caps the ISR interval of every page that calls
-// this (home, /golf/, /guide/[slug], /cost/[slug], /activities/[slug],
-// /hotels/[slug], /best/[slug], /llms.txt — ~420 pages): Next.js sets a
-// route's effective revalidate to the *shorter* of its own declared value
-// and every fetch-level revalidate used during its render — this fetch can
-// only shorten a page's interval, never lengthen it. Most of the ~420 pages
-// declare no revalidate of their own, so this value sets theirs outright;
-// home and /llms.txt declare 86400 and still get pulled down to this value
-// (known tradeoff, not a bug — raise further to relax that if daily-fresh
-// pricing on those two routes matters more than the extra cost saved).
-// A transient pricing-API failure at regen time can leave the fallback
-// catalog (see FALLBACK in site-facts.ts) live for up to this long.
-// It was 300s until 2026-08-25, which forced all ~420 pages to regenerate
-// every 5 minutes and was the single largest driver of Vercel ISR-write cost.
+// ---------------------------------------------------------------------------
+// REVALIDATE: 30 days, and the owner's explicit choice (2026-09-04).
+// ---------------------------------------------------------------------------
+// Next sets a route's effective revalidate to the *shorter* of its own
+// declared value and every fetch-level revalidate used while it renders. This
+// fetch can therefore only SHORTEN a calling page's interval, never lengthen
+// it — so any caller declaring none at all inherits this number outright.
+//
+// History, because the number has moved twice and the reasoning is not
+// reconstructable from the value alone:
+//   300s   until 2026-08-25 — forced ~566 pages to regenerate every 5 minutes
+//                             and was the largest single driver of Vercel
+//                             ISR-write cost (PR #113 raised it).
+//   3600s  until 2026-09-04 — still set the interval for the 10 callers that
+//                             declared none, so ~566 pages regenerated hourly.
+//   30d    now — the owner ruled displayed prices may be a month stale. Every
+//                 caller that should still regenerate daily now says so itself
+//                 (`export const revalidate = 86400`), so this value no longer
+//                 sets anyone's page interval; it only bounds how old the
+//                 PRICE NUMBERS inside those pages may be.
+//
+// TWO CONSEQUENCES OF A LONG INTERVAL. Read both before shortening it back.
+//
+// 1. There is NO on-demand purge in this repo — no revalidateTag, no
+//    revalidatePath anywhere. Vercel's Data Cache also persists across
+//    deployments (unlike the Full Route Cache), so shipping a deploy does NOT
+//    refresh these prices. To force a refresh: purge the Data Cache from the
+//    Vercel project settings, or change PRICING_API / this value. If prices
+//    ever need to propagate on a business timescale, the right fix is a
+//    revalidateTag call fired from lengolf-forms when a price changes — not a
+//    shorter timer, which pays the full ISR cost every day to catch a change
+//    that happens a few times a year.
+//
+// 2. A transient pricing-API failure at regeneration time makes this return
+//    null, and the page renders the pinned FALLBACK figures (see
+//    site-facts.ts). Those are last-known-good, not wrong, and the failure
+//    itself is NOT cached — Next only stores successful responses, so the next
+//    regeneration retries. The exposure is therefore bounded by the calling
+//    PAGE's own revalidate (86400), not by this value.
 export const getPricingCatalog = perRequest(async (): Promise<PricingCatalog | null> => {
   try {
     const res = await fetch(PRICING_API, {
-      next: { revalidate: 3600 },
+      next: { revalidate: 2_592_000 }, // 30 days — see the block above
       signal: AbortSignal.timeout(5000),
     })
     if (!res.ok) throw new Error(`Pricing API ${res.status}`)

@@ -60,6 +60,30 @@ interface Props {
 // Uses the canonical section map — a local copy here previously drifted
 // (omitted activities/hotels), leaving those links with fallback labels.
 
+// Daily. This section's content lives in local data/*.ts, so it only changes on
+// deploy; the interval is a safety net, not a freshness requirement. Declared
+// explicitly because lib/pricing.ts's fetch would otherwise set it — that fetch
+// is now 30 days, and inheriting it would leave a content edit unpublished for
+// a month.
+export const revalidate = 86400
+
+// An unknown slug must 404 at the ROUTING layer, not render on demand.
+//
+// Without this, Next renders the not-found path for any slug a crawler invents
+// and stores the result as a permanent ISR entry — measured on prod 2026-09-04:
+// a bogus /guide/ URL returned 404 carrying `X-Nextjs-Prerender: 1` and
+// `X-Nextjs-Stale-Time: 4294967294` (2^32-2, i.e. never revalidate), 124 KB,
+// MISS then HIT forever. Every unique junk URL therefore cost one invocation,
+// one permanent cache write and 124 KB of egress, unbounded by crawler volume
+// — against ~523K firewall-evaluated requests per cycle on this project.
+//
+// Safe because the middleware resolves locale BEFORE this route: an
+// unregistered locale x slug pair 301s to English. Verified 2026-09-04 on all
+// four non-EN locales of the only EN-only slug in these six sections
+// (where-to-play-golf-at-night-in-bangkok), so nothing serving 200 today
+// becomes a 404. Section E of the smoke suite guards that mechanism.
+export const dynamicParams = false
+
 export async function generateStaticParams() {
   // Only build locale×slug combos that have published content — untranslated
   // locale URLs 301 to English via the middleware (lib/translated-routes.ts).

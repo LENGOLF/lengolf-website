@@ -15,6 +15,12 @@ import {
 } from '@/lib/jsonld'
 import { siteOpenGraph } from '@/lib/open-graph'
 
+// Daily. Declared explicitly so this page does not inherit its ISR interval
+// from the pricing fetch in lib/pricing.ts, which is now 30 days: this page
+// reads live prices via data/pricing.ts, and without this line a content or
+// copy change here would stay unpublished for a month.
+export const revalidate = 86400
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
   const prefix = locale === 'en' ? '' : `/${locale}`

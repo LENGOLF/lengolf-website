@@ -10,9 +10,17 @@ interface Props {
   params: Promise<{ locale: string; slug: string }>
 }
 
+// EN-only. Emitting `locale` is REQUIRED, not cosmetic: a child
+// generateStaticParams under app/[locale] that omits it gets cross-producted
+// with every locale the root layout emits, so these ~84 pages were being
+// prerendered five times (~420) — the 336 extra are 301'd to English by the
+// middleware and listed in no sitemap. Same defect as the [id] route under
+// second-hand-golf-clubs-bangkok, and both survived the PR #64/#65 sweep
+// because neither page consumes an untranslated message namespace, so neither
+// produced the MISSING_MESSAGE spam that sweep was chasing.
 export async function generateStaticParams() {
   const slugs = await getAllLocationSlugs()
-  return slugs.map((slug) => ({ slug }))
+  return slugs.map((slug) => ({ locale: 'en', slug }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

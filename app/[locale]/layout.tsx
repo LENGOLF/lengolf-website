@@ -4,7 +4,6 @@ import Script from 'next/script'
 import { Poppins, Noto_Sans_Thai, Noto_Sans_KR, Noto_Sans_JP, Noto_Sans_SC } from 'next/font/google'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, setRequestLocale } from 'next-intl/server'
-import { Analytics } from '@vercel/analytics/react'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import LineChatWidget from '@/components/layout/LineChatWidget'
@@ -166,7 +165,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <MobileStickyBar />
           </BareRouteGate>
         </NextIntlClientProvider>
-        <Analytics />
       </body>
     </html>
   )
