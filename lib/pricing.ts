@@ -129,7 +129,33 @@ const PRICING_API =
 const isArray = (v: unknown): v is unknown[] => Array.isArray(v)
 
 /**
- * Does this payload carry the fields consumers dereference WITHOUT a guard?
+ * Every `price` in this array is a finite, non-negative number.
+ *
+ * Rejects NaN, Infinity, negatives, and a price shipped as a string — all of
+ * which format into visible copy without throwing. Zero is allowed HERE because
+ * a genuinely free item is real (standard club rental is free with a bay
+ * booking); the separate positive check below covers the arrays where a zero
+ * would render AS A PRICE.
+ */
+function pricesAreFinite(products: unknown[]): boolean {
+  return products.every((p) => {
+    if (typeof p !== 'object' || p === null) return false
+    const price = (p as Record<string, unknown>).price
+    return typeof price === 'number' && Number.isFinite(price) && price >= 0
+  })
+}
+
+/** At least one item priced above zero — i.e. this array can name a real rate. */
+function hasPositivePrice(products: unknown[]): boolean {
+  return products.some((p) => {
+    const price = (p as Record<string, unknown>)?.price
+    return typeof price === 'number' && Number.isFinite(price) && price > 0
+  })
+}
+
+/**
+ * Does this payload carry the fields consumers dereference WITHOUT a guard,
+ * carrying values that are usable as prices?
  *
  * This exists because `res.json()` was previously cast straight to
  * PricingCatalog with no validation, and consumers then reached into it
@@ -137,20 +163,38 @@ const isArray = (v: unknown): v is unknown[] => Array.isArray(v)
  * `catalog.packages`, `catalog.mixedPackages`, `catalog.events`
  * (data/pricing.ts). A 200 carrying `{}` or `{"error":...}` is TRUTHY, so it
  * sails past every `if (!catalog) return FALLBACK` guard and then throws a
- * TypeError at render — a 500 on every one of the ~566 pricing-dependent
+ * TypeError at render — a 500 on every one of the ~597 pricing-rendering
  * pages, served from a cache entry that now lives 30 days.
+ *
+ * STRUCTURE IS NOT ENOUGH, and this is the part that is easy to get wrong.
+ * The first version checked shapes only, which was the right rule at a 1-hour
+ * cache and the wrong one at 30 days. Review measured the hole: a perfectly
+ * well-shaped payload pricing everything at 0 was ACCEPTED, and because
+ * `findPrice()` then returns 0 while `0 ?? FALLBACK` is 0 — nullish coalescing
+ * does not treat zero as missing — `getSiteFacts` resolved
+ * `bayHourlyMin = lessonHourly = bayHourlyMax = 0`. The site would render
+ * "0 THB" on every rate card, inside `{{bayHourlyFrom}}` guide prose, and in
+ * schema.org `Offer.price`, for a month, looking plausible rather than broken.
+ * A POS unit change (baht to hundreds) fails the same way with small numbers.
+ * Hence the two value rules above.
  *
  * Returning null instead routes those payloads down the same path as a network
  * failure: the pinned FALLBACK figures render. The poisoned entry still occupies
  * the Data Cache for its full interval (nothing here can evict it — see
  * consequence #1), but the pages serve real last-known-good prices instead of
- * an error.
+ * an error or a zero.
  *
- * Deliberately NOT required: `clubRental`, `drinksAndGolf` and `fetchedAt`.
- * Every consumer of those already guards them (`catalog.clubRental?.course ??
- * []`, `catalog.fetchedAt ?? null`), and demanding them here would reject a
- * payload the existing code handles correctly. The rule is: require exactly
- * what is dereferenced unguarded, no more.
+ * Deliberately NOT required, and the asymmetry is the point:
+ *  - `clubRental` / `fetchedAt` — every consumer already guards them
+ *    (`catalog.clubRental?.course ?? []`, `catalog.fetchedAt ?? null`), so
+ *    demanding them would reject payloads the existing code handles correctly.
+ *  - `drinksAndGolf` — has ZERO consumers repo-wide. Requiring it would be
+ *    asserting something nothing reads.
+ *  - `packages` / `mixedPackages` / `events` must be arrays of sane prices but
+ *    may legitimately be EMPTY (a season with no event packages is not a
+ *    corrupt catalog), so they get no positive-price requirement.
+ * The rule is: require exactly what is dereferenced unguarded, plus that the
+ * arrays a zero would visibly misprice can actually name a rate.
  */
 function isPricingCatalog(value: unknown): value is PricingCatalog {
   if (typeof value !== 'object' || value === null) return false
@@ -161,11 +205,20 @@ function isPricingCatalog(value: unknown): value is PricingCatalog {
   const b = bayRates as Record<string, unknown>
   if (!isArray(b.morning) || !isArray(b.afternoon) || !isArray(b.evening)) return false
 
+  if (!isArray(c.coaching) || !isArray(c.packages) || !isArray(c.mixedPackages) || !isArray(c.events)) {
+    return false
+  }
+
+  const priced = [b.morning, b.afternoon, b.evening, c.coaching, c.packages, c.mixedPackages, c.events]
+  if (!priced.every(pricesAreFinite)) return false
+
+  // Bay rates and coaching are the two the site quotes as headline prices, and
+  // both fall back through `??`, which zero defeats. Each must name a real rate.
   return (
-    isArray(c.coaching) &&
-    isArray(c.packages) &&
-    isArray(c.mixedPackages) &&
-    isArray(c.events)
+    hasPositivePrice(b.morning) &&
+    hasPositivePrice(b.afternoon) &&
+    hasPositivePrice(b.evening) &&
+    hasPositivePrice(c.coaching)
   )
 }
 

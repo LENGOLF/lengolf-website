@@ -12,9 +12,11 @@ interface Props {
 
 // EN-only. Emitting `locale` is REQUIRED, not cosmetic: a child
 // generateStaticParams under app/[locale] that omits it gets cross-producted
-// with every locale the root layout emits, so these ~84 pages were being
-// prerendered five times (~420) — the 336 extra are 301'd to English by the
-// middleware and listed in no sitemap. Same defect as the [id] route under
+// with every locale the root layout emits, so these 85 pages were being
+// prerendered five times (425) — the 340 extra are 301'd to English by the
+// middleware and listed in no sitemap. (85 is the published row count, not a
+// round number: an earlier draft said ~84/~420/336, which also made the
+// commit's own 512 figure — which needs 85 — disagree with this file.) Same defect as the [id] route under
 // second-hand-golf-clubs-bangkok, and both survived the PR #64/#65 sweep
 // because neither page consumes an untranslated message namespace, so neither
 // produced the MISSING_MESSAGE spam that sweep was chasing.

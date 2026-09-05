@@ -182,7 +182,7 @@ jobs:
       # revalidate, which is 30 days. Consumers dereference catalog.bayRates
       # .morning / .coaching / .packages / .mixedPackages / .events with no
       # optional chaining, so a truthy-but-wrong payload is a render-time
-      # TypeError on ~566 pages replayed for a month. This runs each hostile
+      # TypeError on ~597 pages replayed for a month. This runs each hostile
       # payload through the REAL consumers and requires none of them throws.
       # Mutation-tested: stubbing the shape guard true, false, or dropping
       # either sub-check all go red.
