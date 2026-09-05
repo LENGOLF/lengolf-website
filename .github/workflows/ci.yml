@@ -188,6 +188,32 @@ jobs:
       # either sub-check all go red.
       - run: npm run validate:pricing-payload
 
+      # The gate above guards the pricing payload's CONTENT. This one guards
+      # its BLAST RADIUS. Next sets a route's effective revalidate to the MIN
+      # of its own declared value and every fetch-level revalidate used while
+      # it renders, so the 30-day pricing fetch sets the interval outright for
+      # any caller that declares none -- the exact bug PR #126 fixed by adding
+      # `export const revalidate = 86400` to ten routes, with nothing to stop
+      # the eleventh. Symbol-level taint from getPricingCatalog, parsed with
+      # the TypeScript AST: 13 route files read pricing today (8 directly, 5
+      # only through a default-exported server component) and all 13 declare
+      # an interval, so this fires on ZERO lines in healthy code. Hence the
+      # exact pins on both the tainted-symbol inventory and the route set --
+      # a green run proves nothing on its own.
+      - run: npm run validate:pricing-revalidate
+      # ...and this step is the only one that proves it EXITS non-zero, which
+      # the run above cannot: it runs on a healthy tree, so dropping
+      # process.exit(1) or wrapping a verdict in `if (false && ...)` leaves it
+      # printing a byte-identical success line. Spawns the real binary as a
+      # child process against 10 synthetic fixtures plus 4 mutations of THIS
+      # repo (strip menu/page.tsx's revalidate; add a route importing
+      # getSiteFacts; add one reading pricing only via a server component; put
+      # a pricing call in app/[locale]/layout.tsx, whose interval governs its
+      # whole subtree), each with an unmutated control beside it, then 4
+      # deliberately disarmed copies of the gate. Same argument as
+      # validate:open-graph:contract.
+      - run: npm run validate:pricing-revalidate:contract
+
   build-and-smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 10

@@ -18,6 +18,8 @@
     "scripts/validate-course-slots.ts",
     "scripts/validate-fee-labels.ts",
     "scripts/validate-pr-rigor.ts",
+    "scripts/validate-pricing-revalidate.ts",
+    "scripts/validate-pricing-revalidate-contract.ts",
     "scripts/page-inventory.ts"
   ],
   "exclude": ["node_modules"]

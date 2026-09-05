@@ -1,11 +1,4 @@
 import type { FaqSeoPage } from '@/types/seo-pages'
-import { getPricingCatalog, formatThb, type PricingCatalog } from '@/lib/pricing'
-import {
-  getBayRatesData,
-  getMonthlyPackagesData,
-  getLessonPricingData,
-  getEventPackagesData,
-} from '@/data/pricing'
 
 // Pinned to this file's last real content edit — bump when copy changes.
 // Was `new Date().toISOString()`, which stamped every entry with the BUILD
@@ -213,10 +206,15 @@ export const faqPages: FaqSeoPage[] = [
 
   // ─── JA: how-much-does-indoor-golf-cost-in-bangkok ───
   // Static content mirroring the EN entry's literal prices — this is what the
-  // FAQ renderer actually serves. NOTE: the EN sibling has an (unwired)
-  // getIndoorGolfCostContent() dynamic-pricing function that no renderer
-  // calls; do not add a JA twin unless that family is actually wired up
-  // (same caution as the faq-11-th precedent below).
+  // FAQ renderer actually serves. NOTE: the EN sibling once carried an
+  // unwired dynamic-pricing getter for this entry. It was deleted along with
+  // its two siblings and getPriceGuideTokens: nothing called any of them, and
+  // their imports were the only edges tying this file to lib/pricing. These
+  // static entries are now the single source of truth. If a live-price
+  // version is ever wired up, the consuming route must declare its own
+  // `export const revalidate` — `npm run validate:pricing-revalidate` enforces
+  // that, because the pricing fetch caches for 30 days and would otherwise
+  // set the page's interval.
   // Prices rendered per the JA currency ruling (THB abbreviation, half-width
   // digits, 〜 ranges) and stamped with an as-of marker. related_* retargeted
   // to JA-translated pages (the EN corporate-event and how-long FAQs are
@@ -251,10 +249,15 @@ export const faqPages: FaqSeoPage[] = [
 
   // ─── KO: how-much-does-indoor-golf-cost-in-bangkok ───
   // Static content mirroring the EN entry's literal prices — this is what the
-  // FAQ renderer actually serves. NOTE: the EN sibling has an (unwired)
-  // getIndoorGolfCostContent() dynamic-pricing function that no renderer
-  // calls; do not add a KO twin unless that family is actually wired up
-  // (same caution as the faq-11-th / faq-2-ja precedents).
+  // FAQ renderer actually serves. NOTE: the EN sibling once carried an
+  // unwired dynamic-pricing getter for this entry. It was deleted along with
+  // its two siblings and getPriceGuideTokens: nothing called any of them, and
+  // their imports were the only edges tying this file to lib/pricing. These
+  // static entries are now the single source of truth. If a live-price
+  // version is ever wired up, the consuming route must declare its own
+  // `export const revalidate` — `npm run validate:pricing-revalidate` enforces
+  // that, because the pricing fetch caches for 30 days and would otherwise
+  // set the page's interval.
   // Prices rendered per the KO currency ruling (바트 spelled out, half-width
   // digits, ~ ranges) and stamped with the as-of marker (2026년 7월 기준).
   // Title/meta front-load the KO 스크린골프 cluster (방콕 스크린골프 요금), which
@@ -291,10 +294,15 @@ export const faqPages: FaqSeoPage[] = [
 
   // ─── ZH: how-much-does-indoor-golf-cost-in-bangkok ───
   // Static content mirroring the EN entry's literal prices — this is what the
-  // FAQ renderer actually serves. NOTE: the EN sibling has an (unwired)
-  // getIndoorGolfCostContent() dynamic-pricing function that no renderer
-  // calls; do not add a ZH twin unless that family is actually wired up
-  // (same caution as the faq-11-th / faq-2-ja / faq-2-ko precedents).
+  // FAQ renderer actually serves. NOTE: the EN sibling once carried an
+  // unwired dynamic-pricing getter for this entry. It was deleted along with
+  // its two siblings and getPriceGuideTokens: nothing called any of them, and
+  // their imports were the only edges tying this file to lib/pricing. These
+  // static entries are now the single source of truth. If a live-price
+  // version is ever wired up, the consuming route must declare its own
+  // `export const revalidate` — `npm run validate:pricing-revalidate` enforces
+  // that, because the pricing fetch caches for 30 days and would otherwise
+  // set the page's interval.
   // Prices rendered per the ZH currency ruling (泰铢 spelled out, half-width
   // digits, – ranges) and stamped with the as-of marker (截至2026年7月).
   // Title/meta lead with 收费 — the live ZH GSC query is fee-shaped
@@ -331,11 +339,15 @@ export const faqPages: FaqSeoPage[] = [
 
   // ─── TH: how-much-does-indoor-golf-cost-in-bangkok ───
   // Static content mirroring the EN entry's literal prices — this is what the
-  // FAQ renderer actually serves. NOTE: the EN sibling has an (unwired)
-  // getIndoorGolfCostContent() dynamic-pricing function that no renderer
-  // calls; do NOT add a TH twin inside that function unless the family is
-  // actually wired up (same caution as the faq-11-th / faq-2-ja / faq-2-ko /
-  // faq-2-zh precedents).
+  // FAQ renderer actually serves. NOTE: the EN sibling once carried an
+  // unwired dynamic-pricing getter for this entry. It was deleted along with
+  // its two siblings and getPriceGuideTokens: nothing called any of them, and
+  // their imports were the only edges tying this file to lib/pricing. These
+  // static entries are now the single source of truth. If a live-price
+  // version is ever wired up, the consuming route must declare its own
+  // `export const revalidate` — `npm run validate:pricing-revalidate` enforces
+  // that, because the pricing fetch caches for 30 days and would otherwise
+  // set the page's interval.
   // Prices rendered per the TH currency ruling (บาท spelled out, half-width
   // digits, ASCII - ranges) and stamped with the as-of marker
   // (ข้อมูล ณ กรกฎาคม 2026) — every figure traces to the EN entry.
@@ -1641,10 +1653,15 @@ export const faqPages: FaqSeoPage[] = [
 
   // ─── TH: best-way-to-learn-golf-in-bangkok ───
   // Static content mirroring the EN entry's literal prices — this is what the
-  // FAQ renderer actually serves. NOTE: the EN sibling has an (unwired)
-  // getBestWayToLearnContent() dynamic-pricing function that no renderer
-  // calls; do not add a TH twin unless that family is actually wired up
-  // (see the function's doc comment below).
+  // FAQ renderer actually serves. NOTE: the EN sibling once carried an
+  // unwired dynamic-pricing getter for this entry. It was deleted along with
+  // its two siblings and getPriceGuideTokens: nothing called any of them, and
+  // their imports were the only edges tying this file to lib/pricing. These
+  // static entries are now the single source of truth. If a live-price
+  // version is ever wired up, the consuming route must declare its own
+  // `export const revalidate` — `npm run validate:pricing-revalidate` enforces
+  // that, because the pricing fetch caches for 30 days and would otherwise
+  // set the page's interval.
   {
     id: 'faq-11-th',
     page_type: 'faq',
@@ -1675,10 +1692,15 @@ export const faqPages: FaqSeoPage[] = [
 
   // ─── JA: best-way-to-learn-golf-in-bangkok ───
   // Static content mirroring the EN entry's literal prices — this is what the
-  // FAQ renderer actually serves. NOTE: the EN sibling has an (unwired)
-  // getBestWayToLearnContent() dynamic-pricing function that no renderer
-  // calls; do not add a JA twin unless that family is actually wired up
-  // (same caution as the faq-11-th precedent above).
+  // FAQ renderer actually serves. NOTE: the EN sibling once carried an
+  // unwired dynamic-pricing getter for this entry. It was deleted along with
+  // its two siblings and getPriceGuideTokens: nothing called any of them, and
+  // their imports were the only edges tying this file to lib/pricing. These
+  // static entries are now the single source of truth. If a live-price
+  // version is ever wired up, the consuming route must declare its own
+  // `export const revalidate` — `npm run validate:pricing-revalidate` enforces
+  // that, because the pricing fetch caches for 30 days and would otherwise
+  // set the page's interval.
   // HONESTY: language support uses the required LENGOLF-scoped construction —
   // 日本人コーチ／日本語でのレッスン negated for LENGOLF only, paired with the
   // LINE @lengolf Japanese booking allowance and the on-screen-numbers point.
@@ -1714,10 +1736,15 @@ export const faqPages: FaqSeoPage[] = [
 
   // ─── KO: best-way-to-learn-golf-in-bangkok ───
   // Static content mirroring the EN entry's literal prices — this is what the
-  // FAQ renderer actually serves. NOTE: the EN sibling has an (unwired)
-  // getBestWayToLearnContent() dynamic-pricing function that no renderer
-  // calls; do not add a KO twin unless that family is actually wired up
-  // (same caution as the faq-11-th / faq-11-ja precedents above).
+  // FAQ renderer actually serves. NOTE: the EN sibling once carried an
+  // unwired dynamic-pricing getter for this entry. It was deleted along with
+  // its two siblings and getPriceGuideTokens: nothing called any of them, and
+  // their imports were the only edges tying this file to lib/pricing. These
+  // static entries are now the single source of truth. If a live-price
+  // version is ever wired up, the consuming route must declare its own
+  // `export const revalidate` — `npm run validate:pricing-revalidate` enforces
+  // that, because the pricing fetch caches for 30 days and would otherwise
+  // set the page's interval.
   // HONESTY: language support uses the required LENGOLF-scoped construction —
   // 한국인 코치／한국어 레슨 negated for LENGOLF only, paired with the LINE
   // @lengolf Korean booking allowance and the on-screen-numbers point. No
@@ -1754,10 +1781,15 @@ export const faqPages: FaqSeoPage[] = [
 
   // ─── ZH: best-way-to-learn-golf-in-bangkok ───
   // Static content mirroring the EN entry's literal prices — this is what the
-  // FAQ renderer actually serves. NOTE: the EN sibling has an (unwired)
-  // getBestWayToLearnContent() dynamic-pricing function that no renderer
-  // calls; do not add a ZH twin unless that family is actually wired up
-  // (same caution as the faq-11-th / faq-11-ja / faq-11-ko precedents above).
+  // FAQ renderer actually serves. NOTE: the EN sibling once carried an
+  // unwired dynamic-pricing getter for this entry. It was deleted along with
+  // its two siblings and getPriceGuideTokens: nothing called any of them, and
+  // their imports were the only edges tying this file to lib/pricing. These
+  // static entries are now the single source of truth. If a live-price
+  // version is ever wired up, the consuming route must declare its own
+  // `export const revalidate` — `npm run validate:pricing-revalidate` enforces
+  // that, because the pricing fetch caches for 30 days and would otherwise
+  // set the page's interval.
   // HONESTY: language support uses the required LENGOLF-scoped construction —
   // 中国人教练／中文课程 negated for LENGOLF only, paired with the LINE @lengolf
   // Chinese booking allowance and the on-screen-numbers point (the same wording
@@ -2383,9 +2415,15 @@ export const faqPages: FaqSeoPage[] = [
   // figure (3,000-5,000 vs 3,000-7,000); EN was corrected to the body's own
   // line-item total and every locale now reads 3,000-7,000 in both places.
   // Static content mirroring the EN entry's literal prices — this is what the
-  // FAQ renderer actually serves. NOTE: the EN sibling has an (unwired)
-  // getCorporateEventCostContent() dynamic-pricing function that no renderer
-  // calls; do not add a TH twin unless that family is actually wired up.
+  // FAQ renderer actually serves. NOTE: the EN sibling once carried an
+  // unwired dynamic-pricing getter for this entry. It was deleted along with
+  // its two siblings and getPriceGuideTokens: nothing called any of them, and
+  // their imports were the only edges tying this file to lib/pricing. These
+  // static entries are now the single source of truth. If a live-price
+  // version is ever wired up, the consuming route must declare its own
+  // `export const revalidate` — `npm run validate:pricing-revalidate` enforces
+  // that, because the pricing fetch caches for 30 days and would otherwise
+  // set the page's interval.
   // The EN italic sub-labels (*Small Package — 9,999 THB*) are rendered as
   // **bold** headings instead: single-asterisk italics are forbidden by house
   // style, and the bold form hits the same FaqPage.tsx heading+list branch.
@@ -5753,105 +5791,3 @@ export const faqPages: FaqSeoPage[] = [
     },
   },
 ]
-
-// ── Dynamic content getters for high-intent FAQ pages ──
-// These three pages cite specific prices as their primary value — making them
-// dynamic ensures they always reflect the live rates from the forms app API.
-
-type FaqContent = FaqSeoPage['content']
-
-/**
- * Returns the content for "How Much Does Indoor Golf Cost in Bangkok?" (faq-2)
- * with live bay rates and monthly package prices.
- */
-export async function getIndoorGolfCostContent(catalog?: PricingCatalog | null): Promise<FaqContent> {
-  catalog = catalog ?? await getPricingCatalog()
-  const base = faqPages.find(p => p.slug === 'how-much-does-indoor-golf-cost-in-bangkok')!.content
-
-  if (!catalog) return base
-
-  const [{ bayRates }, { monthlyPackages }] = await Promise.all([
-    getBayRatesData(catalog),
-    getMonthlyPackagesData(catalog),
-  ])
-
-  const morningWD = bayRates[0]?.weekday ?? '550 THB'
-  const afternoonWD = bayRates[1]?.weekday ?? '750 THB'
-  const morningWE = bayRates[0]?.weekend ?? '750 THB'
-  const afternoonWE = bayRates[1]?.weekend ?? '950 THB'
-
-  const morningWDNum = parseInt(morningWD.replace(/[^0-9]/g, ''), 10)
-  const perPerson = isNaN(morningWDNum) ? '110 THB' : formatThb(Math.round(morningWDNum / 5))
-
-  const pkg = (name: string) => monthlyPackages.find(p => p.name === name)?.price ?? ''
-  const bronze = pkg('Bronze') || '3,000 THB'
-  const silver = pkg('Silver') || '8,000 THB'
-  const gold = pkg('Gold') || '14,000 THB'
-  const diamond = pkg('Diamond') || '8,000 THB'
-  const diamondPlus = pkg('Diamond+') || '18,000 THB'
-  const earlyBird = pkg('Early Bird*') || '4,800 THB'
-
-  return {
-    ...base,
-    answer_intro: `Indoor golf in Bangkok typically costs 550–1,000 THB per hour, depending on the venue, time of day, and day of the week. At LENGOLF, simulator bay rental starts at ${morningWD} per hour for up to 5 people — that's just ${perPerson} per person for a group. Free standard golf clubs are included with every booking.`,
-    answer_body: `Here's a complete breakdown of indoor golf pricing in Bangkok.\n\n**LENGOLF Bay Rates**\n- Weekdays (Mon–Thu) before 14:00: ${morningWD}/hour\n- Weekdays 14:00–23:00: ${afternoonWD}/hour\n- Weekends (Fri–Sun & holidays) before 14:00: ${morningWE}/hour\n- Weekends 14:00–23:00: ${afternoonWE}/hour\n\nEach bay holds up to 5 players, and free standard golf club rental is included. Premium club rental (Callaway Warbird or Callaway REVA) adds ~150 THB/hour.\n\n**Monthly Packages for Regular Players**\nIf you play regularly, monthly packages offer better value:\n- Bronze: 5 hours for ${bronze}\n- Silver: 15 hours for ${silver}\n- Gold: 30 hours for ${gold}\n- Diamond: Unlimited hours for ${diamond}/month\n- Diamond+: Unlimited hours for ${diamondPlus}/3 months\n\nEarly Bird packages (before 14:00 only) start at ${earlyBird} for 10 hours.\n\n**How This Compares to Outdoor Golf**\nA round at a Bangkok-area course typically costs 1,500–4,000 THB in green fees alone, plus caddie fees (300–400 THB), cart rental, and transport. Indoor golf is significantly cheaper, weather-proof, and more accessible — especially for groups.`,
-  }
-}
-
-/**
- * Returns the content for "What Is the Best Way to Learn Golf in Bangkok?" (faq-11)
- * with live lesson prices.
- *
- * NOTE: like the other catalog-driven FAQ content functions in this file, this
- * is currently UNWIRED — app/[locale]/faq/[slug]/page.tsx renders the static
- * entry content only. Wire these into the renderer or remove the family
- * (follow-up); until then the static entries are the single source of truth.
- */
-export async function getBestWayToLearnContent(catalog?: PricingCatalog | null): Promise<FaqContent> {
-  catalog = catalog ?? await getPricingCatalog()
-  const base = faqPages.find(p => p.slug === 'best-way-to-learn-golf-in-bangkok')!.content
-
-  if (!catalog) return base
-
-  const { lessonPricing } = await getLessonPricingData(catalog)
-
-  const lesson = (name: string) => lessonPricing.find(p => p.name === name)?.oneGolfer ?? ''
-  const hr1 = lesson('1 Hour') || '1,800 THB'
-  const hr5 = lesson('5 Hour') || '8,500 THB'
-  const hr10 = lesson('10 Hour') || '16,000 THB'
-  const starter = lesson('Starter Package*') || '11,000 THB'
-  const simToFairway = lesson('Sim to Fairway*') || '13,499 THB'
-
-  return {
-    ...base,
-    answer_intro: `The best way to learn golf in Bangkok is with a PGA-certified coach using a golf simulator. Simulator lessons give you real-time swing data (ball speed, launch angle, spin rate) that's impossible to get on a driving range, plus video analysis and instant feedback. At LENGOLF, lessons with PGA-certified coaches start at ${hr1} per hour with simulator usage included.`,
-    answer_body: `Bangkok has several options for learning golf, each with trade-offs.\n\n**1. Simulator Lessons with a Coach (Recommended)**\nGolf simulators provide data-driven instruction that accelerates learning. At LENGOLF, three Thailand PGA-certified coaches (PRO Boss, PRO Ratchavin, and PRO Min) teach all levels using Bravo simulator technology. You see exactly what your club is doing at impact — club path, face angle, ball speed, spin — which means faster improvement than guesswork on a range.\n\nLESSON PRICING:\n- 1 hour: ${hr1} (1 golfer)\n- 5 hours: ${hr5} (valid 6 months)\n- 10 hours: ${hr10} (valid 12 months)\n- Starter Package: ${starter} (5 hours coaching + 5 hours practice + free golf glove)\n- Free 1-hour trial lesson available — contact LINE @lengolf\n\n**2. Driving Range with a Pro**\nBangkok has several driving ranges with coaches available. These are good for hitting lots of balls but lack the data feedback of simulators. Ranges are also hot, noisy, and you can't see exactly where your ball lands.\n\n**3. On-Course Lessons**\nSome courses offer on-course instruction. Better for advanced players learning course management than for beginners learning swing mechanics.\n\n**4. Self-Teaching on YouTube**\nFree but risky. Without feedback, beginners often build bad habits that are harder to fix later.\n\n**Our Recommendation for Beginners**\nStart with the Starter Package at LENGOLF (5 hours coaching + 5 hours practice for ${starter}). Build fundamentals on the simulator with data-driven feedback, then move to the Sim to Fairway package (${simToFairway}) when you're ready for a real course.`,
-  }
-}
-
-/**
- * Returns the content for "How Much Does a Corporate Golf Event Cost in Bangkok?" (faq-15)
- * with live event package prices.
- */
-export async function getCorporateEventCostContent(catalog?: PricingCatalog | null): Promise<FaqContent> {
-  catalog = catalog ?? await getPricingCatalog()
-  const base = faqPages.find(p => p.slug === 'how-much-does-corporate-golf-event-cost-bangkok')!.content
-
-  if (!catalog) return base
-
-  const { eventPackages } = await getEventPackagesData(catalog)
-
-  const small = eventPackages.find(p => p.name === 'Small Package')?.price ?? '9,999 THB'
-  const medium = eventPackages.find(p => p.name === 'Medium Package')?.price ?? '21,999 THB'
-
-  const smallNum = parseInt(small.replace(/[^0-9]/g, ''), 10)
-  const mediumNum = parseInt(medium.replace(/[^0-9]/g, ''), 10)
-  const smallPP15 = isNaN(smallNum) ? '~667' : `~${formatThb(Math.round(smallNum / 15))}`
-  const mediumPP25 = isNaN(mediumNum) ? '~880' : `~${formatThb(Math.round(mediumNum / 25))}`
-
-  return {
-    ...base,
-    answer_intro: `Corporate golf events in Bangkok range from ${small} for a small indoor event to 100,000+ THB for a full outdoor tournament. At LENGOLF, all-inclusive packages start at ${small} (10–15 guests, 2 golf bays, 3 hours, drinks, and catered food) or ${medium} (15–25 guests, 4 bays, full venue rental). Outdoor corporate golf days at Bangkok courses typically cost 3,000–7,000 THB per person.`,
-    answer_body: `Here's a complete breakdown of corporate golf event pricing in Bangkok.\n\n**LENGOLF Indoor Event Packages**\n\n*Small Package — ${small}*\n- 10–15 guests\n- 2 golf simulator bays, 3 hours\n- 10 beers (Singha or Asahi), 5 cocktails, unlimited soft drinks\n- Catered food spread from Smith & Co.\n- Per-person cost: ${smallPP15}–${formatThb(Math.round(smallNum / 10))} THB all-inclusive\n\n*Medium Package — ${medium}*\n- 15–25 guests\n- 4 golf simulator bays, 3 hours\n- Exclusive full-location rental\n- 20 beers, 10 cocktails, unlimited soft drinks\n- Catered food from Smith & Co. & Pizza Mania\n- Per-person cost: ${mediumPP25}–${formatThb(Math.round(mediumNum / 15))} THB all-inclusive\n\n*Custom Packages*\nFor larger groups (25–50+), longer durations, or specific requirements, we create custom packages. Add-ons include sound system, DJ setup, custom decorations, and expanded catering. Contact LINE @lengolf.\n\n**Outdoor Corporate Golf Days (Comparison)**\n- Green fees: 1,500–4,000 THB per person\n- Caddie fees: 300–400 THB per person\n- Cart rental: 700–1,000 THB per cart\n- F&B / after-party: 500–2,000 THB per person\n- Transport: 2,000–5,000 THB for group minivan\n- Total per person: 3,000–7,000 THB\n- Time commitment: Full day (transport + 5-hour round + dinner)\n\n**Why Indoor Corporate Events Work**\n- Everyone participates, including non-golfers\n- 3 hours vs. full-day commitment\n- All-inclusive pricing (no surprise costs)\n- Central location at BTS Chidlom (easy for everyone)\n- Air-conditioned, weather-proof\n- Food, drinks, and activity in one venue\n\nLENGOLF is located at Mercury Ville, BTS Chidlom (Exit 4). Contact our events team on LINE @lengolf or fill out the inquiry form at len.golf/events.`,
-  }
-}
