@@ -22,6 +22,8 @@
     "validate:courses": "tsx scripts/validate-courses.ts",
     "validate:courses:self-test": "tsx scripts/validate-courses.ts --self-test",
     "validate:pricing-payload": "tsx scripts/validate-pricing-payload.ts",
+    "validate:pricing-revalidate": "tsx scripts/validate-pricing-revalidate.ts",
+    "validate:pricing-revalidate:contract": "tsx scripts/validate-pricing-revalidate-contract.ts",
     "validate:hotels": "tsx scripts/validate-hotels.ts",
     "verify:coordinates": "tsx scripts/verify-course-coordinates.ts",
     "inventory": "tsx scripts/page-inventory.ts",
