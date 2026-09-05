@@ -1352,10 +1352,16 @@ export function getRegisteredGuidePaths(locale: string): string[] {
 /**
  * FAQ paths registered as translated for `locale` (the '/faq/...' entries in
  * staticRoutes). Mirrors getRegisteredGuidePaths — this registry cannot
- * import data/faq-pages.ts (it is bundled into the edge middleware, and
- * data/faq-pages.ts runtime-imports lib/pricing), so the smoke tests assert
- * this list stays in sync with the locale-tagged entries in the data file —
- * see scripts/smoke-test.ts registry-consistency check.
+ * import data/faq-pages.ts, because this module is bundled into the edge
+ * middleware and that file is a 5,700-line content corpus. So the smoke
+ * tests assert this list stays in sync with the locale-tagged entries in the
+ * data file — see scripts/smoke-test.ts registry-consistency check.
+ *
+ * This used to give a SECOND reason — that data/faq-pages.ts runtime-imports
+ * lib/pricing — and that reason is now false: PR #127 deleted the three dead
+ * pricing getters there, and with them the only edge from this data file to
+ * lib/pricing. The bundle-size reason stands on its own, so the design does
+ * not change; the premise did.
  */
 export function getRegisteredFaqPaths(locale: string): string[] {
   return (TRANSLATED_ROUTES[locale]?.staticRoutes ?? []).filter((r) =>

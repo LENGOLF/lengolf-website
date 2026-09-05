@@ -20,11 +20,15 @@
  *   - data/price-guide-pages.ts — /cost entries with locale ja/ko/zh/th
  *   - data/activity-occasions.ts — /activities entries, same locales
  *   - data/best-of-listicle-pages.ts — /best entries, same locales
- * data/faq-pages.ts imports lib/pricing at module level, but that module is
- * tsx-safe by design: its React `cache` call falls back to identity outside
- * the RSC runtime (see the comment in lib/pricing.ts), and the live pricing
- * fetch only runs inside the exported async helpers, never at import time.
- * The other three are plain data modules.
+ * Every module in that list is a plain data module — none imports lib/pricing.
+ *
+ * This paragraph used to justify an import that no longer exists: it said
+ * data/faq-pages.ts imports lib/pricing at module level, and argued that was
+ * tsx-safe because lib/pricing's React `cache` call falls back to identity
+ * outside the RSC runtime. PR #127 deleted the three dead pricing getters in
+ * data/faq-pages.ts, and with them that import. The reasoning was sound and is
+ * simply no longer needed here; if a future corpus member does import
+ * lib/pricing, it still holds (see the comment in lib/pricing.ts).
  *
  * ERROR-level (exit 1) — a hard defect that must never ship:
  *   1. Emoji in ja/ko/zh content.

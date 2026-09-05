@@ -31,6 +31,7 @@
  * is a failure here.
  */
 
+import ts from 'typescript'
 import { spawnSync } from 'child_process'
 import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, cpSync, existsSync, unlinkSync } from 'fs'
 import { tmpdir } from 'os'
@@ -55,6 +56,47 @@ let failures = 0
 let judged = 0
 let casesRun = 0
 
+/**
+ * The verdict, as a PURE function of the run — deliberately separated from
+ * `expect()` so it can be exercised on synthetic inputs before the suite runs.
+ * Review neutered `expect()` to print ✓ and return before `failures++`, and
+ * the whole suite reported `20 case(s) · 20 judged · 0 failure(s) · OK` with
+ * the gate fully disarmed: `judged !== casesRun` is powerless there, because
+ * both counters still increment identically. The corruption was in what the
+ * function CONCLUDED, which no counter can see. `assertJudgeDiscriminates()`
+ * below is what sees it.
+ */
+function judgeRun(run: Run, wantCode: number, wantText?: string): boolean {
+  const codeOk = run.code === wantCode
+  const textOk = wantText === undefined || (run.stdout + run.stderr).includes(wantText)
+  return codeOk && textOk
+}
+
+/**
+ * Proves the verdict function still DISCRIMINATES, in both directions, before
+ * a single case runs. A judge pinned true, pinned false, or ignoring either of
+ * its two conditions fails here. This is the harness's own control — the same
+ * argument the disarmed-gate section makes about the gate.
+ */
+function assertJudgeDiscriminates(): void {
+  const ok: Run = { code: 1, stdout: 'the needle is here', stderr: '' }
+  const wrongCode: Run = { code: 0, stdout: 'the needle is here', stderr: '' }
+  const wrongText: Run = { code: 1, stdout: 'nothing relevant', stderr: '' }
+  const checks: Array<[string, boolean]> = [
+    ['a matching run is accepted', judgeRun(ok, 1, 'needle') === true],
+    ['a wrong exit code is rejected', judgeRun(wrongCode, 1, 'needle') === false],
+    ['a missing needle is rejected', judgeRun(wrongText, 1, 'needle') === false],
+    ['code-only mode still discriminates', judgeRun(wrongCode, 1) === false],
+  ]
+  const broken = checks.filter(([, held]) => !held).map(([label]) => label)
+  if (broken.length > 0) {
+    console.error('✗ the contract suite\'s own verdict function does not discriminate:')
+    for (const b of broken) console.error(`    ${b}`)
+    console.error('  Every ✓ below would be meaningless. Refusing to run.')
+    process.exit(1)
+  }
+}
+
 function expect(name: string, run: Run, wantCode: number, wantText?: string): void {
   casesRun++
   const codeOk = run.code === wantCode
@@ -62,7 +104,7 @@ function expect(name: string, run: Run, wantCode: number, wantText?: string): vo
   // Incremented AFTER both comparisons: a `continue` above this line would
   // leave casesRun at its true value while asserting nothing.
   judged++
-  if (codeOk && textOk) {
+  if (judgeRun(run, wantCode, wantText)) {
     console.log(`  ✓ ${name}`)
     return
   }
@@ -121,7 +163,7 @@ export default async function P() { return String(await getSiteFacts()) }
 `,
     },
     wantCode: 1,
-    wantText: 'declares no `export const revalidate`',
+    wantText: 'neither it nor any ancestor layout declares',
     tainted: ['app/p/page.tsx#P', 'app/p/page.tsx#default', 'lib/pricing.ts#getPricingCatalog', 'lib/site-facts.ts#getSiteFacts'],
     routes: ['app/p/page.tsx'],
   },
@@ -184,7 +226,7 @@ export default async function P() { return String(await getSiteFacts()) }
 `,
     },
     wantCode: 1,
-    wantText: 'which is Infinity',
+    wantText: 'shortening branch never runs',
     tainted: ['app/p/page.tsx#P', 'app/p/page.tsx#default', 'lib/pricing.ts#getPricingCatalog', 'lib/site-facts.ts#getSiteFacts'],
     routes: ['app/p/page.tsx'],
   },
@@ -261,6 +303,70 @@ export default async function Q() { return String(await getSiteFacts()) }
       'lib/pricing.ts#getPricingCatalog', 'lib/site-facts.ts#getSiteFacts',
     ],
     routes: ['app/p/page.tsx'],
+  },
+  // The three holes an adversarial pass found in the analyzer. Each was a
+  // SILENT false negative or false positive — the route was not merely
+  // unflagged, it was absent from the inventory, so neither exact pin fired.
+  {
+    name: 'taint survives TOP-LEVEL DESTRUCTURING',
+    files: {
+      'lib/pricing.ts': PRICING_MODULE,
+      'lib/destructure.ts': `import { getPricingCatalog } from '@/lib/pricing'
+export const { a, b } = { a: getPricingCatalog, b: 1 }
+`,
+      'app/p/page.tsx': `import { a } from '@/lib/destructure'
+export default async function P() { return String(await a()) }
+`,
+    },
+    wantCode: 1,
+    wantText: 'a <- lib/destructure.ts',
+    tainted: [
+      'app/p/page.tsx#P', 'app/p/page.tsx#default',
+      'lib/destructure.ts#a', 'lib/destructure.ts#b',
+      'lib/pricing.ts#getPricingCatalog',
+    ],
+    routes: ['app/p/page.tsx'],
+  },
+  {
+    name: 'taint survives a module OUTSIDE the scanned directories',
+    files: {
+      'lib/pricing.ts': PRICING_MODULE,
+      // `hooks/` is not in SCAN_DIRS. Before the closure fix, resolveSpecifier
+      // resolved this file happily while the walk never parsed it, so taint
+      // died here with no trace at all.
+      'hooks/wrap.ts': `import { getPricingCatalog } from '@/lib/pricing'
+export async function wrapped() { return await getPricingCatalog() }
+`,
+      'app/p/page.tsx': `import { wrapped } from '@/hooks/wrap'
+export default async function P() { return String(await wrapped()) }
+`,
+    },
+    wantCode: 1,
+    wantText: 'wrapped <- hooks/wrap.ts',
+    tainted: [
+      'app/p/page.tsx#P', 'app/p/page.tsx#default',
+      'hooks/wrap.ts#wrapped', 'lib/pricing.ts#getPricingCatalog',
+    ],
+    routes: ['app/p/page.tsx'],
+  },
+  {
+    name: 'an ANCESTOR LAYOUT\'s revalidate covers the page (no false positive)',
+    files: {
+      'lib/pricing.ts': PRICING_MODULE,
+      'app/lay/layout.tsx': `export const revalidate = 86400
+export default function L({ children }: { children: unknown }) { return children }
+`,
+      'app/lay/sub/page.tsx': `import { getPricingCatalog } from '@/lib/pricing'
+export default async function S() { return String(await getPricingCatalog()) }
+`,
+    },
+    wantCode: 0,
+    wantText: 'OK',
+    tainted: [
+      'app/lay/sub/page.tsx#S', 'app/lay/sub/page.tsx#default',
+      'lib/pricing.ts#getPricingCatalog',
+    ],
+    routes: ['app/lay/sub/page.tsx'],
   },
 ]
 
@@ -383,16 +489,51 @@ function readPinnedLiterals(): { tainted: string[]; routes: string[] } {
   // Re-derive from the gate itself so the suite cannot drift from the pins it
   // is meant to extend. Reading the source constants beats hardcoding a second
   // copy that a future edit would leave stale.
+  // PARSED WITH THE AST, for the reason the gate itself gives about scanning
+  // source with string search. The previous version delimited the array with
+  // `indexOf('\n]', open)`, and review broke it two ways: emptying the tainted
+  // array to `[]` and indenting its closing bracket by two spaces BOTH made
+  // the search run past the adjacent bracket and land on the NEXT array's
+  // closer, so `grab('EXPECTED_TAINTED_LITERAL')` returned the 13 route
+  // strings (mislabelled) in one case and 59 concatenated entries in the
+  // other. Honest note on severity, because the obvious fear did not
+  // reproduce: the corrupted pin is written into the fixture and fed to the
+  // real gate, whose own diff then fires — so it failed LOUD, as a red
+  // control, rather than silently passing everything. Fail-loud is the safe
+  // direction; it is still a wrong-reason failure and a wasted CI round, and
+  // the AST removes the class rather than the instance.
   const src = readFileSync(GATE, 'utf8')
+  const sf = ts.createSourceFile(GATE, src, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS)
   const grab = (name: string): string[] => {
-    const start = src.indexOf(`const ${name}: string[] = [`)
-    if (start < 0) throw new Error(`contract suite cannot find ${name} in the gate`)
-    const open = src.indexOf('[', start)
-    const close = src.indexOf('\n]', open)
-    if (close < 0) throw new Error(`contract suite cannot delimit ${name}`)
-    return [...src.slice(open, close).matchAll(/'([^']+)'/g)].map(m => m[1])
+    for (const stmt of sf.statements) {
+      if (!ts.isVariableStatement(stmt)) continue
+      for (const d of stmt.declarationList.declarations) {
+        if (!ts.isIdentifier(d.name) || d.name.text !== name) continue
+        const init = d.initializer
+        if (!init || !ts.isArrayLiteralExpression(init)) {
+          throw new Error(`contract suite: ${name} is not an array literal in the gate`)
+        }
+        return init.elements.map(el => {
+          if (!ts.isStringLiteral(el)) {
+            throw new Error(`contract suite: ${name} holds a non-literal element`)
+          }
+          return el.text
+        })
+      }
+    }
+    throw new Error(`contract suite cannot find ${name} in the gate`)
   }
-  return { tainted: grab('EXPECTED_TAINTED_LITERAL'), routes: grab('EXPECTED_PRICING_ROUTES_LITERAL') }
+  const tainted = grab('EXPECTED_TAINTED_LITERAL')
+  const routes = grab('EXPECTED_PRICING_ROUTES_LITERAL')
+  // An emptied pin would make every real-tree mutation pass for the wrong
+  // reason, so refuse rather than measure nothing.
+  if (tainted.length === 0 || routes.length === 0) {
+    throw new Error(
+      `contract suite: the gate's pins are empty (tainted=${tainted.length}, routes=${routes.length}). ` +
+      `Every real-tree case below would be vacuous.`,
+    )
+  }
+  return { tainted, routes }
 }
 
 function runRealTree(): void {
@@ -458,46 +599,173 @@ function runRealTree(): void {
  * refuses to run at all unless the control passed.
  */
 const MUTANT_PATH = 'scripts/_pricing-contract-mutant.ts'
-const MUST_FAIL_TEXT = 'declares no `export const revalidate`'
+const MUST_FAIL_TEXT = 'neither it nor any ancestor layout declares'
 
-const DISARM_MUTANTS: Array<{ name: string; find: string; replace: string }> = [
-  { name: 'process.exit(1) deleted', find: '    process.exit(1)\n  }\n  console.log(\'OK\')', replace: '    // process.exit(1)\n  }\n  console.log(\'OK\')' },
-  { name: 'problems.length > 0 pinned false', find: '  if (problems.length > 0) {', replace: '  if (false && problems.length > 0) {' },
-  { name: 'the missing-revalidate branch disarmed', find: "    if (rv.kind === 'missing') {", replace: '    if (false) {' },
-  { name: 'the pricing-route check short-circuited', find: '    if (hits.length === 0) continue', replace: '    if (true) continue' },
+/**
+ * THIS LIST STARTED AT FOUR AND WAS MEASURABLY INADEQUATE. An adversarial pass
+ * found SIX further single-edit disarms that left the gate exiting 0 on a live
+ * defect while both this suite and the ordinary CI step stayed green — every
+ * one of them absent from the list at the time. The four originals were all
+ * caught; the point is that "the mutants I thought of are caught" is not
+ * coverage. When you add a verdict or an anti-vacuity block to the gate, add
+ * its disarm HERE in the same commit, or it is unguarded by construction.
+ *
+ * Anchors are required to appear EXACTLY ONCE (checked below), so a refactor
+ * that duplicates or reformats one fails loudly rather than silently testing
+ * nothing.
+ */
+const DISARM_MUTANTS: Array<{ name: string; find: string; replace: string; fixture: FixtureKind }> = [
+  // -- the four originals --
+  { name: 'process.exit(1) deleted', fixture: 'missing', find: '    process.exit(1)\n  }\n  console.log(\'OK\')', replace: '    // process.exit(1)\n  }\n  console.log(\'OK\')' },
+  { name: 'problems.length > 0 pinned false', fixture: 'missing', find: '  if (problems.length > 0) {', replace: '  if (false && problems.length > 0) {' },
+  { name: 'the missing-revalidate branch disarmed', fixture: 'missing', find: "    if (rv.kind === 'missing') {", replace: '    if (false) {' },
+  { name: 'the pricing-route check short-circuited', fixture: 'missing', find: '    if (hits.length === 0) continue', replace: '    if (true) continue' },
+
+  // -- the six review found surviving, in the order it reported them --
+  // CRITICAL: one line silently accepts every route regardless of its real
+  // state, and neither pin notices because taint and classification are intact.
+  {
+    name: 'revalidateOf hardcoded to "declared"', fixture: 'missing',
+    find: 'function revalidateOf(mod: Mod): RevalidateState {\n  revalidateProbes++',
+    replace: "function revalidateOf(mod: Mod): RevalidateState {\n  revalidateProbes++\n  return { kind: 'declared', text: 'mutant' }",
+  },
+  // CRITICAL: "expected" derived from "got" in the same run is immune to ANY
+  // analyzer regression, not merely to one specific mutation.
+  {
+    name: 'the tainted pin made self-fulfilling', fixture: 'wrongTainted',
+    find: "  const expectedTainted = expectedFrom('PRICING_GATE_EXPECT_TAINTED', EXPECTED_TAINTED_LITERAL)",
+    replace: '  const expectedTainted = [...a.taintedExports].sort()',
+  },
+  {
+    name: 'the route pin made self-fulfilling', fixture: 'wrongRoute',
+    find: "  const expectedRoutes = expectedFrom('PRICING_GATE_EXPECT_ROUTES', EXPECTED_PRICING_ROUTES_LITERAL)",
+    replace: '  const expectedRoutes = [...pricingRoutes]',
+  },
+  {
+    name: 'the revalidate=false branch disarmed', fixture: 'false',
+    find: "    } else if (rv.kind === 'false') {",
+    replace: '    } else if (false) {',
+  },
+  {
+    name: 'the tainted-pin verdict disarmed', fixture: 'wrongTainted',
+    find: '  if (td.missing.length || td.extra.length) {',
+    replace: '  if (false) {',
+  },
+  {
+    name: 'the route-pin verdict disarmed', fixture: 'wrongRoute',
+    find: '  if (rd.missing.length || rd.extra.length) {',
+    replace: '  if (false) {',
+  },
+  // The compound edit that defeats `judged` by moving the counter WITH the
+  // skip, so judged === pricingRoutes.length while nothing is checked. Caught
+  // now only because `revalidateProbes` is incremented inside the scan itself.
+  {
+    name: 'judged++ moved up beside the push, with a skip below it', fixture: 'missing',
+    find: '    pricingRoutes.push(rel)\n',
+    replace: '    pricingRoutes.push(rel)\n    judged++\n    continue\n',
+  },
 ]
+
+/**
+ * Each mutant is tested against a fixture ITS DISARM ACTUALLY CHANGES.
+ *
+ * The first version of this section ran every mutant against one
+ * missing-revalidate fixture, and five of the eleven "passed" for a reason
+ * that proved nothing: a fixture with no `revalidate = false` in it cannot
+ * expose the false-branch disarm, and a fixture whose pins are CORRECT cannot
+ * expose a pin being disarmed or made self-fulfilling. Adding those six
+ * mutants made the suite honestly report 5 survivors — the list was right and
+ * the fixture was wrong.
+ */
+type FixtureKind = 'missing' | 'false' | 'wrongTainted' | 'wrongRoute'
+
+interface DisarmFixture {
+  /** What the HEALTHY gate must say about this tree. */
+  wantText: string
+  /** Written into app/p/page.tsx. */
+  page: string
+  /** Deliberate corruption of the pins, applied on top of the true inventory. */
+  corrupt?: (t: string[], r: string[]) => { t: string[]; r: string[] }
+}
+
+const DISARM_FIXTURES: Record<FixtureKind, DisarmFixture> = {
+  missing: {
+    wantText: MUST_FAIL_TEXT,
+    page: `import { getSiteFacts } from '@/lib/site-facts'
+export default async function P() { return String(await getSiteFacts()) }
+`,
+  },
+  false: {
+    wantText: 'shortening branch never runs',
+    page: `import { getSiteFacts } from '@/lib/site-facts'
+export const revalidate = false
+export default async function P() { return String(await getSiteFacts()) }
+`,
+  },
+  // A route that is fully compliant, so the ONLY thing the healthy gate can
+  // complain about is the pin — which is what these two fixtures corrupt, one
+  // side at a time. Corrupting both would let a mutant that disarms one pin
+  // still be caught by the other, which is exactly the false pass being fixed.
+  wrongTainted: {
+    wantText: 'the tainted-symbol inventory moved',
+    page: `import { getSiteFacts } from '@/lib/site-facts'
+export const revalidate = 86400
+export default async function P() { return String(await getSiteFacts()) }
+`,
+    corrupt: (t, r) => ({ t: [...t, 'lib/ghost.ts#neverTainted'], r }),
+  },
+  wrongRoute: {
+    wantText: 'set of pricing-reading routes moved',
+    page: `import { getSiteFacts } from '@/lib/site-facts'
+export const revalidate = 86400
+export default async function P() { return String(await getSiteFacts()) }
+`,
+    corrupt: (t, r) => ({ t, r: [...r, 'app/ghost/page.tsx'] }),
+  },
+}
 
 function runDisarmed(): void {
   console.log('\nDisarmed-gate fixtures (exit-code integrity):')
   const dir = mkdtempSync(join(tmpdir(), 'pricing-disarm-'))
   const mutantAbs = join(REPO, MUTANT_PATH)
-  try {
-    // A fixture the healthy gate MUST reject.
-    const tree = join(dir, 'tree')
-    mkdirSync(join(tree, 'lib'), { recursive: true })
-    mkdirSync(join(tree, 'app', 'p'), { recursive: true })
-    writeFileSync(join(tree, 'lib', 'pricing.ts'), PRICING_MODULE)
-    writeFileSync(join(tree, 'lib', 'site-facts.ts'), SITE_FACTS)
-    writeFileSync(join(tree, 'app', 'p', 'page.tsx'),
-      `import { getSiteFacts } from '@/lib/site-facts'
-export default async function P() { return String(await getSiteFacts()) }
-`)
-    const tPin = join(dir, 't.json')
-    const rPin = join(dir, 'r.json')
-    writeFileSync(tPin, JSON.stringify(['app/p/page.tsx#P', 'app/p/page.tsx#default', 'lib/pricing.ts#getPricingCatalog', 'lib/site-facts.ts#getSiteFacts']))
-    writeFileSync(rPin, JSON.stringify(['app/p/page.tsx']))
+  const src = readFileSync(GATE, 'utf8')
 
-    const env = {
-      PRICING_GATE_ROOT: tree,
-      PRICING_GATE_EXPECT_TAINTED: tPin,
-      PRICING_GATE_EXPECT_ROUTES: rPin,
-      PRICING_GATE_MIN_FILES: '1',
-      PRICING_GATE_MIN_ROUTES: '1',
+  /** The true inventory of the one-route fixture tree. */
+  const TRUE_TAINTED = [
+    'app/p/page.tsx#P', 'app/p/page.tsx#default',
+    'lib/pricing.ts#getPricingCatalog', 'lib/site-facts.ts#getSiteFacts',
+  ]
+  const TRUE_ROUTES = ['app/p/page.tsx']
+
+  try {
+    const buildFixture = (kind: FixtureKind) => {
+      const f = DISARM_FIXTURES[kind]
+      const tree = join(dir, kind)
+      mkdirSync(join(tree, 'lib'), { recursive: true })
+      mkdirSync(join(tree, 'app', 'p'), { recursive: true })
+      writeFileSync(join(tree, 'lib', 'pricing.ts'), PRICING_MODULE)
+      writeFileSync(join(tree, 'lib', 'site-facts.ts'), SITE_FACTS)
+      writeFileSync(join(tree, 'app', 'p', 'page.tsx'), f.page)
+      const { t, r } = f.corrupt
+        ? f.corrupt([...TRUE_TAINTED], [...TRUE_ROUTES])
+        : { t: TRUE_TAINTED, r: TRUE_ROUTES }
+      const tPin = join(dir, `${kind}-t.json`)
+      const rPin = join(dir, `${kind}-r.json`)
+      writeFileSync(tPin, JSON.stringify(t))
+      writeFileSync(rPin, JSON.stringify(r))
+      return {
+        wantText: f.wantText,
+        env: {
+          PRICING_GATE_ROOT: tree,
+          PRICING_GATE_EXPECT_TAINTED: tPin,
+          PRICING_GATE_EXPECT_ROUTES: rPin,
+          PRICING_GATE_MIN_FILES: '1',
+          PRICING_GATE_MIN_ROUTES: '1',
+        },
+      }
     }
 
-    const src = readFileSync(GATE, 'utf8')
-
-    const runCopy = (body: string): Run => {
+    const runCopy = (body: string, env: Record<string, string>): Run => {
       writeFileSync(mutantAbs, body)
       const r = spawnSync('npx', ['tsx', MUTANT_PATH], {
         cwd: REPO, env: { ...process.env, ...env }, encoding: 'utf8',
@@ -506,21 +774,39 @@ export default async function P() { return String(await getSiteFacts()) }
       return { code: r.status ?? -1, stdout: r.stdout ?? '', stderr: r.stderr ?? '' }
     }
 
-    /** The suite's contract: what an ARMED gate does to a must-fail fixture. */
-    const satisfiesContract = (r: Run) =>
-      r.code === 1 && (r.stdout + r.stderr).includes(MUST_FAIL_TEXT)
+    const kinds = Object.keys(DISARM_FIXTURES) as FixtureKind[]
+    const built = new Map<FixtureKind, ReturnType<typeof buildFixture>>()
+    let anyControlFailed = false
 
-    const control = runCopy(src)
-    casesRun++
-    const controlOk = satisfiesContract(control)
-    judged++
-    if (controlOk) {
-      console.log('  ✓ control: an unmutated copy of the gate rejects the bad fixture')
-    } else {
-      failures++
-      console.error('  ✗ control: an unmutated copy of the gate rejects the bad fixture')
-      console.error(`      exit ${control.code}; every mutant below would read as caught, so they are SKIPPED`)
-      console.error(`      output:\n        ${(control.stdout + control.stderr).trim().split('\n').slice(0, 8).join('\n        ')}`)
+    // One control per fixture kind. Without these, a mutant that "fails the
+    // contract" because the fixture never provoked the healthy gate in the
+    // first place reads as caught — which is precisely the bug this rewrite
+    // fixes, and it was invisible until the mutant list grew.
+    for (const kind of kinds) {
+      const f = buildFixture(kind)
+      built.set(kind, f)
+      const control = runCopy(src, f.env)
+      casesRun++
+      const ok = judgeRun(control, 1, f.wantText)
+      judged++
+      if (ok) {
+        console.log(`  ✓ control [${kind}]: the unmutated gate rejects this fixture`)
+      } else {
+        failures++
+        anyControlFailed = true
+        console.error(`  ✗ control [${kind}]: the unmutated gate does NOT reject this fixture`)
+        console.error(`      exit ${control.code}, wanted 1 containing ${JSON.stringify(f.wantText)}`)
+        console.error(`      output:\n        ${(control.stdout + control.stderr).trim().split('\n').slice(0, 8).join('\n        ')}`)
+      }
+    }
+
+    if (anyControlFailed) {
+      console.error('  … mutants SKIPPED: with a control failing, every one of them would read as caught.')
+      // Still count them, so the exact-case check does not mask the skip.
+      for (const m of DISARM_MUTANTS) {
+        casesRun++; judged++; failures++
+        console.error(`  ✗ ${m.name}: not evaluated (a control failed)`)
+      }
       return
     }
 
@@ -534,25 +820,21 @@ export default async function P() { return String(await getSiteFacts()) }
         console.error(`      anchor: ${JSON.stringify(m.find)}`)
         continue
       }
-      const run = runCopy(src.replace(m.find, m.replace))
-      // A CRASH is not a caught mutant. Exit codes outside {0,1} mean the copy
-      // never reached a verdict — a module-load error, an abort — and "did not
-      // satisfy the contract" is then true for a reason that says nothing about
-      // the gate's logic. This is the control lesson applied per case: measured
-      // once, when a mutant that exits 1 on an idle machine exited 3221226505
-      // (a Windows process abort) while a `next build` was running beside it.
+      const f = built.get(m.fixture)!
+      const run = runCopy(src.replace(m.find, m.replace), f.env)
+      // A CRASH is not a caught mutant — see the note on the control above.
       const reachedAVerdict = run.code === 0 || run.code === 1
-      const survived = satisfiesContract(run)
+      const survived = judgeRun(run, 1, f.wantText)
       judged++
       if (!reachedAVerdict) {
         failures++
         console.error(`  ✗ ${m.name}: the mutated copy exited ${run.code} without reaching a verdict — nothing was proved`)
         console.error(`      output:\n        ${(run.stdout + run.stderr).trim().split('\n').slice(0, 8).join('\n        ')}`)
       } else if (!survived) {
-        console.log(`  ✓ ${m.name} — this suite would notice (exit ${run.code})`)
+        console.log(`  ✓ ${m.name} [${m.fixture}] — this suite would notice (exit ${run.code})`)
       } else {
         failures++
-        console.error(`  ✗ ${m.name} SURVIVED: the disarmed gate still satisfies this suite's contract`)
+        console.error(`  ✗ ${m.name} [${m.fixture}] SURVIVED: the disarmed gate still satisfies this suite's contract`)
       }
     }
   } finally {
@@ -560,12 +842,26 @@ export default async function P() { return String(await getSiteFacts()) }
     rmSync(dir, { recursive: true, force: true })
   }
 }
-
 // ── Main ───────────────────────────────────────────────────────────────────
 
-const MIN_CASES = 10
+/**
+ * EXACT, not a floor — and the floor it replaces was measured to be useless.
+ * At `MIN_CASES = 10`, emptying the `fixtures` array deleted all ten synthetic
+ * analyzer tests (including "revalidate=false is rejected" and "taint crosses
+ * a default export") and left exactly 10 cases from the other two sections, so
+ * `10 < 10` was FALSE and the suite printed `10 case(s) · 10 judged · 0
+ * failure(s) · OK`. A whole test category vanished with no signal, sitting
+ * precisely on the boundary. Derived from the three section sizes so it moves
+ * when a section legitimately does, rather than being a hand-typed number that
+ * rots — but it is an equality, so a section quietly shrinking is still red.
+ */
+const EXPECTED_CASES =
+  fixtures.length +                    // synthetic (no separate control; each IS its own assertion)
+  1 + mutations.length +               // real-tree: ONE shared control, then the mutations
+  Object.keys(DISARM_FIXTURES).length + DISARM_MUTANTS.length  // disarmed: one control PER FIXTURE KIND, then the mutants
 
 function main(): void {
+  assertJudgeDiscriminates()
   runSynthetic()
   runRealTree()
   runDisarmed()
@@ -576,8 +872,13 @@ function main(): void {
     console.error(`✗ ${casesRun} cases ran but only ${judged} were judged — a skip sits between the two.`)
     failures++
   }
-  if (casesRun < MIN_CASES) {
-    console.error(`✗ only ${casesRun} cases ran, floor is ${MIN_CASES}. An emptied case list passes every check above it.`)
+  if (casesRun !== EXPECTED_CASES) {
+    console.error(
+      `✗ ${casesRun} cases ran, expected exactly ${EXPECTED_CASES} ` +
+      `(${fixtures.length} synthetic + ${1 + mutations.length} real-tree + ${1 + DISARM_MUTANTS.length} disarmed). ` +
+      `A section was skipped or emptied — an inequality would pass that, which is how ` +
+      `emptying all ten synthetic fixtures once sat exactly on a floor of 10 and printed OK.`,
+    )
     failures++
   }
   if (failures > 0) {

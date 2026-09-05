@@ -62,16 +62,25 @@
  * is absent from the pin. Deleting the four dead getters (same commit)
  * removed that wrong reason entirely.
  *
- * WHY THE TYPESCRIPT AST, and not string scanning. `data/faq-pages.ts` names
- * its deleted pricing getters in NINE comments — a text-based prototype
- * false-flagged five files on comment text alone before the AST version was
- * written. Note the scope of that claim honestly: after this commit those
+ * WHY THE TYPESCRIPT AST, and not string scanning. Attribution first, because
+ * the first draft of this paragraph got it wrong: the "a text-based version
+ * false-flagged 5 files" measurement is INHERITED from CLAUDE.md's account of
+ * the PR #126 investigation. No such prototype was written for this gate, and
+ * none exists in the repo or its history — a claim audit correctly called the
+ * original wording unfalsifiable, because it read as though this author had
+ * run one. The two comment counts that text carries are also about different
+ * things and neither is wrong: CLAUDE.md's "four comments" is the count for
+ * `getIndoorGolfCostContent` alone, while NINE is all three getters together
+ * (4 + 4 + 1, measured on a15c09d).
+ *
+ * The durable argument does not rest on that anecdote anyway: comments,
+ * strings, regex literals and type positions are a parser's job, and
+ * validate-open-graph's hand-rolled scanner is the local proof — it had no
+ * regex-literal state and measurably corrupted three files under scripts/.
+ * Note the scope of the text trap honestly: after this commit those
  * comments name only DELETED symbols, so the live text trap is gone and the
- * argument for the AST is the FUTURE one — comments, strings, regex literals
- * and type positions are a parser's job, and a regex literal landing in a
- * scanned file is exactly how validate-open-graph's hand-rolled scanner
- * corrupted three files under scripts/. `typescript` is already a
- * devDependency and that gate is the precedent. One consequence worth naming:
+ * argument for the AST is the FUTURE one. `typescript` is already a
+ * devDependency. One consequence worth naming:
  * `isTypeNode` subtrees are skipped, so `Promise<PricingCatalog>` in a
  * signature is not a reference — which is what keeps app/[locale]/layout.tsx
  * off the list, since its only edge to pricing is a type-only one.
@@ -102,9 +111,24 @@
  *      leave every floor at its true value while evaluating zero comparisons —
  *      the smoke-L6 shape this repo has now hit four times.
  *
- * KNOWN LIMIT: this reads SOURCE. A pricing read introduced through a dynamic
- * `await import()` with a computed specifier, or through a bare re-export
- * chain this resolver cannot follow, is invisible. Both are absent today.
+ * KNOWN LIMITS, all measured rather than guessed:
+ *   - This reads SOURCE, so a pricing read introduced through a dynamic
+ *     `await import()` with a computed specifier is invisible. Absent today.
+ *   - `collectRefs` matches identifier TEXT with no scope resolution, so a
+ *     local binding that SHADOWS a tainted import name still taints the
+ *     module. The error direction is safe (it demands a revalidate that was
+ *     not strictly required, never hides a hazard) and the tainted names are
+ *     distinctive, so this is left as-is rather than given a scope tracker.
+ *   - The gate does not read `dynamic = 'force-dynamic'`. Such a route never
+ *     writes an ISR entry, so it cannot suffer the 30-day freeze at all and
+ *     the revalidate this gate demands of it would be inert. Nothing under
+ *     app/ uses it today; if that changes, this is a spurious-requirement
+ *     risk, not a missed-bug risk.
+ * Three earlier limits are now CLOSED and have fixtures in the contract suite,
+ * because each was a SILENT false negative rather than a documented gap: top-
+ * level destructuring, a module outside SCAN_DIRS, and a route covered by an
+ * ancestor layout's revalidate (that last one a false POSITIVE that also
+ * printed a false statement about what Next does).
  *
  * Env overrides (PRICING_GATE_*) exist SOLELY so the contract suite can point
  * the real binary at a fixture tree; CI runs the ordinary step with none set.
@@ -390,8 +414,16 @@ function parse(abs: string): Mod {
     }
     if (ts.isVariableStatement(stmt)) {
       for (const d of stmt.declarationList.declarations) {
-        if (!ts.isIdentifier(d.name)) continue // destructuring at top level: rare, ignored
-        mod.decls.set(d.name.text, { name: d.name.text, node: d, exportedAs: namesFor(d.name.text) })
+        // A binding PATTERN binds several names to one initializer, so every
+        // name it binds inherits that initializer's taint. Skipping these (the
+        // original behaviour) was a silent hole: `export const { a } =
+        // getPricingCatalog()` taints nothing and the route importing `a` is
+        // not merely unflagged but absent from the inventory entirely, so no
+        // pin notices either. Found by review, latent at the time (the only
+        // top-level pattern in the scanned tree is i18n/navigation.ts).
+        for (const bound of bindingNames(d.name)) {
+          mod.decls.set(bound, { name: bound, node: d, exportedAs: namesFor(bound) })
+        }
       }
       continue
     }
@@ -404,6 +436,17 @@ function parse(abs: string): Mod {
   }
 
   return mod
+}
+
+/** Every identifier a binding name binds — plain, object pattern or array. */
+function bindingNames(name: ts.BindingName): string[] {
+  if (ts.isIdentifier(name)) return [name.text]
+  const out: string[] = []
+  for (const el of name.elements) {
+    if (ts.isOmittedExpression(el)) continue
+    out.push(...bindingNames(el.name))
+  }
+  return out
 }
 
 /** Identifiers referenced in VALUE position inside `node`. */
@@ -448,6 +491,43 @@ function analyze(): Analysis {
   for (const f of files) {
     const m = parse(f)
     mods.set(m.rel, m)
+  }
+
+  // SCAN_DIRS SEEDS THE GRAPH; IT DOES NOT BOUND IT.
+  //
+  // `resolveSpecifier` only checks that a path exists, so it happily resolves
+  // an import into a directory the walk never visited — but that module was
+  // never parsed, so it holds no declarations, and taint flowing through it
+  // simply stops. Review measured the consequence on a fixture: a route
+  // importing a pricing wrapper from a `hooks/` module outside SCAN_DIRS was
+  // absent from the tainted set AND from the pricing-route set, i.e. it was
+  // indistinguishable from a route that genuinely does not read pricing, so
+  // neither exact pin fired. It was latent (nothing under app/lib/data/
+  // components/types/i18n imports docs/, scripts/ or tests/ today) and it
+  // would have become live the first time anyone added a top-level `hooks/`
+  // or `utils/` directory — a bypass nobody would have thought to look for.
+  //
+  // Closing it by parsing to CLOSURE instead of widening SCAN_DIRS: any file
+  // an analysed module actually imports gets parsed, wherever it lives. That
+  // is strictly better than a longer directory list, which would have to be
+  // guessed correctly in advance and would silently rot.
+  const pending = [...mods.keys()]
+  while (pending.length > 0) {
+    const rel = pending.pop()!
+    const mod = mods.get(rel)!
+    const targets = [
+      ...[...mod.imports.values()].map(i => i.module),
+      ...mod.reexports.map(r => r.module),
+      ...mod.starReexports,
+    ]
+    for (const t of targets) {
+      if (!t || mods.has(t)) continue
+      const abs = join(ROOT, t)
+      if (!existsSync(abs)) continue
+      const m = parse(abs)
+      mods.set(m.rel, m)
+      pending.push(m.rel)
+    }
   }
 
   const taintedExports = new Set<string>(SEEDS)
@@ -525,7 +605,20 @@ type RevalidateState =
   | { kind: 'false' }
   | { kind: 'declared'; text: string }
 
+/**
+ * Counts how many times the revalidate scan ACTUALLY RAN. This is the oracle
+ * for a skip that `judged` cannot see: review demonstrated that moving
+ * `judged++` UP beside `pricingRoutes.push()` and adding a `continue` there
+ * keeps `judged === pricingRoutes.length` — both 1 on the fixture — while
+ * evaluating zero revalidate checks, so the equality the docblock cites as
+ * this file's smoke-L6 guard passed with a live defect. This counter is
+ * incremented inside the scan itself, where a skip in the CALLER cannot reach
+ * it, which is what makes it independent rather than a second copy of `judged`.
+ */
+let revalidateProbes = 0
+
 function revalidateOf(mod: Mod): RevalidateState {
+  revalidateProbes++
   for (const stmt of mod.source.statements) {
     if (!ts.isVariableStatement(stmt)) continue
     if (!ts.getModifiers(stmt)?.some(m => m.kind === ts.SyntaxKind.ExportKeyword)) continue
@@ -537,6 +630,42 @@ function revalidateOf(mod: Mod): RevalidateState {
     }
   }
   return { kind: 'missing' }
+}
+
+/**
+ * The route's own declaration, or the nearest ANCESTOR LAYOUT's.
+ *
+ * Next applies the shortening in `create-component-tree.js` once per layout
+ * AND page module in the render tree, so a numeric `revalidate` on a parent
+ * layout genuinely bounds every page beneath it. Checking only the route file
+ * therefore produced a FALSE POSITIVE — and worse, a false STATEMENT: review
+ * reproduced a page under a layout declaring 86400 being told "Next gives it
+ * the pricing fetch's interval — 30 days", which is simply not what Next does.
+ *
+ * Latent when found (neither app/layout.tsx nor app/[locale]/layout.tsx
+ * declares one today), but it would have rejected correct, idiomatic Next the
+ * day someone added one. `false` on an ancestor is NOT coverage, for the same
+ * reason it is not coverage on the route: `typeof false !== 'number'`, so
+ * Next's branch never runs and the fetch's 30 days still wins.
+ */
+function effectiveRevalidate(mod: Mod, a: Analysis): { state: RevalidateState; from: string } {
+  const own = revalidateOf(mod)
+  if (own.kind !== 'missing') return { state: own, from: mod.rel }
+
+  let dir = mod.rel.slice(0, mod.rel.lastIndexOf('/'))
+  for (;;) {
+    for (const base of ['layout.tsx', 'layout.ts']) {
+      const layoutRel = `${dir}/${base}`
+      if (layoutRel === mod.rel) continue
+      const layout = a.mods.get(layoutRel)
+      if (!layout) continue
+      const got = revalidateOf(layout)
+      if (got.kind === 'declared') return { state: got, from: layoutRel }
+    }
+    if (dir === APP_DIR || !dir.includes('/')) break
+    dir = dir.slice(0, dir.lastIndexOf('/'))
+  }
+  return { state: own, from: mod.rel }
 }
 
 /** Which tainted symbols does this module reference directly? */
@@ -577,19 +706,21 @@ function main(): void {
     if (hits.length === 0) continue
     pricingRoutes.push(rel)
 
-    const rv = revalidateOf(mod)
+    const { state: rv, from } = effectiveRevalidate(mod, a)
     if (rv.kind === 'missing') {
       problems.push(
         `${rel}\n    reads pricing via: ${hits.join(', ')}\n` +
-        `    but declares no \`export const revalidate\`, so Next gives it the\n` +
-        `    pricing fetch's interval — 30 days — and the page stops regenerating.`,
+        `    but neither it nor any ancestor layout declares \`export const\n` +
+        `    revalidate\`, so Next gives it the pricing fetch's interval —\n` +
+        `    30 days — and the page stops regenerating.`,
       )
     } else if (rv.kind === 'false') {
       problems.push(
         `${rel}\n    reads pricing via: ${hits.join(', ')}\n` +
-        `    declares \`export const revalidate = false\`, which is Infinity. Next\n` +
-        `    takes the MIN of that and the fetch's 30 days, so the route lands on\n` +
-        `    30 days anyway. Write the interval you actually want.`,
+        `    ${from === rel ? 'declares' : `inherits from ${from}`} \`export const revalidate = false\`, which is not a\n` +
+        `    number, so Next's shortening branch never runs for it (verified in\n` +
+        `    create-component-tree.js) and the fetch's 30 days wins anyway.\n` +
+        `    Write the interval you actually want.`,
       )
     }
     // AFTER the comparison, never at the top of the loop: a `continue` placed
@@ -650,6 +781,13 @@ function main(): void {
     problems.push(
       `ANTI-VACUITY: ${pricingRoutes.length} routes read pricing but only ${judged} revalidate ` +
       `comparisons were applied. A skip is sitting between the two.`,
+    )
+  }
+  if (revalidateProbes < pricingRoutes.length) {
+    problems.push(
+      `ANTI-VACUITY: ${pricingRoutes.length} routes read pricing but the revalidate scan ran only ` +
+      `${revalidateProbes} time(s). \`judged\` cannot see this — moving it up beside the push and ` +
+      `skipping there keeps judged === pricingRoutes.length while checking nothing.`,
     )
   }
 
