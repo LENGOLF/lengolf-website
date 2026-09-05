@@ -176,6 +176,18 @@ jobs:
       # number EN owns.
       - run: npm run validate:hotels
 
+      # Next stores a fetch response in the Data Cache on `res.status === 200`
+      # ALONE, before anything reads the body -- so a 200 carrying an HTML
+      # login page or wrong-shape JSON is cached under the pricing fetch's
+      # revalidate, which is 30 days. Consumers dereference catalog.bayRates
+      # .morning / .coaching / .packages / .mixedPackages / .events with no
+      # optional chaining, so a truthy-but-wrong payload is a render-time
+      # TypeError on ~597 pages replayed for a month. This runs each hostile
+      # payload through the REAL consumers and requires none of them throws.
+      # Mutation-tested: stubbing the shape guard true, false, or dropping
+      # either sub-check all go red.
+      - run: npm run validate:pricing-payload
+
   build-and-smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 10

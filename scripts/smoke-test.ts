@@ -4552,6 +4552,119 @@ async function runNotFoundTests() {
   }
 }
 
+/**
+ * G2) An unknown slug must 404 at the ROUTING layer, not render and CACHE.
+ *
+ * THE STATUS CODE IS NOT THE ASSERTION, and that is the whole point of this
+ * section. Before `dynamicParams = false` an unknown slug ALSO returned 404 --
+ * section G would have been green either way -- but Next rendered the not-found
+ * path and stored it as a permanent ISR entry. Measured on prod 2026-09-04:
+ * /guide/<junk>/ returned 404 carrying `X-Nextjs-Prerender: 1` and
+ * `X-Nextjs-Stale-Time: 4294967294` (2^32-2, never revalidate), ~124 KB, MISS
+ * then HIT forever. Every unique URL a crawler invented therefore cost one
+ * invocation, one permanent cache write and 124 KB of egress, unbounded.
+ *
+ * So this asserts the ABSENCE of `X-Nextjs-Prerender` on a junk URL. Nothing
+ * else in CI can distinguish the fixed state from the broken one, which means
+ * nothing else would notice a future edit dropping the flag.
+ *
+ * NOTE the header is not by itself pathological -- a CORRECTLY prerendered page
+ * carries `X-Nextjs-Stale-Time: 4294967294` too. What must never carry it is a
+ * 404. Hence the paired control below: a real page must still be prerendered,
+ * so an all-dynamic regression (which would also remove the header from the
+ * junk URL) cannot make this section vacuously green.
+ */
+async function runUnknownSlugCacheTests() {
+  console.log("\n\x1b[1mG2) Unknown slugs must 404 without minting an ISR entry\x1b[0m");
+
+  // One junk URL per newly-guarded segment, plus the region hub.
+  const junk = [
+    "/guide/zzz-smoke-not-a-real-slug/",
+    "/faq/zzz-smoke-not-a-real-slug/",
+    "/cost/zzz-smoke-not-a-real-slug/",
+    "/activities/zzz-smoke-not-a-real-slug/",
+    "/hotels/zzz-smoke-not-a-real-slug/",
+    "/best/zzz-smoke-not-a-real-slug/",
+    "/golf-courses/zzz-smoke-not-a-region/",
+  ];
+
+  // ---------------------------------------------------------------------
+  // CONTROL FIRST, and it decides how much this section can assert.
+  //
+  // The prod measurement was taken against VERCEL. CI runs `next build &&
+  // next start`, and it was NOT verified that the Node server emits the same
+  // cache headers -- the Windows dev box cannot complete a production build
+  // (@vercel/og), so this could not be checked before shipping. Asserting a
+  // header that this environment never emits would red CI on correct code,
+  // which is the failure mode this repo keeps re-learning. So: probe a page
+  // that IS prerendered, discover which signal exists here, and assert only
+  // that one. If neither exists, degrade to the status check and SAY SO
+  // loudly rather than passing silently.
+  // ---------------------------------------------------------------------
+  const CONTROL_PATH = "/guide/thailand-golf-trip-cost/";
+  const SIGNALS = ["x-nextjs-prerender", "x-nextjs-cache"] as const;
+  let signal: string | null = null;
+
+  try {
+    const res = await fetch(`${BASE}${CONTROL_PATH}`, { redirect: "follow" });
+    if (res.status !== 200) {
+      fail("G2 control", `${CONTROL_PATH} returned ${res.status}, expected 200`);
+      return;
+    }
+    signal = SIGNALS.find((h) => res.headers.get(h)) ?? null;
+    if (signal) {
+      pass(`G2 control: prerendered pages expose "${signal}" here (${CONTROL_PATH})`);
+    } else {
+      console.log(
+        `\x1b[33m   NOTE\x1b[0m G2: this server exposes neither ${SIGNALS.join(" nor ")} on a ` +
+          `prerendered page, so the cache-entry assertion CANNOT run and only the 404 status is ` +
+          `checked below. That is strictly weaker than intended — section G already covers status. ` +
+          `If this prints in CI, find the header \`next start\` does emit and add it to SIGNALS.`
+      );
+    }
+  } catch (err) {
+    fail("G2 control", `fetch error: ${(err as Error).message}`);
+    return;
+  }
+
+  let checked = 0;
+  for (const path of junk) {
+    const label = signal
+      ? `unknown slug 404s without a cache entry (${path})`
+      : `unknown slug 404s (${path}, status only — see NOTE)`;
+    try {
+      const res = await fetch(`${BASE}${path}`, { redirect: "follow" });
+      if (res.status !== 404) {
+        fail(label, `expected 404, got ${res.status}`);
+        continue;
+      }
+      if (signal) {
+        const got = res.headers.get(signal);
+        if (got) {
+          fail(
+            label,
+            `the 404 carried ${signal}: ${got} — this segment is rendering unknown params on ` +
+              `demand and caching the result permanently (measured on prod at ~124 KB per unique ` +
+              `junk URL, never revalidating). Add \`export const dynamicParams = false\`.`
+          );
+          continue;
+        }
+      }
+      checked++;
+      pass(label);
+    } catch (err) {
+      fail(label, `fetch error: ${(err as Error).message}`);
+    }
+  }
+
+  // Counts URLs that reached a verdict, incremented AFTER the assertions above
+  // rather than at the top of the loop, so a `continue` inserted between the
+  // fetch and the checks cannot leave this floor satisfied at its true value.
+  if (checked !== junk.length) {
+    fail("G2 anti-vacuity", `judged ${checked} of ${junk.length} junk URLs`);
+  }
+}
+
 async function runLlmDiscoverabilityTests() {
   console.log("\n\x1b[1mH) LLM / AI discoverability\x1b[0m");
 
@@ -6628,6 +6741,7 @@ async function main() {
   await runThaiCookieTests();
   await runAcceptLanguageTests();
   await runNotFoundTests();
+  await runUnknownSlugCacheTests();
   await runLlmDiscoverabilityTests();
   await runRegistryConsistencyTests();
   await runRegionHubRegistryConsistencyTests();

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { SITE_URL, BUSINESS_INFO, SOCIAL_LINKS, BOOKING_URL, PHONE_E164 } from '@/lib/constants'
 import { getAllPosts } from '@/lib/blog'
 import { getSeoPagesByType } from '@/lib/seo-pages'
-import { getFactTokens, interpolateFacts } from '@/lib/site-facts'
+import { getFactTokens, getSiteFacts, interpolateFacts } from '@/lib/site-facts'
 import { ALL_LOCALES, getRegisteredRegionHubPaths, type Locale } from '@/lib/translated-routes'
 import { getRegionHubTranslation } from '@/data/golf-courses-i18n'
 import type { SeoPageType } from '@/types/seo-pages'
@@ -65,7 +65,7 @@ function link(title: string, url: string, desc?: string): string {
 }
 
 export async function GET() {
-  const [posts, faqs, guides, tokens] = await Promise.all([
+  const [posts, faqs, guides, tokens, facts] = await Promise.all([
     getAllPosts(),
     getSeoPagesByType('faq'),
     getSeoPagesByType('explainer'),
@@ -73,6 +73,10 @@ export async function GET() {
     // guide page route interpolates them, and so must every other surface that
     // prints entry text, or the literal placeholder leaks (this file is EN).
     getFactTokens('en'),
+    // For `fetchedAt` only, to date the prices above. Costs no extra request:
+    // getFactTokens already calls getSiteFacts, and getPricingCatalog is
+    // wrapped in React cache() so both resolve from one fetch per render.
+    getSiteFacts(),
   ])
 
   const sections: string[] = []
@@ -185,7 +189,19 @@ export async function GET() {
       `- Hours: ${BUSINESS_INFO.hours}\n` +
       `- LINE: ${SOCIAL_LINKS.line}\n` +
       `- Book a bay: ${BOOKING_URL}\n` +
-      `- Full URL list: ${SITE_URL}/sitemap.xml`
+      `- Full URL list: ${SITE_URL}/sitemap.xml\n` +
+      // Prices in this file are interpolated from the POS catalog, whose fetch
+      // is cached for 30 DAYS (lib/pricing.ts). Nothing else on the site
+      // discloses that: `fetchedAt` was resolved by getSiteFacts and rendered
+      // nowhere in the entire repo. This is the one surface where the omission
+      // is actively misleading — an explicitly machine-readable record for AI
+      // agents, served with `s-maxage=86400`, which implies daily currency to
+      // exactly the readers least able to sanity-check a stale number.
+      //
+      // `null` when the catalog was unavailable and the pinned FALLBACK
+      // figures are what rendered, so the marker is honest in that case too
+      // rather than silently claiming a date it does not have.
+      `- Prices as of: ${facts.fetchedAt ?? 'unavailable (published fallback rates shown)'}`
   )
 
   const body = sections.join('\n\n') + '\n'
