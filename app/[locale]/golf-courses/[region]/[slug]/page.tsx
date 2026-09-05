@@ -71,7 +71,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   // Only emit hreflang when a translation actually exists — a lone
   // self-referential hreflang="en" cluster is audit noise (matches the
-  // sitemap). The 54 untranslated courses keep a bare EN canonical.
+  // sitemap). The 42 untranslated courses keep a bare EN canonical.
   const languages = getAlternates(path)
 
   return {

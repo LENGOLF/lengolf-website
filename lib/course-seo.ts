@@ -318,6 +318,19 @@ const PROVINCE_L10N: Record<string, Record<Exclude<CourseSeoLocale, 'en'>, strin
   Rayong: { th: 'จังหวัดระยอง', ja: 'ラヨーン県', ko: '라용주', zh: '罗勇府' },
   Chonburi: { th: 'จังหวัดชลบุรี', ja: 'チョンブリー県', ko: '촌부리주', zh: '春武里府' },
   'Nakhon Pathom': { th: 'จังหวัดนครปฐม', ja: 'ナコンパトム県', ko: '나콘빠톰주', zh: '佛统府' },
+  // Khao Yai batch (2026-08). Nakhon Ratchasima is the province Khao Yai's golf
+  // belt actually sits in (10 of the 12 region files); Saraburi holds
+  // forest-hills. ZH uses the established exonyms, not transcriptions, for the
+  // same reason 大城府 beats a coined 阿育他亚: 呵叻 is the name Chinese sources
+  // and Chinese-language search use for Nakhon Ratchasima (from Khorat), and
+  // 北标 for Saraburi. KO transcribes per the Korean standard for Thai.
+  'Nakhon Ratchasima': {
+    th: 'จังหวัดนครราชสีมา',
+    ja: 'ナコンラーチャシーマー県',
+    ko: '나콘랏차시마주',
+    zh: '呵叻府',
+  },
+  Saraburi: { th: 'จังหวัดสระบุรี', ja: 'サラブリー県', ko: '사라부리주', zh: '北标府' },
   // Southern / island batch. ZH uses the established Chinese exonyms (攀牙 /
   // 甲米 / 素叻他尼 / 宋卡 / 董里) rather than transcriptions, for the same
   // reason 大城府 beats a coined 阿育他亚: they are what Chinese sources and
