@@ -6854,18 +6854,17 @@ async function runRegionHubLinkTests() {
       const html = await res.text();
       const linked = linkedRegionSlugs(html, prefix, regions);
       const missing = regionList.filter((r) => !linked.has(r));
-      const viewAll = renderedMarkup(html).includes(
-        `href="${prefix}/golf-courses/"`,
-      );
+      // Only the PER-REGION links are asserted — deliberately NOT the block's
+      // "View all" CTA. The site footer renders a locale-prefixed
+      // `/golf-courses/` link on every page, so a `href="${prefix}/golf-courses/"`
+      // check would pass on all seven surfaces whether or not RegionHubLinks
+      // renders at all: a guard that cannot fail. The footer does NOT link the
+      // individual region hubs, so the missing-regions check below genuinely
+      // requires the block. Do not add a "View all" assertion here.
       if (missing.length > 0) {
         fail(
           label,
           `missing region-hub link(s): ${missing.join(", ")} — RegionHubLinks must link all ${regions.size} regions. If the block moved, update this test rather than dropping it.`,
-        );
-      } else if (!viewAll) {
-        fail(
-          label,
-          `region tiles present but the "View all" link (${prefix}/golf-courses/) is missing`,
         );
       } else {
         pass(label);
