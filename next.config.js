@@ -59,14 +59,15 @@ const nextConfig = {
     // WordPress blog posts lived at root level (/{slug}/).
     // Next.js serves them under /blog/{slug}/.
     // These 301 redirects preserve SEO equity from the old WordPress URLs.
-    // Blog slugs are now defined in lib/blog-slugs.ts for reuse in middleware.
+    // Blog slugs live in lib/blog-slugs.{ts,js} (hand-synced twins); this
+    // file is the only consumer, middleware.ts no longer reads them.
 
     // All destinations use trailing slashes to match trailingSlash: true
     // and avoid extra redirect hops from trailing-slash normalization.
     // Retired posts are excluded here and handled by retiredBlogRedirects
     // below, so their WordPress root URL goes straight to the section page
     // instead of chaining through /blog/{slug}/.
-    const blogRedirects = LEGACY_BLOG_SLUGS.filter((slug) => !(slug in RETIRED_BLOG_REDIRECTS)).map((slug) => ({
+    const blogRedirects = LEGACY_BLOG_SLUGS.filter((slug) => !Object.hasOwn(RETIRED_BLOG_REDIRECTS, slug)).map((slug) => ({
       source: `/${slug}`,
       destination: `/blog/${slug}/`,
       permanent: true,

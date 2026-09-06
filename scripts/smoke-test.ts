@@ -2911,6 +2911,10 @@ const redirectTests: RedirectTest[] = [
   { path: "/blog/fun-activities-in-bangkok/", expectedStatus: 308, expectedLocation: "/activities/" },
   { path: "/fun-activities-in-bangkok/", expectedStatus: 308, expectedLocation: "/activities/" },
   { path: "/blog/fun-activities-in-bangkok-2/", expectedStatus: 308, expectedLocation: "/activities/" },
+  // The -2 root form is the one a filter regression on that slug alone would
+  // miss (review measured `slug !== 'fun-activities-in-bangkok'` GREEN
+  // against the three entries above). All four generated rules are asserted.
+  { path: "/fun-activities-in-bangkok-2/", expectedStatus: 308, expectedLocation: "/activities/" },
   // The locale forms must reach the LOCALISED page. Measured on prod before
   // these rules existed: /th/about/ 301'd to /about/ and would then continue
   // to a 200 ENGLISH /about-us/, even though /about-us/ is translated in all
