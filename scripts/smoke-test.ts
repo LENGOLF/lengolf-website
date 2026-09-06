@@ -2901,6 +2901,20 @@ const redirectTests: RedirectTest[] = [
   { path: "/about/", expectedStatus: 308, expectedLocation: "/about-us/" },
   { path: "/contact/", expectedStatus: 308, expectedLocation: "/about-us/" },
   { path: "/privacy/", expectedStatus: 308, expectedLocation: "/privacy-policy/" },
+  // Retired blog posts (RETIRED_BLOG_REDIRECTS in lib/blog-slugs.ts). Both
+  // the WordPress root form and the /blog/ form must land on the section page
+  // in ONE hop: the root form used to be caught by the generic LEGACY_BLOG_SLUGS
+  // rule and would otherwise chain /x -> /blog/x/ -> /activities/. Status is
+  // asserted for the same reason as the trust anchors above. While the
+  // blog_posts rows are still published the page exists behind the redirect,
+  // so a 200 here means the rule was deleted, not that the post came back.
+  { path: "/blog/fun-activities-in-bangkok/", expectedStatus: 308, expectedLocation: "/activities/" },
+  { path: "/fun-activities-in-bangkok/", expectedStatus: 308, expectedLocation: "/activities/" },
+  { path: "/blog/fun-activities-in-bangkok-2/", expectedStatus: 308, expectedLocation: "/activities/" },
+  // The -2 root form is the one a filter regression on that slug alone would
+  // miss (review measured `slug !== 'fun-activities-in-bangkok'` GREEN
+  // against the three entries above). All four generated rules are asserted.
+  { path: "/fun-activities-in-bangkok-2/", expectedStatus: 308, expectedLocation: "/activities/" },
   // The locale forms must reach the LOCALISED page. Measured on prod before
   // these rules existed: /th/about/ 301'd to /about/ and would then continue
   // to a 200 ENGLISH /about-us/, even though /about-us/ is translated in all
