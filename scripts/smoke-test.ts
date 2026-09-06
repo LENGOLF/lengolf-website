@@ -6759,6 +6759,123 @@ async function runFallbackPullQuoteTests() {
   }
 }
 
+// ── Q) Region-hub internal links on homepage + /golf/ ───────────────
+// The region hubs (/golf-courses/<region>) sit around search position 10-11
+// and gain more from internal links off high-authority pages than from more
+// course pages (the GSC read behind this batch). RegionHubLinks renders a link
+// to EVERY region hub on the homepage and on /golf/. This section guards that a
+// future refactor of either page can't silently drop the block — which would
+// quietly undo the entire SEO point of the change with every other gate green.
+//
+// Anti-vacuity: assert the FULL region set is linked on each surface, not "at
+// least one". The expected set is DERIVED from the data/golf-courses directory
+// (the same source singleCourseRegions() reads, and the set validate-courses.ts
+// forces REGION_META — hence RegionHubLinks' own iteration — to match), so a new
+// region raises the bar automatically. A real floor (MIN_REGION_DIRS) guards the
+// derivation itself: an empty readdir would otherwise make "linked ⊇ ∅" pass
+// vacuously.
+//
+// Surface scope is deliberate and matches the render decision: the homepage body
+// reaches only en/th (ja/ko/zh return bespoke landing pages BEFORE it), so only
+// / and /th/ are asserted for the homepage — but /golf/ carries the block for
+// all five locales, so all five /golf/ URLs are asserted. Locale prefix is ""
+// for en (default locale, unprefixed) and "/<locale>" otherwise, matching how
+// next-intl's Link prefixes these hrefs.
+const MIN_REGION_DIRS = 14;
+
+/** Every region directory under data/golf-courses — the set RegionHubLinks
+ *  renders (via REGION_META, which validate-courses.ts pins to these dirs). */
+async function regionDirSlugs(): Promise<string[]> {
+  const fs = await import("node:fs");
+  const nodePath = await import("node:path");
+  const root = nodePath.join(__dirname, "..", "data", "golf-courses");
+  return fs
+    .readdirSync(root, { withFileTypes: true })
+    .filter((d) => d.isDirectory())
+    .map((d) => d.name);
+}
+
+/** Region-hub slugs actually linked in the rendered markup for a given locale
+ *  prefix, intersected with the real region set so sibling /golf-courses/under,
+ *  /near, /compare and /best-for links are never miscounted as regions. */
+function linkedRegionSlugs(
+  html: string,
+  prefix: string,
+  regions: Set<string>,
+): Set<string> {
+  const re = new RegExp(
+    `href="${prefix}/golf-courses/([a-z-]+)/?"`,
+    "g",
+  );
+  const found = new Set<string>();
+  const stripped = renderedMarkup(html);
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(stripped)) !== null) {
+    if (regions.has(m[1])) found.add(m[1]);
+  }
+  return found;
+}
+
+async function runRegionHubLinkTests() {
+  console.log(
+    "\n\x1b[1mQ) Region-hub internal links on homepage + /golf/\x1b[0m",
+  );
+  const regionList = await regionDirSlugs();
+  const regions = new Set(regionList);
+
+  if (regions.size < MIN_REGION_DIRS) {
+    fail(
+      "region-hub link floor",
+      `only ${regions.size} region directories found (floor ${MIN_REGION_DIRS}) — the derivation is broken and every presence check below would pass vacuously`,
+    );
+    return;
+  }
+
+  // [path, localePrefix]. Homepage: en/th only (ja/ko/zh are bespoke). /golf/:
+  // all five (it is a translated core route serving 200 in every locale).
+  const surfaces: [string, string][] = [
+    ["/", ""],
+    ["/th/", "/th"],
+    ["/golf/", ""],
+    ["/th/golf/", "/th"],
+    ["/ja/golf/", "/ja"],
+    ["/ko/golf/", "/ko"],
+    ["/zh/golf/", "/zh"],
+  ];
+
+  for (const [path, prefix] of surfaces) {
+    const label = `${path} region-hub links`;
+    try {
+      const res = await fetch(`${BASE}${path}`, { redirect: "follow" });
+      if (res.status !== 200) {
+        fail(label, `expected 200, got ${res.status}`);
+        continue;
+      }
+      const html = await res.text();
+      const linked = linkedRegionSlugs(html, prefix, regions);
+      const missing = regionList.filter((r) => !linked.has(r));
+      const viewAll = renderedMarkup(html).includes(
+        `href="${prefix}/golf-courses/"`,
+      );
+      if (missing.length > 0) {
+        fail(
+          label,
+          `missing region-hub link(s): ${missing.join(", ")} — RegionHubLinks must link all ${regions.size} regions. If the block moved, update this test rather than dropping it.`,
+        );
+      } else if (!viewAll) {
+        fail(
+          label,
+          `region tiles present but the "View all" link (${prefix}/golf-courses/) is missing`,
+        );
+      } else {
+        pass(label);
+      }
+    } catch (err) {
+      fail(`${label} fetch error`, String(err));
+    }
+  }
+}
+
 // ── Main ────────────────────────────────────────────────────────────
 
 async function main() {
@@ -6800,6 +6917,7 @@ async function main() {
   await runRegionCountTests();
   await runLocalizedDriveTimeTests();
   await runFallbackPullQuoteTests();
+  await runRegionHubLinkTests();
 
   console.log(`\n\x1b[1m${passed} passed, ${failed} failed\x1b[0m`);
   if (failures.length > 0) {

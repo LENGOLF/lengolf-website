@@ -15,6 +15,7 @@ import FaqSection from '@/components/shared/FaqSection'
 import ClickableImage from '@/components/shared/ClickableImage'
 import PricingTable from '@/components/shared/PricingTable'
 import CourseRentalCrossLink from '@/components/shared/CourseRentalCrossLink'
+import RegionHubLinks from '@/components/golf-courses/RegionHubLinks'
 import { siteOpenGraph } from '@/lib/open-graph'
 
 const faqLinks: Record<string, { href: string; external?: boolean }> = {
@@ -519,6 +520,13 @@ export default async function GolfPage({ params }: { params: Promise<{ locale: s
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ── Golf Courses in Thailand (region-hub internal links) ── */}
+      <section className="py-16 lg:py-24" style={{ backgroundColor: '#F6FFFA' }}>
+        <div className="section-max-width section-padding">
+          <RegionHubLinks locale={locale} />
         </div>
       </section>
 
