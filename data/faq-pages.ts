@@ -3732,7 +3732,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/golf-courses', '/guide/best-golf-courses-near-bangkok', '/guide/best-time-play-golf-thailand'],
     created_at: now,
-    updated_at: now,
+    // Diverges from the shared `now` deliberately: batch 10 edited this entry's
+    // answer_body (걸프 해안 -> 태국만 해안, the Persian-Gulf misreading) and
+    // nothing else in this file. Bumping the shared const would restamp all 156
+    // entries' sitemap <lastmod> and FAQPage dateModified with a date only one
+    // of them earned.
+    updated_at: '2026-09-06T00:00:00.000Z',
     content: {
       answer_intro:
         '태국에는 골프장이 약 250~300곳 있고, 그중 100~150곳 정도가 외국인 방문객이 이용하기 좋은 코스로 꼽혀요. 아시아에서도 골프장 밀도가 가장 높은 나라 중 하나이고, 방콕만 해도 도심에서 1시간 거리 안에 50곳이 넘는 코스가 모여 있어요.',
