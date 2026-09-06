@@ -47,28 +47,203 @@ const PRICING_API =
 // (~2× per guide page, and one extra per data getter). Cache lifetime is a
 // single request/render pass, so ISR revalidation still refreshes on schedule.
 //
-// The revalidate value here caps the ISR interval of every page that calls
-// this (home, /golf/, /guide/[slug], /cost/[slug], /activities/[slug],
-// /hotels/[slug], /best/[slug], /llms.txt — ~420 pages): Next.js sets a
-// route's effective revalidate to the *shorter* of its own declared value
-// and every fetch-level revalidate used during its render — this fetch can
-// only shorten a page's interval, never lengthen it. Most of the ~420 pages
-// declare no revalidate of their own, so this value sets theirs outright;
-// home and /llms.txt declare 86400 and still get pulled down to this value
-// (known tradeoff, not a bug — raise further to relax that if daily-fresh
-// pricing on those two routes matters more than the extra cost saved).
-// A transient pricing-API failure at regen time can leave the fallback
-// catalog (see FALLBACK in site-facts.ts) live for up to this long.
-// It was 300s until 2026-08-25, which forced all ~420 pages to regenerate
-// every 5 minutes and was the single largest driver of Vercel ISR-write cost.
+// ---------------------------------------------------------------------------
+// REVALIDATE: 30 days, and the owner's explicit choice (2026-09-04).
+// ---------------------------------------------------------------------------
+// Next sets a route's effective revalidate to the *shorter* of its own
+// declared value and every fetch-level revalidate used while it renders. This
+// fetch can therefore only SHORTEN a calling page's interval, never lengthen
+// it — so any caller declaring none at all inherits this number outright.
+//
+// History, because the number has moved twice and the reasoning is not
+// reconstructable from the value alone:
+//   300s   until 2026-08-25 — forced ~566 pages to regenerate every 5 minutes
+//                             and was the largest single driver of Vercel
+//                             ISR-write cost (PR #113 raised it).
+//   3600s  until 2026-09-04 — still set the interval for the 10 callers that
+//                             declared none, so ~566 pages regenerated hourly.
+//   30d    now — the owner ruled displayed prices may be a month stale. Every
+//                 caller that should still regenerate daily now says so itself
+//                 (`export const revalidate = 86400`), so this value no longer
+//                 sets anyone's page interval; it only bounds how old the
+//                 PRICE NUMBERS inside those pages may be.
+//
+// TWO CONSEQUENCES OF A LONG INTERVAL. Read both before shortening it back.
+//
+// 1. A DEPLOY MUST NOT BE RELIED ON TO REFRESH THESE PRICES, and there is no
+//    on-demand purge in this repo — no revalidateTag, no revalidatePath
+//    anywhere. Verified against Vercel's Data Cache docs rather than assumed:
+//    "Cached data persists across deployments unless you explicitly
+//    invalidate it." That is the opposite of the Full Route Cache, which a
+//    deploy DOES flush — which is exactly why this is easy to get wrong.
+//
+//    Stated as "must not be relied on" rather than "does not", because the
+//    honest answer is NON-DETERMINISTIC and an earlier draft of this comment
+//    overstated it. `next build` prerenders these ~566 pages, and that build
+//    reads .next/cache/fetch-cache, which Vercel restores from the BUILD
+//    cache — a separate thing from the runtime Data Cache. So a build whose
+//    build-cache is cold or was cleared re-fetches and re-pins prices for the
+//    next 30 days, while a build that restores it does not. Never plan a price
+//    change around a deploy: it might land, and you cannot tell which.
+//
+//    To force a refresh, either bump this value / PRICING_API (a code change,
+//    so it ships like anything else), or purge manually:
+//      Vercel project -> CDN -> Caches -> Purge cache -> All content
+//      -> "Runtime and Data Cache".
+//
+//    MIND THE BLAST RADIUS ON THAT PURGE. This team is on Pro, where "all
+//    projects in your team share a single cache" per environment — so purging
+//    to refresh len.golf pricing also drops the Data Cache for lengolf-forms,
+//    lengolf-booking-new and lengolf-accounting. It is not a per-project
+//    button, and the docs warn about exactly this.
+//
+//    Countervailing nuance, so the 30 days is not read as a hard floor: the
+//    shared cache has a fixed size and evicts least-recently-used entries, so
+//    a low-traffic entry can be dropped and refetched well before its interval
+//    expires. 30 days is a ceiling on staleness, not a guarantee of it.
+//
+//    If prices ever need to propagate on a business timescale, the right fix
+//    is a revalidateTag call fired from lengolf-forms when a price changes —
+//    not a shorter timer, which pays the full ISR cost every day to catch a
+//    change that happens a few times a year.
+//
+// 2. A pricing-API failure makes this return null and the page renders the
+//    pinned FALLBACK figures (site-facts.ts) — last-known-good, not wrong.
+//    How LONG that lasts depends on how the API failed, and the two cases are
+//    genuinely different. An earlier draft of this comment claimed "the
+//    failure itself is NOT cached" for all of them, which is FALSE and is the
+//    reason the shape check below exists.
+//
+//    NOT cached, self-heals on the next regeneration: a network error, an
+//    abort from the 5s signal, or any non-200 status. Next's store gate is
+//    `res.status === 200` (patch-fetch.js), so these never reach the cache and
+//    exposure is bounded by the calling PAGE's revalidate (86400).
+//
+//    CACHED FOR THE FULL 30 DAYS: a 200 whose BODY is wrong — an HTML error or
+//    login page from an upstream Vercel app, or valid JSON of the wrong shape.
+//    The gate is the status code alone and is evaluated before anything reads
+//    the body, so the bad response is stored, and every regeneration for the
+//    next 30 days replays it. At the old 3600 this self-healed within an hour;
+//    the 30-day value multiplies that window 720x, which is precisely why it
+//    could not be raised without validating the payload.
+const isArray = (v: unknown): v is unknown[] => Array.isArray(v)
+
+/**
+ * Every `price` in this array is a finite, non-negative number.
+ *
+ * Rejects NaN, Infinity, negatives, and a price shipped as a string — all of
+ * which format into visible copy without throwing. Zero is allowed HERE because
+ * a genuinely free item is real (standard club rental is free with a bay
+ * booking); the separate positive check below covers the arrays where a zero
+ * would render AS A PRICE.
+ */
+function pricesAreFinite(products: unknown[]): boolean {
+  return products.every((p) => {
+    if (typeof p !== 'object' || p === null) return false
+    const price = (p as Record<string, unknown>).price
+    return typeof price === 'number' && Number.isFinite(price) && price >= 0
+  })
+}
+
+/** At least one item priced above zero — i.e. this array can name a real rate. */
+function hasPositivePrice(products: unknown[]): boolean {
+  return products.some((p) => {
+    const price = (p as Record<string, unknown>)?.price
+    return typeof price === 'number' && Number.isFinite(price) && price > 0
+  })
+}
+
+/**
+ * Does this payload carry the fields consumers dereference WITHOUT a guard,
+ * carrying values that are usable as prices?
+ *
+ * This exists because `res.json()` was previously cast straight to
+ * PricingCatalog with no validation, and consumers then reached into it
+ * unguarded: `catalog.bayRates.morning` (site-facts.ts), `catalog.coaching`,
+ * `catalog.packages`, `catalog.mixedPackages`, `catalog.events`
+ * (data/pricing.ts). A 200 carrying `{}` or `{"error":...}` is TRUTHY, so it
+ * sails past every `if (!catalog) return FALLBACK` guard and then throws a
+ * TypeError at render — a 500 on every one of the ~597 pricing-rendering
+ * pages, served from a cache entry that now lives 30 days.
+ *
+ * STRUCTURE IS NOT ENOUGH, and this is the part that is easy to get wrong.
+ * The first version checked shapes only, which was the right rule at a 1-hour
+ * cache and the wrong one at 30 days. Review measured the hole: a perfectly
+ * well-shaped payload pricing everything at 0 was ACCEPTED, and because
+ * `findPrice()` then returns 0 while `0 ?? FALLBACK` is 0 — nullish coalescing
+ * does not treat zero as missing — `getSiteFacts` resolved
+ * `bayHourlyMin = lessonHourly = bayHourlyMax = 0`. The site would render
+ * "0 THB" on every rate card, inside `{{bayHourlyFrom}}` guide prose, and in
+ * schema.org `Offer.price`, for a month, looking plausible rather than broken.
+ * A POS unit change (baht to hundreds) fails the same way with small numbers.
+ * Hence the two value rules above.
+ *
+ * Returning null instead routes those payloads down the same path as a network
+ * failure: the pinned FALLBACK figures render. The poisoned entry still occupies
+ * the Data Cache for its full interval (nothing here can evict it — see
+ * consequence #1), but the pages serve real last-known-good prices instead of
+ * an error or a zero.
+ *
+ * Deliberately NOT required, and the asymmetry is the point:
+ *  - `clubRental` / `fetchedAt` — every consumer already guards them
+ *    (`catalog.clubRental?.course ?? []`, `catalog.fetchedAt ?? null`), so
+ *    demanding them would reject payloads the existing code handles correctly.
+ *  - `drinksAndGolf` — has ZERO consumers repo-wide. Requiring it would be
+ *    asserting something nothing reads.
+ *  - `packages` / `mixedPackages` / `events` must be arrays of sane prices but
+ *    may legitimately be EMPTY (a season with no event packages is not a
+ *    corrupt catalog), so they get no positive-price requirement.
+ * The rule is: require exactly what is dereferenced unguarded, plus that the
+ * arrays a zero would visibly misprice can actually name a rate.
+ */
+function isPricingCatalog(value: unknown): value is PricingCatalog {
+  if (typeof value !== 'object' || value === null) return false
+  const c = value as Record<string, unknown>
+
+  const bayRates = c.bayRates
+  if (typeof bayRates !== 'object' || bayRates === null) return false
+  const b = bayRates as Record<string, unknown>
+  if (!isArray(b.morning) || !isArray(b.afternoon) || !isArray(b.evening)) return false
+
+  if (!isArray(c.coaching) || !isArray(c.packages) || !isArray(c.mixedPackages) || !isArray(c.events)) {
+    return false
+  }
+
+  const priced = [b.morning, b.afternoon, b.evening, c.coaching, c.packages, c.mixedPackages, c.events]
+  if (!priced.every(pricesAreFinite)) return false
+
+  // Bay rates and coaching are the two the site quotes as headline prices, and
+  // both fall back through `??`, which zero defeats. Each must name a real rate.
+  return (
+    hasPositivePrice(b.morning) &&
+    hasPositivePrice(b.afternoon) &&
+    hasPositivePrice(b.evening) &&
+    hasPositivePrice(c.coaching)
+  )
+}
+
 export const getPricingCatalog = perRequest(async (): Promise<PricingCatalog | null> => {
   try {
     const res = await fetch(PRICING_API, {
-      next: { revalidate: 3600 },
+      next: { revalidate: 2_592_000 }, // 30 days — see the block above
       signal: AbortSignal.timeout(5000),
     })
     if (!res.ok) throw new Error(`Pricing API ${res.status}`)
-    return await res.json()
+
+    // Parse and shape-check separately: a 200 carrying HTML throws HERE, and
+    // that throw must not be mistaken for an unreachable API. Both land in the
+    // same catch, but the messages have to tell them apart in the logs.
+    const payload: unknown = await res.json()
+    if (!isPricingCatalog(payload)) {
+      throw new Error(
+        `Pricing API returned 200 with an unusable body (keys: ${
+          typeof payload === 'object' && payload !== null
+            ? Object.keys(payload).join(',') || '<none>'
+            : typeof payload
+        })`
+      )
+    }
+    return payload
   } catch (err) {
     console.warn('[pricing] Failed to fetch pricing catalog, using fallback defaults:', err)
     return null

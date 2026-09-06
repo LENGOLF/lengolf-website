@@ -87,6 +87,40 @@ interface LinkTest {
 interface SeoTest {
   path: string;
   locale: "en" | "th" | "ja" | "ko" | "zh";
+  /**
+   * Optional: a substring the rendered <title> must contain, paired with the
+   * reason it must. The two travel together on purpose — a bare needle invites
+   * a future editor to delete it as an unexplained magic string, which is the
+   * exact way the assertion below would be lost.
+   *
+   * Write the needle the way a HUMAN reads it: it is compared against an
+   * entity-DECODED title (see decodeEntities), so an ampersand is written "&".
+   */
+  titleContains?: { needle: string; why: string };
+}
+
+/**
+ * Decode the entities React's text escaper emits, so a `titleContains` needle
+ * can be written in its human spelling.
+ *
+ * Load-bearing, not defensive. React escapes `&` in text, so a course title
+ * containing an ampersand renders as `Golf &amp; Country Club`, and a raw
+ * `includes("Golf & Country Club")` would be a guaranteed FALSE RED on correct
+ * markup. Verified against the live server rather than reasoned about, because
+ * this is exactly the class of "predict what the framework emits" mistake
+ * CLAUDE.md records four revisions of under the validate:open-graph bullet.
+ *
+ * `&amp;` is decoded LAST. Decoding it first turns `&amp;lt;` into `&lt;` and
+ * then into `<`, resurrecting markup the page had correctly escaped twice.
+ */
+function decodeEntities(s: string): string {
+  return s
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#x27;/g, "'")
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, "&");
 }
 
 interface NotFoundTest {
@@ -2867,6 +2901,20 @@ const redirectTests: RedirectTest[] = [
   { path: "/about/", expectedStatus: 308, expectedLocation: "/about-us/" },
   { path: "/contact/", expectedStatus: 308, expectedLocation: "/about-us/" },
   { path: "/privacy/", expectedStatus: 308, expectedLocation: "/privacy-policy/" },
+  // Retired blog posts (RETIRED_BLOG_REDIRECTS in lib/blog-slugs.ts). Both
+  // the WordPress root form and the /blog/ form must land on the section page
+  // in ONE hop: the root form used to be caught by the generic LEGACY_BLOG_SLUGS
+  // rule and would otherwise chain /x -> /blog/x/ -> /activities/. Status is
+  // asserted for the same reason as the trust anchors above. While the
+  // blog_posts rows are still published the page exists behind the redirect,
+  // so a 200 here means the rule was deleted, not that the post came back.
+  { path: "/blog/fun-activities-in-bangkok/", expectedStatus: 308, expectedLocation: "/activities/" },
+  { path: "/fun-activities-in-bangkok/", expectedStatus: 308, expectedLocation: "/activities/" },
+  { path: "/blog/fun-activities-in-bangkok-2/", expectedStatus: 308, expectedLocation: "/activities/" },
+  // The -2 root form is the one a filter regression on that slug alone would
+  // miss (review measured `slug !== 'fun-activities-in-bangkok'` GREEN
+  // against the three entries above). All four generated rules are asserted.
+  { path: "/fun-activities-in-bangkok-2/", expectedStatus: 308, expectedLocation: "/activities/" },
   // The locale forms must reach the LOCALISED page. Measured on prod before
   // these rules existed: /th/about/ 301'd to /about/ and would then continue
   // to a 200 ENGLISH /about-us/, even though /about-us/ is translated in all
@@ -3213,6 +3261,110 @@ const seoTests: SeoTest[] = [
   // application/ld+json only. The 6 visible "096-668-2335" occurrences on this
   // page (header, CTA, footer) are correct human copy and are invisible to it.
   { path: "/location/golf-near-sathorn/", locale: "en" },
+  // The first /golf-courses/<region>/<slug>/ URL in this section, and the only
+  // entry anywhere in the suite that pins a specific <title> string.
+  //
+  // WHY A TITLE ASSERTION AT ALL. PR #120 (dda11dc) merged the duplicate
+  // bangkok/suvarnabhumi-golf-country-club into this file and 308'd the retired
+  // slug here. After that merge the slug, the H1 and the name all read "Phoenix
+  // Gold Golf Bangkok", and getCourseDescription ALWAYS generates the EN
+  // description — it never reads locales.en.meta_description — so the
+  // parenthetical in the hand-written locales.en.title is the only carrier of
+  // the former club name in the page's SERP METADATA: the <title>, and the
+  // og:title derived from it. Per the GSC figures in that file's docblock
+  // (marketing.gsc_query_daily, 90 days to 2026-08-30, NOT reproducible from
+  // this tree and not to be re-quoted forward as a fact about a later window),
+  // "suvarnabhumi golf and country club" is the one query that has ever
+  // converted here.
+  //
+  // SCOPE THAT CLAIM CAREFULLY, because the first version of this comment said
+  // "the last surviving carrier of the former club name ON THE PAGE" and that
+  // is FALSE — caught by review, measured against rendered markup. The former
+  // name also ships in visible body copy twice (prose.overview "later known as
+  // Suvarnabhumi Golf & Country Club", prose.tips "older listings still use
+  // …") and inside the GolfCourse JSON-LD description, which is prose.overview.
+  // What the <title> uniquely holds is the SERP surface: the generated meta
+  // description carries no former name (verified against the rendered page).
+  // So deleting this string does not erase the term from the document. It
+  // removes it from the SERP metadata — the highest-weighted surface, and the
+  // one the snippet is built from. Not "the only surface matched against":
+  // search engines match body copy too, and this page's body carries the term
+  // twice. That weaker claim is the true one.
+  //
+  // WHY THIS PAGE AND NOT A GENERAL RULE. This is the argument the first draft
+  // missed, and it is the strongest one. Nine of the 148 rendered EN titles
+  // carry a parenthetical, but EIGHT of them carry it inside `course.name`,
+  // which every branch of getCourseTitle interpolates — so for those eight the
+  // parenthetical survives the package branch, the closed branch and the
+  // generated fallback alike, and losing it takes a RENAME, which also moves
+  // the H1, the region roster, /compare/, /near/ and the JSON-LD name. A loud
+  // edit, not a silent one. phoenix-gold is the only course carrying its
+  // parenthetical in the DISCARDABLE locales.en.title. So this is not one
+  // instance of a class with unguarded siblings — on the EN corpus there is no
+  // sibling. (There is one in the NON-EN corpus, and it is already broken:
+  // /ja/golf-courses/hua-hin/pineapple-valley-golf-club/ renders （ホアヒン）
+  // where th/ko/zh render their "formerly Banyan Golf Club" equivalent. Out of
+  // scope here — it needs a ja translation decision and native QA — and named
+  // in the PR's known gaps rather than silently fixed.)
+  //
+  // WHY IT NEEDED A *SMOKE* GUARD. Mutation-tested during the PR #120 review
+  // and re-measured here: blanking locales.en.title drops the parenthetical
+  // and every server-free check stays green. Derive that set rather than
+  // trusting a number — earlier drafts of this comment said "ALL SEVEN" and
+  // the lint job runs NINETEEN steps (18 runnable locally; validate:pr-rigor
+  // reads the PR body from the event payload). The reason none of them catches
+  // it: validate:course-slots is registry-scoped and this course is absent
+  // from COURSE_DETAIL_I18N; validate:courses lints fees, rosters and the
+  // package noun, never a required substring; validate:i18n reads the non-EN
+  // catalogs. No routeTests or seoTests entry pinned this page either.
+  //
+  // BE HONEST ABOUT THE ALTERNATIVE, because the first draft said "section D
+  // is the only place the assertion can live" and that is FALSE.
+  // scripts/validate-courses.ts already imports getCourseTitle and calls it per
+  // course in checkPackageNoun, server-free, in the fast lint job — a source
+  // level variant of this assertion could live there and would catch both data
+  // level deletions with ~90s feedback instead of a build plus a server. What
+  // it could NOT do is prove the value still REACHES the rendered tag: if
+  // generateMetadata stopped calling getCourseTitle, or the title template
+  // mangled it, only a fetch notices. This is a claim about SERP metadata, so
+  // it is asserted on the shipped metadata. Both would be better than one.
+  //
+  // SECOND-ORDER BENEFIT, stated as a side effect and not as the reason: this
+  // is the first URL in seoTests under /golf-courses/. Before it, 13 of the 31
+  // openGraph declarations under app/ were unreachable from this section, 8 of
+  // them under /golf-courses/; after it, 12 and 7 (re-derived, not decremented
+  // by hand). It closes one of those eight, not the gap.
+  {
+    path: "/golf-courses/bangkok/phoenix-gold-golf-country-club/",
+    locale: "en",
+    titleContains: {
+      needle: "formerly Suvarnabhumi Golf & Country Club",
+      why:
+        "This page's <title> is the only carrier of the club's former name in its SERP " +
+        "metadata, and per the GSC window in the course file's docblock that name is the " +
+        "page's only converting query. See the comment above this entry for the evidence; " +
+        "what you need in order to act is below. AT LEAST SIX edits delete this string, " +
+        "and this guard catches all six because it asserts the rendered output rather " +
+        "than a cause — so do not assume the two named here are what happened. The two " +
+        "LIVE risks: (a) blanking locales.en.title, which falls through to the generated " +
+        "'<name> — Green Fees & Guide'; and (b) setting fee_is_package, where " +
+        "getCourseTitle's package branch fires on /green fee/i against the hand-written " +
+        "title and returns '<name> — All-In Rates & Guide'. (b) is the one to expect: " +
+        "this course sits in the open caddie-bundled-but-cart-extra owner ruling " +
+        "(caddie 0, cart 600), so flagging it is a REAL trade, not a mistake — but it " +
+        "costs this string. TO KEEP BOTH, give the course a hand-written EN title that " +
+        "omits the words 'green fee': getCourseTitle honours such a title verbatim even " +
+        "with the flag set (lib/course-seo.ts, the branch after the package guard; " +
+        "verified by mutation). The other four causes, none of them named above: " +
+        "operational_status 'permanently_closed'; a rewritten title that simply drops " +
+        "the parenthetical; a title given the '— Green Fees, Course Guide & Golf Club " +
+        "Rentals' suffix, which BOILERPLATE_TITLE then discards; and widening " +
+        "BOILERPLATE_TITLE in lib/course-seo.ts — a cross-file edit nobody would make " +
+        "with a Bangkok course file open. If the loss is deliberate, delete this " +
+        "assertion and its REQUIRED_TITLE_ASSERTIONS entry in the same commit, with the " +
+        "reason in the message.",
+    },
+  },
 ];
 
 /**
@@ -3221,8 +3373,56 @@ const seoTests: SeoTest[] = [
  * clean section having asserted nothing. CLAUDE.md requires "a minimum-input
  * floor with a real number, not `> 0`" for exactly this; sections L2, L3, L4,
  * L6, O and P all carry one and this section did not.
+ *
+ * SCOPE: this counts URLs and nothing else. Section D now has TWO floors —
+ * see REQUIRED_TITLE_ASSERTIONS below for the one guarding the <title>
+ * assertions, which this constant provably does not cover: deleting the
+ * pinned entry and adding any other URL holds this count at 35.
  */
-const MIN_SEO_URLS = 34;
+const MIN_SEO_URLS = 35;
+
+/**
+ * Anti-vacuity for the `titleContains` assertions in `seoTests`. Two-sided by
+ * design, in the idiom of EXPECTED_DECLARATIONS in validate-open-graph.ts:
+ * weakening the guard has to be done in two places, which makes it a decision
+ * rather than a slip.
+ *
+ * Each escalation below was found by mutation, and each one passed the guard
+ * that preceded it:
+ *
+ *   - MIN_SEO_URLS alone does not cover this at all. It counts URLs, so
+ *     deleting the phoenix-gold entry and adding any other URL in the same
+ *     commit holds the count at 35 and the title assertion vanishes with
+ *     section D green.
+ *   - A COUNT of titleContains entries has the same hole one level down: swap
+ *     the needle onto a different page.
+ *   - Pinning the PATH alone still passes a needle BLANKED in place, because
+ *     `includes("")` is true everywhere.
+ *   - Pinning the path and requiring a non-blank needle still passes a needle
+ *     WEAKENED in place. Measured: `needle: "Phoenix Gold"` goes green while
+ *     the parenthetical is gone, because `course.name` is "Phoenix Gold Golf
+ *     Bangkok" and EVERY getCourseTitle fallback interpolates it. That is the
+ *     cheapest of the bypasses, so the needle STRING is pinned here too.
+ *
+ * KNOWN LIMIT, stated rather than implied: this pins what must be asserted, not
+ * that the assertion is sufficient. A needle that is present but no longer
+ * load-bearing (say the parenthetical is reworded and both sides updated
+ * together) is a deliberate two-file edit and is out of scope by construction.
+ */
+const REQUIRED_TITLE_ASSERTIONS: { path: string; needle: string }[] = [
+  {
+    path: "/golf-courses/bangkok/phoenix-gold-golf-country-club/",
+    needle: "formerly Suvarnabhumi Golf & Country Club",
+  },
+];
+
+/**
+ * ...and a floor on the floor. An emptied REQUIRED_TITLE_ASSERTIONS iterates
+ * zero times and every check below passes while asserting nothing — the
+ * empty-input vacuity path CLAUDE.md names explicitly, and the one shape the
+ * two-sided pin above cannot catch on its own.
+ */
+const MIN_TITLE_ASSERTIONS = 1;
 
 // E) Thai redirect tests (untranslated Thai routes → 301 to English)
 interface ThaiRedirectTest {
@@ -3644,6 +3844,72 @@ async function runSeoTests() {
         `it claims`,
     );
   }
+  // The title-assertion floor. Checked before any fetch, so a network failure
+  // cannot skip it, and `fail()` accumulates rather than throwing, so every arm
+  // below reports independently.
+  if (REQUIRED_TITLE_ASSERTIONS.length < MIN_TITLE_ASSERTIONS) {
+    fail(
+      "D) seoTests title-assertion floor",
+      `REQUIRED_TITLE_ASSERTIONS holds ${REQUIRED_TITLE_ASSERTIONS.length} entr(ies), ` +
+        `expected at least ${MIN_TITLE_ASSERTIONS} — an emptied list iterates zero times ` +
+        `and every check below passes while asserting nothing`,
+    );
+  }
+  for (const required of REQUIRED_TITLE_ASSERTIONS) {
+    // `filter`, not `find`. `find` takes the FIRST match, so a duplicate entry
+    // for the same path placed BEFORE the real one is read instead of it —
+    // measured: a duplicate ahead of it false-reds, one after it goes green
+    // with the assertion silently answered by the wrong object. A path in this
+    // list must appear exactly once.
+    const matches = seoTests.filter((t) => t.path === required.path);
+    if (matches.length > 1) {
+      fail(
+        "D) seoTests title-assertion floor",
+        `${required.path} appears ${matches.length} times in seoTests — the floor ` +
+          `below resolves one of them and the others are unchecked; keep pinned ` +
+          `paths unique`,
+      );
+    }
+    const entry = matches[0];
+    if (entry?.titleContains && !entry.titleContains.why.trim()) {
+      // The design's premise is that needle and reason travel together, and
+      // only the needle was enforced. A blank `why` leaves the failure message
+      // as a bare string mismatch, which is precisely the state that gets a
+      // pinned assertion deleted by the next person who trips it.
+      fail(
+        "D) seoTests title-assertion floor",
+        `${required.path} has a blank titleContains.why — the needle survives but the ` +
+          `reason a maintainer needs in order to act on the failure does not`,
+      );
+    }
+    if (!entry) {
+      fail(
+        "D) seoTests title-assertion floor",
+        `${required.path} is no longer in seoTests — its <title> assertion is gone, so a ` +
+          `green section D below is asserting less than it claims`,
+      );
+    } else if (!entry.titleContains?.needle.trim()) {
+      fail(
+        "D) seoTests title-assertion floor",
+        `${required.path} no longer carries a non-blank titleContains.needle — an empty ` +
+          `needle passes includes() on every page, i.e. the assertion is vacuous`,
+      );
+    } else if (entry.titleContains.needle !== required.needle) {
+      // The two-sided half. A needle weakened IN PLACE — e.g. to "Phoenix Gold",
+      // which every getCourseTitle fallback still contains because it is part of
+      // course.name — passes the non-blank check above and goes green while the
+      // string this exists to protect is gone. Measured, not reasoned.
+      fail(
+        "D) seoTests title-assertion floor",
+        `${required.path} asserts needle "${entry.titleContains.needle}" but ` +
+          `REQUIRED_TITLE_ASSERTIONS pins "${required.needle}". If the change is ` +
+          `deliberate, update both; if not, this is the assertion being weakened in ` +
+          `place, which no other check here would catch`,
+      );
+    }
+  }
+  let titleNeedlesJudged = 0;
+
   for (const t of seoTests) {
     const label = `SEO ${t.path}`;
     try {
@@ -3658,13 +3924,48 @@ async function runSeoTests() {
       } else if (langMatch[1] !== t.locale) {
         issues.push(`lang="${langMatch[1]}", expected "${t.locale}"`);
       }
-
       // <title> exists and is non-empty, no "undefined" or "404"
       const titleMatch = body.match(/<title>([^<]*)<\/title>/);
       if (!titleMatch || !titleMatch[1].trim()) {
         issues.push("missing or empty <title>");
       } else if (/undefined|404|Page Not Found/i.test(titleMatch[1])) {
         issues.push(`bad title: "${titleMatch[1]}"`);
+      } else if (t.titleContains) {
+        // Entity-decoded before comparing: React escapes "&" in text, so a
+        // course title carrying an ampersand renders as "Golf &amp; Country
+        // Club" and comparing against the raw markup would false-fail on
+        // correct output. The needle is written the way a human reads it.
+        const renderedTitle = decodeEntities(titleMatch[1]);
+        if (!renderedTitle.includes(t.titleContains.needle)) {
+          issues.push(
+            `<title> no longer contains "${t.titleContains.needle}" — got ` +
+              `"${renderedTitle}". ${t.titleContains.why}`,
+          );
+        }
+        // Counted where the comparison actually HAPPENS, not where the entry is
+        // read — the L6 idiom from #122. Neither floor above can see a SKIPPED
+        // assertion: measured, `} else if (false && t.titleContains) {` ran zero
+        // comparisons and printed a byte-identical green section, because
+        // REQUIRED_TITLE_ASSERTIONS inspects the DATA and never whether the
+        // check ran. The equality after the loop is what closes that.
+        titleNeedlesJudged++;
+      }
+
+      // The pinned URL must be the URL asserted. This loop fetches with
+      // `redirect: "follow"`, so an entry pointing at a slug that 308s asserts
+      // the needle on the DESTINATION while claiming to cover the source —
+      // measured: pointing this entry at the retired
+      // /golf-courses/bangkok/suvarnabhumi-golf-country-club/ (which 308s here)
+      // went green. Bounded damage, since the needle must still appear
+      // somewhere, but it can assert about the wrong URL. Section A carries the
+      // same guard at its own fetch. Scoped to titleContains entries on
+      // purpose: the other 34 entries have followed redirects since they were
+      // written, and silently changing that is a different PR.
+      if (t.titleContains && res.redirected) {
+        issues.push(
+          `redirected to ${res.url} — a pinned-title entry must resolve directly, ` +
+            `or it asserts its needle against a different page than the one it names`,
+        );
       }
 
       // <meta name="description"> exists
@@ -3774,6 +4075,27 @@ async function runSeoTests() {
         issues.push("missing og:site_name");
       }
 
+      // og:title carries the same needle, for the entries that pin one. The
+      // `why` text asserts the <title> assertion covers "the og:title derived
+      // from it" — and that derivation is real (this route passes ONE `title`
+      // const to both `title` and `siteOpenGraph({ title })`) but it holds by
+      // shared source, not by construction. Nothing in the suite asserted
+      // og:title at all before this. One extra check on a fetch already being
+      // made turns the claim into something the gate proves.
+      if (t.titleContains && titleMatch) {
+        const ogTitle = ogTag("title");
+        if (ogTitle === null) {
+          issues.push("missing og:title");
+        } else if (!decodeEntities(ogTitle).includes(t.titleContains.needle)) {
+          issues.push(
+            `og:title no longer contains "${t.titleContains.needle}" — got ` +
+              `"${decodeEntities(ogTitle)}". The <title> and og:title come from one ` +
+              `source on this route, so they should fail together; only one failing ` +
+              `means that shared derivation broke`,
+          );
+        }
+      }
+
       // twitter:card, asserted on the RENDERED tag. This replaces the static
       // twitter/icons tripwire in validate:open-graph, which tried to predict
       // Next's resolution from source. Two of its three shapes were wrong,
@@ -3791,10 +4113,14 @@ async function runSeoTests() {
       //
       // The layout is the SOLE supplier of `card` site-wide, so checking the
       // resolved output here is complete coverage of the SUPPLIER. It is NOT
-      // complete coverage of a future page-level `twitter` declaration: 13 of
+      // complete coverage of a future page-level `twitter` declaration: 12 of
       // the 31 openGraph declarations are unreachable from any URL in this
-      // section — 8 of those 13 under /golf-courses/, the other 5 being
-      // activities, best, cost, hotels and second-hand-club detail. This was
+      // section — 7 of those 12 under /golf-courses/, the other 5 being
+      // activities, best, cost, hotels and second-hand-club detail. (Was 13 and
+      // 8 until the phoenix-gold entry made the course-detail route reachable;
+      // re-derived, not decremented by hand. That entry's own comment warns
+      // about this sentence, so it was updated in the same commit — this was
+      // the FIFTH site.) This was
       // the FOURTH site of that sentence, and the two commits that "fixed the
       // remaining sites" both edited this file without touching it. Grep the
       // claim, not the diff. A meta-name lookup, not property= — Twitter/X
@@ -4039,6 +4365,40 @@ async function runSeoTests() {
       fail(label, `fetch error: ${(err as Error).message}`);
     }
   }
+
+  // Did the needle comparisons actually RUN? Neither floor above can see a
+  // skipped assertion — they inspect the DATA. Measured: replacing the branch
+  // condition with `false && t.titleContains` evaluated zero comparisons and
+  // printed a byte-identical green section. This is the same shape #122 fixed
+  // in L6 (`judged !== itemsChecked`) and that checkPackageNoun fixes with
+  // `judged !== checked`.
+  //
+  // EQUALITY, not a floor, for the reason L6 records: a floor passes every
+  // `judged > expected` state, so it cannot tell "ran more than planned" from
+  // "the plan changed underneath it".
+  //
+  // Expected is derived from `seoTests` rather than from
+  // REQUIRED_TITLE_ASSERTIONS, so it also covers an UNPINNED titleContains
+  // entry. That makes it independently satisfiable at zero — drop every
+  // `titleContains` and both sides are 0 — which is exactly what the
+  // REQUIRED_TITLE_ASSERTIONS floor above rejects. The two compose; neither is
+  // sufficient alone.
+  const titleNeedlesExpected = seoTests.filter((t) => t.titleContains).length;
+  if (titleNeedlesJudged !== titleNeedlesExpected) {
+    fail(
+      "D) seoTests title-assertion coverage",
+      `${titleNeedlesExpected} entr(ies) declare a titleContains but only ` +
+        `${titleNeedlesJudged} needle comparison(s) ran — the assertions were SKIPPED, ` +
+        `not merely failed. Look for an early exit or a disarmed condition between the ` +
+        `<title> match and the needle comparison. If the run is already red with a fetch ` +
+        `error or a missing <title> on one of those URLs, prefer that diagnosis: those ` +
+        `branches legitimately bypass the comparison, and they report separately.`,
+    );
+  } else {
+    pass(
+      `D) judged every one of the ${titleNeedlesExpected} pinned <title> needle(s)`,
+    );
+  }
 }
 
 async function runThaiRedirectTests() {
@@ -4206,6 +4566,119 @@ async function runNotFoundTests() {
   }
 }
 
+/**
+ * G2) An unknown slug must 404 at the ROUTING layer, not render and CACHE.
+ *
+ * THE STATUS CODE IS NOT THE ASSERTION, and that is the whole point of this
+ * section. Before `dynamicParams = false` an unknown slug ALSO returned 404 --
+ * section G would have been green either way -- but Next rendered the not-found
+ * path and stored it as a permanent ISR entry. Measured on prod 2026-09-04:
+ * /guide/<junk>/ returned 404 carrying `X-Nextjs-Prerender: 1` and
+ * `X-Nextjs-Stale-Time: 4294967294` (2^32-2, never revalidate), ~124 KB, MISS
+ * then HIT forever. Every unique URL a crawler invented therefore cost one
+ * invocation, one permanent cache write and 124 KB of egress, unbounded.
+ *
+ * So this asserts the ABSENCE of `X-Nextjs-Prerender` on a junk URL. Nothing
+ * else in CI can distinguish the fixed state from the broken one, which means
+ * nothing else would notice a future edit dropping the flag.
+ *
+ * NOTE the header is not by itself pathological -- a CORRECTLY prerendered page
+ * carries `X-Nextjs-Stale-Time: 4294967294` too. What must never carry it is a
+ * 404. Hence the paired control below: a real page must still be prerendered,
+ * so an all-dynamic regression (which would also remove the header from the
+ * junk URL) cannot make this section vacuously green.
+ */
+async function runUnknownSlugCacheTests() {
+  console.log("\n\x1b[1mG2) Unknown slugs must 404 without minting an ISR entry\x1b[0m");
+
+  // One junk URL per newly-guarded segment, plus the region hub.
+  const junk = [
+    "/guide/zzz-smoke-not-a-real-slug/",
+    "/faq/zzz-smoke-not-a-real-slug/",
+    "/cost/zzz-smoke-not-a-real-slug/",
+    "/activities/zzz-smoke-not-a-real-slug/",
+    "/hotels/zzz-smoke-not-a-real-slug/",
+    "/best/zzz-smoke-not-a-real-slug/",
+    "/golf-courses/zzz-smoke-not-a-region/",
+  ];
+
+  // ---------------------------------------------------------------------
+  // CONTROL FIRST, and it decides how much this section can assert.
+  //
+  // The prod measurement was taken against VERCEL. CI runs `next build &&
+  // next start`, and it was NOT verified that the Node server emits the same
+  // cache headers -- the Windows dev box cannot complete a production build
+  // (@vercel/og), so this could not be checked before shipping. Asserting a
+  // header that this environment never emits would red CI on correct code,
+  // which is the failure mode this repo keeps re-learning. So: probe a page
+  // that IS prerendered, discover which signal exists here, and assert only
+  // that one. If neither exists, degrade to the status check and SAY SO
+  // loudly rather than passing silently.
+  // ---------------------------------------------------------------------
+  const CONTROL_PATH = "/guide/thailand-golf-trip-cost/";
+  const SIGNALS = ["x-nextjs-prerender", "x-nextjs-cache"] as const;
+  let signal: string | null = null;
+
+  try {
+    const res = await fetch(`${BASE}${CONTROL_PATH}`, { redirect: "follow" });
+    if (res.status !== 200) {
+      fail("G2 control", `${CONTROL_PATH} returned ${res.status}, expected 200`);
+      return;
+    }
+    signal = SIGNALS.find((h) => res.headers.get(h)) ?? null;
+    if (signal) {
+      pass(`G2 control: prerendered pages expose "${signal}" here (${CONTROL_PATH})`);
+    } else {
+      console.log(
+        `\x1b[33m   NOTE\x1b[0m G2: this server exposes neither ${SIGNALS.join(" nor ")} on a ` +
+          `prerendered page, so the cache-entry assertion CANNOT run and only the 404 status is ` +
+          `checked below. That is strictly weaker than intended — section G already covers status. ` +
+          `If this prints in CI, find the header \`next start\` does emit and add it to SIGNALS.`
+      );
+    }
+  } catch (err) {
+    fail("G2 control", `fetch error: ${(err as Error).message}`);
+    return;
+  }
+
+  let checked = 0;
+  for (const path of junk) {
+    const label = signal
+      ? `unknown slug 404s without a cache entry (${path})`
+      : `unknown slug 404s (${path}, status only — see NOTE)`;
+    try {
+      const res = await fetch(`${BASE}${path}`, { redirect: "follow" });
+      if (res.status !== 404) {
+        fail(label, `expected 404, got ${res.status}`);
+        continue;
+      }
+      if (signal) {
+        const got = res.headers.get(signal);
+        if (got) {
+          fail(
+            label,
+            `the 404 carried ${signal}: ${got} — this segment is rendering unknown params on ` +
+              `demand and caching the result permanently (measured on prod at ~124 KB per unique ` +
+              `junk URL, never revalidating). Add \`export const dynamicParams = false\`.`
+          );
+          continue;
+        }
+      }
+      checked++;
+      pass(label);
+    } catch (err) {
+      fail(label, `fetch error: ${(err as Error).message}`);
+    }
+  }
+
+  // Counts URLs that reached a verdict, incremented AFTER the assertions above
+  // rather than at the top of the loop, so a `continue` inserted between the
+  // fetch and the checks cannot leave this floor satisfied at its true value.
+  if (checked !== junk.length) {
+    fail("G2 anti-vacuity", `judged ${checked} of ${junk.length} junk URLs`);
+  }
+}
+
 async function runLlmDiscoverabilityTests() {
   console.log("\n\x1b[1mH) LLM / AI discoverability\x1b[0m");
 
@@ -4344,6 +4817,146 @@ async function runLlmDiscoverabilityTests() {
     }
   } catch (err) {
     fail("Sitemap unique URLs", `fetch error: ${(err as Error).message}`);
+  }
+
+  // 6) Every page advertises llms.txt via an HTTP Link header, appended in
+  // middleware.ts (withLlmsLink). Middleware, not next.config headers() and
+  // not metadata: next-intl's middleware sets its own `link` header (hreflang)
+  // which REPLACES a config-attached Link on the same response — measured —
+  // and page-level `alternates` (canonical) would per-key-replace a
+  // layout-level alternates.types, the og:site_name failure shape. Assert on
+  // the homepage; every page route flows through the same middleware return.
+  // TWO fetches, because middleware.ts has two decorated return paths and one
+  // URL cannot cover both. `/` takes the ordinary return; an untranslated path
+  // requested by a non-English browser takes the /en-fallback REWRITE branch,
+  // whose response carries no next-intl hreflang Link at all. Asserting only
+  // `/` left that branch unguarded: deleting its withLlmsLink() call kept every
+  // gate green while stripping the header from every page a ja/ko/zh/th browser
+  // sees on an untranslated route (measured by mutation).
+  //
+  // Attributes are asserted on the llms ENTRY, not on the whole header. The
+  // header is a comma-join of next-intl's hreflang entries plus ours, and every
+  // hreflang entry carries rel="alternate" — so a whole-header regex passed
+  // even with our link removed entirely, and would pass with our link stripped
+  // of its rel or pointed at the wrong host.
+  const llmsLinkChecks: { label: string; url: string; headers?: Record<string, string> }[] = [
+    { label: "/", url: `${BASE}/` },
+    {
+      label: "/golf-in-thailand-guide/ (Accept-Language: ja -> /en rewrite)",
+      url: `${BASE}/golf-in-thailand-guide/`,
+      headers: { "Accept-Language": "ja-JP,ja;q=0.9" },
+    },
+  ];
+  for (const check of llmsLinkChecks) {
+    try {
+      const res = await fetch(check.url, {
+        redirect: "follow",
+        headers: check.headers,
+      });
+      const link = res.headers.get("link") || "";
+      const issues: string[] = [];
+      // Split on the entry boundary: ", " only where the next entry opens "<".
+      const entry = link
+        .split(/,\s*(?=<)/)
+        .find((e) => e.includes("/llms.txt>"));
+      if (!entry) {
+        issues.push(
+          `no llms.txt entry in Link header (got: "${link.slice(0, 140)}")`,
+        );
+      } else {
+        if (!entry.includes("<https://www.len.golf/llms.txt>"))
+          issues.push(`llms entry points at the wrong URL: "${entry}"`);
+        if (!/rel="?alternate"?/.test(entry))
+          issues.push(`llms entry missing rel="alternate": "${entry}"`);
+        if (!/type="?text\/plain"?/.test(entry))
+          issues.push(`llms entry missing type="text/plain": "${entry}"`);
+      }
+      if (issues.length > 0)
+        fail(`llms.txt Link header ${check.label}`, issues.join("; "));
+      else pass(`llms.txt Link header ${check.label}`);
+    } catch (err) {
+      fail(
+        `llms.txt Link header ${check.label}`,
+        `fetch error: ${(err as Error).message}`,
+      );
+    }
+  }
+
+  // 7) IndexNow key file: exactly one 32-hex .txt in public/, its stem equals
+  // the KEY constant in scripts/indexnow-ping.ts, and the server returns it
+  // with the stem as its body (that equality is IndexNow's own ownership
+  // check). Drift between the script's KEY and the served file is the silent
+  // failure mode: the API accepts the ping with HTTP 200 and then discards it
+  // during async key validation, so nothing else can ever go red.
+  try {
+    const fs = await import("fs");
+    const path = await import("path");
+    const pubDir = path.join(__dirname, "..", "public");
+    const keyFiles = fs
+      .readdirSync(pubDir)
+      .filter((f) => /^[0-9a-f]{32}\.txt$/.test(f));
+    const issues: string[] = [];
+    if (keyFiles.length !== 1) {
+      issues.push(`expected exactly 1 IndexNow key file in public/, found ${keyFiles.length}`);
+    } else {
+      const stem = keyFiles[0].replace(/\.txt$/, "");
+      const script = fs.readFileSync(
+        path.join(__dirname, "indexnow-ping.ts"),
+        "utf-8",
+      );
+      const keyMatch = script.match(/const KEY = '([0-9a-f]{32})'/);
+      if (!keyMatch) issues.push("indexnow-ping.ts KEY constant not found");
+      else if (keyMatch[1] !== stem)
+        issues.push(`KEY in indexnow-ping.ts (${keyMatch[1]}) != public/ key file (${stem})`);
+      const res = await fetch(`${BASE}/${keyFiles[0]}`, { redirect: "manual" });
+      if (res.status !== 200) issues.push(`GET /${keyFiles[0]} returned ${res.status}`);
+      else if ((await res.text()).trim() !== stem)
+        issues.push(`served key file body != key`);
+    }
+    if (issues.length > 0) fail("IndexNow key file", issues.join("; "));
+    else pass("IndexNow key file (served, matches ping script)");
+  } catch (err) {
+    fail("IndexNow key file", `error: ${(err as Error).message}`);
+  }
+
+  // 8) FAQ pages carry dateModified in their FAQPage JSON-LD — the freshness
+  // signal answer engines use to trust price-sensitive Q&A. Parse the node,
+  // don't substring the page: a dateModified in some OTHER node must not
+  // satisfy a check about this one.
+  try {
+    const res = await fetch(`${BASE}/faq/can-i-rent-golf-clubs-in-bangkok/`, {
+      redirect: "follow",
+    });
+    const body = await res.text();
+    const blocks = [
+      ...body.matchAll(
+        /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g,
+      ),
+    ].map((m) => m[1]);
+    const faqNode = blocks
+      .map((b) => {
+        try {
+          return JSON.parse(b);
+        } catch {
+          return null;
+        }
+      })
+      .find((n) => n && n["@type"] === "FAQPage");
+    if (!faqNode) {
+      fail("FAQ dateModified", "no FAQPage JSON-LD node found");
+    } else if (
+      typeof faqNode.dateModified !== "string" ||
+      !/^\d{4}-\d{2}-\d{2}/.test(faqNode.dateModified)
+    ) {
+      fail(
+        "FAQ dateModified",
+        `FAQPage.dateModified missing or not ISO: ${JSON.stringify(faqNode.dateModified)}`,
+      );
+    } else {
+      pass(`FAQ dateModified (FAQPage node dated ${faqNode.dateModified.slice(0, 10)})`);
+    }
+  } catch (err) {
+    fail("FAQ dateModified", `fetch error: ${(err as Error).message}`);
   }
 }
 
@@ -5400,6 +6013,7 @@ async function runPriceTierRoundupLanguageTests() {
 
   let itemsChecked = 0;
   let packageItemsSeen = 0;
+  let judged = 0;
   for (const { locale, tier } of params) {
     const target = `/${locale}/golf-courses/under/${tier}/`;
     try {
@@ -5495,7 +6109,48 @@ async function runPriceTierRoundupLanguageTests() {
           itemPath !== undefined && packageUrlPaths.has(itemPath);
         if (isPackage) packageItemsSeen++;
         const want = allowedFor({ fee_is_package: isPackage });
-        if (!want.includes(desc)) {
+        const labelOk = want.includes(desc);
+        // Counted AFTER the comparison actually ran. Both counters above answer
+        // "how many items were VISITED", which is not the question - mutation-
+        // tested during the PR #120 review, a `continue` one line below
+        // `packageItemsSeen++` leaves itemsChecked at 240 and packageItemsSeen at
+        // 36, evaluates ZERO label comparisons, prints both pass lines and exits
+        // GREEN with byte-identical output. It also catches a PARTIAL skip that
+        // neither floor can see by construction: skipping ja alone measured
+        // 240 visited / 180 judged with both floors still printing their true
+        // 240 and 36.
+        //
+        // `judged !== checked` in checkPackageNoun (scripts/validate-courses.ts)
+        // is the ONE sibling in this repo that closes this hole. Do NOT read
+        // validate-course-slots.ts as a second one - an earlier version of this
+        // comment did, and it is backwards: that file's `checked++` is the FIRST
+        // statement of its field loop (line 554) and both its oracles compare
+        // visits against registry-derived expectations, so a `continue` one line
+        // below it runs ZERO judges with byte-identical output and exit 0, and
+        // its --self-test does not help because that exercises judge() directly
+        // and never main()'s loop. Measured, not reasoned. It is an INSTANCE of
+        // this hole; checkPackageNoun's own comment already calls it the victim.
+        //
+        // SCOPE, measured rather than asserted. This catches a skip placed
+        // between `itemsChecked++` and `judged++`. It does NOT catch: a skip
+        // before `itemsChecked++` (both counters stay level, the equality holds,
+        // and it is the 240 floor that reds); a skip between `judged++` and the
+        // `if` below, which evaluates the predicate and discards it; or any
+        // falsification of the predicate rather than a skip of it - pinning
+        // `labelOk` true, writing `if (false && !labelOk)`, or widening `want`
+        // to accept both bases all stay GREEN with a real label defect live in
+        // the data. That last one is not hypothetical: the comment ~30 lines
+        // above records it having shipped once. A counter can only ever prove a
+        // comparison RAN, never that it discriminates; only a contract suite of
+        // the kind scripts/validate-open-graph-contract.ts has can do that, and
+        // nothing guards this assertion's own body either. Do not read this fix
+        // as closing the class - a repo-wide sweep on 2026-08-31 found this
+        // shape in a dozen-odd other gates, of which TWO are confirmed by
+        // mutation: L2's `offerChecked++` (line 4858, 688 assertions) and
+        // validate-course-slots.ts:554 (2,632). See CLAUDE.md for the rest,
+        // which are candidates rather than measurements.
+        judged++;
+        if (!labelOk) {
           fail(
             `ItemList Offer.description is not a '${locale}' label on ${target}`,
             `got ${JSON.stringify(desc)} for ${JSON.stringify(el?.item?.name)}, expected one of ${JSON.stringify(want)} — either the route dropped its offerNames argument and fell back to the silent EN default, or el.item.url stopped matching packageUrlPaths (check golfCourseItem's url expression in lib/jsonld-courses.ts, trailing slash included), which misclassifies every course at once.`,
@@ -5553,6 +6208,37 @@ async function runPriceTierRoundupLanguageTests() {
     );
   } else {
     pass(`L6 asserted package (not green-fee) ItemList labels on ${packageItemsSeen} item(s)`);
+  }
+
+  // Neither floor above can see a SKIPPED assertion, and that is not a
+  // hypothetical: mutation-tested during the PR #120 review, a `continue` placed
+  // one line below `packageItemsSeen++` left itemsChecked at its true 240 and
+  // packageItemsSeen at its true 36, evaluated ZERO label comparisons, printed
+  // both pass lines above and exited GREEN with byte-identical output. A floor
+  // sitting outside the loop is necessary but NOT sufficient — it constrains how
+  // many items were VISITED, and an item can be visited without being tested.
+  //
+  // EQUALITY, not a floor, and the difference is measured: giving `judged` a
+  // second increment site sends it to 480 against 240, which `!==` reds and
+  // `<` passes. Same reasoning as `judged !== checked` in checkPackageNoun,
+  // which is likewise an unreachable-overshoot equality. Do NOT cite that
+  // gate's `checked !== expectedTitles` as the precedent instead: overshoot
+  // there is REACHABLE and was measured at 67 vs 63, so it is a different
+  // argument for the same operator.
+  //
+  // THIS CHECK HAS NO TEETH OF ITS OWN: (0, 0) satisfies it. All of its
+  // non-vacuity is inherited from `itemsChecked < 240` 50 lines above, so
+  // lowering or deleting that floor silently degrades this to nothing. The
+  // pass line is gated on a non-empty run accordingly - it otherwise printed
+  // "judged every one of the 0 offer(s)" inside an already-red run, which is a
+  // success line asserting nothing.
+  if (judged !== itemsChecked) {
+    fail(
+      `L6 visited ${itemsChecked} ItemList offer(s) but judged only ${judged}`,
+      "offers are being counted without being compared to a label — the two floors above are satisfied by items that were merely visited, so a shortfall here means the assertions were SKIPPED, not that the labels are wrong. Look for an early exit (`continue`/`break`/`return`/a throw) between `itemsChecked++` and `judged++` — that is the whole span this equality guards. If the run is already red with a fetch error, prefer that diagnosis: a throw landing between the two counters reaches here as well.",
+    );
+  } else if (itemsChecked > 0) {
+    pass(`L6 judged every one of the ${itemsChecked} offer(s) it counted`);
   }
 }
 
@@ -6097,6 +6783,7 @@ async function main() {
   await runThaiCookieTests();
   await runAcceptLanguageTests();
   await runNotFoundTests();
+  await runUnknownSlugCacheTests();
   await runLlmDiscoverabilityTests();
   await runRegistryConsistencyTests();
   await runRegionHubRegistryConsistencyTests();

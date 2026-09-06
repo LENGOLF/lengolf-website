@@ -380,7 +380,8 @@ The 101 location pages target local search queries across approximately 15 Bangk
 
 ## Analytics
 
-- **Vercel Analytics**: Loaded via `@vercel/analytics/react` in the root layout.
+- **Vercel Analytics**: REMOVED 2026-09-04. GA4 via GTM (`GTM-MKCHVJKW`) already covered the
+  same pageview/visitor data, and the Vercel Web Analytics line was billing separately.
 - **Google Tag Manager**: Loaded via `next/script` with `afterInteractive` strategy. The GTM container ID comes from the `NEXT_PUBLIC_GTM_ID` environment variable.
 
 ---

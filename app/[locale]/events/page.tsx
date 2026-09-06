@@ -15,6 +15,12 @@ import FloorPlanDialog from '@/components/events/FloorPlanDialog'
 import FaqSection from '@/components/shared/FaqSection'
 import { siteOpenGraph } from '@/lib/open-graph'
 
+// Daily. Declared explicitly so this page does not inherit its ISR interval
+// from the pricing fetch in lib/pricing.ts, which is now 30 days: this page
+// reads live prices via data/pricing.ts, and without this line a content or
+// copy change here would stay unpublished for a month.
+export const revalidate = 86400
+
 const faqLinks: Record<string, { href: string; external?: boolean }> = {
   'booking.len.golf': { href: 'https://booking.len.golf/', external: true },
   '@lengolf': { href: 'https://lin.ee/uxQpIXn', external: true },

@@ -33,7 +33,7 @@
  * is covered by an external fixture suite that runs the gate as a child process
  * against a deliberately mutated copy of itself. See
  * scripts/validate-open-graph-contract.ts. Only open-graph has one today; the
- * other three gates are a named follow-up, not a solved problem.
+ * other four gates are a named follow-up, not a solved problem.
  */
 
 export interface Verdict {

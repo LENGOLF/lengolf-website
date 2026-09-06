@@ -21,6 +21,9 @@
     "validate:course-slots:self-test": "tsx scripts/validate-course-slots.ts --self-test",
     "validate:courses": "tsx scripts/validate-courses.ts",
     "validate:courses:self-test": "tsx scripts/validate-courses.ts --self-test",
+    "validate:pricing-payload": "tsx scripts/validate-pricing-payload.ts",
+    "validate:pricing-revalidate": "tsx scripts/validate-pricing-revalidate.ts",
+    "validate:pricing-revalidate:contract": "tsx scripts/validate-pricing-revalidate-contract.ts",
     "validate:hotels": "tsx scripts/validate-hotels.ts",
     "verify:coordinates": "tsx scripts/verify-course-coordinates.ts",
     "inventory": "tsx scripts/page-inventory.ts",
@@ -34,7 +37,9 @@
     "test:mobile:report": "playwright show-report",
     "validate:fee-labels": "tsx scripts/validate-fee-labels.ts",
     "validate:fee-labels:self-test": "tsx scripts/validate-fee-labels.ts --self-test",
-    "validate:pr-rigor": "tsx scripts/validate-pr-rigor.ts"
+    "validate:pr-rigor": "tsx scripts/validate-pr-rigor.ts",
+    "validate:pr-rigor:self-test": "tsx scripts/validate-pr-rigor.ts --self-test",
+    "validate:pr-rigor:contract": "tsx scripts/validate-pr-rigor-contract.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.92.0",
@@ -45,7 +50,6 @@
     "@radix-ui/react-slot": "^1.2.3",
     "@supabase/supabase-js": "^2.49.1",
     "@tailwindcss/typography": "^0.5.19",
-    "@vercel/analytics": "^1.6.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.0.8",

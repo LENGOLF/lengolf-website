@@ -18,9 +18,12 @@ export const revalidate = 86400
 // generateStaticParams (edits to existing listings still ISR-revalidate).
 export const dynamicParams = false
 
+// EN-only — `locale` must be emitted explicitly or this cross-products with
+// all five locales from the root layout (43 ids became ~215 prerendered
+// pages). See the sibling note in app/[locale]/location/[slug]/page.tsx.
 export async function generateStaticParams() {
   const ids = await getUsedClubIds()
-  return ids.map((id) => ({ id }))
+  return ids.map((id) => ({ locale: 'en', id }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; id: string }> }): Promise<Metadata> {

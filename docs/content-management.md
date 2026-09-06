@@ -78,6 +78,17 @@ Blog posts are stored in the `blog_posts` table in Supabase. The data fetching h
 
 Set the `status` field to `draft`. The post will be excluded from the listing and will return a 404 on its direct URL after the next ISR revalidation.
 
+### Retiring a Blog Post into a Section Page (redirect, not 404)
+
+When a post is being consolidated into a page that serves the same search intent, a 404 throws away the URL's history. Instead:
+
+1. Add the slug to `RETIRED_BLOG_REDIRECTS` in `lib/blog-slugs.ts` **and** `lib/blog-slugs.js` (hand-synced twins; `next.config.js` reads the `.js`). Both the WordPress root form and the `/blog/` form then 308 to the destination in one hop.
+2. Add matching `redirectTests` entries in `scripts/smoke-test.ts` for every generated rule (root and `/blog/` form per slug).
+3. Merge and let Vercel deploy. Only then set the `blog_posts` row to `draft`, so the page never 404s in between.
+4. Trigger one more deploy after the flip: `app/sitemap.ts` is a build-time artifact, so the retired URL stays in the sitemap (as a redirect) until the next build. The `/blog/` listing self-heals within 24 hours on its own.
+
+Reviving a retired post means deleting its entry from `RETIRED_BLOG_REDIRECTS` first; config redirects match before the filesystem, so flipping the row back to `published` alone leaves the page unreachable behind its own redirect.
+
 ### Blog Post Content Format
 
 The `content` field stores raw HTML. When writing content:
