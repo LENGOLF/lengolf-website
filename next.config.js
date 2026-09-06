@@ -1,5 +1,5 @@
 const createNextIntlPlugin = require('next-intl/plugin')
-const { LEGACY_BLOG_SLUGS } = require('./lib/blog-slugs.js')
+const { LEGACY_BLOG_SLUGS, RETIRED_BLOG_REDIRECTS } = require('./lib/blog-slugs.js')
 
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
 
@@ -63,11 +63,27 @@ const nextConfig = {
 
     // All destinations use trailing slashes to match trailingSlash: true
     // and avoid extra redirect hops from trailing-slash normalization.
-    const blogRedirects = LEGACY_BLOG_SLUGS.map((slug) => ({
+    // Retired posts are excluded here and handled by retiredBlogRedirects
+    // below, so their WordPress root URL goes straight to the section page
+    // instead of chaining through /blog/{slug}/.
+    const blogRedirects = LEGACY_BLOG_SLUGS.filter((slug) => !(slug in RETIRED_BLOG_REDIRECTS)).map((slug) => ({
       source: `/${slug}`,
       destination: `/blog/${slug}/`,
       permanent: true,
     }))
+
+    // Blog posts retired into a section page (see RETIRED_BLOG_REDIRECTS in
+    // lib/blog-slugs.ts for the why). Both the WordPress root form and the
+    // /blog/ form 308 to the destination. No locale forms: the destinations
+    // are EN-only routes, and middleware already 301s an untranslated
+    // /:locale/blog/{slug}/ to /blog/{slug}/, which then lands here.
+    // Asserted (status AND location) in redirectTests in scripts/smoke-test.ts.
+    // TRAP: redirects match before the filesystem, so flipping the post back
+    // to published in blog_posts does NOT revive it while its entry is here.
+    const retiredBlogRedirects = Object.entries(RETIRED_BLOG_REDIRECTS).flatMap(([slug, destination]) => [
+      { source: `/${slug}`, destination, permanent: true },
+      { source: `/blog/${slug}`, destination, permanent: true },
+    ])
 
     // WordPress page-type taxonomy -> relevant Next.js service pages
     const pageTypeRedirects = [
@@ -236,6 +252,7 @@ const nextConfig = {
 
     return [
       ...blogRedirects,
+      ...retiredBlogRedirects,
       ...pageTypeRedirects,
       ...locationAreaRedirects,
       ...rootLocationRedirects,

@@ -32,3 +32,26 @@ export const LEGACY_BLOG_SLUGS = [
   'ultimate-guide-to-golf-courses-in-bangkok',
   'what-to-do-in-bangkok',
 ] as const
+
+/**
+ * Legacy blog posts RETIRED into a section page. Each slug here is 301d
+ * (permanent 308 from next.config.js) to its destination from BOTH the
+ * WordPress root URL (/{slug}/) and the Next.js URL (/blog/{slug}/), so the
+ * root form does not chain through /blog/ first. Retired slugs stay in
+ * LEGACY_BLOG_SLUGS so middleware keeps skipping locale handling for them.
+ *
+ * TRAP: config redirects match BEFORE the filesystem, so a post listed here is
+ * unreachable even if its blog_posts row is set back to published. Delete the
+ * entry here (and the redirectTests entries in scripts/smoke-test.ts) if a
+ * post is ever revived.
+ *
+ * fun-activities-in-bangkok (+ its WordPress duplicate -2): a 2024 generic
+ * listicle (floating markets, cooking classes, Muay Thai) that ranked ~p18 for
+ * "activities in bangkok" with 0 mobile clicks on ~900 impressions over 90
+ * days to 2026-09-04, while /activities/ is the page built for that intent.
+ * Consolidated 2026-09-05.
+ */
+export const RETIRED_BLOG_REDIRECTS: Readonly<Record<string, string>> = {
+  'fun-activities-in-bangkok': '/activities/',
+  'fun-activities-in-bangkok-2': '/activities/',
+}
