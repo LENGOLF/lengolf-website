@@ -213,6 +213,26 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/chiang-mai/mae-jo-golf-club",
       "/golf-courses/chiang-mai/north-hill-chiang-mai",
       "/golf-courses/chiang-mai/royal-chiang-mai-golf-club",
+      // Batch 10 (2026-08) - khao-yai, the region's full 12-course roster,
+      // 0/12 -> 12/12. Inserted mid-array, NOT appended; the batch-9 bangkok
+      // comment below is NOT the header for these twelve. Order carries no
+      // meaning here - this array backs a membership lookup - and the array is
+      // not sorted (it opens bangkok, phuket, pattaya, hua-hin). An earlier
+      // version of this comment claimed the insertion point kept the paths
+      // "alphabetical"; it does not, and never did - these twelve sit inside
+      // the chiang-mai group.
+      "/golf-courses/khao-yai/bonanza-golf-country-club",
+      "/golf-courses/khao-yai/forest-hills-country-club",
+      "/golf-courses/khao-yai/friendship-meadows-country-club",
+      "/golf-courses/khao-yai/khao-yai-golf-club",
+      "/golf-courses/khao-yai/kirimaya-golf-course",
+      "/golf-courses/khao-yai/life-privilege-country-club",
+      "/golf-courses/khao-yai/mountain-creek-golf-resort",
+      "/golf-courses/khao-yai/rancho-charnvee-country-club",
+      "/golf-courses/khao-yai/rooks-korat-country-club",
+      "/golf-courses/khao-yai/royal-hills-golf-resort",
+      "/golf-courses/khao-yai/seoul-siam-resort-country-club",
+      "/golf-courses/khao-yai/toscana-valley-country-club",
       "/golf-courses/chiang-mai/summit-green-valley-chiangmai",
       // Batch 9 (2026-08) — bangkok tranche, 9 -> 21 of the then-55 bangkok
       // courses (54 since the 2026-08-30 duplicate-course merge), picked by GSC
@@ -499,6 +519,26 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/chiang-mai/mae-jo-golf-club",
       "/golf-courses/chiang-mai/north-hill-chiang-mai",
       "/golf-courses/chiang-mai/royal-chiang-mai-golf-club",
+      // Batch 10 (2026-08) - khao-yai, the region's full 12-course roster,
+      // 0/12 -> 12/12. Inserted mid-array, NOT appended; the batch-9 bangkok
+      // comment below is NOT the header for these twelve. Order carries no
+      // meaning here - this array backs a membership lookup - and the array is
+      // not sorted (it opens bangkok, phuket, pattaya, hua-hin). An earlier
+      // version of this comment claimed the insertion point kept the paths
+      // "alphabetical"; it does not, and never did - these twelve sit inside
+      // the chiang-mai group.
+      "/golf-courses/khao-yai/bonanza-golf-country-club",
+      "/golf-courses/khao-yai/forest-hills-country-club",
+      "/golf-courses/khao-yai/friendship-meadows-country-club",
+      "/golf-courses/khao-yai/khao-yai-golf-club",
+      "/golf-courses/khao-yai/kirimaya-golf-course",
+      "/golf-courses/khao-yai/life-privilege-country-club",
+      "/golf-courses/khao-yai/mountain-creek-golf-resort",
+      "/golf-courses/khao-yai/rancho-charnvee-country-club",
+      "/golf-courses/khao-yai/rooks-korat-country-club",
+      "/golf-courses/khao-yai/royal-hills-golf-resort",
+      "/golf-courses/khao-yai/seoul-siam-resort-country-club",
+      "/golf-courses/khao-yai/toscana-valley-country-club",
       "/golf-courses/chiang-mai/summit-green-valley-chiangmai",
       // Batch 9 (2026-08) — bangkok tranche, 9 -> 21 of the then-55 bangkok
       // courses (54 since the 2026-08-30 duplicate-course merge), picked by GSC
@@ -817,6 +857,26 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/chiang-mai/mae-jo-golf-club",
       "/golf-courses/chiang-mai/north-hill-chiang-mai",
       "/golf-courses/chiang-mai/royal-chiang-mai-golf-club",
+      // Batch 10 (2026-08) - khao-yai, the region's full 12-course roster,
+      // 0/12 -> 12/12. Inserted mid-array, NOT appended; the batch-9 bangkok
+      // comment below is NOT the header for these twelve. Order carries no
+      // meaning here - this array backs a membership lookup - and the array is
+      // not sorted (it opens bangkok, phuket, pattaya, hua-hin). An earlier
+      // version of this comment claimed the insertion point kept the paths
+      // "alphabetical"; it does not, and never did - these twelve sit inside
+      // the chiang-mai group.
+      "/golf-courses/khao-yai/bonanza-golf-country-club",
+      "/golf-courses/khao-yai/forest-hills-country-club",
+      "/golf-courses/khao-yai/friendship-meadows-country-club",
+      "/golf-courses/khao-yai/khao-yai-golf-club",
+      "/golf-courses/khao-yai/kirimaya-golf-course",
+      "/golf-courses/khao-yai/life-privilege-country-club",
+      "/golf-courses/khao-yai/mountain-creek-golf-resort",
+      "/golf-courses/khao-yai/rancho-charnvee-country-club",
+      "/golf-courses/khao-yai/rooks-korat-country-club",
+      "/golf-courses/khao-yai/royal-hills-golf-resort",
+      "/golf-courses/khao-yai/seoul-siam-resort-country-club",
+      "/golf-courses/khao-yai/toscana-valley-country-club",
       "/golf-courses/chiang-mai/summit-green-valley-chiangmai",
       // Batch 9 (2026-08) — bangkok tranche, 9 -> 21 of the then-55 bangkok
       // courses (54 since the 2026-08-30 duplicate-course merge), picked by GSC
@@ -1127,6 +1187,26 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/chiang-mai/mae-jo-golf-club",
       "/golf-courses/chiang-mai/north-hill-chiang-mai",
       "/golf-courses/chiang-mai/royal-chiang-mai-golf-club",
+      // Batch 10 (2026-08) - khao-yai, the region's full 12-course roster,
+      // 0/12 -> 12/12. Inserted mid-array, NOT appended; the batch-9 bangkok
+      // comment below is NOT the header for these twelve. Order carries no
+      // meaning here - this array backs a membership lookup - and the array is
+      // not sorted (it opens bangkok, phuket, pattaya, hua-hin). An earlier
+      // version of this comment claimed the insertion point kept the paths
+      // "alphabetical"; it does not, and never did - these twelve sit inside
+      // the chiang-mai group.
+      "/golf-courses/khao-yai/bonanza-golf-country-club",
+      "/golf-courses/khao-yai/forest-hills-country-club",
+      "/golf-courses/khao-yai/friendship-meadows-country-club",
+      "/golf-courses/khao-yai/khao-yai-golf-club",
+      "/golf-courses/khao-yai/kirimaya-golf-course",
+      "/golf-courses/khao-yai/life-privilege-country-club",
+      "/golf-courses/khao-yai/mountain-creek-golf-resort",
+      "/golf-courses/khao-yai/rancho-charnvee-country-club",
+      "/golf-courses/khao-yai/rooks-korat-country-club",
+      "/golf-courses/khao-yai/royal-hills-golf-resort",
+      "/golf-courses/khao-yai/seoul-siam-resort-country-club",
+      "/golf-courses/khao-yai/toscana-valley-country-club",
       "/golf-courses/chiang-mai/summit-green-valley-chiangmai",
       // Batch 9 (2026-08) — bangkok tranche, 9 -> 21 of the then-55 bangkok
       // courses (54 since the 2026-08-30 duplicate-course merge), picked by GSC
