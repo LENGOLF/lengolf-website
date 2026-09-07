@@ -2562,7 +2562,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'en',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf', '/cost/golf-simulator-prices-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-07T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -2709,7 +2709,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'th',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf', '/cost/golf-simulator-prices-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-07T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -2855,7 +2855,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf', '/cost/golf-simulator-prices-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-07T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -3001,7 +3001,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf', '/cost/golf-simulator-prices-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-07T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -3149,7 +3149,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf', '/cost/golf-simulator-prices-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-07T00:00:00.000Z',
     content: {
       year: 2026,
       intro:

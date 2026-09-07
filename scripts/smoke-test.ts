@@ -6812,6 +6812,19 @@ const MIN_SURFACES = 7;
  * `regions`) — all measured GREEN with a real defect live. A counter proves a
  * comparison RAN, never that it DISCRIMINATES. Only an external contract suite
  * catches those, and smoke has none (a named repo-wide gap, not solved here).
+ * On (b), note the widened predicate is WORSE than it reads: relaxing this to
+ * "at least one region linked" was measured GREEN with 13 of 14 regions gone.
+ *
+ * (c) THE PREDICATE IS A PROXY, and this is the limit to read before trusting
+ * the section. It asserts the href is PRESENT, not that it passes link equity —
+ * which is the property the whole change exists for. Measured GREEN, with all
+ * 14 hrefs intact and the SEO purpose entirely defeated: adding `rel="nofollow"`
+ * to the region Link, wrapping the block in `hidden` / `display:none` /
+ * `<template>` / `<noscript>`, or replacing the localized region label with
+ * constant text (anchor text is a large part of internal-link value and nothing
+ * here reads it). Rendering them inside a `<script>` IS caught, because
+ * renderedMarkup() strips it. So a reviewer must read the component; a green Q
+ * means "the links are in the markup", never "the links still carry weight".
  */
 const REQUIRED_SURFACES: string[] = [
   "/",
@@ -6827,8 +6840,22 @@ const REQUIRED_SURFACES: string[] = [
  *  the subset check below passes while pinning nothing. */
 const MIN_REQUIRED_SURFACES = 7;
 
-/** Every region directory under data/golf-courses — the set RegionHubLinks
- *  renders (via REGION_META, which validate-courses.ts pins to these dirs). */
+/** Every RENDERED region directory under data/golf-courses — i.e. the ones
+ *  holding an `index.ts`, which is the set RegionHubLinks renders via
+ *  REGION_META.
+ *
+ *  The `index.ts` predicate is the SAME one `singleCourseRegions()` above uses,
+ *  and it is load-bearing rather than defensive. Without it any subdirectory is
+ *  demanded as a region: a `_shared/` or `images/` folder holding no file that
+ *  exports `course` is invisible to `validate:courses` (its orphan check reads
+ *  `onDisk`, which `scripts/course-files.ts` populates only from directories
+ *  containing a non-index `.ts` exporting `course`), so it passes there and
+ *  turns all 7 surfaces here RED on a correct tree — measured: injecting one
+ *  extra directory name yields "0 passed / 7 failed … must link all 15
+ *  regions". An `index.ts` is what makes a directory a rendered region, so it
+ *  is the right gate. Deriving from `REGION_META` instead would be WRONG: the
+ *  component iterates that same object, so the expectation would be satisfied
+ *  by the code under test. The directory tree is the independent oracle. */
 async function regionDirSlugs(): Promise<string[]> {
   const fs = await import("node:fs");
   const nodePath = await import("node:path");
@@ -6836,6 +6863,9 @@ async function regionDirSlugs(): Promise<string[]> {
   return fs
     .readdirSync(root, { withFileTypes: true })
     .filter((d) => d.isDirectory())
+    .filter((d) =>
+      fs.existsSync(nodePath.join(root, d.name, "index.ts")),
+    )
     .map((d) => d.name);
 }
 

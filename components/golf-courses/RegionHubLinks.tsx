@@ -44,8 +44,16 @@ export default async function RegionHubLinks({ locale }: { locale: string }) {
         <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-primary">
           {t('heroEyebrow')}
         </p>
+        {/* text-primary IS #005a32 (tailwind.config.ts) — the token, not a
+            second hardcoded copy of the value. Note this matches the homepage,
+            whose five h2 headings all use #005a32, but NOT /golf/, where nine
+            of ten use the CTA green #007429 (which is not a Tailwind token at
+            all). Rendering one shared component in both places cannot satisfy
+            both; taking the colour as a prop is the fix if the owner wants the
+            headings to agree per-host. Left as the brand primary pending that
+            ruling. */}
         <h2 className="text-3xl font-bold italic lg:text-4xl">
-          <span style={{ color: '#005a32' }}>{t('heroHeading')}</span>
+          <span className="text-primary">{t('heroHeading')}</span>
         </h2>
         <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
           {t('heroIntro', { courseCount: totalCourses, regionCount: regionSlugs.length })}

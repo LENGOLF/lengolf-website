@@ -1251,7 +1251,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     locale: 'en',
     related_slugs: ['/activities/indoor-activities-bangkok', '/best/best-indoor-entertainment-bangkok', '/activities/date-night-ideas-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-07T00:00:00.000Z',
     content: {
       occasion_type: 'nightlife',
       intro:
@@ -1297,7 +1297,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     locale: 'th',
     related_slugs: ['/activities/indoor-activities-bangkok', '/best/best-indoor-entertainment-bangkok', '/activities/date-night-ideas-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-07T00:00:00.000Z',
     content: {
       occasion_type: 'nightlife',
       intro:
@@ -1344,7 +1344,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/activities/indoor-activities-bangkok', '/best/best-indoor-entertainment-bangkok', '/activities/date-night-ideas-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-07T00:00:00.000Z',
     content: {
       occasion_type: 'nightlife',
       intro:
@@ -1391,7 +1391,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/activities/indoor-activities-bangkok', '/best/best-indoor-entertainment-bangkok', '/activities/date-night-ideas-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-07T00:00:00.000Z',
     content: {
       occasion_type: 'nightlife',
       intro:
@@ -1438,7 +1438,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/activities/indoor-activities-bangkok', '/best/best-indoor-entertainment-bangkok', '/activities/date-night-ideas-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-07T00:00:00.000Z',
     content: {
       occasion_type: 'nightlife',
       intro:
@@ -1701,7 +1701,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     locale: 'en',
     related_slugs: ['/activities/things-to-do-bangkok-at-night', '/best/best-indoor-entertainment-bangkok', '/activities/rainy-day-activities-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-07T00:00:00.000Z',
     content: {
       occasion_type: 'indoor',
       intro:
@@ -1748,7 +1748,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     locale: 'th',
     related_slugs: ['/activities/things-to-do-bangkok-at-night', '/best/best-indoor-entertainment-bangkok', '/activities/rainy-day-activities-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-07T00:00:00.000Z',
     content: {
       occasion_type: 'indoor',
       intro:
@@ -1795,7 +1795,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/activities/things-to-do-bangkok-at-night', '/best/best-indoor-entertainment-bangkok', '/activities/rainy-day-activities-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-07T00:00:00.000Z',
     content: {
       occasion_type: 'indoor',
       intro:
@@ -1843,7 +1843,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/activities/things-to-do-bangkok-at-night', '/best/best-indoor-entertainment-bangkok', '/activities/rainy-day-activities-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-07T00:00:00.000Z',
     content: {
       occasion_type: 'indoor',
       intro:
@@ -1892,7 +1892,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/activities/things-to-do-bangkok-at-night', '/best/best-indoor-entertainment-bangkok', '/activities/rainy-day-activities-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-07T00:00:00.000Z',
     content: {
       occasion_type: 'indoor',
       intro:
