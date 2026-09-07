@@ -1037,9 +1037,39 @@ const SSG_UI_NAMESPACES: Record<string, Locale[]> = (() => {
   // key added to ClubSpecs fails CI instead of silently English-falling-back on
   // the Thai sheet.
   const clubSpecs = LOCALES.filter((l) => hasTranslationForLocale(l, '/golf-club-specs'))
+  // The /lessons FAQ accordion. Registered because raising `FAQ_COUNT` in
+  // app/[locale]/lessons/page.tsx was, until this entry existed, an entirely
+  // UNOBSERVED operation: `faqItems` is Array.from({ length: FAQ_COUNT }) and
+  // feeds BOTH the visible accordion and getFaqPageJsonLd, while
+  // i18n/request.ts loads exactly one catalog with no EN merge — so a locale
+  // missing the new key does NOT fall back to English. use-intl's
+  // defaultGetMessageFallback returns the dotted path, so /ko/lessons/ renders
+  // the literal string "LessonsFaq.q16" as an accordion question AND inside
+  // FAQPage structured data. Nothing in smoke-test.ts asserts a lessons-FAQ
+  // count, and this namespace was outside the allowlist, so that shipped green.
+  //
+  // BE PRECISE ABOUT WHAT THIS BUYS, because the first version of this comment
+  // claimed it closed that hole and MEASUREMENT SAYS IT DOES NOT. Injection-
+  // tested both ways on ko: deleting the whole `LessonsFaq` namespace is an
+  // ERROR (exit 1); deleting just `q15` is a non-blocking WARN (`ui-key-gap`,
+  // warnings 1095 -> 1096, exit 0). So the exact scenario above — one locale
+  // short one key — still does not fail CI, and a single new line among 1095
+  // standing warnings is easy to miss. This entry converts total silence into a
+  // warning plus a hard error on the namespace, which is an improvement, not a
+  // guard. Closing it properly needs either a smoke assertion on the rendered
+  // accordion or promoting ui-key-gap to ERROR for FAQ_COUNT-driven namespaces,
+  // where a missing key is a visible defect rather than an untranslated string.
+  // (Note the WARN's own text says "English fallback at render", which is
+  // wrong for the same no-EN-merge reason — pre-existing, not fixed here.)
+  //
+  // The same argument applies to every other FAQ_COUNT namespace; this is the
+  // one the q15 batch exercised, so it is the one registered here rather than a
+  // speculative sweep.
+  const lessonsFaq = LOCALES.filter((l) => hasTranslationForLocale(l, '/lessons'))
   return {
     GolfCourseHub: hub,
     ClubSpecs: clubSpecs,
+    LessonsFaq: lessonsFaq,
     GolfCourseRegion: regionHub,
     GolfCoursePriceTier: priceTier,
     // Course-detail pages (CoursePage/CourseFaq + the [slug] route) AND the

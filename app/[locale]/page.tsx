@@ -18,6 +18,7 @@ import { StarIcon } from '@/components/shared/StarRating'
 import JapanLandingPage from '@/components/home/JapanLandingPage'
 import KoreaLandingPage from '@/components/home/KoreaLandingPage'
 import ChinaLandingPage from '@/components/home/ChinaLandingPage'
+import RegionHubLinks from '@/components/golf-courses/RegionHubLinks'
 import { siteOpenGraph } from '@/lib/open-graph'
 
 const BESPOKE_HOME_NAMESPACE: Record<string, string> = {
@@ -451,6 +452,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           </div>
         </div>
       </section>
+
+      {/* ── 7.5 Golf Courses in Thailand (region-hub internal links) ── */}
+      <SectionWrapper>
+        <RegionHubLinks locale={locale} />
+      </SectionWrapper>
 
       {/* ── 8. Find Us ── */}
       <SectionWrapper>
