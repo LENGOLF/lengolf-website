@@ -6791,6 +6791,42 @@ const MIN_REGION_DIRS = 14;
 // emptying it yields 0 < 7 and fails.
 const MIN_SURFACES = 7;
 
+/**
+ * ...and a pin on surface IDENTITY, because the floor above counts surfaces and
+ * says nothing about WHICH ones. Measured bypass: replace ["/ja/golf/", "/ja"]
+ * with a duplicate of ["/", ""] and `surfaces.length` stays 7, the floor is
+ * green, `judged` reaches 7, and the section prints 7 ✓ while /ja/golf/ is never
+ * fetched — GREEN with that page rendering zero region links. This is exactly
+ * the hole REQUIRED_TITLE_ASSERTIONS exists for one section over (MIN_SEO_URLS
+ * counts URLs, so a delete-plus-add holds the count and the assertion vanishes);
+ * the first version of this section implemented the counting half only.
+ *
+ * Pinned as PATHS, so dropping or substituting a surface is a two-place edit.
+ * The locale scope is the load-bearing decision this protects: /golf/ must be
+ * asserted in all five locales while the homepage is only reachable in en/th.
+ *
+ * KNOWN LIMITS, stated rather than implied — neither counter nor pin can see:
+ * (a) a `return` between the floor and the post-loop coverage check (0 passes,
+ * 0 failures, exit 0), or (b) a disarmed verdict BODY (`if (false && ...)`, a
+ * deleted fail(), a widened predicate, or linkedRegionSlugs stubbed to return
+ * `regions`) — all measured GREEN with a real defect live. A counter proves a
+ * comparison RAN, never that it DISCRIMINATES. Only an external contract suite
+ * catches those, and smoke has none (a named repo-wide gap, not solved here).
+ */
+const REQUIRED_SURFACES: string[] = [
+  "/",
+  "/th/",
+  "/golf/",
+  "/th/golf/",
+  "/ja/golf/",
+  "/ko/golf/",
+  "/zh/golf/",
+];
+
+/** A floor on the floor: an emptied REQUIRED_SURFACES iterates zero times and
+ *  the subset check below passes while pinning nothing. */
+const MIN_REQUIRED_SURFACES = 7;
+
 /** Every region directory under data/golf-courses — the set RegionHubLinks
  *  renders (via REGION_META, which validate-courses.ts pins to these dirs). */
 async function regionDirSlugs(): Promise<string[]> {
@@ -6855,6 +6891,24 @@ async function runRegionHubLinkTests() {
     fail(
       "region-hub surface floor",
       `only ${surfaces.length} surface(s) declared (floor ${MIN_SURFACES}) — the surface list was trimmed, so this section is asserting less than it claims`,
+    );
+    return;
+  }
+
+  // Identity, not just count. Catches a substitution that holds the length.
+  if (REQUIRED_SURFACES.length < MIN_REQUIRED_SURFACES) {
+    fail(
+      "region-hub required-surface floor",
+      `only ${REQUIRED_SURFACES.length} required surface(s) pinned (floor ${MIN_REQUIRED_SURFACES}) — the pin was emptied, so the subset check below asserts nothing`,
+    );
+    return;
+  }
+  const declaredPaths = new Set(surfaces.map(([p]) => p));
+  const unpinned = REQUIRED_SURFACES.filter((p) => !declaredPaths.has(p));
+  if (unpinned.length > 0) {
+    fail(
+      "region-hub required surfaces",
+      `surface(s) ${unpinned.join(", ")} are pinned in REQUIRED_SURFACES but absent from the fetched list — a surface was dropped or substituted while the count stayed at ${surfaces.length}`,
     );
     return;
   }
