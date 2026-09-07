@@ -6782,6 +6782,14 @@ async function runFallbackPullQuoteTests() {
 // for en (default locale, unprefixed) and "/<locale>" otherwise, matching how
 // next-intl's Link prefixes these hrefs.
 const MIN_REGION_DIRS = 14;
+// Surfaces are a HARDCODED list, so they need their own floor: MIN_REGION_DIRS
+// guards the region set (the inner expectation) and says nothing about how many
+// PAGES were fetched. Without this, trimming or emptying `surfaces` drops the
+// section to zero assertions while it still prints its header and exits 0 — the
+// MIN_SEO_URLS / MIN_TITLE_ASSERTIONS shape. A floor (not an equality) because
+// the list may legitimately GROW: `surfaces` has no other contributors, so
+// emptying it yields 0 < 7 and fails.
+const MIN_SURFACES = 7;
 
 /** Every region directory under data/golf-courses — the set RegionHubLinks
  *  renders (via REGION_META, which validate-courses.ts pins to these dirs). */
@@ -6843,12 +6851,27 @@ async function runRegionHubLinkTests() {
     ["/zh/golf/", "/zh"],
   ];
 
+  if (surfaces.length < MIN_SURFACES) {
+    fail(
+      "region-hub surface floor",
+      `only ${surfaces.length} surface(s) declared (floor ${MIN_SURFACES}) — the surface list was trimmed, so this section is asserting less than it claims`,
+    );
+    return;
+  }
+
+  // Counts surfaces that REACHED A VERDICT, asserted against surfaces.length
+  // below. Every branch that records a pass/fail increments it, so the only way
+  // to fall short is a `continue` that bypasses the verdict entirely — which is
+  // exactly the L6 skip shape a length floor alone cannot see.
+  let judged = 0;
+
   for (const [path, prefix] of surfaces) {
     const label = `${path} region-hub links`;
     try {
       const res = await fetch(`${BASE}${path}`, { redirect: "follow" });
       if (res.status !== 200) {
         fail(label, `expected 200, got ${res.status}`);
+        judged++;
         continue;
       }
       const html = await res.text();
@@ -6869,9 +6892,21 @@ async function runRegionHubLinkTests() {
       } else {
         pass(label);
       }
+      // AFTER the verdict, never beside the fetch: placed above, a `continue`
+      // one line lower would keep judged === surfaces.length while evaluating
+      // zero comparisons.
+      judged++;
     } catch (err) {
       fail(`${label} fetch error`, String(err));
+      judged++;
     }
+  }
+
+  if (judged !== surfaces.length) {
+    fail(
+      "region-hub surface coverage",
+      `only ${judged} of ${surfaces.length} surfaces reached a verdict — a skip was introduced inside the loop`,
+    );
   }
 }
 

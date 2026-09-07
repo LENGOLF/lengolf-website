@@ -523,8 +523,11 @@ export default async function GolfPage({ params }: { params: Promise<{ locale: s
         </div>
       </section>
 
-      {/* ── Golf Courses in Thailand (region-hub internal links) ── */}
-      <section className="py-16 lg:py-24" style={{ backgroundColor: '#F6FFFA' }}>
+      {/* ── Golf Courses in Thailand (region-hub internal links) ──
+          Deliberately NO background: the preceding "Indoor Golf Near You"
+          section is #F6FFFA, and repeating it here merged the two into one
+          double-height tinted band with no boundary between them. */}
+      <section className="py-16 lg:py-24">
         <div className="section-max-width section-padding">
           <RegionHubLinks locale={locale} />
         </div>
