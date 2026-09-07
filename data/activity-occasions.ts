@@ -1249,7 +1249,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     status: 'published',
     category: 'general',
     locale: 'en',
-    related_slugs: ['/activities/date-night-ideas-bangkok', '/activities/indoor-activities-bangkok', '/activities/group-activities-bangkok'],
+    related_slugs: ['/activities/indoor-activities-bangkok', '/best/best-indoor-entertainment-bangkok', '/activities/date-night-ideas-bangkok'],
     created_at: now,
     updated_at: now,
     content: {
@@ -1295,7 +1295,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     status: 'published',
     category: 'general',
     locale: 'th',
-    related_slugs: ['/activities/date-night-ideas-bangkok', '/activities/indoor-activities-bangkok', '/activities/group-activities-bangkok'],
+    related_slugs: ['/activities/indoor-activities-bangkok', '/best/best-indoor-entertainment-bangkok', '/activities/date-night-ideas-bangkok'],
     created_at: now,
     updated_at: now,
     content: {
@@ -1342,7 +1342,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     status: 'published',
     category: 'general',
     locale: 'ja',
-    related_slugs: ['/activities/date-night-ideas-bangkok', '/activities/indoor-activities-bangkok', '/activities/group-activities-bangkok'],
+    related_slugs: ['/activities/indoor-activities-bangkok', '/best/best-indoor-entertainment-bangkok', '/activities/date-night-ideas-bangkok'],
     created_at: now,
     updated_at: now,
     content: {
@@ -1389,7 +1389,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     status: 'published',
     category: 'general',
     locale: 'ko',
-    related_slugs: ['/activities/date-night-ideas-bangkok', '/activities/indoor-activities-bangkok', '/activities/group-activities-bangkok'],
+    related_slugs: ['/activities/indoor-activities-bangkok', '/best/best-indoor-entertainment-bangkok', '/activities/date-night-ideas-bangkok'],
     created_at: now,
     updated_at: now,
     content: {
@@ -1436,7 +1436,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     status: 'published',
     category: 'general',
     locale: 'zh',
-    related_slugs: ['/activities/date-night-ideas-bangkok', '/activities/indoor-activities-bangkok', '/activities/group-activities-bangkok'],
+    related_slugs: ['/activities/indoor-activities-bangkok', '/best/best-indoor-entertainment-bangkok', '/activities/date-night-ideas-bangkok'],
     created_at: now,
     updated_at: now,
     content: {
@@ -1699,7 +1699,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     status: 'published',
     category: 'weather',
     locale: 'en',
-    related_slugs: ['/activities/rainy-day-activities-bangkok', '/activities/weekend-activities-bangkok', '/activities/family-activities-bangkok'],
+    related_slugs: ['/activities/things-to-do-bangkok-at-night', '/best/best-indoor-entertainment-bangkok', '/activities/rainy-day-activities-bangkok'],
     created_at: now,
     updated_at: now,
     content: {
@@ -1746,7 +1746,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     status: 'published',
     category: 'weather',
     locale: 'th',
-    related_slugs: ['/activities/rainy-day-activities-bangkok', '/activities/weekend-activities-bangkok', '/activities/family-activities-bangkok'],
+    related_slugs: ['/activities/things-to-do-bangkok-at-night', '/best/best-indoor-entertainment-bangkok', '/activities/rainy-day-activities-bangkok'],
     created_at: now,
     updated_at: now,
     content: {
@@ -1793,7 +1793,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     status: 'published',
     category: 'weather',
     locale: 'ja',
-    related_slugs: ['/activities/rainy-day-activities-bangkok', '/activities/weekend-activities-bangkok', '/activities/family-activities-bangkok'],
+    related_slugs: ['/activities/things-to-do-bangkok-at-night', '/best/best-indoor-entertainment-bangkok', '/activities/rainy-day-activities-bangkok'],
     created_at: now,
     updated_at: now,
     content: {
@@ -1841,7 +1841,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     status: 'published',
     category: 'weather',
     locale: 'ko',
-    related_slugs: ['/activities/rainy-day-activities-bangkok', '/activities/weekend-activities-bangkok', '/activities/family-activities-bangkok'],
+    related_slugs: ['/activities/things-to-do-bangkok-at-night', '/best/best-indoor-entertainment-bangkok', '/activities/rainy-day-activities-bangkok'],
     created_at: now,
     updated_at: now,
     content: {
@@ -1890,7 +1890,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     status: 'published',
     category: 'weather',
     locale: 'zh',
-    related_slugs: ['/activities/rainy-day-activities-bangkok', '/activities/weekend-activities-bangkok', '/activities/family-activities-bangkok'],
+    related_slugs: ['/activities/things-to-do-bangkok-at-night', '/best/best-indoor-entertainment-bangkok', '/activities/rainy-day-activities-bangkok'],
     created_at: now,
     updated_at: now,
     content: {

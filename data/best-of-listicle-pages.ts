@@ -2560,7 +2560,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     status: 'published',
     category: 'indoor-entertainment',
     locale: 'en',
-    related_slugs: ['/golf', '/activities/indoor-activities-bangkok', '/activities/rainy-day-activities-bangkok', '/cost/golf-simulator-prices-bangkok'],
+    related_slugs: ['/activities/indoor-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf', '/cost/golf-simulator-prices-bangkok'],
     created_at: now,
     updated_at: now,
     content: {
@@ -2707,7 +2707,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     status: 'published',
     category: 'indoor-entertainment',
     locale: 'th',
-    related_slugs: ['/golf', '/activities/indoor-activities-bangkok', '/activities/rainy-day-activities-bangkok', '/cost/golf-simulator-prices-bangkok'],
+    related_slugs: ['/activities/indoor-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf', '/cost/golf-simulator-prices-bangkok'],
     created_at: now,
     updated_at: now,
     content: {
@@ -2853,7 +2853,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     status: 'published',
     category: 'indoor-entertainment',
     locale: 'ja',
-    related_slugs: ['/golf', '/activities/indoor-activities-bangkok', '/activities/rainy-day-activities-bangkok', '/cost/golf-simulator-prices-bangkok'],
+    related_slugs: ['/activities/indoor-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf', '/cost/golf-simulator-prices-bangkok'],
     created_at: now,
     updated_at: now,
     content: {
@@ -2999,7 +2999,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     status: 'published',
     category: 'indoor-entertainment',
     locale: 'ko',
-    related_slugs: ['/golf', '/activities/indoor-activities-bangkok', '/activities/rainy-day-activities-bangkok', '/cost/golf-simulator-prices-bangkok'],
+    related_slugs: ['/activities/indoor-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf', '/cost/golf-simulator-prices-bangkok'],
     created_at: now,
     updated_at: now,
     content: {
@@ -3147,7 +3147,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     status: 'published',
     category: 'indoor-entertainment',
     locale: 'zh',
-    related_slugs: ['/golf', '/activities/indoor-activities-bangkok', '/activities/rainy-day-activities-bangkok', '/cost/golf-simulator-prices-bangkok'],
+    related_slugs: ['/activities/indoor-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf', '/cost/golf-simulator-prices-bangkok'],
     created_at: now,
     updated_at: now,
     content: {
