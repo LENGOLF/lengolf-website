@@ -5533,7 +5533,7 @@ async function runCourseDetailRegistryLivenessTests() {
   // packageOfferSeen 19 lines below was being raised in the same commit. That
   // is the "raise one ratchet, miss its sibling" shape CLAUDE.md documents,
   // reproduced inside the file that documents it. Re-derive on every batch.
-  if (offerChecked < 768) {
+  if (offerChecked < 824) {
     fail(
       `L2 Offer-label check ran on only ${offerChecked} label(s)`,
       "expected 768 (92 registered courses emit 2 Offers, 8 emit 1, and 6 emit none — 192 per locale x 4). A low count means makesOffer is absent or the catalog lookup is failing, not that the labels are correct.",
@@ -5560,7 +5560,7 @@ async function runCourseDetailRegistryLivenessTests() {
     // true value and turned CI red on a correct tree. A floor below the true value is
     // a slack guard; a floor above it is a false red. Derive from the registry, not
     // from the flag count.
-  if (packageOfferSeen < 108) {
+  if (packageOfferSeen < 116) {
     fail(
       `L2 package-label check ran on only ${packageOfferSeen} Offer(s)`,
       "expected 108+ (14 REGISTERED package courses x 4 locales; 13 emit 2 rates and alpine-golf-resort-chiang-mai emits 1, its weekend fee being null). Zero means no course carries fee_is_package any more, or the registry dropped them — not that the labels are right.",
