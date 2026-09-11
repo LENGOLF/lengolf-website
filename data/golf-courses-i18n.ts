@@ -715,8 +715,10 @@ export const COURSE_DETAIL_I18N: {
   // roster link on /{th,ja,ko,zh}/golf-courses/{kanchanaburi,north-misc}/
   // previously 301'd the reader to an English course page. dragon-hills is the
   // only fee_is_package course here (its title composes the package heading,
-  // no green-fee noun) and the only one with fees_verified_at, so it is the
-  // only course carrying a price-as-of marker. PROVINCE_L10N gained
+  // no green-fee noun) and the only one of THESE NINE with fees_verified_at, so
+  // it is the only course IN THIS BATCH carrying a price-as-of marker — scope
+  // that, because repo-wide it is false: 17 files carry fees_verified_at and six
+  // carry a July-2026 marker. PROVINCE_L10N gained
   // Kanchanaburi / Ratchaburi / Lampang in lib/course-seo.ts. Registered
   // courses 106 -> 115. Only bangkok now has untranslated course pages.
   { region: 'kanchanaburi', slug: 'blue-sapphire-golf-resort', locales: ['th', 'ja', 'ko', 'zh'] },

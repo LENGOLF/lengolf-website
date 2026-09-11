@@ -5520,13 +5520,18 @@ async function runCourseDetailRegistryLivenessTests() {
 
   // The Offer floor cannot be exact — courses with a null weekday fee emit no
   // makesOffer, and only some have a second rate — so it is a real number
-  // derived from the corpus rather than `> 0`. Measured at 768: 106 registered
+  // derived from the corpus rather than `> 0`. Measured at 824: 115 registered
   // courses x 4 locales, each emitting one Offer per non-null rate — NOT a clean
-  // product. Of the 106, **fourteen** are exceptions: SIX emit no makesOffer at
+  // product. Of the 115, **sixteen** are exceptions: EIGHT emit no makesOffer at
   // all (both fees null — amata-spring-country-club, st-andrews-2000,
-  // kumlung-ake-golf-course, rajpruek-club, and batch 10 added
-  // mountain-creek-golf-resort + seoul-siam-resort-country-club) and EIGHT emit a
-  // single Offer (null weekend fee). So 92*2 + 8*1 = 192 per locale, x4 = 768.
+  // kumlung-ake-golf-course, rajpruek-club, batch 10 added
+  // mountain-creek-golf-resort + seoul-siam-resort-country-club, and batch 11
+  // added river-kwai-golf-country-club + mae-moh-golf-course) and EIGHT emit a
+  // single Offer (null weekend fee). So 99*2 + 8*1 = 206 per locale, x4 = 824.
+  // THIS COMMENT SHIPPED STALE ONCE: the batch-11 commit raised the constant
+  // below and the fail() string beside it to 824 but left this block describing
+  // 106/fourteen/SIX/768, so a reader re-deriving from the comment concluded the
+  // ratchet was over-raised. Update the prose in the same edit as the number.
   // An earlier version of this comment named only rajpruek-club, which is one of
   // the exceptions — a reader re-deriving from it gets the wrong number. This sat at
   // 300 against a true 516 and then 600 — HALF the value it measured — while

@@ -80,7 +80,11 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
   // no PROVINCE_L10N entry at all — recount with hasProvinceL10n, this number
   // rots every batch — so localizing only the mapped ones would still make a
   // tier-page roster mix scripts. Closing it needs the last province added
-  // (4 strings, native QA) AND all six render sites switched together. Tracked
+  // (4 strings, native QA) AND all NINE render sites switched together — nine,
+  // not the six this comment claimed until a claim audit enumerated them: the
+  // seven it listed plus [slug]/opengraph-image.tsx:47 and
+  // near/[station]/page.tsx:217. See CLAUDE.md for the list, and re-derive with
+  // `grep -rn '\.province\b' components/ app/ lib/jsonld-courses.ts`. Tracked
   // as a known gap on PR #97 — do not read this file as proof the surface is
   // locale-clean.
   const locale = toFormatLocale(useLocale())
