@@ -6147,8 +6147,8 @@ async function runPriceTierRoundupLanguageTests() {
         // nothing guards this assertion's own body either. Do not read this fix
         // as closing the class - a repo-wide sweep on 2026-08-31 found this
         // shape in a dozen-odd other gates, of which TWO are confirmed by
-        // mutation: L2's `offerChecked++` (line 5471, 768 assertions) and
-        // validate-course-slots.ts:557 (2,968). See CLAUDE.md for the rest,
+        // mutation: L2's `offerChecked++` (line 5471, 824 assertions) and
+        // validate-course-slots.ts:557 (3,220). See CLAUDE.md for the rest,
         // which are candidates rather than measurements.
         judged++;
         if (!labelOk) {

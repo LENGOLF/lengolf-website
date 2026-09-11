@@ -75,11 +75,14 @@ export default function CourseMapExplorer({ courses, region, regionLabel, center
   // PROVINCE_L10N (lib/course-seo.ts) ships th/ja/ko/zh for the mapped ones —
   // one English province span per roster row, so the bangkok hub alone ships 54
   // of them under localized chrome. Not fixed here because it is
-  // pre-existing and NOT a code fix: 6 provinces covering 22 courses have no
-  // PROVINCE_L10N entry at all, so localizing only the mapped ones would make
-  // a tier-page roster mix scripts. It needs a 68-string translation batch with
-  // native QA. Tracked as a known gap on PR #97 — do not read this file as
-  // proof the surface is locale-clean.
+  // pre-existing and NOT a code fix: after the Batch 11 kanchanaburi+mae-moh
+  // mapping, 1 province covering 1 course (Samut Sakhon / bangkok/ekachai) has
+  // no PROVINCE_L10N entry at all — recount with hasProvinceL10n, this number
+  // rots every batch — so localizing only the mapped ones would still make a
+  // tier-page roster mix scripts. Closing it needs the last province added
+  // (4 strings, native QA) AND all six render sites switched together. Tracked
+  // as a known gap on PR #97 — do not read this file as proof the surface is
+  // locale-clean.
   const locale = toFormatLocale(useLocale())
   const [activeSlug, setActiveSlug] = useState<string | null>(null)
   const [mapsUnavailable, setMapsUnavailable] = useState(false)
