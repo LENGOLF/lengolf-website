@@ -233,6 +233,15 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/khao-yai/royal-hills-golf-resort",
       "/golf-courses/khao-yai/seoul-siam-resort-country-club",
       "/golf-courses/khao-yai/toscana-valley-country-club",
+      "/golf-courses/kanchanaburi/blue-sapphire-golf-resort",
+      "/golf-courses/kanchanaburi/dragon-hills-golf-country-club",
+      "/golf-courses/kanchanaburi/evergreen-hills-golf-club",
+      "/golf-courses/kanchanaburi/grand-prix-golf-club",
+      "/golf-courses/kanchanaburi/nichigo-resort-country-club",
+      "/golf-courses/kanchanaburi/river-kwai-golf-country-club",
+      "/golf-courses/kanchanaburi/royal-ratchaburi-golf-club",
+      "/golf-courses/kanchanaburi/woo-sung-castle-hill",
+      "/golf-courses/north-misc/mae-moh-golf-course",
       "/golf-courses/chiang-mai/summit-green-valley-chiangmai",
       // Batch 9 (2026-08) — bangkok tranche, 9 -> 21 of the then-55 bangkok
       // courses (54 since the 2026-08-30 duplicate-course merge), picked by GSC
@@ -539,6 +548,15 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/khao-yai/royal-hills-golf-resort",
       "/golf-courses/khao-yai/seoul-siam-resort-country-club",
       "/golf-courses/khao-yai/toscana-valley-country-club",
+      "/golf-courses/kanchanaburi/blue-sapphire-golf-resort",
+      "/golf-courses/kanchanaburi/dragon-hills-golf-country-club",
+      "/golf-courses/kanchanaburi/evergreen-hills-golf-club",
+      "/golf-courses/kanchanaburi/grand-prix-golf-club",
+      "/golf-courses/kanchanaburi/nichigo-resort-country-club",
+      "/golf-courses/kanchanaburi/river-kwai-golf-country-club",
+      "/golf-courses/kanchanaburi/royal-ratchaburi-golf-club",
+      "/golf-courses/kanchanaburi/woo-sung-castle-hill",
+      "/golf-courses/north-misc/mae-moh-golf-course",
       "/golf-courses/chiang-mai/summit-green-valley-chiangmai",
       // Batch 9 (2026-08) — bangkok tranche, 9 -> 21 of the then-55 bangkok
       // courses (54 since the 2026-08-30 duplicate-course merge), picked by GSC
@@ -877,6 +895,15 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/khao-yai/royal-hills-golf-resort",
       "/golf-courses/khao-yai/seoul-siam-resort-country-club",
       "/golf-courses/khao-yai/toscana-valley-country-club",
+      "/golf-courses/kanchanaburi/blue-sapphire-golf-resort",
+      "/golf-courses/kanchanaburi/dragon-hills-golf-country-club",
+      "/golf-courses/kanchanaburi/evergreen-hills-golf-club",
+      "/golf-courses/kanchanaburi/grand-prix-golf-club",
+      "/golf-courses/kanchanaburi/nichigo-resort-country-club",
+      "/golf-courses/kanchanaburi/river-kwai-golf-country-club",
+      "/golf-courses/kanchanaburi/royal-ratchaburi-golf-club",
+      "/golf-courses/kanchanaburi/woo-sung-castle-hill",
+      "/golf-courses/north-misc/mae-moh-golf-course",
       "/golf-courses/chiang-mai/summit-green-valley-chiangmai",
       // Batch 9 (2026-08) — bangkok tranche, 9 -> 21 of the then-55 bangkok
       // courses (54 since the 2026-08-30 duplicate-course merge), picked by GSC
@@ -1207,6 +1234,15 @@ const TRANSLATED_ROUTES: Record<
       "/golf-courses/khao-yai/royal-hills-golf-resort",
       "/golf-courses/khao-yai/seoul-siam-resort-country-club",
       "/golf-courses/khao-yai/toscana-valley-country-club",
+      "/golf-courses/kanchanaburi/blue-sapphire-golf-resort",
+      "/golf-courses/kanchanaburi/dragon-hills-golf-country-club",
+      "/golf-courses/kanchanaburi/evergreen-hills-golf-club",
+      "/golf-courses/kanchanaburi/grand-prix-golf-club",
+      "/golf-courses/kanchanaburi/nichigo-resort-country-club",
+      "/golf-courses/kanchanaburi/river-kwai-golf-country-club",
+      "/golf-courses/kanchanaburi/royal-ratchaburi-golf-club",
+      "/golf-courses/kanchanaburi/woo-sung-castle-hill",
+      "/golf-courses/north-misc/mae-moh-golf-course",
       "/golf-courses/chiang-mai/summit-green-valley-chiangmai",
       // Batch 9 (2026-08) — bangkok tranche, 9 -> 21 of the then-55 bangkok
       // courses (54 since the 2026-08-30 duplicate-course merge), picked by GSC

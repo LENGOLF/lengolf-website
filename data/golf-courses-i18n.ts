@@ -709,6 +709,27 @@ export const COURSE_DETAIL_I18N: {
   { region: 'khao-yai', slug: 'royal-hills-golf-resort', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'khao-yai', slug: 'seoul-siam-resort-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'khao-yai', slug: 'toscana-valley-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  // Batch 11 (2026-09) — the Kanchanaburi roster (8 of 8) plus Lampang's Mae
+  // Moh, taking BOTH regions 0% -> 100%. Roster completion, not GSC demand:
+  // both region hubs were already translated in all four locales, so every
+  // roster link on /{th,ja,ko,zh}/golf-courses/{kanchanaburi,north-misc}/
+  // previously 301'd the reader to an English course page. dragon-hills is the
+  // only fee_is_package course here (its title composes the package heading,
+  // no green-fee noun) and the only one of THESE NINE with fees_verified_at, so
+  // it is the only course IN THIS BATCH carrying a price-as-of marker — scope
+  // that, because repo-wide it is false: 17 files carry fees_verified_at and six
+  // carry a July-2026 marker. PROVINCE_L10N gained
+  // Kanchanaburi / Ratchaburi / Lampang in lib/course-seo.ts. Registered
+  // courses 106 -> 115. Only bangkok now has untranslated course pages.
+  { region: 'kanchanaburi', slug: 'blue-sapphire-golf-resort', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'kanchanaburi', slug: 'dragon-hills-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'kanchanaburi', slug: 'evergreen-hills-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'kanchanaburi', slug: 'grand-prix-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'kanchanaburi', slug: 'nichigo-resort-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'kanchanaburi', slug: 'river-kwai-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'kanchanaburi', slug: 'royal-ratchaburi-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'kanchanaburi', slug: 'woo-sung-castle-hill', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'north-misc', slug: 'mae-moh-golf-course', locales: ['th', 'ja', 'ko', 'zh'] },
 ]
 
 /**

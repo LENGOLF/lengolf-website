@@ -413,6 +413,34 @@ const PROVINCE_L10N: Record<string, Record<Exclude<CourseSeoLocale, 'en'>, strin
     ko: '차층사오주',
     zh: '北柳府',
   },
+  // Batch 11 — the Kanchanaburi roster and Lampang's Mae Moh. Same policy as
+  // every batch above, and every stem is normalized from the region hub's own
+  // spelling (REGION_HUB_I18N in data/golf-courses-i18n.ts) so no course page
+  // renders two spellings of its own province: the `kanchanaburi` hub already
+  // ships カンチャナブリー県・ラーチャブリー県 / 깐짜나부리 및 랏차부리 /
+  // 北碧府及叻丕府 / กาญจนบุรีและราชบุรี, and the `north-misc` hub ships
+  // ランパーン県 / 람빵 / 南邦府 / ลำปาง. ZH takes the established exonyms
+  // Chinese-language sources actually use — 北碧 / 叻丕 / 南邦 — not coined
+  // transcriptions; KO transcribes per the Korean standard for Thai with the
+  // closed 주 suffix.
+  Kanchanaburi: {
+    th: 'จังหวัดกาญจนบุรี',
+    ja: 'カンチャナブリー県',
+    ko: '깐짜나부리주',
+    zh: '北碧府',
+  },
+  Ratchaburi: {
+    th: 'จังหวัดราชบุรี',
+    ja: 'ラーチャブリー県',
+    ko: '랏차부리주',
+    zh: '叻丕府',
+  },
+  Lampang: {
+    th: 'จังหวัดลำปาง',
+    ja: 'ランパーン県',
+    ko: '람빵주',
+    zh: '南邦府',
+  },
 }
 
 /** Whether a course's (English) province has localized names for the non-EN packs. */

@@ -5520,23 +5520,28 @@ async function runCourseDetailRegistryLivenessTests() {
 
   // The Offer floor cannot be exact — courses with a null weekday fee emit no
   // makesOffer, and only some have a second rate — so it is a real number
-  // derived from the corpus rather than `> 0`. Measured at 768: 106 registered
+  // derived from the corpus rather than `> 0`. Measured at 824: 115 registered
   // courses x 4 locales, each emitting one Offer per non-null rate — NOT a clean
-  // product. Of the 106, **fourteen** are exceptions: SIX emit no makesOffer at
+  // product. Of the 115, **sixteen** are exceptions: EIGHT emit no makesOffer at
   // all (both fees null — amata-spring-country-club, st-andrews-2000,
-  // kumlung-ake-golf-course, rajpruek-club, and batch 10 added
-  // mountain-creek-golf-resort + seoul-siam-resort-country-club) and EIGHT emit a
-  // single Offer (null weekend fee). So 92*2 + 8*1 = 192 per locale, x4 = 768.
+  // kumlung-ake-golf-course, rajpruek-club, batch 10 added
+  // mountain-creek-golf-resort + seoul-siam-resort-country-club, and batch 11
+  // added river-kwai-golf-country-club + mae-moh-golf-course) and EIGHT emit a
+  // single Offer (null weekend fee). So 99*2 + 8*1 = 206 per locale, x4 = 824.
+  // THIS COMMENT SHIPPED STALE ONCE: the batch-11 commit raised the constant
+  // below and the fail() string beside it to 824 but left this block describing
+  // 106/fourteen/SIX/768, so a reader re-deriving from the comment concluded the
+  // ratchet was over-raised. Update the prose in the same edit as the number.
   // An earlier version of this comment named only rajpruek-club, which is one of
   // the exceptions — a reader re-deriving from it gets the wrong number. This sat at
   // 300 against a true 516 and then 600 — HALF the value it measured — while
   // packageOfferSeen 19 lines below was being raised in the same commit. That
   // is the "raise one ratchet, miss its sibling" shape CLAUDE.md documents,
   // reproduced inside the file that documents it. Re-derive on every batch.
-  if (offerChecked < 768) {
+  if (offerChecked < 824) {
     fail(
       `L2 Offer-label check ran on only ${offerChecked} label(s)`,
-      "expected 768 (92 registered courses emit 2 Offers, 8 emit 1, and 6 emit none — 192 per locale x 4). A low count means makesOffer is absent or the catalog lookup is failing, not that the labels are correct.",
+      "expected 824 (99 registered courses emit 2 Offers, 8 emit 1, and 8 emit none — 206 per locale x 4). A low count means makesOffer is absent or the catalog lookup is failing, not that the labels are correct.",
     );
   } else {
     pass(`L2 asserted localized JSON-LD Offer labels on ${offerChecked} label(s)`);
@@ -5545,13 +5550,14 @@ async function runCourseDetailRegistryLivenessTests() {
     // Its own floor, because the package branch goes vacuous INDEPENDENTLY of the
     // one above: the general Offer count stays in the hundreds while the branch that
     // matters here drops to zero. Today 20 of 148 courses carry fee_is_package, but
-    // this corpus is REGISTRY-derived, so only the 14 in COURSE_DETAIL_I18N reach it.
-    // 13 emit 2 rates and alpine-golf-resort-chiang-mai emits 1 (null weekend fee),
-    // so 13*2*4 + 1*4 = 108. Re-derive, do not assume a courses x locales x rates
+    // this corpus is REGISTRY-derived, so only the 15 in COURSE_DETAIL_I18N reach it.
+    // 14 emit 2 rates and alpine-golf-resort-chiang-mai emits 1 (null weekend fee),
+    // so 14*2*4 + 1*4 = 116. Re-derive, do not assume a courses x locales x rates
     // product. (Batch 9 took this 76 -> 92 via artitaya-country-club and
     // prime-city-golf-club; batch 10 took it 92 -> 108 by REGISTERING
-    // forest-hills-country-club and toscana-valley-country-club, which already
-    // carried the flag — the flag count did not move, the registry did.)
+    // forest-hills-country-club and toscana-valley-country-club; batch 11 took it
+    // 108 -> 116 by REGISTERING dragon-hills-golf-country-club — each already
+    // carried the flag, so the flag count did not move, the registry did.)
     //
     // RAISE THIS when a course gains fee_is_package AND IS REGISTERED for
     // translation. That qualifier is load-bearing and the previous text lacked it:
@@ -5560,10 +5566,10 @@ async function runCourseDetailRegistryLivenessTests() {
     // true value and turned CI red on a correct tree. A floor below the true value is
     // a slack guard; a floor above it is a false red. Derive from the registry, not
     // from the flag count.
-  if (packageOfferSeen < 108) {
+  if (packageOfferSeen < 116) {
     fail(
       `L2 package-label check ran on only ${packageOfferSeen} Offer(s)`,
-      "expected 108+ (14 REGISTERED package courses x 4 locales; 13 emit 2 rates and alpine-golf-resort-chiang-mai emits 1, its weekend fee being null). Zero means no course carries fee_is_package any more, or the registry dropped them — not that the labels are right.",
+      "expected 116 (15 REGISTERED package courses x 4 locales; 14 emit 2 rates and alpine-golf-resort-chiang-mai emits 1, its weekend fee being null). Zero means no course carries fee_is_package any more, or the registry dropped them — not that the labels are right.",
     );
   } else {
     pass(`L2 asserted package (not green-fee) Offer labels on ${packageOfferSeen} Offer(s)`);
@@ -6146,8 +6152,8 @@ async function runPriceTierRoundupLanguageTests() {
         // nothing guards this assertion's own body either. Do not read this fix
         // as closing the class - a repo-wide sweep on 2026-08-31 found this
         // shape in a dozen-odd other gates, of which TWO are confirmed by
-        // mutation: L2's `offerChecked++` (line 5471, 768 assertions) and
-        // validate-course-slots.ts:557 (2,968). See CLAUDE.md for the rest,
+        // mutation: L2's `offerChecked++` (line 5471, 824 assertions) and
+        // validate-course-slots.ts:557 (3,220). See CLAUDE.md for the rest,
         // which are candidates rather than measurements.
         judged++;
         if (!labelOk) {
