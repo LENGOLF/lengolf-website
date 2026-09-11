@@ -5536,7 +5536,7 @@ async function runCourseDetailRegistryLivenessTests() {
   if (offerChecked < 824) {
     fail(
       `L2 Offer-label check ran on only ${offerChecked} label(s)`,
-      "expected 768 (92 registered courses emit 2 Offers, 8 emit 1, and 6 emit none — 192 per locale x 4). A low count means makesOffer is absent or the catalog lookup is failing, not that the labels are correct.",
+      "expected 824 (99 registered courses emit 2 Offers, 8 emit 1, and 8 emit none — 206 per locale x 4). A low count means makesOffer is absent or the catalog lookup is failing, not that the labels are correct.",
     );
   } else {
     pass(`L2 asserted localized JSON-LD Offer labels on ${offerChecked} label(s)`);
@@ -5545,13 +5545,14 @@ async function runCourseDetailRegistryLivenessTests() {
     // Its own floor, because the package branch goes vacuous INDEPENDENTLY of the
     // one above: the general Offer count stays in the hundreds while the branch that
     // matters here drops to zero. Today 20 of 148 courses carry fee_is_package, but
-    // this corpus is REGISTRY-derived, so only the 14 in COURSE_DETAIL_I18N reach it.
-    // 13 emit 2 rates and alpine-golf-resort-chiang-mai emits 1 (null weekend fee),
-    // so 13*2*4 + 1*4 = 108. Re-derive, do not assume a courses x locales x rates
+    // this corpus is REGISTRY-derived, so only the 15 in COURSE_DETAIL_I18N reach it.
+    // 14 emit 2 rates and alpine-golf-resort-chiang-mai emits 1 (null weekend fee),
+    // so 14*2*4 + 1*4 = 116. Re-derive, do not assume a courses x locales x rates
     // product. (Batch 9 took this 76 -> 92 via artitaya-country-club and
     // prime-city-golf-club; batch 10 took it 92 -> 108 by REGISTERING
-    // forest-hills-country-club and toscana-valley-country-club, which already
-    // carried the flag — the flag count did not move, the registry did.)
+    // forest-hills-country-club and toscana-valley-country-club; batch 11 took it
+    // 108 -> 116 by REGISTERING dragon-hills-golf-country-club — each already
+    // carried the flag, so the flag count did not move, the registry did.)
     //
     // RAISE THIS when a course gains fee_is_package AND IS REGISTERED for
     // translation. That qualifier is load-bearing and the previous text lacked it:
@@ -5563,7 +5564,7 @@ async function runCourseDetailRegistryLivenessTests() {
   if (packageOfferSeen < 116) {
     fail(
       `L2 package-label check ran on only ${packageOfferSeen} Offer(s)`,
-      "expected 108+ (14 REGISTERED package courses x 4 locales; 13 emit 2 rates and alpine-golf-resort-chiang-mai emits 1, its weekend fee being null). Zero means no course carries fee_is_package any more, or the registry dropped them — not that the labels are right.",
+      "expected 116 (15 REGISTERED package courses x 4 locales; 14 emit 2 rates and alpine-golf-resort-chiang-mai emits 1, its weekend fee being null). Zero means no course carries fee_is_package any more, or the registry dropped them — not that the labels are right.",
     );
   } else {
     pass(`L2 asserted package (not green-fee) Offer labels on ${packageOfferSeen} Offer(s)`);
