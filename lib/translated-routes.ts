@@ -108,6 +108,8 @@ const TRANSLATED_ROUTES: Record<
       // sync by the smoke-test course-detail registry consistency check
       // (section J3); liveness of each built page is asserted by section L2.
       "/golf-courses/bangkok/sai-golf-club",
+      // Batch 12, tranche 1 (2026-09) — nine ordinary bangkok courses. See
+      // COURSE_DETAIL_I18N in data/golf-courses-i18n.ts.
       "/golf-courses/bangkok/bangkok-golf-club",
       "/golf-courses/bangkok/bangpoo-golf-sports-club",
       "/golf-courses/bangkok/dynasty-golf-country-club",
@@ -257,8 +259,9 @@ const TRANSLATED_ROUTES: Record<
       // impressions rather than roster completion. See COURSE_DETAIL_I18N in
       // data/golf-courses-i18n.ts for the demand numbers and for why
       // suvarnabhumi/phoenix-gold (duplicate course, two slugs), bangpoo
-      // (coordinates contradict its own address) and royal-dusit (closed) are
-      // excluded despite outranking several entries here.
+      // (coordinates contradicted its own address) and royal-dusit (closed) were
+      // excluded despite outranking several entries here. bangpoo's hold was
+      // resolved and it was added in Batch 12 tranche 1 (see above).
       "/golf-courses/bangkok/artitaya-country-club",
       "/golf-courses/bangkok/bangsai-country-club",
       "/golf-courses/bangkok/killien-golf-club",
@@ -432,6 +435,8 @@ const TRANSLATED_ROUTES: Record<
       // in ko/zh with zero translated course pages beneath them, so every
       // course link on those hubs left the locale.
       "/golf-courses/bangkok/sai-golf-club",
+      // Batch 12, tranche 1 (2026-09) — nine ordinary bangkok courses. See
+      // COURSE_DETAIL_I18N in data/golf-courses-i18n.ts.
       "/golf-courses/bangkok/bangkok-golf-club",
       "/golf-courses/bangkok/bangpoo-golf-sports-club",
       "/golf-courses/bangkok/dynasty-golf-country-club",
@@ -581,8 +586,9 @@ const TRANSLATED_ROUTES: Record<
       // impressions rather than roster completion. See COURSE_DETAIL_I18N in
       // data/golf-courses-i18n.ts for the demand numbers and for why
       // suvarnabhumi/phoenix-gold (duplicate course, two slugs), bangpoo
-      // (coordinates contradict its own address) and royal-dusit (closed) are
-      // excluded despite outranking several entries here.
+      // (coordinates contradicted its own address) and royal-dusit (closed) were
+      // excluded despite outranking several entries here. bangpoo's hold was
+      // resolved and it was added in Batch 12 tranche 1 (see above).
       "/golf-courses/bangkok/artitaya-country-club",
       "/golf-courses/bangkok/bangsai-country-club",
       "/golf-courses/bangkok/killien-golf-club",
@@ -788,6 +794,8 @@ const TRANSLATED_ROUTES: Record<
       // in ko/zh with zero translated course pages beneath them, so every
       // course link on those hubs left the locale.
       "/golf-courses/bangkok/sai-golf-club",
+      // Batch 12, tranche 1 (2026-09) — nine ordinary bangkok courses. See
+      // COURSE_DETAIL_I18N in data/golf-courses-i18n.ts.
       "/golf-courses/bangkok/bangkok-golf-club",
       "/golf-courses/bangkok/bangpoo-golf-sports-club",
       "/golf-courses/bangkok/dynasty-golf-country-club",
@@ -937,8 +945,9 @@ const TRANSLATED_ROUTES: Record<
       // impressions rather than roster completion. See COURSE_DETAIL_I18N in
       // data/golf-courses-i18n.ts for the demand numbers and for why
       // suvarnabhumi/phoenix-gold (duplicate course, two slugs), bangpoo
-      // (coordinates contradict its own address) and royal-dusit (closed) are
-      // excluded despite outranking several entries here.
+      // (coordinates contradicted its own address) and royal-dusit (closed) were
+      // excluded despite outranking several entries here. bangpoo's hold was
+      // resolved and it was added in Batch 12 tranche 1 (see above).
       "/golf-courses/bangkok/artitaya-country-club",
       "/golf-courses/bangkok/bangsai-country-club",
       "/golf-courses/bangkok/killien-golf-club",
@@ -1136,6 +1145,8 @@ const TRANSLATED_ROUTES: Record<
       // sync by the smoke-test course-detail registry consistency check
       // (section J3); liveness of each built page is asserted by section L2.
       "/golf-courses/bangkok/sai-golf-club",
+      // Batch 12, tranche 1 (2026-09) — nine ordinary bangkok courses. See
+      // COURSE_DETAIL_I18N in data/golf-courses-i18n.ts.
       "/golf-courses/bangkok/bangkok-golf-club",
       "/golf-courses/bangkok/bangpoo-golf-sports-club",
       "/golf-courses/bangkok/dynasty-golf-country-club",
@@ -1285,8 +1296,9 @@ const TRANSLATED_ROUTES: Record<
       // impressions rather than roster completion. See COURSE_DETAIL_I18N in
       // data/golf-courses-i18n.ts for the demand numbers and for why
       // suvarnabhumi/phoenix-gold (duplicate course, two slugs), bangpoo
-      // (coordinates contradict its own address) and royal-dusit (closed) are
-      // excluded despite outranking several entries here.
+      // (coordinates contradicted its own address) and royal-dusit (closed) were
+      // excluded despite outranking several entries here. bangpoo's hold was
+      // resolved and it was added in Batch 12 tranche 1 (see above).
       "/golf-courses/bangkok/artitaya-country-club",
       "/golf-courses/bangkok/bangsai-country-club",
       "/golf-courses/bangkok/killien-golf-club",

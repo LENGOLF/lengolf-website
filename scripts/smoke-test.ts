@@ -6153,8 +6153,8 @@ async function runPriceTierRoundupLanguageTests() {
         // nothing guards this assertion's own body either. Do not read this fix
         // as closing the class - a repo-wide sweep on 2026-08-31 found this
         // shape in a dozen-odd other gates, of which TWO are confirmed by
-        // mutation: L2's `offerChecked++` (line 5471, 824 assertions) and
-        // validate-course-slots.ts:557 (3,220). See CLAUDE.md for the rest,
+        // mutation: L2's `offerChecked++` (888 assertions) and
+        // validate-course-slots.ts's string loop (3,472). See CLAUDE.md for the rest,
         // which are candidates rather than measurements.
         judged++;
         if (!labelOk) {
@@ -6643,8 +6643,13 @@ async function runLocalizedDriveTimeTests() {
 // occupy four tier-roster slots (subhapruek in 1500, bangkok-golf-club in 2500,
 // lotus-valley in 2500 AND 3500) x 4 locales = 16 more retired. Derived two
 // ways that agree: the per-course membership delta (16), and the absolute count
-// of untranslated rostered courses x 4 against the applied registry (56).
-// TWELVE courses still contribute; the re-scope below is still a few batches off.
+// of untranslated roster SLOTS x 4 against the applied registry (14 x 4 = 56).
+// ELEVEN distinct courses fill those 14 slots (thana-city, thai-country-club and
+// royal-bang-pa-in each sit on two tiers). All eleven are untranslated BANGKOK
+// courses, so bangkok tranches 2 and 3 take this to ZERO: the re-scope below is
+// due within this batch series, not "a few batches off". Note the re-scope target
+// named below (region hubs with untranslated courses) empties at the same moment,
+// because bangkok is the last region with any.
 //
 // Pinned AT the true value on purpose, same discipline as the ratchets above: a
 // floor below the population is a guard gone slack, and here it would also hide
