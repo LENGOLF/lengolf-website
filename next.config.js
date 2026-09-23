@@ -251,6 +251,25 @@ const nextConfig = {
       ]),
     ]
 
+    // SEO section pages retired into a sibling that answers the same query.
+    // /best/best-birthday-party-venues-adults-bangkok/ and
+    // /activities/birthday-party-venues-bangkok/ traded places in GSC from June
+    // to September 2026 (weekly: one at 14-19, the other at 42-52, swapping in
+    // late June and again in late August), so Google read them as one intent.
+    // The /activities/ page is the deeper one and keeps the URL.
+    // Locale-prefixed rules are required, not decorative: the data entries are
+    // gone, so without them /th/best/<slug>/ falls through to the untranslated
+    // intercept in middleware.ts and lands on the ENGLISH page in two hops,
+    // while a translated /th/activities/ twin exists. One hop, same locale.
+    const retiredSeoPageRedirects = [
+      ['/best/best-birthday-party-venues-adults-bangkok', '/activities/birthday-party-venues-bangkok/'],
+    ].flatMap(([from, to]) => [
+      { source: from, destination: to, permanent: true },
+      { source: `${from}/`, destination: to, permanent: true },
+      { source: `/:locale(th|ko|ja|zh)${from}`, destination: `/:locale${to}`, permanent: true },
+      { source: `/:locale(th|ko|ja|zh)${from}/`, destination: `/:locale${to}`, permanent: true },
+    ])
+
     return [
       ...blogRedirects,
       ...retiredBlogRedirects,
@@ -260,6 +279,7 @@ const nextConfig = {
       ...rentalConsolidationRedirects,
       ...trustAnchorRedirects,
       ...prefixCorrectionRedirects,
+      ...retiredSeoPageRedirects,
 
       // WordPress tag, category, and author archives -> blog listing
       { source: '/tag/:slug', destination: '/blog/', permanent: true },

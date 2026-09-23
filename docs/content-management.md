@@ -89,6 +89,17 @@ When a post is being consolidated into a page that serves the same search intent
 
 Reviving a retired post means deleting its entry from `RETIRED_BLOG_REDIRECTS` first; config redirects match before the filesystem, so flipping the row back to `published` alone leaves the page unreachable behind its own redirect.
 
+### Retiring an SEO Section Page (`/best`, `/activities`, `/cost`, `/faq`, `/guide`, `/hotels`)
+
+The same idea for the data-file sections. First example: `/best/best-birthday-party-venues-adults-bangkok/` was retired into `/activities/birthday-party-venues-bangkok/` (2026-09-23) after the two pages spent June to September trading places in Search Console for the same queries.
+
+1. Delete the entry in **every** locale from its data file (e.g. `data/best-of-listicle-pages.ts`).
+2. In the **same commit**, delete its path from each locale's `staticRoutes` in `lib/translated-routes.ts`. Smoke section L5 fails if the registry and the data disagree in either direction.
+3. Add a pair to `retiredSeoPageRedirects` in `next.config.js`. It generates the root rule and the `/:locale(th|ko|ja|zh)` rule, so each locale lands on its own translated twin in one hop. Without the locale rule, `/th/best/<slug>/` falls through to the untranslated-locale intercept in `middleware.ts` and reaches the **English** page in two hops. Every locale the retired page had must also exist for the destination, or point that locale somewhere else.
+4. Add `redirectTests` for the root form and each locale (308 plus exact Location), and a no-slash `redirectChainTests` entry, in `scripts/smoke-test.ts`.
+5. Move anything worth keeping from the retired page into the survivor, and give the survivor's entry its own `updated_at`. Don't bump the file's shared `now`, which would redate every entry in the file.
+6. `npm run validate:links` catches any `related_slugs` still pointing at the retired path. The sitemap and `/activities/` hub are derived from the data, so they need no edit.
+
 ### Blog Post Content Format
 
 The `content` field stores raw HTML. When writing content:

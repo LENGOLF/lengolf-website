@@ -718,7 +718,9 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     locale: 'en',
     related_slugs: ['/activities/group-activities-bangkok', '/activities/bachelor-party-ideas-bangkok', '/activities/private-party-venues-bangkok', '/events', '/menu'],
     created_at: now,
-    updated_at: now,
+    // Own date: the named venues below were folded in from the retired
+    // /best/best-birthday-party-venues-adults-bangkok/ listicle (2026-09-23).
+    updated_at: '2026-09-23T00:00:00.000Z',
     content: {
       occasion_type: 'birthday-party',
       intro:
@@ -726,10 +728,11 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
       why_lengolf:
         'LENGOLF runs event packages built for birthdays. The Small Package (9,999 THB) covers 10–15 guests across 2 bays for 3 hours with 10 beers, 5 cocktails, unlimited soft drinks, and a catered food spread. The Medium Package (21,999 THB) steps up to 15–25 guests, all 4 bays, and an exclusive full-venue rental: the whole room is yours. Both centre on Bravo golf simulators that anyone can play, so the group has something to do together rather than just eat; games like closest to the pin keep non-golfers laughing. Food, drinks, decorations, music, and a DJ setup can be customised to the party, and for a bigger celebration the venue hosts 50+ guests on a custom package. It is inside The Mercury Ville at BTS Chidlom, so guests arrive straight off the BTS.',
       other_activities: [
-        { name: 'Private Karaoke Room', description: 'KTV venues across Sukhumvit and Silom rent private rooms by the hour, where everyone joins in and the energy builds over the night. Best for groups that want music and drinks over an activity.', type: 'entertainment' },
-        { name: 'Rooftop Private Dining', description: 'Rooftop restaurants and bars will reserve a private section for a birthday group, trading an activity for skyline views and photos. The open-air setting is weather-dependent in Bangkok.', type: 'dining' },
+        { name: 'The Vocal Karaoke, Thong Lo', description: 'Private karaoke rooms with a large international song library and full food and drinks service, which makes it the strongest KTV pick for English-speaking groups. Works best for about 6 to 20 guests over two to four hours. Thong Lo means a taxi or Grab for most of the group.', type: 'entertainment' },
+        { name: 'Above Eleven Rooftop, Sukhumvit 11', description: 'A rooftop on the 33rd floor of Fraser Suites Sukhumvit 11 that takes private reservations for birthday groups of roughly 10 to 30, with cocktail packages and a Japanese-Peruvian kitchen. The skyline makes the photos; the open-air setting is exposed to heat and rain, and weekends get loud.', type: 'dining' },
+        { name: 'Haoma Private Dining Room, Sukhumvit 31', description: 'A Michelin-recognised, sustainability-focused restaurant with a private room for about 8 to 14 guests. The pick when the food is the point of the night: expect a dinner-party atmosphere rather than a party, and a far higher cost per head.', type: 'dining' },
         { name: 'Cooking Class Party', description: 'Some cooking schools run private group sessions where the party cooks together then eats the result. Interactive and inclusive, with a relaxed pace that suits smaller birthdays.', type: 'culinary' },
-        { name: 'Bowling Party at Blu-O', description: 'Private lane bookings with food and drinks service make bowling an easy, active birthday for casual groups. Located in major malls, so it is central and budget-friendly.', type: 'entertainment' },
+        { name: 'Blu-O Rhythm & Bowl, Siam Paragon', description: 'Private lane bookings with dedicated waitstaff and food and drinks service, plus karaoke rooms in the same venue to extend the night. Central and budget-friendly for casual groups of about 6 to 16, though it is a public venue, so other guests share the space.', type: 'entertainment' },
         { name: 'Escape Room Group Booking', description: 'Booking several rooms lets a birthday group split into competing teams. Fun for puzzle-minded crowds, though the format is short and does not include food or drinks.', type: 'entertainment' },
       ],
       seasonal_relevance: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],

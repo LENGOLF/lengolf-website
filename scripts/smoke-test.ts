@@ -3140,6 +3140,37 @@ const redirectTests: RedirectTest[] = [
     expectedStatus: 308,
     expectedLocation: "/zh/golf-course-club-rental/",
   },
+  // Birthday-page consolidation: the /best/ listicle and the /activities/
+  // page traded places for the same queries, so the listicle was retired
+  // (retiredSeoPageRedirects in next.config.js). The locale rows are the
+  // point: without them /th/best/... would reach the ENGLISH page in two
+  // hops through the untranslated-locale intercept, so each must land on its
+  // own locale's twin in exactly one.
+  {
+    path: "/best/best-birthday-party-venues-adults-bangkok/",
+    expectedStatus: 308,
+    expectedLocation: "/activities/birthday-party-venues-bangkok/",
+  },
+  {
+    path: "/th/best/best-birthday-party-venues-adults-bangkok/",
+    expectedStatus: 308,
+    expectedLocation: "/th/activities/birthday-party-venues-bangkok/",
+  },
+  {
+    path: "/ko/best/best-birthday-party-venues-adults-bangkok/",
+    expectedStatus: 308,
+    expectedLocation: "/ko/activities/birthday-party-venues-bangkok/",
+  },
+  {
+    path: "/ja/best/best-birthday-party-venues-adults-bangkok/",
+    expectedStatus: 308,
+    expectedLocation: "/ja/activities/birthday-party-venues-bangkok/",
+  },
+  {
+    path: "/zh/best/best-birthday-party-venues-adults-bangkok/",
+    expectedStatus: 308,
+    expectedLocation: "/zh/activities/birthday-party-venues-bangkok/",
+  },
 ];
 
 // B2) Slash-less inbound links must still land on the destination.
@@ -3182,6 +3213,11 @@ const redirectChainTests: { path: string; finalPath: string }[] = [
   { path: "/about", finalPath: "/about-us/" },
   { path: "/contact", finalPath: "/about-us/" },
   { path: "/privacy", finalPath: "/privacy-policy/" },
+  // Retired SEO section page (retiredSeoPageRedirects), no-slash form.
+  {
+    path: "/best/best-birthday-party-venues-adults-bangkok",
+    finalPath: "/activities/birthday-party-venues-bangkok/",
+  },
 ];
 
 // C) Critical external link checks
