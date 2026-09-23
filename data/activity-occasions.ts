@@ -485,7 +485,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     slug: 'bachelor-party-ideas-bangkok',
     title: 'Bangkok Stag Do & Bachelor Party Ideas (2026)',
     meta_description:
-      'Stag do and bachelor party ideas in Bangkok: a golf simulator competition with a bar at BTS Chidlom, group packages from 9,999 THB, plus go-karts, Muay Thai and rooftops.',
+      'Stag do and bachelor party ideas in Bangkok: golf simulator games and a bar at BTS Chidlom, group packages from 9,999 THB, plus go-karts, Muay Thai and rooftops.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -494,12 +494,13 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     related_slugs: ['/activities/group-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/activities/private-party-venues-bangkok', '/events', '/menu'],
     created_at: now,
     // Own date: EN deepened for UK/AU "stag do" searches on 2026-09-23. The
-    // th/ja/ko/zh entries below were NOT updated and keep the shorter copy.
+    // th/ja/ko/zh entries below keep the shorter copy; only their false
+    // draft-beer claim was corrected (to bottled beer) the same day.
     updated_at: '2026-09-23T00:00:00.000Z',
     content: {
       occasion_type: 'bachelor-party',
       intro:
-        "Bangkok is one of the world's most popular stag do destinations, and the best bachelor weekends pair a group activity with the nightlife instead of relying on the nightlife alone: the activity is what gets a mixed group talking before the bars take over. This page covers the stag do ideas in Bangkok worth booking, starting with a golf simulator competition at LENGOLF at BTS Chidlom. It covers what that costs for a group, what the packages include, the games that work when half the group has never held a club, and how to fit it into a stag day.",
+        "Bangkok is one of the world's most popular stag do destinations, and the best bachelor weekends pair a group activity with the nightlife instead of relying on the nightlife alone: the activity is what gets a mixed group talking before the bars take over. This page covers the stag do ideas in Bangkok worth booking, starting with a golf simulator competition at LENGOLF at BTS Chidlom: what it costs for a group, what the packages include, the games that work when half the group has never held a club, and how to fit it into a stag day.",
       why_lengolf:
         'Start the stag do with a golf competition at LENGOLF. Four Bravo golf simulator bays hold up to 5 players each and track every shot, so the leaderboard builds itself and the rivalry takes care of the rest. Clubs are provided, the bar pours cocktails, Japanese highballs and bottled beer, and food is served straight to the bay. Bays start at 550 THB per hour for up to 5 people, and group packages with food and drinks start at 9,999 THB. The venue is inside The Mercury Ville at BTS Chidlom, on the same BTS line as Nana, Asok and Thong Lo.',
       other_activities: [
@@ -522,23 +523,23 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
       sections: [
         {
           heading: 'Stag Do Packages, Group Size and Cost',
-          body: "A stag do at LENGOLF can be booked two ways: as plain bay rental, where the group pays by the hour and orders at the bay, or as an all-inclusive group package with the food and a drinks allocation already in the price.\n\n| Option | Group size | What it includes | Price |\n|---|---|---|---|\n| Bay rental | Up to 5 per bay, 4 bays | Simulator bay and clubs; order food and drinks at the bay | 550 to 950 THB per bay per hour |\n| Small Package | 10 to 15 | 2 bays for 3 hours, 10 beers, 5 cocktails, unlimited soft drinks, catered food | 9,999 THB |\n| Medium Package | 15 to 25 | All 4 bays and the whole venue for 3 hours, 20 beers, 10 cocktails, unlimited soft drinks, catered food | 21,999 THB |\n\n**What a small group pays.** Bay rates depend on the day and time: 550 THB an hour before 14:00 on weekdays (Monday to Thursday), up to 950 THB an hour on weekend afternoons and evenings (Friday to Sunday). Ten people across two bays for two hours on a Saturday night comes to 3,800 THB, under 400 THB a head before food and drinks.\n\n**What a big group pays.** The Small Package works out at roughly 667 THB a head across 15 people and the Medium Package at roughly 880 THB a head across 25, with food, drinks and three hours of golf inside that number. Groups larger than 25 are quoted as a custom package.",
+          body: "A stag do at LENGOLF can be booked two ways: as plain bay rental, where the group pays by the hour and orders at the bay, or as an all-inclusive group package with the food and a drinks allocation already in the price.\n\n| Option | Group size | What it includes | Price |\n|---|---|---|---|\n| Bay rental | Up to 5 per bay, 4 bays | Simulator bay and clubs; order food and drinks at the bay | 550 to 950 THB per bay per hour |\n| Small Package | 10 to 15 | 2 bays for 3 hours, 10 beers, 5 cocktails, unlimited soft drinks, catered food | 9,999 THB |\n| Medium Package | 15 to 25 | All 4 bays and the whole venue for 3 hours, 20 beers, 10 cocktails, unlimited soft drinks, catered food | 21,999 THB |\n\n**What a small group pays.** Bay rates depend on the day and time: 550 THB an hour before 14:00 on weekdays (Monday to Thursday), up to 950 THB an hour on weekend afternoons and evenings (Friday to Sunday and public holidays). Ten people across two bays for two hours on a Saturday night comes to 3,800 THB, under 400 THB a head before food and drinks.\n\n**What a big group pays.** The Small Package works out at roughly 667 THB a head across 15 people and the Medium Package at roughly 880 THB a head across 25, with food, drinks and three hours of golf inside that number. Larger groups, including parties of 50 or more, are quoted as a custom package.",
         },
         {
           heading: 'What the Group Gets',
-          body: "**The bays.** Four Bravo golf simulators, each holding up to 5 players, with club sets provided so nobody has to travel with a golf bag. A group of 15 splits across bays and rotates rather than queueing behind one screen.\n\n**The drinks.** The bar serves cocktails, Japanese highballs, bottled beer (Singha or Asahi in the packages), wine and soft drinks. The package drinks are an allocation; the full bar stays open for anything beyond it, billed at menu prices.\n\n**The food.** Burgers, sliders, calamari, crispy chicken, BBQ brisket and fries from Smith & Co are served to the bay, and the Medium Package adds large pizzas. On a normal bay booking, food is ordered from the menu at the bay.\n\n**The staff.** Staff set up the simulators and the games, so whoever organised the stag do is not the one explaining the software to the group.",
+          body: "**The bays.** Four Bravo golf simulators, each holding up to 5 players, with club sets provided so nobody has to travel with a golf bag. A group of 15 splits across bays and rotates rather than queueing behind one screen.\n\n**The drinks.** The bar serves cocktails, Japanese highballs, bottled beer (Singha or Asahi in the packages), wine and soft drinks. The package drinks are an allocation; the full bar stays open for anything beyond it, billed at menu prices.\n\n**The food.** Burgers, sliders, calamari, crispy chicken, BBQ brisket and fries from Smith & Co are served to the bay, and the Medium Package swaps the burgers for large pizzas. On a normal bay booking, food is ordered from the menu at the bay.\n\n**The staff.** Staff set up the simulators and the games, so whoever organised the stag do is not the one explaining the software to the group.",
         },
         {
           heading: 'Stag Do Games on a Golf Simulator',
-          body: "Nobody needs golf experience. These are the games that work for a mixed group, and the simulator keeps the score.\n\n**Closest to the pin.** One shot each at a short hole. The simulator measures the distance to the flag, so there is nothing to argue about.\n\n**Longest drive.** Everyone hits a driver and the leaderboard ranks the results. The confident golfers lose this one to a beginner more often than they expect.\n\n**Team match.** Split the group into two teams and add up the scores over a few holes, which keeps the weaker players in the game.\n\n**Forfeit round.** Last place in each game buys the next round. It is usually the part of the afternoon people remember.",
+          body: "Nobody needs golf experience. These are the games that work for a mixed group, and the simulator keeps the score.\n\n**Closest to the pin.** One shot each at a short hole. The simulator measures the distance to the flag, so there is nothing to argue about.\n\n**Longest drive.** Everyone hits a driver and the leaderboard ranks the results.\n\n**Team match.** Split the group into two teams and add up the scores over a few holes, which keeps the weaker players in the game.\n\n**Forfeit round.** Last place in each game buys the next round. It is usually the part of the afternoon people remember.",
         },
         {
           heading: 'A Bangkok Stag Day That Starts at Chidlom',
-          body: "**Afternoon: golf at LENGOLF.** Book two or three hours in the afternoon or early evening. The venue is inside The Mercury Ville at BTS Chidlom, so the group arrives by BTS rather than sitting in traffic, and the competition gives everyone something to talk about before the night starts.\n\n**Evening: dinner and rooftops.** Chidlom is on the BTS Sukhumvit line, a few stops from Nana, Asok and Thong Lo, where most of the rooftop bars and late-night venues are.\n\n**Next day: something active.** A group Muay Thai class, go-karts or a river cruise fills the second day; several are listed below with the other stag do ideas.\n\n**Book the golf first.** Weekend evenings are the first slots to go, and the rest of the day is easier to plan around a fixed start time.",
+          body: "**Afternoon: golf at LENGOLF.** Book two or three hours in the afternoon or early evening. The venue is inside The Mercury Ville at BTS Chidlom, so the group arrives by BTS rather than sitting in traffic, and the competition gives everyone something to talk about before the night starts.\n\n**Evening: dinner and rooftops.** Chidlom is on the BTS Sukhumvit line, a few stops from Nana, Asok and Thong Lo, where many of the city's rooftop bars and late-night venues are.\n\n**Next day: something active.** A group Muay Thai class, go-karts or a river cruise fills the second day; several are listed below with the other stag do ideas.\n\n**Book the golf first.** Weekend evenings are the first slots to go, and the rest of the day is easier to plan around a fixed start time.",
         },
         {
           heading: 'How to Book a Stag Do at LENGOLF',
-          body: "**Groups under 10.** Book simulator bays directly at booking.len.golf and order food and drinks at the bay on the day.\n\n**Groups of 10 or more.** Send the enquiry form on the event packages page or message LINE @lengolf with the date, the headcount and roughly what you want to spend. The events team confirms availability, adjusts the package and holds the slot.\n\n**What to have ready.** Date and start time, a rough headcount, any dietary requirements, and whether you want the whole venue to yourselves. Packages are quoted as a total, so there is no splitting a bar tab at the end of the night.",
+          body: "**Groups under 10.** Book simulator bays directly at booking.len.golf and order food and drinks at the bay on the day.\n\n**Groups of 10 or more wanting a package.** Send the enquiry form on the event packages page or message LINE @lengolf with the date, the headcount and roughly what you want to spend. The events team confirms availability, adjusts the package and holds the slot.\n\n**What to have ready.** Date and start time, a rough headcount, any dietary requirements, and whether you want the whole venue to yourselves. Packages are quoted as a total, so the core cost is fixed before the night starts; anything ordered beyond the package is billed at menu prices at the end.",
         },
       ],
       faqs: [
@@ -548,7 +549,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
         },
         {
           question: 'How big a group can you host for a stag do?',
-          answer: 'The venue has 4 simulator bays holding up to 5 players each, plus bar and lounge seating. The standard packages cover 10 to 25 guests, and larger groups are quoted as a custom package.',
+          answer: 'The venue has 4 simulator bays holding up to 5 players each, plus bar and lounge seating. The standard packages cover 10 to 25 guests, and larger groups, including parties of 50 or more, are quoted as a custom package.',
         },
         {
           question: 'Does anyone in the group need to play golf?',
@@ -556,7 +557,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
         },
         {
           question: 'Are drinks included?',
-          answer: 'In the group packages, yes: bottled beer, cocktails and unlimited soft drinks are included, and the full bar stays open for anything beyond that. On a normal bay booking, drinks are ordered at the bay at the prices on the food and drinks menu.',
+          answer: 'In the group packages, yes: 10 beers and 5 cocktails on the Small Package (20 beers and 10 cocktails on the Medium), plus unlimited soft drinks, and the full bar stays open for anything beyond that at menu prices. On a normal bay booking, drinks are ordered at the bay at the prices on the food and drinks menu.',
         },
         {
           question: 'Can we book the whole venue for the stag group?',
@@ -601,13 +602,13 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     locale: 'th',
     related_slugs: ['/activities/group-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/events'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-23T00:00:00.000Z',
     content: {
       occasion_type: 'bachelor-party',
       intro:
         'กรุงเทพฯ เป็นหนึ่งในจุดหมายยอดนิยมของงานเลี้ยงสละโสดจากทั่วโลก งานที่สนุกที่สุดมักผสมกิจกรรมกลุ่มเข้ากับไนต์ไลฟ์ และเมืองนี้มีให้ครบทั้งสองอย่าง นี่คือไอเดียงานเลี้ยงสละโสดในกรุงเทพฯ ที่ไปไกลกว่าตัวเลือกเดิมๆ',
       why_lengolf:
-        'เริ่มค่ำคืนที่ LENGOLF ด้วยการแข่งกอล์ฟกันในกลุ่ม เบย์แต่ละห้องรองรับได้สูงสุด 5 คน และซิมูเลเตอร์ Bravo Golf บันทึกทุกช็อต จึงเหมาะกับการแข่งกันแบบเป็นกันเองระหว่างเพื่อน มีบาร์ครบวงจร ทั้งค็อกเทลและคราฟต์เบียร์สด ช่วยตั้งอารมณ์ให้กับค่ำคืนที่เหลือ ตั้งอยู่ที่ BTS ชิดลม จึงห่างจากย่านไนต์ไลฟ์ชั้นนำของกรุงเทพฯ เพียงไม่กี่นาที ค่าเช่าเบย์ประมาณ 550 บาท/ชั่วโมง สำหรับผู้เล่นสูงสุด 5 คน (ข้อมูล ณ กรกฎาคม 2026)',
+        'เริ่มค่ำคืนที่ LENGOLF ด้วยการแข่งกอล์ฟกันในกลุ่ม เบย์แต่ละห้องรองรับได้สูงสุด 5 คน และซิมูเลเตอร์ Bravo Golf บันทึกทุกช็อต จึงเหมาะกับการแข่งกันแบบเป็นกันเองระหว่างเพื่อน มีบาร์ครบวงจร ทั้งค็อกเทลและเบียร์ขวด ช่วยตั้งอารมณ์ให้กับค่ำคืนที่เหลือ ตั้งอยู่ที่ BTS ชิดลม จึงห่างจากย่านไนต์ไลฟ์ชั้นนำของกรุงเทพฯ เพียงไม่กี่นาที ค่าเช่าเบย์ประมาณ 550 บาท/ชั่วโมง สำหรับผู้เล่นสูงสุด 5 คน (ข้อมูล ณ กรกฎาคม 2026)',
       other_activities: [
         { name: 'โกคาร์ตในกรุงเทพฯ (EasyKart)', description: 'สนามโกคาร์ตในร่มที่ RCA ได้ทั้งการแข่งขันและความตื่นเต้น เหมาะกับกลุ่มใหญ่', type: 'entertainment' },
         { name: 'คลาสมวยไทย', description: 'คลาสมวยไทยแบบกลุ่มมีให้เลือกหลายค่าย เป็นประสบการณ์แบบกรุงเทพฯ ที่หาที่อื่นไม่ได้', type: 'sport' },
@@ -647,13 +648,13 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/activities/group-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/events'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-23T00:00:00.000Z',
     content: {
       occasion_type: 'bachelor-party',
       intro:
         'バンコクは、世界でも有数のバチェラーパーティー向けの街です。盛り上がる会は、たいていグループで遊べるアクティビティとナイトライフを組み合わせたもの。この街はその両方を高い水準で備えています。ありきたりで終わらない、バンコクのバチェラーパーティーの過ごし方をまとめました。',
       why_lengolf:
-        '夜の始まりは、LENGOLFでのグループ対抗ゴルフから。各ベイは最大5名まで入れて、Bravo Golfシミュレーターが1打ごとの結果を計測するので、仲間内の競争が自然に盛り上がります。フルバーにはカクテルと樽生のクラフトビールも。BTSチットロム駅にあるため、バンコク屈指のナイトスポットまで数分です。ベイのレンタルは最大5名まで1時間約550THB（2026年7月現在）。',
+        '夜の始まりは、LENGOLFでのグループ対抗ゴルフから。各ベイは最大5名まで入れて、Bravo Golfシミュレーターが1打ごとの結果を計測するので、仲間内の競争が自然に盛り上がります。フルバーにはカクテルと瓶ビールも。BTSチットロム駅にあるため、バンコク屈指のナイトスポットまで数分です。ベイのレンタルは最大5名まで1時間約550THB（2026年7月現在）。',
       other_activities: [
         { name: 'Go-Kart Bangkok (EasyKart)', description: 'RCAにある屋内カートコース。競争心をあおるスリルがあり、グループ向きです。', type: 'entertainment' },
         { name: 'ムエタイ体験クラス', description: '複数のジムでグループ向けのムエタイ体験を受けられます。バンコクならではの体験です。', type: 'sport' },
@@ -678,7 +679,10 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
   // 총각 파티 is the settled KO term for a stag do; the title keeps it up front
   // with 단체 액티비티 as the descriptive tail. Figures carried: 최대 5명,
   // 시간당 약 550바트, 15,000바트(River Cruise Party), 밤 11시. The EN
-  // "craft beer on tap" is kept as 수제 생맥주 — no product claim added.
+  // "craft beer on tap" was rendered 수제 생맥주 until 2026-09-23; the menu has no
+  // draft beer, so all five locales of THIS entry now say bottled beer (병맥주, as
+  // Menu.sectionBeer). data/price-guide-pages.ts still says "craft beer" (a
+  // bottled Thai craft IPA is on the menu, so overstated rather than false).
   {
     id: 'act-3-ko',
     page_type: 'activity_occasion',
@@ -693,13 +697,13 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/activities/group-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/events'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-23T00:00:00.000Z',
     content: {
       occasion_type: 'bachelor-party',
       intro:
         '방콕은 세계에서 손꼽히는 총각 파티 목적지예요. 잘 짜인 총각 파티는 단체 액티비티와 나이트라이프를 함께 엮는데, 방콕은 두 가지 모두 넉넉해요. 뻔한 코스에서 한 발 더 나간 방콕 총각 파티 아이디어를 정리했어요.',
       why_lengolf:
-        'LENGOLF에서 단체 골프 대결로 밤을 시작해 보세요. 베이 하나에 최대 5명까지 들어가고, Bravo 골프 시뮬레이터가 모든 샷을 기록해서 서로 겨루기 좋아요. 바에는 칵테일과 수제 생맥주가 준비돼 있어 분위기를 끌어올리기에 알맞아요. BTS 칫롬역에 있어서 방콕의 주요 나이트라이프 구역까지 금방 이동할 수 있어요. 베이 이용료는 최대 5명까지 시간당 약 550바트예요 (2026년 7월 기준).',
+        'LENGOLF에서 단체 골프 대결로 밤을 시작해 보세요. 베이 하나에 최대 5명까지 들어가고, Bravo 골프 시뮬레이터가 모든 샷을 기록해서 서로 겨루기 좋아요. 바에는 칵테일과 병맥주가 준비돼 있어 분위기를 끌어올리기에 알맞아요. BTS 칫롬역에 있어서 방콕의 주요 나이트라이프 구역까지 금방 이동할 수 있어요. 베이 이용료는 최대 5명까지 시간당 약 550바트예요 (2026년 7월 기준).',
       other_activities: [
         { name: 'Go-Kart Bangkok (EasyKart)', description: 'RCA에 있는 실내 카트장이에요. 승부가 붙기 좋고 아드레날린이 확 올라와서 단체에 잘 맞아요.', type: 'entertainment' },
         { name: '무에타이 클래스', description: '여러 체육관에서 단체 무에타이 수업을 진행해요. 방콕에서만 할 수 있는 경험이에요.', type: 'sport' },
@@ -740,13 +744,13 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/activities/group-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/events'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-23T00:00:00.000Z',
     content: {
       occasion_type: 'bachelor-party',
       intro:
         '曼谷是全球最热门的单身派对目的地之一。一场好的单身派对，通常是团体活动加上夜生活的组合——而这两样这座城市都不缺。以下是曼谷单身派对里几个跳出老套路的选择。',
       why_lengolf:
-        '这一晚可以从LENGOLF的团体高尔夫比拼开始。每个球位最多可容纳5人，Bravo高尔夫模拟器会记录每一杆的数据，很适合朋友之间互相较劲。现场有全套吧台、鸡尾酒和精酿生啤，正好为接下来的行程定下节奏。场馆就在BTS Chidlom，离曼谷几个主要夜生活区都只要几分钟。球位租用每小时约550泰铢，最多5人，截至2026年7月。',
+        '这一晚可以从LENGOLF的团体高尔夫比拼开始。每个球位最多可容纳5人，Bravo高尔夫模拟器会记录每一杆的数据，很适合朋友之间互相较劲。现场有全套吧台、鸡尾酒和瓶装啤酒，正好为接下来的行程定下节奏。场馆就在BTS Chidlom，离曼谷几个主要夜生活区都只要几分钟。球位租用每小时约550泰铢，最多5人，截至2026年7月。',
       other_activities: [
         { name: '卡丁车（EasyKart）', description: '位于RCA的室内卡丁车场，竞争感强、肾上腺素拉满，很适合一群人。', type: 'entertainment' },
         { name: '泰拳体验课', description: '多家拳馆都能安排团体泰拳课程，是很有曼谷特色的体验。', type: 'sport' },
@@ -790,8 +794,8 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
       why_lengolf:
         'LENGOLF runs event packages built for birthdays. The Small Package (9,999 THB) covers 10–15 guests across 2 bays for 3 hours with 10 beers, 5 cocktails, unlimited soft drinks, and a catered food spread. The Medium Package (21,999 THB) steps up to 15–25 guests, all 4 bays, and an exclusive full-venue rental: the whole room is yours. Both centre on Bravo golf simulators that anyone can play, so the group has something to do together rather than just eat; games like closest to the pin keep non-golfers laughing. Food, drinks, decorations, music, and a DJ setup can be customised to the party, and for a bigger celebration the venue hosts 50+ guests on a custom package. It is inside The Mercury Ville at BTS Chidlom, so guests arrive straight off the BTS.',
       other_activities: [
-        { name: 'The Vocal Karaoke, Thong Lo', description: 'Private karaoke rooms with a large international song library and full food and drinks service, which makes it the strongest KTV pick for English-speaking groups. Works best for about 6 to 20 guests over two to four hours. Thong Lo means a taxi or Grab for most of the group.', type: 'entertainment' },
-        { name: 'Above Eleven Rooftop, Sukhumvit 11', description: 'A rooftop on the 33rd floor of Fraser Suites Sukhumvit 11 that takes private reservations for birthday groups of roughly 10 to 30, with cocktail packages and a Japanese-Peruvian kitchen. The skyline makes the photos; the open-air setting is exposed to heat and rain, and weekends get loud.', type: 'dining' },
+        { name: 'Private Karaoke Room', description: 'KTV venues across Sukhumvit and Silom rent private rooms by the hour, where everyone joins in and the energy builds over the night. Best for groups that want music and drinks over an activity.', type: 'entertainment' },
+        { name: 'Above Eleven Rooftop, Sukhumvit 11', description: 'A rooftop on the 33rd floor of Fraser Suites Sukhumvit 11 that takes private reservations for birthday groups of roughly 10 to 30, with cocktail packages and a Japanese-Peruvian kitchen. The skyline makes the photos; the open-air setting is exposed to heat and rain, weekends get loud, and it is one of the pricier options.', type: 'dining' },
         { name: 'Haoma Private Dining Room, Sukhumvit 31', description: 'A Michelin-recognised, sustainability-focused restaurant with a private room for about 8 to 14 guests. The pick when the food is the point of the night: expect a dinner-party atmosphere rather than a party, and a far higher cost per head.', type: 'dining' },
         { name: 'Cooking Class Party', description: 'Some cooking schools run private group sessions where the party cooks together then eats the result. Interactive and inclusive, with a relaxed pace that suits smaller birthdays.', type: 'culinary' },
         { name: 'Blu-O Rhythm & Bowl, Siam Paragon', description: 'Private lane bookings with dedicated waitstaff and food and drinks service, plus karaoke rooms in the same venue to extend the night. Central and budget-friendly for casual groups of about 6 to 16, though it is a public venue, so other guests share the space.', type: 'entertainment' },

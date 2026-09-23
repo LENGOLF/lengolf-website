@@ -257,17 +257,23 @@ const nextConfig = {
     // to September 2026 (weekly: one at 14-19, the other at 42-52, swapping in
     // late June and again in late August), so Google read them as one intent.
     // The /activities/ page is the deeper one and keeps the URL.
-    // Locale-prefixed rules are required, not decorative: the data entries are
-    // gone, so without them /th/best/<slug>/ falls through to the untranslated
-    // intercept in middleware.ts and lands on the ENGLISH page in two hops,
-    // while a translated /th/activities/ twin exists. One hop, same locale.
+    // Locale-prefixed rules are required, not decorative: the registry lines
+    // are gone, so without them /th/best/<slug>/ hits the untranslated-locale
+    // 301 at the top of middleware.ts and lands on the ENGLISH page in two
+    // hops (for a client with no th preference), while a translated
+    // /th/activities/ twin exists. One hop, same locale, from
+    // the canonical trailing-slash form; a no-slash request takes Next's
+    // trailingSlash 308 first (see B2 in scripts/smoke-test.ts), so it is two.
+    // TRAP: config redirects match before the filesystem, so reviving a
+    // retired page means deleting its pair here FIRST.
     const retiredSeoPageRedirects = [
       ['/best/best-birthday-party-venues-adults-bangkok', '/activities/birthday-party-venues-bangkok/'],
     ].flatMap(([from, to]) => [
+      // No-slash sources only: Next normalises the source pattern, so each one
+      // also matches the trailing-slash spelling (see the rootLocationRedirects
+      // note above — do not add slash twins).
       { source: from, destination: to, permanent: true },
-      { source: `${from}/`, destination: to, permanent: true },
       { source: `/:locale(th|ko|ja|zh)${from}`, destination: `/:locale${to}`, permanent: true },
-      { source: `/:locale(th|ko|ja|zh)${from}/`, destination: `/:locale${to}`, permanent: true },
     ])
 
     return [

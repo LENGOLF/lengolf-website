@@ -40,6 +40,9 @@ export const course: GolfCourse = {
       meta_description: `Siam Country Club Bangkok green fees, course overview, designer Toby Cobb, tips for visiting, and how to arrange golf club rentals delivered to your Bangkok hotel.`,
     },
     th: {
+      // CTR TEST (2026-09-23): "ราคากรีนฟี" + ":" instead of the template's
+      // "— ค่ากรีนฟี", on 4 pages; ayutthaya + nikanti are the untouched controls.
+      // Do not normalise back to the glossary form before the ~2026-10-21 re-measure.
       title: `Siam Country Club Bangkok สมุทรปราการ: ราคากรีนฟี รีวิวสนาม และเช่าไม้กอล์ฟ`,
       meta_description: `ค่ากรีนฟี Siam Country Club Bangkok วันธรรมดาประมาณ 6,500 บาทรวมทุกอย่าง รีวิวสนามระดับพรีเมียม พร้อมบริการเช่าไม้กอล์ฟส่งถึงโรงแรมในกรุงเทพฯ`,
       prose: {

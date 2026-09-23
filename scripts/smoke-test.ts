@@ -3144,8 +3144,9 @@ const redirectTests: RedirectTest[] = [
   // page traded places for the same queries, so the listicle was retired
   // (retiredSeoPageRedirects in next.config.js). The locale rows are the
   // point: without them /th/best/... would reach the ENGLISH page in two
-  // hops through the untranslated-locale intercept, so each must land on its
-  // own locale's twin in exactly one.
+  // hops via the untranslated-locale 301 in middleware.ts, so each must land on its
+  // own locale's twin in exactly one (from the trailing-slash form; the
+  // no-slash form is covered by redirectChainTests below, which follows it).
   {
     path: "/best/best-birthday-party-venues-adults-bangkok/",
     expectedStatus: 308,
@@ -3213,11 +3214,19 @@ const redirectChainTests: { path: string; finalPath: string }[] = [
   { path: "/about", finalPath: "/about-us/" },
   { path: "/contact", finalPath: "/about-us/" },
   { path: "/privacy", finalPath: "/privacy-policy/" },
-  // Retired SEO section page (retiredSeoPageRedirects), no-slash form.
+  // Retired SEO section page (retiredSeoPageRedirects): the no-slash root
+  // form, and each locale followed to its FINAL page. The locale chains are
+  // what prove the destination is still translated: if its registry line were
+  // dropped, the first hop (redirectTests) would stay green while the chain
+  // ended on the English page.
   {
     path: "/best/best-birthday-party-venues-adults-bangkok",
     finalPath: "/activities/birthday-party-venues-bangkok/",
   },
+  ...(["th", "ko", "ja", "zh"] as const).map((l) => ({
+    path: `/${l}/best/best-birthday-party-venues-adults-bangkok`,
+    finalPath: `/${l}/activities/birthday-party-venues-bangkok/`,
+  })),
 ];
 
 // C) Critical external link checks
@@ -4754,7 +4763,7 @@ async function runLlmDiscoverabilityTests() {
     // BUSINESS_INFO.phoneRaw ("0966682335") is one property access from
     // PHONE_E164 and is the other plausible mis-substitution -- equally
     // undiallable from abroad, and a literal-string check sailed past it.
-    const localPhone = /0\s*9\s*6[\s.\-]*668[\s.\-]*2335/;
+    const localPhone = /0[\s.()\-–—]*9[\s.()\-–—]*6[\s.()\-–—]*668[\s.()\-–—]*2335/;
     const localHit = body.match(localPhone);
     if (localHit) {
       // Echo the offending LINE, not just the fact. This body includes
@@ -4775,49 +4784,88 @@ async function runLlmDiscoverabilityTests() {
   }
 
   // 1b) llms-full.txt: the long-form companion (app/llms-full.txt/route.ts).
-  // Same surface rules as llms.txt (plain text, no '{{', E.164 only), and
-  // stricter here, because this body prints FAQ PROSE verbatim: a future FAQ
-  // answer quoting "096-668-2335" lands in it with no call-site change at all.
+  // The same surface rules as llms.txt (plain text, no '{{', E.164 only), plus
+  // CONTENT assertions, because this body prints FAQ prose verbatim: a future
+  // FAQ answer quoting "096-668-2335" lands in it with no call-site change.
   //
-  // Anti-vacuity: the file exists to carry every English FAQ answer, so the
-  // count of `Source:` markers must EQUAL the published EN FAQ corpus, derived
-  // from the data file, not a hand-typed number. A floor would pass a route
-  // that silently printed half the corpus; `> 0` would pass one printing one.
+  // The FAQ assertion must prove every English ANSWER is present, not that N
+  // headers are. A count of `Source:` markers alone stayed green under
+  // mutation with every answer body dropped, printed as "undefined", or
+  // swapped for another locale's text. So each published EN entry's exact
+  // block (Source line, answer_intro, answer_body) must appear, AND the marker
+  // count must EQUAL the corpus, which is what catches a duplicated or extra
+  // block. Both sides read data/faq-pages.ts, and that is the property under
+  // test: the route must print that data verbatim.
+  //
+  // Tables: each heading must exist and hold one row per entry of the static
+  // arrays in data/pricing.ts. The getters map those arrays 1:1 (the catalog
+  // only rewrites prices), so the row count does not depend on the POS.
   try {
     const { faqPages } = await import("../data/faq-pages");
-    const expectedFaqs = faqPages.filter(
-      (p) => p.locale === "en" && p.status === "published",
-    ).length;
+    const { bayRates, monthlyPackages, lessonPricing, eventPackages } = await import("../data/pricing");
+    const enFaqs = faqPages.filter((p) => p.locale === "en" && p.status === "published");
     const res = await fetch(`${BASE}/llms-full.txt`, { redirect: "manual" });
-    const body = await res.text();
+    const body = (await res.text()).replace(/\r\n/g, "\n");
     const ct = res.headers.get("content-type") || "";
     const issues: string[] = [];
     if (res.status !== 200) issues.push(`expected 200, got ${res.status}`);
     if (!ct.includes("text/plain"))
       issues.push(`content-type not text/plain: "${ct}"`);
     if (!body.includes("# LENGOLF")) issues.push('missing "# LENGOLF" heading');
-    if (!body.includes("## Simulator bay rates"))
-      issues.push("missing the bay-rate table section");
     if (body.includes("{{")) issues.push("unresolved '{{' fact token in output");
     if (!body.includes("+66966682335"))
       issues.push("llms-full.txt does not publish the phone in E.164");
-    const localPhone = /0\s*9\s*6[\s.\-]*668[\s.\-]*2335/;
+    // Separators include en/em dashes and parentheses, so "096–668–2335" and
+    // "+66 (0)96 668 2335" are caught as well as the hyphenated form. The
+    // E.164 form holds no "0" and cannot match.
+    const localPhone = /0[\s.()\-–—]*9[\s.()\-–—]*6[\s.()\-–—]*668[\s.()\-–—]*2335/;
     const localLine = body.split("\n").find((l) => localPhone.test(l));
     if (localLine)
       issues.push(
         `llms-full.txt publishes the Thai LOCAL phone format; it must be E.164 only. Offending line: "${localLine.trim().slice(0, 120)}"`,
       );
+    const tables: [string, number][] = [
+      ["## Simulator bay rates", bayRates.length],
+      ["## Monthly bay packages", monthlyPackages.length],
+      ["## Golf lesson packages", lessonPricing.length],
+      ["## Event and party packages", eventPackages.length],
+    ];
+    const lines = body.split("\n");
+    for (const [heading, expectedRows] of tables) {
+      const at = lines.findIndex((l) => l.startsWith(heading));
+      if (at < 0) {
+        issues.push(`missing table section "${heading}"`);
+        continue;
+      }
+      let rows = 0;
+      for (let i = at + 1; i < lines.length && lines[i].startsWith("|"); i++) rows++;
+      // minus the header row and the |---| separator
+      if (expectedRows === 0 || rows - 2 !== expectedRows)
+        issues.push(`"${heading}" has ${Math.max(rows - 2, 0)} data row(s), data/pricing.ts has ${expectedRows}`);
+    }
     const printed = (body.match(/^Source: https:\/\/www\.len\.golf\/faq\/[^/\s]+\/$/gm) || []).length;
-    if (expectedFaqs === 0)
+    if (enFaqs.length === 0)
       issues.push("anti-vacuity: 0 published EN FAQ entries in data/faq-pages.ts");
-    else if (printed !== expectedFaqs)
-      issues.push(`printed ${printed} FAQ pages, data has ${expectedFaqs} published EN entries`);
+    else if (printed !== enFaqs.length)
+      issues.push(`printed ${printed} FAQ pages, data has ${enFaqs.length} published EN entries`);
+    const missing = enFaqs
+      .filter((p) => {
+        const block =
+          `Source: https://www.len.golf/faq/${p.slug}/\n\n` +
+          `${p.content.answer_intro}\n\n${p.content.answer_body}`;
+        return !body.includes(block.replace(/\r\n/g, "\n"));
+      })
+      .map((p) => p.slug);
+    if (missing.length > 0)
+      issues.push(
+        `${missing.length} EN FAQ answer(s) not printed verbatim, e.g. ${missing.slice(0, 3).join(", ")}`,
+      );
     // Discoverability: an agent that reads llms.txt must be told this exists.
     const mapBody = await fetch(`${BASE}/llms.txt`).then((r) => r.text());
     if (!mapBody.includes("https://www.len.golf/llms-full.txt"))
       issues.push("llms.txt does not link to /llms-full.txt");
     if (issues.length > 0) fail("GET /llms-full.txt", issues.join("; "));
-    else pass(`GET /llms-full.txt (served as text, ${printed} FAQ pages)`);
+    else pass(`GET /llms-full.txt (served as text, ${printed} FAQ answers verbatim, 4 tables)`);
   } catch (err) {
     fail("GET /llms-full.txt", `fetch error: ${(err as Error).message}`);
   }

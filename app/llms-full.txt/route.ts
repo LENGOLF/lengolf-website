@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { SITE_URL, BUSINESS_INFO, SOCIAL_LINKS, BOOKING_URL, PHONE_E164 } from '@/lib/constants'
 import { getSeoPagesByType } from '@/lib/seo-pages'
 import { getSiteFacts } from '@/lib/site-facts'
+import { getPricingCatalog } from '@/lib/pricing'
 import { isFaqPage } from '@/types/seo-pages'
 import { getFaqHubContent } from '@/data/faq-hub'
 import {
@@ -47,14 +48,23 @@ function cell(value: string, empty = 'n/a'): string {
 }
 
 export async function GET() {
+  // ONE catalog read, passed to every consumer. Do not rely on React cache()
+  // to dedupe this: it only memoises inside a server-component render, which
+  // a Route Handler is not, and Next's fetch dedupe skips requests carrying a
+  // signal (getPricingCatalog sets a timeout signal). Five independent calls
+  // could mix live and fallback prices in one file, and `fetchedAt` would then
+  // date only one of them. Passing the same object makes the "Prices as of"
+  // line date exactly the read behind the tables (not the hand-written prices
+  // inside FAQ prose, nor columns the catalog does not carry, e.g. lesson
+  // "3 to 5 golfers"). A null catalog makes each getter fall back (they
+  // re-try the fetch once), and `fetchedAt` then prints "unavailable".
+  const catalog = await getPricingCatalog()
   const [facts, bay, monthly, lessons, events, faqPages] = await Promise.all([
-    // `fetchedAt` dates every price below. getPricingCatalog is wrapped in
-    // React cache(), so these five calls resolve from one catalog fetch.
-    getSiteFacts(),
-    getBayRatesData(),
-    getMonthlyPackagesData(),
-    getLessonPricingData(),
-    getEventPackagesData(),
+    getSiteFacts(catalog),
+    getBayRatesData(catalog),
+    getMonthlyPackagesData(catalog),
+    getLessonPricingData(catalog),
+    getEventPackagesData(catalog),
     getSeoPagesByType('faq'),
   ])
   const hub = getFaqHubContent('en')
@@ -66,7 +76,7 @@ export async function GET() {
   sections.push(
     `This is the long-form companion to ${SITE_URL}/llms.txt: the facts, prices and answers ` +
       'published on len.golf, in one plain-text file generated from the same data the site renders. ' +
-      'Prices come from the venue\'s POS catalog; the "Prices as of" line in the Contact section dates them.'
+      'Prices in the tables are read from the venue\'s POS catalog where it lists them, and the "Prices as of" line in the Contact section dates that read; prices quoted inside the FAQ answers are written by hand and may lag it.'
   )
 
   sections.push(

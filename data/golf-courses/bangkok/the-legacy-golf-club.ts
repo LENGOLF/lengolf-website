@@ -40,6 +40,9 @@ export const course: GolfCourse = {
       meta_description: `The Legacy Golf Club Bangkok (Natural Park Ramindra) green fees, Jack Nicklaus course guide, visitor tips, and golf club rentals delivered to your Bangkok hotel.`,
     },
     th: {
+      // CTR TEST (2026-09-23): "ราคากรีนฟี" + ":" instead of the template's
+      // "— ค่ากรีนฟี", on 4 pages; ayutthaya + nikanti are the untouched controls.
+      // Do not normalise back to the glossary form before the ~2026-10-21 re-measure.
       title: `The Legacy Golf Club กรุงเทพฯ: ราคากรีนฟี รีวิวสนาม และเช่าไม้กอล์ฟ`,
       meta_description: `ค่ากรีนฟี The Legacy Golf Club (Natural Park Ramindra) วันธรรมดาประมาณ 2,000 บาท สนามเดียวในกรุงเทพฯ จาก Jack Nicklaus พร้อมบริการเช่าไม้กอล์ฟส่งถึงโรงแรม`,
       prose: {

@@ -41,6 +41,9 @@ export const course: GolfCourse = {
       meta_description: `Rayong Green Valley Country Club green fees, course overview, tips, and how to arrange golf club rentals delivered to your Bangkok hotel.`,
     },
     th: {
+      // CTR TEST (2026-09-23): "ราคากรีนฟี" + ":" instead of the template's
+      // "— ค่ากรีนฟี", on 4 pages; ayutthaya + nikanti are the untouched controls.
+      // Do not normalise back to the glossary form before the ~2026-10-21 re-measure.
       title: `Rayong Green Valley Country Club ระยอง: ราคากรีนฟี รีวิวสนาม และเช่าไม้กอล์ฟ`,
       meta_description: `Rayong Green Valley Country Club สนาม 18 หลุม พาร์ 72 ของ Peter Thomson ที่บ้านฉาง จังหวัดระยอง ค่ากรีนฟี ลักษณะสนามบนเนินเขา และเคล็ดลับการเล่น พร้อมเช่าไม้กอล์ฟส่งถึงโรงแรมในกรุงเทพฯ`,
       prose: {

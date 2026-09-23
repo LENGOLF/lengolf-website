@@ -7,6 +7,16 @@ import type { FaqSeoPage } from '@/types/seo-pages'
 // attesting freshness no one verified (see getAllSeoPageSlugsWithDates).
 const now = "2026-08-12T00:00:00.000Z"
 
+// Every published EN entry is also printed VERBATIM (title, answer_intro,
+// answer_body) into /llms-full.txt, a machine-readable surface for AI
+// assistants. Two consequences for EN copy here. (1) No EN entry quotes the
+// venue phone today; if one ever needs to, smoke section H will fail on the
+// Thai local format (096-668-2335) in that file. Decide then between E.164 in
+// the prose and normalising it in app/llms-full.txt/route.ts (the smoke
+// check's verbatim-block assertion would need the same normalisation).
+// (2) Never use {{fact}} tokens: this route, like the FAQ page itself,
+// prints the text without interpolateFacts.
+
 export const faqPages: FaqSeoPage[] = [
   {
     id: 'faq-1',

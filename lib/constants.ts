@@ -68,7 +68,7 @@ export const BUSINESS_INFO = {
  * drift: the schema.org nodes in lib/jsonld.ts, /llms.txt — an explicitly
  * machine-readable AI-agent contact record, which published the local format
  * until this change — and /llms-full.txt, its long-form companion (added
- * 2026-09-23), which also prints FAQ prose verbatim. A local number is undiallable from abroad
+ * 2026-09-23), which prints FAQ prose verbatim. A local number is undiallable from abroad
  * and carries no country context, which is exactly the failure mode an agent
  * reading that file hits.
  *
