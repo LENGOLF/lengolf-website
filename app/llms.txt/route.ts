@@ -73,9 +73,11 @@ export async function GET() {
     // guide page route interpolates them, and so must every other surface that
     // prints entry text, or the literal placeholder leaks (this file is EN).
     getFactTokens('en'),
-    // For `fetchedAt` only, to date the prices above. Costs no extra request:
-    // getFactTokens already calls getSiteFacts, and getPricingCatalog is
-    // wrapped in React cache() so both resolve from one fetch per render.
+    // For `fetchedAt` only, to date the prices above. This is a SECOND
+    // catalog read: getPricingCatalog's React cache() does not memoise in a
+    // Route Handler (no server-component render), and Next's fetch dedupe
+    // skips requests carrying a signal. Usually the 30-day Data Cache serves
+    // both; app/llms-full.txt/route.ts passes one catalog object instead.
     getSiteFacts(),
   ])
 
@@ -85,7 +87,8 @@ export async function GET() {
   sections.push(
     `> LENGOLF is an indoor golf simulator venue and bar at ${BUSINESS_INFO.address}. ` +
       `Open ${BUSINESS_INFO.hours}. Phone ${PHONE_E164}. Book a bay at ${BOOKING_URL}. ` +
-      'This file points AI assistants to the most useful pages on len.golf; the full URL list is in /sitemap.xml.'
+      'This file points AI assistants to the most useful pages on len.golf; the full URL list is in /sitemap.xml, ' +
+      `and the price tables plus the full text of every /faq/ page are in ${SITE_URL}/llms-full.txt`
   )
 
   sections.push(

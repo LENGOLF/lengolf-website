@@ -89,6 +89,19 @@ When a post is being consolidated into a page that serves the same search intent
 
 Reviving a retired post means deleting its entry from `RETIRED_BLOG_REDIRECTS` first; config redirects match before the filesystem, so flipping the row back to `published` alone leaves the page unreachable behind its own redirect.
 
+### Retiring an SEO Section Page (`/best`, `/activities`, `/cost`, `/faq`, `/guide`, `/hotels`)
+
+The same idea for the data-file sections. First example: `/best/best-birthday-party-venues-adults-bangkok/` was retired into `/activities/birthday-party-venues-bangkok/` (2026-09-23) after the two pages spent June to September trading places in Search Console for the same queries.
+
+1. Delete the entry in **every** locale from its data file (e.g. `data/best-of-listicle-pages.ts`).
+2. In the **same commit**, delete its path from each locale's `staticRoutes` in `lib/translated-routes.ts`. The registry-consistency smoke section (L5 for `/cost`, `/activities`, `/best`, `/hotels`; I for `/guide` and `/faq`) fails if the registry and the data disagree.
+3. Add a pair to `retiredSeoPageRedirects` in `next.config.js`. It generates the root rule and the `/:locale(th|ko|ja|zh)` rule, so each locale lands on its own translated twin in one hop from the canonical trailing-slash URL (a no-slash request takes the `trailingSlash` 308 first, so it is two). Without the locale rule, `/th/best/<slug>/` hits the untranslated-locale 301 at the top of `middleware.ts` (its registry line is gone) and reaches the **English** page in two hops. Every locale the retired page had must also exist for the destination, or point that locale somewhere else.
+4. Add `redirectTests` for the root form and each locale (308 plus exact Location), plus `redirectChainTests` for the no-slash root form and for each locale (followed to the final page, which proves the destination is still translated), in `scripts/smoke-test.ts`.
+5. Move anything worth keeping from the retired page into the survivor, and give the survivor's entry its own `updated_at`. Don't bump the file's shared `now`, which would redate every entry in the file.
+6. `npm run validate:links` catches any `related_slugs` or FAQ `related_questions` still pointing at the retired path, but not hardcoded links: also grep `components/`, `app/` and `messages/` for the path. The sitemap and `/activities/` hub are derived from the data, so they need no edit.
+
+Reviving a retired page means deleting its pair from `retiredSeoPageRedirects` first, for the same reason as the blog case above.
+
 ### Blog Post Content Format
 
 The `content` field stores raw HTML. When writing content:

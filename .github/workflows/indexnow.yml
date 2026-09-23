@@ -19,6 +19,7 @@ on:
       - 'data/**'
       - 'messages/**'
       - 'app/llms.txt/**'
+      - 'app/llms-full.txt/**'
 
 jobs:
   ping:
@@ -38,7 +39,7 @@ jobs:
         id: derive
         run: |
           BASE="https://www.len.golf"
-          CHANGED=$(git diff --name-only HEAD^ HEAD -- 'data/**' 'messages/**' 'app/llms.txt/**')
+          CHANGED=$(git diff --name-only HEAD^ HEAD -- 'data/**' 'messages/**' 'app/llms.txt/**' 'app/llms-full.txt/**')
           echo "changed files:"; echo "$CHANGED"
           URLS=""
           # Exact mapping: course files -> course URLs
@@ -67,7 +68,8 @@ jobs:
           $BASE/golf-club-rental/
           $BASE/golf-course-club-rental/
           $BASE/golf-courses/
-          $BASE/llms.txt"
+          $BASE/llms.txt
+          $BASE/llms-full.txt"
           fi
           URLS=$(echo "$URLS" | sed 's/^[[:space:]]*//' | grep -E '^https://' | sort -u || true)
           echo "urls to ping:"; echo "$URLS"
