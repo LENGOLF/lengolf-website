@@ -483,27 +483,29 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
     id: 'act-3',
     page_type: 'activity_occasion',
     slug: 'bachelor-party-ideas-bangkok',
-    title: 'Bachelor Party Ideas Bangkok | Stag Do Activities',
+    title: 'Bangkok Stag Do & Bachelor Party Ideas (2026)',
     meta_description:
-      'Planning a bachelor party in Bangkok? From golf simulator competitions to go-karts and rooftop bars — the best stag do ideas for groups.',
+      'Stag do and bachelor party ideas in Bangkok: a golf simulator competition with a bar at BTS Chidlom, group packages from 9,999 THB, plus go-karts, Muay Thai and rooftops.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
     category: 'social',
     locale: 'en',
-    related_slugs: ['/activities/group-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/events'],
+    related_slugs: ['/activities/group-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/activities/private-party-venues-bangkok', '/events', '/menu'],
     created_at: now,
-    updated_at: now,
+    // Own date: EN deepened for UK/AU "stag do" searches on 2026-09-23. The
+    // th/ja/ko/zh entries below were NOT updated and keep the shorter copy.
+    updated_at: '2026-09-23T00:00:00.000Z',
     content: {
       occasion_type: 'bachelor-party',
       intro:
-        'Bangkok is one of the world\'s top bachelor party destinations. The best stag dos combine group activities with nightlife — and the city delivers both in spades. Here are the best bachelor party ideas in Bangkok that go beyond the obvious.',
+        "Bangkok is one of the world's most popular stag do destinations, and the best bachelor weekends pair a group activity with the nightlife instead of relying on the nightlife alone: the activity is what gets a mixed group talking before the bars take over. This page covers the stag do ideas in Bangkok worth booking, starting with a golf simulator competition at LENGOLF at BTS Chidlom. It covers what that costs for a group, what the packages include, the games that work when half the group has never held a club, and how to fit it into a stag day.",
       why_lengolf:
-        'Start the night at LENGOLF with a group golf competition. Our bays fit up to 5 people each, and the Bravo golf simulators track every shot — perfect for friendly rivalries. With a full bar, cocktails, and craft beer on tap, it sets the tone for the rest of the night. Located at BTS Chidlom, you\'re minutes from Bangkok\'s best nightlife areas. Bay rental is ~550 THB/hour for up to 5 people.',
+        'Start the stag do with a golf competition at LENGOLF. Four Bravo golf simulator bays hold up to 5 players each and track every shot, so the leaderboard builds itself and the rivalry takes care of the rest. Clubs are provided, the bar pours cocktails, Japanese highballs and bottled beer, and food is served straight to the bay. Bays start at 550 THB per hour for up to 5 people, and group packages with food and drinks start at 9,999 THB. The venue is inside The Mercury Ville at BTS Chidlom, on the same BTS line as Nana, Asok and Thong Lo.',
       other_activities: [
         { name: 'Go-Kart Bangkok (EasyKart)', description: 'Indoor karting at RCA. Competitive and adrenaline-filled, great for groups.', type: 'entertainment' },
         { name: 'Muay Thai Class', description: 'Group muay thai sessions available at multiple gyms. A unique Bangkok experience.', type: 'sport' },
-        { name: 'Rooftop Bar Crawl', description: 'Hit Sukhumvit\'s rooftop bars — Octave, Cielo, and Above Eleven — with skyline views.', type: 'nightlife' },
+        { name: 'Rooftop Bar Crawl', description: 'Hit Sukhumvit\'s rooftop bars, such as Octave, Cielo and Above Eleven, for skyline views.', type: 'nightlife' },
         { name: 'River Cruise Party', description: 'Private boat charter on the Chao Phraya with drinks and food. Prices start from 15,000 THB for groups.', type: 'nightlife' },
         { name: 'Paintball / Laser Tag', description: 'Group combat games at various locations around Bangkok. Fun for competitive groups.', type: 'entertainment' },
       ],
@@ -511,11 +513,71 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
       target_audience: 'Groups planning bachelor parties and stag dos',
       show_aqi_widget: false,
       comparison_table: [
-        { feature: 'Group size', lengolf: 'Up to 5 per bay (book multiple)', alternative: 'Varies — some cap at 10' },
+        { feature: 'Group size', lengolf: 'Up to 5 per bay (book multiple)', alternative: 'Varies, some cap at 10' },
         { feature: 'Drinks included', lengolf: 'Full bar on-site', alternative: 'Usually separate venue' },
         { feature: 'Competition element', lengolf: 'Shot tracking, leaderboards', alternative: 'Some (go-karts, paintball)' },
         { feature: 'Night-friendly', lengolf: 'Open until 11pm', alternative: 'Some close early' },
-        { feature: 'Near nightlife', lengolf: 'BTS Chidlom — central', alternative: 'Varies by location' },
+        { feature: 'Near nightlife', lengolf: 'BTS Chidlom, central Sukhumvit line', alternative: 'Varies by location' },
+      ],
+      sections: [
+        {
+          heading: 'Stag Do Packages, Group Size and Cost',
+          body: "A stag do at LENGOLF can be booked two ways: as plain bay rental, where the group pays by the hour and orders at the bay, or as an all-inclusive group package with the food and a drinks allocation already in the price.\n\n| Option | Group size | What it includes | Price |\n|---|---|---|---|\n| Bay rental | Up to 5 per bay, 4 bays | Simulator bay and clubs; order food and drinks at the bay | 550 to 950 THB per bay per hour |\n| Small Package | 10 to 15 | 2 bays for 3 hours, 10 beers, 5 cocktails, unlimited soft drinks, catered food | 9,999 THB |\n| Medium Package | 15 to 25 | All 4 bays and the whole venue for 3 hours, 20 beers, 10 cocktails, unlimited soft drinks, catered food | 21,999 THB |\n\n**What a small group pays.** Bay rates depend on the day and time: 550 THB an hour before 14:00 on weekdays (Monday to Thursday), up to 950 THB an hour on weekend afternoons and evenings (Friday to Sunday). Ten people across two bays for two hours on a Saturday night comes to 3,800 THB, under 400 THB a head before food and drinks.\n\n**What a big group pays.** The Small Package works out at roughly 667 THB a head across 15 people and the Medium Package at roughly 880 THB a head across 25, with food, drinks and three hours of golf inside that number. Groups larger than 25 are quoted as a custom package.",
+        },
+        {
+          heading: 'What the Group Gets',
+          body: "**The bays.** Four Bravo golf simulators, each holding up to 5 players, with club sets provided so nobody has to travel with a golf bag. A group of 15 splits across bays and rotates rather than queueing behind one screen.\n\n**The drinks.** The bar serves cocktails, Japanese highballs, bottled beer (Singha or Asahi in the packages), wine and soft drinks. The package drinks are an allocation; the full bar stays open for anything beyond it, billed at menu prices.\n\n**The food.** Burgers, sliders, calamari, crispy chicken, BBQ brisket and fries from Smith & Co are served to the bay, and the Medium Package adds large pizzas. On a normal bay booking, food is ordered from the menu at the bay.\n\n**The staff.** Staff set up the simulators and the games, so whoever organised the stag do is not the one explaining the software to the group.",
+        },
+        {
+          heading: 'Stag Do Games on a Golf Simulator',
+          body: "Nobody needs golf experience. These are the games that work for a mixed group, and the simulator keeps the score.\n\n**Closest to the pin.** One shot each at a short hole. The simulator measures the distance to the flag, so there is nothing to argue about.\n\n**Longest drive.** Everyone hits a driver and the leaderboard ranks the results. The confident golfers lose this one to a beginner more often than they expect.\n\n**Team match.** Split the group into two teams and add up the scores over a few holes, which keeps the weaker players in the game.\n\n**Forfeit round.** Last place in each game buys the next round. It is usually the part of the afternoon people remember.",
+        },
+        {
+          heading: 'A Bangkok Stag Day That Starts at Chidlom',
+          body: "**Afternoon: golf at LENGOLF.** Book two or three hours in the afternoon or early evening. The venue is inside The Mercury Ville at BTS Chidlom, so the group arrives by BTS rather than sitting in traffic, and the competition gives everyone something to talk about before the night starts.\n\n**Evening: dinner and rooftops.** Chidlom is on the BTS Sukhumvit line, a few stops from Nana, Asok and Thong Lo, where most of the rooftop bars and late-night venues are.\n\n**Next day: something active.** A group Muay Thai class, go-karts or a river cruise fills the second day; several are listed below with the other stag do ideas.\n\n**Book the golf first.** Weekend evenings are the first slots to go, and the rest of the day is easier to plan around a fixed start time.",
+        },
+        {
+          heading: 'How to Book a Stag Do at LENGOLF',
+          body: "**Groups under 10.** Book simulator bays directly at booking.len.golf and order food and drinks at the bay on the day.\n\n**Groups of 10 or more.** Send the enquiry form on the event packages page or message LINE @lengolf with the date, the headcount and roughly what you want to spend. The events team confirms availability, adjusts the package and holds the slot.\n\n**What to have ready.** Date and start time, a rough headcount, any dietary requirements, and whether you want the whole venue to yourselves. Packages are quoted as a total, so there is no splitting a bar tab at the end of the night.",
+        },
+      ],
+      faqs: [
+        {
+          question: 'How much does a stag do at LENGOLF cost?',
+          answer: 'Bay rental starts at 550 THB per hour for up to 5 people and runs up to 950 THB per hour on weekend afternoons and evenings. All-inclusive group packages start at 9,999 THB for 10 to 15 guests (2 bays, 3 hours, beer, cocktails, soft drinks and food) and 21,999 THB for 15 to 25 guests with the whole venue to yourselves.',
+        },
+        {
+          question: 'How big a group can you host for a stag do?',
+          answer: 'The venue has 4 simulator bays holding up to 5 players each, plus bar and lounge seating. The standard packages cover 10 to 25 guests, and larger groups are quoted as a custom package.',
+        },
+        {
+          question: 'Does anyone in the group need to play golf?',
+          answer: 'No. Clubs are provided, the simulators suit complete beginners, and staff set up games like closest to the pin and longest drive that anyone can play.',
+        },
+        {
+          question: 'Are drinks included?',
+          answer: 'In the group packages, yes: bottled beer, cocktails and unlimited soft drinks are included, and the full bar stays open for anything beyond that. On a normal bay booking, drinks are ordered at the bay at the prices on the food and drinks menu.',
+        },
+        {
+          question: 'Can we book the whole venue for the stag group?',
+          answer: 'Yes. The Medium Package (21,999 THB, 15 to 25 guests) is an exclusive full-venue rental for 3 hours, so no other customers are in the space.',
+        },
+        {
+          question: 'What are the opening hours?',
+          answer: 'LENGOLF is open 9am to 11pm daily, so the golf can start the day or kick off the night.',
+        },
+        {
+          question: 'Where is LENGOLF?',
+          answer: 'On Floor 4 of The Mercury Ville at BTS Chidlom, 540 Ploenchit Road, Pathumwan, Bangkok, directly connected to the BTS station. The BTS Sukhumvit line runs from Chidlom to Nana, Asok and Thong Lo.',
+        },
+        {
+          question: 'Can we bring our own food or drinks?',
+          answer: 'No, outside food and drinks are not permitted. The events team can adjust the package food for the group, so anything special is arranged in advance.',
+        },
+        {
+          question: 'How do we book a stag do?',
+          answer: 'For fewer than 10 people, book bays directly at booking.len.golf. For 10 or more, send the enquiry form on the event packages page or message LINE @lengolf with your date, headcount and budget.',
+        },
       ],
     },
   },
