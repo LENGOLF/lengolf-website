@@ -4774,6 +4774,54 @@ async function runLlmDiscoverabilityTests() {
     fail("GET /llms.txt", `fetch error: ${(err as Error).message}`);
   }
 
+  // 1b) llms-full.txt: the long-form companion (app/llms-full.txt/route.ts).
+  // Same surface rules as llms.txt (plain text, no '{{', E.164 only), and
+  // stricter here, because this body prints FAQ PROSE verbatim: a future FAQ
+  // answer quoting "096-668-2335" lands in it with no call-site change at all.
+  //
+  // Anti-vacuity: the file exists to carry every English FAQ answer, so the
+  // count of `Source:` markers must EQUAL the published EN FAQ corpus, derived
+  // from the data file, not a hand-typed number. A floor would pass a route
+  // that silently printed half the corpus; `> 0` would pass one printing one.
+  try {
+    const { faqPages } = await import("../data/faq-pages");
+    const expectedFaqs = faqPages.filter(
+      (p) => p.locale === "en" && p.status === "published",
+    ).length;
+    const res = await fetch(`${BASE}/llms-full.txt`, { redirect: "manual" });
+    const body = await res.text();
+    const ct = res.headers.get("content-type") || "";
+    const issues: string[] = [];
+    if (res.status !== 200) issues.push(`expected 200, got ${res.status}`);
+    if (!ct.includes("text/plain"))
+      issues.push(`content-type not text/plain: "${ct}"`);
+    if (!body.includes("# LENGOLF")) issues.push('missing "# LENGOLF" heading');
+    if (!body.includes("## Simulator bay rates"))
+      issues.push("missing the bay-rate table section");
+    if (body.includes("{{")) issues.push("unresolved '{{' fact token in output");
+    if (!body.includes("+66966682335"))
+      issues.push("llms-full.txt does not publish the phone in E.164");
+    const localPhone = /0\s*9\s*6[\s.\-]*668[\s.\-]*2335/;
+    const localLine = body.split("\n").find((l) => localPhone.test(l));
+    if (localLine)
+      issues.push(
+        `llms-full.txt publishes the Thai LOCAL phone format; it must be E.164 only. Offending line: "${localLine.trim().slice(0, 120)}"`,
+      );
+    const printed = (body.match(/^Source: https:\/\/www\.len\.golf\/faq\/[^/\s]+\/$/gm) || []).length;
+    if (expectedFaqs === 0)
+      issues.push("anti-vacuity: 0 published EN FAQ entries in data/faq-pages.ts");
+    else if (printed !== expectedFaqs)
+      issues.push(`printed ${printed} FAQ pages, data has ${expectedFaqs} published EN entries`);
+    // Discoverability: an agent that reads llms.txt must be told this exists.
+    const mapBody = await fetch(`${BASE}/llms.txt`).then((r) => r.text());
+    if (!mapBody.includes("https://www.len.golf/llms-full.txt"))
+      issues.push("llms.txt does not link to /llms-full.txt");
+    if (issues.length > 0) fail("GET /llms-full.txt", issues.join("; "));
+    else pass(`GET /llms-full.txt (served as text, ${printed} FAQ pages)`);
+  } catch (err) {
+    fail("GET /llms-full.txt", `fetch error: ${(err as Error).message}`);
+  }
+
   // 2) robots.txt explicitly names AI crawlers
   try {
     const res = await fetch(`${BASE}/robots.txt`, { redirect: "follow" });

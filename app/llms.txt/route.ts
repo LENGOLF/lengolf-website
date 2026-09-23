@@ -85,7 +85,8 @@ export async function GET() {
   sections.push(
     `> LENGOLF is an indoor golf simulator venue and bar at ${BUSINESS_INFO.address}. ` +
       `Open ${BUSINESS_INFO.hours}. Phone ${PHONE_E164}. Book a bay at ${BOOKING_URL}. ` +
-      'This file points AI assistants to the most useful pages on len.golf; the full URL list is in /sitemap.xml.'
+      'This file points AI assistants to the most useful pages on len.golf; the full URL list is in /sitemap.xml, ' +
+      `and the full text of the price tables and FAQ answers is in ${SITE_URL}/llms-full.txt.`
   )
 
   sections.push(

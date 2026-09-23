@@ -64,10 +64,11 @@ export const BUSINESS_INFO = {
  * on every page, and switching one of them here would create a fresh
  * disagreement rather than remove one.
  *
- * Lives here, not in lib/jsonld.ts, because it has two consumers that must
- * not drift: the schema.org nodes in lib/jsonld.ts, and /llms.txt — an
- * explicitly machine-readable AI-agent contact record, which published the
- * local format until this change. A local number is undiallable from abroad
+ * Lives here, not in lib/jsonld.ts, because it has consumers that must not
+ * drift: the schema.org nodes in lib/jsonld.ts, /llms.txt — an explicitly
+ * machine-readable AI-agent contact record, which published the local format
+ * until this change — and /llms-full.txt, its long-form companion (added
+ * 2026-09-23), which also prints FAQ prose verbatim. A local number is undiallable from abroad
  * and carries no country context, which is exactly the failure mode an agent
  * reading that file hits.
  *
