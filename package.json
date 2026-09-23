@@ -24,6 +24,7 @@
     "validate:pricing-payload": "tsx scripts/validate-pricing-payload.ts",
     "validate:pricing-revalidate": "tsx scripts/validate-pricing-revalidate.ts",
     "validate:pricing-revalidate:contract": "tsx scripts/validate-pricing-revalidate-contract.ts",
+    "validate:deploy-check:contract": "tsx scripts/wait-for-deploy-contract.ts",
     "validate:hotels": "tsx scripts/validate-hotels.ts",
     "verify:coordinates": "tsx scripts/verify-course-coordinates.ts",
     "inventory": "tsx scripts/page-inventory.ts",
