@@ -237,8 +237,8 @@ interface Rule {
  * The six SEO sections: data file, its exported array, the page type it is
  * registered under in lib/seo-pages.ts (PAGE_DATA_MAP) and the route prefix
  * (ROUTE_PREFIX_TO_TYPE). The self-test asserts this table against both maps
- * by IDENTITY (the imported array must be the very array PAGE_DATA_MAP holds),
- * so a section added there without a row here fails CI.
+ * (each row's array must equal, by content, the array PAGE_DATA_MAP holds for
+ * its type), so a section added there without a row here fails CI.
  */
 export const SEO_SECTIONS = [
   { file: 'data/faq-pages.ts', exportName: 'faqPages', type: 'faq', prefix: 'faq' },
@@ -1132,15 +1132,26 @@ async function structuralChecks(root: string): Promise<Verdict[]> {
     label: '[sig] tells values and function sources apart, and equal values equal',
   })
 
-  // (a) SEO_SECTIONS against lib/seo-pages.ts, by identity.
+  // (a) SEO_SECTIONS against lib/seo-pages.ts. By CONTENT, not identity: this
+  // file imports the data module by file URL while lib/seo-pages.ts reaches
+  // it through its own `@/data/...` import, and under tsx on Linux those are
+  // two module instances. An `===` version passed on Windows and failed all
+  // six rows in CI. No two sections hold equal arrays, so a row naming the
+  // wrong export or type still fails.
   const seo = await importFile(path.join(root, 'lib/seo-pages.ts'))
   const pageDataMap = seo.PAGE_DATA_MAP as Record<string, unknown>
   const prefixMap = seo.ROUTE_PREFIX_TO_TYPE as Record<string, string>
   for (const s of SEO_SECTIONS) {
     const mod = await importFile(path.join(root, s.file))
+    const arr = mod[s.exportName]
     v.push({
-      ok: pageDataMap[s.type] === mod[s.exportName] && prefixMap[s.prefix] === s.type,
-      label: `[tables] ${s.file} is PAGE_DATA_MAP.${s.type} and ROUTE_PREFIX_TO_TYPE.${s.prefix}`,
+      ok:
+        Array.isArray(arr) &&
+        arr.length > 0 &&
+        same(pageDataMap[s.type], arr) &&
+        prefixMap[s.prefix] === s.type,
+      label: `[tables] ${s.file} \`${s.exportName}\` is PAGE_DATA_MAP.${s.type} and ROUTE_PREFIX_TO_TYPE.${s.prefix}`,
+      detail: `export array=${Array.isArray(arr) ? arr.length : 'missing'}, PAGE_DATA_MAP.${s.type}=${Array.isArray(pageDataMap[s.type]) ? (pageDataMap[s.type] as unknown[]).length : 'missing'}, prefix maps to ${prefixMap[s.prefix]}`,
     })
   }
   const types = SEO_SECTIONS.map((s) => s.type as string).sort()
