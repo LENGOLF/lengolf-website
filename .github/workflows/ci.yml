@@ -222,6 +222,21 @@ jobs:
       # either sub-check all go red.
       - run: npm run validate:pricing-payload
 
+      # The IndexNow workflow runs only AFTER a merge to main, so without this a
+      # broken derivation or deploy wait is found in production, and its worst
+      # failure (deriving nothing) is a GREEN run that pings nothing. Two
+      # self-tests: indexnow-urls.ts drives every mapping rule through the real
+      # derivation on synthetic revisions, loads a real base revision through
+      # `git show`, and asserts its tables against source (lib/seo-pages.ts,
+      # the registry's locales, the workflow's trigger paths, and every
+      # consumer of each mapped data module, so a new page that renders one
+      # fails here until it is classified). indexnow-wait-for-deploy.ts spawns
+      # the real CLI against a local stub server and a throwaway git repo and
+      # asserts the EXIT CODE from outside, since the defect that matters
+      # (pinging a deploy that never went live) is a right verdict with a wrong
+      # exit code.
+      - run: npm run validate:indexnow
+
   build-and-smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -250,6 +265,11 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          # What Vercel sets on a real build. app/deploy-sha.txt bakes it in,
+          # and smoke section H asserts the served value equals this commit
+          # (EXPECTED_DEPLOY_SHA on the smoke step). Nothing else reads it:
+          # next, next-intl and @vercel/* were grepped for it.
+          VERCEL_GIT_COMMIT_SHA: ${{ github.sha }}
 
       - name: Start server
         run: |
@@ -273,6 +293,8 @@ jobs:
 
       - name: Run smoke tests
         run: npx tsx scripts/smoke-test.ts http://localhost:3000
+        env:
+          EXPECTED_DEPLOY_SHA: ${{ github.sha }}
 
       - name: Stop server
         if: always()
