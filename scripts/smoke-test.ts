@@ -7132,6 +7132,67 @@ async function runRegionHubLinkTests() {
   }
 }
 
+// ── R) Build marker ─────────────────────────────────────────────────
+//
+// `/api/build-info/` is how `.github/workflows/deploy-check.yml` learns which
+// commit production is serving, so its SHAPE is a contract between this repo
+// and that workflow: rename `sha`, or let the route go dynamic, and every push
+// to main reports a missing deploy.
+//
+// ci.yml sets VERCEL_GIT_COMMIT_SHA on the BUILD step only, never on "Start
+// server", and passes the same value here as BUILD_INFO_EXPECTED_SHA. So the
+// equality below proves two things at once: the route reads the right env
+// var, AND it was baked in at build time. A dynamic route would read the env
+// at request time, find nothing, and serve `null`, which fails here. That is
+// the property that keeps the marker static and costs zero function calls.
+//
+// Anti-vacuity: in CI, a missing BUILD_INFO_EXPECTED_SHA is a FAILURE, not a
+// fallback to the shape check. Otherwise deleting that env line from ci.yml
+// would quietly downgrade this section to "any 40-hex or null", which a
+// dynamic route passes.
+async function runBuildInfoTests() {
+  console.log("\n\x1b[1mR) Build marker (/api/build-info/)\x1b[0m");
+  const label = "/api/build-info/ serves the build's commit";
+  const expected = process.env.BUILD_INFO_EXPECTED_SHA || "";
+  if (process.env.CI && !expected) {
+    fail(
+      label,
+      "BUILD_INFO_EXPECTED_SHA is not set in CI — ci.yml must pass the SHA it gave the Build step, or this section cannot tell a static marker from a dynamic one",
+    );
+    return;
+  }
+  try {
+    const res = await fetch(`${BASE}/api/build-info/`, { redirect: "manual" });
+    const ct = res.headers.get("content-type") || "";
+    const issues: string[] = [];
+    if (res.status !== 200) issues.push(`expected 200, got ${res.status}`);
+    if (!ct.includes("application/json"))
+      issues.push(`content-type not JSON: "${ct}"`);
+    if (!(res.headers.get("x-robots-tag") || "").includes("noindex"))
+      issues.push("missing X-Robots-Tag: noindex");
+    let sha: unknown;
+    try {
+      sha = ((await res.json()) as { sha?: unknown } | null)?.sha;
+    } catch {
+      issues.push("body is not JSON");
+    }
+    if (expected) {
+      if (sha !== expected)
+        issues.push(
+          `sha is ${JSON.stringify(sha)}, but the build was given ${expected} — the route must read VERCEL_GIT_COMMIT_SHA at BUILD time (force-static); a null here usually means it went dynamic`,
+        );
+    } else if (
+      !(sha === null || (typeof sha === "string" && /^[0-9a-f]{40}$/.test(sha)))
+    ) {
+      issues.push(`sha must be a 40-hex string or null, got ${JSON.stringify(sha)}`);
+    }
+    if (issues.length > 0) fail(label, issues.join("; "));
+    else pass(label);
+  } catch (err) {
+    fail(`${label} fetch error`, String(err));
+  }
+}
+
 // ── Main ────────────────────────────────────────────────────────────
 
 async function main() {
@@ -7174,6 +7235,7 @@ async function main() {
   await runLocalizedDriveTimeTests();
   await runFallbackPullQuoteTests();
   await runRegionHubLinkTests();
+  await runBuildInfoTests();
 
   console.log(`\n\x1b[1m${passed} passed, ${failed} failed\x1b[0m`);
   if (failures.length > 0) {

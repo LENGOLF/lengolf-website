@@ -148,6 +148,14 @@ jobs:
       # single-edit disarms left the gate exiting 0 on a live defect with both
       # steps green. Same argument as validate:open-graph:contract.
       - run: npm run validate:pricing-revalidate:contract
+      # The post-merge deploy poller (.github/workflows/deploy-check.yml) only
+      # runs on main, where a bug in it would surface as a false "deployed"
+      # the day it matters. This spawns the real script against a local stub
+      # of the site, the GitHub API and the deploy hook, and asserts EXIT CODES
+      # from outside: a stale, diverged, unknown, 404, null or truncated marker
+      # must never exit 0. Then six deliberately disarmed copies of the poller
+      # must each fail their target case, behind an unmutated control.
+      - run: npm run validate:deploy-check:contract
 
       # The agent floor is TIERED, and the tier is derived from the PR's changed
       # paths — data the author cannot write into the body, which is the same
@@ -250,6 +258,11 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          # What Vercel sets on a real build. Only app/api/build-info reads it
+          # (Next.js itself does not), and it is set on THIS step only, not on
+          # "Start server": smoke section R then proves the value was baked in
+          # at build time, which is what keeps that route static.
+          VERCEL_GIT_COMMIT_SHA: ${{ github.sha }}
 
       - name: Start server
         run: |
@@ -273,6 +286,11 @@ jobs:
 
       - name: Run smoke tests
         run: npx tsx scripts/smoke-test.ts http://localhost:3000
+        env:
+          # Smoke section R asserts /api/build-info/ serves exactly this SHA.
+          # It is the value given to the Build step above as
+          # VERCEL_GIT_COMMIT_SHA, and deliberately NOT to "Start server".
+          BUILD_INFO_EXPECTED_SHA: ${{ github.sha }}
 
       - name: Stop server
         if: always()
