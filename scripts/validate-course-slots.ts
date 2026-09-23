@@ -500,8 +500,8 @@ const corpus = registered.filter(
  * courses) raised them once more, 106/2,968 -> 115/3,220. Both re-derived from
  * the validator's own output on the applied tree, not incremented by hand.
  */
-const MIN_COURSES = 115
-const MIN_STRINGS = 3220
+const MIN_COURSES = 124
+const MIN_STRINGS = 3472
 
 let problems = 0
 let checked = 0

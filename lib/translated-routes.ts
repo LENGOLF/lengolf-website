@@ -108,6 +108,15 @@ const TRANSLATED_ROUTES: Record<
       // sync by the smoke-test course-detail registry consistency check
       // (section J3); liveness of each built page is asserted by section L2.
       "/golf-courses/bangkok/sai-golf-club",
+      "/golf-courses/bangkok/bangkok-golf-club",
+      "/golf-courses/bangkok/bangpoo-golf-sports-club",
+      "/golf-courses/bangkok/dynasty-golf-country-club",
+      "/golf-courses/bangkok/flora-ville-golf-country-club",
+      "/golf-courses/bangkok/krung-kavee-golf-course",
+      "/golf-courses/bangkok/lotus-valley-golf-resort",
+      "/golf-courses/bangkok/muang-ake-wang-noi-golf-course",
+      "/golf-courses/bangkok/panya-indra-golf-club",
+      "/golf-courses/bangkok/subhapruek-golf-course",
       "/golf-courses/bangkok/the-legacy-golf-club",
       "/golf-courses/chiang-mai/lanna-golf-course",
       "/golf-courses/bangkok/pinehurst-golf-country-club",
@@ -423,6 +432,15 @@ const TRANSLATED_ROUTES: Record<
       // in ko/zh with zero translated course pages beneath them, so every
       // course link on those hubs left the locale.
       "/golf-courses/bangkok/sai-golf-club",
+      "/golf-courses/bangkok/bangkok-golf-club",
+      "/golf-courses/bangkok/bangpoo-golf-sports-club",
+      "/golf-courses/bangkok/dynasty-golf-country-club",
+      "/golf-courses/bangkok/flora-ville-golf-country-club",
+      "/golf-courses/bangkok/krung-kavee-golf-course",
+      "/golf-courses/bangkok/lotus-valley-golf-resort",
+      "/golf-courses/bangkok/muang-ake-wang-noi-golf-course",
+      "/golf-courses/bangkok/panya-indra-golf-club",
+      "/golf-courses/bangkok/subhapruek-golf-course",
       "/golf-courses/bangkok/the-legacy-golf-club",
       "/golf-courses/chiang-mai/lanna-golf-course",
       "/golf-courses/bangkok/pinehurst-golf-country-club",
@@ -770,6 +788,15 @@ const TRANSLATED_ROUTES: Record<
       // in ko/zh with zero translated course pages beneath them, so every
       // course link on those hubs left the locale.
       "/golf-courses/bangkok/sai-golf-club",
+      "/golf-courses/bangkok/bangkok-golf-club",
+      "/golf-courses/bangkok/bangpoo-golf-sports-club",
+      "/golf-courses/bangkok/dynasty-golf-country-club",
+      "/golf-courses/bangkok/flora-ville-golf-country-club",
+      "/golf-courses/bangkok/krung-kavee-golf-course",
+      "/golf-courses/bangkok/lotus-valley-golf-resort",
+      "/golf-courses/bangkok/muang-ake-wang-noi-golf-course",
+      "/golf-courses/bangkok/panya-indra-golf-club",
+      "/golf-courses/bangkok/subhapruek-golf-course",
       "/golf-courses/bangkok/the-legacy-golf-club",
       "/golf-courses/chiang-mai/lanna-golf-course",
       "/golf-courses/bangkok/pinehurst-golf-country-club",
@@ -1109,6 +1136,15 @@ const TRANSLATED_ROUTES: Record<
       // sync by the smoke-test course-detail registry consistency check
       // (section J3); liveness of each built page is asserted by section L2.
       "/golf-courses/bangkok/sai-golf-club",
+      "/golf-courses/bangkok/bangkok-golf-club",
+      "/golf-courses/bangkok/bangpoo-golf-sports-club",
+      "/golf-courses/bangkok/dynasty-golf-country-club",
+      "/golf-courses/bangkok/flora-ville-golf-country-club",
+      "/golf-courses/bangkok/krung-kavee-golf-course",
+      "/golf-courses/bangkok/lotus-valley-golf-resort",
+      "/golf-courses/bangkok/muang-ake-wang-noi-golf-course",
+      "/golf-courses/bangkok/panya-indra-golf-club",
+      "/golf-courses/bangkok/subhapruek-golf-course",
       "/golf-courses/bangkok/the-legacy-golf-club",
       "/golf-courses/chiang-mai/lanna-golf-course",
       "/golf-courses/bangkok/pinehurst-golf-country-club",

@@ -730,6 +730,19 @@ export const COURSE_DETAIL_I18N: {
   { region: 'kanchanaburi', slug: 'royal-ratchaburi-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'kanchanaburi', slug: 'woo-sung-castle-hill', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'north-misc', slug: 'mae-moh-golf-course', locales: ['th', 'ja', 'ko', 'zh'] },
+  // Batch 12, Tranche 1 (2026-09) — the first of three Bangkok-region tranches
+  // that finish the last untranslated region. Nine ordinary courses (no
+  // fee_is_package, no closed status); all six provinces they span already
+  // sit in PROVINCE_L10N.
+  { region: 'bangkok', slug: 'bangkok-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'bangpoo-golf-sports-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'dynasty-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'flora-ville-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'krung-kavee-golf-course', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'lotus-valley-golf-resort', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'muang-ake-wang-noi-golf-course', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'panya-indra-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'subhapruek-golf-course', locales: ['th', 'ja', 'ko', 'zh'] },
 ]
 
 /**

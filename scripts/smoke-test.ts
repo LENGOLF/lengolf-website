@@ -5520,14 +5520,15 @@ async function runCourseDetailRegistryLivenessTests() {
 
   // The Offer floor cannot be exact — courses with a null weekday fee emit no
   // makesOffer, and only some have a second rate — so it is a real number
-  // derived from the corpus rather than `> 0`. Measured at 824: 115 registered
+  // derived from the corpus rather than `> 0`. Measured at 888: 124 registered
   // courses x 4 locales, each emitting one Offer per non-null rate — NOT a clean
-  // product. Of the 115, **sixteen** are exceptions: EIGHT emit no makesOffer at
+  // product. Of the 124, **eighteen** are exceptions: EIGHT emit no makesOffer at
   // all (both fees null — amata-spring-country-club, st-andrews-2000,
-  // kumlung-ake-golf-course, rajpruek-club, batch 10 added
-  // mountain-creek-golf-resort + seoul-siam-resort-country-club, and batch 11
-  // added river-kwai-golf-country-club + mae-moh-golf-course) and EIGHT emit a
-  // single Offer (null weekend fee). So 99*2 + 8*1 = 206 per locale, x4 = 824.
+  // kumlung-ake-golf-course, rajpruek-club, mountain-creek-golf-resort,
+  // seoul-siam-resort-country-club, river-kwai-golf-country-club,
+  // mae-moh-golf-course) and TEN emit a single Offer (null weekend fee — batch 12
+  // added flora-ville-golf-country-club + panya-indra-golf-club to the eight).
+  // So 106*2 + 10*1 = 222 per locale, x4 = 888.
   // THIS COMMENT SHIPPED STALE ONCE: the batch-11 commit raised the constant
   // below and the fail() string beside it to 824 but left this block describing
   // 106/fourteen/SIX/768, so a reader re-deriving from the comment concluded the
@@ -5538,10 +5539,10 @@ async function runCourseDetailRegistryLivenessTests() {
   // packageOfferSeen 19 lines below was being raised in the same commit. That
   // is the "raise one ratchet, miss its sibling" shape CLAUDE.md documents,
   // reproduced inside the file that documents it. Re-derive on every batch.
-  if (offerChecked < 824) {
+  if (offerChecked < 888) {
     fail(
       `L2 Offer-label check ran on only ${offerChecked} label(s)`,
-      "expected 824 (99 registered courses emit 2 Offers, 8 emit 1, and 8 emit none — 206 per locale x 4). A low count means makesOffer is absent or the catalog lookup is failing, not that the labels are correct.",
+      "expected 888 (106 registered courses emit 2 Offers, 10 emit 1, and 8 emit none — 222 per locale x 4). A low count means makesOffer is absent or the catalog lookup is failing, not that the labels are correct.",
     );
   } else {
     pass(`L2 asserted localized JSON-LD Offer labels on ${offerChecked} label(s)`);
@@ -6626,7 +6627,7 @@ async function runLocalizedDriveTimeTests() {
 // MIN_COURSES/packageOfferSeen this number shrinks and the floor must be lowered
 // deliberately rather than raised.
 //
-// Today: 72. Batch 9 (bangkok tranche) took it 120 -> 96: five of its twelve
+// Today: 56. Batch 9 (bangkok tranche) took it 120 -> 96: five of its twelve
 // courses occupy six tier-roster slots (windsor-park + bangsai in 1500,
 // the-vintage in 2500, royal-golf + royal-lakeside in 3500, royal-golf again in
 // 5000) x 4 locales = 24 comparisons retired. The previous floor of 100 sat
@@ -6637,8 +6638,13 @@ async function runLocalizedDriveTimeTests() {
 // rancho-charnvee + royal-hills in 1500, life-privilege again in 2500,
 // toscana-valley in 5000 and 7500) x 4 locales = 24 more retired. Re-derived
 // from the registry against the applied tree, not obtained by subtraction.
-// FOURTEEN courses still contribute; at the current rate this check has about
-// three batches left before the re-scope described below is forced.
+//
+// Batch 12 Tranche 1 (bangkok) took it 72 -> 56: three of its nine courses
+// occupy four tier-roster slots (subhapruek in 1500, bangkok-golf-club in 2500,
+// lotus-valley in 2500 AND 3500) x 4 locales = 16 more retired. Derived two
+// ways that agree: the per-course membership delta (16), and the absolute count
+// of untranslated rostered courses x 4 against the applied registry (56).
+// TWELVE courses still contribute; the re-scope below is still a few batches off.
 //
 // Pinned AT the true value on purpose, same discipline as the ratchets above: a
 // floor below the population is a guard gone slack, and here it would also hide
@@ -6652,7 +6658,7 @@ async function runLocalizedDriveTimeTests() {
 // tier pages once every rostered course is translated. The re-scope is to point
 // it at a surface that still has untranslated courses — the region hubs, whose
 // rosters are the full region roster rather than a derived top-12.
-const FALLBACK_MIN_COMPARISONS = 72;
+const FALLBACK_MIN_COMPARISONS = 56;
 
 async function runFallbackPullQuoteTests() {
   console.log(
