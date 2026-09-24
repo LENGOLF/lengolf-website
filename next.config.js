@@ -22,21 +22,37 @@ const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ['isomorphic-dompurify', 'dompurify'],
   trailingSlash: true,
+  // /_next/image is an allowlist, not a proxy. Every (url, w, q) it accepts is
+  // a billable transformation plus a cache entry kept for minimumCacheTTL, and
+  // the caller picks all three. Before this block was narrowed, prod accepted
+  // any q from 1 to 100, any path on our own domain (so one request rendered a
+  // route twice: `url=https://www.len.golf/<junk>/golf-courses/opengraph-image/`),
+  // any RELATIVE path (so `url=/golf-courses/opengraph-image/` rendered too),
+  // any public bucket in the shared Supabase project, and a fresh key for every
+  // `?query` appended to a real object. Smoke section S asserts each of those
+  // now 400s, and that every image the site renders still loads.
   images: {
+    // Exactly the qualities <Image> emits: an unset `quality` resolves to 75
+    // and three call sites in app/[locale]/page.tsx set 70 or 75. Adding a new
+    // `quality` prop means adding it here. Next only throws on an off-list
+    // value in DEV; in production the image just 400s.
+    qualities: [70, 75],
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'www.len.golf',
-      },
-      {
-        protocol: 'https',
-        hostname: 'len.golf',
-      },
-      {
-        protocol: 'https',
         hostname: 'bisimqmtxjsptehhqpeg.supabase.co',
+        // Our bucket only. The project is shared with lengolf-forms and
+        // booking, and `line-messages` is public too.
+        pathname: '/storage/v1/object/public/website-assets/**',
+        // No query string. Supabase ignores one, so without this every
+        // `?v=N` on a real object is a new optimizer key.
+        search: '',
       },
     ],
+    // No <Image> uses a local src. Next appends /_next/static/media/** (static
+    // imports) to this list itself, so an empty array rejects every other
+    // relative path, including dynamic routes the optimizer would render.
+    localPatterns: [],
     minimumCacheTTL: 60 * 60 * 24 * 30,
   },
   async headers() {
