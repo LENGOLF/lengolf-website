@@ -1,0 +1,260 @@
+# Post-merge deploy check: did this push to main actually reach production?
+#
+# Vercel's GitHub integration has skipped production builds on main at least
+# a dozen times with nothing a merge would notice (#81 ... #131). Usually the
+# squash commit's author is not a Vercel team member, once the integration
+# itself was disconnected. #131 sat undeployed for 12 days and was found by an
+# SEO check. This workflow makes that loud within ~12 minutes of the push.
+#
+#   wait-for-deploy  polls https://www.len.golf/api/build-info/ (the SHA baked
+#                    in at build time) until production serves this commit or
+#                    a DESCENDANT, via scripts/wait-for-deploy.ts. "Contains",
+#                    not "equals": two merges inside one build window get one
+#                    build, of the later commit, and both runs must pass.
+#                    On a miss: the job goes red and a `deploy-missing` issue
+#                    is opened (or commented, on a re-run) and assigned, naming
+#                    what Vercel said about the commit. On success: every open
+#                    `deploy-missing` issue whose commit is now live is closed.
+#   indexnow         (was indexnow.yml) runs only AFTER the deploy is live, so
+#                    crawlers are never told to re-fetch content production
+#                    does not serve yet. #131's 36 pages were pinged while they
+#                    still 301'd to English. It diffs from the build production
+#                    served BEFORE this deploy, so a stranded commit's URLs are
+#                    pinged when a later redeploy finally ships them. Diffing
+#                    from HEAD^, the redeploy commit's own diff is empty and
+#                    they would never be pinged.
+#
+# Why the live site and not an API: the GitHub deployments API gives false
+# negatives for this project (PR #97), and what production serves is the one
+# signal that cannot be wrong.
+#
+# Deploy hook (optional, dormant): if the repo secret VERCEL_DEPLOY_HOOK_URL
+# exists, the poller POSTs it once, early when Vercel reports the author gate,
+# otherwise at the deadline when Vercel reported nothing, then waits one more
+# window before failing. Never on a real build failure. WHETHER A DEPLOY HOOK
+# GETS PAST THE AUTHOR GATE IS UNVERIFIED. To test it once before adding the
+# secret: create the hook (Vercel > lengolf-website > Settings > Git > Deploy
+# Hooks, branch `main`), and the next time a `deploy-missing` issue says
+# `author-gate`, run `curl -X POST "<hook url>"` by hand and watch
+# `vercel ls lengolf-website --scope david2928s-projects`. A new Production
+# build that goes Ready means hooks work. Then add the secret, and the empty
+# redeploy commit is no longer needed.
+#
+# No `concurrency` group on purpose: cancel-in-progress would kill an earlier
+# push's run, and with it that push's IndexNow ping.
+name: Deploy check
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  wait-for-deploy:
+    runs-on: ubuntu-latest
+    # 12 min wait + 8 min grace (or post-hook window) + request slack.
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      statuses: read
+      issues: write
+    outputs:
+      live_sha: ${{ steps.wait.outputs.live_sha }}
+      diff_base: ${{ steps.wait.outputs.diff_base }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Wait for production to serve this commit
+        id: wait
+        env:
+          DEPLOY_SHA: ${{ github.sha }}
+          GITHUB_TOKEN: ${{ github.token }}
+          VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+        run: npx tsx scripts/wait-for-deploy.ts
+
+      - name: Open or update the deploy-missing issue
+        if: failure() && steps.wait.outputs.verdict == 'missing'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ github.sha }}
+          LIVE: ${{ steps.wait.outputs.live_sha }}
+          VERCEL_STATE: ${{ steps.wait.outputs.vercel_state }}
+          VERCEL_URL: ${{ steps.wait.outputs.vercel_target_url }}
+          HOOK_FIRED: ${{ steps.wait.outputs.hook_fired }}
+          ELAPSED: ${{ steps.wait.outputs.elapsed_sec }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          SHORT="${SHA:0:7}"
+          # Commit text is untrusted input: it only ever reaches printf as an
+          # ARGUMENT, never as part of a format string or a script.
+          AUTHOR=$(git log -1 --format='%an <%ae>' "$SHA")
+          SUBJECT=$(git log -1 --format='%s' "$SHA")
+          case "$VERCEL_STATE" in
+            author-gate) WHY='Vercel blocked the build because the author of the commit is not a member of the Vercel team (the recurring squash-merge case). The Vercel status links to its team-members docs page, not to a deployment.' ;;
+            build-failed) WHY='Vercel started a build and it FAILED. Open the Vercel link below. Redeploying the same code will fail the same way, so fix the build first.' ;;
+            building|built) WHY='Vercel reported a build in progress (or finished) but production never served it inside the window. Look for a stuck or unpromoted deployment in vercel ls.' ;;
+            *) WHY='Vercel posted no status on this commit at all, so it probably never saw the push. The GitHub integration may be disconnected: remove and re-add it in the Vercel dashboard, then deploy main from there.' ;;
+          esac
+          BODY="$RUNNER_TEMP/deploy-missing.md"
+          {
+            printf 'Commit `%s` was pushed to `main`, and after %ss production (https://www.len.golf/api/build-info/) still serves `%s`, which does not contain it.\n\n' "$SHA" "$ELAPSED" "${LIVE:-no marker}"
+            printf '> %s\n>\n> %s\n\n' "$SUBJECT" "$AUTHOR"
+            printf '**Vercel status on the commit:** `%s` %s\n\n' "$VERCEL_STATE" "$VERCEL_URL"
+            printf '%s\n\n' "$WHY"
+            printf 'Deploy hook fired: %s. Run: %s\n\n' "$HOOK_FIRED" "$RUN_URL"
+            printf 'To redeploy (author gate, or no status), push an empty commit as a Vercel team member:\n\n'
+            printf '    git commit --allow-empty -m "chore: redeploy main after %s" && git push origin main\n\n' "$SHORT"
+            printf 'That push gets its own deploy-check run, which closes this issue once production contains `%s`.\n\n' "$SHORT"
+            printf '<!-- deploy-check sha=%s -->\n' "$SHA"
+          } > "$BODY"
+
+          echo "::error title=Production deploy missing::Production never served $SHORT (Vercel: $VERCEL_STATE). A deploy-missing issue has been opened."
+
+          gh label create deploy-missing --color B60205 \
+            --description "A push to main that production never served (deploy-check.yml)" --force >/dev/null 2>&1 || true
+          EXISTING=$(gh issue list --state open --label deploy-missing --limit 100 --json number,body \
+            --jq ".[] | select(.body | contains(\"deploy-check sha=$SHA\")) | .number" 2>/dev/null | head -n1 || true)
+          if [ -n "$EXISTING" ]; then
+            gh issue comment "$EXISTING" --body-file "$BODY"
+          else
+            TITLE="Production deploy missing for $SHORT"
+            # Assigned so the owner gets an email; retried unassigned rather
+            # than losing the issue if the assignment is ever rejected.
+            gh issue create --title "$TITLE" --label deploy-missing --assignee david2928 --body-file "$BODY" \
+              || gh issue create --title "$TITLE" --label deploy-missing --body-file "$BODY"
+          fi
+
+      - name: Close deploy-missing issues this build resolves
+        if: success()
+        # Housekeeping. A hiccup here must not turn a confirmed deploy red.
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          LIVE: ${{ steps.wait.outputs.live_sha }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          OPEN=$(gh issue list --state open --label deploy-missing --limit 100 --json number,body \
+            --jq '.[] | "\(.number) \((.body | capture("deploy-check sha=(?<s>[0-9a-f]{40})") | .s) // "")"' 2>/dev/null || true)
+          if [ -z "$OPEN" ]; then echo "no open deploy-missing issues"; exit 0; fi
+          while read -r NUM ISSUE_SHA; do
+            [ -n "$ISSUE_SHA" ] || continue
+            REL=$(gh api "repos/$GITHUB_REPOSITORY/compare/$ISSUE_SHA...$LIVE" --jq .status 2>/dev/null || echo unknown)
+            if [ "$REL" = identical ] || [ "$REL" = ahead ]; then
+              gh issue close "$NUM" --comment "Resolved: production now serves \`${LIVE:0:7}\`, which contains \`${ISSUE_SHA:0:7}\`. Checked by $RUN_URL"
+            else
+              echo "#$NUM ($ISSUE_SHA) is not in the live build ($REL); leaving it open"
+            fi
+          done <<< "$OPEN"
+
+  # Push changed-content URLs to IndexNow (the index behind ChatGPT Search /
+  # Copilot), once the content is actually live. Precision over coverage, v1:
+  #
+  #   data/golf-courses/<region>/<slug>.ts  -> that course's URL (exact mapping)
+  #   any other change under data/          -> the fixed key-page list below
+  #   nothing content-shaped changed        -> job exits without calling the API
+  #     (scripts/indexnow-ping.ts hard-fails on an empty list by design — the
+  #     decision to skip lives HERE, visibly, not in a silent script no-op)
+  #
+  # Deliberately NOT mapped per-slug for data/faq-pages.ts etc.: deriving which
+  # slugs changed would mean parsing TS diffs in shell. The key-page list covers
+  # the high-value surfaces; per-slug precision can come later if this earns it.
+  #
+  # This job runs on every push now (it was path-filtered as its own workflow);
+  # a push touching no content paths derives an empty list and skips the ping.
+  indexnow:
+    needs: wait-for-deploy
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # HEAD and HEAD^; any older diff base is fetched on its own below
+          # (the full history is ~150 MB).
+          fetch-depth: 2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Pick the diff base
+        id: base
+        env:
+          # The build production served before this deploy landed, when it was
+          # an ancestor of this commit (empty otherwise). See the header.
+          DIFF_BASE: ${{ needs.wait-for-deploy.outputs.diff_base }}
+          EVENT_BEFORE: ${{ github.event.before }}
+        run: |
+          BASE_SHA="${DIFF_BASE:-$EVENT_BEFORE}"
+          if ! [[ "$BASE_SHA" =~ ^[0-9a-f]{40}$ ]] || [ "$BASE_SHA" = 0000000000000000000000000000000000000000 ]; then
+            BASE_SHA=$(git rev-parse HEAD^)
+          fi
+          if ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
+            git fetch --no-tags --depth=1 origin "$BASE_SHA" || BASE_SHA=$(git rev-parse HEAD^)
+          fi
+          echo "diff base: $BASE_SHA"
+          echo "sha=$BASE_SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Derive changed URLs
+        id: derive
+        env:
+          BASE_SHA: ${{ steps.base.outputs.sha }}
+        run: |
+          BASE="https://www.len.golf"
+          CHANGED=$(git diff --name-only "$BASE_SHA" HEAD -- 'data/**' 'messages/**' 'app/llms.txt/**' 'app/llms-full.txt/**')
+          echo "changed files:"; echo "$CHANGED"
+          URLS=""
+          # Exact mapping: course files -> course URLs
+          COURSE_URLS=$(echo "$CHANGED" | grep -E '^data/golf-courses/[a-z-]+/[a-z0-9-]+\.ts$' \
+            | grep -v '/index\.ts$' \
+            | sed -E "s|^data/golf-courses/([a-z-]+)/([a-z0-9-]+)\.ts$|$BASE/golf-courses/\1/\2/|" || true)
+          URLS="$COURSE_URLS"
+          # Anything else content-shaped -> fixed key-page list. Subtract the
+          # files that actually PRODUCED a course URL, not everything matching
+          # the course-path shape: a region index.ts matches that shape but is
+          # filtered out by the grep -v above, so subtracting the shape left a
+          # push touching only index.ts files pinging nothing at all.
+          OTHER=$(echo "$CHANGED" | grep -vE '^data/golf-courses/[a-z-]+/[a-z0-9-]+\.ts$' || true)
+          if echo "$CHANGED" | grep -qE '^data/golf-courses/[a-z-]+/index\.ts$'; then
+            OTHER="$OTHER
+          data/golf-courses/index-changed"
+          fi
+          if [ -n "$OTHER" ]; then
+            URLS="$URLS
+          $BASE/
+          $BASE/golf/
+          $BASE/lessons/
+          $BASE/events/
+          $BASE/menu/
+          $BASE/faq/
+          $BASE/golf-club-rental/
+          $BASE/golf-course-club-rental/
+          $BASE/golf-courses/
+          $BASE/llms.txt
+          $BASE/llms-full.txt"
+          fi
+          URLS=$(echo "$URLS" | sed 's/^[[:space:]]*//' | grep -E '^https://' | sort -u || true)
+          echo "urls to ping:"; echo "$URLS"
+          {
+            echo "urls<<EOF"
+            echo "$URLS"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Ping IndexNow
+        if: steps.derive.outputs.urls != ''
+        env:
+          # Through the ENVIRONMENT, never interpolated into the shell text.
+          # `npx tsx script.ts ${{ ...outputs.urls }}` looked right and was a
+          # hard failure: the value is newline-separated, so the expansion
+          # pasted a multi-line block into the run script and every URL after
+          # the first ran as its own command (exit 127), pinging exactly one
+          # URL per push. It is also the injection surface — keep it in env.
+          URLS: ${{ steps.derive.outputs.urls }}
+        run: |
+          printf '%s\n' "$URLS" | xargs npx tsx scripts/indexnow-ping.ts
