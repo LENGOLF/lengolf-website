@@ -1,8 +1,10 @@
 /**
  * /deploy-sha.txt — the git commit this deployment was built from, and nothing
- * else. Read by scripts/indexnow-wait-for-deploy.ts, which holds the IndexNow
- * ping until production serves the pushed commit (or a descendant): pinging
- * during the ~2 minute build handed crawlers the previous deploy.
+ * else. Read after every push to main by scripts/wait-for-deploy.ts (the
+ * `wait-for-deploy` job in .github/workflows/deploy-check.yml), which reports
+ * a push production never served and holds the IndexNow ping until production
+ * serves the pushed commit (or a descendant): pinging during the ~2 minute
+ * build handed crawlers the previous deploy.
  *
  * `force-static` bakes the value in at BUILD time, so each deployment answers
  * with its own commit from its own cache and a stale answer across deploys is

@@ -201,6 +201,21 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  {
+    path: "/golf-course-club-rental-agreement/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  // The agreement is translated in every locale (data/rental-agreement/). A
+  // redirect fails a route test, so each entry also proves the route is
+  // registered; contentAbsent catches a translation that silently rendered the
+  // English text (the EN H1) under the locale URL.
+  ...(["th", "ja", "ko", "zh"] as const).map((l) => ({
+    path: `/${l}/golf-course-club-rental-agreement/`,
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+    contentAbsent: ">Golf Course Club Rental Agreement</h1>",
+  })),
   // TH pages
   {
     path: "/th/",
@@ -5470,13 +5485,22 @@ async function runLlmDiscoverabilityTests() {
   }
 
   // 7b) Deploy marker: /deploy-sha.txt serves the commit the build was made
-  // from. The IndexNow workflow waits on it before pinging; if it breaks (moved
-  // under app/[locale], caught by the middleware matcher, stops reading the env
-  // var) every IndexNow run on main times out and pings nothing. CI builds with
+  // from. deploy-check.yml's poller (scripts/wait-for-deploy.ts) reads it after
+  // every push to main, and IndexNow waits on that; if it breaks (moved under
+  // app/[locale], caught by the middleware matcher, stops reading the env var)
+  // every push reports a missed deploy and nothing is pinged. CI builds with
   // VERCEL_GIT_COMMIT_SHA and runs this with EXPECTED_DEPLOY_SHA set to the
   // same commit, so this asserts the exact value rather than the shape. The
   // shape-only fallback exists for local runs and is refused under CI, or
   // dropping the env var from ci.yml would quietly weaken the check.
+  //
+  // The equality proves the route captured the SHA at build time, NOT that it
+  // is static: giving "Start server" the env too, or inlining it through
+  // next.config.js `env`, would let a dynamic route pass. `x-nextjs-prerender:
+  // 1` closes that, because `next start` sets it only on a response served
+  // from the prerender cache (base-server.js, the `isSSG` branch; the header
+  // section G2 relies on). Static is what keeps the marker at zero function
+  // invocations for a poller that reads it every 30s.
   try {
     const expected = process.env.EXPECTED_DEPLOY_SHA;
     const res = await fetch(`${BASE}/deploy-sha.txt`, { redirect: "manual" });
@@ -5487,6 +5511,10 @@ async function runLlmDiscoverabilityTests() {
       issues.push(`content-type "${res.headers.get("content-type")}", want text/plain`);
     if (!/noindex/.test(res.headers.get("x-robots-tag") ?? ""))
       issues.push("missing X-Robots-Tag: noindex");
+    if (res.headers.get("x-nextjs-prerender") !== "1")
+      issues.push(
+        `x-nextjs-prerender is ${JSON.stringify(res.headers.get("x-nextjs-prerender"))}, want "1": the marker is not served from the prerender cache (did it lose force-static?)`,
+      );
     if (expected) {
       if (body !== expected) issues.push(`body "${body}" != EXPECTED_DEPLOY_SHA ${expected}`);
     } else if (process.env.CI) {
@@ -7581,6 +7609,97 @@ async function runRegionHubLinkTests() {
   }
 }
 
+// ── R) Footer links the LOCALIZED rental agreement ─────────────────
+//
+// The defect this exists for was reported by a reader, not caught by CI: the
+// footer's "Rental Agreement" label was localized in every catalog (ko
+// "대여 약관") while its href went to the English-only page, so a Korean reader
+// on the localized course-rental page, the one that sells the rental, landed
+// on terms they could not read. The route is now translated
+// (data/rental-agreement/) and Footer picks next-intl's Link from the
+// registry, so the href must carry the locale prefix.
+//
+// Surface: /<l>/golf-course-club-rental/ in every non-EN locale, derived from
+// ALL_LOCALES and pinned by IDENTITY (REQUIRED_AGREEMENT_FOOTER_LOCALES), not
+// just by count: a count alone passed a list of four copies of one locale.
+// Scoped to the course-rental page because it is the page that sells the
+// rental. The agreement page itself would pass too: its "read the English
+// version" notice uses next-intl `Link locale="en"`, which renders the
+// /en/-PREFIXED href (next-intl forces a prefix whenever `locale` is passed),
+// not the unprefixed one this section forbids.
+//
+// Each surface is a matched pair: the prefixed href present AND the unprefixed
+// one absent. Measured against prod before the fix, BOTH halves were red in
+// all four locales. The absent half earns its place for a footer that renders
+// both links; the present half for one that drops the link entirely.
+//
+// KNOWN LIMITS, as for Q: this proves the href is in the rendered markup, not
+// that the link is visible, and it does not read the label. `judged` proves
+// each surface reached a verdict, never that the verdict discriminates; only a
+// contract suite could, and smoke has none.
+const REQUIRED_AGREEMENT_FOOTER_LOCALES = ["th", "ja", "ko", "zh"];
+
+async function runAgreementFooterLinkTests() {
+  console.log(
+    "\n\x1b[1mR) Footer links the localized rental agreement\x1b[0m",
+  );
+  const { ALL_LOCALES } = await import("../lib/translated-routes");
+  const locales = ALL_LOCALES.filter((l) => l !== "en");
+  const same =
+    locales.length === REQUIRED_AGREEMENT_FOOTER_LOCALES.length &&
+    new Set(locales).size === locales.length &&
+    REQUIRED_AGREEMENT_FOOTER_LOCALES.every((l) => (locales as readonly string[]).includes(l));
+  if (!same) {
+    fail(
+      "agreement footer surfaces",
+      `non-EN locales are [${locales.join(", ")}], expected exactly [${REQUIRED_AGREEMENT_FOOTER_LOCALES.join(", ")}] — update the pin if a locale was added, never trim it to make this pass`,
+    );
+    return;
+  }
+
+  let judged = 0;
+  for (const l of locales) {
+    const path = `/${l}/golf-course-club-rental/`;
+    const label = `${path} footer agreement link`;
+    try {
+      const res = await fetch(`${BASE}${path}`, { redirect: "follow" });
+      if (res.status !== 200) {
+        fail(label, `expected 200, got ${res.status}`);
+        judged++;
+        continue;
+      }
+      const html = renderedMarkup(await res.text());
+      const localized = new RegExp(
+        `href="/${l}/golf-course-club-rental-agreement/?"`,
+      ).test(html);
+      const english = /href="\/golf-course-club-rental-agreement\/?"/.test(
+        html,
+      );
+      if (!localized || english) {
+        fail(
+          label,
+          `${localized ? "" : `no href="/${l}/golf-course-club-rental-agreement/"; `}${english ? 'still links the unprefixed EN agreement "/golf-course-club-rental-agreement/"' : ""}`,
+        );
+      } else {
+        pass(label);
+      }
+      // AFTER the verdict (see Q): above it, a `continue` one line lower
+      // would keep the count honest while comparing nothing.
+      judged++;
+    } catch (err) {
+      fail(`${label} fetch error`, String(err));
+      judged++;
+    }
+  }
+
+  if (judged !== locales.length) {
+    fail(
+      "agreement footer coverage",
+      `only ${judged} of ${locales.length} surfaces reached a verdict — a skip was introduced inside the loop`,
+    );
+  }
+}
+
 // ── Main ────────────────────────────────────────────────────────────
 
 async function main() {
@@ -7623,6 +7742,7 @@ async function main() {
   await runLocalizedDriveTimeTests();
   await runFallbackPullQuoteTests();
   await runRegionHubLinkTests();
+  await runAgreementFooterLinkTests();
 
   console.log(`\n\x1b[1m${passed} passed, ${failed} failed\x1b[0m`);
   if (failures.length > 0) {

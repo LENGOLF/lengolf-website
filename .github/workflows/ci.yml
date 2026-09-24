@@ -148,6 +148,16 @@ jobs:
       # single-edit disarms left the gate exiting 0 on a live defect with both
       # steps green. Same argument as validate:open-graph:contract.
       - run: npm run validate:pricing-revalidate:contract
+      # The post-merge deploy poller (.github/workflows/deploy-check.yml) only
+      # runs on main, where a bug in it would surface as a false "deployed"
+      # the day it matters. This spawns the real script against a local stub
+      # of the site, the GitHub API and the deploy hook, and asserts EXIT CODES
+      # from outside: a stale, diverged, unknown, 404, null or truncated marker,
+      # a compare call that dies on the wire, and a crash must never exit 0.
+      # Then every deliberately disarmed copy of the poller in DISARM_MUTANTS
+      # must fail its target case, behind an unmutated control. (No count here
+      # on purpose: the first version of this comment said "six" against 12.)
+      - run: npm run validate:deploy-check:contract
 
       # The agent floor is TIERED, and the tier is derived from the PR's changed
       # paths — data the author cannot write into the body, which is the same
@@ -222,22 +232,17 @@ jobs:
       # either sub-check all go red.
       - run: npm run validate:pricing-payload
 
-      # The IndexNow workflow runs only AFTER a merge to main, so without these
-      # a broken derivation or deploy wait is found in production, and the
-      # worst failure (deriving nothing) is a GREEN run that pings nothing.
+      # The IndexNow job runs only AFTER a merge to main, so without this a
+      # broken derivation is found in production, and the worst failure
+      # (deriving nothing) is a GREEN run that pings nothing.
       # indexnow-urls.ts --self-test: a case for every mapping rule, table
       # checks against source (lib/seo-pages.ts, the registry's locales, the
-      # workflow's wiring, the runtime importers of each mapped data module),
-      # and the real CLI run end to end against synthetic base commits in a
-      # clean worktree, asserting its stdout and exit codes.
+      # deploy-check workflow's wiring, the runtime importers of each mapped
+      # data module), and the real CLI run end to end against synthetic base
+      # commits in a clean worktree, asserting its stdout and exit codes. The
+      # deploy wait it used to pair with is the poller covered by
+      # validate:deploy-check:contract above.
       - run: npm run validate:indexnow:self-test
-      # indexnow-wait-for-deploy.ts --self-test spawns the real CLI against a
-      # stub server and shallow clones of a throwaway origin, and asserts the
-      # EXIT CODE from outside: the defect that matters (pinging a deploy that
-      # never went live) is a right verdict with a wrong exit code. Its own
-      # step, not `a && b` in one npm script, where a `;` would let the second
-      # exit code mask the first.
-      - run: npm run validate:indexnow-wait:self-test
 
   build-and-smoke:
     runs-on: ubuntu-latest
@@ -269,11 +274,13 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           # What Vercel sets on a real build. app/deploy-sha.txt bakes it in,
           # and smoke section H asserts the served value equals it
-          # (EXPECTED_DEPLOY_SHA on the smoke step). The PR HEAD sha, not
-          # github.sha: on a pull_request run github.sha is the merge commit,
-          # which is also GITHUB_SHA, so a route reading the wrong variable
-          # would pass here and serve `unknown` on Vercel forever. Nothing else
-          # reads this variable: next and next-intl were grepped for it.
+          # (EXPECTED_DEPLOY_SHA on the smoke step) and that it is served from
+          # the prerender cache. The PR HEAD sha, not github.sha: on a
+          # pull_request run github.sha is the merge commit, which is also
+          # GITHUB_SHA, so a route reading the wrong variable would pass here
+          # and serve `unknown` on Vercel forever. It is set on THIS step only,
+          # not on "Start server". Nothing else reads this variable: next and
+          # next-intl were grepped for it.
           VERCEL_GIT_COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Start server
