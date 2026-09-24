@@ -80,6 +80,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/blog/`, lastModified: reviewed, changeFrequency: 'weekly', priority: 0.8, alternates: { languages: getAlternates('/blog/') } },
     { url: `${SITE_URL}/menu/`, lastModified: reviewed, changeFrequency: 'monthly', priority: 0.7, alternates: { languages: getAlternates('/menu/') } },
     { url: `${SITE_URL}/faq/`, lastModified: reviewed, changeFrequency: 'monthly', priority: 0.7, alternates: { languages: getAlternates('/faq/') } },
+    { url: `${SITE_URL}/golf-course-club-rental-agreement/`, lastModified: reviewed, changeFrequency: 'yearly', priority: 0.3, alternates: { languages: getAlternates('/golf-course-club-rental-agreement/') } },
   ]
 
   // Hub / index pages for SEO section groups
@@ -94,7 +95,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/corporate-golf-packages/`, lastModified: reviewed, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${SITE_URL}/privacy-policy/`, lastModified: reviewed, changeFrequency: 'yearly', priority: 0.3 },
     { url: `${SITE_URL}/terms-of-service/`, lastModified: reviewed, changeFrequency: 'yearly', priority: 0.3 },
-    { url: `${SITE_URL}/golf-course-club-rental-agreement/`, lastModified: reviewed, changeFrequency: 'yearly', priority: 0.3 },
   ]
 
   // Blog posts — the one source with a genuine DB edit date.
