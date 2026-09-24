@@ -2,9 +2,10 @@
  * wait-for-deploy: did this push to main actually reach production?
  *
  * Run by .github/workflows/deploy-check.yml on every push to main. It polls
- * the live site's build marker (/api/build-info/, which serves the
- * VERCEL_GIT_COMMIT_SHA baked in at build time) until production serves a
- * build that CONTAINS the pushed commit, or a deadline passes.
+ * the live site's build marker (/deploy-sha.txt, app/deploy-sha.txt/route.ts:
+ * the VERCEL_GIT_COMMIT_SHA baked in at build time, as plain text) until
+ * production serves a build that CONTAINS the pushed commit, or a deadline
+ * passes.
  *
  * Why this exists: at least 20 merges to main since July (#81 ... #131) got
  * no production build, and nothing alerted anyone. The merge commit's
@@ -63,7 +64,7 @@
  *   GITHUB_TOKEN            for the compare + status API (60/h unauthenticated
  *                           is shared per runner IP, so it is required)
  *   GITHUB_API_URL          default https://api.github.com
- *   MARKER_URL              default https://www.len.golf/api/build-info/
+ *   MARKER_URL              default https://www.len.golf/deploy-sha.txt
  *   DEPLOY_TIMEOUT_MS       default 720000 (12 min; a build takes ~2)
  *   DEPLOY_POLL_MS          default 30000
  *   DEPLOY_GRACE_MS         default 480000 (8 min)
@@ -123,7 +124,7 @@ function readConfig(env: NodeJS.ProcessEnv): Config {
   if (!/^[\w.-]+\/[\w.-]+$/.test(repo)) throw new ConfigError(`GITHUB_REPOSITORY must be owner/name, got ${JSON.stringify(repo)}`)
   const token = env.GITHUB_TOKEN || ''
   if (!token) throw new ConfigError('GITHUB_TOKEN is required')
-  const markerUrl = env.MARKER_URL || 'https://www.len.golf/api/build-info/'
+  const markerUrl = env.MARKER_URL || 'https://www.len.golf/deploy-sha.txt'
   if (!URL.canParse(markerUrl) || !/^https?:$/.test(new URL(markerUrl).protocol)) {
     throw new ConfigError(`MARKER_URL must be an absolute http(s) URL, got ${JSON.stringify(markerUrl)}`)
   }
@@ -161,16 +162,12 @@ async function readLiveSha(cfg: Config, attempt: number): Promise<{ sha: string 
       signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     })
     if (res.status !== 200) return { sha: null, note: `marker HTTP ${res.status}` }
-    let body: unknown
-    try {
-      body = await res.json()
-    } catch {
-      return { sha: null, note: 'marker is not JSON' }
-    }
-    const sha = (body as { sha?: unknown } | null)?.sha
-    // A full SHA or nothing: a prefix, a placeholder or null is "not live".
-    if (typeof sha === 'string' && SHA_RE.test(sha)) return { sha, note: '' }
-    return { sha: null, note: `marker sha is ${JSON.stringify(sha)}` }
+    // The WHOLE body, trimmed, must be one full SHA. Never search inside it:
+    // an HTML error page or a redirect target can contain a commit SHA, and
+    // a prefix, `unknown` (a build without Git metadata) or empty is "not live".
+    const body = (await res.text()).trim()
+    if (SHA_RE.test(body)) return { sha: body, note: '' }
+    return { sha: null, note: `marker says ${JSON.stringify(body.slice(0, 40))}` }
   } catch (err) {
     return { sha: null, note: `marker unreachable (${(err as Error).name})` }
   }

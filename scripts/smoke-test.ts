@@ -5051,6 +5051,50 @@ async function runLlmDiscoverabilityTests() {
     fail("IndexNow key file", `error: ${(err as Error).message}`);
   }
 
+  // 7b) Deploy marker: /deploy-sha.txt serves the commit the build was made
+  // from. deploy-check.yml's poller (scripts/wait-for-deploy.ts) reads it after
+  // every push to main, and IndexNow waits on that; if it breaks (moved under
+  // app/[locale], caught by the middleware matcher, stops reading the env var)
+  // every push reports a missed deploy and nothing is pinged. CI builds with
+  // VERCEL_GIT_COMMIT_SHA and runs this with EXPECTED_DEPLOY_SHA set to the
+  // same commit, so this asserts the exact value rather than the shape. The
+  // shape-only fallback exists for local runs and is refused under CI, or
+  // dropping the env var from ci.yml would quietly weaken the check.
+  //
+  // The equality proves the route captured the SHA at build time, NOT that it
+  // is static: giving "Start server" the env too, or inlining it through
+  // next.config.js `env`, would let a dynamic route pass. `x-nextjs-prerender:
+  // 1` closes that, because `next start` sets it only on a response served
+  // from the prerender cache (base-server.js, the `isSSG` branch; the header
+  // section G2 relies on). Static is what keeps the marker at zero function
+  // invocations for a poller that reads it every 30s.
+  try {
+    const expected = process.env.EXPECTED_DEPLOY_SHA;
+    const res = await fetch(`${BASE}/deploy-sha.txt`, { redirect: "manual" });
+    const body = (await res.text()).trim();
+    const issues: string[] = [];
+    if (res.status !== 200) issues.push(`GET /deploy-sha.txt returned ${res.status}`);
+    if (!(res.headers.get("content-type") ?? "").startsWith("text/plain"))
+      issues.push(`content-type "${res.headers.get("content-type")}", want text/plain`);
+    if (!/noindex/.test(res.headers.get("x-robots-tag") ?? ""))
+      issues.push("missing X-Robots-Tag: noindex");
+    if (res.headers.get("x-nextjs-prerender") !== "1")
+      issues.push(
+        `x-nextjs-prerender is ${JSON.stringify(res.headers.get("x-nextjs-prerender"))}, want "1": the marker is not served from the prerender cache (did it lose force-static?)`,
+      );
+    if (expected) {
+      if (body !== expected) issues.push(`body "${body}" != EXPECTED_DEPLOY_SHA ${expected}`);
+    } else if (process.env.CI) {
+      issues.push("EXPECTED_DEPLOY_SHA is unset under CI (ci.yml must pass the built commit)");
+    } else if (!/^([0-9a-f]{40}|unknown)$/.test(body)) {
+      issues.push(`body "${body.slice(0, 60)}" is neither a commit SHA nor "unknown"`);
+    }
+    if (issues.length > 0) fail("Deploy marker /deploy-sha.txt", issues.join("; "));
+    else pass(`Deploy marker /deploy-sha.txt (${expected ? "equals the built commit" : `shape only: ${body}`})`);
+  } catch (err) {
+    fail("Deploy marker /deploy-sha.txt", `error: ${(err as Error).message}`);
+  }
+
   // 8) FAQ pages carry dateModified in their FAQPage JSON-LD — the freshness
   // signal answer engines use to trust price-sensitive Q&A. Parse the node,
   // don't substring the page: a dateModified in some OTHER node must not
@@ -7132,77 +7176,6 @@ async function runRegionHubLinkTests() {
   }
 }
 
-// ── R) Build marker ─────────────────────────────────────────────────
-//
-// `/api/build-info/` is how `.github/workflows/deploy-check.yml` learns which
-// commit production is serving, so its SHAPE is a contract between this repo
-// and that workflow: rename `sha`, or let the route go dynamic, and every push
-// to main reports a missing deploy.
-//
-// Two independent assertions, because either alone has a bypass:
-//
-// 1. ci.yml sets VERCEL_GIT_COMMIT_SHA on the BUILD step only, never on
-//    "Start server", and passes the same value here as
-//    BUILD_INFO_EXPECTED_SHA. The equality proves the route reads the right
-//    env var and captured it at build time. It does NOT alone prove the route
-//    is static: if someone also gave "Start server" the env, or inlined it via
-//    next.config.js `env`, a dynamic route would pass it too.
-// 2. `x-nextjs-prerender: 1`, which `next start` sets only on a response
-//    served from the prerender cache (base-server.js, the `isSSG` branch; the
-//    same header section G2 relies on). A dynamic route never carries it.
-//    Together: static, and holding the build's SHA. Static is what keeps the
-//    marker at zero function invocations.
-//
-// Anti-vacuity: in CI, a missing BUILD_INFO_EXPECTED_SHA is a FAILURE, not a
-// fallback to the shape check. Otherwise deleting that env line from ci.yml
-// would quietly downgrade this section to "any 40-hex or null".
-async function runBuildInfoTests() {
-  console.log("\n\x1b[1mR) Build marker (/api/build-info/)\x1b[0m");
-  const label = "/api/build-info/ serves the build's commit";
-  const expected = process.env.BUILD_INFO_EXPECTED_SHA || "";
-  if (process.env.CI && !expected) {
-    fail(
-      label,
-      "BUILD_INFO_EXPECTED_SHA is not set in CI — ci.yml must pass the SHA it gave the Build step, or this section cannot tell a static marker from a dynamic one",
-    );
-    return;
-  }
-  try {
-    const res = await fetch(`${BASE}/api/build-info/`, { redirect: "manual" });
-    const ct = res.headers.get("content-type") || "";
-    const issues: string[] = [];
-    if (res.status !== 200) issues.push(`expected 200, got ${res.status}`);
-    if (!ct.includes("application/json"))
-      issues.push(`content-type not JSON: "${ct}"`);
-    if (!(res.headers.get("x-robots-tag") || "").includes("noindex"))
-      issues.push("missing X-Robots-Tag: noindex");
-    if (res.headers.get("x-nextjs-prerender") !== "1")
-      issues.push(
-        `x-nextjs-prerender is ${JSON.stringify(res.headers.get("x-nextjs-prerender"))}, want "1" — the route is not being served from the prerender cache (did it lose force-static?)`,
-      );
-    let sha: unknown;
-    try {
-      sha = ((await res.json()) as { sha?: unknown } | null)?.sha;
-    } catch {
-      issues.push("body is not JSON");
-    }
-    if (expected) {
-      if (sha !== expected)
-        issues.push(
-          `sha is ${JSON.stringify(sha)}, but the build was given ${expected} — the route must read VERCEL_GIT_COMMIT_SHA at BUILD time (force-static); a null here usually means it went dynamic`,
-        );
-    } else if (
-      !(sha === null || (typeof sha === "string" && /^[0-9a-f]{40}$/.test(sha)))
-    ) {
-      issues.push(`sha must be a 40-hex string or null, got ${JSON.stringify(sha)}`);
-    }
-    if (issues.length > 0) fail(label, issues.join("; "));
-    else pass(label);
-  } catch (err) {
-    fail(`${label} fetch error`, String(err));
-  }
-}
-
 // ── Main ────────────────────────────────────────────────────────────
 
 async function main() {
@@ -7245,7 +7218,6 @@ async function main() {
   await runLocalizedDriveTimeTests();
   await runFallbackPullQuoteTests();
   await runRegionHubLinkTests();
-  await runBuildInfoTests();
 
   console.log(`\n\x1b[1m${passed} passed, ${failed} failed\x1b[0m`);
   if (failures.length > 0) {

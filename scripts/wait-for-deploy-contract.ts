@@ -7,7 +7,7 @@
  * one job is to never exit 0 unless production serves the pushed commit or a
  * descendant, and the only way to check a job like that is from OUTSIDE: this
  * suite spawns the real script as a child process against a local stub of the
- * three things it talks to (the site's /api/build-info/ marker, the GitHub
+ * three things it talks to (the site's /deploy-sha.txt marker, the GitHub
  * compare + combined-status API, and a Vercel deploy hook) and asserts the
  * exit code, the GITHUB_OUTPUT values the workflow keys on, the step summary,
  * and how often the hook was fired. Same argument as
@@ -43,6 +43,13 @@
  * verdict) before anything runs, because a verdict pinned to "pass" is the
  * one failure no counter can see.
  *
+ * KNOWN LIMITS, measured by review rather than assumed: the module-level
+ * `process.exitCode = EXIT.broken` and the crash handler each cover for the
+ * other, so only a TWO-line edit makes a crash exit 0; the mutant verdict's
+ * call site can still be disarmed by one edit (the self-check covers the
+ * function, not how its result is used); and no case serves a marker that
+ * never answers, so dropping the request timeout survives.
+ *
  * No network: everything is 127.0.0.1. Timing cases key on the stub's own hit
  * counts or elapsed time, never on sleeps, and every timing margin is at
  * least 1.5 seconds (the first version's 600ms flaked 1 run in 7 on 2 CPUs).
@@ -69,11 +76,14 @@ const POLL_MS = 50
 const GRACE_MS = 4000
 /** Flip points for "lands inside the grace window" cases: after the deadline, well before it ends. */
 const AFTER_DEADLINE_MS = TIMEOUT_MS + 1500
-const KILL_AFTER_MS = 15_000
+// Generous: under heavy CPU load a review pass measured poller start-up at
+// up to 5.4s, putting the grace cases near 12s. Only a run that genuinely
+// hangs pays this in full.
+const KILL_AFTER_MS = 30_000
 const CONCURRENCY = 6
 
-const EXPECTED_CASES = 34
-const EXPECTED_MUTANTS = 26
+const EXPECTED_CASES = 39
+const EXPECTED_MUTANTS = 34
 
 const OUTPUT_KEYS = ['verdict', 'live_sha', 'diff_base', 'vercel_state', 'vercel_target_url', 'hook_fired', 'elapsed_ms', 'elapsed_sec']
 
@@ -90,14 +100,20 @@ interface Stub {
   relation?: Record<string, Rel>
   /** Drop the connection on every compare call (a network error, not an HTTP one). */
   compareThrows?: boolean
+  /** Return HTTP 500 on these compare calls (1-based). */
+  compareFails?: (compareHit: number) => boolean
   /** A constant status, or one per status read (1-based). */
   vercel?: VercelStatus | null | ((statusHit: number) => VercelStatus | null)
   /** Return HTTP 502 on these status reads (1-based). */
   statusFails?: (statusHit: number) => boolean
+  /** Drop the connection on these status reads (1-based). */
+  statusThrows?: (statusHit: number) => boolean
 }
 
-const json = (o: unknown): MarkerReply => ({ status: 200, body: JSON.stringify(o) })
-const serves = (sha: string | null) => () => json({ sha })
+// The marker is plain text: the SHA and a newline, or `unknown` when the
+// build had no Git metadata (app/deploy-sha.txt/route.ts).
+const text = (body: string): MarkerReply => ({ status: 200, body, type: 'text/plain; charset=utf-8' })
+const serves = (sha: string | null) => () => text(`${sha ?? 'unknown'}\n`)
 
 // The target_url shapes Vercel actually posted: 9a3c0d7 (#131, author gate),
 // fe1c5c4 (#132, deployed), bb47144 (#118, "Canceled from the Vercel Dashboard").
@@ -112,12 +128,12 @@ const BUILT: VercelStatus = { state: 'success', target_url: DPL_URL, description
 
 interface Running {
   url: string
-  hits: { marker: number; hook: number; status: number }
+  hits: { marker: number; hook: number; status: number; compare: number }
   close: () => Promise<void>
 }
 
 async function startStub(stub: Stub): Promise<Running> {
-  const hits = { marker: 0, hook: 0, status: 0 }
+  const hits = { marker: 0, hook: 0, status: 0, compare: 0 }
   let firstMarkerAt = 0
   const server = createServer((req, res) => {
     const url = new URL(req.url ?? '/', 'http://stub')
@@ -129,7 +145,7 @@ async function startStub(stub: Stub): Promise<Running> {
       hits.hook++
       return send(201, '{"job":{"state":"PENDING"}}')
     }
-    if (url.pathname === '/api/build-info/') {
+    if (url.pathname === '/deploy-sha.txt') {
       hits.marker++
       if (!firstMarkerAt) firstMarkerAt = Date.now()
       const m = stub.marker(hits.marker, Date.now() - firstMarkerAt, hits.hook)
@@ -139,7 +155,9 @@ async function startStub(stub: Stub): Promise<Running> {
     if (isApi && req.headers.authorization !== `Bearer ${TOKEN}`) return send(401, '{"message":"Bad credentials"}')
     const cmp = url.pathname.match(/^\/repos\/o\/r\/compare\/([0-9a-f]+)\.\.\.([0-9a-f]+)$/)
     if (cmp) {
+      hits.compare++
       if (stub.compareThrows) return req.socket.destroy()
+      if (stub.compareFails?.(hits.compare)) return send(500, '{"message":"Server Error"}')
       if (cmp[1] !== PUSHED) return send(422, '{"message":"stub: compare base must be the pushed SHA"}')
       const rel = stub.relation?.[cmp[2]]
       return rel ? send(200, JSON.stringify({ status: rel })) : send(404, '{"message":"Not Found"}')
@@ -148,9 +166,13 @@ async function startStub(stub: Stub): Promise<Running> {
     if (st) {
       hits.status++
       if (st[1] !== PUSHED) return send(422, '{"message":"stub: status must be read for the pushed SHA"}')
+      if (stub.statusThrows?.(hits.status)) return req.socket.destroy()
       if (stub.statusFails?.(hits.status)) return send(502, '{"message":"Bad Gateway"}')
       const v = typeof stub.vercel === 'function' ? stub.vercel(hits.status) : stub.vercel
-      const statuses = v ? [{ context: 'Vercel', ...v }] : []
+      // Another context FIRST, as on real commits (CI checks post statuses
+      // too), so the poller must pick Vercel's by name.
+      const other = { context: 'ci/other', state: 'success', target_url: 'https://github.com/o/r/actions', description: 'ok' }
+      const statuses = [other, ...(v ? [{ context: 'Vercel', ...v }] : [])]
       return send(200, JSON.stringify({ state: v?.state ?? 'pending', statuses }))
     }
     send(404, '{"message":"stub: no such route"}')
@@ -172,7 +194,7 @@ async function closedPortUrl(): Promise<string> {
   const s = await startStub({ marker: serves(null) })
   const url = s.url
   await s.close()
-  return `${url}/api/build-info/`
+  return `${url}/deploy-sha.txt`
 }
 
 // ── Running the poller ─────────────────────────────────────────────
@@ -268,7 +290,7 @@ const CASES: Case[] = [
   },
   {
     name: 'live-after-old',
-    stub: { marker: (hit) => json({ sha: hit <= 2 ? OLD : PUSHED }), relation: { [OLD]: 'behind' } },
+    stub: { marker: (hit) => text(`${hit <= 2 ? OLD : PUSHED}\n`), relation: { [OLD]: 'behind' } },
     // The first observation was an older deploy, so IndexNow diffs from it.
     want: { code: 0, outputs: { verdict: 'live', live_sha: PUSHED, diff_base: OLD } },
   },
@@ -283,16 +305,23 @@ const CASES: Case[] = [
     // Poll 1 sees no marker. diff_base must come from the first build actually
     // OBSERVED (OLD), not be blanked by the failed first poll.
     stub: {
-      marker: (hit) => (hit === 1 ? { status: 404, body: 'Not Found', type: 'text/plain' } : json({ sha: hit <= 3 ? OLD : PUSHED })),
+      marker: (hit) => (hit === 1 ? { status: 404, body: 'Not Found', type: 'text/plain' } : text(`${hit <= 3 ? OLD : PUSHED}\n`)),
       relation: { [OLD]: 'behind' },
     },
+    want: { code: 0, outputs: { verdict: 'live', live_sha: PUSHED, diff_base: OLD } },
+  },
+  {
+    name: 'diff-base-after-failed-first-compare',
+    // Poll 1 reads the marker but its compare call fails. The first build
+    // actually OBSERVED is the first one with a known relation.
+    stub: { marker: (hit) => text(`${hit <= 3 ? OLD : PUSHED}\n`), relation: { [OLD]: 'behind' }, compareFails: (hit) => hit === 1 },
     want: { code: 0, outputs: { verdict: 'live', live_sha: PUSHED, diff_base: OLD } },
   },
   {
     name: 'diff-base-not-from-diverged',
     // A diverged first build (a promoted preview, say) is not something the
     // push range can be diffed from.
-    stub: { marker: (hit) => json({ sha: hit <= 2 ? OTHER : PUSHED }), relation: { [OTHER]: 'diverged' } },
+    stub: { marker: (hit) => text(`${hit <= 2 ? OTHER : PUSHED}\n`), relation: { [OTHER]: 'diverged' } },
     want: { code: 0, outputs: { verdict: 'live', live_sha: PUSHED, diff_base: '' } },
   },
   // -- stale: must exit 1, and classify what Vercel said --
@@ -340,7 +369,8 @@ const CASES: Case[] = [
     want: { code: 1, outputs: { verdict: 'missing', live_sha: '' } },
   },
   {
-    name: 'marker-null-sha',
+    name: 'marker-unknown',
+    // What the route serves for a build without Git metadata (a CLI deploy).
     stub: { marker: serves(null) },
     want: { code: 1, outputs: { verdict: 'missing', live_sha: '' } },
   },
@@ -352,6 +382,12 @@ const CASES: Case[] = [
   {
     name: 'marker-short-sha',
     stub: { marker: serves(PUSHED.slice(0, 7)) },
+    want: { code: 1, outputs: { verdict: 'missing', live_sha: '' } },
+  },
+  {
+    name: 'marker-error-status-with-sha-body',
+    // A non-200 is not live even if its body happens to be the SHA.
+    stub: { marker: () => ({ status: 503, body: `${PUSHED}\n`, type: 'text/plain' }) },
     want: { code: 1, outputs: { verdict: 'missing', live_sha: '' } },
   },
   {
@@ -389,10 +425,30 @@ const CASES: Case[] = [
     want: { code: 1, outputs: { verdict: 'missing', vercel_state: 'build-failed', hook_fired: 'false' }, hookHits: 0 },
   },
   {
+    name: 'status-read-dies-keeps-build-failed',
+    // ...nor a status read that dies on the wire (a timeout, a reset), which
+    // the 502 case above cannot reach.
+    stub: { marker: serves(OLD), relation: { [OLD]: 'behind' }, vercel: BUILD_FAILED, statusThrows: (hit) => hit > 2 },
+    hook: true,
+    want: { code: 1, outputs: { verdict: 'missing', vercel_state: 'build-failed', hook_fired: 'false' }, hookHits: 0 },
+  },
+  {
+    name: 'building-then-canceled',
+    // A state change FROM a known state, not just from none: a build canceled
+    // after it started gets the hook at the deadline like any cancel.
+    stub: {
+      marker: (_hit, _elapsed, hookHits) => text(`${hookHits > 0 ? PUSHED : OLD}\n`),
+      relation: { [OLD]: 'behind' },
+      vercel: (hit) => (hit <= 3 ? BUILDING : CANCELED),
+    },
+    hook: true,
+    want: { code: 0, outputs: { verdict: 'live', vercel_state: 'canceled', hook_fired: 'true' }, hookHits: 1, elapsedAtLeastTimeout: true },
+  },
+  {
     name: 'status-unreadable-keeps-building',
     // ...nor a known build in progress, which would skip the grace window.
     stub: {
-      marker: (_hit, elapsed) => json({ sha: elapsed > AFTER_DEADLINE_MS ? PUSHED : OLD }),
+      marker: (_hit, elapsed) => text(`${elapsed > AFTER_DEADLINE_MS ? PUSHED : OLD}\n`),
       relation: { [OLD]: 'behind' },
       vercel: BUILDING,
       statusFails: (hit) => hit > 2,
@@ -405,7 +461,7 @@ const CASES: Case[] = [
     // keep reading the status and fire the hook when it appears, not at the
     // deadline.
     stub: {
-      marker: (_hit, _elapsed, hookHits) => json({ sha: hookHits > 0 ? PUSHED : OLD }),
+      marker: (_hit, _elapsed, hookHits) => text(`${hookHits > 0 ? PUSHED : OLD}\n`),
       relation: { [OLD]: 'behind' },
       vercel: (hit) => (hit <= 3 ? null : AUTHOR_GATE),
     },
@@ -416,7 +472,7 @@ const CASES: Case[] = [
   {
     name: 'hook-early',
     stub: {
-      marker: (_hit, _elapsed, hookHits) => json({ sha: hookHits > 0 ? PUSHED : OLD }),
+      marker: (_hit, _elapsed, hookHits) => text(`${hookHits > 0 ? PUSHED : OLD}\n`),
       relation: { [OLD]: 'behind' },
       vercel: AUTHOR_GATE,
     },
@@ -445,7 +501,7 @@ const CASES: Case[] = [
     // A build canceled in the dashboard is not a code problem: redeploying
     // helps. At the deadline, not early (a cancel can be deliberate).
     stub: {
-      marker: (_hit, _elapsed, hookHits) => json({ sha: hookHits > 0 ? PUSHED : OLD }),
+      marker: (_hit, _elapsed, hookHits) => text(`${hookHits > 0 ? PUSHED : OLD}\n`),
       relation: { [OLD]: 'behind' },
       vercel: CANCELED,
     },
@@ -465,7 +521,7 @@ const CASES: Case[] = [
     // Vercel is still building at the deadline: one grace window, and the
     // deploy lands inside it. Without the grace this exits 1 at the deadline.
     stub: {
-      marker: (_hit, elapsed) => json({ sha: elapsed > AFTER_DEADLINE_MS ? PUSHED : OLD }),
+      marker: (_hit, elapsed) => text(`${elapsed > AFTER_DEADLINE_MS ? PUSHED : OLD}\n`),
       relation: { [OLD]: 'behind' },
       vercel: BUILDING,
     },
@@ -490,6 +546,12 @@ const CASES: Case[] = [
     name: 'missing-token',
     stub: { marker: serves(PUSHED) },
     env: { GITHUB_TOKEN: '' },
+    want: { code: 2 },
+  },
+  {
+    name: 'bad-marker-url',
+    stub: { marker: serves(PUSHED) },
+    env: { MARKER_URL: 'ftp://www.len.golf/deploy-sha.txt' },
     want: { code: 2 },
   },
   {
@@ -556,8 +618,14 @@ function judge(run: Run, want: Want, hits: { hook: number; marker: number }): st
   return problems
 }
 
-/** Pure: a mutant is caught iff its target case produced at least one problem. */
-function mutantVerdict(problems: string[]): 'caught' | 'survived' {
+/**
+ * Pure: the verdict on one mutant run. Caught iff its target case produced a
+ * problem, EXCEPT that a hang proves nothing unless the mutant is one whose
+ * break is a hang: an overloaded machine can stall any run, and counting that
+ * stall as a catch would hide a surviving mutant behind load.
+ */
+function mutantVerdict(problems: string[], hung: boolean, expectHang: boolean): 'caught' | 'survived' | 'inconclusive' {
+  if (hung) return expectHang ? 'caught' : 'inconclusive'
   return problems.length > 0 ? 'caught' : 'survived'
 }
 
@@ -582,8 +650,10 @@ function assertVerdictsDiscriminate(): void {
     ['judge rejects a late hook', judge({ ...ok, outputs: { ...outputs, elapsed_ms: String(TIMEOUT_MS), elapsed_sec: '3' } }, want, h).length > 0],
     ['judge rejects an early hook', judge(ok, { code: 0, elapsedAtLeastTimeout: true }, h).length > 0],
     ['judge rejects a hung run', judge({ ...ok, hung: true }, want, h).length > 0],
-    ['mutant verdict: no problems means SURVIVED', mutantVerdict([]) === 'survived'],
-    ['mutant verdict: a problem means CAUGHT', mutantVerdict(['x']) === 'caught'],
+    ['mutant verdict: no problems means SURVIVED', mutantVerdict([], false, false) === 'survived'],
+    ['mutant verdict: a problem means CAUGHT', mutantVerdict(['x'], false, false) === 'caught'],
+    ['mutant verdict: an unexpected hang is INCONCLUSIVE', mutantVerdict(['hung'], true, false) === 'inconclusive'],
+    ['mutant verdict: an expected hang is CAUGHT', mutantVerdict(['hung'], true, true) === 'caught'],
   ]
   const broken = checks.filter(([, good]) => !good)
   if (broken.length > 0) {
@@ -593,7 +663,7 @@ function assertVerdictsDiscriminate(): void {
   }
 }
 
-async function runCase(script: string, c: Case): Promise<string[]> {
+async function runCase(script: string, c: Case): Promise<{ problems: string[]; hung: boolean }> {
   const stub = await startStub(c.stub)
   try {
     const env: Record<string, string> = {
@@ -601,7 +671,7 @@ async function runCase(script: string, c: Case): Promise<string[]> {
       GITHUB_REPOSITORY: 'o/r',
       GITHUB_TOKEN: TOKEN,
       GITHUB_API_URL: stub.url,
-      MARKER_URL: c.closedMarker ? await closedPortUrl() : `${stub.url}/api/build-info/`,
+      MARKER_URL: c.closedMarker ? await closedPortUrl() : `${stub.url}/deploy-sha.txt`,
       DEPLOY_TIMEOUT_MS: String(TIMEOUT_MS),
       DEPLOY_POLL_MS: String(POLL_MS),
       DEPLOY_GRACE_MS: String(GRACE_MS),
@@ -614,7 +684,7 @@ async function runCase(script: string, c: Case): Promise<string[]> {
       const tail = (run.stdout + run.stderr).trim().split('\n').slice(-6).join('\n        ')
       problems.push(`output tail:\n        ${tail}`)
     }
-    return problems
+    return { problems, hung: run.hung }
   } finally {
     await stub.close()
   }
@@ -636,7 +706,8 @@ async function pool<T, R>(items: T[], n: number, fn: (t: T) => Promise<R>): Prom
 
 // ── Disarm mutants ─────────────────────────────────────────────────
 
-interface Mutant { name: string; find: string; replace: string; target: string }
+/** expectHang: the break makes the poller loop forever, so the kill IS the catch. */
+interface Mutant { name: string; find: string; replace: string; target: string; expectHang?: boolean }
 
 const DISARM_MUTANTS: Mutant[] = [
   // -- containment --
@@ -727,6 +798,24 @@ const DISARM_MUTANTS: Mutant[] = [
     replace: '    const read = attempt === 1 ? await vercelStatus(cfg) : null\n',
     target: 'status-appears-late',
   },
+  {
+    name: 'a status read that dies on the wire resets the state to none',
+    find: '  } catch {\n    return null\n  }\n',
+    replace: "  } catch {\n    return { state: 'none', targetUrl: '' }\n  }\n",
+    target: 'status-read-dies-keeps-build-failed',
+  },
+  {
+    name: 'the status only updated from none',
+    find: '    if (read) vercel = read\n',
+    replace: "    if (read && vercel.state === 'none') vercel = read\n",
+    target: 'building-then-canceled',
+  },
+  {
+    name: 'the Vercel status matched by any context',
+    find: "statuses.find((s) => (s as { context?: unknown } | null)?.context === 'Vercel')",
+    replace: 'statuses.find(() => true)',
+    target: 'stale-author-gate',
+  },
   // -- deadline, grace, hook --
   {
     name: 'no grace window while Vercel is still building',
@@ -745,6 +834,7 @@ const DISARM_MUTANTS: Mutant[] = [
     find: "  if (s.extended) return 'fail'\n",
     replace: '',
     target: 'grace-is-bounded',
+    expectHang: true,
   },
   {
     name: 'hook fired on a real build failure',
@@ -775,6 +865,37 @@ const DISARM_MUTANTS: Mutant[] = [
     find: '    await sleep(cfg.pollMs)\n',
     replace: '    await sleep(0)\n',
     target: 'stale-author-gate',
+  },
+  // -- reading the marker --
+  {
+    name: 'the marker HTTP status ignored',
+    find: '    if (res.status !== 200) return { sha: null, note: `marker HTTP ${res.status}` }\n',
+    replace: '',
+    target: 'marker-error-status-with-sha-body',
+  },
+  {
+    name: 'MARKER_URL not validated',
+    find: '  if (!URL.canParse(markerUrl) || !/^https?:$/.test(new URL(markerUrl).protocol)) {',
+    replace: '  if (false) {',
+    target: 'bad-marker-url',
+  },
+  {
+    name: 'the first observation taken even when its compare failed',
+    find: "    if (firstLive === undefined && live.sha && rel !== 'unknown') {",
+    replace: '    if (firstLive === undefined && live.sha) {',
+    target: 'diff-base-after-failed-first-compare',
+  },
+  {
+    name: 'marker body searched for a SHA instead of matched whole',
+    find: "    if (SHA_RE.test(body)) return { sha: body, note: '' }\n",
+    replace: "    const found = body.match(/[0-9a-f]{40}/)?.[0]\n    if (found) return { sha: found, note: '' }\n",
+    target: 'marker-html',
+  },
+  {
+    name: 'marker body not trimmed (the route ends it with a newline)',
+    find: '    const body = (await res.text()).trim()\n',
+    replace: '    const body = await res.text()\n',
+    target: 'live-identical',
   },
   // -- outputs --
   {
@@ -814,7 +935,7 @@ async function main(): Promise<void> {
   console.log(`wait-for-deploy contract: ${CASES.length} case(s) against the real poller`)
   const results = await pool(CASES, CONCURRENCY, async (c) => {
     casesRun++
-    const problems = await runCase(POLLER, c)
+    const { problems } = await runCase(POLLER, c)
     judged++
     return { c, problems }
   })
@@ -846,7 +967,7 @@ async function main(): Promise<void> {
     console.log('control: the unmodified poller, run from a temp copy')
     const controlScript = write('control', src)
     const controlTargets = ['live-identical', 'stale-author-gate']
-    const controlResults = await pool(controlTargets, CONCURRENCY, async (t) => ({ t, problems: await runCase(controlScript, byName.get(t)!) }))
+    const controlResults = await pool(controlTargets, CONCURRENCY, async (t) => ({ t, problems: (await runCase(controlScript, byName.get(t)!)).problems }))
     let controlOk = true
     for (const r of controlResults) {
       if (r.problems.length === 0) console.log(`  ✓ control / ${r.t}`)
@@ -876,9 +997,16 @@ async function main(): Promise<void> {
           return { m, verdict: `anchor appears ${occurrences} time(s) in the poller, need exactly 1: ${JSON.stringify(m.find)}` }
         }
         const script = write(`mutant-${DISARM_MUTANTS.indexOf(m)}`, src.replace(m.find, m.replace))
-        const problems = await runCase(script, byName.get(m.target)!)
+        const r = await runCase(script, byName.get(m.target)!)
+        const v = mutantVerdict(r.problems, r.hung, m.expectHang === true)
         judged++
-        return { m, verdict: mutantVerdict(problems) === 'caught' ? null : `SURVIVED: ${m.target} still passes with this break in place` }
+        return {
+          m,
+          verdict:
+            v === 'caught' ? null
+            : v === 'survived' ? `SURVIVED: ${m.target} still passes with this break in place`
+            : `INCONCLUSIVE: the mutated copy hung on ${m.target}, which proves nothing about this break (an overloaded machine?)`,
+        }
       })
       for (const { m, verdict } of mutantResults) {
         if (verdict === null) console.log(`  ✓ ${m.name} (caught by ${m.target})`)
