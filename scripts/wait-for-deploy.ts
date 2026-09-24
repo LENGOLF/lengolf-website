@@ -6,46 +6,56 @@
  * VERCEL_GIT_COMMIT_SHA baked in at build time) until production serves a
  * build that CONTAINS the pushed commit, or a deadline passes.
  *
- * Why this exists: Vercel's GitHub integration has skipped production builds
- * on main at least a dozen times without failing anything a merge would
- * notice (#81, #82, #86, #88, #108, #110, #113, #115, #116, #120, #129, #131).
- * Usually the squash commit's author is not a Vercel team member; once the
- * integration itself was disconnected. #131 sat undeployed for 12 days.
+ * Why this exists: at least 20 merges to main since July (#81 ... #131) got
+ * no production build, and nothing alerted anyone. The merge commit's
+ * `Vercel` status goes red, but nobody watches a status on a commit that is
+ * already merged. Usually the squash commit's author is not a Vercel team
+ * member. Once (#113, #115) the integration itself was disconnected and
+ * Vercel posted nothing at all. #131 sat undeployed for 12 days.
  *
- * Why the live site and not an API: the GitHub deployments API gives false
- * negatives for this project (it showed Preview-only rows while two real
- * Production builds ran, PR #97). What production serves is the one signal
- * that cannot be wrong, which is also why the answer is read from the site
- * rather than from Vercel.
+ * Why the live site and not an API: the GitHub deployments API only records
+ * a Production deployment once the build completes, so read mid-build it
+ * says "no deploy" (that misled a check on #97). And the Vercel status says
+ * what Vercel tried, not what production serves. The live site is the answer.
  *
- * "Contains", not "equals": two merges 44s apart get ONE build, of the later
- * commit (#114 and #112). The earlier run must still pass, so containment is
- * asked of the GitHub compare API: compare(pushed...live) is `identical` or
- * `ahead`. Anything else, including an API error or a SHA GitHub does not
- * know, is "not yet".
+ * "Contains", not "equals": the check passes when production serves the
+ * pushed commit OR A DESCENDANT, asked of the GitHub compare API
+ * (compare(pushed...live) is `identical` or `ahead`). Whenever a later build
+ * ships first (two quick merges, or an earlier build canceled or superseded),
+ * the earlier commit IS live, inside the later build, and must not be
+ * reported missing. Anything else, including an API error or a SHA GitHub
+ * does not know, is "not yet".
  *
- * The commit's `Vercel` status is read on every poll, for two reasons. It
- * names the failure in the report: a failure linking to Vercel's DOCS is the
- * author gate (no deployment was ever created, e.g. 9a3c0d7 for #131), and a
- * failure linking to a deployment is a real build error. And the author gate
- * shows up within seconds, so a configured deploy hook fires right away
- * instead of after the full timeout.
+ * The commit's `Vercel` status is read on every poll. It names the failure in
+ * the report:
+ *   author-gate   failure linking to Vercel's DOCS: no deployment was ever
+ *                 created (e.g. 9a3c0d7, #131)
+ *   canceled      failure described "Canceled ..." (e.g. bb47144, #118)
+ *   build-failed  any other failure or error: a real build error
+ *   building      pending
+ *   built         success
+ *   none          no Vercel status (Vercel never saw the push)
+ * A status read that FAILS keeps the last known state rather than resetting
+ * it to `none`: one 502 at the deadline must not skip a grace window or fire
+ * the hook on a real build failure.
  *
  * Deploy hook (VERCEL_DEPLOY_HOOK_URL, optional, dormant until the secret
- * exists): fired at most ONCE per run, early on the author gate, otherwise at
- * the deadline when Vercel reported nothing at all. Never on a real build
- * failure, where redeploying the same code fails the same way. Whether a
- * deploy hook gets past the author gate is UNVERIFIED as of 2026-09-24; the
- * one-time test is in the workflow's header comment.
+ * exists): fired at most ONCE per run. Early, as soon as the author gate
+ * shows up (it posts within seconds); otherwise at the deadline when Vercel
+ * reported `none` or `canceled`. Never on `build-failed`, where redeploying
+ * the same code fails the same way, and never while Vercel is building.
+ * Whether a deploy hook gets past the author gate is UNVERIFIED as of
+ * 2026-09-24; the one-time test is in the workflow's header comment.
  *
  * At the deadline: if Vercel says it is still building (or built but not yet
- * serving), one grace window. Otherwise fail.
+ * serving), or the hook was just fired, ONE grace window. Then fail.
  *
  * Exit codes, which the workflow keys on:
  *   0  live     production serves the pushed commit or a descendant
  *   1  missing  the deadline passed and it still does not
- *   2  broken   the check itself could not run (bad config, crash).
- *               Never reads as live.
+ *   2  broken   the check itself could not run (bad config, crash). This is
+ *               also the exit code if the process ends for any reason before
+ *               main() settles, so no failure mode defaults to "live".
  *
  * Env:
  *   DEPLOY_SHA              pushed commit, full 40-hex (default GITHUB_SHA)
@@ -62,10 +72,13 @@
  *                           vercel_target_url, hook_fired, elapsed_ms, elapsed_sec
  *   GITHUB_STEP_SUMMARY     one-line summary (empty = skip)
  *
- * `diff_base` is the FIRST live SHA observed, and only when it was an
- * ancestor of the pushed commit. The workflow's IndexNow job diffs from it, so
- * when a stranded commit finally goes live via a later redeploy, its URLs are
- * pinged then instead of never.
+ * `diff_base` is the first live SHA that was actually OBSERVED (a readable
+ * marker and a known relation), and only when it was an ancestor of the
+ * pushed commit. The workflow's IndexNow job diffs from it, so when a
+ * stranded commit finally ships inside a later push's build, that push's run
+ * pings the stranded commit's URLs too. It is empty when the first
+ * observation was already live (the runner started after the build landed),
+ * and then the workflow falls back to the push range.
  *
  * scripts/wait-for-deploy-contract.ts spawns this file against a local stub
  * and holds every rule above to its exit code. When you add a rule, add its
@@ -74,13 +87,19 @@
 
 import { appendFileSync } from 'fs'
 
+const EXIT = { live: 0, missing: 1, broken: 2 } as const
+// Until main() settles, the answer is "broken". If the event loop ever
+// drains early, or something kills the promise chain, Node exits with this
+// rather than its default 0, which the workflow would read as "live".
+process.exitCode = EXIT.broken
+
 const SHA_RE = /^[0-9a-f]{40}$/
 const DOCS_URL_RE = /^https:\/\/vercel\.com\/docs\//
-const EXIT = { live: 0, missing: 1, broken: 2 } as const
+const CANCELED_RE = /cancel/i
 const REQUEST_TIMEOUT_MS = 15_000
 
 type Relation = 'identical' | 'ahead' | 'behind' | 'diverged' | 'unknown'
-type VercelState = 'none' | 'building' | 'built' | 'author-gate' | 'build-failed'
+type VercelState = 'none' | 'building' | 'built' | 'author-gate' | 'canceled' | 'build-failed'
 interface Vercel { state: VercelState; targetUrl: string }
 
 interface Config {
@@ -104,6 +123,10 @@ function readConfig(env: NodeJS.ProcessEnv): Config {
   if (!/^[\w.-]+\/[\w.-]+$/.test(repo)) throw new ConfigError(`GITHUB_REPOSITORY must be owner/name, got ${JSON.stringify(repo)}`)
   const token = env.GITHUB_TOKEN || ''
   if (!token) throw new ConfigError('GITHUB_TOKEN is required')
+  const markerUrl = env.MARKER_URL || 'https://www.len.golf/api/build-info/'
+  if (!URL.canParse(markerUrl) || !/^https?:$/.test(new URL(markerUrl).protocol)) {
+    throw new ConfigError(`MARKER_URL must be an absolute http(s) URL, got ${JSON.stringify(markerUrl)}`)
+  }
   const ms = (name: string, fallback: number): number => {
     const raw = env[name]
     if (raw === undefined || raw === '') return fallback
@@ -116,7 +139,7 @@ function readConfig(env: NodeJS.ProcessEnv): Config {
     repo,
     token,
     apiUrl: (env.GITHUB_API_URL || 'https://api.github.com').replace(/\/+$/, ''),
-    markerUrl: env.MARKER_URL || 'https://www.len.golf/api/build-info/',
+    markerUrl,
     timeoutMs: ms('DEPLOY_TIMEOUT_MS', 12 * 60_000),
     pollMs: ms('DEPLOY_POLL_MS', 30_000),
     graceMs: ms('DEPLOY_GRACE_MS', 8 * 60_000),
@@ -127,6 +150,9 @@ function readConfig(env: NodeJS.ProcessEnv): Config {
 // ── What production serves ─────────────────────────────────────────
 
 async function readLiveSha(cfg: Config, attempt: number): Promise<{ sha: string | null; note: string }> {
+  // The `cb` param changes nothing on Vercel (its cache key is per
+  // deployment, which is what makes the answer move with the production
+  // alias). It is there for any intermediary that might ever sit in front.
   const url = new URL(cfg.markerUrl)
   url.searchParams.set('cb', `${Date.now()}-${attempt}`)
   try {
@@ -191,28 +217,31 @@ function contains(rel: Relation): boolean {
   return rel === 'identical' || rel === 'ahead'
 }
 
-function classifyVercel(rawState: unknown, rawUrl: unknown): Vercel {
+function classifyVercel(rawState: unknown, rawUrl: unknown, rawDescription: unknown): Vercel {
   const url = typeof rawUrl === 'string' ? rawUrl : ''
   if (rawState === 'pending') return { state: 'building', targetUrl: url }
   if (rawState === 'success') return { state: 'built', targetUrl: url }
   if (rawState !== 'failure' && rawState !== 'error') return { state: 'none', targetUrl: url }
   // A permission block links to Vercel's docs, because no deployment exists
-  // to link to. A real build failure links to the deployment.
-  const state: VercelState = DOCS_URL_RE.test(url) ? 'author-gate' : 'build-failed'
+  // to link to. A cancel and a real build failure both link to a deployment,
+  // and only the description tells them apart.
+  if (DOCS_URL_RE.test(url)) return { state: 'author-gate', targetUrl: url }
+  const state: VercelState = typeof rawDescription === 'string' && CANCELED_RE.test(rawDescription) ? 'canceled' : 'build-failed'
   return { state, targetUrl: url }
 }
 
-async function vercelStatus(cfg: Config): Promise<Vercel> {
+/** The commit's Vercel status, or null when it could not be READ (keep the last one). */
+async function vercelStatus(cfg: Config): Promise<Vercel | null> {
   try {
     const r = await githubJson(cfg, `/repos/${cfg.repo}/commits/${cfg.sha}/status`)
     const statuses = (r.body as { statuses?: unknown } | null)?.statuses
-    if (r.status !== 200 || !Array.isArray(statuses)) return { state: 'none', targetUrl: '' }
+    if (r.status !== 200 || !Array.isArray(statuses)) return null
     const v = statuses.find((s) => (s as { context?: unknown } | null)?.context === 'Vercel') as
-      | { state?: unknown; target_url?: unknown }
+      | { state?: unknown; target_url?: unknown; description?: unknown }
       | undefined
-    return v ? classifyVercel(v.state, v.target_url) : { state: 'none', targetUrl: '' }
+    return v ? classifyVercel(v.state, v.target_url, v.description) : { state: 'none', targetUrl: '' }
   } catch {
-    return { state: 'none', targetUrl: '' }
+    return null
   }
 }
 
@@ -262,7 +291,8 @@ async function main(): Promise<number> {
   try {
     cfg = readConfig(process.env)
   } catch (err) {
-    console.error(`deploy-check: ${(err as Error).message}`)
+    if (!(err instanceof ConfigError)) throw err
+    console.error(`deploy-check: ${err.message}`)
     return EXIT.broken
   }
 
@@ -270,7 +300,7 @@ async function main(): Promise<number> {
   let deadline = started + cfg.timeoutMs
   let extended = false
   let hookFired = false
-  let firstLive: string | null | undefined
+  let firstLive: string | undefined
   let firstRel: Relation = 'unknown'
   let lastLive: string | null = null
   let vercel: Vercel = { state: 'none', targetUrl: '' }
@@ -311,15 +341,18 @@ async function main(): Promise<number> {
       rel = r.rel
       relNote = r.note
     }
-    if (firstLive === undefined) {
+    // The first build actually OBSERVED, not merely the first poll: a
+    // marker 404 or a failed compare on poll 1 must not blank diff_base.
+    if (firstLive === undefined && live.sha && rel !== 'unknown') {
       firstLive = live.sha
       firstRel = rel
     }
-    vercel = await vercelStatus(cfg)
+    const read = await vercelStatus(cfg)
+    if (read) vercel = read
 
     const t = Math.round((Date.now() - started) / 1000)
     const seen = live.sha ? `${short(live.sha)} (${rel}${relNote ? `, ${relNote}` : ''})` : live.note
-    console.log(`[+${t}s] live=${seen} · vercel=${vercel.state}`)
+    console.log(`[+${t}s] live=${seen} · vercel=${vercel.state}${read ? '' : ' (status unreadable, kept)'}`)
 
     if (live.sha && contains(rel)) return finish('live')
 
@@ -349,7 +382,7 @@ async function main(): Promise<number> {
 // closing trips a libuv assertion on Windows (exit 0xC0000409 instead of 0),
 // which the contract suite caught on its first run. Nothing is left pending
 // once main() settles (AbortSignal.timeout timers are unref'd, the poll sleep
-// has resolved), so the process ends on its own; a regression there shows up
+// has resolved), so the process ends on its own. A regression there shows up
 // as a hang, which the contract suite kills and fails.
 main().then(
   (code) => {

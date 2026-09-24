@@ -7139,17 +7139,23 @@ async function runRegionHubLinkTests() {
 // and that workflow: rename `sha`, or let the route go dynamic, and every push
 // to main reports a missing deploy.
 //
-// ci.yml sets VERCEL_GIT_COMMIT_SHA on the BUILD step only, never on "Start
-// server", and passes the same value here as BUILD_INFO_EXPECTED_SHA. So the
-// equality below proves two things at once: the route reads the right env
-// var, AND it was baked in at build time. A dynamic route would read the env
-// at request time, find nothing, and serve `null`, which fails here. That is
-// the property that keeps the marker static and costs zero function calls.
+// Two independent assertions, because either alone has a bypass:
+//
+// 1. ci.yml sets VERCEL_GIT_COMMIT_SHA on the BUILD step only, never on
+//    "Start server", and passes the same value here as
+//    BUILD_INFO_EXPECTED_SHA. The equality proves the route reads the right
+//    env var and captured it at build time. It does NOT alone prove the route
+//    is static: if someone also gave "Start server" the env, or inlined it via
+//    next.config.js `env`, a dynamic route would pass it too.
+// 2. `x-nextjs-prerender: 1`, which `next start` sets only on a response
+//    served from the prerender cache (base-server.js, the `isSSG` branch; the
+//    same header section G2 relies on). A dynamic route never carries it.
+//    Together: static, and holding the build's SHA. Static is what keeps the
+//    marker at zero function invocations.
 //
 // Anti-vacuity: in CI, a missing BUILD_INFO_EXPECTED_SHA is a FAILURE, not a
 // fallback to the shape check. Otherwise deleting that env line from ci.yml
-// would quietly downgrade this section to "any 40-hex or null", which a
-// dynamic route passes.
+// would quietly downgrade this section to "any 40-hex or null".
 async function runBuildInfoTests() {
   console.log("\n\x1b[1mR) Build marker (/api/build-info/)\x1b[0m");
   const label = "/api/build-info/ serves the build's commit";
@@ -7170,6 +7176,10 @@ async function runBuildInfoTests() {
       issues.push(`content-type not JSON: "${ct}"`);
     if (!(res.headers.get("x-robots-tag") || "").includes("noindex"))
       issues.push("missing X-Robots-Tag: noindex");
+    if (res.headers.get("x-nextjs-prerender") !== "1")
+      issues.push(
+        `x-nextjs-prerender is ${JSON.stringify(res.headers.get("x-nextjs-prerender"))}, want "1" — the route is not being served from the prerender cache (did it lose force-static?)`,
+      );
     let sha: unknown;
     try {
       sha = ((await res.json()) as { sha?: unknown } | null)?.sha;

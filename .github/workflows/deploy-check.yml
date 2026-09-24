@@ -1,44 +1,57 @@
 # Post-merge deploy check: did this push to main actually reach production?
 #
-# Vercel's GitHub integration has skipped production builds on main at least
-# a dozen times with nothing a merge would notice (#81 ... #131). Usually the
-# squash commit's author is not a Vercel team member, once the integration
-# itself was disconnected. #131 sat undeployed for 12 days and was found by an
-# SEO check. This workflow makes that loud within ~12 minutes of the push.
+# At least 20 merges to main since July (#81 ... #131) got no production
+# build, and nothing alerted anyone: the merge commit's `Vercel` status goes
+# red, but nobody watches a status on a commit that is already merged.
+# Usually the squash commit's author is not a Vercel team member; once the
+# integration itself was disconnected. #131 sat undeployed for 12 days and was
+# found by an SEO check. This workflow makes that loud within ~12 minutes.
 #
 #   wait-for-deploy  polls https://www.len.golf/api/build-info/ (the SHA baked
 #                    in at build time) until production serves this commit or
 #                    a DESCENDANT, via scripts/wait-for-deploy.ts. "Contains",
-#                    not "equals": two merges inside one build window get one
-#                    build, of the later commit, and both runs must pass.
+#                    not "equals": when a later build ships first, this commit
+#                    is live inside it and must not be reported missing.
 #                    On a miss: the job goes red and a `deploy-missing` issue
 #                    is opened (or commented, on a re-run) and assigned, naming
-#                    what Vercel said about the commit. On success: every open
-#                    `deploy-missing` issue whose commit is now live is closed.
-#   indexnow         (was indexnow.yml) runs only AFTER the deploy is live, so
-#                    crawlers are never told to re-fetch content production
-#                    does not serve yet. #131's 36 pages were pinged while they
-#                    still 301'd to English. It diffs from the build production
-#                    served BEFORE this deploy, so a stranded commit's URLs are
-#                    pinged when a later redeploy finally ships them. Diffing
-#                    from HEAD^, the redeploy commit's own diff is empty and
-#                    they would never be pinged.
+#                    what Vercel said about the commit. A check that crashes
+#                    opens one too. On success: every open `deploy-missing`
+#                    issue whose commit is now live is closed.
+#   indexnow         (was indexnow.yml) runs only AFTER the deploy is live.
+#                    It used to fire ~15s after the push, before any build
+#                    existed: on #131 it pinged 19 EN URLs whose pages had not
+#                    changed yet, and never the 36 translated pages the merge
+#                    created. It diffs from the build production served BEFORE
+#                    this deploy (the poller's `diff_base`), so when a stranded
+#                    commit ships inside a later push's build, that run pings
+#                    its URLs too. Two cases it cannot see, both covered by the
+#                    issue text: a fix that is not a push (a dashboard
+#                    redeploy), and a runner that starts after the build is
+#                    already live. "Re-run failed jobs" on the original run
+#                    handles both.
 #
-# Why the live site and not an API: the GitHub deployments API gives false
-# negatives for this project (PR #97), and what production serves is the one
-# signal that cannot be wrong.
+# ONLY A RED `wait-for-deploy` JOB MEANS PRODUCTION IS MISSING A COMMIT. The
+# `indexnow` job fails on its own when the IndexNow API rejects a ping, which
+# also paints this workflow red; read the job name before acting.
+#
+# Why the live site and not an API: the GitHub deployments API records a
+# Production deployment only once the build completes, so read mid-build it
+# says "no deploy" (that misled a check on #97), and a Vercel status says
+# what Vercel tried, not what production serves.
 #
 # Deploy hook (optional, dormant): if the repo secret VERCEL_DEPLOY_HOOK_URL
-# exists, the poller POSTs it once, early when Vercel reports the author gate,
-# otherwise at the deadline when Vercel reported nothing, then waits one more
-# window before failing. Never on a real build failure. WHETHER A DEPLOY HOOK
-# GETS PAST THE AUTHOR GATE IS UNVERIFIED. To test it once before adding the
-# secret: create the hook (Vercel > lengolf-website > Settings > Git > Deploy
-# Hooks, branch `main`), and the next time a `deploy-missing` issue says
-# `author-gate`, run `curl -X POST "<hook url>"` by hand and watch
+# exists, the poller POSTs it once: early when Vercel reports the author gate,
+# otherwise at the deadline when Vercel reported nothing or a canceled build.
+# Then it waits one more window before failing. Never on a real build failure
+# and never while Vercel is building. WHETHER A DEPLOY HOOK GETS PAST THE
+# AUTHOR GATE IS UNVERIFIED. To test it once before adding the secret: create
+# the hook (Vercel > lengolf-website > Settings > Git > Deploy Hooks, branch
+# `main`), and the next time a `deploy-missing` issue says `author-gate`, run
+# `curl -X POST "<hook url>"` by hand and watch
 # `vercel ls lengolf-website --scope david2928s-projects`. A new Production
-# build that goes Ready means hooks work. Then add the secret, and the empty
-# redeploy commit is no longer needed.
+# build that goes Ready means hooks work: add the secret, and the empty
+# redeploy commit is no longer needed. If it does NOT work, delete the hook
+# path from the poller and its contract cases rather than leaving it dormant.
 #
 # No `concurrency` group on purpose: cancel-in-progress would kill an earlier
 # push's run, and with it that push's IndexNow ping.
@@ -51,6 +64,9 @@ on:
 
 jobs:
   wait-for-deploy:
+    # A manual run on another branch would wait for a commit production is
+    # never meant to serve, and open an issue that can never close.
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     # 12 min wait + 8 min grace (or post-hook window) + request slack.
     timeout-minutes: 30
@@ -74,13 +90,19 @@ jobs:
           DEPLOY_SHA: ${{ github.sha }}
           GITHUB_TOKEN: ${{ github.token }}
           VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
-        run: npx tsx scripts/wait-for-deploy.ts
+        # Pinned to the lockfile's tsx: there is no `npm ci` here, so an
+        # unpinned npx would fetch whatever tsx is latest and run it in a step
+        # holding GITHUB_TOKEN and the hook secret.
+        run: npx --yes tsx@4.21.0 scripts/wait-for-deploy.ts
 
       - name: Open or update the deploy-missing issue
-        if: failure() && steps.wait.outputs.verdict == 'missing'
+        # A miss (exit 1) and a check that could not run (exit 2, no verdict)
+        # both open one: either way nobody knows the commit is live.
+        if: failure() && steps.wait.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
           SHA: ${{ github.sha }}
+          VERDICT: ${{ steps.wait.outputs.verdict }}
           LIVE: ${{ steps.wait.outputs.live_sha }}
           VERCEL_STATE: ${{ steps.wait.outputs.vercel_state }}
           VERCEL_URL: ${{ steps.wait.outputs.vercel_target_url }}
@@ -90,38 +112,59 @@ jobs:
         run: |
           SHORT="${SHA:0:7}"
           # Commit text is untrusted input: it only ever reaches printf as an
-          # ARGUMENT, never as part of a format string or a script.
+          # ARGUMENT, never as part of a format string or a script. `<!--` is
+          # broken up so a subject cannot forge the dedupe marker below. (Not
+          # `&lt;`: bash 5.2, which ubuntu-latest ships, reads `&` in a
+          # ${var//pat/rep} replacement as "the matched text".)
           AUTHOR=$(git log -1 --format='%an <%ae>' "$SHA")
           SUBJECT=$(git log -1 --format='%s' "$SHA")
+          AUTHOR="${AUTHOR//<!--/< !--}"
+          SUBJECT="${SUBJECT//<!--/< !--}"
           case "$VERCEL_STATE" in
             author-gate) WHY='Vercel blocked the build because the author of the commit is not a member of the Vercel team (the recurring squash-merge case). The Vercel status links to its team-members docs page, not to a deployment.' ;;
+            canceled) WHY='The Vercel build for this commit was canceled (the status says so). Nothing is wrong with the code: redeploy.' ;;
             build-failed) WHY='Vercel started a build and it FAILED. Open the Vercel link below. Redeploying the same code will fail the same way, so fix the build first.' ;;
-            building|built) WHY='Vercel reported a build in progress (or finished) but production never served it inside the window. Look for a stuck or unpromoted deployment in vercel ls.' ;;
+            building|built) WHY='Vercel reported a build in progress (or finished), but production never served it inside the window. Look for a stuck deployment in vercel ls, or an Instant Rollback in Vercel: a rollback stops new builds being promoted until it is undone, and an empty commit will not help while it is active.' ;;
             *) WHY='Vercel posted no status on this commit at all, so it probably never saw the push. The GitHub integration may be disconnected: remove and re-add it in the Vercel dashboard, then deploy main from there.' ;;
           esac
           BODY="$RUNNER_TEMP/deploy-missing.md"
+          if [ "$VERDICT" = missing ]; then
+            TITLE="Production deploy missing for $SHORT"
+            {
+              printf 'Commit `%s` was pushed to `main`, and after %ss production (https://www.len.golf/api/build-info/) still serves `%s`, which does not contain it.\n\n' "$SHA" "$ELAPSED" "${LIVE:-no commit SHA}"
+              printf '> %s\n>\n> %s\n\n' "$SUBJECT" "$AUTHOR"
+              printf '**Vercel status on the commit:** `%s` %s\n\n' "$VERCEL_STATE" "$VERCEL_URL"
+              printf '%s\n\n' "$WHY"
+              if [ -z "$LIVE" ]; then
+                printf 'Production served no commit SHA at all. A production build made from the CLI (`vercel --prod`) carries no Git SHA, and neither does a build older than this check.\n\n'
+              fi
+            } > "$BODY"
+          else
+            TITLE="Deploy check could not run for $SHORT"
+            {
+              printf 'The deploy check itself failed for commit `%s` (exit 2: bad configuration or a crash; see the run). Whether production serves this commit is UNKNOWN.\n\n' "$SHA"
+              printf '> %s\n>\n> %s\n\n' "$SUBJECT" "$AUTHOR"
+              printf 'Check by hand: `curl -s https://www.len.golf/api/build-info/` should show `%s` or a later commit.\n\n' "$SHA"
+            } > "$BODY"
+          fi
           {
-            printf 'Commit `%s` was pushed to `main`, and after %ss production (https://www.len.golf/api/build-info/) still serves `%s`, which does not contain it.\n\n' "$SHA" "$ELAPSED" "${LIVE:-no marker}"
-            printf '> %s\n>\n> %s\n\n' "$SUBJECT" "$AUTHOR"
-            printf '**Vercel status on the commit:** `%s` %s\n\n' "$VERCEL_STATE" "$VERCEL_URL"
-            printf '%s\n\n' "$WHY"
-            printf 'Deploy hook fired: %s. Run: %s\n\n' "$HOOK_FIRED" "$RUN_URL"
-            printf 'To redeploy (author gate, or no status), push an empty commit as a Vercel team member:\n\n'
+            printf 'Deploy hook fired: %s. Run: %s\n\n' "${HOOK_FIRED:-false}" "$RUN_URL"
+            printf 'To redeploy (author gate, canceled, or no status), push an empty commit as a Vercel team member:\n\n'
             printf '    git commit --allow-empty -m "chore: redeploy main after %s" && git push origin main\n\n' "$SHORT"
             printf 'That push gets its own deploy-check run, which closes this issue once production contains `%s`.\n\n' "$SHORT"
+            printf 'If you fix it WITHOUT a push (a redeploy from the Vercel dashboard, or a deploy hook fired by hand), use **Re-run failed jobs** on the run above once production has it. That closes this issue and sends the IndexNow ping this commit never got, which no later push will send for it.\n\n'
             printf '<!-- deploy-check sha=%s -->\n' "$SHA"
-          } > "$BODY"
+          } >> "$BODY"
 
-          echo "::error title=Production deploy missing::Production never served $SHORT (Vercel: $VERCEL_STATE). A deploy-missing issue has been opened."
+          echo "::error title=$TITLE::Vercel: ${VERCEL_STATE:-unknown}. A deploy-missing issue has been opened or updated."
 
           gh label create deploy-missing --color B60205 \
             --description "A push to main that production never served (deploy-check.yml)" --force >/dev/null 2>&1 || true
           EXISTING=$(gh issue list --state open --label deploy-missing --limit 100 --json number,body \
-            --jq ".[] | select(.body | contains(\"deploy-check sha=$SHA\")) | .number" 2>/dev/null | head -n1 || true)
+            --jq ".[] | select(.body | contains(\"<!-- deploy-check sha=$SHA -->\")) | .number" 2>/dev/null | head -n1 || true)
           if [ -n "$EXISTING" ]; then
             gh issue comment "$EXISTING" --body-file "$BODY"
           else
-            TITLE="Production deploy missing for $SHORT"
             # Assigned so the owner gets an email; retried unassigned rather
             # than losing the issue if the assignment is ever rejected.
             gh issue create --title "$TITLE" --label deploy-missing --assignee david2928 --body-file "$BODY" \
@@ -138,13 +181,17 @@ jobs:
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           OPEN=$(gh issue list --state open --label deploy-missing --limit 100 --json number,body \
-            --jq '.[] | "\(.number) \((.body | capture("deploy-check sha=(?<s>[0-9a-f]{40})") | .s) // "")"' 2>/dev/null || true)
+            --jq '.[] | "\(.number) \((.body | capture("<!-- deploy-check sha=(?<s>[0-9a-f]{40}) -->") | .s) // "")"' 2>/dev/null || true)
           if [ -z "$OPEN" ]; then echo "no open deploy-missing issues"; exit 0; fi
+          # `</dev/null` on every gh call: they run inside a loop reading
+          # $OPEN on stdin, and must not consume the remaining lines. A failed
+          # close warns and moves on rather than stranding the issues after it.
           while read -r NUM ISSUE_SHA; do
             [ -n "$ISSUE_SHA" ] || continue
-            REL=$(gh api "repos/$GITHUB_REPOSITORY/compare/$ISSUE_SHA...$LIVE" --jq .status 2>/dev/null || echo unknown)
+            REL=$(gh api "repos/$GITHUB_REPOSITORY/compare/$ISSUE_SHA...$LIVE" --jq .status </dev/null 2>/dev/null || echo unknown)
             if [ "$REL" = identical ] || [ "$REL" = ahead ]; then
-              gh issue close "$NUM" --comment "Resolved: production now serves \`${LIVE:0:7}\`, which contains \`${ISSUE_SHA:0:7}\`. Checked by $RUN_URL"
+              gh issue close "$NUM" --comment "Resolved: production now serves \`${LIVE:0:7}\`, which contains \`${ISSUE_SHA:0:7}\`. Checked by $RUN_URL" </dev/null \
+                || echo "::warning::could not close #$NUM"
             else
               echo "#$NUM ($ISSUE_SHA) is not in the live build ($REL); leaving it open"
             fi
@@ -257,4 +304,4 @@ jobs:
           # URL per push. It is also the injection surface — keep it in env.
           URLS: ${{ steps.derive.outputs.urls }}
         run: |
-          printf '%s\n' "$URLS" | xargs npx tsx scripts/indexnow-ping.ts
+          printf '%s\n' "$URLS" | xargs npx --yes tsx@4.21.0 scripts/indexnow-ping.ts

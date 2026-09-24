@@ -5,17 +5,19 @@ import { NextResponse } from 'next/server'
  *
  * Read by `.github/workflows/deploy-check.yml` (via
  * `scripts/wait-for-deploy.ts`) after every push to main, to confirm the push
- * actually reached production. Vercel's GitHub integration has repeatedly
- * skipped production builds without any error on main (a squash commit
- * authored by a non-team member, and once a disconnected integration), and
- * the GitHub deployments API gives false negatives for this project. What the
- * live site serves is the one signal that cannot be wrong.
+ * actually reached production. Merges to main have repeatedly got no
+ * production build without anyone noticing (usually a squash commit authored
+ * by a non-member of the Vercel team, once a disconnected integration). The
+ * GitHub deployments API only records a Production deployment once its build
+ * completes, so it cannot tell "still building" from "never started"; what
+ * the live site serves can.
  *
  * `force-static` is load-bearing. The handler runs once at build time, so the
  * SHA is the build's, it is served as a static file with no function
  * invocation, and each deployment carries its own copy: when the production
- * alias moves, the answer moves with it. Smoke section R asserts this by
- * giving the CI build a SHA that the running server does not have.
+ * alias moves, the answer moves with it. Smoke section R asserts both halves:
+ * the CI build is given a SHA the running server does not have, and the
+ * response must carry `x-nextjs-prerender: 1`.
  *
  * `/api/` is excluded from the middleware matcher, so no locale handling and
  * no edge invocation either. The repo is public, so the SHA reveals nothing.

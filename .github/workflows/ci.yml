@@ -152,9 +152,11 @@ jobs:
       # runs on main, where a bug in it would surface as a false "deployed"
       # the day it matters. This spawns the real script against a local stub
       # of the site, the GitHub API and the deploy hook, and asserts EXIT CODES
-      # from outside: a stale, diverged, unknown, 404, null or truncated marker
-      # must never exit 0. Then six deliberately disarmed copies of the poller
-      # must each fail their target case, behind an unmutated control.
+      # from outside: a stale, diverged, unknown, 404, null or truncated marker,
+      # a compare call that dies on the wire, and a crash must never exit 0.
+      # Then every deliberately disarmed copy of the poller in DISARM_MUTANTS
+      # must fail its target case, behind an unmutated control. (No count here
+      # on purpose: the first version of this comment said "six" against 12.)
       - run: npm run validate:deploy-check:contract
 
       # The agent floor is TIERED, and the tier is derived from the PR's changed
