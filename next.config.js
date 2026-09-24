@@ -17,6 +17,26 @@ if (!process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY && !process.env.GITHUB_ACTION
   )
 }
 
+// Objects in our Supabase bucket, 1 to 4 path segments deep (so at most 3
+// folders plus the file name), each segment one of [A-Za-z0-9_-] followed by
+// [A-Za-z0-9_.-]*. Why not the obvious
+// '/storage/v1/object/public/website-assets/**': Vercel's optimizer tests this
+// pattern against the RAW, still-percent-encoded path and only then fetches, and
+// the fetch normalizes. Measured on the PR #138 preview with `/**`,
+// `…/website-assets/%2e%2e/line-messages/<object>` returned that other bucket's
+// image (200), and every `%XX` or `//` spelling of a real object was a new key.
+// Next's own optimizer normalizes first, so neither `next start` nor CI can see
+// that. Excluding `%`, empty segments and dot-leading segments closes all of it.
+// Every one of the 293 objects in the bucket on 2026-09-24 fits, and so does
+// every name lengolf-forms generates (`used-clubs/<timestamp>-<random>.<ext>`).
+// A future object whose name has a space, non-ASCII or a leading dot, or that
+// sits more than 3 folders deep, will 400 through the optimizer: name uploads to fit.
+const WEBSITE_ASSETS_SEGMENT = '[A-Za-z0-9_-]*([A-Za-z0-9_.-])'
+const WEBSITE_ASSETS_PATHNAME =
+  '/storage/v1/object/public/website-assets/{' +
+  [1, 2, 3, 4].map((depth) => Array(depth).fill(WEBSITE_ASSETS_SEGMENT).join('/')).join(',') +
+  '}'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -24,13 +44,18 @@ const nextConfig = {
   trailingSlash: true,
   // /_next/image is an allowlist, not a proxy. Every (url, w, q) it accepts is
   // a billable transformation plus a cache entry kept for minimumCacheTTL, and
-  // the caller picks all three. Before this block was narrowed, prod accepted
-  // any q from 1 to 100, any path on our own domain (so one request rendered a
-  // route twice: `url=https://www.len.golf/<junk>/golf-courses/opengraph-image/`),
-  // any RELATIVE path (so `url=/golf-courses/opengraph-image/` rendered too),
-  // any public bucket in the shared Supabase project, and a fresh key for every
-  // `?query` appended to a real object. Smoke section S asserts each of those
-  // now 400s, and that every image the site renders still loads.
+  // the caller picks all three. Before this block was narrowed, prod returned
+  // 200 for any q from 1 to 100, for any path on www.len.golf or len.golf, for
+  // any RELATIVE path (`url=/golf-courses/opengraph-image/` made the optimizer
+  // fetch, and so render, a route of this site), for any object in the other
+  // public bucket of the shared Supabase project (`line-messages`: LINE profile
+  // photos and chat attachments), and for a fresh key per `?query` appended to
+  // a real object. Smoke section S asserts those now 400 and that every image
+  // the site renders still loads.
+  //
+  // Still unbounded, because no `images` setting can reach them: a zero-padded
+  // width (`w=096`, `w=00096`, ... each a new key; the width check parses the
+  // integer) and the output format negotiated from Accept (webp or original).
   images: {
     // Exactly the qualities <Image> emits: an unset `quality` resolves to 75
     // and three call sites in app/[locale]/page.tsx set 70 or 75. Adding a new
@@ -41,11 +66,12 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'bisimqmtxjsptehhqpeg.supabase.co',
-        // Our bucket only. The project is shared with lengolf-forms and
-        // booking, and `line-messages` is public too.
-        pathname: '/storage/v1/object/public/website-assets/**',
+        port: '',
+        pathname: WEBSITE_ASSETS_PATHNAME,
         // No query string. Supabase ignores one, so without this every
-        // `?v=N` on a real object is a new optimizer key.
+        // `?v=N` on a real object is a new optimizer key. Consequence: an
+        // object overwritten in place stays stale here for minimumCacheTTL;
+        // upload a replacement under a NEW name instead.
         search: '',
       },
     ],

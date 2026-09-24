@@ -244,24 +244,14 @@ If you need a new asset category:
 
 ## Next.js Image Configuration
 
-The `next.config.js` file is configured to allow images from the Supabase Storage hostname:
+`images` in `next.config.js` is an allowlist (see the comments there for why). `/_next/image` returns **400** for anything outside it, so an `<Image>` whose src breaks a rule renders as a broken image in production. `next dev` throws for an off-list `quality` or an unconfigured host; a production build throws for nothing, and the image simply fails in the browser. The rules:
 
-```javascript
-// next.config.js
-const nextConfig = {
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'bisimqmtxjsptehhqpeg.supabase.co',
-      },
-    ],
-    minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
-  },
-}
-```
+- **Source:** `https://bisimqmtxjsptehhqpeg.supabase.co/storage/v1/object/public/website-assets/…` only, which is what `storageUrl()` produces. Other buckets, the `/render/image/` transform endpoint, our own domain and relative paths are all rejected.
+- **Object names:** each path segment starts with a letter, digit, `_` or `-`, then uses only letters, digits, `_`, `.` and `-`. That means no spaces, no non-ASCII and no leading dot, and at most 4 path segments below the bucket (3 folders plus the file name). The pattern rejects any `%`-encoded character, because Vercel matches the raw path and a `%2e%2e` segment would otherwise reach another bucket.
+- **No query string** on the src.
+- **`quality`:** only a value listed in `images.qualities` (70 and 75 today; an unset `quality` resolves to 75).
 
-This allows the `next/image` component to optimize and cache images from Supabase Storage. Images are cached for 30 days by the Next.js image optimization layer.
+Smoke section S checks that every image the site renders passes, and that the off-list shapes 400. Optimized images are cached for 30 days (`minimumCacheTTL`).
 
 Additionally, custom headers in `next.config.js` set aggressive caching for static image and font files served directly:
 
@@ -300,14 +290,14 @@ All other static assets have been migrated to Supabase Storage. Do not add new i
 
 ### Image not optimized by next/image
 
-1. **Check remote patterns**: The Supabase hostname must be listed in `next.config.js` under `images.remotePatterns`.
+1. **Check the allowlist**: open the image's `/_next/image/?url=…` URL directly. A 400 means the src breaks one of the rules under [Next.js Image Configuration](#nextjs-image-configuration): another bucket or host, a query string, an unusual file name, or an off-list `quality`.
 2. **Use the `<Image>` component**: Regular `<img>` tags bypass Next.js image optimization. Use `import Image from 'next/image'` instead.
 
 ### Broken images after upload
 
 1. **File format**: Ensure the file is a valid image format (PNG, JPG, WebP, SVG, GIF).
-2. **File name**: Avoid spaces or special characters. Use lowercase with hyphens.
-3. **Cache**: If you replaced an existing file with the same name, the old version may be cached. Wait for the cache TTL to expire, or append a query parameter for cache-busting during development.
+2. **File name**: letters, digits, `_`, `.` and `-` only, not starting with a dot, at most 3 folders deep (4 path segments including the file name). A name with a space or non-ASCII character 400s through `/_next/image` (see [Next.js Image Configuration](#nextjs-image-configuration)). Use lowercase with hyphens.
+3. **Cache**: if you replaced an existing file under the same name, the optimizer keeps serving the old version for up to 30 days. A query parameter no longer busts it (the src would 400), so upload the replacement under a **new** file name and update the reference.
 
 ### CORS errors
 

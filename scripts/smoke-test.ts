@@ -7703,63 +7703,83 @@ async function runAgreementFooterLinkTests() {
 // ── S) Image optimizer allowlist ────────────────────────────────────
 //
 // next.config.js narrows `images` to qualities [70, 75], one Supabase pattern
-// (the website-assets bucket, object endpoint, no query string) and no local
-// paths. Measured on prod on 2026-09-24, before the narrowing, EVERY off-list
-// case below returned 200: any q from 1 to 100, any path on www.len.golf or
-// len.golf (the route renders once for the fetch and the optimizer caches the
-// result), any relative path including a dynamic route, the public
-// `line-messages` bucket of the shared Supabase project, and a new cache key for
-// each `?query` appended to a real object. Each accepted (url, w, q) is a
-// billable transformation plus a cache entry held for minimumCacheTTL, and the
-// caller chooses all three.
+// (the website-assets bucket, object endpoint, a strict per-segment character
+// class, no query string, default port) and no local paths. Before that, prod
+// ACCEPTED every shape in IMAGE_OFFLIST_CASES (measured 2026-09-24): any q from
+// 1 to 100, any path on www.len.golf or len.golf, any relative path including a
+// dynamic route, any object in the other public bucket of the shared Supabase
+// project (`line-messages`), and a new key per `?query` or `%XX` spelling of a
+// real object. Each accepted (url, w, q) is a billable transformation plus a
+// cache entry held for minimumCacheTTL, and the caller chooses all three.
 //
-// Two halves, and the first is the one the narrowing makes necessary:
+// Three checks:
 //
 // (1) Every (src, q) pair the scanned pages render must come back 200
 //     image/* from THIS server's optimizer. next/image throws on an off-list
 //     `quality` only in DEV (next/dist/shared/lib/image-loader.js); a
 //     production build emits the URL unchanged and the image 400s in the
 //     browser with build, typecheck and lint all green. So a new `quality={80}`,
-//     or a src on a new host or bucket, fails here and nowhere else. Each pair is
-//     requested once, at the smallest width it was rendered at: width is checked
-//     against deviceSizes/imageSizes, which this change left alone.
-// (2) Every off-list case must 400 WITH the message naming its rule, so a 400
-//     for an unrelated reason (a bad width, say) cannot stand in for the rule
-//     under test. The control must 200 through the identical request shape, so
-//     a dead optimizer cannot make the negatives pass.
-//
-// Plus one equality joining them: the q values rendered must EQUAL `qualities`
-// in the build's .next/images-manifest.json (the file Vercel's optimizer is fed
-// from). A rendered q missing from the list is already caught by (1); a listed
-// q that nothing renders is key space with no reason to exist.
+//     or a src on a new host, bucket or unusual file name, fails here and
+//     nowhere else in CI. Each pair is requested once, at the smallest width it
+//     was rendered at: width is checked against deviceSizes/imageSizes, which
+//     this change left alone.
+// (2) The build's .next/images-manifest.json (what Vercel's optimizer is fed)
+//     must list exactly the rendered q values, and its remote pattern must
+//     reject every raw path in RAW_HOSTILE_PATHS while accepting every rendered
+//     src. This is the only check here that sees VERCEL's semantics: Vercel
+//     tests the pattern's regex against the RAW, still-encoded path and only
+//     then fetches, and the fetch normalizes. On the PR #138 preview the plain
+//     `…/website-assets/**` pattern let `%2e%2e/line-messages/<object>` through
+//     to that other bucket (200). Next's own optimizer normalizes first, so the
+//     fetches in (3) would pass either way; only the regex test catches it.
+// (3) Every off-list case must 400 WITH Next's message for its rule, so a 400
+//     for an unrelated reason (a bad width, an upstream failure) cannot stand
+//     in for the rule under test; the control must 200 through the identical
+//     request shape, so a dead optimizer cannot make the negatives pass. The
+//     message pins make this half Next-only BY CONSTRUCTION: Vercel answers
+//     every rejection, and an upstream failure too, with the same generic
+//     `INVALID_IMAGE_OPTIMIZE_REQUEST`.
 //
 // Anti-vacuity, each guard for a hole the others cannot see:
-// - every 200 page must carry at least one optimizer URL, because the header
-//   logo is an <Image> on every page — so a broken extractor goes red on the
-//   first page instead of reporting "0 pairs, 0 failures";
-// - MIN_IMAGE_PAGES / MIN_IMAGE_PAIRS floor the two derived inputs;
-// - `judged` is incremented AFTER each verdict and must equal pairs + 1 +
+// - every HTML page must carry at least one optimizer URL, because the header
+//   logo is an <Image> on every page, so a broken extractor goes red instead
+//   of reporting "0 pairs, 0 failures";
+// - MIN_IMAGE_PAGES floors the listed pages, MIN_CLUB_DETAIL_PAGES the used-club
+//   detail pages, and MIN_CODE_FOLDER_PAIRS the pairs in folders only CODE
+//   writes to, so DB rows cannot make up for lost code-owned images;
+// - `judged` is incremented AFTER each verdict and must equal pairs + 2 +
 //   cases (the L6 shape: above the verdict, a `continue` keeps the count while
 //   comparing nothing);
-// - REQUIRED_OFFLIST_IDS pins case IDENTITY, with its own floor, because a
-//   length check cannot see one case swapped for a duplicate of another.
+// - REQUIRED_OFFLIST_CASES pins each case's id AND url, and every case but the
+//   control must carry `rejectedWith`: an id-only pin stayed GREEN when a
+//   case's url was swapped, or its `rejectedWith` deleted (which silently turns
+//   a negative into a second control). Both measured by mutation.
 //
 // KNOWN LIMITS, stated rather than implied:
 // (a) an image that exists only after a click (the lightboxes, the floor-plan
 //     dialog) has no optimizer URL in server markup, so its q is not checked
-//     here. All of them leave `quality` unset today, which resolves to 75.
-// (b) this is Next's optimizer under `next start`. Vercel runs its own, fed
-//     from the same images-manifest.json; that was verified on the preview
-//     once, by hand, and nothing re-verifies it per deploy.
+//     by (1) or counted by (2). All of them leave `quality` unset today.
+// (b) (1) and (3) exercise Next's optimizer under `next start`, not Vercel's.
+//     Vercel's was verified once, by hand, on the PR #138 preview: all 1,694
+//     distinct (url, w, q) the preview's ~1,560 pages reference returned 200,
+//     and each off-list shape returned 400 against a REAL upstream object.
+//     Nothing re-verifies it per deploy; (2) is the standing proxy.
 // (c) the message pins are Next 15.1.11's strings (server/image-optimizer.js
-//     validateParams). An upgrade that rewords them turns this red, which is
-//     the safe direction.
+//     validateParams). An upgrade that rewords them turns this red, the safe
+//     direction.
 // (d) as everywhere in smoke, a counter proves a comparison RAN, never that it
-//     DISCRIMINATES: `if (false && …)` over a verdict stays green. There is no
-//     contract suite for smoke.
-// (e) the manifest equality assumes BASE is serving the local .next build, as
-//     CI does. Pointed at a remote deployment it compares against whatever the
-//     local checkout last built.
+//     DISCRIMINATES: `if (false && …)` over a verdict, or a deleted fail(),
+//     stays green (measured). There is no contract suite for smoke.
+// (e) an early `return` after the floors and before the coverage check prints
+//     "0 passed, 0 failed" and exits 0 (measured, the same limit as Q's (a)).
+// (f) (2) reads the LOCAL .next build, so it assumes BASE serves that build, as
+//     CI does. And `next dev` writes no manifest and ALWAYS accepts q=70
+//     (BLUR_QUALITY is pushed into `qualities` on every dev request), so a run
+//     against a dev server cannot see a dropped 70.
+// (g) two key-space dimensions no `images` setting can close, measured on the
+//     preview: a zero-padded width (`w=096`, `w=00096`, … each a new key) and
+//     the output format negotiated from Accept. Closing the first needs a
+//     Vercel Firewall rule, which was deliberately not added.
 
 /** Real object, rendered on every page (header + footer logo). */
 const OPTIMIZER_LOGO =
@@ -7789,8 +7809,9 @@ const IMAGE_OFFLIST_CASES: {
     rejectedWith: URL_NOT_ALLOWED,
   },
   {
-    // A made-up object: the rule fires before any fetch. Without it, a missing
-    // object would 404 upstream, which is not the same failure.
+    // A made-up object: the rule fires before any fetch. Were it to regress,
+    // the fetch would fail upstream (Supabase answers 400 for a missing object),
+    // which Next reports with a different message, so the pin still goes red.
     id: "other-public-bucket",
     url: OPTIMIZER_LOGO.replace(
       "website-assets/branding/logo.png",
@@ -7806,9 +7827,37 @@ const IMAGE_OFFLIST_CASES: {
     rejectedWith: URL_NOT_ALLOWED,
   },
   {
-    // Catches a pathname loosened to `website-assets*/**`.
+    // Catches a pathname loosened to `website-assets*/…`.
     id: "bucket-name-prefix",
     url: OPTIMIZER_LOGO.replace("website-assets/", "website-assets-x/"),
+    q: 75,
+    rejectedWith: URL_NOT_ALLOWED,
+  },
+  // Other spellings of the SAME real object. Supabase serves each one, so under
+  // a plain `/**` pattern each was a fresh key (measured on the preview).
+  {
+    id: "encoded-path-char",
+    url: OPTIMIZER_LOGO.replace("logo.png", "%6Cogo.png"),
+    q: 75,
+    rejectedWith: URL_NOT_ALLOWED,
+  },
+  {
+    id: "encoded-slash",
+    url: OPTIMIZER_LOGO.replace("branding/", "branding%2F"),
+    q: 75,
+    rejectedWith: URL_NOT_ALLOWED,
+  },
+  {
+    id: "double-slash",
+    url: OPTIMIZER_LOGO.replace("website-assets/", "website-assets//"),
+    q: 75,
+    rejectedWith: URL_NOT_ALLOWED,
+  },
+  {
+    // `port: ''`. Without it any port passes the pattern and costs an upstream
+    // fetch that can never succeed.
+    id: "explicit-port",
+    url: OPTIMIZER_LOGO.replace(".supabase.co/", ".supabase.co:8443/"),
     q: 75,
     rejectedWith: URL_NOT_ALLOWED,
   },
@@ -7841,73 +7890,140 @@ const IMAGE_OFFLIST_CASES: {
   },
 ];
 
-/** Case identity. Dropping or substituting a case is a two-place edit. */
-const REQUIRED_OFFLIST_IDS: string[] = [
-  "control",
-  "q-off-list",
-  "query-string",
-  "other-public-bucket",
-  "render-endpoint",
-  "bucket-name-prefix",
-  "own-domain-www",
-  "own-domain-apex",
-  "relative-dynamic-route",
-  "relative-static-file",
+/** Case identity AND content: id -> the exact url it probes. Substituting a
+ *  case's url, or dropping one, is a two-place edit. */
+const REQUIRED_OFFLIST_CASES: Record<string, string> = {
+  control: OPTIMIZER_LOGO,
+  "q-off-list": OPTIMIZER_LOGO,
+  "query-string": `${OPTIMIZER_LOGO}?v=1`,
+  "other-public-bucket":
+    "https://bisimqmtxjsptehhqpeg.supabase.co/storage/v1/object/public/line-messages/smoke-probe.jpg",
+  "render-endpoint":
+    "https://bisimqmtxjsptehhqpeg.supabase.co/storage/v1/render/image/public/website-assets/branding/logo.png",
+  "bucket-name-prefix":
+    "https://bisimqmtxjsptehhqpeg.supabase.co/storage/v1/object/public/website-assets-x/branding/logo.png",
+  "encoded-path-char":
+    "https://bisimqmtxjsptehhqpeg.supabase.co/storage/v1/object/public/website-assets/branding/%6Cogo.png",
+  "encoded-slash":
+    "https://bisimqmtxjsptehhqpeg.supabase.co/storage/v1/object/public/website-assets/branding%2Flogo.png",
+  "double-slash":
+    "https://bisimqmtxjsptehhqpeg.supabase.co/storage/v1/object/public/website-assets//branding/logo.png",
+  "explicit-port":
+    "https://bisimqmtxjsptehhqpeg.supabase.co:8443/storage/v1/object/public/website-assets/branding/logo.png",
+  "own-domain-www": "https://www.len.golf/images/favicon.png",
+  "own-domain-apex": "https://len.golf/images/favicon.png",
+  "relative-dynamic-route": "/golf-courses/opengraph-image/",
+  "relative-static-file": "/images/favicon.png",
+};
+/** A floor on the pin: an emptied map subsets vacuously. */
+const MIN_REQUIRED_OFFLIST_CASES = 14;
+
+/** Raw request paths the manifest's remote pattern must NOT match, tested the
+ *  way Vercel tests them (encoded, un-normalized). The first is the bypass the
+ *  PR #138 preview measured against the plain `/**` pattern. */
+const RAW_HOSTILE_PATHS: string[] = [
+  "/storage/v1/object/public/website-assets/%2e%2e/line-messages/a/b.jpg",
+  "/storage/v1/object/public/website-assets/%2E%2E/line-messages/a/b.jpg",
+  "/storage/v1/object/public/website-assets/.%2e/line-messages/a/b.jpg",
+  "/storage/v1/object/public/website-assets/../line-messages/a/b.jpg",
+  "/storage/v1/object/public/website-assets/./branding/logo.png",
+  "/storage/v1/object/public/website-assets/branding/%6Cogo.png",
+  "/storage/v1/object/public/website-assets/branding%2Flogo.png",
+  "/storage/v1/object/public/website-assets//branding/logo.png",
+  "/storage/v1/object/public/website-assets/a/b/c/d/e.png",
+  "/storage/v1/object/public/line-messages/a/b.jpg",
 ];
-/** A floor on the pin: an emptied list subsets vacuously. */
-const MIN_REQUIRED_OFFLIST_IDS = 10;
+const MIN_RAW_HOSTILE_PATHS = 10;
+
 /** HTML 200 pages scanned from routeTests ∪ seoTests (the code-owned lists;
- *  used-club detail pages are counted separately below). Measured 482
- *  on 2026-09-24. At the true value, not below it, so a filter that silently
- *  drops pages goes red; lower it only when an entry is removed. */
+ *  used-club detail pages are counted separately below). Measured 482 on
+ *  2026-09-24. At the true value, so a filter that silently drops pages goes
+ *  red. It is a floor, so a NEW routeTests/seoTests entry adds slack until
+ *  this is raised with it; lower it only when an entry is removed. */
 const MIN_IMAGE_PAGES = 482;
 /** Used-club detail pages reached from the listing. DB rows (43 on
- *  2026-09-24), so a floor of one rather than an exact count: it keeps
- *  ClubDetailGallery exercised. If the inventory ever sells out entirely this
- *  goes red, and lowering it to 0 is then a deliberate edit. */
+ *  2026-09-24), so a floor of one rather than an exact count. Today they add
+ *  no pair the listing lacks (the listing shows every club's photo); the crawl
+ *  is there so ClubDetailGallery stays exercised. If the inventory ever sells
+ *  out entirely this goes red, and lowering it to 0 is a deliberate edit. */
 const MIN_CLUB_DETAIL_PAGES = 1;
-/** Distinct (src, q) pairs those pages render. Measured 173 on 2026-09-24.
- *  The floor is the 98 that CODE owns (branding 6, venue 10, menus 4, lessons
- *  36, events 25, golf 11, icons 6); the other 75 are DB rows staff add and
- *  remove (clubs/ 31, used-clubs/ 40, promotions/ 4), so an exact count would
- *  go red on a content edit. 40 of those 75 render only on the second-hand
- *  pages, which the sitemap omits: a 1,513-page sitemap crawl found 132 pairs
- *  and missed every used-clubs/ image. Re-derive by folder, do not quote. */
-const MIN_IMAGE_PAIRS = 98;
+/** Folders only CODE writes to (storageUrl() paths in app/, components/,
+ *  data/). clubs/ is left out on purpose: it mixes hardcoded paths with
+ *  rental_club_sets rows. used-clubs/ and promotions/ are DB-only. */
+const CODE_ONLY_FOLDERS = new Set([
+  "branding",
+  "venue",
+  "menus",
+  "lessons",
+  "events",
+  "golf",
+  "icons",
+]);
+/** Distinct (src, q) pairs under CODE_ONLY_FOLDERS. Measured 98 on 2026-09-24
+ *  (branding 6, venue 10, menus 4, lessons 36, events 25, golf 11, icons 6)
+ *  out of 173 in total. Floored on the code-only subset because a floor on the
+ *  total let up to 75 DB-driven pairs stand in for lost code-owned ones: an
+ *  extractor that dropped lessons/ and events/ passed at 112 (measured). */
+const MIN_CODE_FOLDER_PAIRS = 98;
 
 /** `/_next/image/?url=…&amp;w=…&amp;q=…`, in any src, srcSet or imageSrcSet. */
 const OPTIMIZER_REF_RE =
   /\/_next\/image\/?\?url=([^&"'\s]+)&(?:amp;)?w=(\d+)&(?:amp;)?q=(\d+)/g;
 
 /** Optimizer URLs in rendered markup. Scripts are stripped (renderedMarkup) so
- *  a URL that only exists in the flight payload is not counted as rendered. */
-function optimizerRefs(html: string): { src: string; w: number; q: number }[] {
-  return [...renderedMarkup(html).matchAll(OPTIMIZER_REF_RE)].map((m) => ({
-    src: decodeURIComponent(m[1]),
-    w: Number(m[2]),
-    q: Number(m[3]),
-  }));
+ *  a URL that only exists in the flight payload is not counted as rendered.
+ *  A malformed escape is returned as `bad` rather than thrown, so one broken
+ *  URL fails this section instead of aborting the suite's summary. */
+function optimizerRefs(html: string): {
+  refs: { src: string; w: number; q: number }[];
+  bad: string[];
+} {
+  const refs: { src: string; w: number; q: number }[] = [];
+  const bad: string[] = [];
+  for (const m of renderedMarkup(html).matchAll(OPTIMIZER_REF_RE)) {
+    try {
+      refs.push({ src: decodeURIComponent(m[1]), w: Number(m[2]), q: Number(m[3]) });
+    } catch {
+      bad.push(m[1].slice(0, 120));
+    }
+  }
+  return { refs, bad };
 }
 
+/** One optimizer request. `retry` re-sends once on anything but a 200 image or
+ *  a 400: CI makes ~175 live Supabase fetches through the optimizer, and an
+ *  upstream blip must not fail the run. A 400 is never retried, and a rule
+ *  rejection is deterministic, so a retry cannot hide the thing under test. */
 async function fetchOptimizer(
   src: string,
   w: number,
   q: number,
+  retry = false,
 ): Promise<{ status: number; type: string; text: string }> {
-  try {
-    const res = await fetch(
-      `${BASE}/_next/image/?url=${encodeURIComponent(src)}&w=${w}&q=${q}`,
-      { headers: { accept: "image/webp,image/*" }, redirect: "manual" },
-    );
-    const type = res.headers.get("content-type") ?? "";
-    if (type.startsWith("image/")) {
-      await res.arrayBuffer();
-      return { status: res.status, type, text: "" };
+  const once = async () => {
+    try {
+      const res = await fetch(
+        `${BASE}/_next/image/?url=${encodeURIComponent(src)}&w=${w}&q=${q}`,
+        {
+          headers: { accept: "image/webp,image/*" },
+          redirect: "manual",
+          signal: AbortSignal.timeout(30000),
+        },
+      );
+      const type = res.headers.get("content-type") ?? "";
+      if (type.startsWith("image/")) {
+        await res.arrayBuffer();
+        return { status: res.status, type, text: "" };
+      }
+      return { status: res.status, type, text: (await res.text()).slice(0, 160) };
+    } catch (err) {
+      return { status: 0, type: "", text: String(err) };
     }
-    return { status: res.status, type, text: (await res.text()).slice(0, 160) };
-  } catch (err) {
-    return { status: 0, type: "", text: String(err) };
-  }
+  };
+  const first = await once();
+  const settled =
+    (first.status === 200 && first.type.startsWith("image/")) || first.status === 400;
+  return settled || !retry ? first : once();
 }
 
 async function runImageOptimizerTests() {
@@ -7915,26 +8031,38 @@ async function runImageOptimizerTests() {
   const fs = await import("node:fs");
   const nodePath = await import("node:path");
 
-  if (REQUIRED_OFFLIST_IDS.length < MIN_REQUIRED_OFFLIST_IDS) {
+  // Case identity and content, before anything is fetched.
+  const requiredIds = Object.keys(REQUIRED_OFFLIST_CASES);
+  if (requiredIds.length < MIN_REQUIRED_OFFLIST_CASES) {
     fail(
       "image optimizer required-case floor",
-      `only ${REQUIRED_OFFLIST_IDS.length} case id(s) pinned (floor ${MIN_REQUIRED_OFFLIST_IDS}) — the pin was emptied, so the identity check asserts nothing`,
+      `only ${requiredIds.length} case(s) pinned (floor ${MIN_REQUIRED_OFFLIST_CASES}) — the pin was emptied, so the identity check asserts nothing`,
     );
     return;
   }
+  const caseProblems: string[] = [];
   const caseIds = new Set(IMAGE_OFFLIST_CASES.map((c) => c.id));
-  const missingIds = REQUIRED_OFFLIST_IDS.filter((id) => !caseIds.has(id));
-  if (missingIds.length > 0 || caseIds.size !== IMAGE_OFFLIST_CASES.length) {
-    fail(
-      "image optimizer case identity",
-      `missing: ${missingIds.join(", ") || "none"}; ${IMAGE_OFFLIST_CASES.length - caseIds.size} duplicate id(s) — a case was dropped or substituted`,
-    );
+  if (caseIds.size !== IMAGE_OFFLIST_CASES.length)
+    caseProblems.push(`${IMAGE_OFFLIST_CASES.length - caseIds.size} duplicate id(s)`);
+  for (const id of requiredIds) {
+    const c = IMAGE_OFFLIST_CASES.find((x) => x.id === id);
+    if (!c) caseProblems.push(`missing ${id}`);
+    else if (c.url !== REQUIRED_OFFLIST_CASES[id]) caseProblems.push(`${id} probes ${c.url}, pinned ${REQUIRED_OFFLIST_CASES[id]}`);
+  }
+  for (const c of IMAGE_OFFLIST_CASES) {
+    if (!(c.id in REQUIRED_OFFLIST_CASES)) caseProblems.push(`${c.id} is not pinned`);
+    if (c.id !== "control" && !c.rejectedWith) caseProblems.push(`${c.id} has no rejectedWith, so it would pass as a second control`);
+  }
+  if (RAW_HOSTILE_PATHS.length < MIN_RAW_HOSTILE_PATHS)
+    caseProblems.push(`only ${RAW_HOSTILE_PATHS.length} raw hostile path(s) (floor ${MIN_RAW_HOSTILE_PATHS})`);
+  if (caseProblems.length > 0) {
+    fail("image optimizer case identity", `${caseProblems.join("; ")} — a case was dropped or substituted`);
     return;
   }
 
-  // (1a) Collect every (src, q) the scanned pages render. routeTests alone is
-  // NOT enough: /golf-club-specs/ and /second-hand-golf-clubs-bangkok/ are only
-  // in seoTests, and the used-club detail pages (ClubDetailGallery, their only
+  // Collect every (src, q) the scanned pages render. routeTests alone is NOT
+  // enough: /golf-club-specs/ and /second-hand-golf-clubs-bangkok/ are only in
+  // seoTests, and the used-club detail pages (ClubDetailGallery, their only
   // consumer) are in neither list because their ids are DB rows. So the page
   // set is routeTests ∪ seoTests, plus every detail page the listing links to.
   const pairs = new Map<string, { src: string; w: number; q: number; page: string }>();
@@ -7946,25 +8074,25 @@ async function runImageOptimizerTests() {
   const pagesWithoutRefs: string[] = [];
   for (let i = 0; i < pagePaths.length; i++) {
     const p = pagePaths[i];
-    let res: Response;
+    let html: string;
     try {
-      res = await fetch(`${BASE}${p}`, { redirect: "manual" });
+      const res = await fetch(`${BASE}${p}`, { redirect: "manual" });
+      // Section A owns route status. The non-HTML entries (the opengraph-image
+      // routes, /api/aqi/) carry no header, so they are not pages here.
+      if (
+        res.status !== 200 ||
+        !(res.headers.get("content-type") ?? "").startsWith("text/html")
+      ) {
+        await res.arrayBuffer();
+        continue;
+      }
+      html = await res.text();
     } catch (err) {
       fail(`image refs on ${p}`, `fetch error: ${String(err)}`);
       continue;
     }
-    // Section A owns route status. Non-HTML routes (llms.txt, robots.txt, …)
-    // carry no header, so they are not pages for the every-page check below.
-    if (
-      res.status !== 200 ||
-      !(res.headers.get("content-type") ?? "").startsWith("text/html")
-    ) {
-      await res.arrayBuffer();
-      continue;
-    }
     pagesScanned++;
     if (/^\/second-hand-golf-clubs-bangkok\/[^/]+\/$/.test(p)) clubDetailPages++;
-    const html = await res.text();
     if (p === "/second-hand-golf-clubs-bangkok/") {
       for (const m of renderedMarkup(html).matchAll(
         /href="(\/second-hand-golf-clubs-bangkok\/[^/"]+\/)"/g,
@@ -7972,7 +8100,8 @@ async function runImageOptimizerTests() {
         if (!pagePaths.includes(m[1])) pagePaths.push(m[1]);
       }
     }
-    const refs = optimizerRefs(html);
+    const { refs, bad } = optimizerRefs(html);
+    for (const b of bad) fail(`optimizer URL on ${p}`, `malformed url escape: ${b}`);
     if (refs.length === 0) pagesWithoutRefs.push(p);
     for (const r of refs) {
       const key = `${r.src}|${r.q}`;
@@ -8002,24 +8131,29 @@ async function runImageOptimizerTests() {
       `${pagesWithoutRefs.length} page(s) rendered no /_next/image URL, though the header logo is an <Image> on every page — the extractor is broken or the header stopped using next/image: ${pagesWithoutRefs.slice(0, 5).join(", ")}`,
     );
   }
-  if (pairs.size < MIN_IMAGE_PAIRS) {
+  const folderOf = (src: string) =>
+    (src.split("/website-assets/")[1] ?? "").split("/")[0];
+  const codeFolderPairs = [...pairs.values()].filter((r) =>
+    CODE_ONLY_FOLDERS.has(folderOf(r.src)),
+  ).length;
+  if (codeFolderPairs < MIN_CODE_FOLDER_PAIRS) {
     fail(
-      "image optimizer pair floor",
-      `only ${pairs.size} distinct (src, q) pair(s) across ${pagesScanned} pages (floor ${MIN_IMAGE_PAIRS}) — the extractor matched less than the site renders`,
+      "image optimizer code-owned pair floor",
+      `only ${codeFolderPairs} distinct (src, q) pair(s) under ${[...CODE_ONLY_FOLDERS].join("/")} (floor ${MIN_CODE_FOLDER_PAIRS}; ${pairs.size} in total) — the extractor matched less than the site renders`,
     );
     return;
   }
 
   let judged = 0;
 
-  // (1b) Every rendered pair must load. A small pool: each request makes this
+  // (1) Every rendered pair must load. A small pool: each request makes this
   // server fetch the original from Supabase and transform it.
   const queue = [...pairs.values()];
   const rejected: string[] = [];
   await Promise.all(
     Array.from({ length: 6 }, async () => {
       for (let r = queue.shift(); r; r = queue.shift()) {
-        const res = await fetchOptimizer(r.src, r.w, r.q);
+        const res = await fetchOptimizer(r.src, r.w, r.q, true);
         if (!(res.status === 200 && res.type.startsWith("image/"))) {
           rejected.push(
             `${r.src.replace(/^.*\/website-assets\//, "…/")} w=${r.w} q=${r.q} (rendered on ${r.page}) -> ${res.status} ${res.text}`,
@@ -8032,42 +8166,88 @@ async function runImageOptimizerTests() {
   );
   if (rejected.length === 0) {
     pass(
-      `all ${pairs.size} rendered (src, q) pairs load through /_next/image (${pagesScanned} pages)`,
+      `all ${pairs.size} rendered (src, q) pairs load through /_next/image (${pagesScanned} pages, ${codeFolderPairs} code-owned pairs)`,
     );
   } else {
     for (const r of rejected) fail("rendered image rejected by the optimizer", r);
   }
 
-  // The rendered q set must equal the build's allowlist.
+  // (2) The manifest Vercel is fed: its qualities, and its pattern's regex.
   const manifestPath = nodePath.join(__dirname, "..", ".next", "images-manifest.json");
-  let allowed: unknown;
+  let images: {
+    qualities?: unknown;
+    remotePatterns?: { protocol?: string; port?: string; pathname?: string; search?: string }[];
+  } | null = null;
+  let manifestError = "";
   try {
-    allowed = JSON.parse(fs.readFileSync(manifestPath, "utf8"))?.images?.qualities;
-  } catch {
-    allowed = undefined;
+    images = JSON.parse(fs.readFileSync(manifestPath, "utf8"))?.images ?? null;
+  } catch (err) {
+    manifestError =
+      (err as NodeJS.ErrnoException).code === "ENOENT"
+        ? `no ${manifestPath} — BASE must serve a \`next build\` (next start); \`next dev\` writes none`
+        : `unreadable ${manifestPath}: ${String(err)}`;
   }
   const rendered = [...new Set([...pairs.values()].map((r) => r.q))].sort((a, b) => a - b);
-  if (!Array.isArray(allowed) || allowed.length === 0) {
-    fail(
-      "images.qualities in the build",
-      `${manifestPath} carries no images.qualities — the allowlist is gone, so every q from 1 to 100 is accepted again`,
-    );
+  if (!images) {
+    fail("images-manifest.json", manifestError || `${manifestPath} has no \`images\``);
   } else {
-    const listed = [...(allowed as number[])].sort((a, b) => a - b);
-    if (listed.join() === rendered.join()) {
-      pass(`rendered q values [${rendered}] equal images.qualities`);
-    } else {
+    const allowed = images.qualities;
+    if (!Array.isArray(allowed) || allowed.length === 0) {
       fail(
-        "rendered q values vs images.qualities",
-        `rendered [${rendered}], allowlisted [${listed}] — add a new quality prop's value to next.config.js, or drop a value nothing renders`,
+        "images.qualities in the build",
+        `${manifestPath} carries no images.qualities — the allowlist is gone, so every q from 1 to 100 is accepted again`,
       );
+    } else {
+      const listed = [...(allowed as number[])].sort((a, b) => a - b);
+      if (listed.join() === rendered.join()) {
+        pass(`rendered q values [${rendered}] equal images.qualities`);
+      } else {
+        fail(
+          "rendered q values vs images.qualities",
+          `rendered [${rendered}], allowlisted [${listed}] — a new quality prop needs its value in next.config.js; drop a listed value only after checking no click-only <Image> (lightbox, dialog) uses it`,
+        );
+      }
     }
   }
   judged++;
 
-  // (2) Off-list shapes must 400 for the named rule; the control must 200.
+  if (images) {
+    const problems: string[] = [];
+    const patterns = images.remotePatterns ?? [];
+    if (patterns.length !== 1) problems.push(`${patterns.length} remote pattern(s), expected exactly 1`);
+    for (const pat of patterns) {
+      if (pat.protocol !== "https") problems.push(`protocol ${pat.protocol}`);
+      if (pat.port !== "") problems.push(`port ${JSON.stringify(pat.port)}, expected ''`);
+      if (pat.search !== "") problems.push(`search ${JSON.stringify(pat.search)}, expected ''`);
+      let re: RegExp | null = null;
+      try {
+        re = new RegExp(pat.pathname ?? "");
+      } catch (err) {
+        problems.push(`pathname is not a regex: ${String(err)}`);
+      }
+      if (!re || !pat.pathname) {
+        problems.push("no pathname");
+        continue;
+      }
+      for (const raw of RAW_HOSTILE_PATHS)
+        if (re.test(raw)) problems.push(`pathname matches raw ${raw}`);
+      const refused = [...pairs.values()].filter((r) => !re!.test(new URL(r.src).pathname));
+      if (refused.length > 0)
+        problems.push(`pathname refuses ${refused.length} rendered src(s), e.g. ${new URL(refused[0].src).pathname}`);
+    }
+    if (problems.length === 0) {
+      pass(
+        `manifest pattern rejects all ${RAW_HOSTILE_PATHS.length} raw hostile paths and accepts all ${pairs.size} rendered srcs`,
+      );
+    } else {
+      for (const pr of problems) fail("images-manifest.json remote pattern", pr);
+    }
+  }
+  judged++;
+
+  // (3) Off-list shapes must 400 for the named rule; the control must 200.
   for (const c of IMAGE_OFFLIST_CASES) {
-    const res = await fetchOptimizer(c.url, OPTIMIZER_PROBE_WIDTH, c.q);
+    const res = await fetchOptimizer(c.url, OPTIMIZER_PROBE_WIDTH, c.q, c.rejectedWith === undefined);
     const label = `optimizer ${c.id}: ${c.url.replace(/^https:\/\/bisimqmtxjsptehhqpeg\.supabase\.co/, "<supabase>")} q=${c.q}`;
     if (c.rejectedWith === undefined) {
       if (res.status === 200 && res.type.startsWith("image/")) pass(`${label} -> 200 ${res.type}`);
@@ -8084,7 +8264,7 @@ async function runImageOptimizerTests() {
     judged++;
   }
 
-  const expectedJudged = pairs.size + 1 + IMAGE_OFFLIST_CASES.length;
+  const expectedJudged = pairs.size + 2 + IMAGE_OFFLIST_CASES.length;
   if (judged !== expectedJudged) {
     fail(
       "image optimizer coverage",
