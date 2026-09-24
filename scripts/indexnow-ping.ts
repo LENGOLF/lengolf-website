@@ -10,10 +10,11 @@
  *
  *   npx tsx scripts/indexnow-ping.ts https://www.len.golf/golf/ [more URLs...]
  *
- * Invoked by .github/workflows/indexnow.yml on pushes to main that touch
- * content data, with the URLs scripts/indexnow-urls.ts derived, once
- * scripts/indexnow-wait-for-deploy.ts has seen the deploy go live. Safe to run
- * by hand after a manual content edit, but only once that edit is live.
+ * Invoked by the `indexnow` job in .github/workflows/deploy-check.yml on
+ * pushes to main that touch content data, with the URLs
+ * scripts/indexnow-urls.ts derived, once the `wait-for-deploy` job
+ * (scripts/wait-for-deploy.ts) has seen the deploy go live. Safe to run by
+ * hand after a manual content edit, but only once that edit is live.
  *
  * Contract (per this repo's gate rules — a gate that cannot fail is worse
  * than no gate):
