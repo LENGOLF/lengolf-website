@@ -484,6 +484,7 @@ function recordRule(file: string, exportName: string, pageFor: (slug: string) =>
   }
 }
 
+const RENTAL_AGREEMENT_PATH = '/golf-course-club-rental-agreement/'
 const COURSE_RE = /^data\/golf-courses\/([a-z0-9-]+)\/([a-z0-9-]+)\.ts$/
 const hubPath = (region: string) => `/golf-courses/${region}/`
 const coursePath = (region: string, slug: string) => `/golf-courses/${region}/${slug}/`
@@ -685,6 +686,29 @@ export const RULES: Rule[] = [
   fixedRule('data/event-clients.ts', ['/events/']),
   fixedRule('data/food-menu.ts', ['/menu/']),
   fixedRule('data/pricing.ts', ['/', '/golf/', '/lessons/', '/events/', '/corporate-golf-packages/', '/llms-full.txt']),
+  {
+    // The course club rental agreement, one file per locale
+    // (app/[locale]/golf-course-club-rental-agreement/page.tsx). A locale's
+    // file renders that locale's page only: the translations do not import
+    // en.ts, they share only BUSINESS_INFO.
+    id: 'rental-agreement',
+    match: (f) => f.match(/^data\/rental-agreement\/([a-z]{2})\.ts$/),
+    derive: (ctx, base, head, _c, m) =>
+      moduleSig(base) === moduleSig(head)
+        ? { kind: 'none' }
+        : { kind: 'records', urls: inLocale(ctx.reg, m[1], RENTAL_AGREEMENT_PATH), note: `${m[1]} agreement text changed` },
+    coarse: (ctx, _c, m) =>
+      LOCALES.includes(m[1]) ? inLocale(ctx.reg, m[1], RENTAL_AGREEMENT_PATH) : served(ctx.reg, RENTAL_AGREEMENT_PATH),
+  },
+  // index.ts assembles every locale's text, so a change there is every locale.
+  fixedRule('data/rental-agreement/index.ts', [RENTAL_AGREEMENT_PATH]),
+  {
+    id: 'none:rental-agreement-types',
+    match: (f) => (f === 'data/rental-agreement/types.ts' ? [f] : null),
+    inert: 'types plus RENTAL_AGREEMENT_VERSION, which no page renders (the date line is prose in each locale file)',
+    derive: () => ({ kind: 'none' }),
+    coarse: () => [],
+  },
   {
     // One UI catalog: the key pages, in that catalog's locale only.
     id: 'messages',
@@ -1303,6 +1327,37 @@ const CASES: Case[] = [
     base: { 'data/food-menu.ts': { menuGroups: [1] } },
     head: { 'data/food-menu.ts': { menuGroups: [2] } },
     want: ['/menu/'],
+  },
+  {
+    name: 'a ja rental-agreement edit pings the ja agreement page alone',
+    changes: [{ status: 'M', file: 'data/rental-agreement/ja.ts' }],
+    base: { 'data/rental-agreement/ja.ts': { ja: { title: 'a' } } },
+    head: { 'data/rental-agreement/ja.ts': { ja: { title: 'b' } } },
+    registered: ['ja:/golf-course-club-rental-agreement', 'ko:/golf-course-club-rental-agreement'],
+    want: ['/ja/golf-course-club-rental-agreement/'],
+  },
+  {
+    name: 'an EN rental-agreement edit pings the EN page, not the translations',
+    changes: [{ status: 'M', file: 'data/rental-agreement/en.ts' }],
+    base: { 'data/rental-agreement/en.ts': { en: { title: 'a' } } },
+    head: { 'data/rental-agreement/en.ts': { en: { title: 'b' } } },
+    registered: ['ja:/golf-course-club-rental-agreement', 'ko:/golf-course-club-rental-agreement'],
+    want: ['/golf-course-club-rental-agreement/'],
+  },
+  {
+    name: 'the rental-agreement index pings the agreement in every locale serving it',
+    changes: [{ status: 'M', file: 'data/rental-agreement/index.ts' }],
+    base: { 'data/rental-agreement/index.ts': { RENTAL_AGREEMENT: { en: 1 } } },
+    head: { 'data/rental-agreement/index.ts': { RENTAL_AGREEMENT: { en: 2 } } },
+    registered: ['th:/golf-course-club-rental-agreement', 'ja:/golf-course-club-rental-agreement'],
+    want: ['/golf-course-club-rental-agreement/', '/th/golf-course-club-rental-agreement/', '/ja/golf-course-club-rental-agreement/'],
+  },
+  {
+    name: 'the rental-agreement types file pings nothing (nothing in it renders)',
+    changes: [{ status: 'M', file: 'data/rental-agreement/types.ts' }],
+    base: {},
+    head: {},
+    want: [],
   },
   {
     name: 'a station edit pings its near page in every locale serving it; the hub list is EN-only',
@@ -1955,8 +2010,8 @@ async function selfTest(): Promise<void> {
   // trigger-path coverage, workflow trigger, locales, two loader checks); one
   // consumer verdict per CONSUMERS key; four CLI verdicts.
   const expected = CASES.length + 1 + 3 + SEO_SECTIONS.length + 8 + Object.keys(CONSUMERS).length + 4
-  if (CASES.length !== 51 || examined !== expected) {
-    console.log(`FAIL: examined ${examined} verdict(s), expected ${expected} (CASES=${CASES.length}, want 51)`)
+  if (CASES.length !== 55 || examined !== expected) {
+    console.log(`FAIL: examined ${examined} verdict(s), expected ${expected} (CASES=${CASES.length}, want 55)`)
     process.exit(1)
   }
   if (failures > 0) {
