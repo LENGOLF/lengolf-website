@@ -11,7 +11,9 @@
  *   npx tsx scripts/indexnow-ping.ts https://www.len.golf/golf/ [more URLs...]
  *
  * Invoked by .github/workflows/indexnow.yml on pushes to main that touch
- * content data; safe to run by hand after a manual content edit.
+ * content data, with the URLs scripts/indexnow-urls.ts derived, once
+ * scripts/indexnow-wait-for-deploy.ts has seen the deploy go live. Safe to run
+ * by hand after a manual content edit, but only once that edit is live.
  *
  * Contract (per this repo's gate rules — a gate that cannot fail is worse
  * than no gate):
@@ -34,10 +36,18 @@ const ENDPOINT = 'https://api.indexnow.org/indexnow'
 // bangkok i18n merge changed 101 course files (111 URLs derived) and would
 // have been rejected wholesale rather than pinged.
 const CHUNK_SIZE = 100
-// Runaway guard, far above any real batch: the corpus is 148 course files, so
-// a change set larger than this is a bug in the caller's diff mapping, not a
-// content pass.
-const MAX_URLS = 500
+// Runaway guard. It was 500 while each course file mapped to its EN URL alone;
+// scripts/indexnow-urls.ts now fans every changed record out to each locale
+// that serves it. Measured 2026-09-24: an edit to every course file derives
+// 678 URLs (608 course pages across registered locales + 70 region-hub URLs),
+// an edit to every SEO entry 571 (561 entry pages + 10 listing URLs), both in
+// one push 1,249. Real pushes have reached 555 (#124). 500 would reject a
+// legitimate all-courses edit wholesale, the failure the CHUNK_SIZE note above
+// records at 100. 1,500 clears both corpora at once, so tripping it means the
+// derivation emitted more than any content push can: a bug, so fail and look.
+// A genuinely larger push can be pinged by hand from the derived list, in
+// slices of at most MAX_URLS.
+const MAX_URLS = 1500
 
 async function main() {
   const urls = process.argv.slice(2)
@@ -48,7 +58,7 @@ async function main() {
   }
   if (urls.length > MAX_URLS) {
     console.error(
-      `indexnow-ping: ${urls.length} URLs exceeds the ${MAX_URLS} runaway guard — a change set this large is probably a bug in the caller's diff mapping.`
+      `indexnow-ping: ${urls.length} URLs exceeds the ${MAX_URLS} runaway guard — a change set this large is probably a bug in the caller's diff mapping. Nothing was pinged. If the list is genuinely right, ping it by hand in slices of at most ${MAX_URLS}.`
     )
     process.exit(1)
   }

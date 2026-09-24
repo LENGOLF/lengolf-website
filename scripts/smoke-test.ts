@@ -5066,6 +5066,37 @@ async function runLlmDiscoverabilityTests() {
     fail("IndexNow key file", `error: ${(err as Error).message}`);
   }
 
+  // 7b) Deploy marker: /deploy-sha.txt serves the commit the build was made
+  // from. The IndexNow workflow waits on it before pinging; if it breaks (moved
+  // under app/[locale], caught by the middleware matcher, stops reading the env
+  // var) every IndexNow run on main times out and pings nothing. CI builds with
+  // VERCEL_GIT_COMMIT_SHA and runs this with EXPECTED_DEPLOY_SHA set to the
+  // same commit, so this asserts the exact value rather than the shape. The
+  // shape-only fallback exists for local runs and is refused under CI, or
+  // dropping the env var from ci.yml would quietly weaken the check.
+  try {
+    const expected = process.env.EXPECTED_DEPLOY_SHA;
+    const res = await fetch(`${BASE}/deploy-sha.txt`, { redirect: "manual" });
+    const body = (await res.text()).trim();
+    const issues: string[] = [];
+    if (res.status !== 200) issues.push(`GET /deploy-sha.txt returned ${res.status}`);
+    if (!(res.headers.get("content-type") ?? "").startsWith("text/plain"))
+      issues.push(`content-type "${res.headers.get("content-type")}", want text/plain`);
+    if (!/noindex/.test(res.headers.get("x-robots-tag") ?? ""))
+      issues.push("missing X-Robots-Tag: noindex");
+    if (expected) {
+      if (body !== expected) issues.push(`body "${body}" != EXPECTED_DEPLOY_SHA ${expected}`);
+    } else if (process.env.CI) {
+      issues.push("EXPECTED_DEPLOY_SHA is unset under CI (ci.yml must pass the built commit)");
+    } else if (!/^([0-9a-f]{40}|unknown)$/.test(body)) {
+      issues.push(`body "${body.slice(0, 60)}" is neither a commit SHA nor "unknown"`);
+    }
+    if (issues.length > 0) fail("Deploy marker /deploy-sha.txt", issues.join("; "));
+    else pass(`Deploy marker /deploy-sha.txt (${expected ? "equals the built commit" : `shape only: ${body}`})`);
+  } catch (err) {
+    fail("Deploy marker /deploy-sha.txt", `error: ${(err as Error).message}`);
+  }
+
   // 8) FAQ pages carry dateModified in their FAQPage JSON-LD — the freshness
   // signal answer engines use to trust price-sensitive Q&A. Parse the node,
   // don't substring the page: a dateModified in some OTHER node must not
