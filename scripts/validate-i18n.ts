@@ -81,7 +81,7 @@ import { activityOccasionPages } from '@/data/activity-occasions'
 import { bestOfListiclePages } from '@/data/best-of-listicle-pages'
 import { hotelConciergePages } from '@/data/hotel-pages'
 import { RENTAL_AGREEMENT, RENTAL_AGREEMENT_PATH, RENTAL_AGREEMENT_VERSION } from '@/data/rental-agreement'
-import type { RentalAgreementContent } from '@/data/rental-agreement'
+import type { RentalAgreementContent, RentalAgreementSection } from '@/data/rental-agreement'
 import {
   getRegisteredGuidePaths,
   getRegisteredFaqPaths,
@@ -313,27 +313,98 @@ for (const locale of LOCALES) {
 }
 
 // data/rental-agreement/ — the Golf Course Club Rental Agreement. Legal text,
-// so on top of the ordinary content checks it gets two ERROR rules of its own
-// (check 12):
+// so on top of the ordinary content checks it gets ERROR rules of its own
+// (check 12), all computed by rentalAgreementProblems() below:
 //   (a) registry agreement, BOTH directions: a locale registered for the route
 //       with no agreement is a hard 404 behind its own hreflang (the page calls
 //       notFound()), and an agreement for an unregistered locale is dead text
 //       the middleware 301s away. Unlike faq-hub's `if (units.length > 0)`,
 //       nothing here is skipped silently.
-//   (b) structure parity against EN (rentalAgreementParityProblems below). In
-//       a contract a dropped bullet is a dropped term, and none of checks 1-9
-//       can see it: a translation missing its late-return clause is fluent,
-//       emoji-free and correctly termed.
+//   (b) structure parity against EN: the English-prevails notice, paragraph,
+//       section, clause and `**` counts, and the numbers in intro, closing and
+//       each section. In a contract a dropped bullet is a dropped term, and
+//       none of checks 1-9 can see it: a translation missing its late-return
+//       clause is fluent, emoji-free and correctly termed.
+//   (c) the date line must contain the agreement date AS THAT LOCALE WRITES IT
+//       (Intl, from RENTAL_AGREEMENT_VERSION). EN is checked too, since it is
+//       the text booking-new stamps the version against. A digit multiset was
+//       tried first and passed a swapped day/month, a wrong month name and a
+//       dropped month.
+//   (d) every string is non-blank, carries at least one character of the
+//       locale's own script (an untranslated English clause has none), and has
+//       no em dash (house style).
 // Only `sourceVersion` is non-prose; every other leaf is copy.
-function rentalAgreementParityProblems(
-  t: RentalAgreementContent,
+const AGREEMENT_DATE_TAG: Record<'en' | Locale, string> = {
+  en: 'en-GB',
+  th: 'th-TH-u-ca-gregory', // Gregorian: Intl's th default is Buddhist-era 2569
+  ja: 'ja-JP',
+  ko: 'ko-KR',
+  zh: 'zh-CN',
+}
+const AGREEMENT_NATIVE: Record<Locale, RegExp> = {
+  th: /\p{Script=Thai}/u,
+  ja: /\p{Script=Hiragana}|\p{Script=Katakana}|\p{Script=Han}/u,
+  ko: /\p{Script=Hangul}/u,
+  zh: /\p{Script=Han}/u,
+}
+
+/** The agreement date as `locale` writes it, e.g. "7 August 2026", "2026年8月7日". */
+function agreementDate(locale: 'en' | Locale): string {
+  return new Intl.DateTimeFormat(AGREEMENT_DATE_TAG[locale], {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(`${RENTAL_AGREEMENT_VERSION}T00:00:00Z`))
+}
+
+/** Every string leaf with its path, blanks INCLUDED (flattenMessages drops them). */
+function agreementStrings(node: unknown, path: string, out: Array<[string, string]>): void {
+  if (typeof node === 'string') out.push([path, node])
+  else if (Array.isArray(node)) node.forEach((v, i) => agreementStrings(v, `${path}[${i}]`, out))
+  else if (node && typeof node === 'object') {
+    for (const [k, v] of Object.entries(node as Record<string, unknown>)) {
+      agreementStrings(v, path ? `${path}.${k}` : k, out)
+    }
+  }
+}
+
+/** Check 12(c) for EN alone: its date line against the version. */
+function rentalAgreementEnProblems(en: RentalAgreementContent): string[] {
+  const want = agreementDate('en')
+  return en.lastUpdated.includes(want)
+    ? []
+    : [`lastUpdated "${en.lastUpdated}" does not contain the agreement date "${want}" (RENTAL_AGREEMENT_VERSION ${RENTAL_AGREEMENT_VERSION})`]
+}
+
+/**
+ * Every check-12 problem for one translation. Pure (inputs in, strings out), so
+ * --self-test drives the SAME function the corpus loop does, registry branches
+ * included. The first version self-tested a parity helper while the loop around
+ * it went untested, and edits to that loop (deleting the call, comparing EN
+ * with itself, a `continue` before add(), `if (false)` over a registry branch)
+ * passed both steps with a real defect live.
+ */
+let agreementJudgeCalls = 0
+function rentalAgreementProblems(
+  locale: Locale,
+  t: RentalAgreementContent | undefined,
+  registered: boolean,
   en: RentalAgreementContent
 ): string[] {
+  agreementJudgeCalls++
+  if (!t) {
+    return registered
+      ? [`${RENTAL_AGREEMENT_PATH} is registered for ${locale} in lib/translated-routes.ts but data/rental-agreement has no ${locale} text (the page 404s)`]
+      : []
+  }
   const problems: string[] = []
-  // Digit runs as a sorted multiset. Catches 24 -> 48, a dropped "(see Section
-  // 7)" cross-reference, and a Buddhist-era year (2569) in the date line. A
-  // translation that legitimately needs an extra digit must rephrase instead;
-  // there is deliberately no allowlist.
+  if (!registered) {
+    problems.push(`data/rental-agreement has ${locale} text but ${RENTAL_AGREEMENT_PATH} is not registered for ${locale} in lib/translated-routes.ts (unreachable)`)
+  }
+  // Digit runs as a sorted multiset. Catches 24 -> 48 and a dropped "(see
+  // Section 7)" cross-reference. A translation that legitimately needs an
+  // extra digit must rephrase instead; there is deliberately no allowlist.
   const digits = (parts: readonly string[]) =>
     parts
       .flatMap((s) => s.match(/\d+/g) ?? [])
@@ -343,15 +414,9 @@ function rentalAgreementParityProblems(
     parts.reduce((n, s) => n + (s.match(/\*\*/g) ?? []).length, 0)
 
   if (!t.notice) problems.push('notice: missing (translations must say the English version prevails)')
-  // The date line is the one field whose digits legitimately differ from EN:
-  // EN spells the month ("7 August 2026") where ja/ko/zh write it as a number
-  // ("2026年8月7日"). So accept exactly the version's day+year, or day+month+
-  // year, derived from RENTAL_AGREEMENT_VERSION rather than from EN's prose.
-  // Still rejects a Buddhist-era year (2569) or a wrong day.
-  const [y, m, d] = RENTAL_AGREEMENT_VERSION.split('-').map((n) => String(Number(n)))
-  const dateOk = [digits([y, d]), digits([y, m, d])]
-  if (!dateOk.includes(digits([t.lastUpdated]))) {
-    problems.push(`lastUpdated: numbers [${digits([t.lastUpdated])}] are not the agreement date ${RENTAL_AGREEMENT_VERSION} (expected [${dateOk.join('] or [')}])`)
+  const date = agreementDate(locale)
+  if (!t.lastUpdated.includes(date)) {
+    problems.push(`lastUpdated "${t.lastUpdated}" does not contain the agreement date as ${locale} writes it: "${date}"`)
   }
   for (const key of ['intro', 'closing'] as const) {
     if (t[key].length !== en[key].length) {
@@ -359,6 +424,14 @@ function rentalAgreementParityProblems(
     } else if (digits(t[key]) !== digits(en[key])) {
       problems.push(`${key}: numbers [${digits(t[key])}] differ from EN [${digits(en[key])}]`)
     }
+  }
+  const leaves: Array<[string, string]> = []
+  agreementStrings(t, '', leaves)
+  for (const [field, value] of leaves) {
+    if (field === 'sourceVersion') continue
+    if (value.trim() === '') problems.push(`${field}: blank`)
+    else if (!AGREEMENT_NATIVE[locale].test(value)) problems.push(`${field}: no ${locale} script at all (untranslated?)`)
+    if (value.includes('—')) problems.push(`${field}: em dash (house style forbids them)`)
   }
   if (t.sections.length !== en.sections.length) {
     problems.push(`sections: ${t.sections.length}, EN has ${en.sections.length}`)
@@ -384,24 +457,27 @@ function rentalAgreementParityProblems(
   return problems
 }
 
+// EN's date line. `add` is typed for the four target locales; EN is reported
+// under its own entry id, which the report prints verbatim.
+for (const problem of rentalAgreementEnProblems(RENTAL_AGREEMENT.en)) {
+  add('error', 'en' as Locale, 'rental-agreement:en', 'lastUpdated', 'rental-agreement', problem)
+}
+
+// Two coverage assertions after the loop, because either half can be skipped
+// alone. RENTAL_AGREEMENT is a Record over every locale (typecheck enforces
+// it), so each of the four must be JUDGED (rentalAgreementProblems called) and
+// LINTED (pushed into the corpus). A counter beside the push would stay at 4
+// with the push deleted, so the second one counts the entries themselves.
+// Measured before this existed: deleting the call, a `continue` above it, or
+// narrowing the loop passed with a dropped clause live.
 for (const locale of LOCALES) {
   const entryId = `rental-agreement:${locale}`
   const agreement = RENTAL_AGREEMENT[locale]
   const registered = hasTranslationForLocale(locale, RENTAL_AGREEMENT_PATH)
-  if (!agreement) {
-    if (registered) {
-      add('error', locale, entryId, '(entry)', 'rental-agreement',
-        `${RENTAL_AGREEMENT_PATH} is registered for ${locale} in lib/translated-routes.ts but data/rental-agreement has no ${locale} text (the page 404s)`)
-    }
-    continue
-  }
-  if (!registered) {
-    add('error', locale, entryId, '(entry)', 'rental-agreement',
-      `data/rental-agreement has ${locale} text but ${RENTAL_AGREEMENT_PATH} is not registered for ${locale} in lib/translated-routes.ts (unreachable)`)
-  }
-  for (const problem of rentalAgreementParityProblems(agreement, RENTAL_AGREEMENT.en)) {
+  for (const problem of rentalAgreementProblems(locale, agreement, registered, RENTAL_AGREEMENT.en)) {
     add('error', locale, entryId, '(structure)', 'rental-agreement', problem)
   }
+  if (!agreement) continue
   const leaves: Array<[string, string]> = []
   flattenMessages(agreement, '', leaves)
   entries.push({
@@ -411,6 +487,13 @@ for (const locale of LOCALES) {
       .filter(([field]) => field !== 'sourceVersion')
       .map(([field, value]) => ({ locale, entryId, field, value })),
   })
+}
+{
+  const linted = entries.filter((e) => e.entryId.startsWith('rental-agreement:')).length
+  if (agreementJudgeCalls !== LOCALES.length || linted !== LOCALES.length) {
+    add('error', 'th', 'rental-agreement:*', '(coverage)', 'rental-agreement',
+      `${agreementJudgeCalls} of ${LOCALES.length} agreement translations judged and ${linted} linted: a skip, a deleted call or a narrowed loop`)
+  }
 }
 
 // data/price-guide-pages.ts (/cost) and data/activity-occasions.ts
@@ -832,13 +915,16 @@ const SCRIPT_CLASS = {
 type ScriptName = keyof typeof SCRIPT_CLASS
 
 /**
- * Which scripts count as "this locale's own". ja claims Han (kanji) and ko
- * claims Han (hanja), which is exactly why ja needs the separate kana rule.
+ * Which scripts count as "this locale's own". ja claims Han (kanji), which is
+ * exactly why ja needs the separate kana rule. ko does NOT claim Han: modern
+ * Korean copy on this site uses no hanja, and while ko counted Han as its own a
+ * Chinese paragraph in a ko slot scored 100% "own" and passed. Measured when
+ * ko dropped Han: zero new errors across the whole corpus.
  */
 const LOCALE_OWN_SCRIPTS: Record<string, ScriptName[]> = {
   th: ['thai'],
   ja: ['kana', 'han'],
-  ko: ['hangul', 'han'],
+  ko: ['hangul'],
   zh: ['han'],
 }
 
@@ -1275,7 +1361,7 @@ if (process.argv.includes('--self-test')) {
   // it, so there was no count and no floor at all: deleting assert() lines
   // silently reduced coverage while it still printed ALL SELF-TESTS PASS.
   // Raise MIN_ASSERTIONS in the same commit that adds one; never lower it.
-  const MIN_ASSERTIONS = 79
+  const MIN_ASSERTIONS = 93
   let asserted = 0
   const assert = (label: string, cond: boolean) => {
     asserted++
@@ -1570,55 +1656,78 @@ if (process.argv.includes('--self-test')) {
   assert('fullwidth digit: ５ matches', FULLWIDTH_DIGIT_RE.test('料金は５00'))
   assert('fullwidth digit: half-width ignored', !FULLWIDTH_DIGIT_RE.test('料金は500'))
 
-  // Check 12(b) — rental-agreement structure parity. Each mutation below is a
-  // defect the corpus checks cannot see, applied to an otherwise-valid copy of
-  // EN, and must raise EXACTLY one problem: more would mean one edit trips
-  // several rules, which hides which rule is actually live.
+  // Check 12 — rental agreement. Drives rentalAgreementProblems(), the SAME
+  // function the corpus loop calls, with the real translations as the valid
+  // baseline. Each mutation is a defect checks 1-9 cannot see and must raise
+  // EXACTLY one problem: more would mean one edit trips several rules, which
+  // hides which rule is actually live.
   {
     const en = RENTAL_AGREEMENT.en
-    const valid = (): RentalAgreementContent => ({
-      ...structuredClone(en),
-      notice: { text: 'translation notice', linkText: 'English version' },
-    })
-    const count = (t: RentalAgreementContent) => rentalAgreementParityProblems(t, en).length
-    const sec = (heading: string) => en.sections.findIndex((s) => s.heading.startsWith(heading))
-    assert('agreement parity: valid translation → 0', count(valid()) === 0)
-    assert('agreement parity: no notice → 1', count({ ...valid(), notice: undefined }) === 1)
-    {
-      const t = valid()
-      const i = sec('7.')
-      t.sections = t.sections.map((s, j) => (j === i ? { ...s, items: s.items!.slice(1) } : s))
-      assert('agreement parity: dropped clause (§7) → 1', count(t) === 1)
+    const real = (l: Locale) => structuredClone(RENTAL_AGREEMENT[l])
+    const count = (l: Locale, t: RentalAgreementContent | undefined, registered = true) =>
+      rentalAgreementProblems(l, t, registered, en).length
+    // Positional section indices (headings are localized, e.g. 第7条（…）).
+    const mapSection = (t: RentalAgreementContent, i: number, f: (s: RentalAgreementSection) => RentalAgreementSection) => {
+      t.sections = t.sections.map((s, j) => (j === i ? f(s) : s))
+      return t
     }
-    {
-      const t = valid()
-      const i = sec('9.')
-      t.sections = t.sections.map((s, j) =>
-        j === i ? { ...s, items: s.items!.map((x, k) => (k === 1 ? x.replace('24', '48') : x)) } : s
-      )
-      assert('agreement parity: 24 → 48 (§9) → 1', count(t) === 1)
-    }
-    {
-      const t = valid()
-      const i = sec('9.')
-      t.sections = t.sections.map((s, j) =>
-        j === i ? { ...s, items: s.items!.map((x) => x.replaceAll('**', '')) } : s
-      )
-      assert('agreement parity: bold dropped (§9) → 1', count(t) === 1)
-    }
+    assert('agreement: real ja translation → 0', count('ja', real('ja')) === 0)
+    assert('agreement: every real translation → 0', LOCALES.every((l) => count(l, real(l)) === 0))
+    assert('agreement: no notice → 1', count('ja', { ...real('ja'), notice: undefined }) === 1)
     assert(
-      'agreement parity: numeric-month date (2026年8月7日) → 0',
-      count({ ...valid(), lastUpdated: '最終更新日：2026年8月7日' }) === 0
+      'agreement: dropped clause (§7) → 1',
+      count('ja', mapSection(real('ja'), 6, (s) => ({ ...s, items: s.items!.slice(1) }))) === 1
     )
     assert(
-      'agreement parity: wrong day in lastUpdated → 1',
-      count({ ...valid(), lastUpdated: '最終更新日：2026年8月8日' }) === 1
+      'agreement: 24 → 48 (§9) → 1',
+      count('ja', mapSection(real('ja'), 8, (s) => ({ ...s, items: s.items!.map((x, k) => (k === 1 ? x.replace('24', '48') : x)) }))) === 1
     )
     assert(
-      'agreement parity: Buddhist-era year in lastUpdated → 1',
-      count({ ...valid(), lastUpdated: en.lastUpdated.replace('2026', '2569') }) === 1
+      'agreement: bold dropped (§9) → 1',
+      count('ja', mapSection(real('ja'), 8, (s) => ({ ...s, items: s.items!.map((x) => x.replaceAll('**', '')) }))) === 1
     )
-    assert('agreement parity: dropped section → 1', count({ ...valid(), sections: en.sections.slice(1) }) === 1)
+    assert(
+      'agreement: dropped paragraph (§5) → 1',
+      count('ja', mapSection(real('ja'), 4, (s) => ({ ...s, paragraphs: [] }))) === 1
+    )
+    assert('agreement: dropped intro paragraph → 1', count('ja', { ...real('ja'), intro: real('ja').intro.slice(0, 1) }) === 1)
+    assert('agreement: dropped section → 1', count('ja', { ...real('ja'), sections: real('ja').sections.slice(1) }) === 1)
+    assert('agreement: wrong day (2026年8月8日) → 1', count('ja', { ...real('ja'), lastUpdated: '最終更新日：2026年8月8日' }) === 1)
+    assert('agreement: day/month swapped (2026年7月8日) → 1', count('ja', { ...real('ja'), lastUpdated: '最終更新日：2026年7月8日' }) === 1)
+    assert(
+      'agreement: Buddhist-era year (th 2569) → 1',
+      count('th', { ...real('th'), lastUpdated: real('th').lastUpdated.replace('2026', '2569') }) === 1
+    )
+    assert(
+      'agreement: wrong month name (th กันยายน) → 1',
+      count('th', { ...real('th'), lastUpdated: real('th').lastUpdated.replace('สิงหาคม', 'กันยายน') }) === 1
+    )
+    assert(
+      'agreement: blank clause → 1',
+      count('ja', mapSection(real('ja'), 0, (s) => ({ ...s, items: s.items!.map((x, k) => (k === 0 ? '' : x)) }))) === 1
+    )
+    assert(
+      'agreement: English (untranslated) notice → 1',
+      count('ja', { ...real('ja'), notice: { text: 'This translation is provided for convenience.', linkText: real('ja').notice!.linkText } }) === 1
+    )
+    assert(
+      'agreement: em dash in a clause → 1',
+      count('ja', mapSection(real('ja'), 0, (s) => ({ ...s, items: s.items!.map((x, k) => (k === 0 ? `${x}—` : x)) }))) === 1
+    )
+    assert('agreement: registered locale with no text → 1', count('ja', undefined, true) === 1)
+    assert('agreement: unregistered locale with no text → 0', count('ja', undefined, false) === 0)
+    assert('agreement: text for an unregistered locale → 1', count('ja', real('ja'), false) === 1)
+    assert('agreement: EN date line matches the version → 0', rentalAgreementEnProblems(en).length === 0)
+    assert(
+      'agreement: EN wrong day → 1',
+      rentalAgreementEnProblems({ ...en, lastUpdated: 'Last updated: 8 August 2026' }).length === 1
+    )
+    // checkScript: ko must not count Han as its own, or a Chinese paragraph in
+    // the ko slot scores 100% "own" (the zh-in-ko swap passed every gate).
+    const zhClause = RENTAL_AGREEMENT.zh.sections[5].items![1]
+    const koClause = RENTAL_AGREEMENT.ko.sections[5].items![1]
+    assert('script: a Chinese clause in the ko slot → 1', errsFrom('ko', zhClause, checkScript) === 1)
+    assert('script: the real ko clause → 0', errsFrom('ko', koClause, checkScript) === 0)
   }
 
   if (asserted < MIN_ASSERTIONS) {
