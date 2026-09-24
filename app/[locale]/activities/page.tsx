@@ -35,7 +35,6 @@ const CATEGORY_LABELS: Record<string, string> = {
   bars: 'Bars & Nightlife',
   'corporate-events': 'Corporate',
   'indoor-entertainment': 'Indoor Fun',
-  'birthday-parties': 'Birthdays',
   golf: 'Golf',
   'local-guide': 'Local Guide',
 }

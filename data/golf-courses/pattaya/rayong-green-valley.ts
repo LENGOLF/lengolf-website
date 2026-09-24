@@ -41,7 +41,10 @@ export const course: GolfCourse = {
       meta_description: `Rayong Green Valley Country Club green fees, course overview, tips, and how to arrange golf club rentals delivered to your Bangkok hotel.`,
     },
     th: {
-      title: `Rayong Green Valley Country Club ระยอง — ค่ากรีนฟี รีวิวสนาม และเช่าไม้กอล์ฟ`,
+      // CTR TEST (2026-09-23): "ราคากรีนฟี" + ":" instead of the template's
+      // "— ค่ากรีนฟี", on 4 pages; ayutthaya + nikanti are the untouched controls.
+      // Do not normalise back to the glossary form before the ~2026-10-21 re-measure.
+      title: `Rayong Green Valley Country Club ระยอง: ราคากรีนฟี รีวิวสนาม และเช่าไม้กอล์ฟ`,
       meta_description: `Rayong Green Valley Country Club สนาม 18 หลุม พาร์ 72 ของ Peter Thomson ที่บ้านฉาง จังหวัดระยอง ค่ากรีนฟี ลักษณะสนามบนเนินเขา และเคล็ดลับการเล่น พร้อมเช่าไม้กอล์ฟส่งถึงโรงแรมในกรุงเทพฯ`,
       prose: {
         overview: `Rayong Green Valley Country Club เป็นสนามกอล์ฟ 18 หลุม พาร์ 72 ในอำเภอบ้านฉาง จังหวัดระยอง ออกแบบโดย Peter Thomson และเปิดให้บริการในปี 1992 งานออกแบบของ Thomson วางตัวอยู่บนภูมิประเทศเนินเขาใกล้อ่าวไทย และดึงลักษณะทางธรรมชาติของพื้นที่ ทั้งแนวหินโผล่ขนาดใหญ่ ก้อนหิน ต้นกระบองเพชร และพืชพรรณพื้นถิ่น มาใช้วางกรอบให้แต่ละหลุมและสร้างอุปสรรคทางธรรมชาติที่แตกต่างอย่างชัดเจนจากบังเกอร์และอุปสรรคน้ำที่สร้างขึ้นในสนามส่วนใหญ่ของพื้นที่พัทยา สนามมีความยาวสูงสุด 6,980 หลา และเป็นที่กล่าวถึงในเรื่องบุคลิกแบบเนินเขาที่มีทัศนียภาพสวยงาม ซึ่งเป็นบรรยากาศที่ทำให้แตกต่างจากสนามรีสอร์ตในพื้นที่พัทยาที่ส่วนใหญ่เป็นพื้นราบ ค่ากรีนฟีอยู่ที่ 3,350 บาทในวันธรรมดา และ 3,550 บาทในวันหยุดสุดสัปดาห์ ซึ่งเป็นระดับราคากลางถึงพรีเมียมที่เทียบเคียงได้กับสนามอื่นในพัทยาที่มีอายุและภูมิหลังการออกแบบใกล้เคียงกัน`,

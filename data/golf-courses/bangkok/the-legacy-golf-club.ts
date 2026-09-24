@@ -40,7 +40,10 @@ export const course: GolfCourse = {
       meta_description: `The Legacy Golf Club Bangkok (Natural Park Ramindra) green fees, Jack Nicklaus course guide, visitor tips, and golf club rentals delivered to your Bangkok hotel.`,
     },
     th: {
-      title: `The Legacy Golf Club กรุงเทพฯ — ค่ากรีนฟี รีวิวสนาม และเช่าไม้กอล์ฟ`,
+      // CTR TEST (2026-09-23): "ราคากรีนฟี" + ":" instead of the template's
+      // "— ค่ากรีนฟี", on 4 pages; ayutthaya + nikanti are the untouched controls.
+      // Do not normalise back to the glossary form before the ~2026-10-21 re-measure.
+      title: `The Legacy Golf Club กรุงเทพฯ: ราคากรีนฟี รีวิวสนาม และเช่าไม้กอล์ฟ`,
       meta_description: `ค่ากรีนฟี The Legacy Golf Club (Natural Park Ramindra) วันธรรมดาประมาณ 2,000 บาท สนามเดียวในกรุงเทพฯ จาก Jack Nicklaus พร้อมบริการเช่าไม้กอล์ฟส่งถึงโรงแรม`,
       prose: {
         overview: `The Legacy Golf Club หรือชื่อเดิม Natural Park Ramindra Golf Club โดดเด่นในฐานะสนามกอล์ฟแห่งเดียวในกรุงเทพฯ ที่ออกแบบโดย Jack Nicklaus เปิดให้บริการในปี 1992 ในเขตคลองสามวาทางฝั่งตะวันออกของกรุงเทพฯ เลย์เอาต์พาร์กแลนด์ที่มีแนวต้นไม้ขนาบแห่งนี้ผสานการออกแบบแนวเสี่ยงแลกผลตอบแทนอันเป็นเอกลักษณ์ของ Nicklaus เข้ากับสภาพแวดล้อมการเล่นที่สมบูรณ์ลงตัว ใกล้กับซาฟารีเวิลด์ สนาม 18 หลุม พาร์ 72 มีระยะ 7,037 หลาจากแท่นทีทอง และถือเป็นบททดสอบจริงจังสำหรับนักกอล์ฟแฮนดิแคปกลางถึงต่ำในกรุงเทพฯ ชื่อชั้นของ Nicklaus สิ่งอำนวยความสะดวกครบครัน และร้านอาหารญี่ปุ่นภายในสนาม ทำให้ The Legacy มีบุคลิกที่เหนือกว่าสนามระดับกลางหลายแห่งของกรุงเทพฯ ทั้งนี้สนามบังคับใช้รถกอล์ฟและแคดดี้ ซึ่งช่วยให้จังหวะการเล่นตลอดเลย์เอาต์กระชับฉับไว`,

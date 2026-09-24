@@ -41,7 +41,10 @@ export const course: GolfCourse = {
       meta_description: `Pattavia Century Golf Club green fees, course overview, tips, and how to arrange golf club rentals delivered to your Pattaya hotel.`,
     },
     th: {
-      title: `Pattavia Century Golf Club ชลบุรี — ค่ากรีนฟี รีวิวสนาม และเช่าไม้กอล์ฟ`,
+      // CTR TEST (2026-09-23): "ราคากรีนฟี" + ":" instead of the template's
+      // "— ค่ากรีนฟี", on 4 pages; ayutthaya + nikanti are the untouched controls.
+      // Do not normalise back to the glossary form before the ~2026-10-21 re-measure.
+      title: `Pattavia Century Golf Club ชลบุรี: ราคากรีนฟี รีวิวสนาม และเช่าไม้กอล์ฟ`,
       meta_description: `Pattavia Century Golf Club สนาม 18 หลุม พาร์ 72 ในอำเภอบ้านบึง จังหวัดชลบุรี ค่ากรีนฟีเริ่มที่ 1,050 บาทในวันธรรมดา รวมค่าแคดดี้ พร้อมรีวิวสนาม การเดินทาง และเช่าไม้กอล์ฟส่งถึงโรงแรมในกรุงเทพฯ`,
       prose: {
         overview: `Pattavia Century Golf Club เป็นสนาม 18 หลุม พาร์ 72 ในตำบลคลองกิ่ว อำเภอบ้านบึง จังหวัดชลบุรี เปิดให้บริการครั้งแรกในปี 1996 ในชื่อ Chonburi Century Country Club และได้รับการปรับปรุงครั้งใหญ่ในปี 2014 หลังจากกลุ่มเจ้าของ Chang Breweries เข้าซื้อกิจการ การปรับปรุงในปี 2014 ขยายเลย์เอาต์ให้ยาวกว่า 7,100 หลาจากแท่นทีระดับแชมเปียนชิพ และรวมถึงคลับเฮาส์หลังใหม่ ค่ากรีนฟีวางโครงสร้างจากอัตราพื้นฐาน 1,050 บาท (วันธรรมดา รวมค่าแคดดี้แล้ว) ไปจนถึง 2,050 บาทสำหรับแพ็กเกจรวมทุกอย่างในช่วงเช้าวันหยุดสุดสัปดาห์ที่คนเล่นมากที่สุด (รวมแคดดี้และรถกอล์ฟ) ด้วยเวลาเดินทาง 50 นาทีจากใจกลางพัทยาผ่านทางหลวงหมายเลข 331 และ 90 นาทีจากสนามบินสุวรรณภูมิ สนามแห่งนี้จึงอยู่นอกแนวสนามกอล์ฟสายหลักของนักท่องเที่ยว และเป็นทางเลือกที่ราคาย่อมเยากว่าสนามระดับพรีเมียมซึ่งอยู่ใกล้ตัวเมืองมากกว่า`,
