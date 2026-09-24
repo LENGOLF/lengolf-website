@@ -10,8 +10,9 @@
  *
  *   npx tsx scripts/indexnow-ping.ts https://www.len.golf/golf/ [more URLs...]
  *
- * Invoked by .github/workflows/indexnow.yml on pushes to main that touch
- * content data; safe to run by hand after a manual content edit.
+ * Invoked by the `indexnow` job in .github/workflows/deploy-check.yml on
+ * pushes to main that touch content data, once production serves the push;
+ * safe to run by hand after a manual content edit.
  *
  * Contract (per this repo's gate rules — a gate that cannot fail is worse
  * than no gate):
