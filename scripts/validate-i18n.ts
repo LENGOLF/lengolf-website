@@ -392,7 +392,7 @@ for (const locale of LOCALES) {
     add('error', locale, entryId, '(entry)', 'rental-agreement',
       `data/rental-agreement has ${locale} text but ${RENTAL_AGREEMENT_PATH} is not registered for ${locale} in lib/translated-routes.ts (unreachable)`)
   }
-  for (const problem of rentalAgreementParityProblems(agreement, RENTAL_AGREEMENT.en!)) {
+  for (const problem of rentalAgreementParityProblems(agreement, RENTAL_AGREEMENT.en)) {
     add('error', locale, entryId, '(structure)', 'rental-agreement', problem)
   }
   const leaves: Array<[string, string]> = []
@@ -1568,7 +1568,7 @@ if (process.argv.includes('--self-test')) {
   // EN, and must raise EXACTLY one problem: more would mean one edit trips
   // several rules, which hides which rule is actually live.
   {
-    const en = RENTAL_AGREEMENT.en!
+    const en = RENTAL_AGREEMENT.en
     const valid = (): RentalAgreementContent => ({
       ...structuredClone(en),
       notice: { text: 'translation notice', linkText: 'English version' },

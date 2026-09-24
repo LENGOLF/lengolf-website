@@ -13,6 +13,10 @@
 // structure (sections, clauses, bold spans, numbers) against EN.
 import type { Locale } from '@/lib/translated-routes'
 import { en } from './en'
+import { ja } from './ja'
+import { ko } from './ko'
+import { th } from './th'
+import { zh } from './zh'
 import type { RentalAgreementContent } from './types'
 
 export { RENTAL_AGREEMENT_VERSION } from './types'
@@ -20,7 +24,7 @@ export type { RentalAgreementContent, RentalAgreementSection } from './types'
 
 export const RENTAL_AGREEMENT_PATH = '/golf-course-club-rental-agreement/'
 
-export const RENTAL_AGREEMENT: Partial<Record<Locale, RentalAgreementContent>> = { en }
+export const RENTAL_AGREEMENT: Record<Locale, RentalAgreementContent> = { en, th, ja, ko, zh }
 
 /** The agreement for `locale`, or undefined when that locale has none. */
 export function getRentalAgreement(locale: string): RentalAgreementContent | undefined {
