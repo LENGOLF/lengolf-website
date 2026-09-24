@@ -75,7 +75,7 @@
     "note": "In JA prose, BTS station and building names are transliterated to katakana (BTSチットロム駅, ザ・マーキュリービル4階). 'The Mercury Ville' / 'Mercury Ville' in Latin is also attested and acceptable in address-like contexts. Latin brand/product names are glossed once with katakana in parens on first use: REVA（レヴァ）. Keep LENGOLF, len.golf, BTS, MRT, PGA, LINE @lengolf, booking.len.golf, and Callaway verbatim. NOTE: transliterating Chidlom/Mercury Ville is intentional JA-prose style and diverges from the Latin-verbatim brand_immutable list (which governs the pure-TS lexicon check for UI strings) — do not 'correct' チットロム／ザ・マーキュリービル in shipped JA guide copy."
   },
   "seo_norms": {
-    "title_display_target": "~32 full-width characters before SERP truncation; front-load the target query, then a descriptive tail after an em dash — (shipped guide titles run 34–65 chars, acceptable for the tail).",
+    "title_display_target": "~32 full-width characters before SERP truncation; front-load the target query, then a descriptive tail after a colon, 、 or a sentence break (？), never an em dash (—). Most shipped JA guide and FAQ titles still use an em-dash tail: legacy debt, do not copy it. Shipped guide titles run 34–65 chars, acceptable for the tail.",
     "meta_note": "Put the hook and target query in the first ~80 characters; JP meta descriptions truncate around 120 full-width chars on mobile. Shipped guide metas run ~90–160 chars.",
     "front_load": "Lead with the reader's query (e.g. ゴルフクラブの受託手荷物料金), not the brand."
   },
@@ -84,6 +84,6 @@
     "Half-width digits and Latin units (kg, THB) inside Japanese text; no space between number and unit (6kg, 1,800THB).",
     "No exclamation marks, no emoji. Friendly-professional です/ます調 throughout.",
     "Gloss a Latin brand/product name once with katakana in parens on first use (REVA（レヴァ）), then either form.",
-    "Em dash — (spaced) for asides; wave dash 〜 for numeric ranges."
+    "No em dash (— or ——) anywhere in copy, per the owner's house style. For an aside use full-width parentheses （）, a colon, 、 or a sentence break; between list items use ・. Wave dash 〜 for numeric ranges. Shipped JA copy still contains em dashes: that is legacy debt for a separate native-QA sweep, not a pattern to copy."
   ]
 }

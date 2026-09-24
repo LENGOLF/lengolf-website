@@ -121,7 +121,13 @@ any language barrier. Nothing beyond that.
 
 ## SERP / SEO checks
 
-- Title front-loads the target query; descriptive tail after an em dash — is fine.
+- Title front-loads the target query, then a descriptive tail after a colon, a comma or a
+  sentence break (`seo_norms.title_display_target` in the ja/ko/zh glossaries names each
+  locale's forms; `th.json` has no `seo_norms`).
+  **No em dash** (`—`, or the doubled `——`) in a title or anywhere else in copy: it is the
+  owner's house style. Most shipped non-EN guide and FAQ titles still carry one. That is legacy debt for a separate
+  native-QA sweep: flag it in copy the batch writes or edits, not in shipped copy it leaves
+  untouched, and never copy the pattern from a sibling entry.
 - Title within the locale display target (glossary `seo_norms.title_display_target`).
 - Meta description puts the hook + query in the first ~80 chars; no keyword stuffing; no invented
   claims (the fact-fidelity rule applies to metadata too).

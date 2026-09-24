@@ -74,7 +74,7 @@
     "note": "KO transliterates the BTS station name (BTS 칫롬역) but keeps 'The Mercury Ville' in Latin ('The Mercury Ville 4층'). Keep LENGOLF, len.golf, BTS, MRT, PGA, LINE @lengolf, booking.len.golf, and Latin brand/product names (Callaway, REVA) verbatim."
   },
   "seo_norms": {
-    "title_display_target": "~30 characters, front-loaded with the target query, descriptive tail after an em dash — (shipped guide titles 22–52 chars).",
+    "title_display_target": "~30 characters, front-loaded with the target query, descriptive tail after a colon (:), a comma or a sentence break (?), never an em dash (—). Most shipped KO guide and FAQ titles still use an em-dash tail: legacy debt, do not copy it. Shipped guide titles 22–52 chars.",
     "meta_note": "Hook + target query in the first ~80 characters; KO meta truncates around 80 chars on mobile SERP. Shipped guide metas run ~90–160 chars.",
     "front_load": "Lead with the reader's query (예: 골프백 수하물 요금), not the brand."
   },
