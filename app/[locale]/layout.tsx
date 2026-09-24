@@ -55,14 +55,23 @@ export function generateStaticParams() {
 
 // A locale outside the five above must 404 at the routing layer, not render.
 // The notFound() below still returns a 404, but only after Next has rendered
-// the not-found path and STORED it as a permanent ISR entry. A junk locale is
-// reachable because the middleware matcher skips file extensions and the
-// images/ and api/ prefixes, so `/<junk>.txt` and `/images/golf/` arrive here
-// with the junk string as the locale (measured on prod 2026-09-24, ~86-132 KB
-// per unique URL, MISS then HIT). Next resolves a route's dynamicParams as
-// "every segment !== false" (build/utils.js), so this one line covers every
-// page under [locale], including static pages with no param of their own, and
-// no child can opt back in. Smoke section G2 asserts it.
+// the not-found path and stored it as an ISR entry that never revalidates, for
+// the life of the deployment. A junk locale is reachable because the middleware
+// matcher skips file extensions, the images/ and api/ prefixes, and any first
+// segment that merely STARTS with favicon.ico, sitemap.xml, robots.txt or
+// llms.txt (those alternatives are unanchored), so `/<junk>.txt` and
+// `/images/golf/` arrive here with the junk string as the locale (measured on
+// prod 2026-09-24, ~86-132 KB per unique URL, MISS then HIT).
+//
+// Next resolves a route's dynamicParams as "every segment !== false"
+// (build/utils.js), so this one line covers every PAGE under [locale],
+// including static pages with no param of their own, and no child can opt back
+// in. It does NOT reach route handlers (opengraph-image and friends), which
+// take config from their own file only: each needs its own flag. Two
+// consequences for new pages here: a dynamic child with no generateStaticParams
+// now 404s on every request, and a page whose own generateStaticParams omits a
+// locale that the middleware lets through 404s for that locale. Smoke section
+// G2 asserts the junk-locale case.
 export const dynamicParams = false
 
 export const metadata: Metadata = {
