@@ -80,7 +80,7 @@ import { priceGuidePages } from '@/data/price-guide-pages'
 import { activityOccasionPages } from '@/data/activity-occasions'
 import { bestOfListiclePages } from '@/data/best-of-listicle-pages'
 import { hotelConciergePages } from '@/data/hotel-pages'
-import { RENTAL_AGREEMENT, RENTAL_AGREEMENT_PATH } from '@/data/rental-agreement'
+import { RENTAL_AGREEMENT, RENTAL_AGREEMENT_PATH, RENTAL_AGREEMENT_VERSION } from '@/data/rental-agreement'
 import type { RentalAgreementContent } from '@/data/rental-agreement'
 import {
   getRegisteredGuidePaths,
@@ -343,8 +343,15 @@ function rentalAgreementParityProblems(
     parts.reduce((n, s) => n + (s.match(/\*\*/g) ?? []).length, 0)
 
   if (!t.notice) problems.push('notice: missing (translations must say the English version prevails)')
-  if (digits([t.lastUpdated]) !== digits([en.lastUpdated])) {
-    problems.push(`lastUpdated: numbers [${digits([t.lastUpdated])}] differ from EN [${digits([en.lastUpdated])}]`)
+  // The date line is the one field whose digits legitimately differ from EN:
+  // EN spells the month ("7 August 2026") where ja/ko/zh write it as a number
+  // ("2026年8月7日"). So accept exactly the version's day+year, or day+month+
+  // year, derived from RENTAL_AGREEMENT_VERSION rather than from EN's prose.
+  // Still rejects a Buddhist-era year (2569) or a wrong day.
+  const [y, m, d] = RENTAL_AGREEMENT_VERSION.split('-').map((n) => String(Number(n)))
+  const dateOk = [digits([y, d]), digits([y, m, d])]
+  if (!dateOk.includes(digits([t.lastUpdated]))) {
+    problems.push(`lastUpdated: numbers [${digits([t.lastUpdated])}] are not the agreement date ${RENTAL_AGREEMENT_VERSION} (expected [${dateOk.join('] or [')}])`)
   }
   for (const key of ['intro', 'closing'] as const) {
     if (t[key].length !== en[key].length) {
@@ -1268,7 +1275,7 @@ if (process.argv.includes('--self-test')) {
   // it, so there was no count and no floor at all: deleting assert() lines
   // silently reduced coverage while it still printed ALL SELF-TESTS PASS.
   // Raise MIN_ASSERTIONS in the same commit that adds one; never lower it.
-  const MIN_ASSERTIONS = 77
+  const MIN_ASSERTIONS = 79
   let asserted = 0
   const assert = (label: string, cond: boolean) => {
     asserted++
@@ -1599,6 +1606,14 @@ if (process.argv.includes('--self-test')) {
       )
       assert('agreement parity: bold dropped (§9) → 1', count(t) === 1)
     }
+    assert(
+      'agreement parity: numeric-month date (2026年8月7日) → 0',
+      count({ ...valid(), lastUpdated: '最終更新日：2026年8月7日' }) === 0
+    )
+    assert(
+      'agreement parity: wrong day in lastUpdated → 1',
+      count({ ...valid(), lastUpdated: '最終更新日：2026年8月8日' }) === 1
+    )
     assert(
       'agreement parity: Buddhist-era year in lastUpdated → 1',
       count({ ...valid(), lastUpdated: en.lastUpdated.replace('2026', '2569') }) === 1
