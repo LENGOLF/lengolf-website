@@ -20,6 +20,7 @@
  *   - data/price-guide-pages.ts — /cost entries with locale ja/ko/zh/th
  *   - data/activity-occasions.ts — /activities entries, same locales
  *   - data/best-of-listicle-pages.ts — /best entries, same locales
+ *   - data/rental-agreement/    — the course club rental agreement per locale
  * Every module in that list is a plain data module — none imports lib/pricing.
  *
  * This paragraph used to justify an import that no longer exists: it said
@@ -48,6 +49,10 @@
  *      cover are derived from the translated-route registry
  *      (lib/translated-routes.ts) — a mirror of the generateStaticParams
  *      data sources, kept in sync by smoke-test sections I/J.
+ *  12. Rental agreement (data/rental-agreement/): a locale registered for
+ *      the route with no text, or text for an unregistered locale; or a
+ *      translation whose structure diverges from EN (paragraph, section,
+ *      clause and ** counts, and the numbers in each section).
  *
  * WARN-level (reported, exit 0) — expected to fire on legacy entries:
  *   7. Currency-convention drift vs conventions.currency.primary.
@@ -75,6 +80,8 @@ import { priceGuidePages } from '@/data/price-guide-pages'
 import { activityOccasionPages } from '@/data/activity-occasions'
 import { bestOfListiclePages } from '@/data/best-of-listicle-pages'
 import { hotelConciergePages } from '@/data/hotel-pages'
+import { RENTAL_AGREEMENT, RENTAL_AGREEMENT_PATH } from '@/data/rental-agreement'
+import type { RentalAgreementContent } from '@/data/rental-agreement'
 import {
   getRegisteredGuidePaths,
   getRegisteredFaqPaths,
@@ -303,6 +310,100 @@ for (const locale of LOCALES) {
     .filter(([field]) => !/\.categories\[|^faqLinks\./.test(field))
     .map(([field, value]) => ({ locale, entryId, field, value }))
   if (units.length > 0) entries.push({ entryId, locale, units })
+}
+
+// data/rental-agreement/ — the Golf Course Club Rental Agreement. Legal text,
+// so on top of the ordinary content checks it gets two ERROR rules of its own
+// (check 12):
+//   (a) registry agreement, BOTH directions: a locale registered for the route
+//       with no agreement is a hard 404 behind its own hreflang (the page calls
+//       notFound()), and an agreement for an unregistered locale is dead text
+//       the middleware 301s away. Unlike faq-hub's `if (units.length > 0)`,
+//       nothing here is skipped silently.
+//   (b) structure parity against EN (rentalAgreementParityProblems below). In
+//       a contract a dropped bullet is a dropped term, and none of checks 1-9
+//       can see it: a translation missing its late-return clause is fluent,
+//       emoji-free and correctly termed.
+// Only `sourceVersion` is non-prose; every other leaf is copy.
+function rentalAgreementParityProblems(
+  t: RentalAgreementContent,
+  en: RentalAgreementContent
+): string[] {
+  const problems: string[] = []
+  // Digit runs as a sorted multiset. Catches 24 -> 48, a dropped "(see Section
+  // 7)" cross-reference, and a Buddhist-era year (2569) in the date line. A
+  // translation that legitimately needs an extra digit must rephrase instead;
+  // there is deliberately no allowlist.
+  const digits = (parts: readonly string[]) =>
+    parts
+      .flatMap((s) => s.match(/\d+/g) ?? [])
+      .sort()
+      .join(',')
+  const bold = (parts: readonly string[]) =>
+    parts.reduce((n, s) => n + (s.match(/\*\*/g) ?? []).length, 0)
+
+  if (!t.notice) problems.push('notice: missing (translations must say the English version prevails)')
+  if (digits([t.lastUpdated]) !== digits([en.lastUpdated])) {
+    problems.push(`lastUpdated: numbers [${digits([t.lastUpdated])}] differ from EN [${digits([en.lastUpdated])}]`)
+  }
+  for (const key of ['intro', 'closing'] as const) {
+    if (t[key].length !== en[key].length) {
+      problems.push(`${key}: ${t[key].length} paragraph(s), EN has ${en[key].length}`)
+    } else if (digits(t[key]) !== digits(en[key])) {
+      problems.push(`${key}: numbers [${digits(t[key])}] differ from EN [${digits(en[key])}]`)
+    }
+  }
+  if (t.sections.length !== en.sections.length) {
+    problems.push(`sections: ${t.sections.length}, EN has ${en.sections.length}`)
+    return problems
+  }
+  en.sections.forEach((es, i) => {
+    const ts = t.sections[i]
+    const at = `sections[${i}] (EN "${es.heading}")`
+    for (const key of ['paragraphs', 'items'] as const) {
+      const got = ts[key]?.length ?? 0
+      const want = es[key]?.length ?? 0
+      if (got !== want) problems.push(`${at}: ${got} ${key}, EN has ${want}`)
+    }
+    const tParts = [ts.heading, ...(ts.paragraphs ?? []), ...(ts.items ?? [])]
+    const eParts = [es.heading, ...(es.paragraphs ?? []), ...(es.items ?? [])]
+    if (bold(tParts) !== bold(eParts)) {
+      problems.push(`${at}: ${bold(tParts)} "**" marker(s), EN has ${bold(eParts)}`)
+    }
+    if (digits(tParts) !== digits(eParts)) {
+      problems.push(`${at}: numbers [${digits(tParts)}] differ from EN [${digits(eParts)}]`)
+    }
+  })
+  return problems
+}
+
+for (const locale of LOCALES) {
+  const entryId = `rental-agreement:${locale}`
+  const agreement = RENTAL_AGREEMENT[locale]
+  const registered = hasTranslationForLocale(locale, RENTAL_AGREEMENT_PATH)
+  if (!agreement) {
+    if (registered) {
+      add('error', locale, entryId, '(entry)', 'rental-agreement',
+        `${RENTAL_AGREEMENT_PATH} is registered for ${locale} in lib/translated-routes.ts but data/rental-agreement has no ${locale} text (the page 404s)`)
+    }
+    continue
+  }
+  if (!registered) {
+    add('error', locale, entryId, '(entry)', 'rental-agreement',
+      `data/rental-agreement has ${locale} text but ${RENTAL_AGREEMENT_PATH} is not registered for ${locale} in lib/translated-routes.ts (unreachable)`)
+  }
+  for (const problem of rentalAgreementParityProblems(agreement, RENTAL_AGREEMENT.en!)) {
+    add('error', locale, entryId, '(structure)', 'rental-agreement', problem)
+  }
+  const leaves: Array<[string, string]> = []
+  flattenMessages(agreement, '', leaves)
+  entries.push({
+    entryId,
+    locale,
+    units: leaves
+      .filter(([field]) => field !== 'sourceVersion')
+      .map(([field, value]) => ({ locale, entryId, field, value })),
+  })
 }
 
 // data/price-guide-pages.ts (/cost) and data/activity-occasions.ts
@@ -1167,7 +1268,7 @@ if (process.argv.includes('--self-test')) {
   // it, so there was no count and no floor at all: deleting assert() lines
   // silently reduced coverage while it still printed ALL SELF-TESTS PASS.
   // Raise MIN_ASSERTIONS in the same commit that adds one; never lower it.
-  const MIN_ASSERTIONS = 70
+  const MIN_ASSERTIONS = 77
   let asserted = 0
   const assert = (label: string, cond: boolean) => {
     asserted++
@@ -1461,6 +1562,49 @@ if (process.argv.includes('--self-test')) {
   assert('exclamation: ！ matches', EXCL_RE.test('すごい！'))
   assert('fullwidth digit: ５ matches', FULLWIDTH_DIGIT_RE.test('料金は５00'))
   assert('fullwidth digit: half-width ignored', !FULLWIDTH_DIGIT_RE.test('料金は500'))
+
+  // Check 12(b) — rental-agreement structure parity. Each mutation below is a
+  // defect the corpus checks cannot see, applied to an otherwise-valid copy of
+  // EN, and must raise EXACTLY one problem: more would mean one edit trips
+  // several rules, which hides which rule is actually live.
+  {
+    const en = RENTAL_AGREEMENT.en!
+    const valid = (): RentalAgreementContent => ({
+      ...structuredClone(en),
+      notice: { text: 'translation notice', linkText: 'English version' },
+    })
+    const count = (t: RentalAgreementContent) => rentalAgreementParityProblems(t, en).length
+    const sec = (heading: string) => en.sections.findIndex((s) => s.heading.startsWith(heading))
+    assert('agreement parity: valid translation → 0', count(valid()) === 0)
+    assert('agreement parity: no notice → 1', count({ ...valid(), notice: undefined }) === 1)
+    {
+      const t = valid()
+      const i = sec('7.')
+      t.sections = t.sections.map((s, j) => (j === i ? { ...s, items: s.items!.slice(1) } : s))
+      assert('agreement parity: dropped clause (§7) → 1', count(t) === 1)
+    }
+    {
+      const t = valid()
+      const i = sec('9.')
+      t.sections = t.sections.map((s, j) =>
+        j === i ? { ...s, items: s.items!.map((x, k) => (k === 1 ? x.replace('24', '48') : x)) } : s
+      )
+      assert('agreement parity: 24 → 48 (§9) → 1', count(t) === 1)
+    }
+    {
+      const t = valid()
+      const i = sec('9.')
+      t.sections = t.sections.map((s, j) =>
+        j === i ? { ...s, items: s.items!.map((x) => x.replaceAll('**', '')) } : s
+      )
+      assert('agreement parity: bold dropped (§9) → 1', count(t) === 1)
+    }
+    assert(
+      'agreement parity: Buddhist-era year in lastUpdated → 1',
+      count({ ...valid(), lastUpdated: en.lastUpdated.replace('2026', '2569') }) === 1
+    )
+    assert('agreement parity: dropped section → 1', count({ ...valid(), sections: en.sections.slice(1) }) === 1)
+  }
 
   if (asserted < MIN_ASSERTIONS) {
     console.log(
