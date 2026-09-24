@@ -4632,12 +4632,23 @@ async function runNotFoundTests() {
  * 404. Hence the paired control below: a real page must still be prerendered,
  * so an all-dynamic regression (which would also remove the header from the
  * junk URL) cannot make this section vacuously green.
+ *
+ * The LOCALE is a param too, and it was the one left unguarded. A junk first
+ * segment normally never reaches `[locale]`: next-intl treats it as an
+ * unprefixed path and rewrites it to `/en/<junk>/`, which matches no route and
+ * falls to the static /404. But the middleware matcher skips file extensions
+ * and the `images/` and `api/` prefixes, so those paths reach the page tree
+ * with the junk string AS the locale. Measured on prod 2026-09-24:
+ * `/<junk>.txt` (and .png/.js/.css) matched `/[locale]` at ~86 KB, and
+ * `/images/golf/` and `/api/golf/` matched `/[locale]/golf` at ~132 KB, all
+ * `X-Nextjs-Prerender: 1`, MISS then HIT. Fixed by `dynamicParams = false` on
+ * app/[locale]/layout.tsx, which Next applies to every page under it.
  */
 async function runUnknownSlugCacheTests() {
   console.log("\n\x1b[1mG2) Unknown slugs must 404 without minting an ISR entry\x1b[0m");
 
   // One junk URL per newly-guarded segment, plus the region hub.
-  const junk = [
+  const junkSlugs = [
     "/guide/zzz-smoke-not-a-real-slug/",
     "/faq/zzz-smoke-not-a-real-slug/",
     "/cost/zzz-smoke-not-a-real-slug/",
@@ -4646,6 +4657,45 @@ async function runUnknownSlugCacheTests() {
     "/best/zzz-smoke-not-a-real-slug/",
     "/golf-courses/zzz-smoke-not-a-region/",
   ];
+
+  // Junk LOCALE values, one per middleware-matcher exclusion that lets a path
+  // reach the page tree. The .txt probe lands on the root page; the two prefix
+  // probes land on a static CHILD page, which is what proves the flag sits on
+  // the layout (a page.tsx-only flag would pass the first and fail these).
+  const junkLocales = [
+    "/zzz-smoke-not-a-real-locale.txt",
+    "/images/golf/",
+    "/api/golf/",
+  ];
+  const junk = [...junkSlugs, ...junkLocales];
+
+  // Each junk-locale probe tests `[locale]` ONLY while the middleware skips
+  // it. If a matcher edit routed it through next-intl, it would be rewritten to
+  // /en/..., 404 from the static page, and pass while probing nothing. So check
+  // the matcher itself. The regex is rebuilt from the matcher source, which is
+  // an approximation of Next's compiler; the positive control below catches a
+  // rebuild that classifies everything as skipped.
+  try {
+    const { config } = await import("../middleware");
+    const matcher = new RegExp(`^${config.matcher[0]}$`);
+    if (!matcher.test("/golf/")) {
+      fail("G2 matcher control", `rebuilt matcher does not match /golf/, so the bypass check below cannot be trusted`);
+    } else {
+      for (const path of junkLocales) {
+        if (matcher.test(path)) {
+          fail(
+            `junk-locale probe still bypasses middleware (${path})`,
+            `the middleware matcher now runs on this path, so next-intl rewrites it to /en/... and it no ` +
+              `longer reaches the [locale] segment. Replace it with a path the matcher still excludes.`
+          );
+        } else {
+          pass(`junk-locale probe still bypasses middleware (${path})`);
+        }
+      }
+    }
+  } catch (err) {
+    fail("G2 matcher check", `could not import middleware.ts: ${(err as Error).message}`);
+  }
 
   // ---------------------------------------------------------------------
   // CONTROL FIRST, and it decides how much this section can assert.
@@ -4688,9 +4738,10 @@ async function runUnknownSlugCacheTests() {
 
   let checked = 0;
   for (const path of junk) {
+    const param = junkLocales.includes(path) ? "locale" : "slug";
     const label = signal
-      ? `unknown slug 404s without a cache entry (${path})`
-      : `unknown slug 404s (${path}, status only — see NOTE)`;
+      ? `unknown ${param} 404s without a cache entry (${path})`
+      : `unknown ${param} 404s (${path}, status only — see NOTE)`;
     try {
       const res = await fetch(`${BASE}${path}`, { redirect: "follow" });
       if (res.status !== 404) {
@@ -4700,11 +4751,14 @@ async function runUnknownSlugCacheTests() {
       if (signal) {
         const got = res.headers.get(signal);
         if (got) {
+          const where = param === "locale"
+            ? "to app/[locale]/layout.tsx (the junk LOCALE is the unguarded param here)"
+            : "to that segment";
           fail(
             label,
             `the 404 carried ${signal}: ${got} — this segment is rendering unknown params on ` +
               `demand and caching the result permanently (measured on prod at ~124 KB per unique ` +
-              `junk URL, never revalidating). Add \`export const dynamicParams = false\`.`
+              `junk URL, never revalidating). Add \`export const dynamicParams = false\` ${where}.`
           );
           continue;
         }
