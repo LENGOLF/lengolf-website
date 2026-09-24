@@ -15,7 +15,7 @@ category: clubs-rental
 
 ## The Short Answer
 
-The most common rental brands at quality Bangkok golf venues are **Callaway**, **TaylorMade**, and **Titleist**. At LENGOLF, all rental sets are Callaway — available in mens, ladies, and left-handed configurations. Budget courses typically stock older or mixed-brand sets, and condition can vary considerably.
+The most common rental brands at quality Bangkok golf venues are **Callaway**, **TaylorMade**, and **Titleist**. At LENGOLF, the premium rental sets are Callaway, in men's and ladies' configurations, plus one left-handed premium set available on request. Budget courses typically stock older or mixed-brand sets, and condition can vary considerably.
 
 ---
 
@@ -25,7 +25,7 @@ The most common rental brands at quality Bangkok golf venues are **Callaway**, *
 
 Higher-end Bangkok golf courses and indoor simulators invest in name-brand rental inventory. Callaway and TaylorMade are the most widely stocked, while Titleist sets appear at a smaller number of quality venues. You can generally expect clubs that are less than a few years old, clean grips, and a complete set from driver to putter.
 
-LENGOLF specifically uses Callaway rental sets across all categories — a consistent choice that suits most mid-handicap players and beginners alike.
+LENGOLF's premium rental sets for men and women are all Callaway — a consistent choice that suits most mid-handicap players and beginners alike.
 
 ### Budget and Municipal Courses
 
@@ -51,7 +51,7 @@ Some venues include a stand bag; others use a cart bag. If you need a specific w
 
 ## Left-Handed and Ladies' Sets
 
-Left-handed and ladies' rental sets are less commonly stocked at standard Bangkok courses — many venues carry only standard right-handed mens sets. LENGOLF is an exception: dedicated left-handed and ladies' Callaway sets are available for rental, making it a practical choice if you fall into either category.
+Left-handed and ladies' rental sets are less commonly stocked at standard Bangkok courses — many venues carry only standard right-handed mens sets. LENGOLF is an exception: ladies' Callaway sets are available for rental, and one left-handed premium set is available on request, making it a practical choice if you fall into either category.
 
 If you are booking a round at a course outside the city or a venue you have not visited before, always confirm availability when making your reservation.
 
