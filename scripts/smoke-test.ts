@@ -5182,13 +5182,22 @@ async function runLlmDiscoverabilityTests() {
   }
 
   // 7b) Deploy marker: /deploy-sha.txt serves the commit the build was made
-  // from. The IndexNow workflow waits on it before pinging; if it breaks (moved
-  // under app/[locale], caught by the middleware matcher, stops reading the env
-  // var) every IndexNow run on main times out and pings nothing. CI builds with
+  // from. deploy-check.yml's poller (scripts/wait-for-deploy.ts) reads it after
+  // every push to main, and IndexNow waits on that; if it breaks (moved under
+  // app/[locale], caught by the middleware matcher, stops reading the env var)
+  // every push reports a missed deploy and nothing is pinged. CI builds with
   // VERCEL_GIT_COMMIT_SHA and runs this with EXPECTED_DEPLOY_SHA set to the
   // same commit, so this asserts the exact value rather than the shape. The
   // shape-only fallback exists for local runs and is refused under CI, or
   // dropping the env var from ci.yml would quietly weaken the check.
+  //
+  // The equality proves the route captured the SHA at build time, NOT that it
+  // is static: giving "Start server" the env too, or inlining it through
+  // next.config.js `env`, would let a dynamic route pass. `x-nextjs-prerender:
+  // 1` closes that, because `next start` sets it only on a response served
+  // from the prerender cache (base-server.js, the `isSSG` branch; the header
+  // section G2 relies on). Static is what keeps the marker at zero function
+  // invocations for a poller that reads it every 30s.
   try {
     const expected = process.env.EXPECTED_DEPLOY_SHA;
     const res = await fetch(`${BASE}/deploy-sha.txt`, { redirect: "manual" });
@@ -5199,6 +5208,10 @@ async function runLlmDiscoverabilityTests() {
       issues.push(`content-type "${res.headers.get("content-type")}", want text/plain`);
     if (!/noindex/.test(res.headers.get("x-robots-tag") ?? ""))
       issues.push("missing X-Robots-Tag: noindex");
+    if (res.headers.get("x-nextjs-prerender") !== "1")
+      issues.push(
+        `x-nextjs-prerender is ${JSON.stringify(res.headers.get("x-nextjs-prerender"))}, want "1": the marker is not served from the prerender cache (did it lose force-static?)`,
+      );
     if (expected) {
       if (body !== expected) issues.push(`body "${body}" != EXPECTED_DEPLOY_SHA ${expected}`);
     } else if (process.env.CI) {

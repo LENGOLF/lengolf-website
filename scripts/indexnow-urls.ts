@@ -8,8 +8,10 @@
  *
  * Run from the repo root with the tree at HEAD (it refuses a dirty tree: the
  * head side is imported from disk, so uncommitted edits would leak into a
- * "what did this commit range change" answer). Consumed by
- * .github/workflows/indexnow.yml, which hands stdout to scripts/indexnow-ping.ts.
+ * "what did this commit range change" answer). Consumed by the `indexnow` job
+ * in .github/workflows/deploy-check.yml, which hands stdout to
+ * scripts/indexnow-ping.ts once the `wait-for-deploy` job has seen the push go
+ * live.
  * Every changed file also gets one line on stderr saying what it mapped to or
  * why it mapped to nothing, so an empty result is legible rather than silent.
  *
@@ -75,9 +77,11 @@ import { runSelfTest, type Verdict } from './self-test-harness'
 export const SITE = 'https://www.len.golf'
 
 /**
- * Must equal `on.push.paths` in .github/workflows/indexnow.yml (asserted by the
- * self-test). A path the workflow triggers on but this script does not diff is
- * a push that runs, derives nothing, and exits green.
+ * The pathspec this script diffs. .github/workflows/deploy-check.yml runs on
+ * EVERY push to main, with no `paths:` filter (asserted by the self-test), so
+ * no trigger can be narrower than this list. When this lived in its own
+ * path-filtered workflow the two lists had to match exactly: a path this
+ * script diffs but the workflow did not trigger on was a push that never ran.
  */
 export const TRIGGER_PATHS = ['data/**', 'messages/**', 'app/llms.txt/**', 'app/llms-full.txt/**']
 
@@ -1690,15 +1694,29 @@ async function structuralChecks(root: string): Promise<Verdict[]> {
     detail: unmapped.length ? `unmapped: ${unmapped.join(', ')}` : `only ${dataFiles.length} files seen: the walk is not reading data/`,
   })
 
-  // TRIGGER_PATHS equals the workflow's on.push.paths. CRLF-normalised: a
-  // Windows checkout otherwise matches nothing.
-  const yml = readFileSync(path.join(root, '.github/workflows/indexnow.yml'), 'utf8').replace(/\r\n/g, '\n')
-  const block = yml.match(/\n {4}paths:\n((?: {6}- .+\n)+)/)
-  const wfPaths = block ? [...block[1].matchAll(/- '([^']+)'/g)].map((x) => x[1]) : []
+  // The workflow runs on EVERY push to main. Its indexnow job diffs over
+  // TRIGGER_PATHS, so any `paths:` / `paths-ignore:` filter on the trigger
+  // would skip some content pushes entirely, pinging nothing and staying
+  // green. (This used to assert indexnow.yml's on.push.paths == TRIGGER_PATHS,
+  // back when the job lived in its own path-filtered workflow.) CRLF-normalised:
+  // a Windows checkout otherwise matches nothing.
+  // Comment lines are dropped first: a column-0 `#` inside `on:` would
+  // otherwise end the parsed block early and hide a `paths:` line after it.
+  const yml = readFileSync(path.join(root, '.github/workflows/deploy-check.yml'), 'utf8')
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .filter((l) => !/^\s*#/.test(l))
+    .join('\n')
+  const onAt = yml.indexOf('\non:\n')
+  const afterOn = onAt >= 0 ? yml.slice(onAt + '\non:\n'.length) : ''
+  const nextTop = afterOn.search(/^\S/m)
+  const onBlock = nextTop >= 0 ? afterOn.slice(0, nextTop) : afterOn
+  const pushesMain = /^ {2}push:\n {4}branches: \[main\]\n/m.test(onBlock)
+  const filtered = /^\s+["']?paths(-ignore)?["']?\s*:/m.test(onBlock)
   v.push({
-    ok: same(wfPaths, TRIGGER_PATHS),
-    label: '[workflow] indexnow.yml on.push.paths == TRIGGER_PATHS',
-    detail: `workflow: ${wfPaths.join(', ') || '(not found)'}; script: ${TRIGGER_PATHS.join(', ')}`,
+    ok: onBlock.trim() !== '' && pushesMain && !filtered,
+    label: '[workflow] deploy-check.yml runs on every push to main (no paths filter)',
+    detail: `on: block ${onBlock.trim() ? 'found' : 'NOT found'}; push to main: ${pushesMain}; paths filter: ${filtered}`,
   })
 
   // LOCALES (catalogs, faq-hub) is the registry's locale set.
@@ -1745,46 +1763,89 @@ function ruleCoverage(): Verdict {
 }
 
 /**
- * The workflow and CI wiring, pinned by string. The trigger-path check above
- * reads one block of indexnow.yml; every other step was measured editable to
- * "ping nothing, green" (`--base HEAD`, a hardcoded count=0, the derive masked
- * with `|| true`) or "ping before live" (the wait step disabled) with every
- * gate green. A benign edit to these lines fails here on purpose: update the
- * pin in the same commit, having checked the edit keeps its step's meaning.
+ * The workflow and CI wiring, pinned by string. The trigger check above reads
+ * the `on:` block of deploy-check.yml; every step below was measured editable
+ * to "ping nothing, green" (`--base HEAD`, a hardcoded count=0, the derive
+ * masked with `|| true`) or "ping before live" with every gate green.
+ *
+ * "Before live" moved when this job moved into deploy-check.yml: it used to be
+ * a wait step in this job, and is now the job-level `needs: wait-for-deploy`.
+ * So the pins cover that edge from both ends. This job must need the wait job
+ * under its exact `if:`. The wait job must run under its exact `if:`, and its
+ * poller step must run the poller, on this push's SHA, with no `if:` of its
+ * own and no `continue-on-error`. Each of those was measured as a one-line
+ * edit that let this job ping a deploy that never went live (or never ping)
+ * with every other gate green: `|| true` after the poller command, `if: false`
+ * on the step, `DEPLOY_SHA` pointed at the previous commit, a loosened job
+ * `if:`. That is why the pinned lines end in `\n`: a substring pin is
+ * satisfied by the same line with `|| true` or `&& false` appended. The wait
+ * job's issue-closing step legitimately carries `continue-on-error`, so that
+ * one step is cut out before looking. A benign edit to these lines fails here
+ * on purpose: update the pin in the same commit, having checked the edit
+ * keeps its step's meaning.
  */
 function wiringPins(root: string): Verdict[] {
   const strip = (s: string) => s.replace(/\r\n/g, '\n').split('\n').filter((l) => !/^\s*#/.test(l)).join('\n')
-  const yml = strip(readFileSync(path.join(root, '.github/workflows/indexnow.yml'), 'utf8'))
+  const yml = strip(readFileSync(path.join(root, '.github/workflows/deploy-check.yml'), 'utf8'))
+  const jobAt = yml.indexOf('\n  indexnow:\n')
+  const waitAt = yml.indexOf('\n  wait-for-deploy:\n')
+  const job = jobAt >= 0 ? yml.slice(jobAt) : ''
+  const waitJob = waitAt >= 0 ? yml.slice(waitAt, jobAt > waitAt ? jobAt : undefined) : ''
+  const stepOf = (text: string, name: string) => {
+    const at = text.indexOf(`- name: ${name}`)
+    if (at < 0) return ''
+    const next = text.indexOf('- name:', at + 1)
+    return text.slice(at, next >= 0 ? next : undefined)
+  }
+  const pollStep = stepOf(waitJob, 'Wait for production to serve this commit')
+  const closeStep = stepOf(waitJob, 'Close deploy-missing issues this build resolves')
+  const waitJobSansClose = closeStep ? waitJob.replace(closeStep, '') : waitJob
   const required = [
-    'branches: [main]',
+    '    needs: wait-for-deploy\n',
+    "    if: github.event_name == 'push'\n",
+    'DIFF_BASE: ${{ needs.wait-for-deploy.outputs.diff_base }}',
     'BEFORE: ${{ github.event.before }}',
     'BASE: ${{ steps.range.outputs.base }}',
     'npx tsx scripts/indexnow-urls.ts --base "$BASE" > urls.txt\n',
     'echo "count=$(grep -c . urls.txt || true)" >> "$GITHUB_OUTPUT"',
-    'npx tsx scripts/indexnow-wait-for-deploy.ts --sha "$GITHUB_SHA"',
     'mapfile -t URLS < urls.txt',
     'npx tsx scripts/indexnow-ping.ts "${URLS[@]}"',
   ]
   const gate = "if: steps.derive.outputs.count != '0'"
-  const missing = required.filter((s) => !yml.includes(s))
-  const gates = yml.split(gate).length - 1
-  const forbidden = ['continue-on-error', '--base HEAD', 'count=0'].filter((s) => yml.includes(s))
+  const missing = required.filter((s) => !job.includes(s))
+  const gates = job.split(gate).length - 1
+  const forbidden = ['continue-on-error', '--base HEAD', 'count=0'].filter((s) => job.includes(s))
+  const waitHeader = waitJob.slice(0, waitJob.indexOf('\n    steps:\n'))
+  const waitProblems = [
+    pollStep === '' && 'the poller step is missing',
+    !waitHeader.includes("\n    if: github.ref == 'refs/heads/main'\n") && "the wait job's `if:` is not exactly the main-branch guard",
+    !pollStep.includes('run: npx --yes tsx@4.21.0 scripts/wait-for-deploy.ts\n') && 'the poller step does not run exactly scripts/wait-for-deploy.ts',
+    !pollStep.includes('DEPLOY_SHA: ${{ github.sha }}\n') && 'the poller is not given this push (DEPLOY_SHA)',
+    /^\s+if:/m.test(pollStep) && 'the poller step has an `if:` of its own',
+    !waitJob.includes('diff_base: ${{ steps.wait.outputs.diff_base }}') && 'the wait job does not export diff_base',
+    waitJobSansClose.includes('continue-on-error') && 'continue-on-error outside the issue-closing step',
+  ].filter(Boolean)
   const ci = strip(readFileSync(path.join(root, '.github/workflows/ci.yml'), 'utf8'))
   const lint = ci.slice(ci.indexOf('\n  lint:'), ci.indexOf('\n  build-and-smoke:'))
   const pkg = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')) as { scripts: Record<string, string> }
-  const steps = ['npm run validate:indexnow:self-test', 'npm run validate:indexnow-wait:self-test'].filter((s) => !lint.includes(s))
+  const steps = ['npm run validate:indexnow:self-test', 'npm run validate:deploy-check:contract'].filter((s) => !lint.includes(s))
   const scripts =
     pkg.scripts['validate:indexnow:self-test'] === 'tsx scripts/indexnow-urls.ts --self-test' &&
-    pkg.scripts['validate:indexnow-wait:self-test'] === 'tsx scripts/indexnow-wait-for-deploy.ts --self-test'
+    pkg.scripts['validate:deploy-check:contract'] === 'tsx scripts/wait-for-deploy-contract.ts'
   return [
     {
-      ok: missing.length === 0 && gates === 2 && forbidden.length === 0,
-      label: '[workflow] indexnow.yml derive/wait/ping steps are wired as pinned (both gated on the count)',
-      detail: `missing: ${missing.join(' | ') || 'none'}; count gates: ${gates} (want 2); forbidden present: ${forbidden.join(', ') || 'none'}`,
+      ok: job !== '' && missing.length === 0 && gates === 1 && forbidden.length === 0,
+      label: '[workflow] deploy-check.yml indexnow job: derive/ping wired as pinned, the ping gated on the count',
+      detail: `job ${job ? 'found' : 'NOT found'}; missing: ${missing.join(' | ') || 'none'}; count gates: ${gates} (want 1); forbidden present: ${forbidden.join(', ') || 'none'}`,
+    },
+    {
+      ok: waitJob !== '' && waitProblems.length === 0,
+      label: '[workflow] deploy-check.yml wait-for-deploy gates the indexnow job (poller step pinned, never continue-on-error)',
+      detail: waitProblems.join('; ') || 'ok',
     },
     {
       ok: steps.length === 0 && scripts,
-      label: '[ci] both self-tests are their own lint-job steps, one script each (no `&&` chain to mask the first)',
+      label: '[ci] the derivation self-test and the deploy poller contract are their own lint-job steps, one script each',
       detail: `missing lint steps: ${steps.join(', ') || 'none'}; package.json scripts exact: ${scripts}`,
     },
   ]
@@ -1943,11 +2004,12 @@ async function selfTest(): Promise<void> {
 
   const examined = derived.examined + structural.examined
   const failures = derived.failures + structural.failures
-  // Exact, not a floor: the derivation cases; rule coverage; two wiring pins;
-  // one table verdict per SEO section plus eight more (sig, fingerprint,
-  // section union, trigger-path coverage, workflow paths, locales, two loader
-  // checks); one consumer verdict per CONSUMERS key; four CLI verdicts.
-  const expected = CASES.length + 1 + 2 + SEO_SECTIONS.length + 8 + Object.keys(CONSUMERS).length + 4
+  // Exact, not a floor: the derivation cases; rule coverage; three wiring pins
+  // (the indexnow job, the wait job that gates it, the CI steps); one table
+  // verdict per SEO section plus eight more (sig, fingerprint, section union,
+  // trigger-path coverage, workflow trigger, locales, two loader checks); one
+  // consumer verdict per CONSUMERS key; four CLI verdicts.
+  const expected = CASES.length + 1 + 3 + SEO_SECTIONS.length + 8 + Object.keys(CONSUMERS).length + 4
   if (CASES.length !== 55 || examined !== expected) {
     console.log(`FAIL: examined ${examined} verdict(s), expected ${expected} (CASES=${CASES.length}, want 55)`)
     process.exit(1)

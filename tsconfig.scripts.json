@@ -20,10 +20,11 @@
     "scripts/validate-pr-rigor.ts",
     "scripts/validate-pricing-revalidate.ts",
     "scripts/validate-pricing-revalidate-contract.ts",
+    "scripts/wait-for-deploy.ts",
+    "scripts/wait-for-deploy-contract.ts",
     "scripts/page-inventory.ts",
     "scripts/indexnow-ping.ts",
-    "scripts/indexnow-urls.ts",
-    "scripts/indexnow-wait-for-deploy.ts"
+    "scripts/indexnow-urls.ts"
   ],
   "exclude": ["node_modules"]
 }
