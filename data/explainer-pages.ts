@@ -1125,7 +1125,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "LENGOLF — The Premium Central Bangkok Option",
-          body: "LENGOLF is Bangkok's leading indoor golf simulator venue for serious golfers, located in central Bangkok with direct BTS access.\n\n**Why LENGOLF stands out:**\n- Professional-grade simulator technology — precise launch data suitable for both casual play and swing analysis\n- Extensive course library — play simulated versions of world-famous layouts\n- Central location — BTS-accessible, no long transfer required\n- Club rental — quality Callaway sets for men and women, plus one left-handed set on request\n- Group bookings — multiple bays available for corporate events or group sessions\n- Air-conditioned — fully climate-controlled year-round\n- Flexible hours — open day and evening, bookable by the hour\n- Coaching available — lessons using simulator data for precise technique feedback",
+          body: "LENGOLF is Bangkok's leading indoor golf simulator venue for serious golfers, located in central Bangkok with direct BTS access.\n\n**Why LENGOLF stands out:**\n- Professional-grade simulator technology — precise launch data suitable for both casual play and swing analysis\n- Extensive course library — play simulated versions of world-famous layouts\n- Central location — BTS-accessible, no long transfer required\n- Club rental — quality Callaway sets for men and women; free standard left-handed clubs with every bay booking, plus one left-handed premium set on request\n- Group bookings — multiple bays available for corporate events or group sessions\n- Air-conditioned — fully climate-controlled year-round\n- Flexible hours — open day and evening, bookable by the hour\n- Coaching available — lessons using simulator data for precise technique feedback",
         },
         {
           heading: "What to Look for When Comparing Other Venues",
@@ -4958,7 +4958,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "LENGOLF — バンコク中心部のプレミアムな選択肢",
-          body: "LENGOLFは、本格志向のゴルファーに向けたバンコクを代表するインドアゴルフシミュレーター施設で、バンコク中心部に位置し、BTSから直接アクセスできます。\n\n**LENGOLFが選ばれる理由:**\n- プロ仕様のシミュレーター技術 — カジュアルなプレーからスイング分析まで対応できる精密な弾道データ\n- 充実したコースライブラリ — 世界的に有名なレイアウトをシミュレーターで再現してプレー\n- 中心部の立地 — BTSでアクセスでき、長距離の移動は不要\n- クラブレンタル — メンズ・レディースの上質なCallawayセットに加え、左利き用も1セット、ご希望に応じてご用意\n- グループ予約 — 法人イベントやグループ利用に対応できる複数のベイ\n- 空調完備 — 一年を通して快適な室温に管理\n- 柔軟な営業時間 — 日中も夜間も営業し、1時間単位で予約可能\n- コーチングにも対応 — シミュレーターのデータを用いて技術を的確にフィードバックするレッスン",
+          body: "LENGOLFは、本格志向のゴルファーに向けたバンコクを代表するインドアゴルフシミュレーター施設で、バンコク中心部に位置し、BTSから直接アクセスできます。\n\n**LENGOLFが選ばれる理由:**\n- プロ仕様のシミュレーター技術 — カジュアルなプレーからスイング分析まで対応できる精密な弾道データ\n- 充実したコースライブラリ — 世界的に有名なレイアウトをシミュレーターで再現してプレー\n- 中心部の立地 — BTSでアクセスでき、長距離の移動は不要\n- クラブレンタル — メンズ・レディースの上質なCallawayセット。左利き用はスタンダードクラブがベイご予約時に無料、プレミアムセット（1セット）もご希望に応じてご用意\n- グループ予約 — 法人イベントやグループ利用に対応できる複数のベイ\n- 空調完備 — 一年を通して快適な室温に管理\n- 柔軟な営業時間 — 日中も夜間も営業し、1時間単位で予約可能\n- コーチングにも対応 — シミュレーターのデータを用いて技術を的確にフィードバックするレッスン",
         },
         {
           heading: "他の施設を比較するときに確認したいこと",
@@ -5006,7 +5006,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "LENGOLF — 방콕 중심가의 프리미엄 선택지",
-          body: "LENGOLF는 진지한 골퍼를 위한 방콕 대표 실내 골프 시뮬레이터 시설로, 도심 한복판에 자리해 BTS로 바로 연결됩니다.\n\n**LENGOLF가 돋보이는 이유:**\n- 프로용 시뮬레이터 기술 — 가벼운 플레이와 스윙 분석 모두에 적합한 정밀한 론치 데이터\n- 방대한 코스 라이브러리 — 세계적으로 유명한 코스를 시뮬레이션으로 플레이\n- 중심가 위치 — BTS로 접근할 수 있어 먼 이동이 필요 없어요\n- 클럽 대여 — 남성용, 여성용으로 준비된 고급 Callaway 세트와 요청 시 이용 가능한 왼손잡이용 세트 1개\n- 단체 예약 — 여러 베이를 갖춰 기업 행사나 단체 세션도 가능\n- 냉방 완비 — 연중 내내 완전한 실내 온도 관리\n- 유연한 운영 시간 — 낮과 저녁 모두 열고, 시간 단위로 예약 가능\n- 코칭 제공 — 시뮬레이터 데이터를 활용해 정밀한 기술 피드백을 주는 레슨",
+          body: "LENGOLF는 진지한 골퍼를 위한 방콕 대표 실내 골프 시뮬레이터 시설로, 도심 한복판에 자리해 BTS로 바로 연결됩니다.\n\n**LENGOLF가 돋보이는 이유:**\n- 프로용 시뮬레이터 기술 — 가벼운 플레이와 스윙 분석 모두에 적합한 정밀한 론치 데이터\n- 방대한 코스 라이브러리 — 세계적으로 유명한 코스를 시뮬레이션으로 플레이\n- 중심가 위치 — BTS로 접근할 수 있어 먼 이동이 필요 없어요\n- 클럽 대여 — 남성용·여성용 고급 Callaway 세트, 베이 예약 시 무료로 제공되는 왼손잡이용 표준 클럽, 요청 시 이용 가능한 왼손잡이용 프리미엄 세트 1개\n- 단체 예약 — 여러 베이를 갖춰 기업 행사나 단체 세션도 가능\n- 냉방 완비 — 연중 내내 완전한 실내 온도 관리\n- 유연한 운영 시간 — 낮과 저녁 모두 열고, 시간 단위로 예약 가능\n- 코칭 제공 — 시뮬레이터 데이터를 활용해 정밀한 기술 피드백을 주는 레슨",
         },
         {
           heading: "다른 시설을 비교할 때 살펴볼 점",
@@ -5054,7 +5054,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "LENGOLF — 曼谷市中心的高端之选",
-          body: "LENGOLF是曼谷领先的室内高尔夫模拟器场馆，面向认真的球友，坐落于市中心，BTS可直达。\n\n**LENGOLF的过人之处：**\n- 专业级模拟器技术——精准的弹道数据，无论是休闲挥杆还是挥杆分析都适用\n- 丰富的球场库——可打世界各大名场的模拟版本\n- 市中心位置——BTS可直达，免去长途奔波\n- 球杆租借——备有优质Callaway套杆，提供男士与女士款，如有需要另可提供一套左手专用套杆\n- 团体预订——多个球位可用，适合企业活动或团体场次\n- 空调场馆——全年恒温\n- 时间灵活——白天与晚间均开放，可按小时预订\n- 提供课程——借助模拟器数据授课，给出精准的技术反馈",
+          body: "LENGOLF是曼谷领先的室内高尔夫模拟器场馆，面向认真的球友，坐落于市中心，BTS可直达。\n\n**LENGOLF的过人之处：**\n- 专业级模拟器技术——精准的弹道数据，无论是休闲挥杆还是挥杆分析都适用\n- 丰富的球场库——可打世界各大名场的模拟版本\n- 市中心位置——BTS可直达，免去长途奔波\n- 球杆租借——备有优质Callaway套杆，提供男士与女士款；每次预订球位均免费提供标准左手球杆，如有需要另可提供一套左手专用高级套杆\n- 团体预订——多个球位可用，适合企业活动或团体场次\n- 空调场馆——全年恒温\n- 时间灵活——白天与晚间均开放，可按小时预订\n- 提供课程——借助模拟器数据授课，给出精准的技术反馈",
         },
         {
           heading: "对比其他场馆时该留意什么",
@@ -5102,7 +5102,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "LENGOLF — ตัวเลือกระดับพรีเมียมใจกลางกรุงเทพฯ",
-          body: "LENGOLF คือสถานที่กอล์ฟซิมูเลเตอร์ในร่มชั้นนำของกรุงเทพฯ สำหรับนักกอล์ฟจริงจัง ตั้งอยู่ใจกลางกรุงเทพฯ เดินทางด้วยรถไฟฟ้า BTS ถึงได้โดยตรง\n\n**ทำไม LENGOLF ถึงโดดเด่น**\n- เทคโนโลยีซิมูเลเตอร์ระดับมืออาชีพ — ข้อมูลจาก launch monitor ที่แม่นยำ เหมาะทั้งกับการเล่นสบายๆ และการวิเคราะห์วงสวิง\n- คลังสนามกอล์ฟครบครัน — เล่นเวอร์ชันจำลองของสนามชื่อดังระดับโลก\n- ทำเลใจกลางเมือง — เดินทางด้วยรถไฟฟ้า BTS ได้สะดวก ไม่ต้องเดินทางต่อไกล\n- บริการเช่าไม้กอล์ฟ — ชุดไม้ Callaway คุณภาพดี มีให้เลือกทั้งแบบผู้ชายและผู้หญิง พร้อมชุดสำหรับคนถนัดซ้ายอีก 1 ชุดโดยต้องแจ้งขอล่วงหน้า\n- รองรับการจองแบบกลุ่ม — มีเบย์หลายช่องรองรับอีเวนต์องค์กรหรือการเล่นเป็นหมู่คณะ\n- ปรับอากาศเย็นสบาย — ควบคุมอุณหภูมิได้เต็มที่ตลอดทั้งปี\n- เวลาเปิดยืดหยุ่น — เปิดทั้งกลางวันและช่วงเย็น จองได้แบบรายชั่วโมง\n- มีบริการโค้ชกอล์ฟ — คอร์สเรียนที่ใช้ข้อมูลจากซิมูเลเตอร์เพื่อให้คำแนะนำปรับเทคนิคได้อย่างแม่นยำ",
+          body: "LENGOLF คือสถานที่กอล์ฟซิมูเลเตอร์ในร่มชั้นนำของกรุงเทพฯ สำหรับนักกอล์ฟจริงจัง ตั้งอยู่ใจกลางกรุงเทพฯ เดินทางด้วยรถไฟฟ้า BTS ถึงได้โดยตรง\n\n**ทำไม LENGOLF ถึงโดดเด่น**\n- เทคโนโลยีซิมูเลเตอร์ระดับมืออาชีพ — ข้อมูลจาก launch monitor ที่แม่นยำ เหมาะทั้งกับการเล่นสบายๆ และการวิเคราะห์วงสวิง\n- คลังสนามกอล์ฟครบครัน — เล่นเวอร์ชันจำลองของสนามชื่อดังระดับโลก\n- ทำเลใจกลางเมือง — เดินทางด้วยรถไฟฟ้า BTS ได้สะดวก ไม่ต้องเดินทางต่อไกล\n- บริการเช่าไม้กอล์ฟ — ชุดไม้พรีเมียม Callaway สำหรับผู้ชายและผู้หญิง ส่วนคนถนัดซ้ายมีไม้กอล์ฟมาตรฐานให้ใช้ฟรีทุกครั้งที่จองเบย์ และมีชุดพรีเมียมอีก 1 ชุด ให้เช่าตามคำขอ\n- รองรับการจองแบบกลุ่ม — มีเบย์หลายช่องรองรับอีเวนต์องค์กรหรือการเล่นเป็นหมู่คณะ\n- ปรับอากาศเย็นสบาย — ควบคุมอุณหภูมิได้เต็มที่ตลอดทั้งปี\n- เวลาเปิดยืดหยุ่น — เปิดทั้งกลางวันและช่วงเย็น จองได้แบบรายชั่วโมง\n- มีบริการโค้ชกอล์ฟ — คอร์สเรียนที่ใช้ข้อมูลจากซิมูเลเตอร์เพื่อให้คำแนะนำปรับเทคนิคได้อย่างแม่นยำ",
         },
         {
           heading: "สิ่งที่ควรพิจารณาเมื่อเปรียบเทียบสถานที่อื่น",
