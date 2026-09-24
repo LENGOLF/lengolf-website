@@ -49,14 +49,17 @@
  * 2026-09-24; the one-time test is in the workflow's header comment.
  *
  * At the deadline: if Vercel says it is still building (or built but not yet
- * serving), or the hook was just fired, ONE grace window. Then fail.
+ * serving), or the hook was fired AT the deadline, ONE grace window. Then
+ * fail. (An early fire on the author gate gets no extra window: only the rest
+ * of the 12 minutes.)
  *
  * Exit codes, which the workflow keys on:
  *   0  live     production serves the pushed commit or a descendant
  *   1  missing  the deadline passed and it still does not
- *   2  broken   the check itself could not run (bad config, crash). This is
- *               also the exit code if the process ends for any reason before
- *               main() settles, so no failure mode defaults to "live".
+ *   2  broken   the check itself could not run (bad config, crash). It is
+ *               also the exit code if the event loop drains before main()
+ *               settles, so that failure does not default to "live" (an
+ *               uncaught throw elsewhere exits 1, a signal 128+n: never 0).
  *
  * Env:
  *   DEPLOY_SHA              pushed commit, full 40-hex (default GITHUB_SHA)
@@ -65,7 +68,7 @@
  *                           is shared per runner IP, so it is required)
  *   GITHUB_API_URL          default https://api.github.com
  *   MARKER_URL              default https://www.len.golf/deploy-sha.txt
- *   DEPLOY_TIMEOUT_MS       default 720000 (12 min; a build takes ~2)
+ *   DEPLOY_TIMEOUT_MS       default 720000 (12 min; a build takes ~2-4)
  *   DEPLOY_POLL_MS          default 30000
  *   DEPLOY_GRACE_MS         default 480000 (8 min)
  *   VERCEL_DEPLOY_HOOK_URL  optional; never printed

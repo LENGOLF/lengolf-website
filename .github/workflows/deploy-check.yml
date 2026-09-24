@@ -5,7 +5,8 @@
 # red, but nobody watches a status on a commit that is already merged.
 # Usually the squash commit's author is not a Vercel team member; once the
 # integration itself was disconnected. #131 sat undeployed for 12 days and was
-# found by an SEO check. This workflow makes that loud within ~12 minutes.
+# found by an SEO check. This workflow makes that loud within 12 to 20
+# minutes of the push.
 #
 #   wait-for-deploy  polls https://www.len.golf/deploy-sha.txt (the SHA baked
 #                    in at build time, app/deploy-sha.txt/route.ts, #133) until
@@ -46,7 +47,8 @@
 # Deploy hook (optional, dormant): if the repo secret VERCEL_DEPLOY_HOOK_URL
 # exists, the poller POSTs it once: early when Vercel reports the author gate,
 # otherwise at the deadline when Vercel reported nothing or a canceled build.
-# Then it waits one more window before failing. Never on a real build failure
+# Fired at the deadline, it waits one more window before failing; an early
+# fire gets only the rest of the 12 minutes. Never on a real build failure
 # and never while Vercel is building. WHETHER A DEPLOY HOOK GETS PAST THE
 # AUTHOR GATE IS UNVERIFIED. To test it once before adding the secret: create
 # the hook (Vercel > lengolf-website > Settings > Git > Deploy Hooks, branch
@@ -72,7 +74,11 @@ jobs:
     # never meant to serve, and open an issue that can never close.
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    # 12 min wait + 8 min grace (or post-hook window) + request slack.
+    # 12 min wait + 8 min grace (or post-hook window) + request slack. #133's
+    # wait was a flat 20 minutes, because a build queued behind the team's
+    # other projects can start late. Here the grace window covers that: a
+    # queued build already posts a `pending` Vercel status, so only a push
+    # Vercel never acknowledged at all fails at 12.
     timeout-minutes: 30
     permissions:
       contents: read
@@ -130,7 +136,7 @@ jobs:
             author-gate) WHY='Vercel blocked the build because the author of the commit is not a member of the Vercel team (the recurring squash-merge case). The Vercel status links to its team-members docs page, not to a deployment.' ;;
             canceled) WHY='The Vercel build for this commit was canceled (the status says so). Nothing is wrong with the code: redeploy.' ;;
             build-failed) WHY='Vercel started a build and it FAILED. Open the Vercel link below. Redeploying the same code will fail the same way, so fix the build first.' ;;
-            building|built) WHY='Vercel reported a build in progress (or finished), but production never served it inside the window. Look for a stuck deployment in vercel ls, or an Instant Rollback in Vercel: a rollback stops new builds being promoted until it is undone, and an empty commit will not help while it is active.' ;;
+            building|built) WHY='Vercel reported a build in progress (or finished), but production never served it inside the window. Look for a stuck deployment in vercel ls; an Instant Rollback in Vercel (a rollback stops new builds being promoted until it is undone, and an empty commit will not help while it is active); or a preview promoted to production, whose branch commit main does not contain.' ;;
             *) WHY='Vercel posted no status on this commit at all, so it probably never saw the push. The GitHub integration may be disconnected: remove and re-add it in the Vercel dashboard, then deploy main from there.' ;;
           esac
           BODY="$RUNNER_TEMP/deploy-missing.md"
@@ -189,13 +195,14 @@ jobs:
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           # This run's IndexNow job diffs from DIFF_BASE, the build live before
-          # this deploy. Empty means production was ALREADY live on the first
-          # poll, so the job falls back to this push's own range and does not
-          # cover an earlier stranded commit: say so on that commit's issue
-          # rather than closing it as if nothing were left to do.
+          # this deploy. Empty means the first build this run observed was
+          # already live, or was not an ancestor of this push, so the job falls
+          # back to this push's own range and does not cover an earlier
+          # stranded commit: say so on that commit's issue rather than closing
+          # it as if nothing were left to do.
           NOTE=""
           if [ -z "$DIFF_BASE" ]; then
-            NOTE=" This run found production already live on its first check, so its IndexNow job diffed only this push's range: that commit's URLs were NOT pinged. Use Re-run failed jobs on the run linked in this issue to send them."
+            NOTE=" This run could not diff from the build that was live before it (production was already serving this push, or a build main does not contain, on its first check), so its IndexNow job diffed only this push's range: that commit's URLs were NOT pinged. Use Re-run failed jobs on the run linked in this issue to send them."
           fi
           OPEN=$(gh issue list --state open --label deploy-missing --limit 100 --json number,body \
             --jq '.[] | "\(.number) \((.body | capture("<!-- deploy-check sha=(?<s>[0-9a-f]{40}) -->") | .s) // "")"' 2>/dev/null || true)
@@ -237,7 +244,11 @@ jobs:
   # indexnow-ping.ts's MAX_URLS (nothing pinged), or the IndexNow API
   # rejected a batch (earlier batches of 100 were already submitted). It does
   # NOT mean a missed deploy: that is a red `wait-for-deploy`, with this job
-  # skipped. Either way, "Re-run failed jobs" on the run once fixed.
+  # skipped. Either way, "Re-run failed jobs" on the run once fixed. That
+  # reuses the wait job's saved diff_base, so if a wide diff_base is what
+  # pushed the list past MAX_URLS, use "Re-run all jobs" instead: the wait
+  # job re-polls, finds this push live, and the derivation falls back to the
+  # push range.
   indexnow:
     needs: wait-for-deploy
     if: github.event_name == 'push'
@@ -280,6 +291,9 @@ jobs:
               && { git cat-file -e "$1^{commit}" 2>/dev/null \
                    || git fetch --no-tags --quiet --depth=1 origin "$1"; }
           }
+          if [ -n "$DIFF_BASE" ] && ! usable "$DIFF_BASE"; then
+            echo "::warning title=IndexNow::diff_base $DIFF_BASE could not be fetched; falling back to the push range, so a stranded commit's URLs may not be pinged"
+          fi
           if usable "$DIFF_BASE"; then
             echo "base=$DIFF_BASE (the build live before this deploy)"
             echo "base=$DIFF_BASE" >> "$GITHUB_OUTPUT"

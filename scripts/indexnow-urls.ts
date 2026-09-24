@@ -1645,13 +1645,19 @@ async function structuralChecks(root: string): Promise<Verdict[]> {
   // green. (This used to assert indexnow.yml's on.push.paths == TRIGGER_PATHS,
   // back when the job lived in its own path-filtered workflow.) CRLF-normalised:
   // a Windows checkout otherwise matches nothing.
-  const yml = readFileSync(path.join(root, '.github/workflows/deploy-check.yml'), 'utf8').replace(/\r\n/g, '\n')
+  // Comment lines are dropped first: a column-0 `#` inside `on:` would
+  // otherwise end the parsed block early and hide a `paths:` line after it.
+  const yml = readFileSync(path.join(root, '.github/workflows/deploy-check.yml'), 'utf8')
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .filter((l) => !/^\s*#/.test(l))
+    .join('\n')
   const onAt = yml.indexOf('\non:\n')
   const afterOn = onAt >= 0 ? yml.slice(onAt + '\non:\n'.length) : ''
   const nextTop = afterOn.search(/^\S/m)
   const onBlock = nextTop >= 0 ? afterOn.slice(0, nextTop) : afterOn
   const pushesMain = /^ {2}push:\n {4}branches: \[main\]\n/m.test(onBlock)
-  const filtered = /^\s+paths(-ignore)?:/m.test(onBlock)
+  const filtered = /^\s+["']?paths(-ignore)?["']?\s*:/m.test(onBlock)
   v.push({
     ok: onBlock.trim() !== '' && pushesMain && !filtered,
     label: '[workflow] deploy-check.yml runs on every push to main (no paths filter)',
@@ -1709,12 +1715,18 @@ function ruleCoverage(): Verdict {
  *
  * "Before live" moved when this job moved into deploy-check.yml: it used to be
  * a wait step in this job, and is now the job-level `needs: wait-for-deploy`.
- * So the pins cover that edge from both ends: this job must need the wait
- * job, and the wait job's poller step must be neither `continue-on-error` nor
- * detached from the poller (either lets this job run on a missed deploy). The
- * wait job's issue-closing step legitimately carries `continue-on-error`, so
- * that one step is cut out before looking. A benign edit to these lines fails
- * here on purpose: update the pin in the same commit, having checked the edit
+ * So the pins cover that edge from both ends. This job must need the wait job
+ * under its exact `if:`. The wait job must run under its exact `if:`, and its
+ * poller step must run the poller, on this push's SHA, with no `if:` of its
+ * own and no `continue-on-error`. Each of those was measured as a one-line
+ * edit that let this job ping a deploy that never went live (or never ping)
+ * with every other gate green: `|| true` after the poller command, `if: false`
+ * on the step, `DEPLOY_SHA` pointed at the previous commit, a loosened job
+ * `if:`. That is why the pinned lines end in `\n`: a substring pin is
+ * satisfied by the same line with `|| true` or `&& false` appended. The wait
+ * job's issue-closing step legitimately carries `continue-on-error`, so that
+ * one step is cut out before looking. A benign edit to these lines fails here
+ * on purpose: update the pin in the same commit, having checked the edit
  * keeps its step's meaning.
  */
 function wiringPins(root: string): Verdict[] {
@@ -1734,8 +1746,8 @@ function wiringPins(root: string): Verdict[] {
   const closeStep = stepOf(waitJob, 'Close deploy-missing issues this build resolves')
   const waitJobSansClose = closeStep ? waitJob.replace(closeStep, '') : waitJob
   const required = [
-    'needs: wait-for-deploy',
-    "if: github.event_name == 'push'",
+    '    needs: wait-for-deploy\n',
+    "    if: github.event_name == 'push'\n",
     'DIFF_BASE: ${{ needs.wait-for-deploy.outputs.diff_base }}',
     'BEFORE: ${{ github.event.before }}',
     'BASE: ${{ steps.range.outputs.base }}',
@@ -1748,9 +1760,13 @@ function wiringPins(root: string): Verdict[] {
   const missing = required.filter((s) => !job.includes(s))
   const gates = job.split(gate).length - 1
   const forbidden = ['continue-on-error', '--base HEAD', 'count=0'].filter((s) => job.includes(s))
+  const waitHeader = waitJob.slice(0, waitJob.indexOf('\n    steps:\n'))
   const waitProblems = [
     pollStep === '' && 'the poller step is missing',
-    !pollStep.includes('npx --yes tsx@4.21.0 scripts/wait-for-deploy.ts') && 'the poller step does not run scripts/wait-for-deploy.ts',
+    !waitHeader.includes("\n    if: github.ref == 'refs/heads/main'\n") && "the wait job's `if:` is not exactly the main-branch guard",
+    !pollStep.includes('run: npx --yes tsx@4.21.0 scripts/wait-for-deploy.ts\n') && 'the poller step does not run exactly scripts/wait-for-deploy.ts',
+    !pollStep.includes('DEPLOY_SHA: ${{ github.sha }}\n') && 'the poller is not given this push (DEPLOY_SHA)',
+    /^\s+if:/m.test(pollStep) && 'the poller step has an `if:` of its own',
     !waitJob.includes('diff_base: ${{ steps.wait.outputs.diff_base }}') && 'the wait job does not export diff_base',
     waitJobSansClose.includes('continue-on-error') && 'continue-on-error outside the issue-closing step',
   ].filter(Boolean)
