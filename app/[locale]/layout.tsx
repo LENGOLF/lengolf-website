@@ -53,6 +53,18 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
 }
 
+// A locale outside the five above must 404 at the routing layer, not render.
+// The notFound() below still returns a 404, but only after Next has rendered
+// the not-found path and STORED it as a permanent ISR entry. A junk locale is
+// reachable because the middleware matcher skips file extensions and the
+// images/ and api/ prefixes, so `/<junk>.txt` and `/images/golf/` arrive here
+// with the junk string as the locale (measured on prod 2026-09-24, ~86-132 KB
+// per unique URL, MISS then HIT). Next resolves a route's dynamicParams as
+// "every segment !== false" (build/utils.js), so this one line covers every
+// page under [locale], including static pages with no param of their own, and
+// no child can opt back in. Smoke section G2 asserts it.
+export const dynamicParams = false
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
