@@ -32,7 +32,7 @@ Not all rental sets are equal, and three factors separate a decent rental experi
 
 Premium Bangkok courses — particularly those in the Nichada, Bangna, and eastern corridors — typically stock Callaway or TaylorMade sets for rental, available in men's, ladies', and occasionally left-handed configurations. These sets are replaced on a reasonable cycle and are usually in good playable condition.
 
-LENGOLF's indoor simulator facility rents premium Callaway sets for men and women; left-handed players get free standard clubs with every bay booking, plus one left-handed premium set on request — a good benchmark for what quality rental equipment looks like in practice. If you're unsure whether a course you're booking meets that standard, call ahead and ask specifically which brand and model they stock.
+LENGOLF's indoor simulator facility rents premium Callaway sets for men and women — a good benchmark for what quality rental equipment looks like in practice. Left-handed players get free standard clubs with every bay booking, plus one left-handed premium set on request. If you're unsure whether a course you're booking meets that standard, call ahead and ask specifically which brand and model they stock.
 
 Budget and resort courses are less predictable. Some will surprise you; many won't.
 
