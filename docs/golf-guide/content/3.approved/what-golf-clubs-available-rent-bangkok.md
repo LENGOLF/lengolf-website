@@ -15,7 +15,7 @@ category: clubs-rental
 
 ## The Short Answer
 
-The most common rental brands at quality Bangkok golf venues are **Callaway**, **TaylorMade**, and **Titleist**. At LENGOLF, the premium rental sets are Callaway, in men's and ladies' configurations, plus one left-handed premium set available on request. Budget courses typically stock older or mixed-brand sets, and condition can vary considerably.
+The most common rental brands at quality Bangkok golf venues are **Callaway**, **TaylorMade**, and **Titleist**. At LENGOLF, the men's and ladies' premium rental sets are Callaway; left-handed golfers get free standard clubs with every bay booking, plus one left-handed premium set on request. Budget courses typically stock older or mixed-brand sets, and condition can vary considerably.
 
 ---
 
@@ -51,7 +51,7 @@ Some venues include a stand bag; others use a cart bag. If you need a specific w
 
 ## Left-Handed and Ladies' Sets
 
-Left-handed and ladies' rental sets are less commonly stocked at standard Bangkok courses — many venues carry only standard right-handed mens sets. LENGOLF is an exception: ladies' Callaway sets are available for rental, and one left-handed premium set is available on request, making it a practical choice if you fall into either category.
+Left-handed and ladies' rental sets are less commonly stocked at standard Bangkok courses — many venues carry only standard right-handed mens sets. LENGOLF is an exception: ladies' Callaway sets are available for rental, free standard left-handed clubs come with every bay booking, and one left-handed premium set is available on request, making it a practical choice if you fall into either category.
 
 If you are booking a round at a course outside the city or a venue you have not visited before, always confirm availability when making your reservation.
 

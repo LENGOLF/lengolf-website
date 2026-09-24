@@ -83,7 +83,7 @@ LENGOLF, Bangkok's indoor golf simulator venue, offers rental sets as part of ev
 
 1. **Men's (right-handed)**
 2. **Ladies'**
-3. **Left-handed** (one premium set, on request)
+3. **Left-handed** (free standard clubs with every bay booking, plus one premium set on request)
 
 Left-handed golfers, who often find rental options limited at standard courses, should request the left-handed set when booking. The Callaway sets are well-maintained and suitable for all ability levels — from complete beginners hitting their first shots to experienced players working on specific aspects of their game.
 
