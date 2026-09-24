@@ -4611,52 +4611,83 @@ async function runNotFoundTests() {
   }
 }
 
-/** Route handlers under app/[locale] whose ONLY param is the locale, read from
- *  the filesystem so a new one gets a G2 probe without anyone remembering to
- *  add it. The layout's `dynamicParams = false` does not reach route handlers,
- *  so each of these must carry its own flag, and nothing else checks that.
- *  `remainder` is the handler's URL with the locale stripped. Handlers under a
- *  second dynamic segment are returned separately and NOT probed: a junk
- *  locale only discriminates when paired with a REAL value for the other
- *  param, which this walk cannot supply. */
+/** Route handlers under app/[locale], read from the filesystem so a new one is
+ *  noticed without anyone remembering to add it. The layout's
+ *  `dynamicParams = false` does not reach route handlers, so each must carry
+ *  its own flag, and nothing else checks that.
+ *
+ *  Classified with Next's own `isMetadataRouteFile` (the rule the build uses)
+ *  plus `route.*`, so numbered (`icon1.tsx`) and static (`opengraph-image.png`)
+ *  variants cannot slip past a hand-rolled filename regex. Three buckets:
+ *  - `localeOnly`: the handler's only param is the locale, and its URL is
+ *    derivable (`remainder` = URL with the locale stripped). These get a probe.
+ *  - `multiParam`: under a second dynamic segment. NOT probed: a junk locale
+ *    discriminates only beside a REAL value for the other param, which this
+ *    walk cannot supply. Counted, so a new one is at least noticed.
+ *  - `unsupported`: a handler whose URL this walk would guess wrong (numbered
+ *    or `[]` variants, static image files, sitemaps, a metadata image under a
+ *    route group or slot, where Next suffixes the URL with a hash, anything
+ *    under a slot or intercepting folder). Each one fails G2 by name, so a
+ *    new shape is taught here rather than silently skipped. */
 async function localeRouteHandlers(): Promise<{
-  localeOnly: { file: string; remainder: string }[];
+  localeOnly: { file: string; remainder: string; kind: "image" | "route" }[];
   multiParam: string[];
   unsupported: string[];
 }> {
   const fs = await import("node:fs");
   const nodePath = await import("node:path");
+  // Exported at runtime but absent from Next's .d.ts; same precedent as the
+  // getMiddlewareMatchers import in G2. If an upgrade moves it, this throws.
+  const { isMetadataRouteFile } = (await import("next/dist/lib/metadata/is-metadata-route")) as unknown as {
+    isMetadataRouteFile?: (appDirRelativePath: string, pageExtensions: string[], withExtension: boolean) => boolean;
+  };
+  if (typeof isMetadataRouteFile !== "function") {
+    throw new Error("next/dist/lib/metadata/is-metadata-route no longer exports isMetadataRouteFile");
+  }
+  const PAGE_EXTENSIONS = ["tsx", "ts", "jsx", "js"];
   // Resolved from this file, not process.cwd(), for the reason singleCourseRegions gives.
   const root = nodePath.join(__dirname, "..", "app", "[locale]");
-  const IMAGE_ROUTE = /^(?:opengraph-image|twitter-image|icon|apple-icon)\.[jt]sx?$/;
+  const DERIVABLE_IMAGE = /^(?:opengraph-image|twitter-image|icon|apple-icon)\.[jt]sx?$/;
   const ROUTE_FILE = /^route\.[jt]sx?$/;
-  // Metadata routes whose URL is not the file's basename (sitemap.xml, ...).
-  // None exist under [locale]; fail loudly rather than guess a URL.
-  const OTHER_METADATA = /^(?:sitemap|robots|manifest)\.[jt]sx?$/;
-  const out = { localeOnly: [] as { file: string; remainder: string }[], multiParam: [] as string[], unsupported: [] as string[] };
-  const walk = (dir: string, urlSegs: string[], dynamic: boolean) => {
+  const out = {
+    localeOnly: [] as { file: string; remainder: string; kind: "image" | "route" }[],
+    multiParam: [] as string[],
+    unsupported: [] as string[],
+  };
+  const walk = (dir: string, urlSegs: string[], dynamic: boolean, grouped: boolean, special: boolean) => {
     for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
       const rel = `app/[locale]/${nodePath.relative(root, nodePath.join(dir, entry.name)).split(nodePath.sep).join("/")}`;
       if (entry.isDirectory()) {
-        if (entry.name.startsWith("_")) continue; // private folder, never routed
-        const invisible = /^\(.*\)$/.test(entry.name) || entry.name.startsWith("@"); // group / slot
+        const name = entry.name;
+        if (name.startsWith("_")) continue; // private folder, never routed
+        const intercepting = /^\(\.{1,3}\)/.test(name) || /^(?:\(\.\.\))+/.test(name);
+        const group = !intercepting && /^\(.*\)$/.test(name);
         walk(
-          nodePath.join(dir, entry.name),
-          invisible ? urlSegs : [...urlSegs, entry.name],
-          dynamic || entry.name.startsWith("["),
+          nodePath.join(dir, name),
+          group || name.startsWith("@") ? urlSegs : [...urlSegs, name],
+          dynamic || name.startsWith("["),
+          grouped || group,
+          special || intercepting || name.startsWith("@"),
         );
         continue;
       }
-      let segs: string[] | null = null;
-      if (IMAGE_ROUTE.test(entry.name)) segs = [...urlSegs, entry.name.replace(/\.[jt]sx?$/, "")];
-      else if (ROUTE_FILE.test(entry.name)) segs = urlSegs;
-      else if (OTHER_METADATA.test(entry.name)) out.unsupported.push(rel);
-      if (!segs) continue;
-      if (dynamic) out.multiParam.push(rel);
-      else out.localeOnly.push({ file: rel, remainder: segs.length ? `/${segs.join("/")}/` : "/" });
+      const isRoute = ROUTE_FILE.test(entry.name);
+      const isMetadata = isMetadataRouteFile(`/${rel.replace(/^app\//, "")}`, PAGE_EXTENSIONS, true);
+      if (!isRoute && !isMetadata) continue;
+      const derivable = isRoute ? !special : DERIVABLE_IMAGE.test(entry.name) && !special && !grouped;
+      if (!derivable) out.unsupported.push(rel);
+      else if (dynamic) out.multiParam.push(rel);
+      else {
+        const segs = isRoute ? urlSegs : [...urlSegs, entry.name.replace(/\.[jt]sx?$/, "")];
+        out.localeOnly.push({
+          file: rel,
+          remainder: segs.length ? `/${segs.join("/")}/` : "/",
+          kind: isRoute ? "route" : "image",
+        });
+      }
     }
   };
-  walk(root, [], false);
+  walk(root, [], false, false, false);
   return out;
 }
 
@@ -4703,7 +4734,17 @@ async function localeRouteHandlers(): Promise<{
  * `/images/golf-courses/opengraph-image/` rendered a fresh 200 PNG (43,596 B on
  * prod 2026-09-24) for every junk locale and every query string on a bypassed
  * path. No ISR write, so the signal header never showed it: the STATUS is the
- * assertion there, which is why that probe fails on a 200 by name.
+ * assertion there, which is why that probe fails on a 200 by name. Its fix is
+ * EN-only `generateStaticParams`, so the HANDLER CONTROL below follows the card
+ * URL every locale's hub page emits and requires an image, pinning the premise
+ * that th/ja/ko/zh reach it through the untranslated-route 301.
+ *
+ * The route-handler probe does not discriminate on `next dev`: observed
+ * 2026-09-24 on a Windows dev server, dev compiled `/[locale]/golf-courses/
+ * [region]` for `/images/golf-courses/opengraph-image/` (region
+ * `opengraph-image`) and 404'd with the fix and without it. It also cannot
+ * pass there, because the cards themselves 500 on Windows (@vercel/og). Its
+ * evidence is `next build && next start` on Linux (CI) and a Vercel deploy.
  */
 async function runUnknownSlugCacheTests() {
   console.log("\n\x1b[1mG2) Unknown slugs and locales must 404 without minting an ISR entry\x1b[0m");
@@ -4732,21 +4773,25 @@ async function runUnknownSlugCacheTests() {
   ];
 
   // Junk LOCALE values aimed at a ROUTE HANDLER, which the layout's flag does
-  // not reach (see the docblock). DERIVED, one per locale-only handler file, so
-  // a probe cannot be pointed at a different card while its own file loses the
-  // flag, and a new handler is probed from the commit that adds it. Today that
-  // is the hub card alone (/images/golf-courses/opengraph-image/); the [region]
-  // and [slug] cards sit under a second param and are guarded in their own
-  // files. `images/` is the prefix because the matcher skips it (checked below).
-  let junkLocaleHandlers: { path: string; file: string }[] = [];
+  // not reach (see the docblock). DERIVED, one per locale-only handler file, and
+  // each probe carries the remainder it was derived from, which the remainder
+  // check below compares against the probe's own path, so an edited probe
+  // cannot drift onto a different card. Today that is the hub card alone
+  // (/images/golf-courses/opengraph-image/). `images/` is the prefix because
+  // the matcher skips it (checked below).
+  const HANDLER_PROBE_PREFIX = "/images";
+  let junkLocaleHandlers: { path: string; file: string; remainder: string; kind: "image" | "route" }[] = [];
+  let multiParamHandlers: string[] | null = null;
   try {
     const handlers = await localeRouteHandlers();
-    junkLocaleHandlers = handlers.localeOnly.map((h) => ({ path: `/images${h.remainder}`, file: h.file }));
+    junkLocaleHandlers = handlers.localeOnly.map((h) => ({ ...h, path: `${HANDLER_PROBE_PREFIX}${h.remainder}` }));
+    multiParamHandlers = handlers.multiParam;
     for (const file of handlers.unsupported) {
       fail(
         "G2 route-handler derivation",
-        `${file} is a metadata route whose URL is not its basename; teach localeRouteHandlers() its URL ` +
-          `so a junk-locale probe can be built for it`
+        `${file} is a route handler under [locale] whose URL localeRouteHandlers() cannot derive (see its ` +
+          `docblock), so no junk-locale probe exists for it. A static metadata file cannot carry ` +
+          `dynamicParams at all; move it out of [locale]. Otherwise teach the walk its URL.`
       );
     }
   } catch (err) {
@@ -4759,13 +4804,16 @@ async function runUnknownSlugCacheTests() {
   // Exact pins, not derived from the lists: a floor derived from a list shrinks
   // with it, so a trimmed or emptied list would pass. The anti-vacuity check at
   // the end compares against their SUM for the same reason. Raise a pin when
-  // adding a probe; never lower one to absorb a removal.
-  // The handler pin counts DERIVED probes, so it also catches the walk
-  // degrading (a moved tree, a broken filename rule) to zero probes. A new
-  // locale-only route handler moves it too: guard that file, then raise it.
+  // adding a probe; never lower one to absorb a removal. The two handler pins
+  // count what the WALK found, so they also catch it degrading to zero; they
+  // move only in the commit that adds or deletes a handler file, after that
+  // file carries its own `dynamicParams = false` and `generateStaticParams`.
   const EXPECTED_JUNK_SLUGS = 7;
   const EXPECTED_JUNK_LOCALES = 3;
   const EXPECTED_JUNK_LOCALE_HANDLERS = 1;
+  // The [region] and [slug] cards. Counted, NOT probed (see localeRouteHandlers):
+  // nothing in G2 guards their own flags, only that a new one is noticed.
+  const EXPECTED_MULTI_PARAM_HANDLERS = 2;
   if (
     junkSlugs.length !== EXPECTED_JUNK_SLUGS ||
     junkLocales.length !== EXPECTED_JUNK_LOCALES ||
@@ -4776,6 +4824,14 @@ async function runUnknownSlugCacheTests() {
       `expected ${EXPECTED_JUNK_SLUGS} slug + ${EXPECTED_JUNK_LOCALES} locale + ` +
         `${EXPECTED_JUNK_LOCALE_HANDLERS} route-handler probes, found ` +
         `${junkSlugs.length} + ${junkLocales.length} + ${junkLocaleHandlers.length}`
+    );
+  }
+  if (multiParamHandlers && multiParamHandlers.length !== EXPECTED_MULTI_PARAM_HANDLERS) {
+    fail(
+      "G2 multi-param handler pin",
+      `expected ${EXPECTED_MULTI_PARAM_HANDLERS} route handlers under a second dynamic segment, found ` +
+        `${multiParamHandlers.length} (${multiParamHandlers.join(", ")}). G2 cannot probe these; confirm each ` +
+        `carries its own dynamicParams = false and generateStaticParams, then update the pin.`
     );
   }
 
@@ -4805,17 +4861,30 @@ async function runUnknownSlugCacheTests() {
     if (!runsMiddleware("/golf/")) {
       fail("G2 matcher control", `no rebuilt matcher entry matches /golf/, so the bypass check below cannot be trusted`);
     } else {
+      // Counted per verdict and compared to the pins, so this loop iterating
+      // the wrong list (e.g. `junkLocales` alone) cannot drop the handler probe.
+      let bypassJudged = 0;
       for (const path of allJunkLocales) {
+        const remedy = handlerPaths.includes(path)
+          ? `Change HANDLER_PROBE_PREFIX to a prefix the matcher still excludes (the probe is derived).`
+          : `Replace it with a path the matcher still excludes AND whose remainder after the first ` +
+            `segment is a real page (checked next).`;
         if (runsMiddleware(path)) {
           fail(
             `junk-locale probe still bypasses middleware (${path})`,
             `the middleware matcher now runs on this path, so next-intl rewrites it to /en/... and it no ` +
-              `longer reaches the [locale] segment. Replace it with a path the matcher still excludes AND ` +
-              `whose remainder after the first segment is a real page (checked next).`
+              `longer reaches the [locale] segment. ${remedy}`
           );
         } else {
           pass(`junk-locale probe still bypasses middleware (${path})`);
         }
+        bypassJudged++;
+      }
+      if (bypassJudged !== EXPECTED_JUNK_LOCALES + EXPECTED_JUNK_LOCALE_HANDLERS) {
+        fail(
+          "G2 matcher anti-vacuity",
+          `checked ${bypassJudged} of ${EXPECTED_JUNK_LOCALES + EXPECTED_JUNK_LOCALE_HANDLERS} pinned junk-locale probes`
+        );
       }
     }
   } catch (err) {
@@ -4826,36 +4895,128 @@ async function runUnknownSlugCacheTests() {
   // refused junk locale and a probe that matches no route at all return the
   // same static /404, so a probe renamed to `/images/zzz-not-a-page/` would pass
   // forever while testing nothing. Stripping the junk first segment must leave
-  // a page that serves 200 for a real locale. A route-handler probe must leave
-  // an IMAGE: renamed to `/images/golf-courses/`, its remainder is a real page
-  // and serves 200, but it would then test the layout's flag, not the handler's.
+  // a page that serves 200 for a real locale. For a route-handler probe the
+  // remainder must also be the one its file was derived from, and for an image
+  // handler it must serve an IMAGE: that catches a mis-derived remainder (a
+  // dropped basename leaves `/golf-courses/`, a real page guarded by the layout).
+  // It does NOT prove the junk-locale probe itself reaches the handler: on
+  // `next dev` the probe is routed to the [region] PAGE instead (see docblock).
+  let remainderJudged = 0;
   for (const path of allJunkLocales) {
     const remainder = path.replace(/^\/[^/]+/, "") || "/";
-    const isHandler = handlerPaths.includes(path);
-    const label = isHandler
-      ? `junk-locale probe targets a real image route (${path} -> ${remainder})`
+    const handler = junkLocaleHandlers.find((h) => h.path === path);
+    const label = handler
+      ? `junk-locale probe targets a real ${handler.kind === "image" ? "image" : "route"} handler (${path} -> ${remainder})`
       : `junk-locale probe targets a real page (${path} -> ${remainder})`;
     try {
-      const res = await fetch(`${BASE}${remainder}`, { redirect: "follow" });
-      const type = res.headers.get("content-type") ?? "";
-      if (res.status !== 200) {
+      if (handler && remainder !== handler.remainder) {
         fail(
           label,
-          `${remainder} returned ${res.status}, so ${path} matches no route and 404s from the static ` +
-            `page with or without the fix: it probes nothing.`
-        );
-      } else if (isHandler && !type.startsWith("image/")) {
-        fail(
-          label,
-          `${remainder} served "${type}", not an image, so ${path} lands on a page (guarded by the ` +
-            `layout) rather than on the route handler it exists to probe.`
+          `the probe's remainder is ${remainder}, but it was derived from ${handler.file}, whose URL is ` +
+            `${handler.remainder}: the probe no longer targets its own handler.`
         );
       } else {
-        pass(label);
+        const res = await fetch(`${BASE}${remainder}`, { redirect: "follow" });
+        const type = res.headers.get("content-type") ?? "";
+        if (res.status !== 200) {
+          fail(
+            label,
+            `${remainder} returned ${res.status} (no route, or the route errored), so ${path} cannot show ` +
+              `whether the guard works: with no route it 404s from the static page with or without the fix.`
+          );
+        } else if (handler?.kind === "image" && !type.startsWith("image/")) {
+          fail(
+            label,
+            `${remainder} served "${type}", not an image, so ${path} lands on a page (guarded by the ` +
+              `layout) rather than on the route handler it exists to probe.`
+          );
+        } else {
+          pass(label);
+        }
       }
     } catch (err) {
       fail(label, `fetch error: ${(err as Error).message}`);
     }
+    remainderJudged++;
+  }
+  if (remainderJudged !== EXPECTED_JUNK_LOCALES + EXPECTED_JUNK_LOCALE_HANDLERS) {
+    fail(
+      "G2 remainder anti-vacuity",
+      `checked ${remainderJudged} of ${EXPECTED_JUNK_LOCALES + EXPECTED_JUNK_LOCALE_HANDLERS} pinned junk-locale probes`
+    );
+  }
+
+  // HANDLER CONTROL: the guard must not cut real traffic off. Each image
+  // handler's own page, in every locale that serves it, must still emit a URL
+  // to the card, and that URL, followed, must end on a 200 image. This pins the
+  // premise the EN-only `generateStaticParams` rests on: today th/ja/ko/zh
+  // reach the card only through the middleware's untranslated-route 301, and a
+  // translated-routes entry that matched the card path (a static entry, or a
+  // `dynamicRoutePatterns` entry such as `/golf-courses/[slug]`, which
+  // `hasTranslationForLocale` expands to `[^/]+`) would stop that 301, and the
+  // card would 404 for that locale while every probe above stayed green.
+  const EXPECTED_HANDLER_CARD_PAGES = 5; // /golf-courses/ in en, th, ja, ko, zh
+  let cardPagesJudged = 0;
+  try {
+    const { hasTranslationForLocale, ALL_LOCALES } = await import("../lib/translated-routes");
+    for (const h of junkLocaleHandlers.filter((x) => x.kind === "image")) {
+      const cardPath = h.remainder.replace(/\/$/, "");
+      const pagePath = cardPath.replace(/\/[^/]+$/, "") + "/";
+      const escapedCard = cardPath.slice(1).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      // An attribute value: optional origin, optional locale prefix, the card
+      // path, optional query, then the closing quote. Backslashes are excluded
+      // so the RSC payload's escaped copy (`...?<hash>\"`) does not match too.
+      const cardRe = new RegExp(
+        `(?:https?://[^"'\\s/]+)?/(?:(?:${ALL_LOCALES.join("|")})/)?${escapedCard}(?:\\?[^"'\\s<>\\\\]*)?(?=["'])`,
+        "g"
+      );
+      const locales = ALL_LOCALES.filter((l) => l === "en" || hasTranslationForLocale(l, pagePath));
+      for (const locale of locales) {
+        const page = `${locale === "en" ? "" : `/${locale}`}${pagePath}`;
+        const label = `G2 handler control: ${page} still resolves its card (${cardPath}/)`;
+        try {
+          const html = await (await fetch(`${BASE}${page}`, { redirect: "follow" })).text();
+          const urls = [...new Set((html.match(cardRe) ?? []).map((u) => u.replace(/&amp;/g, "&")))];
+          if (urls.length === 0) {
+            fail(label, `${page} emits no URL to ${cardPath}; it lost its social card.`);
+            continue;
+          }
+          const bad: string[] = [];
+          let images = 0;
+          for (const u of urls) {
+            const target = new URL(u, BASE);
+            const res = await fetch(`${BASE}${target.pathname}${target.search}`, { redirect: "follow" });
+            const type = res.headers.get("content-type") ?? "";
+            const isImage = res.status === 200 && type.startsWith("image/");
+            if (!isImage) bad.push(`${target.pathname}${target.search} -> ${res.status} ${type}`);
+            if (isImage) images++;
+          }
+          if (bad.length) {
+            fail(
+              label,
+              `${bad.join("; ")}. If ${locale} now reaches the card without the untranslated-route 301, add ` +
+                `it to generateStaticParams in ${h.file}.`
+            );
+            continue;
+          }
+          // Positive witness, as in the verdict loop: counted only when every
+          // emitted URL was SEEN to be an image, not when `bad` merely stayed
+          // empty (measured: a disarmed `bad.push` otherwise passed here).
+          if (images === urls.length) cardPagesJudged++;
+          pass(label);
+        } catch (err) {
+          fail(label, `fetch error: ${(err as Error).message}`);
+        }
+      }
+    }
+  } catch (err) {
+    fail("G2 handler control", `could not load lib/translated-routes: ${(err as Error).message}`);
+  }
+  if (cardPagesJudged !== EXPECTED_HANDLER_CARD_PAGES) {
+    fail(
+      "G2 handler control anti-vacuity",
+      `${cardPagesJudged} of ${EXPECTED_HANDLER_CARD_PAGES} pinned pages resolved their card`
+    );
   }
 
   // ---------------------------------------------------------------------
@@ -4917,8 +5078,8 @@ async function runUnknownSlugCacheTests() {
             label,
             `got a 200 ${type}: the route handler rendered its card for a junk locale, one render per ` +
               `invented URL (and per query string on a bypassed path), measured on prod at 43,596 B each. ` +
-              `The layout's dynamicParams does not reach route handlers; add \`revalidate\`, ` +
-              `\`dynamicParams = false\` and \`generateStaticParams\` to ${handler.file} itself.`
+              `The layout's dynamicParams does not reach route handlers; add \`dynamicParams = false\` and ` +
+              `\`generateStaticParams\` (plus \`revalidate\`, as the sibling cards do) to ${handler.file} itself.`
           );
         } else {
           fail(label, `expected 404, got ${res.status}`);
@@ -4927,13 +5088,22 @@ async function runUnknownSlugCacheTests() {
       }
       if (signal) {
         const got = res.headers.get(signal);
+        if (got && handler) {
+          // Not the measured failure: the unguarded card was a 200 PNG with no
+          // ISR write (above). A 404 carrying the signal is a different state.
+          fail(
+            label,
+            `the route handler's 404 carried ${signal}: ${got}, so it is rendering the junk locale and ` +
+              `caching the result (a state nobody has measured). Check \`dynamicParams = false\` and ` +
+              `\`generateStaticParams\` in ${handler.file}.`
+          );
+          continue;
+        }
         if (got) {
-          const where = handler
-            ? `to ${handler.file} itself (the layout's flag does not reach route handlers)`
-            : param === "locale"
-              ? "to app/[locale]/layout.tsx (the junk LOCALE is the unguarded param here)"
-              : "to that segment";
-          const size = handler ? "~44 KB" : param === "locale" ? "~86-132 KB" : "~124 KB";
+          const where = param === "locale"
+            ? "to app/[locale]/layout.tsx (the junk LOCALE is the unguarded param here)"
+            : "to that segment";
+          const size = param === "locale" ? "~86-132 KB" : "~124 KB";
           fail(
             label,
             `the 404 carried ${signal}: ${got} — this segment is rendering unknown params on ` +
@@ -4943,7 +5113,13 @@ async function runUnknownSlugCacheTests() {
           continue;
         }
       }
-      checked++;
+      // A POSITIVE witness: the counter re-reads the verdict it vouches for
+      // (a 404 with no signal header) instead of trusting that control reached
+      // this line. Measured: with a bare `checked++`, exempting handlers from
+      // the status gate (`res.status !== 404 && !handler`), loosening it to
+      // `>= 500`, or downgrading the 200-image failure to a warning all reached
+      // here and passed on prod, where the handler probe is a live 200.
+      if (res.status === 404 && !(signal && res.headers.get(signal))) checked++;
       pass(label);
     } catch (err) {
       fail(label, `fetch error: ${(err as Error).message}`);
@@ -4960,7 +5136,8 @@ async function runUnknownSlugCacheTests() {
   if (checked !== pinnedTotal) {
     fail(
       "G2 anti-vacuity",
-      `judged ${checked} of ${pinnedTotal} pinned junk URLs (${junk.length} reached the verdict loop)`
+      `${checked} of ${pinnedTotal} pinned junk URLs reached a passing 404 verdict ` +
+        `(${junk.length} entered the verdict loop)`
     );
   }
 }
