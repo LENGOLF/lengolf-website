@@ -222,6 +222,23 @@ jobs:
       # either sub-check all go red.
       - run: npm run validate:pricing-payload
 
+      # The IndexNow workflow runs only AFTER a merge to main, so without these
+      # a broken derivation or deploy wait is found in production, and the
+      # worst failure (deriving nothing) is a GREEN run that pings nothing.
+      # indexnow-urls.ts --self-test: a case for every mapping rule, table
+      # checks against source (lib/seo-pages.ts, the registry's locales, the
+      # workflow's wiring, the runtime importers of each mapped data module),
+      # and the real CLI run end to end against synthetic base commits in a
+      # clean worktree, asserting its stdout and exit codes.
+      - run: npm run validate:indexnow:self-test
+      # indexnow-wait-for-deploy.ts --self-test spawns the real CLI against a
+      # stub server and shallow clones of a throwaway origin, and asserts the
+      # EXIT CODE from outside: the defect that matters (pinging a deploy that
+      # never went live) is a right verdict with a wrong exit code. Its own
+      # step, not `a && b` in one npm script, where a `;` would let the second
+      # exit code mask the first.
+      - run: npm run validate:indexnow-wait:self-test
+
   build-and-smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -250,6 +267,14 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          # What Vercel sets on a real build. app/deploy-sha.txt bakes it in,
+          # and smoke section H asserts the served value equals it
+          # (EXPECTED_DEPLOY_SHA on the smoke step). The PR HEAD sha, not
+          # github.sha: on a pull_request run github.sha is the merge commit,
+          # which is also GITHUB_SHA, so a route reading the wrong variable
+          # would pass here and serve `unknown` on Vercel forever. Nothing else
+          # reads this variable: next and next-intl were grepped for it.
+          VERCEL_GIT_COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Start server
         run: |
@@ -273,6 +298,8 @@ jobs:
 
       - name: Run smoke tests
         run: npx tsx scripts/smoke-test.ts http://localhost:3000
+        env:
+          EXPECTED_DEPLOY_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Stop server
         if: always()
