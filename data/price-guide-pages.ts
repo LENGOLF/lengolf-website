@@ -975,7 +975,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/cost/how-much-does-golf-cost-bangkok', '/cost/lengolf-pricing-guide', '/faq/how-much-does-indoor-golf-cost-in-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-24T00:00:00.000Z",
     content: {
       intro:
         'バンコクのゴルフシミュレーター料金は、施設・時間帯・曜日によって1ベイ1時間あたりおよそ400〜1,400THBです。市内中心部では1ベイ1時間550〜1,200THBが目安で、LENGOLFは最大5名で1時間550THBから。以下はバンコクの主要なシミュレーター施設を正直に比較したもので、掲載しているレートはすべて2026年7月に各施設の公表価格をもとに再確認しています（2026年7月現在）。',
@@ -1081,7 +1081,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
       sections: [
         {
           heading: 'LENGOLF — 料金表のすべて',
-          body: 'LENGOLFはザ・マーキュリービル内にあり、BTSチットロム駅（4番出口）から直結しています。平日は14:00までが1時間550THB、14:00〜23:00が1時間750THB。週末と祝日は14:00までが1時間750THB、14:00〜23:00が1時間950THB。すべて1ベイあたり（最大5名）の料金で、VAT込みです。標準クラブのレンタルはご予約ごとに無料で付属します。プレミアムクラブのレンタル（Callaway（マジェスティ））は1時間150THBから。月額パッケージはBronze（5時間・3,000THB）、Silver（15時間・8,000THB）、Gold（30時間・14,000THB）、Diamond Unlimited（月額8,000THB）、Diamond+ Unlimited（3か月18,000THB）。Early Birdパッケージ（14:00までの利用限定）は10時間4,800THB、または月額5,000THBの無制限プランです。',
+          body: 'LENGOLFはザ・マーキュリービル内にあり、BTSチットロム駅（4番出口）から直結しています。平日は14:00までが1時間550THB、14:00〜23:00が1時間750THB。週末と祝日は14:00までが1時間750THB、14:00〜23:00が1時間950THB。すべて1ベイあたり（最大5名）の料金で、VAT込みです。標準クラブのレンタルはご予約ごとに無料で付属します。プレミアムクラブのレンタル（Callaway）は1時間150THBから。月額パッケージはBronze（5時間・3,000THB）、Silver（15時間・8,000THB）、Gold（30時間・14,000THB）、Diamond Unlimited（月額8,000THB）、Diamond+ Unlimited（3か月18,000THB）。Early Birdパッケージ（14:00までの利用限定）は10時間4,800THB、または月額5,000THBの無制限プランです。',
         },
         {
           heading: 'Front 9 — 料金表のすべて',
@@ -2015,7 +2015,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/golf-club-rental', '/cost/how-much-does-golf-cost-bangkok', '/faq/should-i-bring-golf-clubs-to-thailand-or-rent', '/faq/cost-to-fly-with-golf-clubs-to-thailand'],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-24T00:00:00.000Z",
     content: {
       intro:
         'バンコクでのゴルフクラブレンタルは、LENGOLFのようにベイのご予約に無料で付く場合から、屋外コースで1ラウンド1,500THBかかる場合まで幅があります。旅行でお越しの方がご自身のクラブを持ち込むか現地で借りるかを判断できるよう、選択肢と費用を一つずつ整理します（2026年2月現在）。',
@@ -2030,7 +2030,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: 'ゴルフボール（LENGOLF）', price: '6球400THB', notes: 'Srixonクラスの品質。LENGOLFでお求めいただけます。' },
       ],
       comparison_with_alternatives:
-        'バンコクを訪れる旅行者にとって、計算ははっきりしています。ゴルフクラブを空輸すると航空会社の手数料だけで往復4,000〜12,000THB、これに手間と破損のリスクが加わります。LENGOLFの標準クラブレンタルは無料なので、シミュレーターゴルフに関してはこの費用がまるごと不要です。屋外コースにも出たい場合は、Callaway（マジェスティ）のセットを1日1,200THBで借りられるプレミアムレンタルが、レンタル専門サービスと比べても競争力があり、コースのプロショップでのレンタルより大幅に安く済みます。',
+        'バンコクを訪れる旅行者にとって、計算ははっきりしています。ゴルフクラブを空輸すると航空会社の手数料だけで往復4,000〜12,000THB、これに手間と破損のリスクが加わります。LENGOLFの標準クラブレンタルは無料なので、シミュレーターゴルフに関してはこの費用がまるごと不要です。屋外コースにも出たい場合は、Callawayのセットを1日1,200THBで借りられるプレミアムレンタルが、レンタル専門サービスと比べても競争力があり、コースのプロショップでのレンタルより大幅に安く済みます。',
       value_proposition:
         'バンコクのシミュレーター施設のなかで、ベイのご予約すべてに標準クラブレンタルが無料で付くのはLENGOLFだけです。手ぶらでお越しいただき、そのままプレーできます。屋外コースに出る日には、プレミアムクラブの配送サービス（1日1,200THBと、バンコク市内への配送500THB）が最も便利です——ホテルでもゴルフ場でも、クラブをお届けします。',
       last_verified: '2026-02-19',
