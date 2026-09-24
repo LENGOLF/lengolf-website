@@ -6647,9 +6647,13 @@ async function runLocalizedDriveTimeTests() {
 // ELEVEN distinct courses fill those 14 slots (thana-city, thai-country-club and
 // royal-bang-pa-in each sit on two tiers). All eleven are untranslated BANGKOK
 // courses, so bangkok tranches 2 and 3 take this to ZERO: the re-scope below is
-// due within this batch series, not "a few batches off". Note the re-scope target
-// named below (region hubs with untranslated courses) empties at the same moment,
-// because bangkok is the last region with any.
+// due within this batch series, not "a few batches off". The re-scope target
+// named below (region hubs) does not work either: hubs render no pull quote
+// (RoundupList is used only by /under/, /near/ and /best-for/, and the last two
+// pin locale 'en'), and the bangkok hub keeps its closed courses untranslated.
+// Once the tier rosters are fully translated no localized surface renders an
+// EN-fallback pull quote at all; replace this section with a unit-level check of
+// localizedOverview + firstSentence over a fixture course before tranche 3.
 //
 // Pinned AT the true value on purpose, same discipline as the ratchets above: a
 // floor below the population is a guard gone slack, and here it would also hide

@@ -666,7 +666,7 @@ export const COURSE_DETAIL_I18N: {
   // coordinates compute to ESE (119 deg, 61 deg off) and sit ~24 km east of the
   // Mueang Samut Prakan address the same file states. Needs verify:coordinates,
   // not a translation. RESOLVED in Batch 12 tranche 1: the owner supplied the
-  // real pin (13.5408, 100.6721 — south-east, on the coast, matching the
+  // real pin (13.5408, 100.6721 — south-east, near the coast, matching the
   // address), the prose bearing was corrected to south-east in EN and every
   // locale, and the course is now registered below.
   //
@@ -736,8 +736,9 @@ export const COURSE_DETAIL_I18N: {
   // Batch 12, Tranche 1 (2026-09) — the first of three Bangkok-region tranches
   // that finish the last untranslated region. Nine ordinary courses (no
   // fee_is_package, no closed status); all six provinces they span already
-  // sit in PROVINCE_L10N. bangpoo is here because its Batch 9 coordinate hold
-  // (above) was resolved in this batch, not because the hold was overlooked.
+  // sit in PROVINCE_L10N. bangpoo was first registered with its Batch 9
+  // coordinate hold (above) overlooked — this tranche's pre-flight missed the
+  // note — and pr-rigor caught it; the hold was then resolved in the same batch.
   { region: 'bangkok', slug: 'bangkok-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'bangkok', slug: 'bangpoo-golf-sports-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'bangkok', slug: 'dynasty-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },

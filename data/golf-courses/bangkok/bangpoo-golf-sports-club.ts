@@ -13,7 +13,9 @@ export const course: GolfCourse = {
   green_fee_weekend_thb: 2600,
   // The posted green fee includes the caddie (Thai booking sites list it
   // "รวมแคดดี้"; the ~400 THB paid on the day is a customary tip). Zero is
-  // this repo's encoding of a genuine inclusion: SpecTable renders "Included".
+  // this repo's encoding of a genuine inclusion (SpecTable, on /compare/, would
+  // render "Included"; CoursePage hides the caddie row either way, and the
+  // generated caddie FAQ treats 0 like null).
   // Cart is optional and extra, so this is NOT fee_is_package.
   caddie_fee_thb: 0,
   cart_fee_thb: null,
