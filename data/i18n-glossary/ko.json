@@ -47,7 +47,9 @@
     { "term": "올인클루시브", "use": "올인클루시브", "avoid": ["올 인클루시브"], "note": "all-inclusive — write closed." },
     { "term": "스크린골프", "use": "스크린골프", "avoid": ["스크린 골프"], "note": "screen golf — write closed. Used as the familiar KO frame of reference for the simulator." },
     { "term": "프로샵", "use": "프로샵", "avoid": ["프로 샵"], "note": "pro shop." },
-    { "term": "태국만", "use": "태국만", "avoid": ["걸프"], "note": "Gulf of Thailand. 걸프 alone reads as the Persian Gulf; it shipped once in data/faq-pages.ts (fixed by hand) and was a pre-flight landmine again in Batch 12. Nothing on this site refers to the Persian Gulf." }
+    { "term": "태국만", "use": "태국만", "avoid": ["걸프"], "note": "Gulf of Thailand. 걸프 alone reads as the Persian Gulf; it shipped once in data/faq-pages.ts (fixed by hand) and was a pre-flight landmine again in Batch 12. Nothing on this site refers to the Persian Gulf." },
+    { "term": "Callaway", "use": "Callaway", "avoid": ["마제스티", "Majesty"], "note": "Callaway's women's line is REVA. The Majesty set is retired (rental_club_sets.website_visible=false), and 'Callaway (Majesty)' shipped once in ja/ko catalogs and six ja content strings until Batch 12. Nothing on this site should name Majesty." },
+    { "term": "LENGOLF는", "use": "LENGOLF는 / LENGOLF를 / LENGOLF가 / LENGOLF와", "avoid": ["LENGOLF은", "LENGOLF을", "LENGOLF이", "LENGOLF과"], "note": "LENGOLF reads 렌골프 (vowel-final), so it takes the vowel-final allomorph. Five consonant-final forms shipped in messages/ko.json before the hua-hin batch; this was unlinted until Batch 12. Measured 0 false positives on the corpus." }
   ],
   "conventions": {
     "currency": {

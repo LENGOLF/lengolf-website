@@ -1114,7 +1114,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/golf-in-thailand-guide",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-24T00:00:00.000Z",
     content: {
       intro:
         "Golf simulators in Bangkok have moved well beyond novelty. The best venues now use professional-grade launch monitor technology to deliver accurate ball flight data, realistic course visuals, and a playing experience that serious golfers treat as genuine practice time. For visitors who want to play without the logistics of a full course trip, a good simulator venue is a meaningful option.",
@@ -1125,7 +1125,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "LENGOLF — The Premium Central Bangkok Option",
-          body: "LENGOLF is Bangkok's leading indoor golf simulator venue for serious golfers, located in central Bangkok with direct BTS access.\n\n**Why LENGOLF stands out:**\n- Professional-grade simulator technology — precise launch data suitable for both casual play and swing analysis\n- Extensive course library — play simulated versions of world-famous layouts\n- Central location — BTS-accessible, no long transfer required\n- Club rental — quality Callaway sets available in men's, ladies', and left-handed configurations\n- Group bookings — multiple bays available for corporate events or group sessions\n- Air-conditioned — fully climate-controlled year-round\n- Flexible hours — open day and evening, bookable by the hour\n- Coaching available — lessons using simulator data for precise technique feedback",
+          body: "LENGOLF is Bangkok's leading indoor golf simulator venue for serious golfers, located in central Bangkok with direct BTS access.\n\n**Why LENGOLF stands out:**\n- Professional-grade simulator technology — precise launch data suitable for both casual play and swing analysis\n- Extensive course library — play simulated versions of world-famous layouts\n- Central location — BTS-accessible, no long transfer required\n- Club rental — quality Callaway sets for men and women, plus one left-handed set on request\n- Group bookings — multiple bays available for corporate events or group sessions\n- Air-conditioned — fully climate-controlled year-round\n- Flexible hours — open day and evening, bookable by the hour\n- Coaching available — lessons using simulator data for precise technique feedback",
         },
         {
           heading: "What to Look for When Comparing Other Venues",

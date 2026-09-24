@@ -15,8 +15,11 @@ Clubs are not delivered to golf courses — delivery is to the customer's hotel 
 Source: lengolf.com | Verified: 2026-04
 
 **Rental brands available:**
-TaylorMade and Callaway sets.
-Source: lengolf.com | Verified: 2026-04
+Callaway: Premium+ Paradym Forged Carbon, Premium Warbird (men), Premium REVA
+(women). Write "premium Callaway" in course copy. Do NOT write "TaylorMade and
+Callaway": the one exception is a single left-handed set (TaylorMade / Ping),
+offered on request only, which is not the default offer. Majesty is retired.
+Source: rental_club_sets table (Supabase) + messages/en.json CourseClubRental | Verified: 2026-09-24
 
 **Delivery area:**
 Bangkok hotels. Not Phuket, Hua Hin, or Pattaya (as of April 2026).
