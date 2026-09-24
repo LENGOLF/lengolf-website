@@ -243,13 +243,15 @@ export default async function Footer() {
         <div className="flex flex-col items-center gap-2 text-center text-xs text-foreground/70 sm:flex-row sm:justify-between sm:text-left">
           <p>{t('copyright', { year: new Date().getFullYear() })}</p>
           <div className="flex gap-4">
-            {/* RawLink for the same reason as DISCOVER_LINKS above: these three
-                pages are hardcoded English (no translation hook at all), so
-                they are deliberately absent from the registry and the
+            {/* Link vs RawLink is derived from the registry, as for
+                DISCOVER_LINKS above. The rental agreement is translated in
+                every locale (data/rental-agreement/), so it gets the
+                locale-aware Link. Privacy and terms are still hardcoded
+                English and absent from the registry, so they get RawLink: the
                 locale-aware Link would emit /ja/privacy-policy/ only for the
-                middleware to 301 it back. The LABELS are localized; only the
-                href is un-prefixed. Derived, so if one of them ever gains a
-                translation it starts prefixing on its own. */}
+                middleware to 301 it back. Their LABELS are localized; only the
+                href is un-prefixed, and it starts prefixing on its own if one
+                of them is ever translated. */}
             {LEGAL_LINKS.map(({ key, href }) => {
               const LinkTag = hasTranslationForLocale(locale, href) ? Link : RawLink
               return (

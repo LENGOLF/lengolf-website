@@ -201,6 +201,21 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  {
+    path: "/golf-course-club-rental-agreement/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  // The agreement is translated in every locale (data/rental-agreement/). A
+  // redirect fails a route test, so each entry also proves the route is
+  // registered; contentAbsent catches a translation that silently rendered the
+  // English text (the EN H1) under the locale URL.
+  ...(["th", "ja", "ko", "zh"] as const).map((l) => ({
+    path: `/${l}/golf-course-club-rental-agreement/`,
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+    contentAbsent: ">Golf Course Club Rental Agreement</h1>",
+  })),
   // TH pages
   {
     path: "/th/",
@@ -7132,6 +7147,89 @@ async function runRegionHubLinkTests() {
   }
 }
 
+// ── R) Footer links the LOCALIZED rental agreement ─────────────────
+//
+// The defect this exists for was reported by a reader, not caught by CI: the
+// footer's "Rental Agreement" label was localized in every catalog (ko
+// "대여 약관") while its href went to the English-only page, so a Korean reader
+// on the localized course-rental page, the one that sells the rental, landed
+// on terms they could not read. The route is now translated
+// (data/rental-agreement/) and Footer picks next-intl's Link from the
+// registry, so the href must carry the locale prefix.
+//
+// Surface: /<l>/golf-course-club-rental/ in every non-EN locale, derived from
+// ALL_LOCALES so nothing is hand-listed, with the count pinned so a trimmed
+// locale list cannot shrink the section silently. NOT the agreement page
+// itself: its "read the English version" notice deliberately links the
+// unprefixed EN URL and would trip the absent half.
+//
+// Each surface is a matched pair: the prefixed href present AND the unprefixed
+// one absent. The absent half is what is red on the pre-fix tree; the present
+// half stops a footer that dropped the link entirely from passing.
+//
+// KNOWN LIMITS, as for Q: this proves the href is in the rendered markup, not
+// that the link is visible, and it does not read the label. `judged` proves
+// each surface reached a verdict, never that the verdict discriminates; only a
+// contract suite could, and smoke has none.
+const EXPECTED_AGREEMENT_FOOTER_SURFACES = 4;
+
+async function runAgreementFooterLinkTests() {
+  console.log(
+    "\n\x1b[1mR) Footer links the localized rental agreement\x1b[0m",
+  );
+  const { ALL_LOCALES } = await import("../lib/translated-routes");
+  const locales = ALL_LOCALES.filter((l) => l !== "en");
+  if (locales.length !== EXPECTED_AGREEMENT_FOOTER_SURFACES) {
+    fail(
+      "agreement footer surface count",
+      `${locales.length} non-EN locale(s), expected exactly ${EXPECTED_AGREEMENT_FOOTER_SURFACES} — update the constant if a locale was added, never lower it to make this pass`,
+    );
+    return;
+  }
+
+  let judged = 0;
+  for (const l of locales) {
+    const path = `/${l}/golf-course-club-rental/`;
+    const label = `${path} footer agreement link`;
+    try {
+      const res = await fetch(`${BASE}${path}`, { redirect: "follow" });
+      if (res.status !== 200) {
+        fail(label, `expected 200, got ${res.status}`);
+        judged++;
+        continue;
+      }
+      const html = renderedMarkup(await res.text());
+      const localized = new RegExp(
+        `href="/${l}/golf-course-club-rental-agreement/?"`,
+      ).test(html);
+      const english = /href="\/golf-course-club-rental-agreement\/?"/.test(
+        html,
+      );
+      if (!localized || english) {
+        fail(
+          label,
+          `${localized ? "" : `no href="/${l}/golf-course-club-rental-agreement/"; `}${english ? 'still links the unprefixed EN agreement "/golf-course-club-rental-agreement/"' : ""}`,
+        );
+      } else {
+        pass(label);
+      }
+      // AFTER the verdict (see Q): above it, a `continue` one line lower
+      // would keep the count honest while comparing nothing.
+      judged++;
+    } catch (err) {
+      fail(`${label} fetch error`, String(err));
+      judged++;
+    }
+  }
+
+  if (judged !== locales.length) {
+    fail(
+      "agreement footer coverage",
+      `only ${judged} of ${locales.length} surfaces reached a verdict — a skip was introduced inside the loop`,
+    );
+  }
+}
+
 // ── Main ────────────────────────────────────────────────────────────
 
 async function main() {
@@ -7174,6 +7272,7 @@ async function main() {
   await runLocalizedDriveTimeTests();
   await runFallbackPullQuoteTests();
   await runRegionHubLinkTests();
+  await runAgreementFooterLinkTests();
 
   console.log(`\n\x1b[1m${passed} passed, ${failed} failed\x1b[0m`);
   if (failures.length > 0) {
