@@ -4647,12 +4647,25 @@ async function runNotFoundTests() {
  * 404. Hence the paired control below: a real page must still be prerendered,
  * so an all-dynamic regression (which would also remove the header from the
  * junk URL) cannot make this section vacuously green.
+ *
+ * The LOCALE is a param too, and it was the one left unguarded. A junk first
+ * segment normally never reaches `[locale]`: next-intl treats it as an
+ * unprefixed path and rewrites it to `/en/<junk>/`, which matches no route and
+ * falls to the static /404. But the middleware matcher skips file extensions,
+ * the `images/` and `api/` prefixes, and (its name-listed alternatives being
+ * unanchored) any first segment that merely starts with favicon.ico,
+ * sitemap.xml, robots.txt or llms.txt, so those paths reach the page tree with
+ * the junk string AS the locale. Measured on prod 2026-09-24: `/<junk>.txt`
+ * (and .png/.js/.css) matched `/[locale]` at ~86 KB, and `/images/golf/` and
+ * `/api/golf/` matched `/[locale]/golf` at ~132 KB, all `X-Nextjs-Prerender: 1`,
+ * MISS then HIT. Fixed by `dynamicParams = false` on app/[locale]/layout.tsx,
+ * which Next applies to every PAGE under it (route handlers are not covered).
  */
 async function runUnknownSlugCacheTests() {
-  console.log("\n\x1b[1mG2) Unknown slugs must 404 without minting an ISR entry\x1b[0m");
+  console.log("\n\x1b[1mG2) Unknown slugs and locales must 404 without minting an ISR entry\x1b[0m");
 
   // One junk URL per newly-guarded segment, plus the region hub.
-  const junk = [
+  const junkSlugs = [
     "/guide/zzz-smoke-not-a-real-slug/",
     "/faq/zzz-smoke-not-a-real-slug/",
     "/cost/zzz-smoke-not-a-real-slug/",
@@ -4662,18 +4675,109 @@ async function runUnknownSlugCacheTests() {
     "/golf-courses/zzz-smoke-not-a-region/",
   ];
 
+  // Junk LOCALE values, one per matcher-exclusion family measured reaching the
+  // page tree on prod (the extension list, `images/`, `api/`). The .txt probe
+  // lands on the root page; the two prefix probes land on a static CHILD page
+  // (/[locale]/golf), so they catch the flag being moved from the layout to the
+  // root page.tsx. They cannot tell the layout flag from per-page flags on `/`
+  // and `/golf` alone.
+  const junkLocales = [
+    "/zzz-smoke-not-a-real-locale.txt",
+    "/images/golf/",
+    "/api/golf/",
+  ];
+  const junk = [...junkSlugs, ...junkLocales];
+
+  // Exact pins, not derived from the lists: the `checked !== junk.length`
+  // floor below shrinks with the list, so a trimmed or emptied list would pass
+  // it. Raise a pin when adding a probe; never lower one to absorb a removal.
+  const EXPECTED_JUNK_SLUGS = 7;
+  const EXPECTED_JUNK_LOCALES = 3;
+  if (junkSlugs.length !== EXPECTED_JUNK_SLUGS || junkLocales.length !== EXPECTED_JUNK_LOCALES) {
+    fail(
+      "G2 probe pins",
+      `expected ${EXPECTED_JUNK_SLUGS} slug + ${EXPECTED_JUNK_LOCALES} locale probes, found ` +
+        `${junkSlugs.length} + ${junkLocales.length}`
+    );
+  }
+
+  // Each junk-locale probe tests `[locale]` ONLY while the middleware skips
+  // it. If a matcher edit routed it through next-intl, it would be rewritten to
+  // /en/..., 404 from the static page, and pass while probing nothing. So check
+  // the matcher itself. Middleware runs when ANY entry matches, so every entry
+  // is checked, compiled by Next's own getMiddlewareMatchers (the path-to-regexp
+  // step the build uses) rather than a hand-rolled regex, which misread
+  // `'/images/:path*'` as a literal and let that entry disarm the check. It is
+  // an internal module of the pinned `next`; if an upgrade moves it, the import
+  // fails loudly below. The positive control catches a compile that classifies
+  // everything as skipped.
+  try {
+    const { config } = await import("../middleware");
+    // Exported at runtime but absent from Next's .d.ts, hence the narrow cast.
+    const { getMiddlewareMatchers } = (await import(
+      "next/dist/build/analysis/get-page-static-info"
+    )) as unknown as {
+      getMiddlewareMatchers?: (matcher: unknown, nextConfig: object) => { regexp: string }[];
+    };
+    if (typeof getMiddlewareMatchers !== "function") {
+      throw new Error("next/dist/build/analysis/get-page-static-info no longer exports getMiddlewareMatchers");
+    }
+    const matchers = getMiddlewareMatchers(config.matcher, {}).map((m) => new RegExp(m.regexp));
+    const runsMiddleware = (path: string) => matchers.some((re) => re.test(path));
+    if (!runsMiddleware("/golf/")) {
+      fail("G2 matcher control", `no rebuilt matcher entry matches /golf/, so the bypass check below cannot be trusted`);
+    } else {
+      for (const path of junkLocales) {
+        if (runsMiddleware(path)) {
+          fail(
+            `junk-locale probe still bypasses middleware (${path})`,
+            `the middleware matcher now runs on this path, so next-intl rewrites it to /en/... and it no ` +
+              `longer reaches the [locale] segment. Replace it with a path the matcher still excludes AND ` +
+              `whose remainder after the first segment is a real page (checked next).`
+          );
+        } else {
+          pass(`junk-locale probe still bypasses middleware (${path})`);
+        }
+      }
+    }
+  } catch (err) {
+    fail("G2 matcher check", `could not load middleware.ts or Next's matcher compiler: ${(err as Error).message}`);
+  }
+
+  // A junk-locale probe must also land on a REAL route. With the fix live, a
+  // refused junk locale and a probe that matches no route at all return the
+  // same static /404, so a probe renamed to `/images/zzz-not-a-page/` would pass
+  // forever while testing nothing. Stripping the junk first segment must leave
+  // a page that serves 200 for a real locale.
+  for (const path of junkLocales) {
+    const remainder = path.replace(/^\/[^/]+/, "") || "/";
+    const label = `junk-locale probe targets a real page (${path} -> ${remainder})`;
+    try {
+      const res = await fetch(`${BASE}${remainder}`, { redirect: "follow" });
+      if (res.status === 200) {
+        pass(label);
+      } else {
+        fail(
+          label,
+          `${remainder} returned ${res.status}, so ${path} matches no route and 404s from the static ` +
+            `page with or without the fix: it probes nothing.`
+        );
+      }
+    } catch (err) {
+      fail(label, `fetch error: ${(err as Error).message}`);
+    }
+  }
+
   // ---------------------------------------------------------------------
   // CONTROL FIRST, and it decides how much this section can assert.
   //
-  // The prod measurement was taken against VERCEL. CI runs `next build &&
-  // next start`, and it was NOT verified that the Node server emits the same
-  // cache headers -- the Windows dev box cannot complete a production build
-  // (@vercel/og), so this could not be checked before shipping. Asserting a
-  // header that this environment never emits would red CI on correct code,
-  // which is the failure mode this repo keeps re-learning. So: probe a page
-  // that IS prerendered, discover which signal exists here, and assert only
-  // that one. If neither exists, degrade to the status check and SAY SO
-  // loudly rather than passing silently.
+  // Probe a page that IS prerendered, discover which cache signal this server
+  // emits, and assert only that one. CI's `next build && next start` emits
+  // `x-nextjs-prerender` (every CI log of this section shows the control
+  // passing on it), so under CI a missing signal is a FAILURE: silently
+  // degrading would turn every probe below into a status check, which section G
+  // already covers, and exit 0. Outside CI (an arbitrary server) degrade to the
+  // status check and SAY SO loudly rather than passing silently.
   // ---------------------------------------------------------------------
   const CONTROL_PATH = "/guide/thailand-golf-trip-cost/";
   const SIGNALS = ["x-nextjs-prerender", "x-nextjs-cache"] as const;
@@ -4688,12 +4792,18 @@ async function runUnknownSlugCacheTests() {
     signal = SIGNALS.find((h) => res.headers.get(h)) ?? null;
     if (signal) {
       pass(`G2 control: prerendered pages expose "${signal}" here (${CONTROL_PATH})`);
+    } else if (process.env.CI) {
+      fail(
+        "G2 control",
+        `${CONTROL_PATH} exposes neither ${SIGNALS.join(" nor ")} under CI, so every probe below ` +
+          `degrades to status-only. Find the header \`next start\` emits now and add it to SIGNALS.`
+      );
     } else {
       console.log(
         `\x1b[33m   NOTE\x1b[0m G2: this server exposes neither ${SIGNALS.join(" nor ")} on a ` +
           `prerendered page, so the cache-entry assertion CANNOT run and only the 404 status is ` +
           `checked below. That is strictly weaker than intended — section G already covers status. ` +
-          `If this prints in CI, find the header \`next start\` does emit and add it to SIGNALS.`
+          `Under CI this is a failure instead (see above).`
       );
     }
   } catch (err) {
@@ -4703,9 +4813,10 @@ async function runUnknownSlugCacheTests() {
 
   let checked = 0;
   for (const path of junk) {
+    const param = junkLocales.includes(path) ? "locale" : "slug";
     const label = signal
-      ? `unknown slug 404s without a cache entry (${path})`
-      : `unknown slug 404s (${path}, status only — see NOTE)`;
+      ? `unknown ${param} 404s without a cache entry (${path})`
+      : `unknown ${param} 404s (${path}, status only — see NOTE)`;
     try {
       const res = await fetch(`${BASE}${path}`, { redirect: "follow" });
       if (res.status !== 404) {
@@ -4715,11 +4826,15 @@ async function runUnknownSlugCacheTests() {
       if (signal) {
         const got = res.headers.get(signal);
         if (got) {
+          const where = param === "locale"
+            ? "to app/[locale]/layout.tsx (the junk LOCALE is the unguarded param here)"
+            : "to that segment";
+          const size = param === "locale" ? "~86-132 KB" : "~124 KB";
           fail(
             label,
             `the 404 carried ${signal}: ${got} — this segment is rendering unknown params on ` +
-              `demand and caching the result permanently (measured on prod at ~124 KB per unique ` +
-              `junk URL, never revalidating). Add \`export const dynamicParams = false\`.`
+              `demand and caching the result permanently (measured on prod at ${size} per unique ` +
+              `junk URL, never revalidating). Add \`export const dynamicParams = false\` ${where}.`
           );
           continue;
         }
