@@ -1,25 +1,36 @@
 # Push changed-content URLs to IndexNow (the index behind Bing, ChatGPT Search
 # and Copilot) on every push to main that touches content. Three steps:
 #
-#   derive  scripts/indexnow-urls.ts maps the pushed range to the exact URLs it
-#           changed, in every locale lib/translated-routes.ts serves them in
-#           (its header documents the rules; its --self-test runs in CI)
+#   derive  scripts/indexnow-urls.ts maps the pushed range to the URLs whose
+#           content it changed, in every locale lib/translated-routes.ts serves
+#           them in (its header documents the rules and their known limits;
+#           its --self-test runs in CI)
 #   wait    scripts/indexnow-wait-for-deploy.ts polls /deploy-sha.txt until
-#           production serves this commit or a descendant. Pinged earlier, the
-#           crawler fetched the PREVIOUS deploy: a new URL 301'd or 404'd and an
-#           edited page served its old copy, because this job starts ~15s after
-#           the push and the Vercel build takes ~2 minutes
+#           production serves this commit or a descendant. The old job pinged
+#           within ~20s of the merge, while the Vercel build takes ~2 minutes,
+#           so the crawler fetched the PREVIOUS deploy: a new URL 301'd or 404'd
+#           and an edited page served its old copy
 #   ping    scripts/indexnow-ping.ts
+#
+# Why a marker route and not `on: deployment_status`: for this repo the GitHub
+# deployments API has reported Preview-only while real Production builds ran,
+# so it cannot say when production changed. The marker is read from production.
 #
 # Nothing derived -> the job ends after `derive`, visibly and green, without
 # calling the API (indexnow-ping.ts hard-fails on an empty list by design; the
 # decision to skip lives HERE, not in a silent script no-op).
 #
-# A RED run almost always means `wait` timed out: the deploy never went live and
-# nothing was pinged. That is also the only alarm this repo gets when Vercel
-# silently skips a production build. Once production has caught up, use
-# "Re-run jobs" on the failed run: it re-derives the same range, and the wait
-# accepts a descendant deploy such as an empty redeploy commit.
+# A RED run, most often: `wait` timed out, because the deploy never went live
+# (Vercel skipped the build, it is still queued past 20 minutes, or production
+# was rolled back to an older commit), and NOTHING was pinged. For a content
+# push that derives a URL this is the alarm for a silently skipped production
+# build. Other causes, each named in the log: the derivation crashed, the list
+# exceeded indexnow-ping.ts's MAX_URLS (nothing pinged), or the IndexNow API
+# rejected a batch (earlier batches of 100 were already submitted). A later push
+# diffs only its own range, so a failed run's URLs are covered by nothing but a
+# "Re-run jobs" on that run once production has caught up; the rerun re-derives
+# the same range, and the wait accepts a descendant deploy such as an empty
+# redeploy commit.
 name: IndexNow
 
 on:
@@ -91,7 +102,9 @@ jobs:
 
       - name: Wait for production to serve this commit
         if: steps.derive.outputs.count != '0'
-        run: npx tsx scripts/indexnow-wait-for-deploy.ts --sha "$GITHUB_SHA" --timeout 900
+        # 20 minutes: builds take ~2, and build concurrency is shared with the
+        # team's other projects, so a queued build can start late.
+        run: npx tsx scripts/indexnow-wait-for-deploy.ts --sha "$GITHUB_SHA" --timeout 1200
 
       - name: Ping IndexNow
         if: steps.derive.outputs.count != '0'

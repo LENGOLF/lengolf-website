@@ -38,13 +38,16 @@ const ENDPOINT = 'https://api.indexnow.org/indexnow'
 const CHUNK_SIZE = 100
 // Runaway guard. It was 500 while each course file mapped to its EN URL alone;
 // scripts/indexnow-urls.ts now fans every changed record out to each locale
-// that serves it, and the largest single corpus measured 2026-09-24 derives 678
-// URLs when every course file changes (608 course pages across registered
-// locales + 70 region-hub URLs), with every SEO entry at 561. 500 would reject
-// a legitimate all-courses edit wholesale, the failure the CHUNK_SIZE note
-// above records at 100. Above 1000 is two whole corpora in one push, or a
-// derivation bug; either way, fail and look.
-const MAX_URLS = 1000
+// that serves it. Measured 2026-09-24: an edit to every course file derives
+// 678 URLs (608 course pages across registered locales + 70 region-hub URLs),
+// an edit to every SEO entry 571 (561 entry pages + 10 listing URLs), both in
+// one push 1,249. Real pushes have reached 555 (#124). 500 would reject a
+// legitimate all-courses edit wholesale, the failure the CHUNK_SIZE note above
+// records at 100. 1,500 clears both corpora at once, so tripping it means the
+// derivation emitted more than any content push can: a bug, so fail and look.
+// A genuinely larger push can be pinged by hand from the derived list, in
+// slices of at most MAX_URLS.
+const MAX_URLS = 1500
 
 async function main() {
   const urls = process.argv.slice(2)
@@ -55,7 +58,7 @@ async function main() {
   }
   if (urls.length > MAX_URLS) {
     console.error(
-      `indexnow-ping: ${urls.length} URLs exceeds the ${MAX_URLS} runaway guard — a change set this large is probably a bug in the caller's diff mapping.`
+      `indexnow-ping: ${urls.length} URLs exceeds the ${MAX_URLS} runaway guard — a change set this large is probably a bug in the caller's diff mapping. Nothing was pinged. If the list is genuinely right, ping it by hand in slices of at most ${MAX_URLS}.`
     )
     process.exit(1)
   }
