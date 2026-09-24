@@ -14,7 +14,9 @@ import type { RentalAgreementContent } from './types'
 //   Thai has one pronoun for both "we" and "us"), ข้อตกลงนี้ (this Agreement).
 // - Cross-references render "Section N" as ข้อ N, the usual Thai contract form.
 // - Title head noun is ข้อตกลง, matching Footer.rentalAgreement. "Course
-//   rental" is การเช่าออกสนาม, the site's own term (a13, handednessNote).
+//   rental" is เช่าออกสนาม, the site's own term (ให้เช่าออกสนาม in a13 and
+//   handednessNote); the title uses การเช่าไม้กอล์ฟออกสนาม and §14
+//   การจองเช่าออกสนาม.
 // - "Security deposit" is เงินประกัน, the Civil and Commercial Code term.
 //   มัดจำ (the site's FAQ/meta word) is legally earnest money (§377-378).
 //   The two do not contradict each other here: both say no deposit is taken.

@@ -14,6 +14,8 @@ import { RENTAL_AGREEMENT_PATH, getRentalAgreement } from '@/data/rental-agreeme
 // at the top. Which locales are REACHABLE is decided by lib/translated-routes.ts
 // (the middleware 301s an unregistered locale to EN), so a locale with no data
 // entry is a hard 404 here rather than a silent English page under /<locale>/.
+// That branch is defensive today: RENTAL_AGREEMENT is typed Record<Locale, …>,
+// so typecheck already requires text for every locale.
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params

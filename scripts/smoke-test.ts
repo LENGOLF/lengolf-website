@@ -7189,20 +7189,24 @@ async function runRegionHubLinkTests() {
 // registry, so the href must carry the locale prefix.
 //
 // Surface: /<l>/golf-course-club-rental/ in every non-EN locale, derived from
-// ALL_LOCALES so nothing is hand-listed, with the count pinned so a trimmed
-// locale list cannot shrink the section silently. NOT the agreement page
-// itself: its "read the English version" notice deliberately links the
-// unprefixed EN URL and would trip the absent half.
+// ALL_LOCALES and pinned by IDENTITY (REQUIRED_AGREEMENT_FOOTER_LOCALES), not
+// just by count: a count alone passed a list of four copies of one locale.
+// Scoped to the course-rental page because it is the page that sells the
+// rental. The agreement page itself would pass too: its "read the English
+// version" notice uses next-intl `Link locale="en"`, which renders the
+// /en/-PREFIXED href (next-intl forces a prefix whenever `locale` is passed),
+// not the unprefixed one this section forbids.
 //
 // Each surface is a matched pair: the prefixed href present AND the unprefixed
-// one absent. The absent half is what is red on the pre-fix tree; the present
-// half stops a footer that dropped the link entirely from passing.
+// one absent. Measured against prod before the fix, BOTH halves were red in
+// all four locales. The absent half earns its place for a footer that renders
+// both links; the present half for one that drops the link entirely.
 //
 // KNOWN LIMITS, as for Q: this proves the href is in the rendered markup, not
 // that the link is visible, and it does not read the label. `judged` proves
 // each surface reached a verdict, never that the verdict discriminates; only a
 // contract suite could, and smoke has none.
-const EXPECTED_AGREEMENT_FOOTER_SURFACES = 4;
+const REQUIRED_AGREEMENT_FOOTER_LOCALES = ["th", "ja", "ko", "zh"];
 
 async function runAgreementFooterLinkTests() {
   console.log(
@@ -7210,10 +7214,14 @@ async function runAgreementFooterLinkTests() {
   );
   const { ALL_LOCALES } = await import("../lib/translated-routes");
   const locales = ALL_LOCALES.filter((l) => l !== "en");
-  if (locales.length !== EXPECTED_AGREEMENT_FOOTER_SURFACES) {
+  const same =
+    locales.length === REQUIRED_AGREEMENT_FOOTER_LOCALES.length &&
+    new Set(locales).size === locales.length &&
+    REQUIRED_AGREEMENT_FOOTER_LOCALES.every((l) => (locales as readonly string[]).includes(l));
+  if (!same) {
     fail(
-      "agreement footer surface count",
-      `${locales.length} non-EN locale(s), expected exactly ${EXPECTED_AGREEMENT_FOOTER_SURFACES} — update the constant if a locale was added, never lower it to make this pass`,
+      "agreement footer surfaces",
+      `non-EN locales are [${locales.join(", ")}], expected exactly [${REQUIRED_AGREEMENT_FOOTER_LOCALES.join(", ")}] — update the pin if a locale was added, never trim it to make this pass`,
     );
     return;
   }

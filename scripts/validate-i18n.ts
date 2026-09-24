@@ -51,8 +51,12 @@
  *      data sources, kept in sync by smoke-test sections I/J.
  *  12. Rental agreement (data/rental-agreement/): a locale registered for
  *      the route with no text, or text for an unregistered locale; or a
- *      translation whose structure diverges from EN (paragraph, section,
- *      clause and ** counts, and the numbers in each section).
+ *      translation that lacks the English-prevails notice, diverges from EN
+ *      in structure (paragraph, section, clause and ** counts, and the numbers
+ *      in intro, closing and each section), has a date line that is not the
+ *      agreement date as that locale writes it, or carries a blank string, a
+ *      string with none of its own script, or an em dash. EN's date line is
+ *      checked against the version too.
  *
  * WARN-level (reported, exit 0) — expected to fire on legacy entries:
  *   7. Currency-convention drift vs conventions.currency.primary.
