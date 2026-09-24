@@ -16,6 +16,7 @@ const TRANSLATED_ROUTES: Record<
       "/events",
       "/golf-club-rental",
       "/golf-course-club-rental",
+      "/golf-course-club-rental-agreement",
       // TH only (alongside EN). The spec sheet's chrome is translated; the
       // club/shaft strings inside it come from rental_club_sets and stay
       // English in every locale — they are brand and model names that staff
@@ -373,6 +374,7 @@ const TRANSLATED_ROUTES: Record<
       "/about-us",
       "/golf-club-rental",
       "/golf-course-club-rental",
+      "/golf-course-club-rental-agreement",
       "/menu",
       "/blog",
       // Translated /faq/ hub (content in data/faq-hub.ts CONTENT, NOT a
@@ -731,6 +733,7 @@ const TRANSLATED_ROUTES: Record<
       "/about-us",
       "/golf-club-rental",
       "/golf-course-club-rental",
+      "/golf-course-club-rental-agreement",
       "/menu",
       "/blog",
       // Translated /faq/ hub (content in data/faq-hub.ts CONTENT, NOT a
@@ -1089,6 +1092,7 @@ const TRANSLATED_ROUTES: Record<
       "/about-us",
       "/golf-club-rental",
       "/golf-course-club-rental",
+      "/golf-course-club-rental-agreement",
       "/menu",
       "/blog",
       // Translated /faq/ hub (content in data/faq-hub.ts CONTENT, NOT a

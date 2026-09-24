@@ -24,6 +24,7 @@
     "validate:pricing-payload": "tsx scripts/validate-pricing-payload.ts",
     "validate:pricing-revalidate": "tsx scripts/validate-pricing-revalidate.ts",
     "validate:pricing-revalidate:contract": "tsx scripts/validate-pricing-revalidate-contract.ts",
+    "validate:deploy-check:contract": "tsx scripts/wait-for-deploy-contract.ts",
     "validate:hotels": "tsx scripts/validate-hotels.ts",
     "verify:coordinates": "tsx scripts/verify-course-coordinates.ts",
     "inventory": "tsx scripts/page-inventory.ts",
@@ -40,8 +41,7 @@
     "validate:pr-rigor": "tsx scripts/validate-pr-rigor.ts",
     "validate:pr-rigor:self-test": "tsx scripts/validate-pr-rigor.ts --self-test",
     "validate:pr-rigor:contract": "tsx scripts/validate-pr-rigor-contract.ts",
-    "validate:indexnow:self-test": "tsx scripts/indexnow-urls.ts --self-test",
-    "validate:indexnow-wait:self-test": "tsx scripts/indexnow-wait-for-deploy.ts --self-test"
+    "validate:indexnow:self-test": "tsx scripts/indexnow-urls.ts --self-test"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.92.0",
