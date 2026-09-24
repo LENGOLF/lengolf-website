@@ -79,15 +79,15 @@ Before you accept a rental set, take a few minutes to review the following:
 
 ## LENGOLF Club Rental
 
-LENGOLF, Bangkok's indoor golf simulator venue, offers rental sets as part of every simulator session (the premium sets are Callaway). Sets are available in three configurations:
+LENGOLF, Bangkok's indoor golf simulator venue, includes a free standard club set with every simulator bay booking, with premium Callaway upgrades (Warbird men's, REVA women's) from 150 THB/hr. Standard sets are available in three configurations:
 
 1. **Men's (right-handed)**
 2. **Ladies'**
 3. **Left-handed** (free standard clubs with every bay booking, plus one premium set on request)
 
-Left-handed golfers, who often find rental options limited at standard courses, should request the left-handed set when booking. The Callaway sets are well-maintained and suitable for all ability levels — from complete beginners hitting their first shots to experienced players working on specific aspects of their game.
+Left-handed golfers, who often find rental options limited at standard courses, should request the left-handed set when booking. The sets are well-maintained and suitable for all ability levels — from complete beginners hitting their first shots to experienced players working on specific aspects of their game.
 
-Club rental is included with simulator bay bookings, so there's no separate fee to track.
+Standard club rental is included with simulator bay bookings, so there's no separate fee to track unless you upgrade to a premium set.
 
 ---
 
