@@ -4073,7 +4073,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/guide/first-time-golf-thailand",
     ],
     created_at: "2026-03-28T00:00:00.000Z",
-    updated_at: "2026-03-28T00:00:00.000Z",
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro: `Thailand might seem like an ambitious destination for your first round of golf — but in many ways, it's one of the most forgiving places in the world to start. Caddies guide you through every hole, club rental is widely available, the culture is relaxed and welcoming, and you can ease in at an indoor simulator before setting foot on a full course.`,
       sections: [
@@ -4095,7 +4095,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "Dress Code Basics",
-          body: `Golf in Thailand has a dress code, and courses do enforce it at the pro shop entrance. The rules are simple:\n\n1. Collared shirt required — polo shirts work perfectly\n2. No cargo shorts or jeans — tailored shorts or trousers only\n3. Soft-spike or spikeless golf shoes preferred; trainers are accepted at many courses but check in advance\n4. No sleeveless shirts unless they have a collar\n\nWhen in doubt, a plain polo shirt and tailored shorts covers you at virtually every course in Bangkok.`,
+          body: `Golf in Thailand has a dress code, and courses do enforce it at the pro shop entrance. The rules are simple:\n\n1. Collared shirt required — polo shirts work perfectly\n2. No cargo shorts or jeans — tailored shorts or trousers only\n3. Soft-spike or spikeless golf shoes are expected at most courses; a few accept clean trainers, so check in advance\n4. No sleeveless shirts unless they have a collar\n\nWhen in doubt, a plain polo shirt and tailored shorts covers you at virtually every course in Bangkok.`,
         },
         {
           heading: "Cost Expectations for a Beginner Round",
@@ -10744,7 +10744,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "ja",
     related_slugs: ["/guide/first-time-golf-thailand"],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "記念すべき初ラウンドの地にタイを選ぶと聞くと、少しハードルが高く感じるかもしれません。ですが実際には、タイは世界でもとりわけ気軽にゴルフを始められる場所のひとつです。キャディーがホールごとにサポートしてくれ、クラブレンタルもほぼどこでも利用でき、ゴルフ文化はおおらかで親しみやすい雰囲気。本格的なコースに出る前に、インドアゴルフシミュレーターで無理なく慣れていくこともできます。",
@@ -10767,7 +10767,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "ドレスコードの基本",
-          body: "タイのゴルフにはドレスコードがあり、各コースはプロショップの入口でしっかりチェックしています。ルールはシンプルです:\n\n1. 襟付きシャツが必須——ポロシャツならまず問題ありません\n2. カーゴショーツやジーンズは不可——テーラードのショートパンツかロングパンツのみ\n3. ソフトスパイクまたはスパイクレスのゴルフシューズが望ましい。スニーカーを認めるコースも多いですが、事前に確認を\n4. 襟のないノースリーブは不可\n\n迷ったら、無地のポロシャツとテーラードのショートパンツを選べば、バンコクのほぼすべてのコースで問題ありません。",
+          body: "タイのゴルフにはドレスコードがあり、各コースはプロショップの入口でしっかりチェックしています。ルールはシンプルです:\n\n1. 襟付きシャツが必須——ポロシャツならまず問題ありません\n2. カーゴショーツやジーンズは不可——テーラードのショートパンツかロングパンツのみ\n3. ほとんどのコースでソフトスパイクまたはスパイクレスのゴルフシューズが求められます。清潔なスニーカーを認めるコースも一部にはありますが、事前に確認を\n4. 襟のないノースリーブは不可\n\n迷ったら、無地のポロシャツとテーラードのショートパンツを選べば、バンコクのほぼすべてのコースで問題ありません。",
         },
         {
           heading: "初心者ラウンドの費用の目安",
@@ -10799,7 +10799,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "ko",
     related_slugs: ["/guide/first-time-golf-thailand"],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "태국은 첫 골프 라운딩 장소로는 다소 야심 찬 선택처럼 보일 수 있지만, 여러 면에서 골프에 입문하기에 세계에서 가장 부담 없는 곳 중 하나예요. 캐디가 홀마다 함께하며 안내해 주고, 클럽 대여도 어디서나 쉽게 할 수 있으며, 문화가 여유롭고 친근한 데다, 정식 코스에 나서기 전에 실내 시뮬레이터에서 천천히 적응할 수도 있거든요.",
@@ -10822,7 +10822,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "드레스 코드 기본",
-          body: "태국 골프에는 드레스 코드가 있고, 코스에서는 프로샵 입구에서 이를 실제로 확인해요. 규칙은 간단합니다:\n\n1. 카라가 있는 셔츠 필수 — 폴로 셔츠면 완벽해요\n2. 카고 반바지나 청바지 금지 — 재단된 반바지나 슬랙스만 가능\n3. 소프트 스파이크나 스파이크리스 골프화 권장. 운동화는 많은 코스에서 허용되지만 미리 확인하세요\n4. 카라가 없는 민소매 셔츠 금지\n\n헷갈린다면, 무난한 폴로 셔츠와 재단된 반바지면 방콕의 거의 모든 코스에서 문제없어요.",
+          body: "태국 골프에는 드레스 코드가 있고, 코스에서는 프로샵 입구에서 이를 실제로 확인해요. 규칙은 간단합니다:\n\n1. 카라가 있는 셔츠 필수 — 폴로 셔츠면 완벽해요\n2. 카고 반바지나 청바지 금지 — 재단된 반바지나 슬랙스만 가능\n3. 대부분의 코스에서 소프트 스파이크나 스파이크리스 골프화 필요. 깨끗한 운동화를 허용하는 코스도 일부 있으니 미리 확인하세요\n4. 카라가 없는 민소매 셔츠 금지\n\n헷갈린다면, 무난한 폴로 셔츠와 재단된 반바지면 방콕의 거의 모든 코스에서 문제없어요.",
         },
         {
           heading: "초보자 라운딩 예상 비용",
@@ -10854,7 +10854,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "zh",
     related_slugs: ["/guide/first-time-golf-thailand"],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "把泰国当作你第一次打高尔夫的目的地，听上去或许有些大胆——但从很多方面来看，这里其实是全世界最适合新手起步的地方之一。球童会带着你打完每一个洞，球杆租借随处可得，这里的高尔夫文化轻松而友好，而且在真正踏上完整球场之前，你还可以先在室内高尔夫模拟器上慢慢适应。",
@@ -10877,7 +10877,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "基本着装要求",
-          body: "泰国的高尔夫有着装要求，球场也确实会在Pro Shop入口处执行这些规定。规则很简单：\n\n1. 必须穿有领上衣——Polo衫最合适\n2. 不能穿工装短裤或牛仔裤——只能穿修身短裤或长裤\n3. 建议穿软钉或无钉高尔夫球鞋；很多球场也接受运动鞋，但请提前确认\n4. 不能穿无袖上衣，除非带有领子\n\n拿不准的时候，一件素色Polo衫加一条修身短裤，几乎能让你通行曼谷的每一座球场。",
+          body: "泰国的高尔夫有着装要求，球场也确实会在Pro Shop入口处执行这些规定。规则很简单：\n\n1. 必须穿有领上衣——Polo衫最合适\n2. 不能穿工装短裤或牛仔裤——只能穿修身短裤或长裤\n3. 大多数球场要求穿软钉或无钉高尔夫球鞋；少数球场也接受干净的运动鞋，但请提前确认\n4. 不能穿无袖上衣，除非带有领子\n\n拿不准的时候，一件素色Polo衫加一条修身短裤，几乎能让你通行曼谷的每一座球场。",
         },
         {
           heading: "初学者一轮球的费用预期",
@@ -10909,7 +10909,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "th",
     related_slugs: ["/guide/first-time-golf-thailand"],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "ประเทศไทยอาจฟังดูเป็นจุดหมายที่ท้าทายสำหรับการออกรอบกอล์ฟครั้งแรกของคุณ — แต่ในหลายแง่มุม ที่นี่กลับเป็นหนึ่งในสถานที่ที่เป็นมิตรกับผู้เริ่มต้นมากที่สุดในโลก แคดดี้คอยแนะนำคุณในทุกหลุม บริการเช่าไม้กอล์ฟมีให้ใช้อย่างแพร่หลาย วัฒนธรรมการเล่นผ่อนคลายและเป็นกันเอง และคุณยังค่อย ๆ เริ่มต้นได้ที่กอล์ฟซิมูเลเตอร์ในร่มก่อนจะก้าวเท้าเข้าสู่สนามจริงเต็มรูปแบบ",
@@ -10932,7 +10932,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "กฎการแต่งกายเบื้องต้น",
-          body: "การเล่นกอล์ฟในประเทศไทยมีกฎการแต่งกาย และสนามต่าง ๆ ก็บังคับใช้กฎนี้อย่างจริงจังตั้งแต่ทางเข้าโปรช็อป กฎเหล่านี้เข้าใจง่าย:\n\n1. ต้องสวมเสื้อมีปก — เสื้อโปโลเหมาะที่สุด\n2. ห้ามกางเกงขาสั้นคาร์โก้หรือกางเกงยีนส์ — สวมได้เฉพาะกางเกงขาสั้นทรงสุภาพหรือกางเกงขายาวเท่านั้น\n3. แนะนำให้สวมรองเท้ากอล์ฟแบบปุ่มนุ่มหรือแบบไม่มีปุ่ม รองเท้าผ้าใบเป็นที่ยอมรับได้ในหลายสนามแต่ควรสอบถามล่วงหน้า\n4. ห้ามสวมเสื้อแขนกุด ยกเว้นเสื้อที่มีปก\n\nหากไม่แน่ใจ เสื้อโปโลเรียบ ๆ กับกางเกงขาสั้นทรงสุภาพก็เพียงพอสำหรับสนามแทบทุกแห่งในกรุงเทพฯ",
+          body: "การเล่นกอล์ฟในประเทศไทยมีกฎการแต่งกาย และสนามต่าง ๆ ก็บังคับใช้กฎนี้อย่างจริงจังตั้งแต่ทางเข้าโปรช็อป กฎเหล่านี้เข้าใจง่าย:\n\n1. ต้องสวมเสื้อมีปก — เสื้อโปโลเหมาะที่สุด\n2. ห้ามกางเกงขาสั้นคาร์โก้หรือกางเกงยีนส์ — สวมได้เฉพาะกางเกงขาสั้นทรงสุภาพหรือกางเกงขายาวเท่านั้น\n3. สนามส่วนใหญ่กำหนดให้สวมรองเท้ากอล์ฟแบบปุ่มนุ่มหรือแบบไม่มีปุ่ม มีเพียงไม่กี่แห่งที่ยอมให้ใส่รองเท้าผ้าใบที่สะอาด จึงควรสอบถามล่วงหน้า\n4. ห้ามสวมเสื้อแขนกุด ยกเว้นเสื้อที่มีปก\n\nหากไม่แน่ใจ เสื้อโปโลเรียบ ๆ กับกางเกงขาสั้นทรงสุภาพก็เพียงพอสำหรับสนามแทบทุกแห่งในกรุงเทพฯ",
         },
         {
           heading: "ค่าใช้จ่ายโดยประมาณสำหรับการออกรอบของมือใหม่",
