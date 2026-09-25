@@ -17,26 +17,71 @@ if (!process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY && !process.env.GITHUB_ACTION
   )
 }
 
+// Objects in our Supabase bucket, 1 to 4 path segments deep (so at most 3
+// folders plus the file name), each segment one of [A-Za-z0-9_-] followed by
+// [A-Za-z0-9_.-]*. Why not the obvious
+// '/storage/v1/object/public/website-assets/**': Vercel's optimizer tests this
+// pattern against the RAW, still-percent-encoded path and only then fetches, and
+// the fetch normalizes. Measured on the PR #138 preview with `/**`,
+// `…/website-assets/%2e%2e/line-messages/<object>` returned that other bucket's
+// image (200), and every `%XX` or `//` spelling of a real object was a new key.
+// Next's own optimizer normalizes first, so neither `next start` nor CI can see
+// that. Excluding `%`, empty segments and dot-leading segments closes all of it.
+// Every one of the 293 objects in the bucket on 2026-09-24 fits, and so does
+// every name lengolf-forms generates (`used-clubs/<timestamp>-<random>.<ext>`,
+// provided the uploaded file has an extension: the uploader takes `<ext>` from
+// the file name, so an extension-less name would carry through whole).
+// A future object whose name has a space, non-ASCII or a leading dot, or that
+// sits more than 3 folders deep, will 400 through the optimizer: name uploads to fit.
+const WEBSITE_ASSETS_SEGMENT = '[A-Za-z0-9_-]*([A-Za-z0-9_.-])'
+const WEBSITE_ASSETS_PATHNAME =
+  '/storage/v1/object/public/website-assets/{' +
+  [1, 2, 3, 4].map((depth) => Array(depth).fill(WEBSITE_ASSETS_SEGMENT).join('/')).join(',') +
+  '}'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ['isomorphic-dompurify', 'dompurify'],
   trailingSlash: true,
+  // /_next/image is an allowlist, not a proxy. Every (url, w, q) it accepts is
+  // a billable transformation plus a cache entry kept for minimumCacheTTL, and
+  // the caller picks all three. Before this block was narrowed, prod returned
+  // 200 for any q from 1 to 100, for any path on www.len.golf or len.golf, for
+  // any RELATIVE path (`url=/golf-courses/opengraph-image/` made the optimizer
+  // fetch, and so render, a route of this site), for any object in the other
+  // public bucket of the shared Supabase project (`line-messages`: LINE profile
+  // photos and chat attachments), and for a fresh key per `?query` appended to
+  // a real object. Smoke section S asserts those now 400 and that every image
+  // the site renders still loads.
+  //
+  // Still unbounded, because no `images` setting can reach them: a zero-padded
+  // width or quality (`w=096`, `q=075`, `q=0075`, ... each a new key, because
+  // both checks parse the integer) and the output format negotiated from Accept
+  // (webp or original).
   images: {
+    // Exactly the qualities <Image> emits: an unset `quality` resolves to 75
+    // and three call sites in app/[locale]/page.tsx set 70 or 75. Adding a new
+    // `quality` prop means adding it here. Next only throws on an off-list
+    // value in DEV; in production the image just 400s.
+    qualities: [70, 75],
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'www.len.golf',
-      },
-      {
-        protocol: 'https',
-        hostname: 'len.golf',
-      },
-      {
-        protocol: 'https',
         hostname: 'bisimqmtxjsptehhqpeg.supabase.co',
+        port: '',
+        pathname: WEBSITE_ASSETS_PATHNAME,
+        // No query string. Supabase ignores one, so without this every
+        // `?v=N` on a real object is a new optimizer key. Consequence: an
+        // object overwritten in place stays stale here for minimumCacheTTL;
+        // upload a replacement under a NEW name instead.
+        search: '',
       },
     ],
+    // No <Image> uses a local src. Next appends /_next/static/media/** (static
+    // imports) to this list itself, so an empty array rejects every other
+    // relative path, including dynamic routes the optimizer would render.
+    localPatterns: [],
     minimumCacheTTL: 60 * 60 * 24 * 30,
   },
   async headers() {
