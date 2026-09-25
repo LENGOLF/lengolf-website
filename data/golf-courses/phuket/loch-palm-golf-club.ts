@@ -69,7 +69,7 @@ export const course: GolfCourse = {
         layout_and_experience: `这座18洞球场铺展在普吉中部石灰岩丘陵环抱的山谷地形上。前九洞以相对宽阔、两侧列树的球道展开，后九洞则绕着Crystal Lake而行，好几个洞沿着水边打，果岭朝水障碍一侧倾斜，攻果岭球必须精准。果岭以Japonica Zoysia草养护，斯廷普计（Stimpmeter）读数约8.5，属于中快而稳定的水准；球道用的是Matrella Zoysia草，球位干净，码数也可靠。球场奖励精准更甚于距离：能把球放上球道的人有抓鸟的机会，而后九洞的临湖球洞会让成绩向两个方向剧烈摆动。难度属中等——高差点访客打起来轻松，想要一天不必像Red Mountain那样吃苦头的低差点球手也仍觉有趣。两座球场近在咫尺，让Loch Palm自然而然成为在普吉住上几晚的访客第二轮的去处。`,
         tips: `Loch Palm很适合安排在上午晚些时候或下午开球：山谷的位置比Red Mountain开阔的地形更有遮阴。不用球车、带着球童走着打，在这条相对平坦的布局上确实可行，如果同行的人喜欢这种方式，节奏也会更从容。练习场、切球区和推杆果岭一应俱全，下场前可以好好热身；想把练习设施用个遍，建议预留30–45分钟。通过MBK Golf网站预订（与Red Mountain是同一家运营方），可以在一笔交易里把两座球场都安排好。果岭费套餐里常常附赠球具店代金券，留到打完球在餐厅吃午饭时用最划算。`,
         location_and_access: `Loch Palm Golf Club位于普吉中部的Kathu县，距Patong Beach约15分钟，距Phuket Town 12公里，就在Vichitsongkram Road上与Red Mountain Golf Club并肩而立。从普吉国际机场经Route 402前来，车程约40–45分钟。从曼谷前来的访客都搭飞机（约1小时20分钟）。交通以Grab和酒店接送为主，球场不提供从酒店出发的接驳车。`,
-        rental_cta_context: `打算在普吉行程里到Loch Palm Golf Club打一场吗？路上可以把Callaway高级球杆直接送到你的曼谷酒店——省下航空公司的托运行李费。`,
+        rental_cta_context: `打算在普吉行程里到Loch Palm Golf Club打一场吗？路上可以把Callaway高级球杆直接送到你的曼谷酒店，省下航空公司的托运行李费。`,
       },
     },
     ja: {
