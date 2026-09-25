@@ -23,7 +23,7 @@ Flights are excluded throughout; this covers on-the-ground costs from arrival to
 
 | Item | Budget | Mid-Range | Premium |
 |---|---|---|---|
-| Green fee (per round) | 1,500–2,000 THB (~$41–54) | 2,500–3,500 THB (~$68–95) | 4,000–5,000+ THB (~$108–135+) |
+| Green fee (per round) | Up to 2,000 THB (up to ~$54) | 2,500–3,500 THB (~$68–95) | 4,000–5,000+ THB (~$108–135+) |
 | Caddie fee (mandatory) | 400–500 THB (~$11–14) | 500–600 THB (~$14–16) | 500–600 THB (~$14–16) |
 | Caddie tip (per round) | 400 THB (~$11) | 450 THB (~$12) | 500 THB (~$14) |
 | Transport to course | 300–400 THB (~$8–11) | 400–550 THB (~$11–15) | 600–1,200 THB (~$16–32) |
@@ -54,7 +54,7 @@ The mid-range figure of roughly **$1,800 USD** for a week of golf — including 
 
 ## Green Fees in Detail
 
-Green fees are the biggest variable in your budget. Rates at Bangkok-area courses run from about 1,500 THB at value public courses on weekdays up to 5,000 THB or more at premium resort or private-access courses.
+Green fees are the biggest variable in your budget. Rates at Bangkok-area courses run from under 1,000 THB on a weekday at the cheapest courses up to 5,000 THB or more at the premium clubs.
 
 Three factors drive the price gap:
 
