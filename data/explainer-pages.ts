@@ -4073,7 +4073,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/guide/first-time-golf-thailand",
     ],
     created_at: "2026-03-28T00:00:00.000Z",
-    updated_at: "2026-09-25T00:00:00.000Z",
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro: `Thailand might seem like an ambitious destination for your first round of golf — but in many ways, it's one of the most forgiving places in the world to start. Caddies guide you through every hole, club rental is widely available, the culture is relaxed and welcoming, and you can ease in at an indoor simulator before setting foot on a full course.`,
       sections: [
@@ -10744,7 +10744,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "ja",
     related_slugs: ["/guide/first-time-golf-thailand"],
     created_at: now,
-    updated_at: "2026-09-25T00:00:00.000Z",
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "記念すべき初ラウンドの地にタイを選ぶと聞くと、少しハードルが高く感じるかもしれません。ですが実際には、タイは世界でもとりわけ気軽にゴルフを始められる場所のひとつです。キャディーがホールごとにサポートしてくれ、クラブレンタルもほぼどこでも利用でき、ゴルフ文化はおおらかで親しみやすい雰囲気。本格的なコースに出る前に、インドアゴルフシミュレーターで無理なく慣れていくこともできます。",
@@ -10799,7 +10799,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "ko",
     related_slugs: ["/guide/first-time-golf-thailand"],
     created_at: now,
-    updated_at: "2026-09-25T00:00:00.000Z",
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "태국은 첫 골프 라운딩 장소로는 다소 야심 찬 선택처럼 보일 수 있지만, 여러 면에서 골프에 입문하기에 세계에서 가장 부담 없는 곳 중 하나예요. 캐디가 홀마다 함께하며 안내해 주고, 클럽 대여도 어디서나 쉽게 할 수 있으며, 문화가 여유롭고 친근한 데다, 정식 코스에 나서기 전에 실내 시뮬레이터에서 천천히 적응할 수도 있거든요.",
@@ -10854,7 +10854,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "zh",
     related_slugs: ["/guide/first-time-golf-thailand"],
     created_at: now,
-    updated_at: "2026-09-25T00:00:00.000Z",
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "把泰国当作你第一次打高尔夫的目的地，听上去或许有些大胆——但从很多方面来看，这里其实是全世界最适合新手起步的地方之一。球童会带着你打完每一个洞，球杆租借随处可得，这里的高尔夫文化轻松而友好，而且在真正踏上完整球场之前，你还可以先在室内高尔夫模拟器上慢慢适应。",
@@ -10909,7 +10909,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "th",
     related_slugs: ["/guide/first-time-golf-thailand"],
     created_at: now,
-    updated_at: "2026-09-25T00:00:00.000Z",
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "ประเทศไทยอาจฟังดูเป็นจุดหมายที่ท้าทายสำหรับการออกรอบกอล์ฟครั้งแรกของคุณ — แต่ในหลายแง่มุม ที่นี่กลับเป็นหนึ่งในสถานที่ที่เป็นมิตรกับผู้เริ่มต้นมากที่สุดในโลก แคดดี้คอยแนะนำคุณในทุกหลุม บริการเช่าไม้กอล์ฟมีให้ใช้อย่างแพร่หลาย วัฒนธรรมการเล่นผ่อนคลายและเป็นกันเอง และคุณยังค่อย ๆ เริ่มต้นได้ที่กอล์ฟซิมูเลเตอร์ในร่มก่อนจะก้าวเท้าเข้าสู่สนามจริงเต็มรูปแบบ",
