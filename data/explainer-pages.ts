@@ -3758,7 +3758,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     slug: "round-of-golf-cost-bangkok",
     title: "曼谷打一场高尔夫要多少钱？果岭费与球童费全解析",
     meta_description:
-      "曼谷打一场高尔夫的费用有多少？从平价球场不到1,000泰铢的果岭费，到高级球会7,000泰铢以上，为你拆解果岭费、球童费、球童小费到球车费的总额。",
+      "曼谷打一场高尔夫的费用有多少？从平价球场不到1,000泰铢的果岭费，到高级球会7,000泰铢以上，为你拆解果岭费、球童费、球童小费和球车费的总额。",
     featured_image: null,
     schema_markup: null,
     status: "published",
