@@ -37,7 +37,7 @@ Southeast Asia is home to three of the most popular golf destinations outside of
 
 ### Strengths
 
-Thailand has more golf infrastructure than any other destination in the region — roughly 250 to 300 courses nationally, with over 50 within an hour of Bangkok. That density means genuine variety: parkland layouts, resort courses, championship venues, and budget-friendly municipal tracks. Green fees run from under 1,000 THB (~$27 USD) on a weekday at the cheapest courses to 5,000 THB+ (~$135 USD) at marquee venues.
+Thailand has more golf infrastructure than any other destination in the region — roughly 250 to 300 courses nationally, with over 50 within an hour of Bangkok. That density means genuine variety: parkland layouts, resort courses, championship venues, and budget-friendly tracks. Green fees run from under 1,000 THB (~$27 USD) on a weekday at the cheapest courses to 5,000 THB+ (~$135 USD) at marquee venues.
 
 Course quality at the top end is legitimately world-class. Black Mountain Hua Hin, Nikanti Golf Club, Alpine Golf Resort, and Thai Country Club are regularly cited among Asia's best. Bangkok also has a strong indoor simulator scene — [LENGOLF's simulator facility in central Bangkok](https://www.len.golf) lets visitors practice or play full rounds without leaving the city.
 

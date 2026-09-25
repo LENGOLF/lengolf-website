@@ -14,7 +14,7 @@ category: clubs-rental
 
 **The short answer: at premium venues, yes. At budget courses, probably not.**
 
-If you're playing at a top-tier Bangkok course or a simulator venue like LENGOLF, you'll find modern Callaway, TaylorMade, or Titleist rental sets that are genuinely playable for a serious golfer. If you're booking a round at a lower-cost municipal or resort course, expect older, mixed-brand sets in variable condition — not what you want when your game matters.
+If you're playing at a top-tier Bangkok course or a simulator venue like LENGOLF, you'll find modern Callaway, TaylorMade, or Titleist rental sets that are genuinely playable for a serious golfer. If you're booking a round at a budget or resort course, expect older, mixed-brand sets in variable condition — not what you want when your game matters.
 
 ## What "Serious Golfer" Actually Means Here
 

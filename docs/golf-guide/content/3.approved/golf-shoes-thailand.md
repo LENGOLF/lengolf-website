@@ -17,7 +17,7 @@ category: packing-preparation
 
 ## What Most Thai Golf Courses Require
 
-The vast majority of Bangkok-area courses enforce a proper footwear policy on their fairways. That means dedicated golf shoes — either spiked or spikeless — rather than running shoes, sneakers, flip flops, or sandals. Policies do vary: a handful of more relaxed municipal or resort courses will permit clean athletic trainers, but this is the exception rather than the rule. If you plan to play multiple venues without checking each one in advance, assume golf shoes are required.
+The vast majority of Bangkok-area courses enforce a proper footwear policy on their fairways. That means dedicated golf shoes — either spiked or spikeless — rather than running shoes, sneakers, flip flops, or sandals. Policies do vary: a handful of more relaxed courses will permit clean athletic trainers, but this is the exception rather than the rule. If you plan to play multiple venues without checking each one in advance, assume golf shoes are required.
 
 **Bottom line:** Do not show up in flip flops or sandals. You are almost certain to be turned away.
 

@@ -35,7 +35,7 @@ Rental fees are usually settled at checkout alongside your green fee, caddie fee
 
 Not all rental sets are equal, and the gap between budget and premium venues can be significant.
 
-**Budget and municipal courses** often stock sets that have seen years of use. Grips may be worn smooth, shafts can be mismatched, and lofts sometimes vary from what the club head suggests. You can still complete your round, but don't expect consistent ball flight from irons that have been hit several thousand times by visiting golfers.
+**Budget courses** often stock sets that have seen years of use. Grips may be worn smooth, shafts can be mismatched, and lofts sometimes vary from what the club head suggests. You can still complete your round, but don't expect consistent ball flight from irons that have been hit several thousand times by visiting golfers.
 
 **Mid-range resort courses** typically rotate their rental inventory more frequently and often carry one or two tiers — a standard set and a "premium" set at a higher rate. These sets are generally playable and representative of the club specs.
 
