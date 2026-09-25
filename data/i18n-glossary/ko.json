@@ -74,7 +74,7 @@
     "note": "KO transliterates the BTS station name (BTS 칫롬역) but keeps 'The Mercury Ville' in Latin ('The Mercury Ville 4층'). Keep LENGOLF, len.golf, BTS, MRT, PGA, LINE @lengolf, booking.len.golf, and Latin brand/product names (Callaway, REVA) verbatim."
   },
   "seo_norms": {
-    "title_display_target": "~30 characters, front-loaded with the target query, descriptive tail after an em dash — (shipped guide titles 22–52 chars).",
+    "title_display_target": "~30 characters, front-loaded with the target query, then the descriptive tail. When the head is itself a question, end it with ? and start the tail after one space (골프 클럽 대여, 그걸로 충분할까? 품질 판단 기준); add the ? if a question-shaped head (-까, -나요) lacks one. Otherwise use a colon attached to the head and followed by one space (태국 골프 초보자 가이드: 시작 전 알아야 할 모든 것), a comma when the head is a topic leading into a question (방콕 골프, 하루 중 언제가 좋을까?), or join a noun head and a label tail with a space (블랙마운틴 골프클럽 후아힌 방문 가이드). Never an em dash (— or ——) or a look-alike used as the separator (–, ―, ─, the Hangul vowel ㅡ, a spaced hyphen), never a mid-title period, and never | (the layout already appends \" | LENGOLF\"). Most shipped KO guide and FAQ titles still use an em-dash tail: legacy debt, do not copy it. Shipped guide titles 20–37 chars (2026-09).",
     "meta_note": "Hook + target query in the first ~80 characters; KO meta truncates around 80 chars on mobile SERP. Shipped guide metas run ~90–160 chars.",
     "front_load": "Lead with the reader's query (예: 골프백 수하물 요금), not the brand."
   },
