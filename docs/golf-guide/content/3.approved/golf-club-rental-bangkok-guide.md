@@ -85,7 +85,7 @@ LENGOLF, Bangkok's indoor golf simulator venue, includes a free standard club se
 2. **Ladies'**
 3. **Left-handed** (free standard clubs with every bay booking, plus one premium set on request)
 
-Left-handed golfers, who often find rental options limited at standard courses, should request the left-handed set when booking. The sets are well-maintained and suitable for all ability levels — from complete beginners hitting their first shots to experienced players working on specific aspects of their game.
+Left-handed golfers, who often find rental options limited at standard courses, should request the left-handed set when booking. The sets are well-maintained and suitable for all ability levels, from complete beginners hitting their first shots to experienced players working on specific aspects of their game.
 
 Standard club rental is included with simulator bay bookings, so there's no separate fee to track unless you upgrade to a premium set.
 
