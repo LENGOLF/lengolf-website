@@ -18,7 +18,7 @@ import {
   getRelatedCourses,
   getUseCasesByRarity,
 } from '@/lib/golf-courses-derived'
-import { BTS_STATIONS } from '@/data/bts-stations'
+import { BTS_STATIONS, stationPlaceName } from '@/data/bts-stations'
 import { USE_CASE_RULES } from '@/data/golf-courses-use-cases'
 import { PRICE_TIERS } from '@/data/price-tiers'
 import { haversineKm } from '@/lib/geo'
@@ -148,9 +148,9 @@ export default async function CoursePageRoute({ params }: Props) {
       { km: Infinity, station: stations[0] }
     )
     nearestStationLink = {
-      label: `Best courses near ${nearest.station.name} BTS`,
+      label: `Best courses near ${stationPlaceName(nearest.station)}`,
       href: `/golf-courses/near/${nearest.station.slug}`,
-      description: `${nearest.km.toFixed(1)} km from ${nearest.station.name} in a straight line — closest station to ${course.name}.`,
+      description: `${nearest.km.toFixed(1)} km from ${stationPlaceName(nearest.station)} in a straight line, the closest station to ${course.name}.`,
     }
   }
 
