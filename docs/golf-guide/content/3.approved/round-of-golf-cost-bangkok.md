@@ -37,15 +37,15 @@ At premium courses the all-in figure climbs to 6,000–8,000 THB or more. At bud
 
 Bangkok courses broadly fall into three pricing tiers.
 
-### 1. Budget Courses — 1,500–2,000 THB (weekday)
+### 1. Budget Courses: up to 2,000 THB (weekday)
 
-Older public-access courses and municipally operated clubs sit at the lower end. Facilities are more basic, but the golf is perfectly playable. Expect weekday green fees in the 1,500–2,000 THB range before extras.
+This is the largest group of courses within 90 minutes of Bangkok. Most have a driving range, and a few add on-site accommodation and a spa. The golf is perfectly playable. Expect weekday green fees of up to 2,000 THB before extras.
 
-### 2. Mid-Range Courses — 2,500–3,500 THB (weekday)
+### 2. Mid-Range Courses: 2,500–3,500 THB (weekday)
 
 The majority of well-maintained private member courses open to visitors sit in this bracket. These offer good course conditioning, full clubhouses, and organised tee-time systems. This is the sweet spot for most golfers visiting Bangkok.
 
-### 3. Premium Courses — 4,500 THB+ (weekday)
+### 3. Premium Courses: 4,500 THB+ (weekday)
 
 Top-tier clubs such as Nikanti Golf Club and Alpine Golf Club sit at the premium end and are priced accordingly:
 
