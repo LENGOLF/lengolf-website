@@ -4977,12 +4977,16 @@ async function localeRouteHandlers(): Promise<{
  * params read from data (MULTI_PARAM_VALUES), since beside a junk value they
  * 404 with or without their own flag.
  *
- * The route-handler probe does not discriminate on `next dev`: observed
+ * The HUB card's probe does not discriminate on `next dev`: observed
  * 2026-09-24 on a Windows dev server, dev compiled `/[locale]/golf-courses/
  * [region]` for `/images/golf-courses/opengraph-image/` (region
- * `opengraph-image`) and 404'd with the fix and without it. It also cannot
- * pass there, because the cards themselves 500 on Windows (@vercel/og). Its
- * evidence is `next build && next start` on Linux (CI) and a Vercel deploy.
+ * `opengraph-image`) and 404'd with the fix and without it. The six
+ * multi-param probes DO discriminate there (2026-09-25: deleting a card's
+ * `dynamicParams = false` flipped its probe from 404 to 500, the render the
+ * flag should have refused). No handler probe can PASS on Windows dev,
+ * because the cards themselves 500 (@vercel/og), so the remainder check and
+ * the handler control fail there. Their evidence is `next build && next
+ * start` on Linux (CI) and a Vercel deploy.
  */
 async function runUnknownSlugCacheTests() {
   console.log("\n\x1b[1mG2) Unknown slugs and locales must 404 without minting an ISR entry\x1b[0m");
@@ -5040,6 +5044,9 @@ async function runUnknownSlugCacheTests() {
   // Junk LOCALE values aimed at a route handler under a SECOND dynamic segment.
   // A junk locale discriminates only beside a REAL value for the other params:
   // beside a junk tier the card 404s whether or not it carries its own flag.
+  // It also relies on the cards IGNORING the locale (none reads it today): a
+  // card that called notFound() for a non-en locale would 404 here with or
+  // without its flag.
   // Measured on PR #142: deleting `dynamicParams = false` from
   // under/[tier]/opengraph-image.tsx turned the junk-locale probe beside a real
   // tier from a 404 into a rendered card while sections D and G2 stayed green.
@@ -5048,8 +5055,8 @@ async function runUnknownSlugCacheTests() {
   // several are derived and can retire (a compare pair leaves its region's top 3
   // on an unrelated fee edit). lib/golf-courses*.ts are `import 'server-only'`
   // and throw here, so the sources are the plain modules those files read:
-  // data/golf-courses/<region>/index.ts (the registry getAllCourseParams walks,
-  // and which validate:courses pins REGION_META to), PRICE_TIERS, BTS_STATIONS,
+  // data/golf-courses/<region>/index.ts (the files getAllCourseParams imports;
+  // validate:courses pins REGION_META to the dirs holding course files), PRICE_TIERS, BTS_STATIONS,
   // USE_CASES, and for compare the sitemap, which the running server builds
   // from getComparisonPairs. The value must also be one the card RENDERS for
   // `en`: the remainder check below requires it to serve an image, so a stale
@@ -5227,7 +5234,10 @@ async function runUnknownSlugCacheTests() {
   // handler it must serve an IMAGE: that catches a mis-derived remainder (a
   // dropped basename leaves `/golf-courses/`, a real page guarded by the layout).
   // It does NOT prove the junk-locale probe itself reaches the handler: on
-  // `next dev` the probe is routed to the [region] PAGE instead (see docblock).
+  // `next dev` the hub probe is routed to the [region] PAGE instead (see
+  // docblock). For a multi-param probe a failure here usually means the value
+  // MULTI_PARAM_VALUES chose no longer renders (the tier and use-case cards
+  // 404 when their roster is empty), not a routing problem.
   let remainderJudged = 0;
   for (const path of allJunkLocales) {
     const remainder = path.replace(/^\/[^/]+/, "") || "/";
@@ -5249,7 +5259,11 @@ async function runUnknownSlugCacheTests() {
           fail(
             label,
             `${remainder} returned ${res.status} (no route, or the route errored), so ${path} cannot show ` +
-              `whether the guard works: with no route it 404s from the static page with or without the fix.`
+              `whether the guard works: with no route it 404s from the static page with or without the fix.` +
+              (multiParamProbes.some((p) => p.path === path)
+                ? ` The value came from MULTI_PARAM_VALUES; if that card no longer renders it (an emptied ` +
+                  `roster, a retired pair), pick a value that does, still from data.`
+                : ``)
           );
         } else if (handler?.kind === "image" && !type.startsWith("image/")) {
           fail(
@@ -5286,9 +5300,11 @@ async function runUnknownSlugCacheTests() {
   let cardPagesJudged = 0;
   try {
     const { hasTranslationForLocale, ALL_LOCALES } = await import("../lib/translated-routes");
-    // Locale-only handlers only. The multi-param cards' real traffic is section
-    // D's share-card check, which follows each pinned /golf-courses/ page's
-    // og:image through its redirects to a 200 PNG.
+    // Locale-only handlers only. For the multi-param cards, section D follows
+    // one EN page per family (plus the ja tier page) through its og:image to a
+    // 200 PNG. Translated region hubs and course details, whose locale-prefixed
+    // og:image relies on the untranslated-route 301 to the EN card, are NOT
+    // followed anywhere: a known gap, not covered here.
     for (const h of localeOnlyHandlers.filter((x) => x.kind === "image")) {
       const cardPath = h.remainder.replace(/\/$/, "");
       const pagePath = cardPath.replace(/\/[^/]+$/, "") + "/";
