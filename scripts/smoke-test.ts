@@ -2272,6 +2272,28 @@ const routeTests: RouteTest[] = [
     path: "/golf-courses/bangkok/alpine-golf-club/opengraph-image/",
     expectedStatus: [200],
   },
+  // The roundup cards. Section D also fetches these through each page's own
+  // og:image; these catch a card route that breaks for a slug section D does
+  // not visit (the other airport, a use case).
+  {
+    path: "/golf-courses/under/7500-baht/opengraph-image/",
+    expectedStatus: [200],
+  },
+  {
+    path: "/golf-courses/near/don-mueang-airport/opengraph-image/",
+    expectedStatus: [200],
+  },
+  {
+    path: "/golf-courses/best-for/tournaments/opengraph-image/",
+    expectedStatus: [200],
+  },
+  {
+    // A DERIVED pair (each region's top 3 by popularityScore), like the one in
+    // seoTests: if a course edit retires it, swap in another live pair. This
+    // one is #1 vs #2 in pattaya, so it retires only if two courses overtake.
+    path: "/golf-courses/compare/pattaya/burapha-golf-club-vs-siam-country-club-waterside/opengraph-image/",
+    expectedStatus: [200],
+  },
   // Golf course detail pages — spot-check one Bangkok + two Pattaya + two Hua Hin + two Phuket
   {
     path: "/golf-courses/bangkok/nikanti-golf-club/",
@@ -3425,6 +3447,32 @@ const seoTests: SeoTest[] = [
         "reason in the message.",
     },
   },
+  // The four golf-course roundup families (plus the hub and a region hub,
+  // below). Each page declares its own
+  // `openGraph`, which REPLACES the parent segment's resolved one, hub card
+  // included, so until each segment got an opengraph-image.tsx of its own they
+  // shipped `twitter:card=summary_large_image` with no og:image and no
+  // twitter:image (measured on prod 2026-09-24). REQUIRED_OWN_OG_CARDS pins
+  // them. Both near/ variants, because the station and airport branches are two
+  // separate `openGraph` declarations; the ja tier because it is the one family
+  // that SSGs non-EN locales, and its card URL has to survive the untranslated-
+  // route 301 to the English card. The compare pair is DERIVED (each region's
+  // top 3 by popularityScore), so a course edit can retire it; if this entry
+  // starts redirecting or 404ing, the page is gone, which needs a redirect in
+  // next.config.js anyway. Swap in another live pair here and in the pin.
+  // The hub and a region hub, which already had cards: pinned too, so every
+  // golf-courses openGraph declaration is reachable from this section.
+  { path: "/golf-courses/", locale: "en" },
+  { path: "/golf-courses/bangkok/", locale: "en" },
+  { path: "/golf-courses/under/1500-baht/", locale: "en" },
+  { path: "/ja/golf-courses/under/1500-baht/", locale: "ja" },
+  { path: "/golf-courses/near/asok/", locale: "en" },
+  { path: "/golf-courses/near/suvarnabhumi-airport/", locale: "en" },
+  { path: "/golf-courses/best-for/beginners/", locale: "en" },
+  {
+    path: "/golf-courses/compare/bangkok/royal-gems-golf-sports-club-vs-siam-country-club-bangkok/",
+    locale: "en",
+  },
 ];
 
 /**
@@ -3434,12 +3482,13 @@ const seoTests: SeoTest[] = [
  * floor with a real number, not `> 0`" for exactly this; sections L2, L3, L4,
  * L6, O and P all carry one and this section did not.
  *
- * SCOPE: this counts URLs and nothing else. Section D now has TWO floors —
+ * SCOPE: this counts URLs and nothing else. Section D now has THREE floors —
  * see REQUIRED_TITLE_ASSERTIONS below for the one guarding the <title>
  * assertions, which this constant provably does not cover: deleting the
- * pinned entry and adding any other URL holds this count at 35.
+ * pinned entry and adding any other URL holds this count. Nor does it cover
+ * the share-card assertions; see REQUIRED_OWN_OG_CARDS.
  */
-const MIN_SEO_URLS = 35;
+const MIN_SEO_URLS = 43;
 
 /**
  * Anti-vacuity for the `titleContains` assertions in `seoTests`. Two-sided by
@@ -3483,6 +3532,36 @@ const REQUIRED_TITLE_ASSERTIONS: { path: string; needle: string }[] = [
  * two-sided pin above cannot catch on its own.
  */
 const MIN_TITLE_ASSERTIONS = 1;
+
+/**
+ * Pages whose share card must be the opengraph-image.tsx in their OWN segment.
+ * Section D applies the check to every seoTests entry under /golf-courses/,
+ * and this list pins which entries those are, because a scope derived from
+ * seoTests shrinks silently when an entry is deleted. Same idiom as
+ * REQUIRED_TITLE_ASSERTIONS, with its own floor for the same reason.
+ *
+ * Why "own segment", not merely "has an og:image": the failure this guards is
+ * a page whose `openGraph` replaced the parent's resolved object, card and
+ * all. A check for ANY og:image would pass a page that fell back to the hub
+ * card or to a hardcoded `images` argument, which is a different page's card.
+ */
+const REQUIRED_OWN_OG_CARDS: string[] = [
+  "/golf-courses/",
+  "/golf-courses/bangkok/",
+  "/golf-courses/bangkok/phoenix-gold-golf-country-club/",
+  "/golf-courses/under/1500-baht/",
+  "/ja/golf-courses/under/1500-baht/",
+  "/golf-courses/near/asok/",
+  "/golf-courses/near/suvarnabhumi-airport/",
+  "/golf-courses/best-for/beginners/",
+  "/golf-courses/compare/bangkok/royal-gems-golf-sports-club-vs-siam-country-club-bangkok/",
+];
+const MIN_OWN_OG_CARDS = 9;
+
+/** A seoTests path with its locale prefix removed (`/ja/x/` -> `/x/`). */
+function stripLocalePrefix(path: string): string {
+  return path.replace(/^\/(?:en|th|ja|ko|zh)(?=\/)/, "");
+}
 
 // E) Thai redirect tests (untranslated Thai routes → 301 to English)
 interface ThaiRedirectTest {
@@ -3970,12 +4049,51 @@ async function runSeoTests() {
   }
   let titleNeedlesJudged = 0;
 
+  // The share-card pin: same shape as the title pin above.
+  if (REQUIRED_OWN_OG_CARDS.length < MIN_OWN_OG_CARDS) {
+    fail(
+      "D) seoTests share-card floor",
+      `REQUIRED_OWN_OG_CARDS holds ${REQUIRED_OWN_OG_CARDS.length} entr(ies), expected at ` +
+        `least ${MIN_OWN_OG_CARDS} — an emptied list iterates zero times and passes`,
+    );
+  }
+  for (const required of REQUIRED_OWN_OG_CARDS) {
+    if (!stripLocalePrefix(required).startsWith("/golf-courses/")) {
+      fail(
+        "D) seoTests share-card floor",
+        `${required} is pinned but outside /golf-courses/, where the check never runs`,
+      );
+    }
+    const n = seoTests.filter((t) => t.path === required).length;
+    if (n !== 1) {
+      fail(
+        "D) seoTests share-card floor",
+        `${required} appears ${n} time(s) in seoTests, expected exactly 1 — its share-card ` +
+          `assertion is gone or duplicated`,
+      );
+    }
+  }
+  // A duplicate pin keeps the length at the floor while a real entry goes
+  // unpinned (measured: pin one path twice, then re-point the other's seoTests
+  // entry outside /golf-courses/, and every check above stays green).
+  if (new Set(REQUIRED_OWN_OG_CARDS).size !== REQUIRED_OWN_OG_CARDS.length) {
+    fail("D) seoTests share-card floor", "REQUIRED_OWN_OG_CARDS lists a path twice");
+  }
+  const ownOgCardScope = seoTests.filter((t) =>
+    stripLocalePrefix(t.path).startsWith("/golf-courses/"),
+  );
+  let ownOgCardsJudged = 0;
+
   for (const t of seoTests) {
     const label = `SEO ${t.path}`;
     try {
       const res = await fetch(`${BASE}${t.path}`, { redirect: "follow" });
       const body = await res.text();
       const issues: string[] = [];
+      // Set at the END of the share-card block, counted where the entry's
+      // verdict is REPORTED (below), so a skip anywhere between the checks and
+      // the report cannot keep the count.
+      let ownOgCardChecked = false;
 
       // <html lang="..."> matches expected locale
       const langMatch = body.match(/<html[^>]*\slang="([^"]*)"/);
@@ -4167,17 +4285,19 @@ async function runSeoTests() {
       //     exact value and nothing drops.
       //   - TRUE RED on `twitter: { title }` with no images: that resolves
       //     to `summary` permanently. Dropping the source rule gave up a real
-      //     check across all 47 files under app/.
+      //     check on every file it audited (36 at the time).
       //   - FALSE GREEN on `icons: { icon }`, which dropped the layout's
       //     `apple` because the rule modelled one field per key.
       //
       // The layout is the SOLE supplier of `card` site-wide, so checking the
       // resolved output here is complete coverage of the SUPPLIER. It is NOT
-      // complete coverage of a future page-level `twitter` declaration: 12 of
+      // complete coverage of a future page-level `twitter` declaration: 5 of
       // the 31 openGraph declarations are unreachable from any URL in this
-      // section — 7 of those 12 under /golf-courses/, the other 5 being
-      // activities, best, cost, hotels and second-hand-club detail. (Was 13 and
-      // 8 until the phoenix-gold entry made the course-detail route reachable;
+      // section, none under /golf-courses/: activities, best, cost, hotels and
+      // second-hand-club detail. (Was 12 and 7 until the share-card entries
+      // made the hub, a region hub and under/near/best-for/compare reachable,
+      // near/ counting twice for its station and airport branches; was 13 and 8 before the
+      // phoenix-gold entry made the course-detail route reachable. Both
       // re-derived, not decremented by hand. That entry's own comment warns
       // about this sentence, so it was updated in the same commit — this was
       // the FIFTH site.) This was
@@ -4207,6 +4327,82 @@ async function runSeoTests() {
         if (!visible.match(new RegExp(`<link[^>]*rel="${rel_}"[^>]*>`))) {
           issues.push(`missing <link rel="${rel_}">`);
         }
+      }
+
+      // The share card, for /golf-courses/ pages: og:image must be the card in
+      // this page's OWN segment, twitter:image must match it, and the URL must
+      // serve a PNG after redirects. The layout's twitter:card is
+      // summary_large_image everywhere, so a page with no image here still
+      // advertises a large card; that shipped on the four roundup families
+      // until each segment got an opengraph-image.tsx.
+      if (stripLocalePrefix(t.path).startsWith("/golf-courses/")) {
+        const ogImage = ogTag("image");
+        const twTag = visible.match(/<meta[^>]*name="twitter:image"[^>]*>/);
+        const twImage = twTag ? (twTag[0].match(/content="([^"]*)"/)?.[1] ?? "") : null;
+        const want = `${stripLocalePrefix(t.path)}opengraph-image`;
+        if (res.redirected) {
+          // Otherwise a pinned page that starts redirecting fails below as
+          // "another page's image", which names the wrong cause.
+          issues.push(
+            `redirected to ${res.url} — a share-card entry must resolve directly, or it ` +
+              `asserts the destination's card`,
+          );
+        }
+        if (!ogImage) {
+          issues.push(
+            `no og:image — a page-level openGraph replaces the parent's card, so this ` +
+              `segment needs its own opengraph-image.tsx`,
+          );
+        } else {
+          const card = new URL(decodeEntities(ogImage), BASE);
+          if (stripLocalePrefix(card.pathname) !== want) {
+            issues.push(
+              `og:image is ${card.pathname}, not this page's own card (${want}) — it is ` +
+                `inheriting or hardcoding another page's image`,
+            );
+          }
+          if (twImage !== ogImage) {
+            issues.push(`twitter:image "${twImage ?? "(missing)"}" does not match og:image`);
+          }
+          // The declared metadata must describe what is served: a card file
+          // exporting the wrong contentType or size otherwise ships a PNG
+          // labelled image/jpeg, or dimensions a platform crops by.
+          const declaredType = ogTag("image:type");
+          if (declaredType !== "image/png") {
+            issues.push(`og:image:type is "${declaredType ?? "(missing)"}", expected image/png`);
+          }
+          if (ogTag("image:width") !== "1200" || ogTag("image:height") !== "630") {
+            issues.push(
+              `og:image size is ${ogTag("image:width")}x${ogTag("image:height")}, expected 1200x630`,
+            );
+          }
+          // Fetched against BASE: the tag's host is SITE_URL (production). Its
+          // own try, so a throw here reports alongside the verdicts above
+          // instead of replacing them with the page's "fetch error".
+          try {
+            const cardRes = await fetch(`${BASE}${card.pathname}${card.search}`, {
+              redirect: "follow",
+            });
+            const type = cardRes.headers.get("content-type") ?? "";
+            await cardRes.arrayBuffer();
+            if (cardRes.status !== 200 || !type.startsWith("image/png")) {
+              issues.push(
+                `og:image ${card.pathname} served ${cardRes.status} ${type} after redirects, ` +
+                  `expected 200 image/png`,
+              );
+            }
+            // Where the redirects END, not only that they end on a PNG: the ja
+            // tier card legitimately 301s to the EN card, so following is
+            // required, and a redirect to some other card would otherwise pass.
+            const landed = new URL(cardRes.url).pathname;
+            if (stripLocalePrefix(landed).replace(/\/$/, "") !== want) {
+              issues.push(`og:image ${card.pathname} redirected to ${landed}, not this page's card`);
+            }
+          } catch (err) {
+            issues.push(`og:image ${card.pathname} fetch error: ${(err as Error).message}`);
+          }
+        }
+        ownOgCardChecked = true;
       }
 
       // The WebSite node's publisher Organization is read for entity
@@ -4421,6 +4617,11 @@ async function runSeoTests() {
       } else {
         pass(label);
       }
+      // Counted after the report, not inside the share-card block: measured,
+      // `if (issues.length > 0) continue;` placed just after an in-block
+      // increment kept the count at 7 of 7 while all seven failures went
+      // unreported.
+      if (ownOgCardChecked) ownOgCardsJudged++;
     } catch (err) {
       fail(label, `fetch error: ${(err as Error).message}`);
     }
@@ -4459,7 +4660,25 @@ async function runSeoTests() {
       `D) judged every one of the ${titleNeedlesExpected} pinned <title> needle(s)`,
     );
   }
+  if (ownOgCardsJudged !== ownOgCardScope.length) {
+    fail(
+      "D) seoTests share-card coverage",
+      `${ownOgCardScope.length} /golf-courses/ entr(ies) in seoTests but only ` +
+        `${ownOgCardsJudged} share-card check(s) ran — skipped, not failed. A fetch error ` +
+        `on one of those URLs also bypasses it, and reports separately.`,
+    );
+  } else {
+    pass(`D) judged the share card on all ${ownOgCardScope.length} /golf-courses/ page(s)`);
+  }
+  seoTestsCompleted = true;
 }
+
+/**
+ * Set on the LAST line of runSeoTests and checked by main(). A `return` inside
+ * its loop otherwise skips both coverage checks above and exits green: measured,
+ * a `return;` at the top of the share-card block printed 34 passes and exit 0.
+ */
+let seoTestsCompleted = false;
 
 async function runThaiRedirectTests() {
   console.log("\n\x1b[1mE) Thai redirect tests\x1b[0m");
@@ -4743,9 +4962,10 @@ async function localeRouteHandlers(): Promise<{
  *
  * ROUTE HANDLERS are not covered by that flag: they take segment config from
  * their own file only (`collectAppRouteSegments` in next/dist/build/segment-
- * config/app/app-segments.js), metadata image routes included. The three under
+ * config/app/app-segments.js), metadata image routes included. The seven under
  * `[locale]` are the golf-courses og-image cards. The `[region]` and `[slug]`
- * cards carried their own flag already; the hub card had none, so
+ * cards carried their own flag already, and the four roundup cards (under,
+ * near, best-for, compare) were added with it; the hub card had none, so
  * `/images/golf-courses/opengraph-image/` rendered a fresh 200 PNG (43,596 B on
  * prod 2026-09-24) for every junk locale and every query string on a bypassed
  * path. No ISR write, so the signal header never showed it: the STATUS is the
@@ -4826,9 +5046,11 @@ async function runUnknownSlugCacheTests() {
   const EXPECTED_JUNK_SLUGS = 7;
   const EXPECTED_JUNK_LOCALES = 3;
   const EXPECTED_JUNK_LOCALE_HANDLERS = 1;
-  // The [region] and [slug] cards. Counted, NOT probed (see localeRouteHandlers):
-  // nothing in G2 guards their own flags, only that a new one is noticed.
-  const EXPECTED_MULTI_PARAM_HANDLERS = 2;
+  // The [region] and [slug] cards plus the four roundup cards (under/[tier],
+  // near/[station], best-for/[useCase], compare/[region]/[pair]). Counted, NOT
+  // probed (see localeRouteHandlers): nothing in G2 guards their own flags,
+  // only that a new one is noticed.
+  const EXPECTED_MULTI_PARAM_HANDLERS = 6;
   if (
     junkSlugs.length !== EXPECTED_JUNK_SLUGS ||
     junkLocales.length !== EXPECTED_JUNK_LOCALES ||
@@ -7715,6 +7937,579 @@ async function runAgreementFooterLinkTests() {
   }
 }
 
+// ── S) Image optimizer allowlist ────────────────────────────────────
+//
+// next.config.js narrows `images` to qualities [70, 75], one Supabase pattern
+// (the website-assets bucket, object endpoint, a strict per-segment character
+// class, no query string, default port) and no local paths. Before that, prod
+// ACCEPTED every shape in IMAGE_OFFLIST_CASES (measured 2026-09-24): any q from
+// 1 to 100, any path on www.len.golf or len.golf, any relative path including a
+// dynamic route, any object in the other public bucket of the shared Supabase
+// project (`line-messages`), and a new key per `?query` or `%XX` spelling of a
+// real object. Each accepted (url, w, q) is a billable transformation plus a
+// cache entry held for minimumCacheTTL, and the caller chooses all three.
+//
+// Three checks:
+//
+// (1) Every (src, q) pair the scanned pages render must come back 200
+//     image/* from THIS server's optimizer. next/image throws on an off-list
+//     `quality` only in DEV (next/dist/shared/lib/image-loader.js); a
+//     production build emits the URL unchanged and the image 400s in the
+//     browser with build, typecheck and lint all green. So a new `quality={80}`,
+//     or a src on a new host, bucket or unusual file name, fails here and
+//     nowhere else in CI. Each pair is requested once, at the smallest width it
+//     was rendered at: width is checked against deviceSizes/imageSizes, which
+//     this change left alone.
+// (2) The build's .next/images-manifest.json (what Vercel's optimizer is fed)
+//     must list exactly the rendered q values, and its remote pattern must
+//     reject every raw path in RAW_HOSTILE_PATHS while accepting every rendered
+//     src. This is the only check here that sees VERCEL's semantics: Vercel
+//     tests the pattern's regex against the RAW, still-encoded path and only
+//     then fetches, and the fetch normalizes. On the PR #138 preview the plain
+//     `…/website-assets/**` pattern let `%2e%2e/line-messages/<object>` through
+//     to that other bucket (200). Next's own optimizer normalizes first, so the
+//     fetches in (3) would pass either way; only the regex test catches it.
+// (3) Every off-list case must 400 WITH Next's message for its rule, so a 400
+//     for an unrelated reason (a bad width, an upstream failure) cannot stand
+//     in for the rule under test; the control must 200 through the identical
+//     request shape, so a dead optimizer cannot make the negatives pass. The
+//     message pins make this half Next-only BY CONSTRUCTION: Vercel answers
+//     every rejection, and an upstream failure too, with the same generic
+//     `INVALID_IMAGE_OPTIMIZE_REQUEST`.
+//
+// Anti-vacuity, each guard for a hole the others cannot see:
+// - every HTML page must carry at least one optimizer URL, because the header
+//   logo is an <Image> on every page, so a broken extractor goes red instead
+//   of reporting "0 pairs, 0 failures";
+// - MIN_IMAGE_PAGES floors the listed pages, MIN_CLUB_DETAIL_PAGES the used-club
+//   detail pages, and MIN_CODE_FOLDER_PAIRS the pairs in folders only CODE
+//   writes to, so DB rows cannot make up for lost code-owned images;
+// - `judged` is incremented AFTER each verdict and must equal pairs + 2 +
+//   cases (the L6 shape: above the verdict, a `continue` keeps the count while
+//   comparing nothing);
+// - REQUIRED_OFFLIST_CASES pins each case's id AND url, and every case but the
+//   control must carry `rejectedWith`: an id-only pin stayed GREEN when a
+//   case's url was swapped, or its `rejectedWith` deleted (which silently turns
+//   a negative into a second control). Both measured by mutation.
+//
+// KNOWN LIMITS, stated rather than implied:
+// (a) an image that exists only after a click (the lightboxes, the floor-plan
+//     dialog) has no optimizer URL in server markup, so its q is not checked
+//     by (1) or counted by (2). All of them leave `quality` unset today.
+// (b) (1) and (3) exercise Next's optimizer under `next start`, not Vercel's.
+//     Vercel's was verified once, by hand, on the PR #138 preview: all 1,694
+//     distinct (url, w, q) the preview's ~1,560 pages reference returned 200,
+//     and each off-list shape returned 400 against a REAL upstream object.
+//     Nothing re-verifies it per deploy; (2) is the standing proxy.
+// (c) the message pins are Next 15.1.11's strings (server/image-optimizer.js
+//     validateParams). An upgrade that rewords them turns this red, the safe
+//     direction.
+// (d) as everywhere in smoke, a counter proves a comparison RAN, never that it
+//     DISCRIMINATES: `if (false && …)` over a verdict, or a deleted fail(),
+//     stays green (measured). There is no contract suite for smoke.
+// (e) an early `return` after the floors and before the coverage check prints
+//     "0 passed, 0 failed" and exits 0 (measured, the same limit as Q's (a)).
+// (f) (2) reads the LOCAL .next build, so it assumes BASE serves that build, as
+//     CI does. And `next dev` writes no manifest and ALWAYS accepts q=70
+//     (BLUR_QUALITY is pushed into `qualities` on every dev request), so a run
+//     against a dev server cannot see a dropped 70.
+// (g) key-space dimensions no `images` setting can close, measured on the
+//     preview: a zero-padded width or quality (`w=096`, `q=075`, `q=0075`, …
+//     each a new key) and the output format negotiated from Accept. Closing
+//     the first needs a Vercel Firewall rule, which was deliberately not added.
+
+/** Real object, rendered on every page (header + footer logo). */
+const OPTIMIZER_LOGO =
+  "https://bisimqmtxjsptehhqpeg.supabase.co/storage/v1/object/public/website-assets/branding/logo.png";
+/** In imageSizes, so every case below reaches the url/q rule under test. */
+const OPTIMIZER_PROBE_WIDTH = 64;
+const URL_NOT_ALLOWED = '"url" parameter is not allowed';
+
+const IMAGE_OFFLIST_CASES: {
+  id: string;
+  url: string;
+  q: number;
+  /** undefined = the control, which must 200 image/*. */
+  rejectedWith?: string;
+}[] = [
+  { id: "control", url: OPTIMIZER_LOGO, q: 75 },
+  {
+    id: "q-off-list",
+    url: OPTIMIZER_LOGO,
+    q: 3,
+    rejectedWith: '"q" parameter (quality) of 3 is not allowed',
+  },
+  {
+    id: "query-string",
+    url: `${OPTIMIZER_LOGO}?v=1`,
+    q: 75,
+    rejectedWith: URL_NOT_ALLOWED,
+  },
+  {
+    // A made-up object: the rule fires before any fetch. Were it to regress,
+    // the fetch would fail upstream (Supabase answers 400 for a missing object),
+    // which Next reports with a different message, so the pin still goes red.
+    id: "other-public-bucket",
+    url: OPTIMIZER_LOGO.replace(
+      "website-assets/branding/logo.png",
+      "line-messages/smoke-probe.jpg",
+    ),
+    q: 75,
+    rejectedWith: URL_NOT_ALLOWED,
+  },
+  {
+    id: "render-endpoint",
+    url: OPTIMIZER_LOGO.replace("/object/", "/render/image/"),
+    q: 75,
+    rejectedWith: URL_NOT_ALLOWED,
+  },
+  {
+    // Catches a pathname loosened to `website-assets*/…`.
+    id: "bucket-name-prefix",
+    url: OPTIMIZER_LOGO.replace("website-assets/", "website-assets-x/"),
+    q: 75,
+    rejectedWith: URL_NOT_ALLOWED,
+  },
+  // Other spellings of the SAME real object. Supabase serves each one, so under
+  // a plain `/**` pattern each was a fresh key (measured on the preview).
+  {
+    id: "encoded-path-char",
+    url: OPTIMIZER_LOGO.replace("logo.png", "%6Cogo.png"),
+    q: 75,
+    rejectedWith: URL_NOT_ALLOWED,
+  },
+  {
+    id: "encoded-slash",
+    url: OPTIMIZER_LOGO.replace("branding/", "branding%2F"),
+    q: 75,
+    rejectedWith: URL_NOT_ALLOWED,
+  },
+  {
+    id: "double-slash",
+    url: OPTIMIZER_LOGO.replace("website-assets/", "website-assets//"),
+    q: 75,
+    rejectedWith: URL_NOT_ALLOWED,
+  },
+  {
+    // `port: ''`. Without it any port passes the pattern and costs an upstream
+    // fetch that can never succeed.
+    id: "explicit-port",
+    url: OPTIMIZER_LOGO.replace(".supabase.co/", ".supabase.co:8443/"),
+    q: 75,
+    rejectedWith: URL_NOT_ALLOWED,
+  },
+  // The own-domain and relative cases name a STATIC file or a local route on
+  // purpose: if the rule ever regresses, the probe costs a favicon fetch rather
+  // than a production render.
+  {
+    id: "own-domain-www",
+    url: "https://www.len.golf/images/favicon.png",
+    q: 75,
+    rejectedWith: URL_NOT_ALLOWED,
+  },
+  {
+    id: "own-domain-apex",
+    url: "https://len.golf/images/favicon.png",
+    q: 75,
+    rejectedWith: URL_NOT_ALLOWED,
+  },
+  {
+    id: "relative-dynamic-route",
+    url: "/golf-courses/opengraph-image/",
+    q: 75,
+    rejectedWith: URL_NOT_ALLOWED,
+  },
+  {
+    id: "relative-static-file",
+    url: "/images/favicon.png",
+    q: 75,
+    rejectedWith: URL_NOT_ALLOWED,
+  },
+];
+
+/** Case identity AND content: id -> the exact url it probes. Substituting a
+ *  case's url, or dropping one, is a two-place edit. */
+const REQUIRED_OFFLIST_CASES: Record<string, string> = {
+  control: OPTIMIZER_LOGO,
+  "q-off-list": OPTIMIZER_LOGO,
+  "query-string": `${OPTIMIZER_LOGO}?v=1`,
+  "other-public-bucket":
+    "https://bisimqmtxjsptehhqpeg.supabase.co/storage/v1/object/public/line-messages/smoke-probe.jpg",
+  "render-endpoint":
+    "https://bisimqmtxjsptehhqpeg.supabase.co/storage/v1/render/image/public/website-assets/branding/logo.png",
+  "bucket-name-prefix":
+    "https://bisimqmtxjsptehhqpeg.supabase.co/storage/v1/object/public/website-assets-x/branding/logo.png",
+  "encoded-path-char":
+    "https://bisimqmtxjsptehhqpeg.supabase.co/storage/v1/object/public/website-assets/branding/%6Cogo.png",
+  "encoded-slash":
+    "https://bisimqmtxjsptehhqpeg.supabase.co/storage/v1/object/public/website-assets/branding%2Flogo.png",
+  "double-slash":
+    "https://bisimqmtxjsptehhqpeg.supabase.co/storage/v1/object/public/website-assets//branding/logo.png",
+  "explicit-port":
+    "https://bisimqmtxjsptehhqpeg.supabase.co:8443/storage/v1/object/public/website-assets/branding/logo.png",
+  "own-domain-www": "https://www.len.golf/images/favicon.png",
+  "own-domain-apex": "https://len.golf/images/favicon.png",
+  "relative-dynamic-route": "/golf-courses/opengraph-image/",
+  "relative-static-file": "/images/favicon.png",
+};
+/** A floor on the pin: an emptied map subsets vacuously. */
+const MIN_REQUIRED_OFFLIST_CASES = 14;
+
+/** Raw request paths the manifest's remote pattern must NOT match, tested the
+ *  way Vercel tests them (encoded, un-normalized). The first is the bypass the
+ *  PR #138 preview measured against the plain `/**` pattern. */
+const RAW_HOSTILE_PATHS: string[] = [
+  "/storage/v1/object/public/website-assets/%2e%2e/line-messages/a/b.jpg",
+  "/storage/v1/object/public/website-assets/%2E%2E/line-messages/a/b.jpg",
+  "/storage/v1/object/public/website-assets/.%2e/line-messages/a/b.jpg",
+  "/storage/v1/object/public/website-assets/../line-messages/a/b.jpg",
+  "/storage/v1/object/public/website-assets/./branding/logo.png",
+  "/storage/v1/object/public/website-assets/branding/%6Cogo.png",
+  "/storage/v1/object/public/website-assets/branding%2Flogo.png",
+  "/storage/v1/object/public/website-assets//branding/logo.png",
+  "/storage/v1/object/public/website-assets/a/b/c/d/e.png",
+  "/storage/v1/object/public/line-messages/a/b.jpg",
+];
+const MIN_RAW_HOSTILE_PATHS = 10;
+
+/** HTML 200 pages scanned from routeTests ∪ seoTests (the code-owned lists;
+ *  used-club detail pages are counted separately below). Measured 482 on
+ *  2026-09-24. At the true value, so a filter that silently drops pages goes
+ *  red. It is a floor, so a NEW routeTests/seoTests entry adds slack until
+ *  this is raised with it; lower it only when an entry is removed. */
+const MIN_IMAGE_PAGES = 482;
+/** Used-club detail pages reached from the listing. DB rows (43 on
+ *  2026-09-24), so a floor of one rather than an exact count. Today they add
+ *  no pair the listing lacks (the listing shows every club's photo); the crawl
+ *  is there so ClubDetailGallery stays exercised. If the inventory ever sells
+ *  out entirely this goes red, and lowering it to 0 is a deliberate edit. */
+const MIN_CLUB_DETAIL_PAGES = 1;
+/** Folders only CODE writes to (storageUrl() paths in app/, components/,
+ *  data/). clubs/ is left out on purpose: it mixes hardcoded paths with
+ *  rental_club_sets rows. used-clubs/ and promotions/ are DB-only. */
+const CODE_ONLY_FOLDERS = new Set([
+  "branding",
+  "venue",
+  "menus",
+  "lessons",
+  "events",
+  "golf",
+  "icons",
+]);
+/** Distinct (src, q) pairs under CODE_ONLY_FOLDERS. Measured 98 on 2026-09-24
+ *  (branding 6, venue 10, menus 4, lessons 36, events 25, golf 11, icons 6)
+ *  out of 173 in total. Floored on the code-only subset because a floor on the
+ *  total let up to 75 DB-driven pairs stand in for lost code-owned ones: an
+ *  extractor that dropped lessons/ and events/ passed at 112 (measured). */
+const MIN_CODE_FOLDER_PAIRS = 98;
+
+/** `/_next/image/?url=…&amp;w=…&amp;q=…`, in any src, srcSet or imageSrcSet. */
+const OPTIMIZER_REF_RE =
+  /\/_next\/image\/?\?url=([^&"'\s]+)&(?:amp;)?w=(\d+)&(?:amp;)?q=(\d+)/g;
+
+/** Optimizer URLs in rendered markup. Scripts are stripped (renderedMarkup) so
+ *  a URL that only exists in the flight payload is not counted as rendered.
+ *  A malformed escape is returned as `bad` rather than thrown, so one broken
+ *  URL fails this section instead of aborting the suite's summary. */
+function optimizerRefs(html: string): {
+  refs: { src: string; w: number; q: number }[];
+  bad: string[];
+} {
+  const refs: { src: string; w: number; q: number }[] = [];
+  const bad: string[] = [];
+  for (const m of renderedMarkup(html).matchAll(OPTIMIZER_REF_RE)) {
+    try {
+      refs.push({ src: decodeURIComponent(m[1]), w: Number(m[2]), q: Number(m[3]) });
+    } catch {
+      bad.push(m[1].slice(0, 120));
+    }
+  }
+  return { refs, bad };
+}
+
+/** One optimizer request. `retry` re-sends once on anything but a 200 image or
+ *  a 400: CI makes ~175 live Supabase fetches through the optimizer, and an
+ *  upstream blip must not fail the run. A 400 is never retried, and a rule
+ *  rejection is deterministic, so a retry cannot hide the thing under test. */
+async function fetchOptimizer(
+  src: string,
+  w: number,
+  q: number,
+  retry = false,
+): Promise<{ status: number; type: string; text: string }> {
+  const once = async () => {
+    try {
+      const res = await fetch(
+        `${BASE}/_next/image/?url=${encodeURIComponent(src)}&w=${w}&q=${q}`,
+        {
+          headers: { accept: "image/webp,image/*" },
+          redirect: "manual",
+          signal: AbortSignal.timeout(30000),
+        },
+      );
+      const type = res.headers.get("content-type") ?? "";
+      if (type.startsWith("image/")) {
+        await res.arrayBuffer();
+        return { status: res.status, type, text: "" };
+      }
+      return { status: res.status, type, text: (await res.text()).slice(0, 160) };
+    } catch (err) {
+      return { status: 0, type: "", text: String(err) };
+    }
+  };
+  const first = await once();
+  const settled =
+    (first.status === 200 && first.type.startsWith("image/")) || first.status === 400;
+  return settled || !retry ? first : once();
+}
+
+async function runImageOptimizerTests() {
+  console.log("\n\x1b[1mS) Image optimizer allowlist\x1b[0m");
+  const fs = await import("node:fs");
+  const nodePath = await import("node:path");
+
+  // Case identity and content, before anything is fetched.
+  const requiredIds = Object.keys(REQUIRED_OFFLIST_CASES);
+  if (requiredIds.length < MIN_REQUIRED_OFFLIST_CASES) {
+    fail(
+      "image optimizer required-case floor",
+      `only ${requiredIds.length} case(s) pinned (floor ${MIN_REQUIRED_OFFLIST_CASES}) — the pin was emptied, so the identity check asserts nothing`,
+    );
+    return;
+  }
+  const caseProblems: string[] = [];
+  const caseIds = new Set(IMAGE_OFFLIST_CASES.map((c) => c.id));
+  if (caseIds.size !== IMAGE_OFFLIST_CASES.length)
+    caseProblems.push(`${IMAGE_OFFLIST_CASES.length - caseIds.size} duplicate id(s)`);
+  for (const id of requiredIds) {
+    const c = IMAGE_OFFLIST_CASES.find((x) => x.id === id);
+    if (!c) caseProblems.push(`missing ${id}`);
+    else if (c.url !== REQUIRED_OFFLIST_CASES[id]) caseProblems.push(`${id} probes ${c.url}, pinned ${REQUIRED_OFFLIST_CASES[id]}`);
+  }
+  for (const c of IMAGE_OFFLIST_CASES) {
+    if (!(c.id in REQUIRED_OFFLIST_CASES)) caseProblems.push(`${c.id} is not pinned`);
+    if (c.id !== "control" && !c.rejectedWith) caseProblems.push(`${c.id} has no rejectedWith, so it would pass as a second control`);
+  }
+  if (RAW_HOSTILE_PATHS.length < MIN_RAW_HOSTILE_PATHS)
+    caseProblems.push(`only ${RAW_HOSTILE_PATHS.length} raw hostile path(s) (floor ${MIN_RAW_HOSTILE_PATHS})`);
+  if (caseProblems.length > 0) {
+    fail("image optimizer case identity", `${caseProblems.join("; ")} — a case was dropped or substituted`);
+    return;
+  }
+
+  // Collect every (src, q) the scanned pages render. routeTests alone is NOT
+  // enough: /golf-club-specs/ and /second-hand-golf-clubs-bangkok/ are only in
+  // seoTests, and the used-club detail pages (ClubDetailGallery, their only
+  // consumer) are in neither list because their ids are DB rows. So the page
+  // set is routeTests ∪ seoTests, plus every detail page the listing links to.
+  const pairs = new Map<string, { src: string; w: number; q: number; page: string }>();
+  const pagePaths = [
+    ...new Set([...routeTests.map((t) => t.path), ...seoTests.map((t) => t.path)]),
+  ];
+  let pagesScanned = 0;
+  let clubDetailPages = 0;
+  const pagesWithoutRefs: string[] = [];
+  for (let i = 0; i < pagePaths.length; i++) {
+    const p = pagePaths[i];
+    let html: string;
+    try {
+      const res = await fetch(`${BASE}${p}`, { redirect: "manual" });
+      // Section A owns route status. The non-HTML entries (the opengraph-image
+      // routes, /api/aqi/) carry no header, so they are not pages here.
+      if (
+        res.status !== 200 ||
+        !(res.headers.get("content-type") ?? "").startsWith("text/html")
+      ) {
+        await res.arrayBuffer();
+        continue;
+      }
+      html = await res.text();
+    } catch (err) {
+      fail(`image refs on ${p}`, `fetch error: ${String(err)}`);
+      continue;
+    }
+    pagesScanned++;
+    if (/^\/second-hand-golf-clubs-bangkok\/[^/]+\/$/.test(p)) clubDetailPages++;
+    if (p === "/second-hand-golf-clubs-bangkok/") {
+      for (const m of renderedMarkup(html).matchAll(
+        /href="(\/second-hand-golf-clubs-bangkok\/[^/"]+\/)"/g,
+      )) {
+        if (!pagePaths.includes(m[1])) pagePaths.push(m[1]);
+      }
+    }
+    const { refs, bad } = optimizerRefs(html);
+    for (const b of bad) fail(`optimizer URL on ${p}`, `malformed url escape: ${b}`);
+    if (refs.length === 0) pagesWithoutRefs.push(p);
+    for (const r of refs) {
+      const key = `${r.src}|${r.q}`;
+      const seen = pairs.get(key);
+      if (!seen) pairs.set(key, { ...r, page: p });
+      else if (r.w < seen.w) seen.w = r.w;
+    }
+  }
+
+  const listedPagesScanned = pagesScanned - clubDetailPages;
+  if (listedPagesScanned < MIN_IMAGE_PAGES) {
+    fail(
+      "image optimizer page floor",
+      `only ${listedPagesScanned} routeTests/seoTests page(s) served HTML 200 (floor ${MIN_IMAGE_PAGES}) — the page derivation collapsed or a filter is dropping pages`,
+    );
+    return;
+  }
+  if (clubDetailPages < MIN_CLUB_DETAIL_PAGES) {
+    fail(
+      "used-club detail pages",
+      `${clubDetailPages} detail page(s) reached from /second-hand-golf-clubs-bangkok/ (floor ${MIN_CLUB_DETAIL_PAGES}) — ClubDetailGallery's images are unchecked`,
+    );
+  }
+  if (pagesWithoutRefs.length > 0) {
+    fail(
+      "optimizer URL on every page",
+      `${pagesWithoutRefs.length} page(s) rendered no /_next/image URL, though the header logo is an <Image> on every page — the extractor is broken or the header stopped using next/image: ${pagesWithoutRefs.slice(0, 5).join(", ")}`,
+    );
+  }
+  const folderOf = (src: string) =>
+    (src.split("/website-assets/")[1] ?? "").split("/")[0];
+  const codeFolderPairs = [...pairs.values()].filter((r) =>
+    CODE_ONLY_FOLDERS.has(folderOf(r.src)),
+  ).length;
+  if (codeFolderPairs < MIN_CODE_FOLDER_PAIRS) {
+    fail(
+      "image optimizer code-owned pair floor",
+      `only ${codeFolderPairs} distinct (src, q) pair(s) under ${[...CODE_ONLY_FOLDERS].join("/")} (floor ${MIN_CODE_FOLDER_PAIRS}; ${pairs.size} in total) — the extractor matched less than the site renders`,
+    );
+    return;
+  }
+
+  let judged = 0;
+
+  // (1) Every rendered pair must load. A small pool: each request makes this
+  // server fetch the original from Supabase and transform it.
+  const queue = [...pairs.values()];
+  const rejected: string[] = [];
+  await Promise.all(
+    Array.from({ length: 6 }, async () => {
+      for (let r = queue.shift(); r; r = queue.shift()) {
+        const res = await fetchOptimizer(r.src, r.w, r.q, true);
+        if (!(res.status === 200 && res.type.startsWith("image/"))) {
+          rejected.push(
+            `${r.src.replace(/^.*\/website-assets\//, "…/")} w=${r.w} q=${r.q} (rendered on ${r.page}) -> ${res.status} ${res.text}`,
+          );
+        }
+        // AFTER the verdict (see Q).
+        judged++;
+      }
+    }),
+  );
+  if (rejected.length === 0) {
+    pass(
+      `all ${pairs.size} rendered (src, q) pairs load through /_next/image (${pagesScanned} pages, ${codeFolderPairs} code-owned pairs)`,
+    );
+  } else {
+    for (const r of rejected) fail("rendered image rejected by the optimizer", r);
+  }
+
+  // (2) The manifest Vercel is fed: its qualities, and its pattern's regex.
+  const manifestPath = nodePath.join(__dirname, "..", ".next", "images-manifest.json");
+  let images: {
+    qualities?: unknown;
+    remotePatterns?: { protocol?: string; port?: string; pathname?: string; search?: string }[];
+  } | null = null;
+  let manifestError = "";
+  try {
+    images = JSON.parse(fs.readFileSync(manifestPath, "utf8"))?.images ?? null;
+  } catch (err) {
+    manifestError =
+      (err as NodeJS.ErrnoException).code === "ENOENT"
+        ? `no ${manifestPath} — BASE must serve a \`next build\` (next start); \`next dev\` writes none`
+        : `unreadable ${manifestPath}: ${String(err)}`;
+  }
+  const rendered = [...new Set([...pairs.values()].map((r) => r.q))].sort((a, b) => a - b);
+  if (!images) {
+    fail("images-manifest.json", manifestError || `${manifestPath} has no \`images\``);
+  } else {
+    const allowed = images.qualities;
+    if (!Array.isArray(allowed) || allowed.length === 0) {
+      fail(
+        "images.qualities in the build",
+        `${manifestPath} carries no images.qualities — the allowlist is gone, so every q from 1 to 100 is accepted again`,
+      );
+    } else {
+      const listed = [...(allowed as number[])].sort((a, b) => a - b);
+      if (listed.join() === rendered.join()) {
+        pass(`rendered q values [${rendered}] equal images.qualities`);
+      } else {
+        fail(
+          "rendered q values vs images.qualities",
+          `rendered [${rendered}], allowlisted [${listed}] — a new quality prop needs its value in next.config.js; drop a listed value only after checking no click-only <Image> (lightbox, dialog) uses it`,
+        );
+      }
+    }
+  }
+  judged++;
+
+  if (images) {
+    const problems: string[] = [];
+    const patterns = images.remotePatterns ?? [];
+    if (patterns.length !== 1) problems.push(`${patterns.length} remote pattern(s), expected exactly 1`);
+    for (const pat of patterns) {
+      if (pat.protocol !== "https") problems.push(`protocol ${pat.protocol}`);
+      if (pat.port !== "") problems.push(`port ${JSON.stringify(pat.port)}, expected ''`);
+      if (pat.search !== "") problems.push(`search ${JSON.stringify(pat.search)}, expected ''`);
+      let re: RegExp | null = null;
+      try {
+        re = new RegExp(pat.pathname ?? "");
+      } catch (err) {
+        problems.push(`pathname is not a regex: ${String(err)}`);
+      }
+      if (!re || !pat.pathname) {
+        problems.push("no pathname");
+        continue;
+      }
+      for (const raw of RAW_HOSTILE_PATHS)
+        if (re.test(raw)) problems.push(`pathname matches raw ${raw}`);
+      const refused = [...pairs.values()].filter((r) => !re!.test(new URL(r.src).pathname));
+      if (refused.length > 0)
+        problems.push(`pathname refuses ${refused.length} rendered src(s), e.g. ${new URL(refused[0].src).pathname}`);
+    }
+    if (problems.length === 0) {
+      pass(
+        `manifest pattern rejects all ${RAW_HOSTILE_PATHS.length} raw hostile paths and accepts all ${pairs.size} rendered srcs`,
+      );
+    } else {
+      for (const pr of problems) fail("images-manifest.json remote pattern", pr);
+    }
+  }
+  judged++;
+
+  // (3) Off-list shapes must 400 for the named rule; the control must 200.
+  for (const c of IMAGE_OFFLIST_CASES) {
+    const res = await fetchOptimizer(c.url, OPTIMIZER_PROBE_WIDTH, c.q, c.rejectedWith === undefined);
+    const label = `optimizer ${c.id}: ${c.url.replace(/^https:\/\/bisimqmtxjsptehhqpeg\.supabase\.co/, "<supabase>")} q=${c.q}`;
+    if (c.rejectedWith === undefined) {
+      if (res.status === 200 && res.type.startsWith("image/")) pass(`${label} -> 200 ${res.type}`);
+      else fail(label, `expected 200 image/*, got ${res.status} ${res.type} ${res.text}`);
+    } else if (res.status === 400 && res.text.includes(c.rejectedWith)) {
+      pass(`${label} -> 400`);
+    } else {
+      fail(
+        label,
+        `expected 400 "${c.rejectedWith}", got ${res.status} ${res.type} ${res.text}`,
+      );
+    }
+    // AFTER the verdict (see Q).
+    judged++;
+  }
+
+  const expectedJudged = pairs.size + 2 + IMAGE_OFFLIST_CASES.length;
+  if (judged !== expectedJudged) {
+    fail(
+      "image optimizer coverage",
+      `only ${judged} of ${expectedJudged} checks reached a verdict — a skip was introduced inside a loop`,
+    );
+  }
+}
+
 // ── Main ────────────────────────────────────────────────────────────
 
 async function main() {
@@ -7735,6 +8530,9 @@ async function main() {
   await runRedirectTests();
   await runLinkTests();
   await runSeoTests();
+  if (!seoTestsCompleted) {
+    fail("D) section completion", "runSeoTests returned before its coverage checks ran");
+  }
   await runThaiRedirectTests();
   await runThaiCookieTests();
   await runAcceptLanguageTests();
@@ -7758,6 +8556,7 @@ async function main() {
   await runFallbackPullQuoteTests();
   await runRegionHubLinkTests();
   await runAgreementFooterLinkTests();
+  await runImageOptimizerTests();
 
   console.log(`\n\x1b[1m${passed} passed, ${failed} failed\x1b[0m`);
   if (failures.length > 0) {
