@@ -55,7 +55,7 @@ zero-or-low clicks at pos 8–50 on meaningful impressions is the signal.
   **SEQUENTIALLY when they share a file** — every builder edits `data/explainer-pages.ts`
   and parallel edits collide. Give each builder: the target slugs, the EN source,
   the glossary path, `docs/i18n-review-checklist.md`, and a sibling entry to copy
-  the shape from.
+  the field shape from (not its punctuation; see the em-dash note below).
 - **Reviewer agents (read-only, one per locale)** run in **PARALLEL after** builders.
   Reviewers are `general-purpose`/`Explore` agents told to be READ-ONLY (checklist
   "Golden rule") and to emit a verdict per `docs/i18n-review-checklist.md`:
@@ -67,12 +67,26 @@ zero-or-low clicks at pos 8–50 on meaningful impressions is the signal.
 Builders AND reviewers must read: the locale glossary, the checklist, and 1–2
 already-shipped sibling entries of the same slug (for tone + field shape).
 
+**Siblings are not a punctuation model.** The owner bans em dashes (`—`, and the
+doubled `——`) in website copy, yet nearly every shipped ja/ko/zh/th guide and FAQ
+entry contains them (2026-09). They are legacy debt for a separate native-QA sweep,
+not a pattern: builders must not copy a sibling's em dashes, and reviewers flag any
+in copy the batch writes or edits, not in shipped copy it leaves untouched. Each
+locale's replacements are in its glossary `style_notes` (titles: `seo_norms`, or the
+checklist for th), along with the one load-bearing exception: the ` — ` venue
+delimiter in `price_breakdown[].item` stays byte-for-byte wherever the EN entry has
+one.
+
 ---
 
 ## 3. Content rules (pointers — do not duplicate)
 
-- **Glossary is law.** `data/i18n-glossary/<locale>.json` keys `terminology`,
-  `conventions`, `honesty_constraints`, `transliterations`, `seo_norms`. The
+- **Glossary is law, all of it.** Besides the `locale` / `language_name` metadata,
+  `data/i18n-glossary/<locale>.json` carries `brand_immutable`, `preferred`, `tone`,
+  `formality`, `preserve`, `terminology`,
+  `conventions`, `honesty_constraints`, `transliterations`, `seo_norms` (absent from
+  `th.json`) and `style_notes`. `style_notes` is the easy one to skip and it carries
+  the prose rules, including each locale's no-em-dash rule and its replacements. The
   honesty-scoping nuance lives in `docs/i18n-review-checklist.md` §"Honesty & scoping".
 - **LENGOLF prices MUST be `{{tokens}}`**, never hardcoded literals — resolved from
   the POS catalog by `lib/site-facts.ts`. Current token vocabulary (`getFactTokens`):
