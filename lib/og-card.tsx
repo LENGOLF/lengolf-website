@@ -9,16 +9,37 @@ interface OgCardProps {
   title: string
   /** Fact chips rendered under the title (e.g. "18 holes · Par 72"). */
   chips?: string[]
-  /** Muted footer line. */
-  footer?: string
+  /**
+   * Muted footer line. Required, with no default: the old default read
+   * "Green Fees · …", which a caller that omitted it shipped silently, and
+   * validate:fee-labels never reads these files (none of them reads a green_fee
+   * field). Every caller now states its own noun, or none.
+   */
+  footer: string
+}
+
+/**
+ * Rewrite `฿1,500` as `1,500 THB`. The bundled next/og font has no U+0E3F
+ * glyph (it renders as tofu), and page titles written for HTML use it, e.g.
+ * every PRICE_TIERS title.
+ */
+export function ogThb(s: string): string {
+  // The amount must start and end on a digit, so a trailing comma or a decimal
+  // tail stays outside it: `฿1,500, weekdays` -> `1,500 THB, weekdays`,
+  // `฿1,500.50` -> `1,500.50 THB`.
+  return s.replace(/฿\s?(\d(?:[\d,]*\d)?(?:\.\d+)?)/g, '$1 THB')
 }
 
 /**
  * Shared branded OpenGraph card for the golf-course cluster, rendered with
  * next/og from structured data — no photo assets required or licensed.
  * Used by the opengraph-image.tsx route files for the course detail pages,
- * region hubs, and the main hub, so all ~165 share cards come from one
- * implementation.
+ * region hubs, the main hub, and the under/near/best-for/compare roundups,
+ * so every golf-course share card comes from one implementation.
+ *
+ * Those roundups need a file of their own: a page's `openGraph` replaces the
+ * parent segment's resolved one wholesale, card included, while a card in the
+ * page's OWN segment is merged after the page's metadata.
  *
  * Satori constraints: every multi-child div needs explicit display:flex,
  * and only a bundled default sans font is available (loading Poppins would
@@ -146,7 +167,7 @@ export function ogCard({ eyebrow, title, chips = [], footer }: OgCardProps) {
 
         {/* Footer */}
         <div style={{ display: 'flex', fontSize: 24, color: 'rgba(255,255,255,0.5)' }}>
-          {footer ?? 'Green Fees · Course Guide · Golf Club Rental'}
+          {footer}
         </div>
       </div>
     ),
