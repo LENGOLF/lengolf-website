@@ -417,7 +417,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/guide/golf-weather-bangkok-by-month",
     ],
     created_at: "2026-03-28T00:00:00.000Z",
-    updated_at: "2026-03-28T00:00:00.000Z",
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro: `If you're planning a golf trip to Bangkok between May and October, the rainy season is probably on your mind. The short answer: yes, you can absolutely play golf — and many visiting golfers do, without their rounds being washed out. The key is understanding how the rain actually behaves here, and adjusting your approach accordingly.`,
       sections: [
@@ -439,7 +439,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: `Indoor Golf as the Backup Plan`,
-          body: `On days when morning storms arrive early, or you simply don't want to risk a washed-out round, Bangkok has a genuinely excellent alternative: indoor golf simulators.\n\nLENGOLF is Bangkok's dedicated indoor golf simulator facility — air-conditioned bays, premium simulator technology, and the ability to play courses from around the world regardless of what's happening outside. It's genuinely weather-proof, which makes it a useful complement to an outdoor golf itinerary.\n\nGreen fees at Bangkok's outdoor courses typically range from around 1,500 THB at weekday public courses up to 5,000 THB or more at premium private clubs. Indoor simulator pricing varies by session length — check directly for current rates.`,
+          body: `On days when morning storms arrive early, or you simply don't want to risk a washed-out round, Bangkok has a genuinely excellent alternative: indoor golf simulators.\n\nLENGOLF is Bangkok's dedicated indoor golf simulator facility — air-conditioned bays, premium simulator technology, and the ability to play courses from around the world regardless of what's happening outside. It's genuinely weather-proof, which makes it a useful complement to an outdoor golf itinerary.\n\nGreen fees at Bangkok's outdoor courses range from under 1,000 THB on a weekday at the cheapest courses up to 5,000 THB or more at the premium clubs, where caddie and cart are usually included. Indoor simulator pricing varies by session length — check directly for current rates.`,
         },
         {
           heading: `The Verdict`,
@@ -476,7 +476,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/guide/golf-bangkok-rainy-season",
     ],
     created_at: "2026-03-28T00:00:00.000Z",
-    updated_at: "2026-03-28T00:00:00.000Z",
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro: `Bangkok sits just 14 degrees north of the equator, which means it is warm all year. For golfers, that is mostly good news — there is no off-season, snow, or frost. What you do need to plan around is the tropical rainfall cycle, which divides the calendar into three distinct phases: a cool dry season, a hot dry season, and a long rainy season defined by afternoon thunderstorms. Get the timing right and you can play 40+ courses within an hour of central Bangkok in near-perfect conditions.`,
       sections: [
@@ -490,7 +490,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: `Tee Time Strategy: Morning vs Twilight`,
-          body: `**Morning tee times (6–9am)** are the single most effective tool for managing Bangkok's climate year-round. In the hot season they beat the worst of the heat; in the rainy season they beat the afternoon thunderstorms. Most of Bangkok's 40+ courses open at or before 6am, and early-bird rates are common.\n\n**Twilight rates** (typically available from around 2–3pm) offer good value during the cool season — November through February — when afternoon temperatures are pleasant and afternoon rain is not a concern. During the rainy season (May–October), twilight tee times carry the risk of thunderstorm interruption.\n\nGreen fees at Bangkok-area courses generally range from 1,500 THB at municipal tracks up to 5,000 THB or more at premium resort-style venues. Twilight and weekday rates can reduce this significantly. Always confirm current pricing directly with the course before booking.`,
+          body: `**Morning tee times (6–9am)** are the single most effective tool for managing Bangkok's climate year-round. In the hot season they beat the worst of the heat; in the rainy season they beat the afternoon thunderstorms. Most of Bangkok's 40+ courses open at or before 6am, and early-bird rates are common.\n\n**Twilight rates** (typically available from around 2–3pm) offer good value during the cool season — November through February — when afternoon temperatures are pleasant and afternoon rain is not a concern. During the rainy season (May–October), twilight tee times carry the risk of thunderstorm interruption.\n\nGreen fees at Bangkok-area courses range from under 1,000 THB on a weekday at the cheapest courses up to 5,000 THB or more at the premium clubs, where caddie and cart are usually included. Weekend rates run higher, and twilight rates can bring the price down. Always confirm current pricing directly with the course before booking.`,
         },
         {
           heading: `When the Weather Wins: Indoor Golf at LENGOLF`,
@@ -506,7 +506,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         `April is the hottest month (avg high ~35°C, can exceed 40°C); 6–7am tee times essential`,
         `September is the wettest month (~333mm avg rainfall); morning tee times and indoor golf backup recommended`,
         `Morning tee times (6–9am) are the single most effective strategy year-round`,
-        `Green fees range from ~1,500 THB to 5,000+ THB depending on course and season`,
+        `Green fees range from under 1,000 THB to 5,000+ THB depending on course and season`,
       ],
       comparison_table: [],
     },
@@ -3581,7 +3581,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/golf-in-thailand-guide",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "Bangkok is one of the best-value golf destinations in Asia. A full round at a well-maintained, caddie-served course costs a fraction of what you would pay in Japan, Australia, or the UK — and the quality of courses is genuinely impressive.",
@@ -3592,7 +3592,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "Green Fees by Tier",
-          body: "**1. Budget Courses — 1,500–2,000 THB (weekday green fee)**\nOlder public-access and municipally operated clubs. More basic facilities but perfectly playable golf.\n\n**2. Mid-Range Courses — 2,500–3,500 THB (weekday)**\nWell-maintained private member courses open to visitors. Good course conditioning, full clubhouses, organised tee-time systems. The sweet spot for most visiting golfers.\n\n**3. Premium Courses — 4,500 THB+ (weekday)**\n- **Nikanti Golf Club:** ~5,500 THB weekday / ~6,500 THB weekend (all-inclusive — caddie, tip, beverages, two meals included)\n- **Alpine Golf Club:** ~5,400 THB weekday / ~7,400 THB weekend (caddie and cart typically included)\n\nChampionship-standard layouts and immaculate conditioning. Prices are indicative — confirm directly with the club.",
+          body: "**1. Budget Courses: up to 2,000 THB (weekday green fee)**\nThe largest group within 90 minutes of Bangkok. Most have a driving range, and a few add on-site accommodation and a spa. Perfectly playable golf.\n\n**2. Mid-Range Courses: 2,500–3,500 THB (weekday)**\nWell-maintained private member courses open to visitors. Good course conditioning, full clubhouses, organised tee-time systems. The sweet spot for most visiting golfers.\n\n**3. Premium Courses: 4,500 THB+ (weekday)**\n- **Nikanti Golf Club:** ~5,500 THB weekday / ~6,500 THB weekend (all-inclusive — caddie, tip, beverages, two meals included)\n- **Alpine Golf Club:** ~5,400 THB weekday / ~7,400 THB weekend (caddie and cart typically included)\n\nChampionship-standard layouts and immaculate conditioning. Prices are indicative — confirm directly with the club.",
         },
         {
           heading: "Mandatory and Optional Extras",
@@ -3643,7 +3643,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/guide/golf-lessons-bangkok-coaches",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "バンコクはアジア屈指のコストパフォーマンスを誇るゴルフ目的地です。手入れの行き届いた、キャディー付きのコースでの1ラウンドは、日本、オーストラリア、英国で支払う金額のほんの一部で楽しめます——しかもコースの質は本当に見事です。",
@@ -3654,7 +3654,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "グレード別のグリーンフィー",
-          body: "**1. 格安コース — 1,500〜2,000THB（平日グリーンフィー）**\n公営や一般開放の歴史あるクラブ。設備はより簡素ですが、プレー自体は問題なく楽しめます。\n\n**2. 中級コース — 2,500〜3,500THB（平日）**\nビジターも受け入れる、手入れの行き届いたメンバーコース。良好なコースコンディション、充実したクラブハウス、整ったティータイムシステム。多くの旅行ゴルファーにとって最もバランスの取れた選択です。\n\n**3. プレミアムコース — 4,500THB〜（平日）**\n- **Nikanti Golf Club:** 平日約5,500THB / 週末約6,500THB（キャディー、チップ、飲み物、食事2回込みのオールインクルーシブ）\n- **Alpine Golf Club:** 平日約5,400THB / 週末約7,400THB（通常キャディーとカート込み）\n\nチャンピオンシップ水準のレイアウトと、非の打ちどころのないコンディション。価格は目安です——クラブへ直接ご確認ください。",
+          body: "**1. 格安コース: 2,000THBまで（平日グリーンフィー）**\nバンコクから90分圏内で、最もコース数の多い価格帯です。大半のコースにドライビングレンジがあり、宿泊施設とスパを併設したコースもいくつかあります。プレーも問題なく楽しめます。\n\n**2. 中級コース: 2,500〜3,500THB（平日）**\nビジターも受け入れる、手入れの行き届いたメンバーコース。良好なコースコンディション、充実したクラブハウス、整ったティータイムシステム。多くの旅行ゴルファーにとって最もバランスの取れた選択です。\n\n**3. プレミアムコース: 4,500THB〜（平日）**\n- **Nikanti Golf Club:** 平日約5,500THB / 週末約6,500THB（キャディー、チップ、飲み物、食事2回込みのオールインクルーシブ）\n- **Alpine Golf Club:** 平日約5,400THB / 週末約7,400THB（通常キャディーとカート込み）\n\nチャンピオンシップ水準のレイアウトと、非の打ちどころのないコンディション。価格は目安です——クラブへ直接ご確認ください。",
         },
         {
           heading: "必須の費用と任意の費用",
@@ -3705,7 +3705,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/golf",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "방콕은 아시아에서도 손꼽히는 가성비 좋은 골프 여행지예요. 잘 관리된, 캐디가 함께하는 코스에서의 18홀 라운딩 비용이 일본, 호주, 영국에서 내는 금액의 일부에 불과하고 — 코스의 수준도 정말 인상적이에요.",
@@ -3716,7 +3716,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "등급별 그린피",
-          body: "**1. 저렴한 코스 — 1,500~2,000바트(평일 그린피)**\n공영이나 일반 개방형의 오래된 클럽이에요. 시설은 다소 소박하지만 플레이 자체는 문제없이 즐길 수 있어요.\n\n**2. 중급 코스 — 2,500~3,500바트(평일)**\n비지터도 받는, 잘 관리된 멤버 코스예요. 좋은 코스 컨디션, 충실한 클럽하우스, 잘 정비된 티타임 시스템을 갖추고 있어요. 여행으로 찾는 대부분의 골퍼에게 가장 균형 잡힌 선택이에요.\n\n**3. 프리미엄 코스 — 4,500바트 이상(평일)**\n- **Nikanti Golf Club:** 평일 약 5,500바트 / 주말 약 6,500바트(캐디, 팁, 음료, 식사 2회 포함 올인클루시브)\n- **Alpine Golf Club:** 평일 약 5,400바트 / 주말 약 7,400바트(보통 캐디와 카트 포함)\n\n챔피언십 수준의 레이아웃과 흠잡을 데 없는 컨디션이에요. 가격은 참고용이니 클럽에 직접 확인하세요.",
+          body: "**1. 저렴한 코스: 2,000바트 이하(평일 그린피)**\n방콕에서 90분 이내 거리의 코스가 가장 많이 몰려 있는 가격대예요. 대부분 드라이빙 레인지가 있고, 몇몇 곳은 숙박 시설과 스파까지 갖추고 있어요. 골프를 즐기기에 전혀 부족함이 없어요.\n\n**2. 중급 코스: 2,500~3,500바트(평일)**\n비지터도 받는, 잘 관리된 멤버 코스예요. 좋은 코스 컨디션, 충실한 클럽하우스, 잘 정비된 티타임 시스템을 갖추고 있어요. 여행으로 찾는 대부분의 골퍼에게 가장 균형 잡힌 선택이에요.\n\n**3. 프리미엄 코스: 4,500바트 이상(평일)**\n- **Nikanti Golf Club:** 평일 약 5,500바트 / 주말 약 6,500바트(캐디, 팁, 음료, 식사 2회 포함 올인클루시브)\n- **Alpine Golf Club:** 평일 약 5,400바트 / 주말 약 7,400바트(보통 캐디와 카트 포함)\n\n챔피언십 수준의 레이아웃과 흠잡을 데 없는 컨디션이에요. 가격은 참고용이니 클럽에 직접 확인하세요.",
         },
         {
           heading: "필수 비용과 선택 비용",
@@ -3771,7 +3771,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/golf",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "曼谷是亚洲性价比最高的高尔夫目的地之一。在一座维护良好、配有球童的球场打完整一轮，花费只是你在日本、澳大利亚或英国所付的一小部分——而球场的品质确实令人惊艳。",
@@ -3782,7 +3782,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "分档看果岭费",
-          body: "**1. 平价球场 — 1,500–2,000泰铢（平日果岭费）**\n历史较久的公众开放及市政球场。设施较为基础，但打球体验完全没问题。\n\n**2. 中档球场 — 2,500–3,500泰铢（平日）**\n对访客开放、维护良好的会员制球场。球场状态好、会所设施完整、开球时间系统规范。对大多数到访球友而言最为均衡的选择。\n\n**3. 高级球场 — 4,500泰铢起（平日）**\n- **Nikanti Golf Club：** 平日约5,500泰铢 / 周末约6,500泰铢（全包——含球童、小费、饮料和两餐）\n- **Alpine Golf Club：** 平日约5,400泰铢 / 周末约7,400泰铢（通常含球童和球车）\n\n锦标赛水准的球道设计，保养无可挑剔。价格仅供参考——请直接向球会确认。",
+          body: "**1. 平价球场：2,000泰铢以内（平日果岭费）**\n在曼谷90分钟车程范围内，这一档的球场数量最多。其中大多数设有练习场，少数还配有住宿和水疗设施。打球体验完全没问题。\n\n**2. 中档球场：2,500–3,500泰铢（平日）**\n对访客开放、维护良好的会员制球场。球场状态好、会所设施完整、开球时间系统规范。对大多数到访球友而言最为均衡的选择。\n\n**3. 高级球场：4,500泰铢起（平日）**\n- **Nikanti Golf Club：** 平日约5,500泰铢 / 周末约6,500泰铢（全包——含球童、小费、饮料和两餐）\n- **Alpine Golf Club：** 平日约5,400泰铢 / 周末约7,400泰铢（通常含球童和球车）\n\n锦标赛水准的球道设计，保养无可挑剔。价格仅供参考——请直接向球会确认。",
         },
         {
           heading: "强制与可选的额外费用",
@@ -3847,7 +3847,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/golf-course-club-rental",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "กรุงเทพฯ เป็นหนึ่งในจุดหมายกอล์ฟที่คุ้มค่าที่สุดในเอเชีย การออกรอบเต็มรอบในสนามที่ดูแลดีและมีแคดดี้ประจำ มีค่าใช้จ่ายเพียงเศษเสี้ยวของที่ต้องจ่ายในญี่ปุ่น ออสเตรเลีย หรือสหราชอาณาจักร และคุณภาพของสนามก็น่าประทับใจอย่างแท้จริง",
@@ -3858,7 +3858,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "ค่ากรีนฟีแบ่งตามระดับ",
-          body: "**1. สนามระดับประหยัด — 1,500-2,000 บาท (ค่ากรีนฟีวันธรรมดา)**\nสนามเปิดสาธารณะและสนามของหน่วยงานท้องถิ่นที่เปิดมานาน สิ่งอำนวยความสะดวกพื้นฐานกว่า แต่เล่นกอล์ฟได้ดีไม่มีปัญหา\n\n**2. สนามระดับกลาง — 2,500-3,500 บาท (วันธรรมดา)**\nสนามสมาชิกที่ดูแลดีและเปิดรับผู้เล่นทั่วไป สภาพสนามดี คลับเฮาส์ครบครัน และระบบทีไทม์เป็นระเบียบ เป็นจุดที่ลงตัวที่สุดสำหรับนักกอล์ฟที่เดินทางมาเล่นส่วนใหญ่\n\n**3. สนามระดับพรีเมียม — 4,500 บาทขึ้นไป (วันธรรมดา)**\n- **Nikanti Golf Club:** วันธรรมดาประมาณ 5,500 บาท / วันหยุดสุดสัปดาห์ประมาณ 6,500 บาท (ออลอินคลูซีฟ — รวมค่าแคดดี้ ทิป เครื่องดื่ม และอาหาร 2 มื้อ)\n- **Alpine Golf Club:** วันธรรมดาประมาณ 5,400 บาท / วันหยุดสุดสัปดาห์ประมาณ 7,400 บาท (โดยทั่วไปรวมค่าแคดดี้และรถกอล์ฟ)\n\nเลย์เอาต์ระดับแชมเปียนชิพและการดูแลสนามที่ไร้ที่ติ ราคาเป็นเพียงข้อมูลอ้างอิง — ควรตรวจสอบกับสนามโดยตรง",
+          body: "**1. สนามระดับประหยัด: ไม่เกิน 2,000 บาท (ค่ากรีนฟีวันธรรมดา)**\nเป็นกลุ่มที่มีจำนวนสนามมากที่สุดในบรรดาสนามที่ขับรถจากกรุงเทพฯ ไม่เกิน 90 นาที สนามในกลุ่มนี้ส่วนใหญ่มีสนามไดรฟ์ และบางแห่งยังมีที่พักและสปาในตัวด้วย ออกรอบได้สบายไม่มีปัญหา\n\n**2. สนามระดับกลาง: 2,500-3,500 บาท (วันธรรมดา)**\nสนามสมาชิกที่ดูแลดีและเปิดรับผู้เล่นทั่วไป สภาพสนามดี คลับเฮาส์ครบครัน และระบบทีไทม์เป็นระเบียบ เป็นจุดที่ลงตัวที่สุดสำหรับนักกอล์ฟที่เดินทางมาเล่นส่วนใหญ่\n\n**3. สนามระดับพรีเมียม: 4,500 บาทขึ้นไป (วันธรรมดา)**\n- **Nikanti Golf Club:** วันธรรมดาประมาณ 5,500 บาท / วันหยุดสุดสัปดาห์ประมาณ 6,500 บาท (ออลอินคลูซีฟ — รวมค่าแคดดี้ ทิป เครื่องดื่ม และอาหาร 2 มื้อ)\n- **Alpine Golf Club:** วันธรรมดาประมาณ 5,400 บาท / วันหยุดสุดสัปดาห์ประมาณ 7,400 บาท (โดยทั่วไปรวมค่าแคดดี้และรถกอล์ฟ)\n\nเลย์เอาต์ระดับแชมเปียนชิพและการดูแลสนามที่ไร้ที่ติ ราคาเป็นเพียงข้อมูลอ้างอิง — ควรตรวจสอบกับสนามโดยตรง",
         },
         {
           heading: "ค่าใช้จ่ายที่บังคับและที่เป็นทางเลือก",
@@ -9940,7 +9940,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "ja",
     related_slugs: ["/guide/golf-weather-bangkok-by-month"],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "5月から10月の間にバンコクへのゴルフ旅行を計画しているなら、雨季のことが気になっているかもしれません。先に結論からお伝えすると、ゴルフは十分に楽しめます。実際、多くの旅行ゴルファーがラウンドを雨で流されることなくプレーしています。大切なのは、この時期の雨が実際にどう降るのかを理解し、それに合わせて過ごし方を調整することです。",
@@ -9963,7 +9963,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "バックアップとしてのインドアゴルフ",
-          body: "朝早くから雷雨が来る日や、そもそもラウンドが流れるリスクを避けたい日には、バンコクには実に優れた選択肢があります。インドアゴルフシミュレーターです。\n\nLENGOLFは、バンコクのインドアゴルフシミュレーター専門施設です。空調の効いたベイ、上質なシミュレーター技術、そして外の天気がどうであれ世界中のコースをプレーできる環境が揃っています。まさに天候に左右されないため、屋外ゴルフの日程を補う存在として役立ちます。\n\nバンコクの屋外コースのグリーンフィーは、平日のパブリックコースで約1,500THBから、高級プライベートクラブでは5,000THB以上と幅があります。インドアシミュレーターの料金はセッションの長さによって異なるため、最新の料金は直接ご確認ください。",
+          body: "朝早くから雷雨が来る日や、そもそもラウンドが流れるリスクを避けたい日には、バンコクには実に優れた選択肢があります。インドアゴルフシミュレーターです。\n\nLENGOLFは、バンコクのインドアゴルフシミュレーター専門施設です。空調の効いたベイ、上質なシミュレーター技術、そして外の天気がどうであれ世界中のコースをプレーできる環境が揃っています。まさに天候に左右されないため、屋外ゴルフの日程を補う存在として役立ちます。\n\nバンコクの屋外コースのグリーンフィーは、最も安いコースの平日料金なら1,000THB未満から、高級コースでは5,000THB以上まで幅があります（高級コースは多くの場合、キャディー・カート込みの料金です）。インドアシミュレーターの料金はセッションの長さによって異なるため、最新の料金は直接ご確認ください。",
         },
         {
           heading: "結論",
@@ -9994,7 +9994,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "ko",
     related_slugs: ["/guide/golf-weather-bangkok-by-month"],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "5월에서 10월 사이에 방콕으로 골프 여행을 계획하고 계신다면, 아마 우기가 신경 쓰이실 거예요. 짧게 답하자면, 네, 골프는 얼마든지 즐길 수 있어요 — 실제로 많은 여행 골퍼들이 라운딩을 비로 날려버리지 않고 플레이하고 있습니다. 핵심은 이곳의 비가 실제로 어떻게 내리는지 이해하고, 그에 맞게 접근 방식을 조정하는 거예요.",
@@ -10017,7 +10017,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "대비책이 되어 주는 실내 골프",
-          body: "아침 폭풍우가 일찍 찾아오는 날, 또는 라운딩을 우천으로 날릴 위험을 감수하고 싶지 않은 날, 방콕에는 정말 훌륭한 대안이 있어요. 바로 실내 골프 시뮬레이터예요.\n\nLENGOLF는 방콕의 전문 실내 골프 시뮬레이터 시설이에요. 냉방이 되는 베이, 프리미엄 시뮬레이터 기술, 그리고 바깥 상황과 상관없이 전 세계 코스를 플레이할 수 있는 환경을 갖추고 있어요. 날씨의 영향을 전혀 받지 않아서, 야외 골프 일정을 보완하는 좋은 선택지가 됩니다.\n\n방콕 야외 코스의 그린피는 보통 평일 퍼블릭 코스의 약 1,500바트부터 프리미엄 프라이빗 클럽의 5,000바트 이상까지 다양해요. 실내 시뮬레이터 요금은 이용 시간에 따라 달라져요 — 현재 요금은 직접 문의해 확인하세요.",
+          body: "아침 폭풍우가 일찍 찾아오는 날, 또는 라운딩을 우천으로 날릴 위험을 감수하고 싶지 않은 날, 방콕에는 정말 훌륭한 대안이 있어요. 바로 실내 골프 시뮬레이터예요.\n\nLENGOLF는 방콕의 전문 실내 골프 시뮬레이터 시설이에요. 냉방이 되는 베이, 프리미엄 시뮬레이터 기술, 그리고 바깥 상황과 상관없이 전 세계 코스를 플레이할 수 있는 환경을 갖추고 있어요. 날씨의 영향을 전혀 받지 않아서, 야외 골프 일정을 보완하는 좋은 선택지가 됩니다.\n\n방콕 야외 코스의 그린피는 가장 저렴한 코스의 평일 요금 1,000바트 미만부터 프리미엄 클럽의 5,000바트 이상(보통 캐디와 카트 포함)까지 다양해요. 실내 시뮬레이터 요금은 이용 시간에 따라 달라져요 — 현재 요금은 직접 문의해 확인하세요.",
         },
         {
           heading: "결론",
@@ -10048,7 +10048,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "zh",
     related_slugs: ["/guide/golf-weather-bangkok-by-month"],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "如果你打算在5月到10月之间来曼谷打一趟高尔夫，雨季大概是你会惦记的一件事。简短的答案是：完全可以照打——很多到访的球友都这么做，他们的球局并没有被雨水泡汤。关键在于理解这里的雨究竟是怎么下的，并据此调整你的应对方式。",
@@ -10071,7 +10071,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "室内高尔夫：备选方案",
-          body: "遇上早晨风暴提前到来的日子，或者你干脆不想冒着整轮被雨浇掉的风险，曼谷有一个确实出色的替代选择：室内高尔夫模拟器。\n\nLENGOLF是曼谷专门的室内高尔夫模拟器场馆——恒温的球位、高端的模拟器技术，无论外面天气如何，都能让你打世界各地的球场。它真正做到了不受天气影响，因而是户外高尔夫行程的一个实用补充。\n\n曼谷户外球场的果岭费通常从工作日公众球场的约1,500泰铢起，到高端私人俱乐部的5,000泰铢甚至更高。室内模拟器的价格则按场次时长而定——最新费率请直接咨询。",
+          body: "遇上早晨风暴提前到来的日子，或者你干脆不想冒着整轮被雨浇掉的风险，曼谷有一个确实出色的替代选择：室内高尔夫模拟器。\n\nLENGOLF是曼谷专门的室内高尔夫模拟器场馆——恒温的球位、高端的模拟器技术，无论外面天气如何，都能让你打世界各地的球场。它真正做到了不受天气影响，因而是户外高尔夫行程的一个实用补充。\n\n曼谷户外球场的果岭费，从最便宜的球场平日不到1,000泰铢，到高端球会的5,000泰铢或以上不等，后者通常已含球童和球车。室内模拟器的价格则按场次时长而定——最新费率请直接咨询。",
         },
         {
           heading: "结论",
@@ -10102,7 +10102,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "th",
     related_slugs: ["/guide/golf-weather-bangkok-by-month"],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "หากคุณกำลังวางแผนทริปกอล์ฟมากรุงเทพฯ ในช่วงเดือนพฤษภาคมถึงตุลาคม หน้าฝนก็คงเป็นเรื่องที่คุณนึกถึงอยู่ คำตอบสั้น ๆ คือ เล่นกอล์ฟได้แน่นอน และนักกอล์ฟที่มาเยือนจำนวนมากก็เล่นกันโดยที่รอบของพวกเขาไม่ได้ล่มเพราะฝน สิ่งสำคัญคือการเข้าใจว่าจริง ๆ แล้วฝนที่นี่ตกในรูปแบบไหน แล้วปรับแนวทางของคุณให้เหมาะสม",
@@ -10125,7 +10125,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "กอล์ฟในร่มในฐานะแผนสำรอง",
-          body: "ในวันที่พายุฝนช่วงเช้ามาถึงเร็วกว่าปกติ หรือคุณแค่ไม่อยากเสี่ยงกับการที่รอบต้องล่มเพราะฝน กรุงเทพฯ ก็มีทางเลือกที่ยอดเยี่ยมจริง ๆ นั่นคือกอล์ฟซิมูเลเตอร์ในร่ม\n\nLENGOLF คือสถานที่ให้บริการกอล์ฟซิมูเลเตอร์ในร่มโดยเฉพาะในกรุงเทพฯ — มีเบย์ปรับอากาศ เทคโนโลยีซิมูเลเตอร์ระดับพรีเมียม และเล่นสนามกอล์ฟจากทั่วโลกได้ไม่ว่าข้างนอกจะเป็นอย่างไร ที่นี่ไม่ขึ้นกับสภาพอากาศอย่างแท้จริง จึงเป็นตัวเสริมที่ดีสำหรับแผนการเล่นกอล์ฟกลางแจ้งของคุณ\n\nค่ากรีนฟีของสนามกอล์ฟกลางแจ้งในกรุงเทพฯ โดยทั่วไปเริ่มตั้งแต่ประมาณ 1,500 บาท สำหรับสนามสาธารณะในวันธรรมดา ไปจนถึง 5,000 บาท หรือมากกว่านั้นสำหรับสนามกอล์ฟเอกชนระดับพรีเมียม (ข้อมูล ณ กรกฎาคม 2026) ส่วนราคากอล์ฟซิมูเลเตอร์ในร่มจะแตกต่างกันไปตามระยะเวลาการเล่น — สามารถสอบถามอัตราค่าบริการล่าสุดได้โดยตรง",
+          body: "ในวันที่พายุฝนช่วงเช้ามาถึงเร็วกว่าปกติ หรือคุณแค่ไม่อยากเสี่ยงกับการที่รอบต้องล่มเพราะฝน กรุงเทพฯ ก็มีทางเลือกที่ยอดเยี่ยมจริง ๆ นั่นคือกอล์ฟซิมูเลเตอร์ในร่ม\n\nLENGOLF คือสถานที่ให้บริการกอล์ฟซิมูเลเตอร์ในร่มโดยเฉพาะในกรุงเทพฯ — มีเบย์ปรับอากาศ เทคโนโลยีซิมูเลเตอร์ระดับพรีเมียม และเล่นสนามกอล์ฟจากทั่วโลกได้ไม่ว่าข้างนอกจะเป็นอย่างไร ที่นี่ไม่ขึ้นกับสภาพอากาศอย่างแท้จริง จึงเป็นตัวเสริมที่ดีสำหรับแผนการเล่นกอล์ฟกลางแจ้งของคุณ\n\nค่ากรีนฟีของสนามกอล์ฟกลางแจ้งใกล้กรุงเทพฯ มีตั้งแต่ต่ำกว่า 1,000 บาทในวันธรรมดาที่สนามราคาถูกที่สุด ไปจนถึง 5,000 บาทขึ้นไปที่สนามระดับพรีเมียม ซึ่งโดยทั่วไปรวมค่าแคดดี้และรถกอล์ฟแล้ว (ข้อมูล ณ กันยายน 2026) ส่วนราคากอล์ฟซิมูเลเตอร์ในร่มจะแตกต่างกันไปตามระยะเวลาการเล่น — สามารถสอบถามอัตราค่าบริการล่าสุดได้โดยตรง",
         },
         {
           heading: "บทสรุป",
@@ -11148,7 +11148,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "ja",
     related_slugs: ["/guide/golf-bangkok-rainy-season"],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "バンコクは赤道からわずか14度北に位置しているため、一年を通じて温暖です。ゴルファーにとって、これはおおむね嬉しい知らせです——オフシーズンも、雪も、霜もありません。計画で気をつけたいのは、熱帯特有の降雨サイクル。これが一年を3つのはっきりとした時期に分けます。涼しい乾季、暑い乾季、そして午後の雷雨に特徴づけられる長い雨季の3つです。タイミングさえ合わせれば、バンコク中心部から1時間以内にある40以上のコースを、ほぼ完璧なコンディションでプレーできます。",
@@ -11163,7 +11163,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "ティータイム戦略: 朝 vs トワイライト",
-          body: "**午前のティータイム（6〜9時）** は、バンコクの気候を一年を通じて攻略する、最も効果的な手段です。暑季には日中の最も厳しい暑さを避けられ、雨季には午後の雷雨を避けられます。バンコクにある40以上のコースの多くは午前6時かそれ以前にオープンし、早朝割引もよく用意されています。\n\n**トワイライト料金**（通常は午後2〜3時ごろから利用可能）は、涼季——11月から2月——にお得です。この時期は午後の気温が快適で、午後の雨の心配もありません。雨季（5月〜10月）には、トワイライトのティータイムは雷雨で中断するリスクを伴います。\n\nバンコク周辺のコースのグリーンフィーは、公営コースの1,500THBから、高級リゾート型のコースでは5,000THB以上まで幅があります。トワイライトや平日の料金なら、これを大きく抑えられます。予約前に必ず、最新の料金をコースに直接ご確認ください。",
+          body: "**午前のティータイム（6〜9時）** は、バンコクの気候を一年を通じて攻略する、最も効果的な手段です。暑季には日中の最も厳しい暑さを避けられ、雨季には午後の雷雨を避けられます。バンコクにある40以上のコースの多くは午前6時かそれ以前にオープンし、早朝割引もよく用意されています。\n\n**トワイライト料金**（通常は午後2〜3時ごろから利用可能）は、涼季——11月から2月——にお得です。この時期は午後の気温が快適で、午後の雨の心配もありません。雨季（5月〜10月）には、トワイライトのティータイムは雷雨で中断するリスクを伴います。\n\nバンコク周辺のコースのグリーンフィーは、最も安いコースの平日料金なら1,000THB未満から、高級コースでは5,000THB以上まで幅があります（高級コースは多くの場合、キャディー・カート込みの料金です）。週末は平日より料金が高くなり、トワイライト料金なら安く抑えられます。予約前に必ず、最新の料金をコースに直接ご確認ください。",
         },
         {
           heading: "天気が味方しないとき: LENGOLFのインドアゴルフ",
@@ -11179,7 +11179,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         "4月は一年で最も暑い月です（平均最高気温約35°C、40°Cを超えることも）。午前6〜7時のティータイムが必須です",
         "9月は最も雨の多い月です（平均降水量約333mm）。午前のティータイムと、インドアゴルフのバックアップがおすすめです",
         "午前のティータイム（6〜9時）は、一年を通じて最も効果的な戦略です",
-        "グリーンフィーはコースとシーズンによって約1,500THB〜5,000THB以上の幅があります",
+        "グリーンフィーはコースとシーズンによって1,000THB未満から5,000THB以上までの幅があります",
       ],
       comparison_table: [],
     },
@@ -11198,7 +11198,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "ko",
     related_slugs: ["/guide/golf-bangkok-rainy-season"],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "방콕은 적도에서 북쪽으로 불과 14도 떨어진 곳에 있어, 일 년 내내 따뜻해요. 골퍼에게는 대체로 반가운 소식이에요 — 비수기도, 눈도, 서리도 없으니까요. 대신 계획할 때 신경 써야 할 것은 열대 강우 사이클이에요. 이 사이클이 한 해를 뚜렷한 세 시기로 나누는데, 선선한 건기, 무더운 건기, 그리고 오후 뇌우가 특징인 긴 우기예요. 타이밍만 잘 맞추면 방콕 도심에서 1시간 이내의 코스 40개 이상을 거의 완벽한 컨디션에서 즐길 수 있어요.",
@@ -11213,7 +11213,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "티타임 전략: 아침 vs 트와일라잇",
-          body: "**아침 티타임(오전 6~9시)** — 일 년 내내 방콕의 기후에 대응하는 가장 효과적인 단 하나의 수단이에요. 핫 시즌에는 최악의 더위를, 우기에는 오후 뇌우를 피할 수 있죠. 방콕의 40개 이상 코스 대부분이 오전 6시 또는 그 이전에 문을 열고, 얼리버드 요금도 흔해요.\n\n**트와일라잇 요금**(보통 오후 2~3시경부터 이용 가능)은 쿨 시즌, 즉 11월부터 2월 사이에 가성비가 좋아요. 오후 기온이 쾌적하고 오후 비 걱정이 없는 시기니까요. 우기(5~10월)에는 트와일라잇 티타임이 뇌우로 중단될 위험이 있어요.\n\n방콕 인근 코스의 그린피는 보통 시립 코스의 1,500바트부터 프리미엄 리조트형 코스의 5,000바트 이상까지 다양해요. 트와일라잇과 평일 요금이면 이를 상당히 낮출 수 있어요. 예약 전에 항상 코스에 직접 현재 요금을 확인하세요.",
+          body: "**아침 티타임(오전 6~9시)** — 일 년 내내 방콕의 기후에 대응하는 가장 효과적인 단 하나의 수단이에요. 핫 시즌에는 최악의 더위를, 우기에는 오후 뇌우를 피할 수 있죠. 방콕의 40개 이상 코스 대부분이 오전 6시 또는 그 이전에 문을 열고, 얼리버드 요금도 흔해요.\n\n**트와일라잇 요금**(보통 오후 2~3시경부터 이용 가능)은 쿨 시즌, 즉 11월부터 2월 사이에 가성비가 좋아요. 오후 기온이 쾌적하고 오후 비 걱정이 없는 시기니까요. 우기(5~10월)에는 트와일라잇 티타임이 뇌우로 중단될 위험이 있어요.\n\n방콕 인근 코스의 그린피는 가장 저렴한 코스의 평일 요금 1,000바트 미만부터 프리미엄 클럽의 5,000바트 이상(보통 캐디와 카트 포함)까지 다양해요. 주말 요금은 평일보다 비싸고, 트와일라잇 요금을 이용하면 비용을 줄일 수 있어요. 예약 전에 항상 코스에 직접 현재 요금을 확인하세요.",
         },
         {
           heading: "날씨가 이길 때: LENGOLF 실내 골프",
@@ -11229,7 +11229,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         "4월은 가장 더운 달이에요(평균 최고 약 35°C, 40°C를 넘기도 함). 오전 6~7시 티타임이 필수예요",
         "9월은 비가 가장 많은 달이에요(평균 강수량 약 333mm). 오전 티타임과 실내 골프 대비책을 추천해요",
         "아침 티타임(오전 6~9시)이 일 년 내내 가장 효과적인 전략이에요",
-        "그린피는 코스와 시즌에 따라 약 1,500바트부터 5,000바트 이상까지 다양해요",
+        "그린피는 코스와 시즌에 따라 1,000바트 미만부터 5,000바트 이상까지 다양해요",
       ],
       comparison_table: [],
     },
@@ -11248,7 +11248,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "zh",
     related_slugs: ["/guide/golf-bangkok-rainy-season"],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "曼谷位于赤道以北仅14度，这意味着这里全年温暖。对高尔夫球友来说，这多半是好消息——没有休赛期、冰雪或霜冻。你真正需要提前规划的，是热带的降雨周期。它把一年分成三个截然不同的阶段：凉爽干燥的凉季、炎热干燥的热季，以及以午后雷暴为特征的漫长雨季。只要时机把握得当，你就能在近乎完美的条件下，畅打曼谷市中心一小时车程内的40多座球场。",
@@ -11263,7 +11263,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "开球时间策略：上午 vs 黄昏",
-          body: "**上午的开球时间（6–9点）**是全年应对曼谷气候最有效的单一手段。在热季，它能避开最难熬的酷热；在雨季，它能躲过午后的雷暴。曼谷40多座球场中，大多数在上午6点或更早开放，早鸟优惠也很常见。\n\n**黄昏时段优惠**（通常从下午2–3点左右开始）在凉季——也就是11月到2月——很划算，那时下午气温宜人，午后降雨也不成问题。而在雨季（5–10月），黄昏时段的开球时间则有被雷暴打断的风险。\n\n曼谷周边球场的果岭费，通常从市政球场的1,500泰铢，到高端度假村式球场的5,000泰铢或以上不等。黄昏时段和平日的价格能大幅降低这一费用。预订前，请务必直接向球场确认最新价格。",
+          body: "**上午的开球时间（6–9点）**是全年应对曼谷气候最有效的单一手段。在热季，它能避开最难熬的酷热；在雨季，它能躲过午后的雷暴。曼谷40多座球场中，大多数在上午6点或更早开放，早鸟优惠也很常见。\n\n**黄昏时段优惠**（通常从下午2–3点左右开始）在凉季——也就是11月到2月——很划算，那时下午气温宜人，午后降雨也不成问题。而在雨季（5–10月），黄昏时段的开球时间则有被雷暴打断的风险。\n\n曼谷周边球场的果岭费，从最便宜的球场平日不到1,000泰铢，到高端球会的5,000泰铢或以上不等，后者通常已含球童和球车。周末价格更高，黄昏时段优惠则能把价格降下来。预订前，请务必直接向球场确认最新价格。",
         },
         {
           heading: "当天气占上风时：LENGOLF的室内高尔夫",
@@ -11279,7 +11279,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         "4月是最热的月份（平均最高气温约35°C，有时可超过40°C），上午6–7点的开球时间必不可少",
         "9月是最湿的月份（平均降雨量约333毫米），建议选择上午的开球时间，并把室内高尔夫作为备选方案",
         "上午的开球时间（6–9点）是全年最有效的单一策略",
-        "果岭费视球场和季节而定，约在1,500–5,000泰铢之间，甚至更高",
+        "果岭费视球场和季节而定，便宜的不到1,000泰铢，贵的在5,000泰铢以上",
       ],
       comparison_table: [],
     },
@@ -11298,7 +11298,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "th",
     related_slugs: ["/guide/golf-bangkok-rainy-season"],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "กรุงเทพฯ ตั้งอยู่เหนือเส้นศูนย์สูตรเพียง 14 องศา จึงมีอากาศอบอุ่นตลอดทั้งปี สำหรับนักกอล์ฟแล้ว นี่คือข่าวดีเป็นส่วนใหญ่ — ไม่มีช่วงปิดฤดูกาล ไม่มีหิมะ และไม่มีน้ำค้างแข็ง สิ่งที่คุณต้องวางแผนรับมือคือวัฏจักรฝนแบบเขตร้อน ซึ่งแบ่งปฏิทินออกเป็นสามช่วงที่ชัดเจน ได้แก่ ฤดูหนาวที่แห้ง ฤดูร้อนที่แห้ง และฤดูฝนอันยาวนานที่มีพายุฝนฟ้าคะนองช่วงบ่ายเป็นตัวกำหนด หากจับจังหวะเวลาได้ถูกต้อง คุณจะสามารถเล่นสนามกอล์ฟกว่า 40 แห่งภายในระยะหนึ่งชั่วโมงจากใจกลางกรุงเทพฯ ในสภาพที่แทบจะสมบูรณ์แบบ",
@@ -11313,7 +11313,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "กลยุทธ์ทีไทม์: ช่วงเช้า vs ช่วงทไวไลท์",
-          body: "**ทีไทม์ช่วงเช้า (6-9am)** คือเครื่องมือที่มีประสิทธิภาพที่สุดเพียงหนึ่งเดียวในการรับมือกับสภาพอากาศของกรุงเทพฯ ตลอดทั้งปี ในฤดูร้อนช่วงเวลานี้ช่วยเลี่ยงความร้อนที่รุนแรงที่สุด ส่วนในฤดูฝนก็ช่วยเลี่ยงพายุฝนฟ้าคะนองช่วงบ่าย สนามกอล์ฟกว่า 40 แห่งในกรุงเทพฯ ส่วนใหญ่เปิดเวลา 6am หรือก่อนหน้านั้น และมักมีราคาพิเศษสำหรับผู้เล่นช่วงเช้าตรู่\n\n**อัตราทไวไลท์** (โดยทั่วไปเริ่มให้บริการตั้งแต่ราว 2-3pm) ให้ความคุ้มค่าดีในช่วงฤดูหนาว — พฤศจิกายนถึงกุมภาพันธ์ — เมื่ออุณหภูมิช่วงบ่ายน่ารื่นรมย์และไม่ต้องกังวลเรื่องฝนตอนบ่าย ส่วนในช่วงฤดูฝน (พฤษภาคม-ตุลาคม) ทีไทม์ช่วงทไวไลท์มีความเสี่ยงที่จะถูกขัดจังหวะด้วยพายุฝนฟ้าคะนอง\n\nค่ากรีนฟีของสนามในเขตกรุงเทพฯ โดยทั่วไปอยู่ที่ 1,500 บาท สำหรับสนามของเทศบาล ไปจนถึง 5,000 บาทขึ้นไปสำหรับสนามระดับพรีเมียมสไตล์รีสอร์ท (ข้อมูล ณ กรกฎาคม 2026) อัตราทไวไลท์และวันธรรมดาช่วยลดราคานี้ลงได้อย่างมาก และควรตรวจสอบราคาปัจจุบันกับสนามโดยตรงทุกครั้งก่อนทำการจอง",
+          body: "**ทีไทม์ช่วงเช้า (6-9am)** คือเครื่องมือที่มีประสิทธิภาพที่สุดเพียงหนึ่งเดียวในการรับมือกับสภาพอากาศของกรุงเทพฯ ตลอดทั้งปี ในฤดูร้อนช่วงเวลานี้ช่วยเลี่ยงความร้อนที่รุนแรงที่สุด ส่วนในฤดูฝนก็ช่วยเลี่ยงพายุฝนฟ้าคะนองช่วงบ่าย สนามกอล์ฟกว่า 40 แห่งในกรุงเทพฯ ส่วนใหญ่เปิดเวลา 6am หรือก่อนหน้านั้น และมักมีราคาพิเศษสำหรับผู้เล่นช่วงเช้าตรู่\n\n**อัตราทไวไลท์** (โดยทั่วไปเริ่มให้บริการตั้งแต่ราว 2-3pm) ให้ความคุ้มค่าดีในช่วงฤดูหนาว — พฤศจิกายนถึงกุมภาพันธ์ — เมื่ออุณหภูมิช่วงบ่ายน่ารื่นรมย์และไม่ต้องกังวลเรื่องฝนตอนบ่าย ส่วนในช่วงฤดูฝน (พฤษภาคม-ตุลาคม) ทีไทม์ช่วงทไวไลท์มีความเสี่ยงที่จะถูกขัดจังหวะด้วยพายุฝนฟ้าคะนอง\n\nค่ากรีนฟีของสนามใกล้กรุงเทพฯ มีตั้งแต่ต่ำกว่า 1,000 บาทในวันธรรมดาที่สนามราคาถูกที่สุด ไปจนถึง 5,000 บาทขึ้นไปที่สนามระดับพรีเมียม ซึ่งโดยทั่วไปรวมค่าแคดดี้และรถกอล์ฟแล้ว (ข้อมูล ณ กันยายน 2026) ราคาวันหยุดสุดสัปดาห์สูงกว่าวันธรรมดา ส่วนอัตราทไวไลท์ช่วยลดราคาลงได้ ทั้งนี้ควรตรวจสอบราคาปัจจุบันกับสนามโดยตรงทุกครั้งก่อนทำการจอง",
         },
         {
           heading: "เมื่อสภาพอากาศเป็นฝ่ายชนะ: กอล์ฟในร่มที่ LENGOLF",
@@ -11329,7 +11329,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         "เมษายนเป็นเดือนที่ร้อนที่สุด (อุณหภูมิสูงสุดเฉลี่ยราว 35°C อาจเกิน 40°C) ทีไทม์ช่วง 6-7am เป็นสิ่งจำเป็น",
         "กันยายนเป็นเดือนที่ฝนตกชุกที่สุด (ปริมาณฝนเฉลี่ยราว 333 มม.) แนะนำทีไทม์ช่วงเช้าและมีกอล์ฟในร่มเป็นแผนสำรอง",
         "ทีไทม์ช่วงเช้า (6-9am) คือกลยุทธ์ที่มีประสิทธิภาพที่สุดเพียงหนึ่งเดียวตลอดทั้งปี",
-        "ค่ากรีนฟีอยู่ที่ราว 1,500 บาท ถึง 5,000 บาทขึ้นไป ขึ้นอยู่กับสนามและฤดูกาล",
+        "ค่ากรีนฟีมีตั้งแต่ต่ำกว่า 1,000 บาท ไปจนถึง 5,000 บาทขึ้นไป ขึ้นอยู่กับสนามและฤดูกาล",
       ],
       comparison_table: [],
     },
