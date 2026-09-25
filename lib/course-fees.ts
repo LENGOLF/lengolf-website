@@ -252,13 +252,15 @@ type FeeLabelT = (
  * half of the old note, which read "`/near/` is still unreached (8 stations + 2
  * airports, zero package courses)". `krungthep-kreetha-sports-club` is #8 from
  * Suvarnabhumi, so `/golf-courses/near/suvarnabhumi-airport/` now reaches this
- * function. Scope precisely, because the obvious reading is wrong: within `/near/`,
- * `feeNounEn` is called only from `AirportPage` and the airport branch of that
- * route's share card. `StationPage` renders a `RoundupList` with no fee noun, and
- * the station card's footer names none, so the 8 BTS station page BODIES are not
- * affected - one airport page is. (The station page's <title> hardcodes "Green
- * Fees" behind a fee-noun-ok escape, and every station roster's noun is 'Rate'
- * today; that is an open title defect, not a use of this function.)
+ * function. Within `/near/` it is called from `AirportPage`, from BOTH branches
+ * of the route's `generateMetadata`, and from BOTH branches of its share card
+ * (`near/[station]/opengraph-image.tsx`). `StationPage`'s body renders a
+ * `RoundupList` with no fee noun, but the station <title>, og:title and meta
+ * description used to hardcode "Green Fees" behind a fee-noun-ok escape while
+ * `krungthep-kreetha` ranked #1 on 7 station rosters and #2 on Ekkamai - so all 8
+ * station pages were affected, in their SERP metadata, and an earlier version of
+ * this note said they were not. The station metadata and card now derive the noun
+ * from the same `getCoursesNearStation(station, 8)` roster the page renders.
  *
  * It returns 'Rate' for all of them, which is correct; the noun is handled. Treat
  * reachability as today's popularity scores rather than a property of the code.
