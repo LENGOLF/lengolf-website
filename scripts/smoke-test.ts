@@ -4855,9 +4855,10 @@ async function runNotFoundTests() {
  *  variants cannot slip past a hand-rolled filename regex. Three buckets:
  *  - `localeOnly`: the handler's only param is the locale, and its URL is
  *    derivable (`remainder` = URL with the locale stripped). These get a probe.
- *  - `multiParam`: under a second dynamic segment. NOT probed: a junk locale
- *    discriminates only beside a REAL value for the other param, which this
- *    walk cannot supply. Counted, so a new one is at least noticed.
+ *  - `multiParam`: under a second dynamic segment. `template` is the URL with
+ *    the locale stripped and the other params left as `[name]`; G2 fills them
+ *    with a REAL value from data (MULTI_PARAM_VALUES there), because a junk
+ *    locale discriminates only beside a real value for the other param.
  *  - `unsupported`: a handler whose URL this walk would guess wrong (numbered
  *    or `[]` variants, static image files, sitemaps, a metadata image under a
  *    route group or slot, where Next suffixes the URL with a hash, anything
@@ -4865,7 +4866,7 @@ async function runNotFoundTests() {
  *    new shape is taught here rather than silently skipped. */
 async function localeRouteHandlers(): Promise<{
   localeOnly: { file: string; remainder: string; kind: "image" | "route" }[];
-  multiParam: string[];
+  multiParam: { file: string; template: string; kind: "image" | "route" }[];
   unsupported: string[];
 }> {
   const fs = await import("node:fs");
@@ -4885,7 +4886,7 @@ async function localeRouteHandlers(): Promise<{
   const ROUTE_FILE = /^route\.[jt]sx?$/;
   const out = {
     localeOnly: [] as { file: string; remainder: string; kind: "image" | "route" }[],
-    multiParam: [] as string[],
+    multiParam: [] as { file: string; template: string; kind: "image" | "route" }[],
     unsupported: [] as string[],
   };
   const walk = (dir: string, urlSegs: string[], dynamic: boolean, grouped: boolean, special: boolean) => {
@@ -4909,16 +4910,15 @@ async function localeRouteHandlers(): Promise<{
       const isMetadata = isMetadataRouteFile(`/${rel.replace(/^app\//, "")}`, PAGE_EXTENSIONS, true);
       if (!isRoute && !isMetadata) continue;
       const derivable = isRoute ? !special : DERIVABLE_IMAGE.test(entry.name) && !special && !grouped;
-      if (!derivable) out.unsupported.push(rel);
-      else if (dynamic) out.multiParam.push(rel);
-      else {
-        const segs = isRoute ? urlSegs : [...urlSegs, entry.name.replace(/\.[jt]sx?$/, "")];
-        out.localeOnly.push({
-          file: rel,
-          remainder: segs.length ? `/${segs.join("/")}/` : "/",
-          kind: isRoute ? "route" : "image",
-        });
+      if (!derivable) {
+        out.unsupported.push(rel);
+        continue;
       }
+      const segs = isRoute ? urlSegs : [...urlSegs, entry.name.replace(/\.[jt]sx?$/, "")];
+      const url = segs.length ? `/${segs.join("/")}/` : "/";
+      const kind = isRoute ? "route" : "image";
+      if (dynamic) out.multiParam.push({ file: rel, template: url, kind });
+      else out.localeOnly.push({ file: rel, remainder: url, kind });
     }
   };
   walk(root, [], false, false, false);
@@ -4972,14 +4972,21 @@ async function localeRouteHandlers(): Promise<{
  * assertion there, which is why that probe fails on a 200 by name. Its fix is
  * EN-only `generateStaticParams`, so the HANDLER CONTROL below follows the card
  * URL every locale's hub page emits and requires an image, pinning the premise
- * that th/ja/ko/zh reach it through the untranslated-route 301.
+ * that th/ja/ko/zh reach it through the untranslated-route 301. The six cards
+ * under a second param are probed too, each beside a REAL value for its other
+ * params read from data (MULTI_PARAM_VALUES), since beside a junk value they
+ * 404 with or without their own flag.
  *
- * The route-handler probe does not discriminate on `next dev`: observed
+ * The HUB card's probe does not discriminate on `next dev`: observed
  * 2026-09-24 on a Windows dev server, dev compiled `/[locale]/golf-courses/
  * [region]` for `/images/golf-courses/opengraph-image/` (region
- * `opengraph-image`) and 404'd with the fix and without it. It also cannot
- * pass there, because the cards themselves 500 on Windows (@vercel/og). Its
- * evidence is `next build && next start` on Linux (CI) and a Vercel deploy.
+ * `opengraph-image`) and 404'd with the fix and without it. The six
+ * multi-param probes DO discriminate there (2026-09-25: deleting a card's
+ * `dynamicParams = false` flipped its probe from 404 to 500, the render the
+ * flag should have refused). No handler probe can PASS on Windows dev,
+ * because the cards themselves 500 (@vercel/og), so the remainder check and
+ * the handler control fail there. Their evidence is `next build && next
+ * start` on Linux (CI) and a Vercel deploy.
  */
 async function runUnknownSlugCacheTests() {
   console.log("\n\x1b[1mG2) Unknown slugs and locales must 404 without minting an ISR entry\x1b[0m");
@@ -5015,11 +5022,12 @@ async function runUnknownSlugCacheTests() {
   // (/images/golf-courses/opengraph-image/). `images/` is the prefix because
   // the matcher skips it (checked below).
   const HANDLER_PROBE_PREFIX = "/images";
-  let junkLocaleHandlers: { path: string; file: string; remainder: string; kind: "image" | "route" }[] = [];
-  let multiParamHandlers: string[] | null = null;
+  type HandlerProbe = { path: string; file: string; remainder: string; kind: "image" | "route" };
+  let localeOnlyHandlers: HandlerProbe[] = [];
+  let multiParamHandlers: { file: string; template: string; kind: "image" | "route" }[] | null = null;
   try {
     const handlers = await localeRouteHandlers();
-    junkLocaleHandlers = handlers.localeOnly.map((h) => ({ ...h, path: `${HANDLER_PROBE_PREFIX}${h.remainder}` }));
+    localeOnlyHandlers = handlers.localeOnly.map((h) => ({ ...h, path: `${HANDLER_PROBE_PREFIX}${h.remainder}` }));
     multiParamHandlers = handlers.multiParam;
     for (const file of handlers.unsupported) {
       fail(
@@ -5032,43 +5040,132 @@ async function runUnknownSlugCacheTests() {
   } catch (err) {
     fail("G2 route-handler derivation", `could not walk app/[locale]: ${(err as Error).message}`);
   }
+
+  // Junk LOCALE values aimed at a route handler under a SECOND dynamic segment.
+  // A junk locale discriminates only beside a REAL value for the other params:
+  // beside a junk tier the card 404s whether or not it carries its own flag.
+  // It also relies on the cards IGNORING the locale (none reads it today): a
+  // card that called notFound() for a non-en locale would 404 here with or
+  // without its flag.
+  // Measured on PR #142: deleting `dynamicParams = false` from
+  // under/[tier]/opengraph-image.tsx turned the junk-locale probe beside a real
+  // tier from a 404 into a rendered card while sections D and G2 stayed green.
+  //
+  // So each template gets its values FROM DATA, never a hardcoded slug, because
+  // several are derived and can retire (a compare pair leaves its region's top 3
+  // on an unrelated fee edit). lib/golf-courses*.ts are `import 'server-only'`
+  // and throw here, so the sources are the plain modules those files read:
+  // data/golf-courses/<region>/index.ts (the files getAllCourseParams imports;
+  // validate:courses pins REGION_META to the dirs holding course files), PRICE_TIERS, BTS_STATIONS,
+  // USE_CASES, and for compare the sitemap, which the running server builds
+  // from getComparisonPairs. The value must also be one the card RENDERS for
+  // `en`: the remainder check below requires it to serve an image, so a stale
+  // value fails by name instead of turning the probe into a 404 that passes.
+  // A new multi-param handler with no entry here fails by name too.
+  const MULTI_PARAM_VALUES: Record<string, () => Promise<Record<string, string>>> = {
+    "/golf-courses/[region]/opengraph-image/": async () => ({ region: (await firstCourse()).region }),
+    "/golf-courses/[region]/[slug]/opengraph-image/": async () => firstCourse(),
+    "/golf-courses/under/[tier]/opengraph-image/": async () => {
+      const { PRICE_TIERS } = await import("../data/price-tiers");
+      return { tier: PRICE_TIERS[0]?.slug ?? "" };
+    },
+    "/golf-courses/near/[station]/opengraph-image/": async () => {
+      const { BTS_STATIONS } = await import("../data/bts-stations");
+      return { station: Object.keys(BTS_STATIONS)[0] ?? "" };
+    },
+    "/golf-courses/best-for/[useCase]/opengraph-image/": async () => {
+      const { USE_CASES } = await import("../data/golf-courses-use-cases");
+      return { useCase: USE_CASES[0] ?? "" };
+    },
+    "/golf-courses/compare/[region]/[pair]/opengraph-image/": async () => {
+      const res = await fetch(`${BASE}/sitemap.xml`, { redirect: "follow" });
+      if (res.status !== 200) throw new Error(`/sitemap.xml returned ${res.status}`);
+      const m = (await res.text()).match(/<loc>[^<]*\/golf-courses\/compare\/([^/<]+)\/([^/<]+)\/<\/loc>/);
+      if (!m) throw new Error("/sitemap.xml lists no /golf-courses/compare/<region>/<pair>/ URL");
+      return { region: m[1], pair: m[2] };
+    },
+  };
+  async function firstCourse(): Promise<{ region: string; slug: string }> {
+    const fs = await import("node:fs");
+    const nodePath = await import("node:path");
+    const { pathToFileURL } = await import("node:url");
+    // Resolved from this file, not process.cwd(), for the reason singleCourseRegions gives.
+    const root = nodePath.join(__dirname, "..", "data", "golf-courses");
+    for (const region of fs.readdirSync(root).sort()) {
+      const abs = nodePath.join(root, region, "index.ts");
+      if (!fs.existsSync(abs)) continue;
+      const mod = await import(pathToFileURL(abs).href);
+      const slugs: string[] = (mod.default ?? mod).slugs ?? [];
+      if (slugs[0]) return { region, slug: slugs[0] };
+    }
+    throw new Error("no data/golf-courses/<region>/index.ts lists a slug");
+  }
+  const multiParamProbes: HandlerProbe[] = [];
+  for (const h of multiParamHandlers ?? []) {
+    const label = `G2 multi-param probe value (${h.file})`;
+    const resolve = MULTI_PARAM_VALUES[h.template];
+    if (!resolve) {
+      fail(
+        label,
+        `no MULTI_PARAM_VALUES entry for ${h.template}, so no junk-locale probe exists for it. Add one ` +
+          `that reads a real value for each [param] from data (not a hardcoded slug).`
+      );
+      continue;
+    }
+    try {
+      const values = await resolve();
+      const remainder = h.template.replace(/\[([^\]/]+)\]/g, (seg, name: string) => values[name] || seg);
+      if (remainder.includes("[")) {
+        fail(label, `resolved ${h.template} to ${remainder}: a param got no value (${JSON.stringify(values)})`);
+        continue;
+      }
+      multiParamProbes.push({ file: h.file, remainder, kind: h.kind, path: `${HANDLER_PROBE_PREFIX}${remainder}` });
+    } catch (err) {
+      fail(label, `could not resolve a real value for ${h.template}: ${(err as Error).message}`);
+    }
+  }
+  const junkLocaleHandlers = [...localeOnlyHandlers, ...multiParamProbes];
   const handlerPaths = junkLocaleHandlers.map((h) => h.path);
   const allJunkLocales = [...junkLocales, ...handlerPaths];
   const junk = [...junkSlugs, ...allJunkLocales];
 
   // Exact pins, not derived from the lists: a floor derived from a list shrinks
-  // with it, so a trimmed or emptied list would pass. The anti-vacuity check at
-  // the end compares against their SUM for the same reason. Raise a pin when
-  // adding a probe; never lower one to absorb a removal. The two handler pins
-  // count what the WALK found, so they also catch it degrading to zero; they
-  // move only in the commit that adds or deletes a handler file, after that
-  // file carries its own `dynamicParams = false` and `generateStaticParams`.
+  // with it, so a trimmed or emptied list would pass. The anti-vacuity checks
+  // compare against their SUM for the same reason. Raise a pin when adding a
+  // probe; never lower one to absorb a removal. The two handler pins count what
+  // the WALK found (and, for multi-param, what resolved to a real value), so
+  // they also catch either degrading to zero; they move only in the commit that
+  // adds or deletes a handler file, after that file carries its own
+  // `dynamicParams = false` and `generateStaticParams`.
   const EXPECTED_JUNK_SLUGS = 7;
   const EXPECTED_JUNK_LOCALES = 3;
   const EXPECTED_JUNK_LOCALE_HANDLERS = 1;
   // The [region] and [slug] cards plus the four roundup cards (under/[tier],
-  // near/[station], best-for/[useCase], compare/[region]/[pair]). Counted, NOT
-  // probed (see localeRouteHandlers): nothing in G2 guards their own flags,
-  // only that a new one is noticed.
+  // near/[station], best-for/[useCase], compare/[region]/[pair]), each probed
+  // beside a real value from MULTI_PARAM_VALUES.
   const EXPECTED_MULTI_PARAM_HANDLERS = 6;
+  const EXPECTED_HANDLER_PROBES = EXPECTED_JUNK_LOCALE_HANDLERS + EXPECTED_MULTI_PARAM_HANDLERS;
   if (
     junkSlugs.length !== EXPECTED_JUNK_SLUGS ||
     junkLocales.length !== EXPECTED_JUNK_LOCALES ||
-    junkLocaleHandlers.length !== EXPECTED_JUNK_LOCALE_HANDLERS
+    localeOnlyHandlers.length !== EXPECTED_JUNK_LOCALE_HANDLERS ||
+    multiParamProbes.length !== EXPECTED_MULTI_PARAM_HANDLERS
   ) {
     fail(
       "G2 probe pins",
       `expected ${EXPECTED_JUNK_SLUGS} slug + ${EXPECTED_JUNK_LOCALES} locale + ` +
-        `${EXPECTED_JUNK_LOCALE_HANDLERS} route-handler probes, found ` +
-        `${junkSlugs.length} + ${junkLocales.length} + ${junkLocaleHandlers.length}`
+        `${EXPECTED_JUNK_LOCALE_HANDLERS} locale-only handler + ${EXPECTED_MULTI_PARAM_HANDLERS} ` +
+        `multi-param handler probes, found ${junkSlugs.length} + ${junkLocales.length} + ` +
+        `${localeOnlyHandlers.length} + ${multiParamProbes.length}`
     );
   }
   if (multiParamHandlers && multiParamHandlers.length !== EXPECTED_MULTI_PARAM_HANDLERS) {
     fail(
       "G2 multi-param handler pin",
       `expected ${EXPECTED_MULTI_PARAM_HANDLERS} route handlers under a second dynamic segment, found ` +
-        `${multiParamHandlers.length} (${multiParamHandlers.join(", ")}). G2 cannot probe these; confirm each ` +
-        `carries its own dynamicParams = false and generateStaticParams, then update the pin.`
+        `${multiParamHandlers.length} (${multiParamHandlers.map((h) => h.file).join(", ")}). Confirm each ` +
+        `carries its own dynamicParams = false and generateStaticParams, give it a MULTI_PARAM_VALUES ` +
+        `entry, then update the pin.`
     );
   }
 
@@ -5117,10 +5214,10 @@ async function runUnknownSlugCacheTests() {
         }
         bypassJudged++;
       }
-      if (bypassJudged !== EXPECTED_JUNK_LOCALES + EXPECTED_JUNK_LOCALE_HANDLERS) {
+      if (bypassJudged !== EXPECTED_JUNK_LOCALES + EXPECTED_HANDLER_PROBES) {
         fail(
           "G2 matcher anti-vacuity",
-          `checked ${bypassJudged} of ${EXPECTED_JUNK_LOCALES + EXPECTED_JUNK_LOCALE_HANDLERS} pinned junk-locale probes`
+          `checked ${bypassJudged} of ${EXPECTED_JUNK_LOCALES + EXPECTED_HANDLER_PROBES} pinned junk-locale probes`
         );
       }
     }
@@ -5137,7 +5234,10 @@ async function runUnknownSlugCacheTests() {
   // handler it must serve an IMAGE: that catches a mis-derived remainder (a
   // dropped basename leaves `/golf-courses/`, a real page guarded by the layout).
   // It does NOT prove the junk-locale probe itself reaches the handler: on
-  // `next dev` the probe is routed to the [region] PAGE instead (see docblock).
+  // `next dev` the hub probe is routed to the [region] PAGE instead (see
+  // docblock). For a multi-param probe a failure here usually means the value
+  // MULTI_PARAM_VALUES chose no longer renders (the tier and use-case cards
+  // 404 when their roster is empty), not a routing problem.
   let remainderJudged = 0;
   for (const path of allJunkLocales) {
     const remainder = path.replace(/^\/[^/]+/, "") || "/";
@@ -5159,7 +5259,11 @@ async function runUnknownSlugCacheTests() {
           fail(
             label,
             `${remainder} returned ${res.status} (no route, or the route errored), so ${path} cannot show ` +
-              `whether the guard works: with no route it 404s from the static page with or without the fix.`
+              `whether the guard works: with no route it 404s from the static page with or without the fix.` +
+              (multiParamProbes.some((p) => p.path === path)
+                ? ` The value came from MULTI_PARAM_VALUES; if that card no longer renders it (an emptied ` +
+                  `roster, a retired pair), pick a value that does, still from data.`
+                : ``)
           );
         } else if (handler?.kind === "image" && !type.startsWith("image/")) {
           fail(
@@ -5176,10 +5280,10 @@ async function runUnknownSlugCacheTests() {
     }
     remainderJudged++;
   }
-  if (remainderJudged !== EXPECTED_JUNK_LOCALES + EXPECTED_JUNK_LOCALE_HANDLERS) {
+  if (remainderJudged !== EXPECTED_JUNK_LOCALES + EXPECTED_HANDLER_PROBES) {
     fail(
       "G2 remainder anti-vacuity",
-      `checked ${remainderJudged} of ${EXPECTED_JUNK_LOCALES + EXPECTED_JUNK_LOCALE_HANDLERS} pinned junk-locale probes`
+      `checked ${remainderJudged} of ${EXPECTED_JUNK_LOCALES + EXPECTED_HANDLER_PROBES} pinned junk-locale probes`
     );
   }
 
@@ -5196,7 +5300,12 @@ async function runUnknownSlugCacheTests() {
   let cardPagesJudged = 0;
   try {
     const { hasTranslationForLocale, ALL_LOCALES } = await import("../lib/translated-routes");
-    for (const h of junkLocaleHandlers.filter((x) => x.kind === "image")) {
+    // Locale-only handlers only. For the multi-param cards, section D follows
+    // one EN page per family (plus the ja tier page) through its og:image to a
+    // 200 PNG. Translated region hubs and course details, whose locale-prefixed
+    // og:image relies on the untranslated-route 301 to the EN card, are NOT
+    // followed anywhere: a known gap, not covered here.
+    for (const h of localeOnlyHandlers.filter((x) => x.kind === "image")) {
       const cardPath = h.remainder.replace(/\/$/, "");
       const pagePath = cardPath.replace(/\/[^/]+$/, "") + "/";
       const escapedCard = cardPath.slice(1).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -5369,7 +5478,7 @@ async function runUnknownSlugCacheTests() {
   // Compared against the PINNED total, not `junk.length`: the pins check each
   // list, and a `junk` that quietly left one list out (measured: dropping the
   // route-handler probes from it) would shrink `junk.length` with it and pass.
-  const pinnedTotal = EXPECTED_JUNK_SLUGS + EXPECTED_JUNK_LOCALES + EXPECTED_JUNK_LOCALE_HANDLERS;
+  const pinnedTotal = EXPECTED_JUNK_SLUGS + EXPECTED_JUNK_LOCALES + EXPECTED_HANDLER_PROBES;
   if (checked !== pinnedTotal) {
     fail(
       "G2 anti-vacuity",
