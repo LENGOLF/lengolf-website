@@ -20,10 +20,33 @@ export const PRICE_TIERS: readonly PriceTier[] = [
     thb: 1500,
     slug: '1500-baht',
     title: 'Best Bangkok-Area Golf Courses Under ฿1,500',
+    // Both strings describe the courses getCoursesUnderPrice(1500, 12) actually
+    // lists (measured 2026-09-25 under the Bangkok-area band rule), so re-verify
+    // them against those course files when the roster rule or a listed
+    // course's fee changes. Until 2026-09-25 they said "older
+    // municipal or government layouts (EGAT power-plant courses, military
+    // clubs)", "basic clubhouse facilities", "no driving range at most venues",
+    // "conditioning that varies sharply with rainfall" and "walking-only". Several
+    // clubhouses have accommodation and a spa, and only one course's prose ties
+    // conditioning to the season, so neither caveat was kept. None of the
+    // listed courses was EGAT, municipal or military (every EGAT course in the
+    // corpus is 360+ minutes from Bangkok, and the one army course within 90,
+    // Panurangsi, ranks last of the eligible pool), 11 of 12 had a driving
+    // range, and every course with cart data rents carts. The named architects'
+    // listed courses are Subhapruek and Khao Kheow (Pete Dye) and Windsor Park
+    // (Ronald Fream); the other claims rest on thin majorities (7 of 12 opened
+    // 1992-1996; caddie and cart on top at 7 of 12), so a reshuffle of one or
+    // two courses can tip them. Subhapruek and Windsor Park sit at exactly
+    // ฿1,500 weekday with no fees_verified_at, so a fee edit on either moves it
+    // to the ฿2,500 band and falsifies its architect example. In `catch` the
+    // ceiling is never spelled with a currency word (1,500 บาท, 1,500THB,
+    // 1,500바트, 1,500泰铢), which validate:i18n's price-as-of check reads as an
+    // undated course fee: th and ja keep the source's ฿1,500 (the glossaries'
+    // `preserve` list), ko and zh reuse the ฿7,500 tier's "displayed ceiling".
     framing:
-      'At the very low end of the Thai green-fee market. These rounds are typically at older municipal or government layouts (EGAT power-plant courses, military clubs) where a foreign visitor can play 18 holes for the price of a buffet brunch.',
+      'At the very low end of the Thai green-fee market. These rounds are typically at established layouts from the 1990s, several of them by well-known architects such as Pete Dye and Ronald Fream, where a foreign visitor can play 18 holes for the price of a buffet brunch.',
     catch:
-      'Expect basic clubhouse facilities, no driving range at most venues, and conditioning that varies sharply with rainfall. Golf carts may not be available; many of these courses are walking-only.',
+      'The ฿1,500 is usually the green fee alone: at most of these courses caddie and cart are charged on top, and weekend rates run higher, often past the ฿1,500 ceiling. Carts are generally available, though at some courses they must stay on the paths. Confirm what the rate includes when you book.',
   },
   {
     thb: 2500,
@@ -74,7 +97,8 @@ export const PRICE_TIER_SLUGS = PRICE_TIERS.map((t) => t.slug)
  * (getCoursesUnderPrice), or a course-file edit that moves a course onto or off
  * a tier (a fee, drive time or status change, or a popularityScore input such
  * as the website, driving range or layout prose, which reorders a full band).
- * 2026-09-25: rosters became Bangkok-area price bands.
+ * 2026-09-25: rosters became Bangkok-area price bands, and the ฿1,500 copy was
+ * rewritten to match its roster.
  */
 export const PRICE_TIERS_UPDATED_AT = '2026-09-25'
 
@@ -91,13 +115,15 @@ export const PRICE_TIERS_UPDATED_AT = '2026-09-25'
  * (e.g. ฿3,500, ฿7,500) and land on the EN page with ~0 clicks at pos 4.5-7.6.
  * `title` therefore keeps the ฿X,XXX form verbatim (it's the query Thais type),
  * while `framing`/`catch` prose spells out บาท per the TH glossary currency
- * ruling (data/i18n-glossary/th.json conventions.currency).
+ * ruling (data/i18n-glossary/th.json conventions.currency). The one exception
+ * is the ฿1,500 `catch`, which keeps the source's ฿1,500 ceiling (th.json
+ * `preserve`) because a spelled price reads as an undated course fee.
  *
- * Honesty note: `framing`/`catch` carry deliberately honest caveats (walking-only
- * courses, phone-only booking, conditioning variance) translated from the EN
- * source without softening. One EN caveat — "limited English on the line" — is
- * viewpoint-dependent (a non-issue for a Thai-speaking caller) and was reframed
- * to drop the English-specific clause while preserving the underlying fact
+ * Honesty note: `framing`/`catch` carry deliberately honest caveats (caddie and
+ * cart on top of the green fee, phone-only booking, conditioning variance)
+ * translated from the EN source without softening. One EN caveat — "limited
+ * English on the line" — is viewpoint-dependent (a non-issue for a
+ * Thai-speaking caller) and was reframed to drop the English-specific clause while preserving the underlying fact
  * (booking is phone-only, no online option). Two similar reframes (dropping
  * "visiting golfer" framing on the 3500 tier, and "book-able ... in English" on
  * the 5000 tier) are documented in the batch commit/PR notes — the reframed
@@ -121,9 +147,9 @@ export const PRICE_TIER_I18N: Partial<
     th: {
       title: 'สนามกอล์ฟใกล้กรุงเทพฯ ที่ดีที่สุด ราคาไม่เกิน ฿1,500',
       framing:
-        'อยู่ในกลุ่มราคาต่ำสุดของตลาดค่ากรีนฟีในไทย รอบส่วนใหญ่ในระดับราคานี้เล่นที่สนามเทศบาลหรือสนามของหน่วยงานรัฐที่เปิดมานาน (สนามของการไฟฟ้าฝ่ายผลิตแห่งประเทศไทยตามโรงไฟฟ้า สนามของหน่วยทหาร) ซึ่งนักกอล์ฟต่างชาติสามารถเล่น 18 หลุมได้ในราคาเทียบเท่ามื้อบุฟเฟต์เช้าสาย',
+        'อยู่ในกลุ่มราคาต่ำสุดของตลาดค่ากรีนฟีในไทย รอบส่วนใหญ่ในระดับราคานี้เล่นที่สนามที่เปิดให้บริการมาตั้งแต่ทศวรรษ 1990 (หลายแห่งออกแบบโดยสถาปนิกสนามกอล์ฟชื่อดัง เช่น Pete Dye และ Ronald Fream) ซึ่งนักกอล์ฟต่างชาติสามารถเล่น 18 หลุมได้ในราคาเทียบเท่ามื้อบุฟเฟต์เช้าสาย',
       catch:
-        'คาดหวังสิ่งอำนวยความสะดวกในคลับเฮาส์แบบพื้นฐาน สนามส่วนใหญ่ไม่มีสนามไดรฟ์ และสภาพสนามจะแปรผันตามปริมาณฝนอย่างชัดเจน รถกอล์ฟอาจไม่มีให้บริการ สนามหลายแห่งในกลุ่มนี้เป็นแบบเดินตีเท่านั้น',
+        'ราคาในระดับนี้มักเป็นค่ากรีนฟีอย่างเดียว สนามส่วนใหญ่ในกลุ่มนี้เก็บค่าแคดดี้และค่ารถกอล์ฟเพิ่มต่างหาก และราคาวันหยุดสุดสัปดาห์สูงกว่าวันธรรมดาและมักเกิน ฿1,500 ส่วนรถกอล์ฟโดยทั่วไปมีให้บริการ แต่บางสนามกำหนดให้วิ่งได้เฉพาะบนเส้นทางรถกอล์ฟ ตอนจองควรสอบถามให้ชัดว่าราคารวมอะไรบ้าง',
     },
     // JA GSC context (2026-07): Japanese searchers typed 「バンコク の ゴルフ場 安い」
     // and 「バンコク ゴルフ 安い」 and landed on the EN page at pos 58-64 with 0
@@ -155,9 +181,9 @@ export const PRICE_TIER_I18N: Partial<
     ja: {
       title: 'バンコク近郊の安いゴルフ場 ฿1,500以下 — おすすめコースと注意点',
       framing:
-        'タイのグリーンフィー市場の中でも最安値帯です。この価格帯のラウンドは、開場から年数を経た市営・政府系コース（EGATの発電所併設コース、軍関係のクラブなど）が中心で、海外からのビジターでもビュッフェブランチほどの料金で18ホールをプレーできます。',
+        'タイのグリーンフィー市場の中でも最安値帯です。この価格帯のラウンドは、1990年代に開場し、長年営業を続けているコースが中心で、Pete Dye（ピート・ダイ）やRonald Fream（ロナルド・フリーム）といった著名な設計家が手がけたコースも複数あります。海外からのビジターでもビュッフェブランチほどの料金で18ホールをプレーできます。',
       catch:
-        'クラブハウスの設備は必要最低限と考えてください。ほとんどのコースにドライビングレンジはなく、コースコンディションは降雨量によって大きく変わります。ゴルフカートがない場合もあり、歩きでのラウンドのみのコースも少なくありません。',
+        'この価格帯の料金は、多くの場合グリーンフィーのみの金額です。大半のコースではキャディーとカートの料金が別途かかり、週末料金は平日より高く、฿1,500の上限を上回ることも珍しくありません。カートはたいてい利用できますが、カート道しか走れず、フェアウェイへの乗り入れができないコースもあります。予約時に、料金に何が含まれるかを確認しておきましょう。',
     },
     // KO title frames follow the same per-tier logic documented on the ja rows
     // above — 저렴한 ("cheap") only at ฿1,500/฿2,500, 가성비 좋은 at ฿3,500
@@ -170,15 +196,15 @@ export const PRICE_TIER_I18N: Partial<
     // English-language-specific caveats ("limited English on the line",
     // "book-able online in English") are KEPT — Korean readers ARE
     // international visitors. Latin course/designer names (Nikanti,
-    // Schmidt-Curley, Nicklaus, EGAT, Asian Tour) stay verbatim without
+    // Pete Dye, Ronald Fream, Asian Tour) stay verbatim without
     // hangul glosses, matching the shipped KO guide corpus in
     // data/explainer-pages.ts ("Nikanti는 …", "Nikanti·Alpine은 …").
     ko: {
       title: '방콕 근교 저렴한 골프장 ฿1,500 이하 — 추천 코스와 주의할 점',
       framing:
-        '태국 그린피 시장에서 가장 낮은 가격대예요. 이 가격대의 라운딩은 주로 오래된 시영·정부 계열 코스(EGAT 발전소 부설 코스, 군 소속 클럽 등)에서 이루어지며, 외국인 방문객도 뷔페 브런치 한 끼 가격으로 18홀을 플레이할 수 있어요.',
+        '태국 그린피 시장에서 가장 낮은 가격대예요. 이 가격대의 라운딩은 주로 1990년대부터 운영되어 온 코스에서 이루어지고, 그중 여러 곳은 Pete Dye, Ronald Fream 같은 유명 설계가의 작품이에요. 외국인 방문객도 뷔페 브런치 한 끼 가격으로 18홀을 플레이할 수 있어요.',
       catch:
-        '클럽하우스 시설은 기본적인 수준이라고 생각해 두세요. 대부분의 코스에 드라이빙 레인지가 없고, 코스 상태는 강우량에 따라 크게 달라져요. 골프 카트가 없는 경우도 있으며, 걸어서만 라운딩해야 하는 코스도 많아요.',
+        '이 가격대의 요금은 대개 그린피만 해당하는 금액이에요. 대부분의 코스는 캐디피와 카트비를 따로 받고, 주말 요금은 더 높아서 표시된 상한 금액을 넘는 경우가 많아요. 카트는 대체로 이용할 수 있지만, 카트 도로로만 다녀야 하는 코스도 있어요. 예약할 때 요금에 무엇이 포함되는지 확인해 두세요.',
     },
     // ZH GSC context (2026-07): a ZH searcher typed 室内高尔夫球练习场 收费 —
     // fee/price intent — so titles front-load a 曼谷周边…高尔夫球场 query phrase
@@ -198,13 +224,15 @@ export const PRICE_TIER_I18N: Partial<
     // is glossed 亚洲巡回赛（Asian Tour） (ZH Phuket guide), designer person
     // names get transliteration + Latin parens (尼克劳斯（Nicklaus）, per
     // 杰克·尼克劳斯（Jack Nicklaus） in the same corpus); Schmidt-Curley has no
-    // shipped transliteration and stays Latin verbatim.
+    // shipped transliteration and stays Latin verbatim, and so do Pete Dye and
+    // Ronald Fream in the ฿1,500 framing (the shipped zh course copy writes
+    // them in Latin).
     zh: {
       title: '曼谷周边便宜高尔夫球场 ฿1,500以下 — 推荐球场与注意事项',
       framing:
-        '处于泰国果岭费市场的最低价位。这个价位的球局一般在开业多年的市政或政府系球场（EGAT电厂附属球场、军方俱乐部等）进行，外国访客花一顿自助早午餐的钱就能打完18洞。',
+        '处于泰国果岭费市场的最低价位。这个价位的球局一般在1990年代开业、经营多年的球场进行，其中好几座出自Pete Dye、Ronald Fream等知名设计师之手，外国访客花一顿自助早午餐的钱就能打完18洞。',
       catch:
-        '会所设施请按基础水平预期：大多数球场没有练习场，场地状态也会随降雨量明显起伏。球车未必租得到，这类球场不少只能步行打球。',
+        '这个价位段的报价通常只含果岭费：其中大多数球场会另收球童费和球车费，周末价格也更高，常常超出本页标示的上限。球车一般都租得到，但有些球场仅限球车道行驶，不能开上球道。预订时最好问清楚价格包含哪些项目。',
     },
   },
   '2500-baht': {

@@ -1142,7 +1142,7 @@
     "coursesCount": "{count, plural, =1 {# <muted>course</muted>} other {# <muted>courses</muted>}}",
     "viewAll": "View all",
     "budgetHeading": "Filter by green fee budget",
-    "budgetIntro": "From low-budget EGAT-municipal layouts up to trophy-course territory.",
+    "budgetIntro": "From budget-friendly weekday rounds up to trophy-course territory.",
     "underPrice": "Under ฿{price}",
     "rentalEyebrow": "No clubs? No problem.",
     "rentalPitch": "Rent premium clubs from our Bangkok simulator — Callaway Paradym, Warbird, REVA. From <price>1,200 THB/day</price>.",
