@@ -180,14 +180,16 @@ export function feeRosterHeadingKey(
  * `feeRosterHeadingKey` one level up: a shared header may only name the noun when
  * EVERY course beneath it agrees.
  *
- * The tier roster is a derived top 12 spanning regions, so one package course in
- * it makes "green fee under X" false for that row — and the chrome sits directly
- * above the list. This went live with the chiang-mai batch, which flagged
- * `royal-chiang-mai-golf-club` (#8) and `gassan-khuntan-golf-resort` (#11) in
- * `/under/5000-baht/`; before it, no package course reached ANY tier roster, so
- * the hardcoded noun was latent-but-correct. Exactly the shape CLAUDE.md records
- * as round 4 of the fee_is_package saga — the cheap per-course string was fixed
- * and the prominent shared header was not.
+ * The tier roster is a derived top 12 of a Bangkok-area price band, so one
+ * package course in it makes "green fee under X" false for that row — and the
+ * chrome sits directly above the list. Since the tiers became bands
+ * (2026-09-25), four of the five rosters (฿1,500 to ฿5,000) hold a package
+ * course and take the rate keys; ฿7,500 holds none and keeps the green-fee
+ * keys. It first went live with the chiang-mai batch, which put two package
+ * courses on the then-cumulative `/under/5000-baht/`; before that no package
+ * course reached ANY tier roster, so the hardcoded noun was latent-but-correct.
+ * Exactly the shape CLAUDE.md records as round 4 of the fee_is_package saga —
+ * the cheap per-course string was fixed and the prominent shared header was not.
  *
  * `validate:fee-labels` was structurally blind here — its SCAN_DIRS are
  * app/components/lib/data and these strings live in `messages/*.json`, so the
@@ -207,8 +209,8 @@ export function feeRosterHeadingKey(
  *
  * STILL UNSWEPT, named so it does not read as covered: `GolfCourseHub`'s
  * budget heading AND its metaTitle name the noun on `/golf-courses/` directly
- * above the link to `/under/5000-baht/`, whose roster this very function
- * concedes is not green-fee-only. Defensible (the tier filters on
+ * above the five tier links, four of whose rosters this very function concedes
+ * are not green-fee-only. Defensible (the tier filters on
  * `green_fee_weekday_thb`) but not swept.
  */
 export function tierChromeKeys(courses: readonly FeeCopySource[]): {

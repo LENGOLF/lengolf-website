@@ -1,8 +1,10 @@
 /**
  * Price tiers for the /golf-courses/under-[price]-baht/ pages.
  *
- * Tier values are weekday green fee ceilings in THB. The "framing" copy is
- * shown as the page intro — kept honest and specific so each tier reads
+ * Tier values are weekday-fee ceilings in THB, and each page lists its BAND:
+ * courses above the next-lower ceiling, up to this one, within 90 minutes of
+ * Bangkok (getCoursesUnderPrice in lib/golf-courses-derived.ts). The "framing"
+ * copy is shown as the page intro — kept honest and specific so each tier reads
  * as a different page (not just five copies of the same template).
  */
 export interface PriceTier {
@@ -37,7 +39,7 @@ export const PRICE_TIERS: readonly PriceTier[] = [
     slug: '3500-baht',
     title: 'Best Bangkok-Area Golf Courses Under ฿3,500',
     framing:
-      'The sweet spot for the budget-conscious visiting golfer — modern layouts within an hour of Bangkok at a price most international markets would consider impossibly low for an 18-hole round with caddie and cart.',
+      'The sweet spot for the budget-conscious visiting golfer: modern layouts within 90 minutes of Bangkok at a price most international markets would consider impossibly low for an 18-hole round with caddie and cart.',
     catch:
       'Rates often jump 30–40% at peak times — weekends at most courses here, high season at the seasonally priced ones — so flexible dates are worth real money in this band. Some venues at the top of the band introduce caddie tipping conventions that quietly add 300–500 THB to the published green fee.',
   },
@@ -55,13 +57,26 @@ export const PRICE_TIERS: readonly PriceTier[] = [
     slug: '7500-baht',
     title: 'Best Bangkok-Area Golf Courses Under ฿7,500',
     framing:
-      'The top end of the visiting-tourist market. Trophy courses here include all-inclusive premium experiences (Nikanti), former Asian Tour venues, and the marquee Schmidt-Curley and Nicklaus designs that put Thailand on the world golf map.',
+      'The top end of the visiting-tourist market. Trophy courses here include all-inclusive premium experiences (Nikanti) and a former Asian Tour venue.',
     catch:
       'Weekend rates frequently exceed the headline tier on these courses; if your trip dates are flexible, weekday play is dramatically better value. Dress codes are enforced and online booking through the course’s own site is usually cheapest.',
   },
 ] as const
 
 export const PRICE_TIER_SLUGS = PRICE_TIERS.map((t) => t.slug)
+
+/**
+ * The tier pages' sitemap `<lastmod>`: an ISO literal, never `new Date()`, per
+ * the content-dates rule. The sitemap emits the later of this and
+ * CONTENT_LAST_UPDATED, so a site-wide content pass still re-dates these pages.
+ * Bump it when something these pages render changes WITHOUT that pass: the copy
+ * in this file, the roster rule in lib/golf-courses-derived.ts
+ * (getCoursesUnderPrice), or a course-file edit that moves a course onto or off
+ * a tier (a fee, drive time or status change, or a popularityScore input such
+ * as the website, driving range or layout prose, which reorders a full band).
+ * 2026-09-25: rosters became Bangkok-area price bands.
+ */
+export const PRICE_TIERS_UPDATED_AT = '2026-09-25'
 
 /**
  * Per-locale translations for the price-tier pages
@@ -104,7 +119,7 @@ export const PRICE_TIER_I18N: Partial<
 > = {
   '1500-baht': {
     th: {
-      title: 'สนามกอล์ฟกรุงเทพฯ ที่ดีที่สุด ราคาไม่เกิน ฿1,500',
+      title: 'สนามกอล์ฟใกล้กรุงเทพฯ ที่ดีที่สุด ราคาไม่เกิน ฿1,500',
       framing:
         'อยู่ในกลุ่มราคาต่ำสุดของตลาดค่ากรีนฟีในไทย รอบส่วนใหญ่ในระดับราคานี้เล่นที่สนามเทศบาลหรือสนามของหน่วยงานรัฐที่เปิดมานาน (สนามของการไฟฟ้าฝ่ายผลิตแห่งประเทศไทยตามโรงไฟฟ้า สนามของหน่วยทหาร) ซึ่งนักกอล์ฟต่างชาติสามารถเล่น 18 หลุมได้ในราคาเทียบเท่ามื้อบุฟเฟต์เช้าสาย',
       catch:
@@ -194,7 +209,7 @@ export const PRICE_TIER_I18N: Partial<
   },
   '2500-baht': {
     th: {
-      title: 'สนามกอล์ฟกรุงเทพฯ ที่ดีที่สุด ราคาไม่เกิน ฿2,500',
+      title: 'สนามกอล์ฟใกล้กรุงเทพฯ ที่ดีที่สุด ราคาไม่เกิน ฿2,500',
       framing:
         'กอล์ฟงบปานกลางที่คุ้มค่าจริง ภายในระยะเวลาไม่เกิน 90 นาทีจากใจกลางกรุงเทพฯ สนามส่วนใหญ่ในระดับราคานี้เปิดมานานกว่า 15 ปี และบริหารโดยกลุ่มเจ้าของเดิมที่สร้างสนามขึ้นมา โดยราคาเน้นกลุ่มนักกอล์ฟไทยทั่วไปมากกว่านักท่องเที่ยวต่างชาติ',
       catch:
@@ -224,37 +239,37 @@ export const PRICE_TIER_I18N: Partial<
   },
   '3500-baht': {
     th: {
-      title: 'สนามกอล์ฟกรุงเทพฯ ที่ดีที่สุด ราคาไม่เกิน ฿3,500',
+      title: 'สนามกอล์ฟใกล้กรุงเทพฯ ที่ดีที่สุด ราคาไม่เกิน ฿3,500',
       framing:
-        'จุดคุ้มค่าที่สุดสำหรับนักกอล์ฟที่ดูแลงบประมาณ — สนามสมัยใหม่ในระยะเวลาไม่เกิน 1 ชั่วโมงจากกรุงเทพฯ ในราคาที่ตลาดกอล์ฟต่างประเทศส่วนใหญ่มองว่าถูกอย่างไม่น่าเชื่อ สำหรับการเล่น 18 หลุมพร้อมแคดดี้และรถกอล์ฟ',
+        'จุดคุ้มค่าที่สุดสำหรับนักกอล์ฟที่ดูแลงบประมาณ คือสนามสมัยใหม่ในระยะเวลาไม่เกิน 90 นาทีจากกรุงเทพฯ ในราคาที่ตลาดกอล์ฟต่างประเทศส่วนใหญ่มองว่าถูกอย่างไม่น่าเชื่อ สำหรับการเล่น 18 หลุมพร้อมแคดดี้และรถกอล์ฟ',
       catch:
         'ราคามักปรับขึ้น 30-40% ในช่วงพีค ซึ่งสำหรับสนามส่วนใหญ่ในกลุ่มนี้คือช่วงวันหยุดสุดสัปดาห์ ส่วนสนามที่คิดราคาตามฤดูกาลจะเป็นช่วงไฮซีซัน หากเลือกวันเล่นได้ยืดหยุ่นก็ช่วยประหยัดได้มากในระดับราคานี้ สนามบางแห่งในกลุ่มบนของระดับราคานี้มีธรรมเนียมทิปแคดดี้ที่จะเพิ่มค่าใช้จ่ายอีก 300-500 บาท จากค่ากรีนฟีที่ประกาศไว้ (ข้อมูล ณ กรกฎาคม 2026)',
     },
     ja: {
       title: 'バンコク近郊のコスパの良いゴルフ場 ฿3,500以下 — おすすめコースと注意点',
       framing:
-        '予算を意識しながら旅行するゴルファーにとって、最もバランスの良い価格帯です。バンコクから1時間圏内のモダンなレイアウトを、キャディーとカート付きの18ホールとしては海外のほとんどの市場では考えられない安さでプレーできます。',
+        '予算を意識しながら旅行するゴルファーにとって、最もバランスの良い価格帯です。バンコクから90分圏内のモダンなレイアウトを、キャディーとカート付きの18ホールとしては海外のほとんどの市場では考えられない安さでプレーできます。',
       catch:
         'ピーク時には料金が30〜40%上がることが多く、この価格帯では多くのコースで週末が、シーズンで料金が変わるコースではハイシーズンがそれにあたります。日程に融通が利くかどうかで支払額はかなり変わります。価格帯上位の一部のコースにはキャディーへのチップの慣習があり、公表されているグリーンフィーに300〜500THB（2026年7月現在）がひそかに上乗せされます。',
     },
     ko: {
       title: '방콕 근교 가성비 좋은 골프장 ฿3,500 이하 — 추천 코스와 주의할 점',
       framing:
-        '예산을 생각하며 여행하는 골퍼에게 가장 균형 잡힌 가격대예요. 방콕에서 1시간 이내의 현대적인 코스를, 캐디와 카트가 포함된 18홀 라운딩치고는 해외 대부분의 시장에서 믿기 어려울 만큼 낮은 가격에 즐길 수 있어요.',
+        '예산을 생각하며 여행하는 골퍼에게 가장 균형 잡힌 가격대예요. 방콕에서 90분 이내의 현대적인 코스를, 캐디와 카트가 포함된 18홀 라운딩치고는 해외 대부분의 시장에서 믿기 어려울 만큼 낮은 가격에 즐길 수 있어요.',
       catch:
         '요금이 30~40% 뛰는 시기가 있어요. 이 가격대에서 대부분의 코스는 주말이, 시즌에 따라 요금이 달라지는 코스는 성수기가 그 시기예요. 날짜를 유연하게 잡을 수 있다면 이 가격대에서는 그만큼 아낄 수 있어요. 가격대 상단의 일부 코스에는 캐디 팁 관행이 있어서, 공시된 그린피에 300~500바트가 슬그머니 더해지기도 해요 (2026년 7월 기준).',
     },
     zh: {
       title: '曼谷周边高性价比高尔夫球场 ฿3,500以下 — 推荐球场与注意事项',
       framing:
-        '对精打细算的到访球友来说，这是最划算的价位段——曼谷1小时以内的现代球场，18洞含球童和球车的价格，在大多数国际市场看来低得难以置信。',
+        '对精打细算的到访球友来说，这是最划算的价位段：距曼谷90分钟车程以内的现代球场，18洞含球童和球车的价格，在大多数国际市场看来低得难以置信。',
       catch:
         '价格在高峰期常上涨30–40%：多数球场是周末，按季节定价的球场则是旺季。所以在这个价位段，日期能否灵活安排，差别不小。价位段上端的部分球场有球童小费惯例，会在公示的果岭费之外悄悄多出300–500泰铢，截至2026年7月。',
     },
   },
   '5000-baht': {
     th: {
-      title: 'สนามกอล์ฟกรุงเทพฯ ที่ดีที่สุด ราคาไม่เกิน ฿5,000',
+      title: 'สนามกอล์ฟใกล้กรุงเทพฯ ที่ดีที่สุด ราคาไม่เกิน ฿5,000',
       framing:
         'กอล์ฟระดับพรีเมียมในราคารายวัน โดยยังไม่ถึงระดับสนามชื่อดังระดับโลก กลุ่มราคานี้ครอบคลุมสนามที่ดีกว่าในเขตกรุงเทพฯ ที่กรุ๊ปทัวร์กอล์ฟต่างชาติเลือกใช้เป็นประจำ — สภาพสนามดี พร้อมสำหรับการแข่งขัน และจองออนไลน์ได้',
       catch:
@@ -284,30 +299,30 @@ export const PRICE_TIER_I18N: Partial<
   },
   '7500-baht': {
     th: {
-      title: 'สนามกอล์ฟกรุงเทพฯ ที่ดีที่สุด ราคาไม่เกิน ฿7,500',
+      title: 'สนามกอล์ฟใกล้กรุงเทพฯ ที่ดีที่สุด ราคาไม่เกิน ฿7,500',
       framing:
-        'ระดับบนสุดของตลาดนักท่องเที่ยวที่มาเยือน สนามระดับแชมป์ในกลุ่มนี้มีทั้งประสบการณ์พรีเมียมแบบครบวงจร (Nikanti) สนามที่เคยเป็นเจ้าภาพการแข่งขัน Asian Tour และสนามออกแบบโดย Schmidt-Curley และ Nicklaus ที่ทำให้ประเทศไทยมีชื่อเสียงในวงการกอล์ฟระดับโลก',
+        'ระดับบนสุดของตลาดนักท่องเที่ยวที่มาเยือน สนามระดับแชมป์ในกลุ่มนี้มีทั้งประสบการณ์พรีเมียมแบบครบวงจร (Nikanti) และสนามที่เคยเป็นเจ้าภาพการแข่งขัน Asian Tour',
       catch:
         'ราคาวันหยุดสุดสัปดาห์ของสนามกลุ่มนี้มักสูงกว่าราคาหลักที่ประกาศไว้ หากวันเดินทางของคุณยืดหยุ่นได้ การเล่นวันธรรมดาคุ้มค่ากว่ามาก มีการบังคับใช้กฎการแต่งกาย และการจองออนไลน์ผ่านเว็บไซต์ของสนามเองมักมีราคาถูกที่สุด',
     },
     ja: {
       title: 'バンコク近郊の名門ゴルフ場 ฿7,500以下 — おすすめコースと注意点',
       framing:
-        '観光で訪れるゴルファー向け市場の最上位帯です。この価格帯の名門コースには、オールインクルーシブのプレミアム体験を提供するNikanti（ニカンティ）、Asian Tourの開催実績を持つコース、そしてタイを世界のゴルフ地図に載せたSchmidt-Curley（シュミット・カーリー）やNicklaus（ニクラウス）設計の代表的コースが含まれます。',
+        '観光で訪れるゴルファー向け市場の最上位帯です。この価格帯の名門コースには、オールインクルーシブのプレミアム体験を提供するNikanti（ニカンティ）や、Asian Tourの開催実績を持つコースが含まれます。',
       catch:
         'この価格帯のコースでは、週末料金が見出しの上限額を上回ることも珍しくありません。旅行日程に融通が利くなら、平日プレーのほうがはるかに割安です。ドレスコードは厳格に運用されており、コース公式サイトからのオンライン予約が最も安く済むのが一般的です。',
     },
     ko: {
       title: '방콕 근교 명문 골프장 ฿7,500 이하 — 추천 코스와 주의할 점',
       framing:
-        '방문 관광객 시장의 최상위 가격대예요. 이 가격대의 명문 코스에는 올인클루시브 프리미엄 경험을 제공하는 Nikanti, Asian Tour 대회를 개최했던 코스, 그리고 태국을 세계 골프 지도에 올려놓은 Schmidt-Curley와 Nicklaus 설계의 대표 코스들이 포함돼요.',
+        '방문 관광객 시장의 최상위 가격대예요. 이 가격대의 명문 코스에는 올인클루시브 프리미엄 경험을 제공하는 Nikanti, 그리고 Asian Tour 대회를 개최했던 코스가 포함돼요.',
       catch:
         '이 가격대 코스들은 주말 요금이 표시된 상한 금액을 넘어서는 경우가 많아요. 여행 날짜에 여유가 있다면 평일 플레이가 훨씬 더 이득이에요. 드레스 코드가 엄격히 적용되며, 코스 공식 사이트를 통한 온라인 예약이 보통 가장 저렴해요.',
     },
     zh: {
       title: '曼谷周边顶级高尔夫球场 ฿7,500以下 — 推荐球场与注意事项',
       framing:
-        '到访游客市场的最高价位段。这里的名场包括全包式高端体验（Nikanti）、曾承办亚洲巡回赛（Asian Tour）赛事的球场，以及把泰国推上世界高尔夫版图的Schmidt-Curley与尼克劳斯（Nicklaus）设计名作。',
+        '到访游客市场的最高价位段。这里的名场包括全包式高端体验（Nikanti）以及曾承办亚洲巡回赛（Asian Tour）赛事的球场。',
       catch:
         '这些球场的周末价格经常超出本页标示的上限；如果你的行程日期灵活，平日打球划算得多。着装要求会被严格执行，而通过球场官网在线预订通常最便宜。',
     },

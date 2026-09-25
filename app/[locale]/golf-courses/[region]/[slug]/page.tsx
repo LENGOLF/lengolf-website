@@ -17,6 +17,7 @@ import {
   getCoursesUnderPrice,
   getRelatedCourses,
   getUseCasesByRarity,
+  matchesUseCase,
 } from '@/lib/golf-courses-derived'
 import { BTS_STATIONS } from '@/data/bts-stations'
 import { USE_CASE_RULES } from '@/data/golf-courses-use-cases'
@@ -156,11 +157,13 @@ export default async function CoursePageRoute({ params }: Props) {
 
   // 3) Rarest use-case page this course belongs to (EN only, see above) —
   // ordering computed from actual member counts (self-updating; a hardcoded
-  // list would silently re-starve the thinnest pages as course data evolves)
+  // list would silently re-starve the thinnest pages as course data evolves).
+  // matchesUseCase, not the bare predicate: the use-case pages list Bangkok-area
+  // courses only, so a Phuket course must not link to one.
   let useCaseLink: CrossLink | null = null
   if (locale === 'en') {
     const useCasesByRarity = await getUseCasesByRarity()
-    const matchedUseCase = useCasesByRarity.find((u) => USE_CASE_RULES[u].predicate(course))
+    const matchedUseCase = useCasesByRarity.find((u) => matchesUseCase(course, u))
     useCaseLink = matchedUseCase
       ? {
           label: USE_CASE_RULES[matchedUseCase].title.replace('Best Bangkok-Area Golf Courses ', ''),

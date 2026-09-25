@@ -1510,6 +1510,7 @@ const CONSUMERS: Record<string, Record<string, string>> = {
     'app/[locale]/golf-courses/under/[tier]/opengraph-image.tsx': 'ignored: the share card; an image is not a pinged URL, and its tier page is',
     'app/[locale]/golf-courses/page.tsx': 'pinged: tier list (PRICE_TIERS)',
     'app/[locale]/golf-courses/[region]/[slug]/page.tsx': "ignored: a course's tier cross-link, category (3)",
+    'app/sitemap.ts': 'ignored: the sitemap is not a pinged URL',
     'lib/golf-courses-derived.ts': 'ignored: derives the tier rosters rendered by the tier page',
   },
   'data/bts-stations.ts': {
