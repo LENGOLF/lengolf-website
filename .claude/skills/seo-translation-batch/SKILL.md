@@ -72,10 +72,10 @@ doubled `——`) in website copy, yet nearly every shipped ja/ko/zh/th guide an
 entry contains them (2026-09). They are legacy debt for a separate native-QA sweep,
 not a pattern: builders must not copy a sibling's em dashes, and reviewers flag any
 in copy the batch writes or edits, not in shipped copy it leaves untouched. Each
-locale's replacements are in its glossary `style_notes` (titles: `seo_norms`, or the
-checklist for th), along with the one load-bearing exception: the ` — ` venue
-delimiter in `price_breakdown[].item` stays byte-for-byte wherever the EN entry has
-one.
+locale's replacements are in its glossary `style_notes` (titles: `seo_norms` for
+ja/ko/zh; th's `style_notes` cover its titles), along with the one load-bearing
+exception: the ` — ` venue delimiter in `price_breakdown[].item` stays byte-for-byte
+wherever the EN entry has one.
 
 ---
 
@@ -83,9 +83,9 @@ one.
 
 - **Glossary is law, all of it.** Besides the `locale` / `language_name` metadata,
   `data/i18n-glossary/<locale>.json` carries `brand_immutable`, `preferred`, `tone`,
-  `formality`, `preserve`, `terminology`,
-  `conventions`, `honesty_constraints`, `transliterations`, `seo_norms` (absent from
-  `th.json`) and `style_notes`. `style_notes` is the easy one to skip and it carries
+  `formality`, `preserve`, `terminology`, `conventions`, `honesty_constraints`,
+  `transliterations`, `seo_norms` (absent from `th.json`) and `style_notes`.
+  `style_notes` is the easy one to skip and it carries
   the prose rules, including each locale's no-em-dash rule and its replacements. The
   honesty-scoping nuance lives in `docs/i18n-review-checklist.md` §"Honesty & scoping".
 - **LENGOLF prices MUST be `{{tokens}}`**, never hardcoded literals — resolved from
