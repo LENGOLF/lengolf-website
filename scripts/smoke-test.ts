@@ -7776,10 +7776,10 @@ async function runAgreementFooterLinkTests() {
 //     CI does. And `next dev` writes no manifest and ALWAYS accepts q=70
 //     (BLUR_QUALITY is pushed into `qualities` on every dev request), so a run
 //     against a dev server cannot see a dropped 70.
-// (g) two key-space dimensions no `images` setting can close, measured on the
-//     preview: a zero-padded width (`w=096`, `w=00096`, … each a new key) and
-//     the output format negotiated from Accept. Closing the first needs a
-//     Vercel Firewall rule, which was deliberately not added.
+// (g) key-space dimensions no `images` setting can close, measured on the
+//     preview: a zero-padded width or quality (`w=096`, `q=075`, `q=0075`, …
+//     each a new key) and the output format negotiated from Accept. Closing
+//     the first needs a Vercel Firewall rule, which was deliberately not added.
 
 /** Real object, rendered on every page (header + footer logo). */
 const OPTIMIZER_LOGO =

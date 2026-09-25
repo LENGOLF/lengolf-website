@@ -28,7 +28,9 @@ if (!process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY && !process.env.GITHUB_ACTION
 // Next's own optimizer normalizes first, so neither `next start` nor CI can see
 // that. Excluding `%`, empty segments and dot-leading segments closes all of it.
 // Every one of the 293 objects in the bucket on 2026-09-24 fits, and so does
-// every name lengolf-forms generates (`used-clubs/<timestamp>-<random>.<ext>`).
+// every name lengolf-forms generates (`used-clubs/<timestamp>-<random>.<ext>`,
+// provided the uploaded file has an extension: the uploader takes `<ext>` from
+// the file name, so an extension-less name would carry through whole).
 // A future object whose name has a space, non-ASCII or a leading dot, or that
 // sits more than 3 folders deep, will 400 through the optimizer: name uploads to fit.
 const WEBSITE_ASSETS_SEGMENT = '[A-Za-z0-9_-]*([A-Za-z0-9_.-])'
@@ -54,8 +56,9 @@ const nextConfig = {
   // the site renders still loads.
   //
   // Still unbounded, because no `images` setting can reach them: a zero-padded
-  // width (`w=096`, `w=00096`, ... each a new key; the width check parses the
-  // integer) and the output format negotiated from Accept (webp or original).
+  // width or quality (`w=096`, `q=075`, `q=0075`, ... each a new key, because
+  // both checks parse the integer) and the output format negotiated from Accept
+  // (webp or original).
   images: {
     // Exactly the qualities <Image> emits: an unset `quality` resolves to 75
     // and three call sites in app/[locale]/page.tsx set 70 or 75. Adding a new
