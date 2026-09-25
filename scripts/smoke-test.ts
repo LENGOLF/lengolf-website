@@ -7114,13 +7114,18 @@ async function runPriceTierRoundupLanguageTests() {
   // edits. So the expectation comes from the same course-file oracle L7 uses,
   // and an exact equality keeps what the old 240 caught: this loop dropping
   // items before `itemsChecked++`. The derived value carries its own floor,
-  // because a degraded oracle (no course files read) would otherwise collapse
-  // both sides together (the checkPackageNoun lesson in CLAUDE.md).
-  const oracle = await loadRosterOracle();
+  // only to sharpen the message: an oracle that read no course files would make
+  // the equality below go red anyway (itemsChecked is counted from the pages),
+  // but as "checked 172, expected 0" rather than naming the oracle.
   let expectedItems = 0;
-  for (const { tier } of params) {
-    const t = oracle.PRICE_TIERS.find((x) => x.slug === tier);
-    if (t) expectedItems += oracle.expectedCount(TIER_ROSTER_SIZE, oracle.bandRule(t.thb).test);
+  try {
+    const oracle = await loadRosterOracle();
+    for (const { tier } of params) {
+      const t = oracle.PRICE_TIERS.find((x) => x.slug === tier);
+      if (t) expectedItems += oracle.expectedCount(TIER_ROSTER_SIZE, oracle.bandRule(t.thb).test);
+    }
+  } catch (err) {
+    fail("L6 roster oracle", `could not load the course files: ${String(err)}`);
   }
   if (expectedItems < 150) {
     fail(
@@ -7224,9 +7229,12 @@ async function runPriceTierRoundupLanguageTests() {
 //
 // Anti-vacuity: REQUIRED_ROSTER_PAGES is an exact pin on pages JUDGED (the
 // counter sits after the count verdict), paths must be unique, itemsJudged sits
-// after each per-item verdict and must equal itemsSeen, and MIN_ROSTER_ITEMS
-// floors the total. Mutation-tested (L6 + L7 together) on 2026-09-25 against a
-// dev server, each mutant in lib/golf-courses-derived.ts: radius lifted with
+// after each per-item verdict and must equal itemsSeen, and itemsSeen must
+// EQUAL the sum of the per-page expectations (259 on 2026-09-25), which catches
+// a skip placed before itemsSeen++ that the per-page checks cannot see. Derived,
+// not a literal: a hand-set floor of 240 had 19 items of slack and would have
+// reddened after about four ordinary course edits. Mutation-tested (L6 + L7
+// together) on 2026-09-25 against a dev server, each mutant in lib/golf-courses-derived.ts: radius lifted with
 // null still excluded (124 failures, the over-90 canary among them), null
 // included too (157), band floor dropped (116), matchesUseCase back to the bare
 // predicate (17, all three negative canaries), and isPlayable alone dropped
@@ -7248,13 +7256,6 @@ const TIER_ROSTER_SIZE = 12;
 const USE_CASE_ROSTER_SIZE = 8;
 // 5 EN tiers + 20 translated tiers (getTranslatedPriceTierParams) + 6 use cases.
 const REQUIRED_ROSTER_PAGES = 31;
-// True total 259 on 2026-09-25 (EN tiers 43, translated tiers 172, use cases
-// 44). Floored below it on purpose: one course crossing a band edge in each of
-// the three sparse bands (฿3,500/5,000/7,500 hold 8/5/6) moves the total by up
-// to 5 per band (EN + 4 locales), so 240 cannot be false-reddened by an
-// ordinary fee correction while still asserting over 90% of the population. The
-// per-page count equality below is the exact check.
-const MIN_ROSTER_ITEMS = 240;
 
 /**
  * The roster oracle, rebuilt from the course files. Shared by L7 (per-page
@@ -7290,7 +7291,14 @@ async function runRosterClaimTests() {
   console.log("\n\x1b[1mL7) Tier and best-for rosters are Bangkok-area\x1b[0m");
   const { getTranslatedPriceTierParams } = await import("../data/price-tiers");
   const { USE_CASES, USE_CASE_RULES } = await import("../data/golf-courses-use-cases");
-  const { PRICE_TIERS, courses, byPath, playable, near, bandRule, expectedCount } = await loadRosterOracle();
+  let oracle: Awaited<ReturnType<typeof loadRosterOracle>>;
+  try {
+    oracle = await loadRosterOracle();
+  } catch (err) {
+    fail("L7 roster oracle", `could not load the course files: ${String(err)}`);
+    return;
+  }
+  const { PRICE_TIERS, courses, byPath, playable, near, bandRule, expectedCount } = oracle;
   type Course = GolfCourse;
   const pages: { path: string; size: number; rule: { what: string; test: (c: Course) => boolean } }[] = [];
   for (const t of PRICE_TIERS) {
@@ -7318,6 +7326,7 @@ async function runRosterClaimTests() {
   let pagesJudged = 0;
   let itemsSeen = 0;
   let itemsJudged = 0;
+  let expectedTotal = 0;
   for (const pg of pages) {
     try {
       const res = await fetch(`${BASE}${pg.path}`, { redirect: "manual" });
@@ -7375,6 +7384,7 @@ async function runRosterClaimTests() {
       const expected = expectedCount(pg.size, pg.rule.test);
       const countOk = items.length === expected;
       pagesJudged++; // after the count verdict
+      expectedTotal += expected;
       if (!countOk) {
         fail(
           `L7 ${pg.path} lists ${items.length} course(s)`,
@@ -7400,8 +7410,11 @@ async function runRosterClaimTests() {
       "an item was counted without being checked: look for an early exit between itemsSeen++ and itemsJudged++",
     );
   }
-  if (itemsSeen < MIN_ROSTER_ITEMS) {
-    fail(`L7 checked only ${itemsSeen} roster item(s)`, `expected ${MIN_ROSTER_ITEMS}+ (true 259 on 2026-09-25)`);
+  if (itemsSeen !== expectedTotal) {
+    fail(
+      `L7 checked ${itemsSeen} roster item(s)`,
+      `expected exactly ${expectedTotal}, the sum of the per-page expectations (259 on 2026-09-25). With every page's own count passing, a mismatch means items were skipped before itemsSeen++.`,
+    );
   } else if (itemsJudged === itemsSeen) {
     pass(
       `L7 every one of ${itemsSeen} listed courses is playable, within ${ROSTER_MAX_DRIVE_MIN} min, and in its page's band or rule`,

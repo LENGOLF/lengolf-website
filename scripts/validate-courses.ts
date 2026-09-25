@@ -71,6 +71,11 @@ const warnings: string[] = []
 // drive times in the corpus (8 + 12). Anywhere else, null reads as "not within
 // 90 minutes" to isBangkokArea and removes the course from the tier and
 // best-for rosters, so it must be filled in or its region listed here.
+// Checked for closed courses too (stricter than the rosters need, but a closed
+// course reopening would otherwise inherit the hole). NO --self-test case covers
+// this rule: like the fee rules in main(), it is inline, so deleting it keeps
+// every gate green on healthy data. Mutation-tested by hand on 2026-09-25
+// (blanking sai-golf-club's drive time goes red).
 const NULL_DRIVE_TIME_REGIONS = new Set(['phuket', 'chiang-mai'])
 
 
@@ -270,7 +275,7 @@ async function main() {
 
     if (c.drive_time_from_bangkok_min === null && !NULL_DRIVE_TIME_REGIONS.has(c.region)) {
       errors.push(
-        `${file}: drive_time_from_bangkok_min is null in region "${c.region}" — the Bangkok-area tier and best-for rosters would silently drop this course; set the drive time, or add the region to NULL_DRIVE_TIME_REGIONS if it is genuinely a flight away`
+        `${file}: drive_time_from_bangkok_min is null in region "${c.region}" — the Bangkok-area tier and best-for rosters read null as "beyond 90 minutes", so an open course here would silently drop off them; set the drive time, or add the region to NULL_DRIVE_TIME_REGIONS if it is genuinely a flight away`
       )
     }
 

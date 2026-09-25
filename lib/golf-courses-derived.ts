@@ -72,8 +72,9 @@ export function isPlayable(c: GolfCourse): boolean {
  * Drive time, not region: `pattaya`, `khao-yai` and `kanchanaburi` each hold
  * courses on both sides of 90 minutes. A null drive time is excluded: today
  * the only nulls are every course in `phuket` and `chiang-mai` (a flight, not a
- * drive), so this costs no course within 90 minutes. It does mean a new Bangkok
- * course file that omits the field drops off these lists without an error.
+ * drive), so this costs no course within 90 minutes. A null anywhere else is a
+ * `validate:courses` ERROR (NULL_DRIVE_TIME_REGIONS), because it would drop an
+ * open course off these lists with no other signal.
  *
  * Deliberately NOT applied in getAllPublishedCourses: the BTS-station and
  * airport pages rank by straight-line distance from their own anchor, and
