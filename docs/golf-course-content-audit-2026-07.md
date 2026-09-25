@@ -138,8 +138,11 @@ of Search Console data.
    Blend in GSC impressions (static snapshot file) or editorial rank.
 6. **`x-default` hreflang** missing across all translated clusters
    (`getAlternates` in lib/translated-routes.ts).
-7. **Titles of `under/*` and `best-for/*`** say "Bangkok-Area" but lists pull
-   from all 14 regions — either filter by distance or retitle.
+7. ~~**Titles of `under/*` and `best-for/*`** say "Bangkok-Area" but lists pull
+   from all 14 regions~~ **DONE 2026-09-25** — both rosters now list only courses
+   within 90 minutes of Bangkok (`isBangkokArea` / `matchesUseCase` in
+   `lib/golf-courses-derived.ts`), and each tier lists its own price band;
+   guarded by smoke section L7.
 8. ~~**Phoenix Gold / Suvarnabhumi merge**~~ — **DONE 2026-08-30.** Web
    research (2026-07-30) confirmed `bangkok/suvarnabhumi-golf-country-club`
    and `bangkok/phoenix-gold-golf-country-club` were the SAME 36-hole RTJ Jr.
@@ -187,10 +190,10 @@ of Search Console data.
   downgrades those courses' schema to province-only with no warning or test
   (PR #82 review, deferred item). The right sweep: add typed address fields,
   migrate the 27, then delete all 149 blobs.
-- Tier/best-for pages titled "Bangkok-Area" still list courses from all 14
-  regions (`getCoursesUnderPrice`/`getCoursesForUseCase` are nationwide) —
-  pre-existing backlog item 7, now also surfaced by the tier cross-link on
-  non-Bangkok course pages (PR #82 review, deferred item).
+- ~~Tier/best-for pages titled "Bangkok-Area" still list courses from all 14
+  regions~~ **DONE 2026-09-25** (backlog item 7): the rosters are Bangkok-area,
+  and course pages more than 90 minutes from Bangkok no longer carry a tier or
+  best-for link to them.
 - `club_rental_available === false` exists in code but not in data (134 true /
   15 null / 0 false) — the strongest rental pitch never renders. If research
   confirms any course genuinely lacks rentals, set it to `false`.

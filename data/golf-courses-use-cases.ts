@@ -152,3 +152,16 @@ export const USE_CASE_RULES: Record<UseCase, UseCaseMeta> = {
 }
 
 export const USE_CASE_SLUGS = USE_CASES.map((u) => u)
+
+/**
+ * The use-case pages' sitemap `<lastmod>`: an ISO literal, never `new Date()`,
+ * per the content-dates rule. The sitemap emits the later of this and
+ * CONTENT_LAST_UPDATED, so a site-wide content pass still re-dates these pages.
+ * Bump it when something these pages render changes WITHOUT that pass: the copy
+ * or predicates in this file, the roster rule in lib/golf-courses-derived.ts
+ * (matchesUseCase), or a course-file edit that moves a course onto or off a
+ * list (a fee, drive time, facility or status change, or a popularityScore
+ * input such as the website or layout prose, which reorders a full list).
+ * 2026-09-25: rosters limited to courses within 90 minutes of Bangkok.
+ */
+export const USE_CASES_UPDATED_AT = '2026-09-25'

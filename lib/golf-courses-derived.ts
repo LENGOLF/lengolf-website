@@ -61,6 +61,48 @@ export function isPlayable(c: GolfCourse): boolean {
   )
 }
 
+/**
+ * The radius behind "Bangkok-area": the tier pages say so in their titles in
+ * all five locales and the use-case pages in EN, and three of their intros
+ * (฿2,500, ฿3,500, beginners) say "within 90 minutes of Bangkok". Their
+ * rosters used to rank every published course nationally, so a
+ * Chiang Rai course (720 min) sat on "Best Bangkok-Area Golf Courses Under
+ * ฿1,500" and three Phuket courses on the beginners page.
+ *
+ * Drive time, not region: `pattaya`, `khao-yai` and `kanchanaburi` each hold
+ * courses on both sides of 90 minutes. A null drive time is excluded: today
+ * the only nulls are every course in `phuket` and `chiang-mai` (a flight, not a
+ * drive), so this costs no course within 90 minutes. A null anywhere else is a
+ * `validate:courses` ERROR (NULL_DRIVE_TIME_REGIONS), because it would drop an
+ * open course off these lists with no other signal.
+ *
+ * Deliberately NOT applied in getAllPublishedCourses: the BTS-station and
+ * airport pages rank by straight-line distance from their own anchor, and
+ * `/compare/` reads getTopCoursesByRegion, so neither is a Bangkok-area claim.
+ */
+export const BANGKOK_AREA_MAX_DRIVE_MIN = 90
+
+export function isBangkokArea(c: GolfCourse): boolean {
+  return (
+    c.drive_time_from_bangkok_min !== null &&
+    c.drive_time_from_bangkok_min <= BANGKOK_AREA_MAX_DRIVE_MIN
+  )
+}
+
+/**
+ * Is this course eligible for the `/golf-courses/best-for/<useCase>/` page?
+ * The one definition shared by the page roster, the rarity ordering and the
+ * course-detail "best for" cross-link, so that link never points at a list
+ * whose rule excludes the course. (It can still point at one where the course
+ * ranks below the top 8: the link picks the rarest matching use case, not a
+ * list the course is actually on.) isPlayable is here for the cross-link: the
+ * roster callers already filter to playable courses, but a closed course's own
+ * page still renders and must not link to a list that can never show it.
+ */
+export function matchesUseCase(c: GolfCourse, useCase: UseCase): boolean {
+  return isPlayable(c) && isBangkokArea(c) && USE_CASE_RULES[useCase].predicate(c)
+}
+
 // Module-memoized like comparisonPairsCache/useCaseRarityCache below: the
 // tier-link block on every course-detail render calls this, so without the
 // cache each of the ~170 page builds repeats the same 14-region fan-out.
@@ -281,35 +323,57 @@ export async function getCoursesNearAirport(
 }
 
 /**
- * Top N courses with weekday green fee ≤ tier, ranked by composite score.
- * Courses without a weekday fee are excluded.
+ * The price band below a tier ceiling: the next-lower tier's ceiling, or 0 for
+ * the cheapest tier.
+ */
+function priceBandFloor(thb: number): number {
+  return Math.max(0, ...PRICE_TIERS.map((t) => t.thb).filter((ceiling) => ceiling < thb))
+}
+
+/**
+ * Top N Bangkok-area courses whose weekday fee falls in this tier's BAND
+ * (above the next-lower tier's ceiling, at or below this one), ranked by
+ * composite score. Courses without a weekday fee are excluded.
+ *
+ * A band, not every course under the ceiling: each tier's intro describes its
+ * band ("premium daily-fee golf without crossing into trophy-course territory")
+ * and the ja/ko/zh titles name it (安い / プレミアム / 名門), so without bands a
+ * ฿2,500 course sat on "Under ฿5,000" as "premium" two tiers after it appeared
+ * as "cheap". Within 90
+ * minutes of Bangkok the upper bands are thin (8, 5 and 6 courses for ฿3,500,
+ * ฿5,000 and ฿7,500 on 2026-09-25), so those pages list fewer than N. It also
+ * matches the course page's tier link, which already picks the course's band.
  */
 export async function getCoursesUnderPrice(
   thb: number,
   n: number
 ): Promise<GolfCourse[]> {
+  const floor = priceBandFloor(thb)
   const all = await getAllPublishedCourses()
   return all
     .filter(
       (c) =>
-        c.green_fee_weekday_thb !== null && c.green_fee_weekday_thb <= thb
+        isBangkokArea(c) &&
+        c.green_fee_weekday_thb !== null &&
+        c.green_fee_weekday_thb > floor &&
+        c.green_fee_weekday_thb <= thb
     )
     .sort(byPopularity)
     .slice(0, n)
 }
 
 /**
- * Top N courses matching a use-case predicate, ranked by composite score.
+ * Top N Bangkok-area courses matching a use-case predicate, ranked by composite
+ * score.
  */
 export async function getCoursesForUseCase(
   useCase: UseCase,
   n: number
 ): Promise<GolfCourse[]> {
-  const meta = USE_CASE_RULES[useCase]
-  if (!meta) return []
+  if (!USE_CASE_RULES[useCase]) return []
   const all = await getAllPublishedCourses()
   return all
-    .filter(meta.predicate)
+    .filter((c) => matchesUseCase(c, useCase))
     .sort(byPopularity)
     .slice(0, n)
 }
@@ -323,7 +387,7 @@ let useCaseRarityCache: Promise<UseCase[]> | null = null
 export function getUseCasesByRarity(): Promise<UseCase[]> {
   return (useCaseRarityCache ??= (async () => {
     const all = await getAllPublishedCourses()
-    const count = (u: UseCase) => all.filter(USE_CASE_RULES[u].predicate).length
+    const count = (u: UseCase) => all.filter((c) => matchesUseCase(c, u)).length
     return [...USE_CASES].sort((a, b) => count(a) - count(b) || a.localeCompare(b))
   })())
 }
