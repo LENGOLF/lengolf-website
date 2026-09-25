@@ -121,13 +121,19 @@ any language barrier. Nothing beyond that.
 
 ## SERP / SEO checks
 
-- Title front-loads the target query, then a descriptive tail after a colon, a comma or a
-  sentence break (`seo_norms.title_display_target` in the ja/ko/zh glossaries names each
-  locale's forms; `th.json` has no `seo_norms`).
-  **No em dash** (`—`, or the doubled `——`) in a title or anywhere else in copy: it is the
-  owner's house style. Most shipped non-EN guide and FAQ titles still carry one. That is legacy debt for a separate
-  native-QA sweep: flag it in copy the batch writes or edits, not in shipped copy it leaves
-  untouched, and never copy the pattern from a sibling entry.
+- Title front-loads the target query, then a descriptive tail after a colon, a comma, the
+  owner's ` · `, a question mark (only when the head is itself a question), or joined directly
+  to a noun head. `seo_norms.title_display_target` in the ja/ko/zh glossaries names each
+  locale's forms (ja writes the middle dot as `・`); `th.json` has no `seo_norms`. Never a
+  mid-title period, a dash look-alike used as the separator, or `｜`/`|` (the layout already
+  appends ` | LENGOLF`).
+- **No em dash** (`—`, or the doubled `——`) in a title or anywhere else in copy: it is the
+  owner's house style. One exception: the ` — ` venue delimiter inside `price_breakdown[].item`
+  in `data/price-guide-pages.ts` is a code separator (`PriceGuidePage.groupPriceRows()` splits
+  on it), so it stays wherever the EN entry has one. Most shipped non-EN guide and FAQ titles
+  still carry an em dash. That is legacy debt for a separate native-QA sweep: flag it in copy
+  the batch writes or edits, not in shipped copy it leaves untouched, and never copy the
+  pattern from a sibling entry.
 - Title within the locale display target (glossary `seo_norms.title_display_target`).
 - Meta description puts the hook + query in the first ~80 chars; no keyword stuffing; no invented
   claims (the fact-fidelity rule applies to metadata too).

@@ -29,7 +29,7 @@
     "Learn More": "了解更多"
   },
   "tone": "friendly-professional, second-person, conversational. No exclamation marks. No emoji. Avoid marketing-speak inflation.",
-  "formality": "Simplified Chinese (Mainland). Guide/explainer content addresses the reader as 你 (warm, direct) — this matches all shipped ZH guide entries. Use natural Mainland vocabulary and full-width punctuation （，。：“”）, never an em dash (—— or —). Keep sentences readable, not stiff. NOTE: messages/zh.json UI copy uses 您 (formal) per its own namespace convention — that is a separate register; do not change it and do not import 您 into guide prose.",
+  "formality": "Simplified Chinese (Mainland). Guide/explainer content addresses the reader as 你 (warm, direct) — this matches all shipped ZH guide entries. Use natural Mainland vocabulary and full-width punctuation (，、。：；？“”（）), never an em dash (—— or —); style_notes names the replacements. Keep sentences readable, not stiff. NOTE: messages/zh.json UI copy uses 您 (formal) per its own namespace convention — that is a separate register; do not change it and do not import 您 into guide prose.",
   "preserve": [
     "All next-intl placeholders like {name}, {year}, {pct}, {n}, {rate}",
     "All markdown formatting (**, *, [, ], (), # headings)",
@@ -77,15 +77,15 @@
     "note": "ZH keeps station/venue names in Latin (Chidlom, The Mercury Ville) rather than transliterating; only Bangkok is localized (曼谷). Airline and brand names are glossed once with the Latin name in full-width parens on first use, e.g. 泰国国际航空（Thai Airways）, then either form. Keep LENGOLF, len.golf, BTS, MRT, PGA, LINE @lengolf, len.golf, and Latin product names (Callaway, REVA) verbatim."
   },
   "seo_norms": {
-    "title_display_target": "~28–30 Hanzi characters; front-load the target query, then a descriptive tail after a full-width colon ：, a comma ， or a sentence break (？), never an em dash (—— or —). Most shipped ZH guide and FAQ titles still use an em-dash tail: legacy debt, do not copy it. Shipped ZH guide titles run 22–27 chars.",
+    "title_display_target": "~28–30 Hanzi characters; front-load the target query, then the descriptive tail. When the head is itself a question, the tail follows ？ directly (泰国有多少座高尔夫球场？各地区分布与选择建议); add the ？ if a question-shaped head (吗, 多少, 哪里) lacks one. Otherwise use a full-width colon ： (曼谷 Alpine 高尔夫俱乐部：果岭费、球童与预约指南), a comma ， when the tail continues the head as a clause (曼谷打高尔夫最佳时段，6:00–9:00开球最合适), or join a noun head and a label tail directly (华欣 Black Mountain 高尔夫俱乐部到访指南). No spaces around full-width marks. Never an em dash (—— or —) or a look-alike used as the separator (–, ―, ─), never 。 mid-title, and never ｜ or | (the layout already appends \" | LENGOLF\"). Most shipped ZH guide and FAQ titles still use an em-dash tail: legacy debt, do not copy it. Shipped ZH guide titles run 20–34 chars (2026-09).",
     "meta_note": "Hook + target query in the first ~40 Hanzi; ZH meta truncates around 78 characters on mobile SERP. Shipped guide metas run ~70–80 chars.",
     "front_load": "Lead with the reader's query (例：高尔夫球杆托运行李费用), not the brand."
   },
   "style_notes": [
     "Address the reader as 你 in guide prose (never 您 — that is UI-namespace register).",
-    "Full-width punctuation throughout: （），。：“”； and full-width parens for glosses.",
+    "Full-width punctuation throughout: （），、。：；？“” and full-width parens for glosses; 、 (not ，) between listed items (果岭费、球童与预约).",
     "Half-width Arabic digits with Chinese units and no space (6公斤, 1,200泰铢).",
-    "En dash – for numeric ranges. No em dash (—— or —) anywhere in copy, per the owner's house style: for an aside or explanatory break use full-width parentheses （）, a full-width colon ：, a comma ， or a sentence break. Shipped ZH copy still contains em dashes: that is legacy debt for a separate native-QA sweep, not a pattern to copy.",
+    "En dash – for numeric ranges only, never as a separator. No em dash (—— or —) anywhere in copy, per the owner's house style, and no look-alike used as a separator in its place (―, ─, －): for an aside or explanatory break use full-width parentheses （）, a full-width colon ：, a comma ， or a sentence break (。). A bold label or lead-in takes the colon inside the bold rather than a dash after it (**球童费：**…). One exception: the ' — ' venue delimiter inside price_breakdown[].item in data/price-guide-pages.ts is a code separator (PriceGuidePage.groupPriceRows() splits on it), so keep it exactly where the EN entry has one and add none elsewhere. Shipped ZH copy still contains em dashes: that is legacy debt for a separate native-QA sweep, not a pattern to copy.",
     "No exclamation marks, no emoji. Warm, direct, plain Mainland Chinese — avoid Taiwan/HK lexical variants."
   ]
 }
