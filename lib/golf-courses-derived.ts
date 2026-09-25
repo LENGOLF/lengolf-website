@@ -61,6 +61,42 @@ export function isPlayable(c: GolfCourse): boolean {
   )
 }
 
+/**
+ * The radius behind "Bangkok-area": the tier and use-case pages say so in their
+ * titles in all five locales, and their intro copy says "within 90 minutes of
+ * Bangkok". Their rosters used to rank every published course nationally, so a
+ * Chiang Rai course (720 min) sat on "Best Bangkok-Area Golf Courses Under
+ * ฿1,500" and four Phuket courses on the beginners page.
+ *
+ * Drive time, not region: `pattaya`, `khao-yai` and `kanchanaburi` each hold
+ * courses on both sides of 90 minutes. A null drive time is excluded: today
+ * the only nulls are every course in `phuket` and `chiang-mai` (a flight, not a
+ * drive), so this costs no course within 90 minutes. It does mean a new Bangkok
+ * course file that omits the field drops off these lists without an error.
+ *
+ * Deliberately NOT applied in getAllPublishedCourses: the BTS-station and
+ * airport pages rank by straight-line distance from their own anchor, and
+ * `/compare/` reads getTopCoursesByRegion, so neither is a Bangkok-area claim.
+ */
+export const BANGKOK_AREA_MAX_DRIVE_MIN = 90
+
+export function isBangkokArea(c: GolfCourse): boolean {
+  return (
+    c.drive_time_from_bangkok_min !== null &&
+    c.drive_time_from_bangkok_min <= BANGKOK_AREA_MAX_DRIVE_MIN
+  )
+}
+
+/**
+ * Can this course appear on the `/golf-courses/best-for/<useCase>/` page?
+ * The one definition shared by the page roster, the rarity ordering and the
+ * course-detail "best for" cross-link, so a course is never sent to a list
+ * that cannot include it.
+ */
+export function matchesUseCase(c: GolfCourse, useCase: UseCase): boolean {
+  return isBangkokArea(c) && USE_CASE_RULES[useCase].predicate(c)
+}
+
 // Module-memoized like comparisonPairsCache/useCaseRarityCache below: the
 // tier-link block on every course-detail render calls this, so without the
 // cache each of the ~170 page builds repeats the same 14-region fan-out.
@@ -281,8 +317,8 @@ export async function getCoursesNearAirport(
 }
 
 /**
- * Top N courses with weekday green fee ≤ tier, ranked by composite score.
- * Courses without a weekday fee are excluded.
+ * Top N Bangkok-area courses with weekday green fee ≤ tier, ranked by composite
+ * score. Courses without a weekday fee are excluded.
  */
 export async function getCoursesUnderPrice(
   thb: number,
@@ -292,24 +328,26 @@ export async function getCoursesUnderPrice(
   return all
     .filter(
       (c) =>
-        c.green_fee_weekday_thb !== null && c.green_fee_weekday_thb <= thb
+        isBangkokArea(c) &&
+        c.green_fee_weekday_thb !== null &&
+        c.green_fee_weekday_thb <= thb
     )
     .sort(byPopularity)
     .slice(0, n)
 }
 
 /**
- * Top N courses matching a use-case predicate, ranked by composite score.
+ * Top N Bangkok-area courses matching a use-case predicate, ranked by composite
+ * score.
  */
 export async function getCoursesForUseCase(
   useCase: UseCase,
   n: number
 ): Promise<GolfCourse[]> {
-  const meta = USE_CASE_RULES[useCase]
-  if (!meta) return []
+  if (!USE_CASE_RULES[useCase]) return []
   const all = await getAllPublishedCourses()
   return all
-    .filter(meta.predicate)
+    .filter((c) => matchesUseCase(c, useCase))
     .sort(byPopularity)
     .slice(0, n)
 }
@@ -323,7 +361,7 @@ let useCaseRarityCache: Promise<UseCase[]> | null = null
 export function getUseCasesByRarity(): Promise<UseCase[]> {
   return (useCaseRarityCache ??= (async () => {
     const all = await getAllPublishedCourses()
-    const count = (u: UseCase) => all.filter(USE_CASE_RULES[u].predicate).length
+    const count = (u: UseCase) => all.filter((c) => matchesUseCase(c, u)).length
     return [...USE_CASES].sort((a, b) => count(a) - count(b) || a.localeCompare(b))
   })())
 }

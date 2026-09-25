@@ -7130,27 +7130,28 @@ async function runPriceTierRoundupLanguageTests() {
     // vacuous INDEPENDENTLY of the count above, so itemsChecked stays at 240 while
     // the branch that matters here drops to zero.
     //
-    // MEASURED, not derived. CI run 33289945032 printed `packageItemsSeen = 36`,
-    // confirming the offline derivation exactly: seven package courses reach a
-    // translated tier roster (rachakram in under/2500; cascata and lam-luk-ka in
-    // under/3500; toscana-valley and royal-bang-pa-in in BOTH under/5000 and
-    // under/7500; royal-chiang-mai and gassan-khuntan), = 9 items per locale x 4.
-    // The previous text here said "12 of 149 courses are packages", "only two reach
-    // a translated tier roster" and "the true value below is unchanged at 8" - all
-    // three were stale, and the floor sat at 4 against a true 36.
+    // True value 36, derived offline from the registry: six package courses hold
+    // nine translated-tier slots (artitaya in under/1500; rachakram in under/2500;
+    // krungthep-kreetha in under/3500; cascata, lam-luk-ka and royal-bang-pa-in in
+    // two tiers each: 3500+5000, 3500+5000 and 5000+7500) = 9 items per locale x 4.
+    // Limiting the tiers to courses within 90 minutes of Bangkok swapped the
+    // membership (toscana-valley, royal-chiang-mai and gassan-khuntan left;
+    // artitaya and krungthep-kreetha joined; cascata and lam-luk-ka gained 5000)
+    // and left the total at 36 by coincidence. Before that it was confirmed in CI
+    // (run 33289945032 printed `packageItemsSeen = 36`); re-check the next CI log.
     //
     // 28, NOT 36, and unlike every other ratchet in this repo that is deliberate.
     // The roster is a derived top 12 and CLAUDE.md warns against pinning to it: a
     // fee correction elsewhere can displace a course and red a PR that changed
     // nothing about labels. 28 = 36 minus the largest single course's contribution
-    // (toscana-valley and royal-bang-pa-in each hold 2 tiers x 4 locales = 8), so no
-    // ONE displacement can false-red it, while it still asserts 78% of the measured
+    // (cascata, lam-luk-ka and royal-bang-pa-in each hold 2 tiers x 4 locales = 8),
+    // so no ONE displacement can false-red it, while it still asserts 78% of the measured
     // value instead of the 11% a floor of 4 asserted. Re-measure from the CI log
     // when the package set changes; do not raise it to the true value.
   if (packageItemsSeen < 28) {
     fail(
       `L6 package-label branch ran on only ${packageItemsSeen} item(s)`,
-      "expected 28+ (measured 36 today: seven fee_is_package courses across four translated tier rosters; floored one course-contribution below true so a roster displacement cannot false-red). Zero means no package course reaches one any more, or packageUrlPaths stopped matching el.item.url's pathname — not that the labels are right.",
+      "expected 28+ (derived 36 today: six fee_is_package courses in nine translated-tier slots; floored one course-contribution below true so a roster displacement cannot false-red). Zero means no package course reaches one any more, or packageUrlPaths stopped matching el.item.url's pathname — not that the labels are right.",
     );
   } else {
     pass(`L6 asserted package (not green-fee) ItemList labels on ${packageItemsSeen} item(s)`);
@@ -7564,21 +7565,17 @@ async function runLocalizedDriveTimeTests() {
 // course has NO translated prose.overview, so the EN fallback fires and there is
 // something to compare. Every translation batch REMOVES comparisons, so unlike
 // MIN_COURSES/packageOfferSeen this number shrinks and the floor must be lowered
-// deliberately rather than raised.
+// deliberately rather than raised. The one other thing that moves it is a change
+// to the ROSTER rule (getCoursesUnderPrice), which can move it either way.
 //
-// Today: 72. Batch 9 (bangkok tranche) took it 120 -> 96: five of its twelve
-// courses occupy six tier-roster slots (windsor-park + bangsai in 1500,
-// the-vintage in 2500, royal-golf + royal-lakeside in 3500, royal-golf again in
-// 5000) x 4 locales = 24 comparisons retired. The previous floor of 100 sat
-// ABOVE the new true value, so section P would have failed CI on a correct tree.
-//
-// Batch 10 (khao-yai, full 12-course roster) took it 96 -> 72 the same way:
-// four of its courses occupy six tier-roster slots (life-privilege +
-// rancho-charnvee + royal-hills in 1500, life-privilege again in 2500,
-// toscana-valley in 5000 and 7500) x 4 locales = 24 more retired. Re-derived
-// from the registry against the applied tree, not obtained by subtraction.
-// FOURTEEN courses still contribute; at the current rate this check has about
-// three batches left before the re-scope described below is forced.
+// Today: 128, across NINETEEN courses. The tiers used to rank every course in
+// Thailand; limiting them to courses within 90 minutes of Bangkok (the claim in
+// their titles) took it 72 -> 128: the courses that joined carry fewer
+// translated overviews than the ones they displaced. Derived per (tier, locale)
+// from the registry against the applied tree, and checked by reproducing the
+// previous 72 from the previous rule; not obtained by adding up the swaps.
+// Each translation batch that reaches a tier roster retires 4 per tier slot it
+// occupies (one per translated locale).
 //
 // Pinned AT the true value on purpose, same discipline as the ratchets above: a
 // floor below the population is a guard gone slack, and here it would also hide
@@ -7592,7 +7589,7 @@ async function runLocalizedDriveTimeTests() {
 // tier pages once every rostered course is translated. The re-scope is to point
 // it at a surface that still has untranslated courses — the region hubs, whose
 // rosters are the full region roster rather than a derived top-12.
-const FALLBACK_MIN_COMPARISONS = 72;
+const FALLBACK_MIN_COMPARISONS = 128;
 
 async function runFallbackPullQuoteTests() {
   console.log(
