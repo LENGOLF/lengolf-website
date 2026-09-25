@@ -6947,8 +6947,10 @@ const wayfindingTests: {
 //
 // Asserts membership in the locale's own label SET rather than per-course
 // equality: the roundup only ever emits the LOWER rate, whose basis is
-// per-course (a tier page really does mix seasonal and day-of-week courses), so
-// the valid answers are exactly that locale's two lower-basis labels.
+// per-course, so the valid answers are that locale's two lower-basis labels.
+// (No seasonally priced course lies within 90 minutes of Bangkok, so since the
+// tiers became Bangkok-area bands every item resolves the day-of-week label;
+// the set keeps the seasonal pair so a future one does not false-red.)
 async function runPriceTierRoundupLanguageTests() {
   console.log("\n\x1b[1mL6) Price-tier roundup ItemList language\x1b[0m");
   const { getTranslatedPriceTierParams } = await import("../data/price-tiers");
@@ -6988,15 +6990,12 @@ async function runPriceTierRoundupLanguageTests() {
         .GolfCourseDetail;
       // The roundup emits only the LOWER rate, so the valid answers are this
       // locale's two lower-basis labels — PLUS the two package forms, because
-      // the tier route now resolves labels through `feeHeadings`. Omitting them
-      // was latent rather than harmless. It is no longer latent: the chiang-mai
-      // batch flagged royal-chiang-mai-golf-club and gassan-khuntan-golf-resort,
-      // both of which sit in the /under/5000-baht/ top 12, so this branch now
-      // decides 8 real items (2 courses x 4 locales). Before that batch it
-      // decided ZERO — the four older package courses are all cheap enough to
-      // miss every translated tier roster. Same "fixed one of two sites" shape
-      // as the defect the package work exists to close — L2 got the branch,
-      // L6 did not, and L6 also went without the floor below.
+      // the tier route resolves labels through `feeHeadings`. Omitting them was
+      // latent rather than harmless, and this branch decides real items: six
+      // package courses sit on translated tier rosters (see the floor below).
+      // It once decided ZERO, when no package course reached one. Same "fixed
+      // one of two sites" shape as the defect the package work exists to close
+      // — L2 got the branch, L6 did not, and L6 also went without the floor.
       // Per-COURSE, not a widened global set. The first version appended the two
       // package forms to one `allowed` array shared by every item, which accepted
       // "Weekday package" for any of the 128 NON-package courses — L2 got the
@@ -7080,7 +7079,7 @@ async function runPriceTierRoundupLanguageTests() {
         // SCOPE, measured rather than asserted. This catches a skip placed
         // between `itemsChecked++` and `judged++`. It does NOT catch: a skip
         // before `itemsChecked++` (both counters stay level, the equality holds,
-        // and it is the 240 floor that reds); a skip between `judged++` and the
+        // and it is the itemsChecked floor that reds); a skip between `judged++` and the
         // `if` below, which evaluates the predicate and discards it; or any
         // falsification of the predicate rather than a skip of it - pinning
         // `labelOk` true, writing `if (false && !labelOk)`, or widening `want`
@@ -7108,50 +7107,48 @@ async function runPriceTierRoundupLanguageTests() {
     }
   }
 
-  // Real number, not `> 0`: 5 tiers x 4 locales, each listing 12 courses = 240.
-  // Raised 100 -> 240 by batch 9. It had sat at 100 against a true 240 — slack by
-  // 140, i.e. more than half the population could vanish while this printed a
-  // success line. That is the identical shape the L2 comment ~570 lines above
-  // calls out by name ("sat at 300 against a true 516 — HALF the value it
-  // measured"), reproduced 24 lines above the L6 floor that WAS being maintained.
-  // Every tier's roster is a full 12 today, so this is an exact product; if a
-  // tier ever holds fewer than 12 qualifying courses, re-derive rather than
-  // lowering it blindly.
-  if (itemsChecked < 240) {
+  // Real number, not `> 0`. True value 172 on 2026-09-25: the tiers are
+  // Bangkok-area price BANDS, which list 12 / 12 / 8 / 5 / 6 courses
+  // (฿1,500 → ฿7,500), x 4 locales. It was an exact 240 while every tier filled
+  // 12; the three sparse bands now move with fee edits (a course crossing a band
+  // edge moves one band's count by 1 per locale), so this floor sits one course
+  // per sparse band below true (172 - 3 x 4 = 160) and the EXACT per-page count
+  // is section L7's job. An earlier floor of 100 against a true 240 let more
+  // than half the population vanish while this printed a success line; keep
+  // this one close to true and re-derive it when the band counts change.
+  if (itemsChecked < 160) {
     fail(
       `L6 checked only ${itemsChecked} ItemList offer(s)`,
-      "expected 240 (20 translated tier pages x 12 courses). A low count means the ItemList isn't being found, not that it is correct.",
+      "expected 160+ (derived 172: 20 translated tier pages listing 12/12/8/5/6 courses per locale). A low count means the ItemList isn't being found, not that it is correct.",
     );
   } else {
     pass(`L6 asserted localized ItemList Offer.description on ${itemsChecked} item(s)`);
   }
 
     // Its own floor, for the same reason L2 carries one: the package branch goes
-    // vacuous INDEPENDENTLY of the count above, so itemsChecked stays at 240 while
+    // vacuous INDEPENDENTLY of the count above, so itemsChecked stays at its true value while
     // the branch that matters here drops to zero.
     //
-    // True value 36, derived offline from the registry: six package courses hold
-    // nine translated-tier slots (artitaya in under/1500; rachakram in under/2500;
-    // krungthep-kreetha in under/3500; cascata, lam-luk-ka and royal-bang-pa-in in
-    // two tiers each: 3500+5000, 3500+5000 and 5000+7500) = 9 items per locale x 4.
-    // Limiting the tiers to courses within 90 minutes of Bangkok swapped the
-    // membership (toscana-valley, royal-chiang-mai and gassan-khuntan left;
-    // artitaya and krungthep-kreetha joined; cascata and lam-luk-ka gained 5000)
-    // and left the total at 36 by coincidence. Before that it was confirmed in CI
-    // (run 33289945032 printed `packageItemsSeen = 36`); re-check the next CI log.
+    // True value 24, derived offline from the registry on 2026-09-25: six
+    // package courses hold one translated-tier slot each (artitaya in
+    // under/1500; rachakram in under/2500; cascata, lam-luk-ka and
+    // krungthep-kreetha in under/3500; royal-bang-pa-in in under/5000) = 6 items
+    // per locale x 4. A course sits in exactly one tier now that tiers are price
+    // bands, which is why the largest single contribution fell from 8 to 4. It
+    // was 36 while the tiers were cumulative (CI run 33289945032 printed it);
+    // re-check the next CI log.
     //
-    // 28, NOT 36, and unlike every other ratchet in this repo that is deliberate.
+    // 20, NOT 24, and unlike every other ratchet in this repo that is deliberate.
     // The roster is a derived top 12 and CLAUDE.md warns against pinning to it: a
     // fee correction elsewhere can displace a course and red a PR that changed
-    // nothing about labels. 28 = 36 minus the largest single course's contribution
-    // (cascata, lam-luk-ka and royal-bang-pa-in each hold 2 tiers x 4 locales = 8),
-    // so no ONE displacement can false-red it, while it still asserts 78% of the measured
-    // value instead of the 11% a floor of 4 asserted. Re-measure from the CI log
-    // when the package set changes; do not raise it to the true value.
-  if (packageItemsSeen < 28) {
+    // nothing about labels. 20 = 24 minus the largest single course's
+    // contribution (4 locales), so no ONE displacement can false-red it, while it
+    // still asserts 83% of the derived value. Re-derive when the package set
+    // changes; do not raise it to the true value.
+  if (packageItemsSeen < 20) {
     fail(
       `L6 package-label branch ran on only ${packageItemsSeen} item(s)`,
-      "expected 28+ (derived 36 today: six fee_is_package courses in nine translated-tier slots; floored one course-contribution below true so a roster displacement cannot false-red). Zero means no package course reaches one any more, or packageUrlPaths stopped matching el.item.url's pathname — not that the labels are right.",
+      "expected 20+ (derived 24 today: six fee_is_package courses in six translated-tier slots; floored one course-contribution below true so a roster displacement cannot false-red). Zero means no package course reaches one any more, or packageUrlPaths stopped matching el.item.url's pathname — not that the labels are right.",
     );
   } else {
     pass(`L6 asserted package (not green-fee) ItemList labels on ${packageItemsSeen} item(s)`);
@@ -7174,7 +7171,7 @@ async function runPriceTierRoundupLanguageTests() {
   // argument for the same operator.
   //
   // THIS CHECK HAS NO TEETH OF ITS OWN: (0, 0) satisfies it. All of its
-  // non-vacuity is inherited from `itemsChecked < 240` 50 lines above, so
+  // non-vacuity is inherited from the `itemsChecked < 160` floor above, so
   // lowering or deleting that floor silently degrades this to nothing. The
   // pass line is gated on a non-empty run accordingly - it otherwise printed
   // "judged every one of the 0 offer(s)" inside an already-red run, which is a
@@ -7186,6 +7183,240 @@ async function runPriceTierRoundupLanguageTests() {
     );
   } else if (itemsChecked > 0) {
     pass(`L6 judged every one of the ${itemsChecked} offer(s) it counted`);
+  }
+}
+
+// ── L7) Tier and best-for rosters keep their Bangkok-area claim ──────
+// `/golf-courses/under/<tier>/` and `/golf-courses/best-for/<useCase>/` are
+// titled "Bangkok-Area" in all five locales and their intros say "within 90
+// minutes of Bangkok", yet until 2026-09-25 both rosters ranked every course in
+// Thailand (a 720-minute Chiang Rai course sat on the ฿1,500 page). The rule now
+// lives in lib/golf-courses-derived.ts (isBangkokArea, matchesUseCase, and the
+// price BAND in getCoursesUnderPrice), and before this section nothing guarded
+// it: section P went red on a revert only because the courses that would come
+// back happened to be translated, and a best-for revert was invisible.
+//
+// The ORACLE is rebuilt here from the course files, not imported, and that is
+// the point. ROSTER_MAX_DRIVE_MIN is a literal 90 because the COPY says 90;
+// importing BANGKOK_AREA_MAX_DRIVE_MIN would let one edit to lib satisfy both
+// sides (and that module is server-only). The band edges and the use-case
+// predicates ARE imported, from data/price-tiers.ts and
+// data/golf-courses-use-cases.ts: those are the pages' own specification, so an
+// edit there legitimately moves both sides together.
+//
+// Per page it asserts two things: every ItemList course is playable, within 90
+// minutes, and inside the page's band or rule; and the item COUNT equals
+// min(roster size, eligible courses). The count half catches a filter that got
+// STRICTER, which the per-item half cannot see. A fee edit moves both halves
+// together, so neither pins a derived top-N (CLAUDE.md's /compare/ warning).
+//
+// Anti-vacuity: REQUIRED_ROSTER_PAGES is an exact pin on pages JUDGED (the
+// counter sits after the count verdict), paths must be unique, itemsJudged sits
+// after each per-item verdict and must equal itemsSeen, and MIN_ROSTER_ITEMS
+// floors the total. Mutation-tested on 2026-09-25 against a dev server: the
+// 90-minute filter reverted (122 failures), the band floor dropped (115) and
+// matchesUseCase back to the bare predicate (15, far canary included) all go
+// red; the unmutated control is green. KNOWN LIMITS: `<` for `<=` SURVIVES,
+// because every band holding a course at exactly 90 minutes has more eligible
+// courses than slots, so the page still lists a full, valid roster and only
+// which course fills the last slot changes; seeing that would mean re-ranking
+// with popularityScore here, which is the derived-top-N pin CLAUDE.md warns
+// against. And a counter proves a comparison ran, not that it discriminates:
+// `if (false && …)` over a verdict, or an early `return` after the floors,
+// stays green. Smoke has no contract suite.
+const ROSTER_MAX_DRIVE_MIN = 90;
+// The page-side N: getCoursesUnderPrice(meta.thb, 12) in the tier page and
+// getCoursesForUseCase(useCase, 8) in the best-for page.
+const TIER_ROSTER_SIZE = 12;
+const USE_CASE_ROSTER_SIZE = 8;
+// 5 EN tiers + 20 translated tiers (getTranslatedPriceTierParams) + 6 use cases.
+const REQUIRED_ROSTER_PAGES = 31;
+// True total 259 on 2026-09-25 (EN tiers 43, translated tiers 172, use cases
+// 44). Floored below it on purpose: one course crossing a band edge in each of
+// the three sparse bands (฿3,500/5,000/7,500 hold 8/5/6) moves the total by up
+// to 5 per band (EN + 4 locales), so 240 cannot be false-reddened by an
+// ordinary fee correction while still asserting over 90% of the population. The
+// per-page count equality below is the exact check.
+const MIN_ROSTER_ITEMS = 240;
+
+async function runRosterClaimTests() {
+  console.log("\n\x1b[1mL7) Tier and best-for rosters are Bangkok-area\x1b[0m");
+  const { PRICE_TIERS, getTranslatedPriceTierParams } = await import("../data/price-tiers");
+  const { USE_CASES, USE_CASE_RULES } = await import("../data/golf-courses-use-cases");
+  const { loadCourseFiles } = await import("./course-files");
+  type Course = Awaited<ReturnType<typeof loadCourseFiles>>[number]["course"];
+  const courses = (await loadCourseFiles()).map((e) => e.course);
+  const byPath = new Map(courses.map((c) => [`/golf-courses/${c.region}/${c.slug}/`, c]));
+  const playable = (c: Course) =>
+    c.status === "published" && (!c.operational_status || c.operational_status === "open");
+  const near = (c: Course) =>
+    c.drive_time_from_bangkok_min !== null && c.drive_time_from_bangkok_min <= ROSTER_MAX_DRIVE_MIN;
+
+  const ceilings = PRICE_TIERS.map((t) => t.thb);
+  const bandRule = (thb: number) => {
+    const floor = Math.max(0, ...ceilings.filter((x) => x < thb));
+    return {
+      what: `weekday fee in (${floor}, ${thb}]`,
+      test: (c: Course) =>
+        c.green_fee_weekday_thb !== null && c.green_fee_weekday_thb > floor && c.green_fee_weekday_thb <= thb,
+    };
+  };
+  const pages: { path: string; size: number; rule: { what: string; test: (c: Course) => boolean } }[] = [];
+  for (const t of PRICE_TIERS) {
+    pages.push({ path: `/golf-courses/under/${t.slug}/`, size: TIER_ROSTER_SIZE, rule: bandRule(t.thb) });
+  }
+  for (const { locale, tier } of getTranslatedPriceTierParams()) {
+    const t = PRICE_TIERS.find((x) => x.slug === tier);
+    if (!t) {
+      fail(`L7 translated tier ${locale}/${tier}`, "registered in PRICE_TIER_I18N but absent from PRICE_TIERS");
+      continue;
+    }
+    pages.push({ path: `/${locale}/golf-courses/under/${tier}/`, size: TIER_ROSTER_SIZE, rule: bandRule(t.thb) });
+  }
+  for (const u of USE_CASES) {
+    pages.push({
+      path: `/golf-courses/best-for/${u}/`,
+      size: USE_CASE_ROSTER_SIZE,
+      rule: { what: `the ${u} predicate`, test: USE_CASE_RULES[u].predicate },
+    });
+  }
+  if (new Set(pages.map((p) => p.path)).size !== pages.length) {
+    fail("L7 page list", "duplicate paths: a duplicate can stand in for a dropped page and keep the pin satisfied");
+  }
+
+  let pagesJudged = 0;
+  let itemsSeen = 0;
+  let itemsJudged = 0;
+  for (const pg of pages) {
+    try {
+      const res = await fetch(`${BASE}${pg.path}`, { redirect: "manual" });
+      if (res.status !== 200) {
+        fail(`L7 ${pg.path}`, `expected 200, got ${res.status}`);
+        continue;
+      }
+      const body = await res.text();
+      let list: Record<string, any> | null = null;
+      for (const m of body.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)) {
+        try {
+          const j = JSON.parse(m[1]);
+          if (j["@type"] === "ItemList") list = j;
+        } catch {
+          /* not this blob */
+        }
+      }
+      if (!list || !Array.isArray(list.itemListElement)) {
+        fail(`L7 ${pg.path}`, "no ItemList JSON-LD (getCourseRoundupJsonLd output missing or unparseable)");
+        continue;
+      }
+      const items: any[] = list.itemListElement;
+      for (const el of items) {
+        itemsSeen++;
+        let itemPath: string | undefined;
+        try {
+          // golfCourseItem builds the url from SITE_URL, which need not equal
+          // BASE, and it is the EN URL even on a translated page; strip any
+          // locale prefix defensively rather than depend on that.
+          itemPath = new URL(el?.item?.url).pathname.replace(/^\/(?:th|ja|ko|zh)(?=\/)/, "");
+        } catch {
+          itemPath = undefined;
+        }
+        const c = itemPath ? byPath.get(itemPath) : undefined;
+        const problems: string[] = [];
+        if (!c) {
+          problems.push(`no course file for ${JSON.stringify(el?.item?.url)}`);
+        } else {
+          if (!playable(c)) problems.push(`not playable (status ${c.status}, ${c.operational_status ?? "open"})`);
+          if (!near(c)) {
+            problems.push(
+              c.drive_time_from_bangkok_min === null
+                ? "no drive time (a flight, not a drive, from Bangkok)"
+                : `drive time ${c.drive_time_from_bangkok_min} min, over ${ROSTER_MAX_DRIVE_MIN}`,
+            );
+          }
+          if (!pg.rule.test(c)) problems.push(`fails ${pg.rule.what} (weekday fee ${c.green_fee_weekday_thb})`);
+        }
+        itemsJudged++; // after the verdict is computed, never above it
+        if (problems.length > 0) {
+          fail(`L7 ${pg.path} lists ${itemPath ?? "?"}`, problems.join("; "));
+        }
+      }
+      const eligible = courses.filter((c) => playable(c) && near(c) && pg.rule.test(c)).length;
+      const expected = Math.min(pg.size, eligible);
+      const countOk = items.length === expected;
+      pagesJudged++; // after the count verdict
+      if (!countOk) {
+        fail(
+          `L7 ${pg.path} lists ${items.length} course(s)`,
+          `expected ${expected} = min(${pg.size}, ${eligible} playable courses within ${ROSTER_MAX_DRIVE_MIN} min matching ${pg.rule.what}). Fewer means the roster filter got stricter than the page's claim; more means it got looser.`,
+        );
+      }
+    } catch (err) {
+      fail(`L7 ${pg.path} fetch error`, String(err));
+    }
+  }
+
+  if (pagesJudged !== REQUIRED_ROSTER_PAGES) {
+    fail(
+      `L7 judged ${pagesJudged} roster page(s)`,
+      `expected exactly ${REQUIRED_ROSTER_PAGES} (5 EN tiers + 20 translated tiers + 6 use cases). A shortfall with no fetch error above means pages were skipped; a new tier, locale or use case means re-derive this pin.`,
+    );
+  } else {
+    pass(`L7 judged all ${pagesJudged} tier and best-for roster pages`);
+  }
+  if (itemsJudged !== itemsSeen) {
+    fail(
+      `L7 saw ${itemsSeen} roster item(s) but judged ${itemsJudged}`,
+      "an item was counted without being checked: look for an early exit between itemsSeen++ and itemsJudged++",
+    );
+  }
+  if (itemsSeen < MIN_ROSTER_ITEMS) {
+    fail(`L7 checked only ${itemsSeen} roster item(s)`, `expected ${MIN_ROSTER_ITEMS}+ (true 259 on 2026-09-25)`);
+  } else if (itemsJudged === itemsSeen) {
+    pass(
+      `L7 every one of ${itemsSeen} listed courses is playable, within ${ROSTER_MAX_DRIVE_MIN} min, and in its page's band or rule`,
+    );
+  }
+
+  // The course page's "best for" cross-link, both directions, on DERIVED
+  // canaries rather than pinned slugs: the first playable course that matches a
+  // use-case rule but lies outside 90 minutes must carry NO best-for link (it
+  // would point at a Bangkok-area list that can never show it), and the first
+  // one within 90 minutes must carry one. The best-for link is the only
+  // /golf-courses/best-for/ href a course page renders, so the negative is clean.
+  const matchesAny = (c: Course) => USE_CASES.some((u) => USE_CASE_RULES[u].predicate(c));
+  const canaries: [Course | undefined, boolean][] = [
+    [courses.find((c) => playable(c) && !near(c) && matchesAny(c)), false],
+    [courses.find((c) => playable(c) && near(c) && matchesAny(c)), true],
+  ];
+  for (const [c, wantLink] of canaries) {
+    if (!c) {
+      fail(
+        "L7 best-for cross-link canary",
+        `no playable course ${wantLink ? "within" : "beyond"} ${ROSTER_MAX_DRIVE_MIN} min matches any use-case rule, so this check has no subject`,
+      );
+      continue;
+    }
+    const path = `/golf-courses/${c.region}/${c.slug}/`;
+    try {
+      const res = await fetch(`${BASE}${path}`, { redirect: "manual" });
+      if (res.status !== 200) {
+        fail(`L7 ${path}`, `expected 200, got ${res.status}`);
+        continue;
+      }
+      const hasLink = renderedMarkup(await res.text()).includes('href="/golf-courses/best-for/');
+      if (hasLink !== wantLink) {
+        fail(
+          `L7 ${path} best-for cross-link`,
+          wantLink
+            ? "a playable course within 90 minutes that matches a use-case rule rendered no best-for link"
+            : `${c.drive_time_from_bangkok_min === null ? "no drive time" : `drive time ${c.drive_time_from_bangkok_min} min`}, yet the course links to a Bangkok-area best-for list that cannot include it (route the link through matchesUseCase, not the bare predicate)`,
+        );
+      } else {
+        pass(`L7 ${path} ${wantLink ? "links" : "does not link"} to a best-for list, as its drive time requires`);
+      }
+    } catch (err) {
+      fail(`L7 ${path} fetch error`, String(err));
+    }
   }
 }
 
@@ -7568,11 +7799,12 @@ async function runLocalizedDriveTimeTests() {
 // deliberately rather than raised. The one other thing that moves it is a change
 // to the ROSTER rule (getCoursesUnderPrice), which can move it either way.
 //
-// Today: 128, across NINETEEN courses. The tiers used to rank every course in
-// Thailand; limiting them to courses within 90 minutes of Bangkok (the claim in
-// their titles) took it 72 -> 128: the courses that joined carry fewer
-// translated overviews than the ones they displaced. Derived per (tier, locale)
-// from the registry against the applied tree, and checked by reproducing the
+// Today: 88, across TWENTY-TWO courses. The tiers used to rank every course in
+// Thailand under each ceiling; they are now Bangkok-area price bands (within 90
+// minutes, above the next-lower ceiling), which took it 72 -> 88: the courses
+// that joined carry fewer translated overviews than the ones that left, and the
+// bands list 43 items per locale instead of 60. Derived per (tier, locale) from
+// the registry against the applied tree, and checked by reproducing the
 // previous 72 from the previous rule; not obtained by adding up the swaps.
 // Each translation batch that reaches a tier roster retires 4 per tier slot it
 // occupies (one per translated locale).
@@ -7589,7 +7821,7 @@ async function runLocalizedDriveTimeTests() {
 // tier pages once every rostered course is translated. The re-scope is to point
 // it at a surface that still has untranslated courses — the region hubs, whose
 // rosters are the full region roster rather than a derived top-12.
-const FALLBACK_MIN_COMPARISONS = 128;
+const FALLBACK_MIN_COMPARISONS = 88;
 
 async function runFallbackPullQuoteTests() {
   console.log(
@@ -8641,6 +8873,7 @@ async function main() {
   await runFaqRegistryLivenessTests();
   await runSeoSectionRegistryTests();
   await runPriceTierRoundupLanguageTests();
+  await runRosterClaimTests();
   await runWayfindingTests();
   await runRegionCountTests();
   await runLocalizedDriveTimeTests();

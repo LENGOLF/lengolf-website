@@ -23,8 +23,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // per-entry updated_at literals (their `const now` used to be a build-time
   // `new Date()` — pinned when the sitemap started trusting them). Location,
   // course and the other derived pages have no per-entry date yet, so they stay
-  // on the constant; the price-tier and use-case sections take a per-section
-  // date from their own data files.
+  // on the constant; the price-tier and use-case sections take the later of it
+  // and a per-section date from their own data files.
   const reviewed = CONTENT_LAST_UPDATED
 
   // A section WITH a per-entry date emits it verbatim; `reviewed` is only the
@@ -40,6 +40,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // nothing while reading as if it worked.
   const entryDate = (date: string | undefined, fallback: string): string =>
     date || fallback
+
+  // The two DERIVED sections that carry a section date are the one place the
+  // later-of is right. The argument above is about per-entry dates, which are
+  // last-modified claims matched by each page's own dateModified; these pages
+  // have no dateModified, and they render course data, so a CONTENT_LAST_UPDATED
+  // pass must still re-date them. ISO dates compare correctly as strings.
+  const laterOf = (a: string, b: string): string => (a > b ? a : b)
 
   const [
     blogEntries,
@@ -277,9 +284,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const languages = getAlternates(`/golf-courses/under/${tier}/`)
     return {
       url: `${SITE_URL}/golf-courses/under/${tier}/`,
-      // Per-section date, not `reviewed`: bumping CONTENT_LAST_UPDATED for a
-      // tier-roster change would re-date every location and course page too.
-      lastModified: PRICE_TIERS_UPDATED_AT,
+      // A per-section date on top of `reviewed`: bumping CONTENT_LAST_UPDATED
+      // for a tier-roster change would re-date every location and course page.
+      lastModified: laterOf(PRICE_TIERS_UPDATED_AT, reviewed),
       changeFrequency: 'monthly' as const,
       priority: 0.7,
       ...(Object.keys(languages).length > 1 ? { alternates: { languages } } : {}),
@@ -288,7 +295,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const golfBestForPages: MetadataRoute.Sitemap = USE_CASES.map((useCase) => ({
     url: `${SITE_URL}/golf-courses/best-for/${useCase}/`,
-    lastModified: USE_CASES_UPDATED_AT,
+    lastModified: laterOf(USE_CASES_UPDATED_AT, reviewed),
     changeFrequency: 'monthly' as const,
     priority: 0.6,
   }))

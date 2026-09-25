@@ -66,7 +66,7 @@ export function isPlayable(c: GolfCourse): boolean {
  * titles in all five locales, and their intro copy says "within 90 minutes of
  * Bangkok". Their rosters used to rank every published course nationally, so a
  * Chiang Rai course (720 min) sat on "Best Bangkok-Area Golf Courses Under
- * ฿1,500" and four Phuket courses on the beginners page.
+ * ฿1,500" and three Phuket courses on the beginners page.
  *
  * Drive time, not region: `pattaya`, `khao-yai` and `kanchanaburi` each hold
  * courses on both sides of 90 minutes. A null drive time is excluded: today
@@ -88,13 +88,17 @@ export function isBangkokArea(c: GolfCourse): boolean {
 }
 
 /**
- * Can this course appear on the `/golf-courses/best-for/<useCase>/` page?
+ * Is this course eligible for the `/golf-courses/best-for/<useCase>/` page?
  * The one definition shared by the page roster, the rarity ordering and the
- * course-detail "best for" cross-link, so a course is never sent to a list
- * that cannot include it.
+ * course-detail "best for" cross-link, so that link never points at a list
+ * whose rule excludes the course. (It can still point at one where the course
+ * ranks below the top 8: the link picks the rarest matching use case, not a
+ * list the course is actually on.) isPlayable is here for the cross-link: the
+ * roster callers already filter to playable courses, but a closed course's own
+ * page still renders and must not link to a list that can never show it.
  */
 export function matchesUseCase(c: GolfCourse, useCase: UseCase): boolean {
-  return isBangkokArea(c) && USE_CASE_RULES[useCase].predicate(c)
+  return isPlayable(c) && isBangkokArea(c) && USE_CASE_RULES[useCase].predicate(c)
 }
 
 // Module-memoized like comparisonPairsCache/useCaseRarityCache below: the
@@ -317,19 +321,38 @@ export async function getCoursesNearAirport(
 }
 
 /**
- * Top N Bangkok-area courses with weekday green fee ≤ tier, ranked by composite
- * score. Courses without a weekday fee are excluded.
+ * The price band below a tier ceiling: the next-lower tier's ceiling, or 0 for
+ * the cheapest tier.
+ */
+function priceBandFloor(thb: number): number {
+  return Math.max(0, ...PRICE_TIERS.map((t) => t.thb).filter((ceiling) => ceiling < thb))
+}
+
+/**
+ * Top N Bangkok-area courses whose weekday fee falls in this tier's BAND
+ * (above the next-lower tier's ceiling, at or below this one), ranked by
+ * composite score. Courses without a weekday fee are excluded.
+ *
+ * A band, not every course under the ceiling: each tier's intro describes its
+ * band ("premium daily-fee golf without crossing into trophy-course territory")
+ * and the ja/ko/zh titles name it (安い / プレミアム / 名門), so a ฿2,500 course on
+ * "Under ฿5,000" read as "premium" one page after it read as "cheap". Within 90
+ * minutes of Bangkok the upper bands are thin (8, 5 and 6 courses for ฿3,500,
+ * ฿5,000 and ฿7,500 on 2026-09-25), so those pages list fewer than N. It also
+ * matches the course page's tier link, which already picks the course's band.
  */
 export async function getCoursesUnderPrice(
   thb: number,
   n: number
 ): Promise<GolfCourse[]> {
+  const floor = priceBandFloor(thb)
   const all = await getAllPublishedCourses()
   return all
     .filter(
       (c) =>
         isBangkokArea(c) &&
         c.green_fee_weekday_thb !== null &&
+        c.green_fee_weekday_thb > floor &&
         c.green_fee_weekday_thb <= thb
     )
     .sort(byPopularity)
