@@ -51,7 +51,7 @@ The best tee times year-round are between 6 am and 9 am. Starting early means co
 
 Many courses offer twilight rates for rounds beginning after 2 pm or 3 pm. These discounted slots are worth considering if you are flexible on timing and want to keep costs down — green fees are typically lower than standard rates, and you will often find more availability. Bear in mind that twilight rounds may not allow you to complete all 18 holes if daylight runs short, so check the expected finish time when booking.
 
-Green fees across the Bangkok region range from approximately 1,500 THB at more modest layouts to 5,000 THB or more at premium clubs. Weekend rates commonly run 20 to 40 percent higher than weekday pricing.
+Green fees across the Bangkok region range from under 1,000 THB on a weekday at the cheapest courses to 5,000 THB or more at premium clubs, where caddie and cart are usually included. Weekend rates commonly run 20 to 40 percent higher than weekday pricing.
 
 ---
 

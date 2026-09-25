@@ -3,7 +3,7 @@ id: GG-022
 slug: round-of-golf-cost-bangkok
 page_type: explainer
 title: How Much Does a Round of Golf Cost in Bangkok?
-meta_description: Green fees, caddie fees, and all-in costs for a round of golf in Bangkok — from budget courses at 1,500 THB to premium clubs at 7,000+ THB.
+meta_description: Green fees, caddie fees, and all-in costs for a round of golf in Bangkok, from budget courses under 1,000 THB to premium clubs at 7,000+ THB.
 target_keywords:
   - round of golf cost bangkok
   - green fees bangkok
@@ -27,7 +27,7 @@ A typical weekday round at a mid-range Bangkok course breaks down like this:
 | Buggy / cart hire (optional) | 300 – 600 |
 | **All-in total (est.)** | **3,300 – 4,900** |
 
-At premium courses the all-in figure climbs to 6,000–8,000 THB or more. At budget public courses you can play for closer to 2,000–2,500 THB all-in.
+At premium courses the all-in figure climbs to 6,000–8,000 THB or more. At budget courses, 2,000–2,500 THB all-in is typical, and the cheapest come in under 2,000 THB.
 
 > **Verify before booking:** Green fees change seasonally and are adjusted by individual clubs. Always confirm the current rate directly with the course or through a booking platform before your round.
 
@@ -41,11 +41,11 @@ Bangkok courses broadly fall into three pricing tiers.
 
 This is the largest group of courses within 90 minutes of Bangkok. Most have a driving range, and a few add on-site accommodation and a spa. The golf is perfectly playable. Expect weekday green fees of up to 2,000 THB before extras.
 
-### 2. Mid-Range Courses: 2,500–3,500 THB (weekday)
+### 2. Mid-Range Courses: 2,000–3,500 THB (weekday)
 
 The majority of well-maintained private member courses open to visitors sit in this bracket. These offer good course conditioning, full clubhouses, and organised tee-time systems. This is the sweet spot for most golfers visiting Bangkok.
 
-### 3. Premium Courses: 4,500 THB+ (weekday)
+### 3. Premium Courses: 3,500 THB+ (weekday)
 
 Top-tier clubs such as Nikanti Golf Club and Alpine Golf Club sit at the premium end and are priced accordingly:
 

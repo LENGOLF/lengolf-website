@@ -25,7 +25,7 @@ Because Phuket is tourist-focused year-round, the courses here are generally wel
 
 ## What to Expect on the Course
 
-**Green fees** in Phuket sit toward the higher end of the Thai range. While courses elsewhere in Thailand can be found from around 1,500 THB, Phuket's tourist-oriented clubs typically run from 2,500 THB upward, with peak-season rates at premium resort courses reaching 5,000 THB or more. Always confirm current rates directly with the club or through a booking platform, as pricing varies significantly by season, tee time, and package.
+**Green fees** in Phuket sit toward the higher end of the Thai range. While courses elsewhere in Thailand can be found for under 1,000 THB, Phuket's tourist-oriented clubs typically run from 2,500 THB upward, with peak-season rates at premium resort courses reaching 5,000 THB or more. Always confirm current rates directly with the club or through a booking platform, as pricing varies significantly by season, tee time, and package.
 
 **Caddies are mandatory** at virtually all Thai golf courses, including those in Phuket. Your caddie will carry your bag, read greens, and offer yardage advice throughout the round. The caddie fee is generally 300–500 THB, paid to the course, and a tip of 200–300 THB is standard practice for a full 18-hole round. Tipping well is both customary and appreciated — caddies in Phuket are often extremely knowledgeable about their course and can genuinely improve your round.
 

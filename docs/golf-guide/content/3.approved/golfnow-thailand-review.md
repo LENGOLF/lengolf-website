@@ -61,7 +61,7 @@ Skip GolfNow (or check it last) if:
 
 ## Direct Booking — Often the Best Option
 
-Many Bangkok golf courses are well-staffed and equipped to handle direct reservations by phone, email, or their own website booking forms. Green fees in Bangkok typically range from around 1,500 THB at more accessible courses up to 5,000 THB or more at premium venues — and direct booking sometimes comes in below any platform price, because you're not paying the platform's margin.
+Many Bangkok golf courses are well-staffed and equipped to handle direct reservations by phone, email, or their own website booking forms. Green fees in Bangkok range from under 1,000 THB on a weekday at the cheapest courses up to 5,000 THB or more at the premium clubs, where caddie and cart are usually included. Direct booking sometimes comes in below any platform price, because you're not paying the platform's margin.
 
 If you have a specific course in mind, it's worth calling or emailing directly before assuming a platform is offering the best rate. Course staff can also confirm availability for your preferred tee time, which is useful during peak season when popular slots fill quickly.
 
