@@ -7,7 +7,7 @@ import { ogCard, OG_SIZE } from '@/lib/og-card'
 export const size = OG_SIZE
 export const contentType = 'image/png'
 // Module-level, so it cannot follow the roster's fee noun: noun-neutral.
-export const alt = 'Golf courses picked for a type of round — course roundup'
+export const alt = 'Golf courses picked for a type of round: course roundup'
 
 // Mirror the page's segment config. This is a route handler, so the
 // dynamicParams = false on app/[locale]/layout.tsx does not reach it.
@@ -27,7 +27,8 @@ export default async function Image({ params }: Props) {
   if (!(USE_CASES as readonly string[]).includes(useCase)) notFound()
   const meta = USE_CASE_RULES[useCase as UseCase]
 
-  // The same roster call the page makes, so the count and the noun match it.
+  // The same roster call the page makes, so the count matches its H2
+  // ("N courses matching the ... criteria").
   const courses = await getCoursesForUseCase(meta.slug, 8)
   if (courses.length === 0) notFound()
 
@@ -35,7 +36,8 @@ export default async function Image({ params }: Props) {
     eyebrow: 'Golf course guide',
     // The page's own H1, so the two cannot disagree.
     title: meta.title,
-    chips: [`Top ${courses.length} courses`],
+    chips: [`${courses.length} matching courses`],
+    // The page names no noun of its own; this one follows the roster.
     footer: `${feeNounEn(courses)}s · Course Guides · Golf Club Rental`,
   })
 }

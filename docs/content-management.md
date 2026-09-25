@@ -58,7 +58,7 @@ Blog posts are stored in the `blog_posts` table in Supabase. The data fetching h
 | `content` | Yes | HTML content body. Supports standard HTML tags. |
 | `status` | Yes | Set to `published` to make it visible. Use `draft` to hide it. |
 | `excerpt` | No | Short summary shown on the blog listing page |
-| `featured_image` | No | Full URL to the post's header image |
+| `featured_image` | No | Full URL to the post's header image. It must be a `website-assets` object URL with no query string (`https://bisimqmtxjsptehhqpeg.supabase.co/storage/v1/object/public/website-assets/…`). Any other URL 400s through the image optimizer and shows as a broken image; see [supabase-storage.md](supabase-storage.md#nextjs-image-configuration). |
 | `meta_title` | No | SEO title override (falls back to `title` if empty) |
 | `meta_description` | No | SEO description override (falls back to `excerpt` if empty) |
 | `published_at` | No | Publication date. Controls the display order (newest first). |

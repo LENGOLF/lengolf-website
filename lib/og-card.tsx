@@ -9,8 +9,13 @@ interface OgCardProps {
   title: string
   /** Fact chips rendered under the title (e.g. "18 holes · Par 72"). */
   chips?: string[]
-  /** Muted footer line. */
-  footer?: string
+  /**
+   * Muted footer line. Required, with no default: the old default read
+   * "Green Fees · …", which a caller that omitted it shipped silently, and
+   * validate:fee-labels never reads these files (none of them reads a green_fee
+   * field). Every caller now states its own noun, or none.
+   */
+  footer: string
 }
 
 /**
@@ -19,7 +24,10 @@ interface OgCardProps {
  * every PRICE_TIERS title.
  */
 export function ogThb(s: string): string {
-  return s.replace(/฿\s?([\d,]+)/g, '$1 THB')
+  // The amount must start and end on a digit, so a trailing comma or a decimal
+  // tail stays outside it: `฿1,500, weekdays` -> `1,500 THB, weekdays`,
+  // `฿1,500.50` -> `1,500.50 THB`.
+  return s.replace(/฿\s?(\d(?:[\d,]*\d)?(?:\.\d+)?)/g, '$1 THB')
 }
 
 /**
@@ -159,7 +167,7 @@ export function ogCard({ eyebrow, title, chips = [], footer }: OgCardProps) {
 
         {/* Footer */}
         <div style={{ display: 'flex', fontSize: 24, color: 'rgba(255,255,255,0.5)' }}>
-          {footer ?? 'Green Fees · Course Guide · Golf Club Rental'}
+          {footer}
         </div>
       </div>
     ),

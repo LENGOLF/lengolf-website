@@ -7,11 +7,13 @@ import { ogCard, ogThb, OG_SIZE } from '@/lib/og-card'
 export const size = OG_SIZE
 export const contentType = 'image/png'
 // Module-level, so it cannot follow the roster's fee noun: noun-neutral.
-export const alt = 'Golf courses under a price band — course roundup'
+export const alt = 'Golf courses under a price band: course roundup'
 
 // Mirror the page's segment config. This is a route handler, so the
 // dynamicParams = false on app/[locale]/layout.tsx does not reach it: without
-// these it renders a PNG on demand for any probed tier.
+// this one, a junk locale beside a real tier (/images/golf-courses/under/
+// 1500-baht/opengraph-image/, where the middleware matcher skips the path)
+// would render a PNG on demand for every invented URL.
 export const revalidate = 86400
 export const dynamicParams = false
 
@@ -19,7 +21,8 @@ export function generateStaticParams() {
   // EN-only, although the PAGE also builds th/ja/ko/zh tiers: the translated-
   // routes allowlist lists the tier page, not this /opengraph-image child, so a
   // translated page's og:image (/ja/golf-courses/under/<tier>/opengraph-image)
-  // 301s to the English card, the same as the [region] sibling.
+  // 308s to the trailing slash and then 301s to the English card, the same as
+  // the [region] sibling.
   return getPriceTierSlugs().map((tier) => ({ locale: 'en', tier }))
 }
 
@@ -32,8 +35,10 @@ export default async function Image({ params }: Props) {
   const meta = PRICE_TIERS.find((t) => t.slug === tier)
   if (!meta) notFound()
 
-  // The same roster call the page makes, so the count and the noun match its H2.
+  // The same roster call the page makes, and the same empty-roster 404, so the
+  // count and the noun match its H2.
   const courses = await getCoursesUnderPrice(meta.thb, 12)
+  if (courses.length === 0) notFound()
   const amount = meta.thb.toLocaleString('en-US')
   const noun = feeNounEn(courses)
 

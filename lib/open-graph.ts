@@ -38,9 +38,13 @@ type OpenGraphMeta = NonNullable<Metadata['openGraph']>
  *     and /guide/<slug>/ emit NO og:image today, while /golf-courses/ and
  *     /golf-courses/<region>/ emit exactly one (from the colocated file). The
  *     families with neither an `images` argument nor a colocated file are
- *     /location/, /guide/, /faq/, /cost/, /best/, /activities/ and /hotels/
- *     <slug>. The four /golf-courses/{under,near,best-for,compare}/ routes
- *     were on that list until each got a card of its own: a child openGraph
+ *     /location/, /guide/, /faq/, /cost/, /best/, /activities/<slug> and
+ *     /hotels/<slug> (the /activities/ hub itself inherits the layout's
+ *     image). Two more have one only conditionally: /blog/<slug> without a
+ *     featured image, and /second-hand-golf-clubs-bangkok/<id>, which passes
+ *     `images: []` when the club has no image_url. The four
+ *     /golf-courses/{under,near,best-for,compare}/ routes were on that list
+ *     until each got a card of its own: a child openGraph
  *     discards the PARENT segment's card, so inheriting the hub's was never
  *     available to them. Fixing the rest needs those segments exempted or
  *     the default applied per-family, which is a separate change. (Page count

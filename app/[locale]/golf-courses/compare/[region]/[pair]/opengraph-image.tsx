@@ -16,7 +16,9 @@ export const dynamicParams = false
 
 export async function generateStaticParams() {
   // The page's own list, EN-only: the pairs are derived, so a card can only
-  // exist for a comparison the page also builds.
+  // exist for a comparison the page also builds. A pair that drops out of its
+  // region's top 3 takes this card with it; the page's retirement redirect in
+  // next.config.js matches the page path only, not this child.
   const pairs = await getComparisonPairs()
   return pairs.map((p) => ({ locale: 'en', region: p.region, pair: pairSlug(p.slugA, p.slugB) }))
 }
@@ -42,7 +44,9 @@ export default async function Image({ params }: Props) {
     eyebrow: `${REGION_META[region as Region].label} Golf Course Comparison`,
     // The page's H1.
     title: `${a.name} vs ${b.name}`,
-    chips: ['Side by side', 'Par, designer & drive time'],
+    // `par` is typed non-null on every course; designer and drive time are
+    // not (both are null on some pairs), so the chips promise neither.
+    chips: [`Par ${a.par} vs Par ${b.par}`, 'Side-by-side spec table'],
     // Both courses are in scope, so the noun follows them, as the page's does.
     footer: `${feeNounEn([a, b])}s · Course Guides · Golf Club Rental`,
   })

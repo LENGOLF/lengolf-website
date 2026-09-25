@@ -252,9 +252,13 @@ type FeeLabelT = (
  * half of the old note, which read "`/near/` is still unreached (8 stations + 2
  * airports, zero package courses)". `krungthep-kreetha-sports-club` is #8 from
  * Suvarnabhumi, so `/golf-courses/near/suvarnabhumi-airport/` now reaches this
- * function. Scope precisely, because the obvious reading is wrong: `feeNounEn` is
- * called ONLY from `AirportPage`. `StationPage` renders a `RoundupList` with no fee
- * noun, so the 8 BTS station pages are NOT affected - one airport page is.
+ * function. Scope precisely, because the obvious reading is wrong: within `/near/`,
+ * `feeNounEn` is called only from `AirportPage` and the airport branch of that
+ * route's share card. `StationPage` renders a `RoundupList` with no fee noun, and
+ * the station card's footer names none, so the 8 BTS station page BODIES are not
+ * affected - one airport page is. (The station page's <title> hardcodes "Green
+ * Fees" behind a fee-noun-ok escape, and every station roster's noun is 'Rate'
+ * today; that is an open title defect, not a use of this function.)
  *
  * It returns 'Rate' for all of them, which is correct; the noun is handled. Treat
  * reachability as today's popularity scores rather than a property of the code.
