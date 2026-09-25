@@ -47,8 +47,9 @@ export default async function Image({ params }: Props) {
     eyebrow: `${course.province} · ${regionLabel}`,
     title: course.name,
     chips,
-    // ogCard's default footer opens with "Green Fees", and this route passed no
-    // footer — so a package course's social card said "Green Fees" directly
+    // ogCard's footer used to default to "Green Fees · …" (it is required now,
+    // with no default), and this route passed none — so a package course's
+    // social card said "Green Fees" directly
     // under an all-in price chip, in the `alt` text too. The price chip itself
     // is noun-free (`From 1,199 THB`), which is why nothing else caught it.
     footer: `${feeNounEn([course])}s · Course Guide · Golf Club Rental`,

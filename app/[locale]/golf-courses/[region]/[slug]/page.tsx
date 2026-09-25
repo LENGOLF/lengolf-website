@@ -150,7 +150,7 @@ export default async function CoursePageRoute({ params }: Props) {
     nearestStationLink = {
       label: `Best courses near ${stationPlaceName(nearest.station)}`,
       href: `/golf-courses/near/${nearest.station.slug}`,
-      description: `${nearest.km.toFixed(1)} km from ${stationPlaceName(nearest.station)} in a straight line, the closest station to ${course.name}.`,
+      description: `${nearest.km.toFixed(1)} km from ${stationPlaceName(nearest.station)} in a straight line, the nearest of our Bangkok station guides to ${course.name}.`,
     }
   }
 

@@ -2272,6 +2272,28 @@ const routeTests: RouteTest[] = [
     path: "/golf-courses/bangkok/alpine-golf-club/opengraph-image/",
     expectedStatus: [200],
   },
+  // The roundup cards. Section D also fetches these through each page's own
+  // og:image; these catch a card route that breaks for a slug section D does
+  // not visit (the other airport, a use case).
+  {
+    path: "/golf-courses/under/7500-baht/opengraph-image/",
+    expectedStatus: [200],
+  },
+  {
+    path: "/golf-courses/near/don-mueang-airport/opengraph-image/",
+    expectedStatus: [200],
+  },
+  {
+    path: "/golf-courses/best-for/tournaments/opengraph-image/",
+    expectedStatus: [200],
+  },
+  {
+    // A DERIVED pair (each region's top 3 by popularityScore), like the one in
+    // seoTests: if a course edit retires it, swap in another live pair. This
+    // one is #1 vs #2 in pattaya, so it retires only if two courses overtake.
+    path: "/golf-courses/compare/pattaya/burapha-golf-club-vs-siam-country-club-waterside/opengraph-image/",
+    expectedStatus: [200],
+  },
   // Golf course detail pages — spot-check one Bangkok + two Pattaya + two Hua Hin + two Phuket
   {
     path: "/golf-courses/bangkok/nikanti-golf-club/",
@@ -3425,6 +3447,32 @@ const seoTests: SeoTest[] = [
         "reason in the message.",
     },
   },
+  // The four golf-course roundup families (plus the hub and a region hub,
+  // below). Each page declares its own
+  // `openGraph`, which REPLACES the parent segment's resolved one, hub card
+  // included, so until each segment got an opengraph-image.tsx of its own they
+  // shipped `twitter:card=summary_large_image` with no og:image and no
+  // twitter:image (measured on prod 2026-09-24). REQUIRED_OWN_OG_CARDS pins
+  // them. Both near/ variants, because the station and airport branches are two
+  // separate `openGraph` declarations; the ja tier because it is the one family
+  // that SSGs non-EN locales, and its card URL has to survive the untranslated-
+  // route 301 to the English card. The compare pair is DERIVED (each region's
+  // top 3 by popularityScore), so a course edit can retire it; if this entry
+  // starts redirecting or 404ing, the page is gone, which needs a redirect in
+  // next.config.js anyway. Swap in another live pair here and in the pin.
+  // The hub and a region hub, which already had cards: pinned too, so every
+  // golf-courses openGraph declaration is reachable from this section.
+  { path: "/golf-courses/", locale: "en" },
+  { path: "/golf-courses/bangkok/", locale: "en" },
+  { path: "/golf-courses/under/1500-baht/", locale: "en" },
+  { path: "/ja/golf-courses/under/1500-baht/", locale: "ja" },
+  { path: "/golf-courses/near/asok/", locale: "en" },
+  { path: "/golf-courses/near/suvarnabhumi-airport/", locale: "en" },
+  { path: "/golf-courses/best-for/beginners/", locale: "en" },
+  {
+    path: "/golf-courses/compare/bangkok/royal-gems-golf-sports-club-vs-siam-country-club-bangkok/",
+    locale: "en",
+  },
 ];
 
 /**
@@ -3434,12 +3482,13 @@ const seoTests: SeoTest[] = [
  * floor with a real number, not `> 0`" for exactly this; sections L2, L3, L4,
  * L6, O and P all carry one and this section did not.
  *
- * SCOPE: this counts URLs and nothing else. Section D now has TWO floors —
+ * SCOPE: this counts URLs and nothing else. Section D now has THREE floors —
  * see REQUIRED_TITLE_ASSERTIONS below for the one guarding the <title>
  * assertions, which this constant provably does not cover: deleting the
- * pinned entry and adding any other URL holds this count at 35.
+ * pinned entry and adding any other URL holds this count. Nor does it cover
+ * the share-card assertions; see REQUIRED_OWN_OG_CARDS.
  */
-const MIN_SEO_URLS = 35;
+const MIN_SEO_URLS = 43;
 
 /**
  * Anti-vacuity for the `titleContains` assertions in `seoTests`. Two-sided by
@@ -3483,6 +3532,36 @@ const REQUIRED_TITLE_ASSERTIONS: { path: string; needle: string }[] = [
  * two-sided pin above cannot catch on its own.
  */
 const MIN_TITLE_ASSERTIONS = 1;
+
+/**
+ * Pages whose share card must be the opengraph-image.tsx in their OWN segment.
+ * Section D applies the check to every seoTests entry under /golf-courses/,
+ * and this list pins which entries those are, because a scope derived from
+ * seoTests shrinks silently when an entry is deleted. Same idiom as
+ * REQUIRED_TITLE_ASSERTIONS, with its own floor for the same reason.
+ *
+ * Why "own segment", not merely "has an og:image": the failure this guards is
+ * a page whose `openGraph` replaced the parent's resolved object, card and
+ * all. A check for ANY og:image would pass a page that fell back to the hub
+ * card or to a hardcoded `images` argument, which is a different page's card.
+ */
+const REQUIRED_OWN_OG_CARDS: string[] = [
+  "/golf-courses/",
+  "/golf-courses/bangkok/",
+  "/golf-courses/bangkok/phoenix-gold-golf-country-club/",
+  "/golf-courses/under/1500-baht/",
+  "/ja/golf-courses/under/1500-baht/",
+  "/golf-courses/near/asok/",
+  "/golf-courses/near/suvarnabhumi-airport/",
+  "/golf-courses/best-for/beginners/",
+  "/golf-courses/compare/bangkok/royal-gems-golf-sports-club-vs-siam-country-club-bangkok/",
+];
+const MIN_OWN_OG_CARDS = 9;
+
+/** A seoTests path with its locale prefix removed (`/ja/x/` -> `/x/`). */
+function stripLocalePrefix(path: string): string {
+  return path.replace(/^\/(?:en|th|ja|ko|zh)(?=\/)/, "");
+}
 
 // E) Thai redirect tests (untranslated Thai routes → 301 to English)
 interface ThaiRedirectTest {
@@ -3970,12 +4049,51 @@ async function runSeoTests() {
   }
   let titleNeedlesJudged = 0;
 
+  // The share-card pin: same shape as the title pin above.
+  if (REQUIRED_OWN_OG_CARDS.length < MIN_OWN_OG_CARDS) {
+    fail(
+      "D) seoTests share-card floor",
+      `REQUIRED_OWN_OG_CARDS holds ${REQUIRED_OWN_OG_CARDS.length} entr(ies), expected at ` +
+        `least ${MIN_OWN_OG_CARDS} — an emptied list iterates zero times and passes`,
+    );
+  }
+  for (const required of REQUIRED_OWN_OG_CARDS) {
+    if (!stripLocalePrefix(required).startsWith("/golf-courses/")) {
+      fail(
+        "D) seoTests share-card floor",
+        `${required} is pinned but outside /golf-courses/, where the check never runs`,
+      );
+    }
+    const n = seoTests.filter((t) => t.path === required).length;
+    if (n !== 1) {
+      fail(
+        "D) seoTests share-card floor",
+        `${required} appears ${n} time(s) in seoTests, expected exactly 1 — its share-card ` +
+          `assertion is gone or duplicated`,
+      );
+    }
+  }
+  // A duplicate pin keeps the length at the floor while a real entry goes
+  // unpinned (measured: pin one path twice, then re-point the other's seoTests
+  // entry outside /golf-courses/, and every check above stays green).
+  if (new Set(REQUIRED_OWN_OG_CARDS).size !== REQUIRED_OWN_OG_CARDS.length) {
+    fail("D) seoTests share-card floor", "REQUIRED_OWN_OG_CARDS lists a path twice");
+  }
+  const ownOgCardScope = seoTests.filter((t) =>
+    stripLocalePrefix(t.path).startsWith("/golf-courses/"),
+  );
+  let ownOgCardsJudged = 0;
+
   for (const t of seoTests) {
     const label = `SEO ${t.path}`;
     try {
       const res = await fetch(`${BASE}${t.path}`, { redirect: "follow" });
       const body = await res.text();
       const issues: string[] = [];
+      // Set at the END of the share-card block, counted where the entry's
+      // verdict is REPORTED (below), so a skip anywhere between the checks and
+      // the report cannot keep the count.
+      let ownOgCardChecked = false;
 
       // <html lang="..."> matches expected locale
       const langMatch = body.match(/<html[^>]*\slang="([^"]*)"/);
@@ -4167,17 +4285,19 @@ async function runSeoTests() {
       //     exact value and nothing drops.
       //   - TRUE RED on `twitter: { title }` with no images: that resolves
       //     to `summary` permanently. Dropping the source rule gave up a real
-      //     check across all 47 files under app/.
+      //     check on every file it audited (36 at the time).
       //   - FALSE GREEN on `icons: { icon }`, which dropped the layout's
       //     `apple` because the rule modelled one field per key.
       //
       // The layout is the SOLE supplier of `card` site-wide, so checking the
       // resolved output here is complete coverage of the SUPPLIER. It is NOT
-      // complete coverage of a future page-level `twitter` declaration: 12 of
+      // complete coverage of a future page-level `twitter` declaration: 5 of
       // the 31 openGraph declarations are unreachable from any URL in this
-      // section — 7 of those 12 under /golf-courses/, the other 5 being
-      // activities, best, cost, hotels and second-hand-club detail. (Was 13 and
-      // 8 until the phoenix-gold entry made the course-detail route reachable;
+      // section, none under /golf-courses/: activities, best, cost, hotels and
+      // second-hand-club detail. (Was 12 and 7 until the share-card entries
+      // made the hub, a region hub and under/near/best-for/compare reachable,
+      // near/ counting twice for its station and airport branches; was 13 and 8 before the
+      // phoenix-gold entry made the course-detail route reachable. Both
       // re-derived, not decremented by hand. That entry's own comment warns
       // about this sentence, so it was updated in the same commit — this was
       // the FIFTH site.) This was
@@ -4207,6 +4327,82 @@ async function runSeoTests() {
         if (!visible.match(new RegExp(`<link[^>]*rel="${rel_}"[^>]*>`))) {
           issues.push(`missing <link rel="${rel_}">`);
         }
+      }
+
+      // The share card, for /golf-courses/ pages: og:image must be the card in
+      // this page's OWN segment, twitter:image must match it, and the URL must
+      // serve a PNG after redirects. The layout's twitter:card is
+      // summary_large_image everywhere, so a page with no image here still
+      // advertises a large card; that shipped on the four roundup families
+      // until each segment got an opengraph-image.tsx.
+      if (stripLocalePrefix(t.path).startsWith("/golf-courses/")) {
+        const ogImage = ogTag("image");
+        const twTag = visible.match(/<meta[^>]*name="twitter:image"[^>]*>/);
+        const twImage = twTag ? (twTag[0].match(/content="([^"]*)"/)?.[1] ?? "") : null;
+        const want = `${stripLocalePrefix(t.path)}opengraph-image`;
+        if (res.redirected) {
+          // Otherwise a pinned page that starts redirecting fails below as
+          // "another page's image", which names the wrong cause.
+          issues.push(
+            `redirected to ${res.url} — a share-card entry must resolve directly, or it ` +
+              `asserts the destination's card`,
+          );
+        }
+        if (!ogImage) {
+          issues.push(
+            `no og:image — a page-level openGraph replaces the parent's card, so this ` +
+              `segment needs its own opengraph-image.tsx`,
+          );
+        } else {
+          const card = new URL(decodeEntities(ogImage), BASE);
+          if (stripLocalePrefix(card.pathname) !== want) {
+            issues.push(
+              `og:image is ${card.pathname}, not this page's own card (${want}) — it is ` +
+                `inheriting or hardcoding another page's image`,
+            );
+          }
+          if (twImage !== ogImage) {
+            issues.push(`twitter:image "${twImage ?? "(missing)"}" does not match og:image`);
+          }
+          // The declared metadata must describe what is served: a card file
+          // exporting the wrong contentType or size otherwise ships a PNG
+          // labelled image/jpeg, or dimensions a platform crops by.
+          const declaredType = ogTag("image:type");
+          if (declaredType !== "image/png") {
+            issues.push(`og:image:type is "${declaredType ?? "(missing)"}", expected image/png`);
+          }
+          if (ogTag("image:width") !== "1200" || ogTag("image:height") !== "630") {
+            issues.push(
+              `og:image size is ${ogTag("image:width")}x${ogTag("image:height")}, expected 1200x630`,
+            );
+          }
+          // Fetched against BASE: the tag's host is SITE_URL (production). Its
+          // own try, so a throw here reports alongside the verdicts above
+          // instead of replacing them with the page's "fetch error".
+          try {
+            const cardRes = await fetch(`${BASE}${card.pathname}${card.search}`, {
+              redirect: "follow",
+            });
+            const type = cardRes.headers.get("content-type") ?? "";
+            await cardRes.arrayBuffer();
+            if (cardRes.status !== 200 || !type.startsWith("image/png")) {
+              issues.push(
+                `og:image ${card.pathname} served ${cardRes.status} ${type} after redirects, ` +
+                  `expected 200 image/png`,
+              );
+            }
+            // Where the redirects END, not only that they end on a PNG: the ja
+            // tier card legitimately 301s to the EN card, so following is
+            // required, and a redirect to some other card would otherwise pass.
+            const landed = new URL(cardRes.url).pathname;
+            if (stripLocalePrefix(landed).replace(/\/$/, "") !== want) {
+              issues.push(`og:image ${card.pathname} redirected to ${landed}, not this page's card`);
+            }
+          } catch (err) {
+            issues.push(`og:image ${card.pathname} fetch error: ${(err as Error).message}`);
+          }
+        }
+        ownOgCardChecked = true;
       }
 
       // The WebSite node's publisher Organization is read for entity
@@ -4421,6 +4617,11 @@ async function runSeoTests() {
       } else {
         pass(label);
       }
+      // Counted after the report, not inside the share-card block: measured,
+      // `if (issues.length > 0) continue;` placed just after an in-block
+      // increment kept the count at 7 of 7 while all seven failures went
+      // unreported.
+      if (ownOgCardChecked) ownOgCardsJudged++;
     } catch (err) {
       fail(label, `fetch error: ${(err as Error).message}`);
     }
@@ -4459,7 +4660,25 @@ async function runSeoTests() {
       `D) judged every one of the ${titleNeedlesExpected} pinned <title> needle(s)`,
     );
   }
+  if (ownOgCardsJudged !== ownOgCardScope.length) {
+    fail(
+      "D) seoTests share-card coverage",
+      `${ownOgCardScope.length} /golf-courses/ entr(ies) in seoTests but only ` +
+        `${ownOgCardsJudged} share-card check(s) ran — skipped, not failed. A fetch error ` +
+        `on one of those URLs also bypasses it, and reports separately.`,
+    );
+  } else {
+    pass(`D) judged the share card on all ${ownOgCardScope.length} /golf-courses/ page(s)`);
+  }
+  seoTestsCompleted = true;
 }
+
+/**
+ * Set on the LAST line of runSeoTests and checked by main(). A `return` inside
+ * its loop otherwise skips both coverage checks above and exits green: measured,
+ * a `return;` at the top of the share-card block printed 34 passes and exit 0.
+ */
+let seoTestsCompleted = false;
 
 async function runThaiRedirectTests() {
   console.log("\n\x1b[1mE) Thai redirect tests\x1b[0m");
@@ -4743,9 +4962,10 @@ async function localeRouteHandlers(): Promise<{
  *
  * ROUTE HANDLERS are not covered by that flag: they take segment config from
  * their own file only (`collectAppRouteSegments` in next/dist/build/segment-
- * config/app/app-segments.js), metadata image routes included. The three under
+ * config/app/app-segments.js), metadata image routes included. The seven under
  * `[locale]` are the golf-courses og-image cards. The `[region]` and `[slug]`
- * cards carried their own flag already; the hub card had none, so
+ * cards carried their own flag already, and the four roundup cards (under,
+ * near, best-for, compare) were added with it; the hub card had none, so
  * `/images/golf-courses/opengraph-image/` rendered a fresh 200 PNG (43,596 B on
  * prod 2026-09-24) for every junk locale and every query string on a bypassed
  * path. No ISR write, so the signal header never showed it: the STATUS is the
@@ -4826,9 +5046,11 @@ async function runUnknownSlugCacheTests() {
   const EXPECTED_JUNK_SLUGS = 7;
   const EXPECTED_JUNK_LOCALES = 3;
   const EXPECTED_JUNK_LOCALE_HANDLERS = 1;
-  // The [region] and [slug] cards. Counted, NOT probed (see localeRouteHandlers):
-  // nothing in G2 guards their own flags, only that a new one is noticed.
-  const EXPECTED_MULTI_PARAM_HANDLERS = 2;
+  // The [region] and [slug] cards plus the four roundup cards (under/[tier],
+  // near/[station], best-for/[useCase], compare/[region]/[pair]). Counted, NOT
+  // probed (see localeRouteHandlers): nothing in G2 guards their own flags,
+  // only that a new one is noticed.
+  const EXPECTED_MULTI_PARAM_HANDLERS = 6;
   if (
     junkSlugs.length !== EXPECTED_JUNK_SLUGS ||
     junkLocales.length !== EXPECTED_JUNK_LOCALES ||
@@ -8293,6 +8515,9 @@ async function main() {
   await runRedirectTests();
   await runLinkTests();
   await runSeoTests();
+  if (!seoTestsCompleted) {
+    fail("D) section completion", "runSeoTests returned before its coverage checks ran");
+  }
   await runThaiRedirectTests();
   await runThaiCookieTests();
   await runAcceptLanguageTests();

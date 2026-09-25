@@ -26,16 +26,18 @@
  * Both are now asserted on the RENDERED tag in smoke section D, where the
  * resolver has already run and there is nothing to predict. The TRADE, stated
  * plainly and without the inflation an earlier version of this paragraph
- * carried: the walk yields 47 files under app/, of which 36 reach the audit
+ * carried: the walk yields 53 files under app/, of which 37 reach the audit
  * (measured against THIS token list — the figure was 33 under the previous
  * one, and quoting it forward after widening the filter was its own stale
- * number), and — the part that matters — NO page file
+ * number; the walk read 47 here while the tree already held 49, the four
+ * roundup opengraph-image.tsx cards took it to 53 without touching the audit,
+ * since none of them carries a metadata token, and #140 took the audit from
+ * 36 to 37 by giving the hub card a comment containing `metadata`), and — the part that matters — NO page file
  * declares `twitter` or `icons` today, only the layout. So nothing LIVE was
  * given up; what was given up is coverage of a hypothetical future page-level
- * declaration. Section D fetches 35 URLs, and 12 of the 31 openGraph
- * declarations are unreachable from any of them; 7 of those 12 are under
- * /golf-courses/ (measured), the other 5 being activities, best, cost, hotels
- * and second-hand-club detail. Coverage of the SUPPLIER (the layout, sole
+ * declaration. Section D fetches 43 URLs, and 5 of the 31 openGraph
+ * declarations are unreachable from any of them, none under /golf-courses/
+ * (measured): activities, best, cost, hotels and second-hand-club detail. Coverage of the SUPPLIER (the layout, sole
  * source of both keys) is complete; coverage of a future page-level
  * declaration is not. Do not re-add a source-level version without reading
  * Next's resolver first.
@@ -65,11 +67,12 @@
  *
  * Smoke section D asserts the rendered artifact — og:type, og:site_name,
  * twitter:card, `<link rel="icon">` and `<link rel="apple-touch-icon">` — on
- * 35 URLs, plus og:title on the entries that pin a <title> needle. (This line
+ * 43 URLs, plus og:title on the entries that pin a <title> needle and
+ * og:image, twitter:image and the served card on the 9 /golf-courses/ ones. (This line
  * listed three of the five until a claim audit caught it,
  * in the same commit whose message named that exact omission elsewhere.)
  * THIS gate runs with no server and covers every openGraph declaration in
- * app/; section D does not — see the scope note above for the 13 it misses.
+ * app/; section D does not — see the scope note above for the 5 it misses.
  *
  * SELF-TEST COVERAGE, stated honestly. The printed total is the EXECUTED count
  * with a declared-vs-executed mismatch as a hard failure. Attribution, since
