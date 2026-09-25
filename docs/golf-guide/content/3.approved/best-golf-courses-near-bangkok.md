@@ -22,7 +22,7 @@ Bangkok is one of the best cities in the world for a golfer to be based. With 50
 Before booking, narrow down by four factors:
 
 1. **Location from your hotel** — Bangkok's traffic is significant. A course 40km away can take 90 minutes in peak hour. Check the direction from your hotel and plan accordingly.
-2. **Budget** — Green fees range from around 1,500 THB at accessible daily-fee courses to 5,000+ THB at premium clubs. Weekends cost 20–40% more.
+2. **Budget** — Green fees range from under 1,000 THB on a weekday at the cheapest courses to 5,000+ THB at premium clubs. Weekends cost 20–40% more.
 3. **Skill level and style** — Some courses are genuine championship challenges; others are resort-friendly and forgiving. Know what kind of round you want.
 4. **Public access** — Most Bangkok-area courses accept visiting golfers. A few operate primarily for members and require advance arrangement or a contact.
 
@@ -70,7 +70,7 @@ Most Bangkok-area courses can be booked directly by phone or email, or through o
 
 | Category | Typical weekday range | Typical weekend range |
 |----------|----------------------|----------------------|
-| Accessible daily-fee courses | 1,500–2,500 THB | 2,000–3,500 THB |
+| Accessible daily-fee courses | Up to 2,500 THB | Up to 3,500 THB |
 | Mid-range championship courses | 2,500–3,500 THB | 3,000–4,500 THB |
 | Premium / prestige courses | 3,500–5,000+ THB | 4,500–6,000+ THB |
 

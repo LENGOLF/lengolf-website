@@ -200,12 +200,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'en',
     related_slugs: ['/faq/how-much-does-corporate-golf-event-cost-bangkok', '/faq/can-i-rent-golf-clubs-in-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-26T00:00:00.000Z',
     content: {
       answer_intro:
         'Indoor golf in Bangkok typically costs 550–1,000 THB per hour, depending on the venue, time of day, and day of the week. At LENGOLF, simulator bay rental starts at 550 THB per hour for up to 5 people — that\'s just 110 THB per person for a group. Free standard golf clubs are included with every booking.',
       answer_body:
-        'Here\'s a complete breakdown of indoor golf pricing in Bangkok.\n\n**LENGOLF Bay Rates**\n- Weekdays (Mon–Thu) before 14:00: 550 THB/hour\n- Weekdays 14:00–23:00: 750 THB/hour\n- Weekends (Fri–Sun & holidays) before 14:00: 750 THB/hour\n- Weekends 14:00–23:00: 950 THB/hour\n\nEach bay holds up to 5 players, and free standard golf club rental is included. Premium club rental (Callaway Warbird or Callaway REVA) adds 150 THB/hour.\n\n**Monthly Packages for Regular Players**\nIf you play regularly, monthly packages offer better value:\n- Bronze: 5 hours for 3,000 THB (600 THB/hour)\n- Silver: 15 hours for 8,000 THB (~533 THB/hour)\n- Gold: 30 hours for 14,000 THB (~467 THB/hour)\n- Diamond: Unlimited hours for 8,000 THB/month\n- Diamond+: Unlimited hours for 18,000 THB/3 months\n\nEarly Bird packages (before 14:00 only) start at 4,800 THB for 10 hours.\n\n**How This Compares to Outdoor Golf**\nA round at a Bangkok-area course typically costs 1,500–4,000 THB in green fees alone, plus caddie fees (300–400 THB), cart rental, and transport. Indoor golf is significantly cheaper, weather-proof, and more accessible — especially for groups.',
+        'Here\'s a complete breakdown of indoor golf pricing in Bangkok.\n\n**LENGOLF Bay Rates**\n- Weekdays (Mon–Thu) before 14:00: 550 THB/hour\n- Weekdays 14:00–23:00: 750 THB/hour\n- Weekends (Fri–Sun & holidays) before 14:00: 750 THB/hour\n- Weekends 14:00–23:00: 950 THB/hour\n\nEach bay holds up to 5 players, and free standard golf club rental is included. Premium club rental (Callaway Warbird or Callaway REVA) adds 150 THB/hour.\n\n**Monthly Packages for Regular Players**\nIf you play regularly, monthly packages offer better value:\n- Bronze: 5 hours for 3,000 THB (600 THB/hour)\n- Silver: 15 hours for 8,000 THB (~533 THB/hour)\n- Gold: 30 hours for 14,000 THB (~467 THB/hour)\n- Diamond: Unlimited hours for 8,000 THB/month\n- Diamond+: Unlimited hours for 18,000 THB/3 months\n\nEarly Bird packages (before 14:00 only) start at 4,800 THB for 10 hours.\n\n**How This Compares to Outdoor Golf**\nGreen fees at Bangkok-area courses range from under 1,000 THB on a weekday at the cheapest courses up to 5,000 THB or more at the premium clubs, where caddie and cart are usually included. At most courses, caddie fees (300–400 THB) and cart rental come on top, plus transport. Indoor golf is significantly cheaper, weather-proof, and more accessible — especially for groups.',
       related_questions: [
         { slug: 'can-i-rent-golf-clubs-in-bangkok', question: 'Can I Rent Golf Clubs in Bangkok?' },
         { slug: 'how-much-does-corporate-golf-event-cost-bangkok', question: 'How Much Does a Corporate Golf Event Cost in Bangkok?' },
@@ -243,12 +243,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/faq/can-i-rent-golf-clubs-in-bangkok', '/guide/round-of-golf-cost-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-26T00:00:00.000Z',
     content: {
       answer_intro:
         'バンコクのインドアゴルフは、施設・時間帯・曜日によって1時間あたり550〜1,000THBが目安です。LENGOLFのシミュレーターベイは1時間550THBから。最大5名まで利用できるので、グループなら1人あたり110THBの計算になります。標準のゴルフクラブレンタルは、どのご予約にも無料で付いています（2026年7月現在）。',
       answer_body:
-        'バンコクのインドアゴルフ料金を、項目ごとに詳しく見ていきます。\n\n**LENGOLFのベイ料金**\n- 平日（月〜木）14:00まで: 1時間550THB\n- 平日14:00〜23:00: 1時間750THB\n- 週末（金〜日・祝日）14:00まで: 1時間750THB\n- 週末14:00〜23:00: 1時間950THB\n\n1ベイは最大5名まで利用でき、標準のゴルフクラブレンタルは無料。プレミアムクラブ（Callaway WarbirdまたはCallaway REVA）をご利用の場合は1時間150THBの追加となります。\n\n**通う方向けの月額パッケージ**\n定期的にプレーするなら、月額パッケージのほうが割安です。\n- Bronze: 5時間 3,000THB（1時間あたり600THB）\n- Silver: 15時間 8,000THB（1時間あたり約533THB）\n- Gold: 30時間 14,000THB（1時間あたり約467THB）\n- Diamond: 時間無制限で月8,000THB\n- Diamond+: 時間無制限で3か月18,000THB\n\nEarly Birdパッケージ（14:00までの利用限定）は、10時間4,800THBから。\n\n**屋外ゴルフとの比較**\nバンコク近郊のコースを1ラウンド回ると、グリーンフィーだけで1,500〜4,000THB。これにキャディーフィー（300〜400THB）、カート代、往復の交通費が加わります。インドアゴルフは費用面で大きく有利なうえ、天候に左右されず、アクセスも良好——特にグループでの利用に向いています。',
+        'バンコクのインドアゴルフ料金を、項目ごとに詳しく見ていきます。\n\n**LENGOLFのベイ料金**\n- 平日（月〜木）14:00まで: 1時間550THB\n- 平日14:00〜23:00: 1時間750THB\n- 週末（金〜日・祝日）14:00まで: 1時間750THB\n- 週末14:00〜23:00: 1時間950THB\n\n1ベイは最大5名まで利用でき、標準のゴルフクラブレンタルは無料。プレミアムクラブ（Callaway WarbirdまたはCallaway REVA）をご利用の場合は1時間150THBの追加となります。\n\n**通う方向けの月額パッケージ**\n定期的にプレーするなら、月額パッケージのほうが割安です。\n- Bronze: 5時間 3,000THB（1時間あたり600THB）\n- Silver: 15時間 8,000THB（1時間あたり約533THB）\n- Gold: 30時間 14,000THB（1時間あたり約467THB）\n- Diamond: 時間無制限で月8,000THB\n- Diamond+: 時間無制限で3か月18,000THB\n\nEarly Birdパッケージ（14:00までの利用限定）は、10時間4,800THBから。\n\n**屋外ゴルフとの比較**\nバンコク近郊のコースのグリーンフィーは、最も安いコースの平日料金なら1,000THB未満から、高級コースでは5,000THB以上まで幅があります（高級コースは多くの場合、キャディー・カート込みの料金です）。多くのコースではこれにキャディーフィー（300〜400THB）とカート代がかかり、さらに往復の交通費が加わります。インドアゴルフは費用面で大きく有利なうえ、天候に左右されず、アクセスも良好——特にグループでの利用に向いています。',
       related_questions: [
         { slug: 'can-i-rent-golf-clubs-in-bangkok', question: 'バンコクでゴルフクラブはレンタルできる？ — 料金と受け取り方' },
         { slug: '/guide/round-of-golf-cost-bangkok', question: 'バンコクのゴルフラウンドの費用は？グリーンフィー・キャディー代の相場' },
@@ -288,12 +288,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/faq/can-i-rent-golf-clubs-in-bangkok', '/guide/round-of-golf-cost-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-26T00:00:00.000Z',
     content: {
       answer_intro:
         '방콕의 실내 골프(스크린골프)는 시설과 시간대, 요일에 따라 시간당 550~1,000바트 정도가 시세예요. LENGOLF의 시뮬레이터 베이는 시간당 550바트부터 시작하고, 한 베이에 최대 5명까지 들어갈 수 있어서 여럿이 오면 1인당 110바트인 셈이에요. 기본 골프 클럽 대여는 모든 예약에 무료로 포함돼요 (2026년 7월 기준).',
       answer_body:
-        '방콕의 실내 골프 요금을 항목별로 정리해 볼게요.\n\n**LENGOLF 베이 요금**\n- 평일(월~목) 14:00 이전: 시간당 550바트\n- 평일 14:00~23:00: 시간당 750바트\n- 주말(금~일·공휴일) 14:00 이전: 시간당 750바트\n- 주말 14:00~23:00: 시간당 950바트\n\n베이 하나에 최대 5명까지 이용할 수 있고, 기본 골프 클럽 대여는 무료예요. 프리미엄 클럽(Callaway Warbird 또는 Callaway REVA)을 쓰시면 시간당 150바트가 추가돼요.\n\n**자주 오시는 분을 위한 월 패키지**\n정기적으로 치신다면 월 패키지가 더 유리해요.\n- Bronze: 5시간 3,000바트 (시간당 600바트)\n- Silver: 15시간 8,000바트 (시간당 약 533바트)\n- Gold: 30시간 14,000바트 (시간당 약 467바트)\n- Diamond: 시간 무제한 월 8,000바트\n- Diamond+: 시간 무제한 3개월 18,000바트\n\nEarly Bird 패키지(14:00 이전 이용 한정)는 10시간 4,800바트부터예요.\n\n**실외 골프와 비교하면**\n방콕 근교 코스에서 한 라운드를 돌면 그린피만 1,500~4,000바트, 여기에 캐디피(300~400바트)와 카트 대여료, 왕복 교통비가 더해져요. 실내 골프는 비용 면에서 크게 유리하고, 날씨에 좌우되지 않으며, 접근성도 좋아요 — 특히 단체로 오실 때 그렇죠.',
+        '방콕의 실내 골프 요금을 항목별로 정리해 볼게요.\n\n**LENGOLF 베이 요금**\n- 평일(월~목) 14:00 이전: 시간당 550바트\n- 평일 14:00~23:00: 시간당 750바트\n- 주말(금~일·공휴일) 14:00 이전: 시간당 750바트\n- 주말 14:00~23:00: 시간당 950바트\n\n베이 하나에 최대 5명까지 이용할 수 있고, 기본 골프 클럽 대여는 무료예요. 프리미엄 클럽(Callaway Warbird 또는 Callaway REVA)을 쓰시면 시간당 150바트가 추가돼요.\n\n**자주 오시는 분을 위한 월 패키지**\n정기적으로 치신다면 월 패키지가 더 유리해요.\n- Bronze: 5시간 3,000바트 (시간당 600바트)\n- Silver: 15시간 8,000바트 (시간당 약 533바트)\n- Gold: 30시간 14,000바트 (시간당 약 467바트)\n- Diamond: 시간 무제한 월 8,000바트\n- Diamond+: 시간 무제한 3개월 18,000바트\n\nEarly Bird 패키지(14:00 이전 이용 한정)는 10시간 4,800바트부터예요.\n\n**실외 골프와 비교하면**\n방콕 근교 코스의 그린피는 가장 저렴한 코스의 평일 요금 1,000바트 미만부터 프리미엄 클럽의 5,000바트 이상(보통 캐디와 카트 포함)까지 다양해요. 대부분의 코스에서는 여기에 캐디피(300~400바트)와 카트 대여료가 붙고, 왕복 교통비도 더해져요. 실내 골프는 비용 면에서 크게 유리하고, 날씨에 좌우되지 않으며, 접근성도 좋아요 — 특히 단체로 오실 때 그렇죠.',
       related_questions: [
         { slug: 'can-i-rent-golf-clubs-in-bangkok', question: '방콕에서 골프 클럽 대여되나요? — 요금과 수령 방법' },
         { slug: '/guide/round-of-golf-cost-bangkok', question: '방콕 골프 라운딩 비용은? 그린피·캐디피 총정리' },
@@ -333,12 +333,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/faq/can-i-rent-golf-clubs-in-bangkok', '/guide/round-of-golf-cost-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-26T00:00:00.000Z',
     content: {
       answer_intro:
         '曼谷的室内高尔夫收费，按场馆、时段和星期几不同，一般在每小时550–1,000泰铢之间。LENGOLF的模拟器球位每小时550泰铢起，一个球位最多可5人同时使用——多人分摊下来，每人每小时只要110泰铢。标准高尔夫球杆的租借，免费包含在每一次预订里，截至2026年7月。',
       answer_body:
-        '下面把曼谷室内高尔夫的收费逐项拆解给你看。\n\n**LENGOLF球位收费**\n- 平日（周一至周四）14:00前：每小时550泰铢\n- 平日14:00–23:00：每小时750泰铢\n- 周末（周五至周日及公众假期）14:00前：每小时750泰铢\n- 周末14:00–23:00：每小时950泰铢\n\n一个球位最多可5人同时使用，标准高尔夫球杆租借免费。若要使用高级球杆（Callaway Warbird或Callaway REVA），每小时加收150泰铢。\n\n**常来球友的月套餐**\n如果你打得比较规律，月套餐更划算。\n- Bronze：5小时3,000泰铢（每小时600泰铢）\n- Silver：15小时8,000泰铢（每小时约533泰铢）\n- Gold：30小时14,000泰铢（每小时约467泰铢）\n- Diamond：时长不限，每月8,000泰铢\n- Diamond+：时长不限，3个月18,000泰铢\n\nEarly Bird套餐（仅限14:00前使用）10小时4,800泰铢起。\n\n**与真实球场相比如何**\n在曼谷近郊的球场打一轮，光是果岭费就要1,500–4,000泰铢，还要再加上球童费（300–400泰铢）、球车租用和往返交通。室内高尔夫在费用上明显更省，不受天气影响，交通也更方便——尤其适合多人一起来。',
+        '下面把曼谷室内高尔夫的收费逐项拆解给你看。\n\n**LENGOLF球位收费**\n- 平日（周一至周四）14:00前：每小时550泰铢\n- 平日14:00–23:00：每小时750泰铢\n- 周末（周五至周日及公众假期）14:00前：每小时750泰铢\n- 周末14:00–23:00：每小时950泰铢\n\n一个球位最多可5人同时使用，标准高尔夫球杆租借免费。若要使用高级球杆（Callaway Warbird或Callaway REVA），每小时加收150泰铢。\n\n**常来球友的月套餐**\n如果你打得比较规律，月套餐更划算。\n- Bronze：5小时3,000泰铢（每小时600泰铢）\n- Silver：15小时8,000泰铢（每小时约533泰铢）\n- Gold：30小时14,000泰铢（每小时约467泰铢）\n- Diamond：时长不限，每月8,000泰铢\n- Diamond+：时长不限，3个月18,000泰铢\n\nEarly Bird套餐（仅限14:00前使用）10小时4,800泰铢起。\n\n**与真实球场相比如何**\n曼谷近郊球场的果岭费，从最便宜的球场平日不到1,000泰铢，到高端球会的5,000泰铢或以上不等，后者通常已含球童和球车。在大多数球场，还要另加球童费（300–400泰铢）和球车租用，再加上往返交通。室内高尔夫在费用上明显更省，不受天气影响，交通也更方便——尤其适合多人一起来。',
       related_questions: [
         { slug: 'can-i-rent-golf-clubs-in-bangkok', question: '曼谷能租到高尔夫球杆吗？ — 收费、球杆套装与配送方式' },
         { slug: '/guide/round-of-golf-cost-bangkok', question: '曼谷打一场高尔夫要多少钱？果岭费与球童费全解析' },
@@ -382,12 +382,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'th',
     related_slugs: ['/faq/can-i-rent-golf-clubs-in-bangkok', '/guide/round-of-golf-cost-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-26T00:00:00.000Z',
     content: {
       answer_intro:
         'กอล์ฟในร่มในกรุงเทพฯ โดยทั่วไปมีราคาชั่วโมงละ 550-1,000 บาท ขึ้นอยู่กับสถานที่ ช่วงเวลาของวัน และวันในสัปดาห์ ที่ LENGOLF ค่าเช่าเบย์ซิมมูเลเตอร์เริ่มต้นที่ 550 บาทต่อชั่วโมง สำหรับผู้เล่นสูงสุด 5 คน ซึ่งเท่ากับเพียง 110 บาทต่อคนหากมากันเป็นกลุ่ม และมีไม้กอล์ฟมาตรฐานให้ใช้ฟรีในทุกการจอง (ข้อมูล ณ กรกฎาคม 2026)',
       answer_body:
-        'นี่คือการแจกแจงราคากอล์ฟในร่มในกรุงเทพฯ อย่างครบถ้วน\n\n**อัตราค่าเบย์ของ LENGOLF**\n- วันธรรมดา (จันทร์-พฤหัสบดี) ก่อน 14:00 น.: 550 บาท/ชั่วโมง\n- วันธรรมดา 14:00-23:00 น.: 750 บาท/ชั่วโมง\n- วันหยุด (ศุกร์-อาทิตย์ และวันนักขัตฤกษ์) ก่อน 14:00 น.: 750 บาท/ชั่วโมง\n- วันหยุด 14:00-23:00 น.: 950 บาท/ชั่วโมง\n\nแต่ละเบย์รองรับผู้เล่นได้สูงสุด 5 คน และรวมบริการเช่าไม้กอล์ฟมาตรฐานฟรี หากต้องการไม้ระดับพรีเมียม (Callaway Warbird หรือ Callaway REVA) มีค่าใช้จ่ายเพิ่ม 150 บาท/ชั่วโมง\n\n**แพ็กเกจรายเดือนสำหรับผู้เล่นประจำ**\nหากคุณเล่นเป็นประจำ แพ็กเกจรายเดือนคุ้มค่ากว่า\n- Bronze: 5 ชั่วโมง 3,000 บาท (600 บาท/ชั่วโมง)\n- Silver: 15 ชั่วโมง 8,000 บาท (ประมาณ 533 บาท/ชั่วโมง)\n- Gold: 30 ชั่วโมง 14,000 บาท (ประมาณ 467 บาท/ชั่วโมง)\n- Diamond: ไม่จำกัดชั่วโมง 8,000 บาท/เดือน\n- Diamond+: ไม่จำกัดชั่วโมง 18,000 บาท/3 เดือน\n\nแพ็กเกจ Early Bird (ใช้ได้ก่อน 14:00 น. เท่านั้น) เริ่มต้นที่ 4,800 บาท สำหรับ 10 ชั่วโมง\n\n**เทียบกับกอล์ฟกลางแจ้งแล้วเป็นอย่างไร**\nการออกรอบที่สนามในย่านกรุงเทพฯ โดยทั่วไปมีค่ากรีนฟีอย่างเดียว 1,500-4,000 บาท บวกค่าแคดดี้ (300-400 บาท) ค่าเช่ารถกอล์ฟ และค่าเดินทาง กอล์ฟในร่มจึงถูกกว่าอย่างชัดเจน ไม่ขึ้นกับสภาพอากาศ และเข้าถึงได้ง่ายกว่า โดยเฉพาะเมื่อมากันเป็นกลุ่ม',
+        'นี่คือการแจกแจงราคากอล์ฟในร่มในกรุงเทพฯ อย่างครบถ้วน\n\n**อัตราค่าเบย์ของ LENGOLF**\n- วันธรรมดา (จันทร์-พฤหัสบดี) ก่อน 14:00 น.: 550 บาท/ชั่วโมง\n- วันธรรมดา 14:00-23:00 น.: 750 บาท/ชั่วโมง\n- วันหยุด (ศุกร์-อาทิตย์ และวันนักขัตฤกษ์) ก่อน 14:00 น.: 750 บาท/ชั่วโมง\n- วันหยุด 14:00-23:00 น.: 950 บาท/ชั่วโมง\n\nแต่ละเบย์รองรับผู้เล่นได้สูงสุด 5 คน และรวมบริการเช่าไม้กอล์ฟมาตรฐานฟรี หากต้องการไม้ระดับพรีเมียม (Callaway Warbird หรือ Callaway REVA) มีค่าใช้จ่ายเพิ่ม 150 บาท/ชั่วโมง\n\n**แพ็กเกจรายเดือนสำหรับผู้เล่นประจำ**\nหากคุณเล่นเป็นประจำ แพ็กเกจรายเดือนคุ้มค่ากว่า\n- Bronze: 5 ชั่วโมง 3,000 บาท (600 บาท/ชั่วโมง)\n- Silver: 15 ชั่วโมง 8,000 บาท (ประมาณ 533 บาท/ชั่วโมง)\n- Gold: 30 ชั่วโมง 14,000 บาท (ประมาณ 467 บาท/ชั่วโมง)\n- Diamond: ไม่จำกัดชั่วโมง 8,000 บาท/เดือน\n- Diamond+: ไม่จำกัดชั่วโมง 18,000 บาท/3 เดือน\n\nแพ็กเกจ Early Bird (ใช้ได้ก่อน 14:00 น. เท่านั้น) เริ่มต้นที่ 4,800 บาท สำหรับ 10 ชั่วโมง\n\n**เทียบกับกอล์ฟกลางแจ้งแล้วเป็นอย่างไร**\nค่ากรีนฟีของสนามใกล้กรุงเทพฯ มีตั้งแต่ต่ำกว่า 1,000 บาทในวันธรรมดาที่สนามราคาถูกที่สุด ไปจนถึง 5,000 บาทขึ้นไปที่สนามระดับพรีเมียม ซึ่งโดยทั่วไปรวมค่าแคดดี้และรถกอล์ฟแล้ว แต่สนามส่วนใหญ่จะคิดค่าแคดดี้ (300-400 บาท) และค่าเช่ารถกอล์ฟเพิ่ม และยังมีค่าเดินทางด้วย กอล์ฟในร่มจึงถูกกว่าอย่างชัดเจน ไม่ขึ้นกับสภาพอากาศ และเข้าถึงได้ง่ายกว่า โดยเฉพาะเมื่อมากันเป็นกลุ่ม',
       related_questions: [
         { slug: 'can-i-rent-golf-clubs-in-bangkok', question: 'เช่าไม้กอล์ฟในกรุงเทพฯ ได้ไหม' },
         { slug: '/guide/round-of-golf-cost-bangkok', question: 'ออกรอบกอล์ฟในกรุงเทพฯ ค่าใช้จ่ายเท่าไหร่ — ค่ากรีนฟีและค่าแคดดี้' },
@@ -2404,12 +2404,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'en',
     related_slugs: ['/faq/how-much-does-indoor-golf-cost-in-bangkok', '/activities/group-activities-bangkok', '/events'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-26T00:00:00.000Z',
     content: {
       answer_intro:
         'Corporate golf events in Bangkok range from 9,999 THB for a small indoor event to 100,000+ THB for a full outdoor tournament. At LENGOLF, all-inclusive packages start at 9,999 THB (10–15 guests, 2 golf bays, 3 hours, drinks, and catered food) or 21,999 THB (15–25 guests, 4 bays, full venue rental). Outdoor corporate golf days at Bangkok courses typically cost 3,000–7,000 THB per person.',
       answer_body:
-        'Here\'s a complete breakdown of corporate golf event pricing in Bangkok.\n\n**LENGOLF Indoor Event Packages**\n\n*Small Package — 9,999 THB*\n- 10–15 guests\n- 2 golf simulator bays, 3 hours\n- 10 beers (Singha or Asahi), 5 cocktails, unlimited soft drinks\n- Catered food spread from Smith & Co.\n- Per-person cost: ~667–1,000 THB all-inclusive\n\n*Medium Package — 21,999 THB*\n- 15–25 guests\n- 4 golf simulator bays, 3 hours\n- Exclusive full-location rental\n- 20 beers, 10 cocktails, unlimited soft drinks\n- Catered food from Smith & Co. & Pizza Mania\n- Per-person cost: ~880–1,467 THB all-inclusive\n\n*Custom Packages*\nFor larger groups (25–50+), longer durations, or specific requirements, we create custom packages. Add-ons include sound system, DJ setup, custom decorations, and expanded catering. Contact LINE @lengolf.\n\n**Outdoor Corporate Golf Days (Comparison)**\n- Green fees: 1,500–4,000 THB per person\n- Caddie fees: 300–400 THB per person\n- Cart rental: 700–1,000 THB per cart\n- F&B / after-party: 500–2,000 THB per person\n- Transport: 2,000–5,000 THB for group minivan\n- Total per person: 3,000–7,000 THB\n- Time commitment: Full day (transport + 5-hour round + dinner)\n\n**Why Indoor Corporate Events Work**\n- Everyone participates, including non-golfers\n- 3 hours vs. full-day commitment\n- All-inclusive pricing (no surprise costs)\n- Central location at BTS Chidlom (easy for everyone)\n- Air-conditioned, weather-proof\n- Food, drinks, and activity in one venue\n\nLENGOLF is located at Mercury Ville, BTS Chidlom (Exit 4). Contact our events team on LINE @lengolf or fill out the inquiry form at len.golf/events.',
+        'Here\'s a complete breakdown of corporate golf event pricing in Bangkok.\n\n**LENGOLF Indoor Event Packages**\n\n*Small Package — 9,999 THB*\n- 10–15 guests\n- 2 golf simulator bays, 3 hours\n- 10 beers (Singha or Asahi), 5 cocktails, unlimited soft drinks\n- Catered food spread from Smith & Co.\n- Per-person cost: ~667–1,000 THB all-inclusive\n\n*Medium Package — 21,999 THB*\n- 15–25 guests\n- 4 golf simulator bays, 3 hours\n- Exclusive full-location rental\n- 20 beers, 10 cocktails, unlimited soft drinks\n- Catered food from Smith & Co. & Pizza Mania\n- Per-person cost: ~880–1,467 THB all-inclusive\n\n*Custom Packages*\nFor larger groups (25–50+), longer durations, or specific requirements, we create custom packages. Add-ons include sound system, DJ setup, custom decorations, and expanded catering. Contact LINE @lengolf.\n\n**Outdoor Corporate Golf Days (Comparison)**\n- Green fees: under 1,000 to 5,000+ THB per person (premium clubs usually include caddie and cart)\n- Caddie fees: 300–400 THB per person\n- Cart rental: 700–1,000 THB per cart\n- F&B / after-party: 500–2,000 THB per person\n- Transport: 2,000–5,000 THB for group minivan\n- Total per person: 3,000–7,000 THB\n- Time commitment: Full day (transport + 5-hour round + dinner)\n\n**Why Indoor Corporate Events Work**\n- Everyone participates, including non-golfers\n- 3 hours vs. full-day commitment\n- All-inclusive pricing (no surprise costs)\n- Central location at BTS Chidlom (easy for everyone)\n- Air-conditioned, weather-proof\n- Food, drinks, and activity in one venue\n\nLENGOLF is located at Mercury Ville, BTS Chidlom (Exit 4). Contact our events team on LINE @lengolf or fill out the inquiry form at len.golf/events.',
       related_questions: [
         { slug: 'how-much-does-indoor-golf-cost-in-bangkok', question: 'How Much Does Indoor Golf Cost in Bangkok?' },
         { slug: 'how-long-does-simulator-golf-take', question: 'How Long Does a Round of Simulator Golf Take?' },
@@ -2421,7 +2421,7 @@ export const faqPages: FaqSeoPage[] = [
   // ─── TH: how-much-does-corporate-golf-event-cost-bangkok ───
   // Every figure traces to the EN entry faq-15: 9,999 / 21,999 บาท, กว่า 100,000
   // บาท, 10-15 และ 15-25 คน, 2 และ 4 เบย์, 3 ชั่วโมง, ประมาณ 667-1,000 และ
-  // 880-1,467 บาทต่อคน, 25-50 คนขึ้นไป, และบล็อกกลางแจ้ง (1,500-4,000 /
+  // 880-1,467 บาทต่อคน, 25-50 คนขึ้นไป, และบล็อกกลางแจ้ง (green fee ต่ำกว่า 1,000 ถึง 5,000+ since 2026-09-26 /
   // 300-400 / 700-1,000 / 500-2,000 / 2,000-5,000 / 3,000-7,000 บาท, ออกรอบ
   // 5 ชั่วโมง). The EN intro/body once disagreed on the outdoor per-person
   // figure (3,000-5,000 vs 3,000-7,000); EN was corrected to the body's own
@@ -2466,12 +2466,12 @@ export const faqPages: FaqSeoPage[] = [
       '/events',
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-26T00:00:00.000Z',
     content: {
       answer_intro:
         'กิจกรรมกอล์ฟองค์กรในกรุงเทพฯ มีค่าใช้จ่ายตั้งแต่ 9,999 บาทสำหรับงานในร่มขนาดเล็ก ไปจนถึงกว่า 100,000 บาทสำหรับทัวร์นาเมนต์กลางแจ้งเต็มรูปแบบ ที่ LENGOLF แพ็กเกจแบบรวมทุกอย่างเริ่มต้นที่ 9,999 บาท (10-15 คน เบย์กอล์ฟ 2 เบย์ 3 ชั่วโมง เครื่องดื่ม และอาหารจัดเลี้ยง) หรือ 21,999 บาท (15-25 คน 4 เบย์ เหมาสถานที่ทั้งหมด) ส่วนกิจกรรมกอล์ฟองค์กรกลางแจ้งตามสนามในกรุงเทพฯ โดยทั่วไปอยู่ที่ 3,000-7,000 บาทต่อคน (ข้อมูล ณ กรกฎาคม 2026)',
       answer_body:
-        'นี่คือรายละเอียดค่าใช้จ่ายทั้งหมดของการจัดกิจกรรมกอล์ฟองค์กรในกรุงเทพฯ\n\n**แพ็กเกจกิจกรรมในร่มของ LENGOLF**\n\n**แพ็กเกจเล็ก — 9,999 บาท**\n- 10-15 คน\n- เบย์กอล์ฟซิมมูเลเตอร์ 2 เบย์ 3 ชั่วโมง\n- เบียร์ 10 ที่ (Singha หรือ Asahi) ค็อกเทล 5 แก้ว และเครื่องดื่มซอฟต์ดริงก์ไม่อั้น\n- ชุดอาหารจัดเลี้ยงจาก Smith & Co.\n- ค่าใช้จ่ายต่อคน: ประมาณ 667-1,000 บาท แบบรวมทุกอย่าง\n\n**แพ็กเกจกลาง — 21,999 บาท**\n- 15-25 คน\n- เบย์กอล์ฟซิมมูเลเตอร์ 4 เบย์ 3 ชั่วโมง\n- เหมาสถานที่ทั้งหมดแบบส่วนตัว\n- เบียร์ 20 ที่ ค็อกเทล 10 แก้ว และเครื่องดื่มซอฟต์ดริงก์ไม่อั้น\n- อาหารจัดเลี้ยงจาก Smith & Co. และ Pizza Mania\n- ค่าใช้จ่ายต่อคน: ประมาณ 880-1,467 บาท แบบรวมทุกอย่าง\n\n**แพ็กเกจตามความต้องการ**\nสำหรับกลุ่มที่ใหญ่กว่านั้น (25-50 คนขึ้นไป) ระยะเวลาที่ยาวกว่า หรือความต้องการเฉพาะ เราจัดแพ็กเกจให้ได้ตามที่ต้องการ ตัวเลือกเสริมมีทั้งระบบเสียง ชุดอุปกรณ์ดีเจ การตกแต่งตามที่ต้องการ และอาหารจัดเลี้ยงเพิ่มเติม ติดต่อได้ทาง LINE @lengolf\n\n**กิจกรรมกอล์ฟองค์กรกลางแจ้ง (เปรียบเทียบ)**\n- ค่ากรีนฟี: 1,500-4,000 บาทต่อคน\n- ค่าแคดดี้: 300-400 บาทต่อคน\n- ค่าเช่ารถกอล์ฟ: 700-1,000 บาทต่อคัน\n- อาหารและเครื่องดื่ม / งานเลี้ยงหลังจบรอบ: 500-2,000 บาทต่อคน\n- การเดินทาง: 2,000-5,000 บาทสำหรับรถตู้ทั้งกลุ่ม\n- รวมต่อคน: 3,000-7,000 บาท\n- เวลาที่ต้องใช้: เต็มวัน (เดินทาง + ออกรอบ 5 ชั่วโมง + มื้อค่ำ)\n\n**ทำไมกิจกรรมองค์กรในร่มจึงลงตัว**\n- ทุกคนได้ร่วมสนุก รวมถึงคนที่ไม่เล่นกอล์ฟ\n- ใช้เวลา 3 ชั่วโมง แทนที่จะต้องกันเวลาไว้ทั้งวัน\n- ราคาแบบรวมทุกอย่าง ไม่มีค่าใช้จ่ายงอกเพิ่มภายหลัง\n- ทำเลใจกลางเมืองที่ BTS ชิดลม เดินทางสะดวกสำหรับทุกคน\n- ห้องปรับอากาศ ไม่ต้องลุ้นสภาพอากาศ\n- อาหาร เครื่องดื่ม และกิจกรรม ครบในที่เดียว\n\nLENGOLF อยู่ที่ Mercury Ville, BTS ชิดลม (ทางออก 4) ติดต่อทีมงานอีเวนต์ได้ทาง LINE @lengolf หรือกรอกแบบฟอร์มสอบถามที่ len.golf/events',
+        'นี่คือรายละเอียดค่าใช้จ่ายทั้งหมดของการจัดกิจกรรมกอล์ฟองค์กรในกรุงเทพฯ\n\n**แพ็กเกจกิจกรรมในร่มของ LENGOLF**\n\n**แพ็กเกจเล็ก — 9,999 บาท**\n- 10-15 คน\n- เบย์กอล์ฟซิมมูเลเตอร์ 2 เบย์ 3 ชั่วโมง\n- เบียร์ 10 ที่ (Singha หรือ Asahi) ค็อกเทล 5 แก้ว และเครื่องดื่มซอฟต์ดริงก์ไม่อั้น\n- ชุดอาหารจัดเลี้ยงจาก Smith & Co.\n- ค่าใช้จ่ายต่อคน: ประมาณ 667-1,000 บาท แบบรวมทุกอย่าง\n\n**แพ็กเกจกลาง — 21,999 บาท**\n- 15-25 คน\n- เบย์กอล์ฟซิมมูเลเตอร์ 4 เบย์ 3 ชั่วโมง\n- เหมาสถานที่ทั้งหมดแบบส่วนตัว\n- เบียร์ 20 ที่ ค็อกเทล 10 แก้ว และเครื่องดื่มซอฟต์ดริงก์ไม่อั้น\n- อาหารจัดเลี้ยงจาก Smith & Co. และ Pizza Mania\n- ค่าใช้จ่ายต่อคน: ประมาณ 880-1,467 บาท แบบรวมทุกอย่าง\n\n**แพ็กเกจตามความต้องการ**\nสำหรับกลุ่มที่ใหญ่กว่านั้น (25-50 คนขึ้นไป) ระยะเวลาที่ยาวกว่า หรือความต้องการเฉพาะ เราจัดแพ็กเกจให้ได้ตามที่ต้องการ ตัวเลือกเสริมมีทั้งระบบเสียง ชุดอุปกรณ์ดีเจ การตกแต่งตามที่ต้องการ และอาหารจัดเลี้ยงเพิ่มเติม ติดต่อได้ทาง LINE @lengolf\n\n**กิจกรรมกอล์ฟองค์กรกลางแจ้ง (เปรียบเทียบ)**\n- ค่ากรีนฟี: ต่ำกว่า 1,000 ถึง 5,000+ บาทต่อคน (สนามระดับพรีเมียมโดยทั่วไปรวมค่าแคดดี้และรถกอล์ฟแล้ว)\n- ค่าแคดดี้: 300-400 บาทต่อคน\n- ค่าเช่ารถกอล์ฟ: 700-1,000 บาทต่อคัน\n- อาหารและเครื่องดื่ม / งานเลี้ยงหลังจบรอบ: 500-2,000 บาทต่อคน\n- การเดินทาง: 2,000-5,000 บาทสำหรับรถตู้ทั้งกลุ่ม\n- รวมต่อคน: 3,000-7,000 บาท\n- เวลาที่ต้องใช้: เต็มวัน (เดินทาง + ออกรอบ 5 ชั่วโมง + มื้อค่ำ)\n\n**ทำไมกิจกรรมองค์กรในร่มจึงลงตัว**\n- ทุกคนได้ร่วมสนุก รวมถึงคนที่ไม่เล่นกอล์ฟ\n- ใช้เวลา 3 ชั่วโมง แทนที่จะต้องกันเวลาไว้ทั้งวัน\n- ราคาแบบรวมทุกอย่าง ไม่มีค่าใช้จ่ายงอกเพิ่มภายหลัง\n- ทำเลใจกลางเมืองที่ BTS ชิดลม เดินทางสะดวกสำหรับทุกคน\n- ห้องปรับอากาศ ไม่ต้องลุ้นสภาพอากาศ\n- อาหาร เครื่องดื่ม และกิจกรรม ครบในที่เดียว\n\nLENGOLF อยู่ที่ Mercury Ville, BTS ชิดลม (ทางออก 4) ติดต่อทีมงานอีเวนต์ได้ทาง LINE @lengolf หรือกรอกแบบฟอร์มสอบถามที่ len.golf/events',
       related_questions: [
         { slug: 'how-much-does-indoor-golf-cost-in-bangkok', question: 'ราคากอล์ฟในร่มในกรุงเทพฯ เท่าไหร่ — ชั่วโมงละ 550-1,000 บาท' },
         { slug: 'how-long-does-simulator-golf-take', question: 'เล่นกอล์ฟซิมมูเลเตอร์หนึ่งรอบใช้เวลานานแค่ไหน' },
@@ -2483,7 +2483,7 @@ export const faqPages: FaqSeoPage[] = [
   // ─── JA: how-much-does-corporate-golf-event-cost-bangkok ───
   // Every figure traces to the EN entry faq-15 (9,999／21,999THB, 100,000THB超,
   // 10〜15／15〜25名, ベイ2／4台, 3時間, ビール10／20杯, カクテル5／10杯,
-  // 667〜1,000／880〜1,467THB, グリーンフィー1,500〜4,000, キャディーフィー
+  // 667〜1,000／880〜1,467THB, グリーンフィー1,000THB未満から5,000THB以上 (since 2026-09-26), キャディーフィー
   // 300〜400, カート700〜1,000, 飲食500〜2,000, 送迎2,000〜5,000, 合計
   // 3,000〜7,000THB, 25〜50名以上, 4番出口); prices carry （2026年7月現在）.
   // PRESERVED CONTRADICTION: the EN intro says outdoor days cost 3,000〜5,000THB
@@ -2508,12 +2508,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/faq/how-much-does-indoor-golf-cost-in-bangkok', '/guide/corporate-golf-events-bangkok', '/events'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-26T00:00:00.000Z',
     content: {
       answer_intro:
         'バンコクの企業ゴルフイベントの費用は、小規模なインドア開催の9,999THBから、本格的な屋外トーナメントの100,000THB超まで幅があります。LENGOLFのオールインクルーシブのパッケージは、9,999THB（10〜15名、ゴルフベイ2台、3時間、ドリンクとケータリング付き）または21,999THB（15〜25名、ベイ4台、会場貸切）から。バンコクのゴルフ場での屋外開催は、通常1人あたり3,000〜7,000THBが目安です（2026年7月現在）。',
       answer_body:
-        'バンコクでの企業ゴルフイベントの費用を、内訳まで含めて整理します。\n\n**LENGOLFのインドアイベントパッケージ**\n\n**スモールパッケージ — 9,999THB**\n- 10〜15名\n- ゴルフシミュレーターベイ2台、3時間\n- ビール10杯（SinghaまたはAsahi）、カクテル5杯、ソフトドリンク飲み放題\n- Smith & Co.のケータリング料理\n- 1人あたり667〜1,000THBほど、すべて込み\n\n**ミディアムパッケージ — 21,999THB**\n- 15〜25名\n- ゴルフシミュレーターベイ4台、3時間\n- 会場全体の貸切\n- ビール20杯、カクテル10杯、ソフトドリンク飲み放題\n- Smith & Co.とPizza Maniaのケータリング料理\n- 1人あたり880〜1,467THBほど、すべて込み\n\n**カスタムパッケージ**\n25〜50名以上の大人数、より長い開催時間、個別のご要望には、カスタムパッケージをお作りします。音響設備、DJセット、装飾、ケータリングの拡充といったオプションもご用意。ご相談はLINE @lengolf まで。\n\n**屋外での企業ゴルフデー（比較）**\n- グリーンフィー: 1人1,500〜4,000THB\n- キャディーフィー: 1人300〜400THB\n- カートレンタル: 1台700〜1,000THB\n- 飲食・二次会: 1人500〜2,000THB\n- 送迎: グループ用ミニバンで2,000〜5,000THB\n- 1人あたり合計: 3,000〜7,000THB\n- 拘束時間: 移動、5時間のラウンド、会食を含めて丸1日\n\n上記の屋外費用は第三者のゴルフ場の相場です（2026年7月現在）。\n\n**インドア開催がうまくいく理由**\n- ゴルフをしない方も含め、全員が参加できます\n- 丸1日ではなく3時間で完結します\n- すべて込みの料金設定なので、想定外の出費がありません\n- BTSチットロムという中心部の立地で、全員が集まりやすい\n- 空調完備で天候に左右されません\n- 食事、ドリンク、アクティビティが1か所で完結します\n\nLENGOLFはザ・マーキュリービル、BTSチットロム駅（4番出口）にあります。イベント担当へのご相談はLINE @lengolf、またはlen.golf/eventsのお問い合わせフォームからどうぞ。',
+        'バンコクでの企業ゴルフイベントの費用を、内訳まで含めて整理します。\n\n**LENGOLFのインドアイベントパッケージ**\n\n**スモールパッケージ — 9,999THB**\n- 10〜15名\n- ゴルフシミュレーターベイ2台、3時間\n- ビール10杯（SinghaまたはAsahi）、カクテル5杯、ソフトドリンク飲み放題\n- Smith & Co.のケータリング料理\n- 1人あたり667〜1,000THBほど、すべて込み\n\n**ミディアムパッケージ — 21,999THB**\n- 15〜25名\n- ゴルフシミュレーターベイ4台、3時間\n- 会場全体の貸切\n- ビール20杯、カクテル10杯、ソフトドリンク飲み放題\n- Smith & Co.とPizza Maniaのケータリング料理\n- 1人あたり880〜1,467THBほど、すべて込み\n\n**カスタムパッケージ**\n25〜50名以上の大人数、より長い開催時間、個別のご要望には、カスタムパッケージをお作りします。音響設備、DJセット、装飾、ケータリングの拡充といったオプションもご用意。ご相談はLINE @lengolf まで。\n\n**屋外での企業ゴルフデー（比較）**\n- グリーンフィー: 1人1,000THB未満から5,000THB以上（高級コースは多くの場合、キャディー・カート込み）\n- キャディーフィー: 1人300〜400THB\n- カートレンタル: 1台700〜1,000THB\n- 飲食・二次会: 1人500〜2,000THB\n- 送迎: グループ用ミニバンで2,000〜5,000THB\n- 1人あたり合計: 3,000〜7,000THB\n- 拘束時間: 移動、5時間のラウンド、会食を含めて丸1日\n\n上記の屋外費用は第三者のゴルフ場の相場です（2026年7月現在）。\n\n**インドア開催がうまくいく理由**\n- ゴルフをしない方も含め、全員が参加できます\n- 丸1日ではなく3時間で完結します\n- すべて込みの料金設定なので、想定外の出費がありません\n- BTSチットロムという中心部の立地で、全員が集まりやすい\n- 空調完備で天候に左右されません\n- 食事、ドリンク、アクティビティが1か所で完結します\n\nLENGOLFはザ・マーキュリービル、BTSチットロム駅（4番出口）にあります。イベント担当へのご相談はLINE @lengolf、またはlen.golf/eventsのお問い合わせフォームからどうぞ。',
       related_questions: [
         { slug: 'how-much-does-indoor-golf-cost-in-bangkok', question: 'バンコクのインドアゴルフ料金は？ — 1時間550〜1,000THBの相場と内訳' },
         { slug: 'how-long-does-simulator-golf-take', question: 'ゴルフシミュレーターの18ホールは何時間？ — 形式別の所要時間の目安' },
@@ -2525,7 +2525,7 @@ export const faqPages: FaqSeoPage[] = [
   // ─── KO: how-much-does-corporate-golf-event-cost-bangkok ───
   // Every package figure traces to the EN entry faq-15 (9,999 / 21,999바트,
   // 10~15명·15~25명, 베이 2개·4개, 3시간, 667~1,000 / 880~1,467바트 1인당,
-  // 그린피 1,500~4,000, 캐디피 300~400, 카트 700~1,000, 식음료 500~2,000,
+  // 그린피 1,000바트 미만부터 5,000바트 이상 (since 2026-09-26), 캐디피 300~400, 카트 700~1,000, 식음료 500~2,000,
   // 이동 2,000~5,000). PRESERVED EN SELF-DIVERGENCE: the EN intro says outdoor
   // days run 3,000~5,000바트 per person while its own comparison list totals
   // 3,000~7,000바트 — both are carried verbatim rather than reconciled.
@@ -2547,12 +2547,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/faq/how-much-does-indoor-golf-cost-in-bangkok', '/guide/corporate-golf-events-bangkok', '/events'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-26T00:00:00.000Z',
     content: {
       answer_intro:
         '방콕의 기업 골프 행사 비용은 소규모 실내 행사 9,999바트부터 본격적인 야외 토너먼트 100,000바트 이상까지 폭이 넓어요. LENGOLF의 올인클루시브 패키지는 9,999바트(10~15명, 골프 베이 2개, 3시간, 음료와 케이터링 음식 포함) 또는 21,999바트(15~25명, 베이 4개, 전 공간 대관)부터예요. 방콕 골프장에서 여는 야외 기업 골프 데이는 보통 1인당 3,000~7,000바트 정도예요 (2026년 7월 기준).',
       answer_body:
-        '방콕 기업 골프 행사 비용을 항목별로 정리해 볼게요.\n\n**LENGOLF 실내 이벤트 패키지**\n\n**스몰 패키지 — 9,999바트**\n- 10~15명\n- 골프 시뮬레이터 베이 2개, 3시간\n- 맥주 10잔(Singha 또는 Asahi), 칵테일 5잔, 소프트드링크 무제한\n- Smith & Co.의 케이터링 음식\n- 1인당 비용: 올인클루시브로 약 667~1,000바트\n\n**미디엄 패키지 — 21,999바트**\n- 15~25명\n- 골프 시뮬레이터 베이 4개, 3시간\n- 전 공간 단독 대관\n- 맥주 20잔, 칵테일 10잔, 소프트드링크 무제한\n- Smith & Co.와 Pizza Mania의 케이터링 음식\n- 1인당 비용: 올인클루시브로 약 880~1,467바트\n\n**커스텀 패키지**\n25~50명 이상의 큰 규모, 더 긴 시간, 특별한 요청이 있으시면 맞춤 패키지를 만들어 드려요. 음향 시스템, DJ 세팅, 맞춤 장식, 케이터링 확대 같은 추가 옵션도 있어요. LINE @lengolf로 문의해 주세요.\n\n**야외 기업 골프 데이와 비교하면**\n- 그린피: 1인당 1,500~4,000바트\n- 캐디피: 1인당 300~400바트\n- 카트 대여: 카트 1대당 700~1,000바트\n- 식음료와 뒤풀이: 1인당 500~2,000바트\n- 이동: 단체 밴 2,000~5,000바트\n- 1인당 합계: 3,000~7,000바트\n- 소요 시간: 하루 종일 (이동 + 5시간 라운딩 + 저녁 식사)\n\n위 야외 비용은 방콕 골프장에서 일반적으로 드는 수준이에요 (2026년 7월 기준).\n\n**실내 기업 행사가 잘 맞는 이유**\n- 골프를 치지 않는 분까지 모두 참여할 수 있어요\n- 하루를 통째로 비우지 않고 3시간이면 끝나요\n- 올인클루시브 가격이라 예상 밖의 비용이 없어요\n- BTS 칫롬역 도심 한가운데라 모이기 편해요\n- 에어컨이 나오고 날씨에 영향을 받지 않아요\n- 음식, 음료, 액티비티가 한 곳에서 해결돼요\n\nLENGOLF는 The Mercury Ville, BTS 칫롬역(4번 출구)에 있어요. 이벤트 담당팀에 LINE @lengolf로 연락하시거나 len.golf/events의 문의 양식을 남겨 주세요.',
+        '방콕 기업 골프 행사 비용을 항목별로 정리해 볼게요.\n\n**LENGOLF 실내 이벤트 패키지**\n\n**스몰 패키지 — 9,999바트**\n- 10~15명\n- 골프 시뮬레이터 베이 2개, 3시간\n- 맥주 10잔(Singha 또는 Asahi), 칵테일 5잔, 소프트드링크 무제한\n- Smith & Co.의 케이터링 음식\n- 1인당 비용: 올인클루시브로 약 667~1,000바트\n\n**미디엄 패키지 — 21,999바트**\n- 15~25명\n- 골프 시뮬레이터 베이 4개, 3시간\n- 전 공간 단독 대관\n- 맥주 20잔, 칵테일 10잔, 소프트드링크 무제한\n- Smith & Co.와 Pizza Mania의 케이터링 음식\n- 1인당 비용: 올인클루시브로 약 880~1,467바트\n\n**커스텀 패키지**\n25~50명 이상의 큰 규모, 더 긴 시간, 특별한 요청이 있으시면 맞춤 패키지를 만들어 드려요. 음향 시스템, DJ 세팅, 맞춤 장식, 케이터링 확대 같은 추가 옵션도 있어요. LINE @lengolf로 문의해 주세요.\n\n**야외 기업 골프 데이와 비교하면**\n- 그린피: 1인당 1,000바트 미만부터 5,000바트 이상(프리미엄 클럽은 보통 캐디와 카트 포함)\n- 캐디피: 1인당 300~400바트\n- 카트 대여: 카트 1대당 700~1,000바트\n- 식음료와 뒤풀이: 1인당 500~2,000바트\n- 이동: 단체 밴 2,000~5,000바트\n- 1인당 합계: 3,000~7,000바트\n- 소요 시간: 하루 종일 (이동 + 5시간 라운딩 + 저녁 식사)\n\n위 야외 비용은 방콕 골프장에서 일반적으로 드는 수준이에요 (2026년 7월 기준).\n\n**실내 기업 행사가 잘 맞는 이유**\n- 골프를 치지 않는 분까지 모두 참여할 수 있어요\n- 하루를 통째로 비우지 않고 3시간이면 끝나요\n- 올인클루시브 가격이라 예상 밖의 비용이 없어요\n- BTS 칫롬역 도심 한가운데라 모이기 편해요\n- 에어컨이 나오고 날씨에 영향을 받지 않아요\n- 음식, 음료, 액티비티가 한 곳에서 해결돼요\n\nLENGOLF는 The Mercury Ville, BTS 칫롬역(4번 출구)에 있어요. 이벤트 담당팀에 LINE @lengolf로 연락하시거나 len.golf/events의 문의 양식을 남겨 주세요.',
       related_questions: [
         { slug: 'how-much-does-indoor-golf-cost-in-bangkok', question: '방콕 스크린골프 요금 — 시간당 550~1,000바트 실내 골프 비용' },
         { slug: 'how-long-does-simulator-golf-take', question: '스크린골프 18홀 시간 — 인원별 소요 시간 정리' },
@@ -2563,7 +2563,7 @@ export const faqPages: FaqSeoPage[] = [
 
   // ─── ZH: how-much-does-corporate-golf-event-cost-bangkok ───
   // Every figure traces to EN faq-15 (9,999／21,999泰铢套餐与其全部内容, 人均
-  // 约667–1,000／约880–1,467泰铢, 定制25–50人以上, 室外果岭费1,500–4,000、球童费
+  // 约667–1,000／约880–1,467泰铢, 定制25–50人以上, 室外果岭费1,000以下至5,000+ (since 2026-09-26)、球童费
   // 300–400、球车700–1,000、餐饮500–2,000、交通2,000–5,000、人均合计3,000–7,000).
   // PRESERVED EN DIVERGENCE: the EN intro says outdoor days cost 3,000–5,000 THB
   // per person while the EN body's line-item total is 3,000–7,000 — both are
@@ -2587,12 +2587,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/faq/how-much-does-indoor-golf-cost-in-bangkok', '/faq/how-long-does-simulator-golf-take', '/events'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-26T00:00:00.000Z',
     content: {
       answer_intro:
         '曼谷的企业高尔夫活动，费用从室内小型活动的9,999泰铢，到完整室外锦标赛的100,000泰铢以上都有。在LENGOLF，全包套餐9,999泰铢起（10–15人、2个高尔夫球位、3小时、酒水与餐饮），或21,999泰铢（15–25人、4个球位、整场包场）。在曼谷球场举办的室外企业高尔夫日，人均通常3,000–7,000泰铢，截至2026年7月。',
       answer_body:
-        '下面是曼谷企业高尔夫活动费用的完整拆解。\n\n**LENGOLF室内活动套餐**\n\n**小型套餐——9,999泰铢**\n- 10–15人\n- 2个高尔夫模拟器球位，3小时\n- 10瓶啤酒（Singha或Asahi）、5杯鸡尾酒、软饮无限量\n- Smith & Co.提供的自助餐点\n- 人均约667–1,000泰铢，全包\n\n**中型套餐——21,999泰铢**\n- 15–25人\n- 4个高尔夫模拟器球位，3小时\n- 整场独家包场\n- 20瓶啤酒、10杯鸡尾酒、软饮无限量\n- Smith & Co.与Pizza Mania提供的餐点\n- 人均约880–1,467泰铢，全包\n\n**定制套餐**\n人数更多（25–50人以上）、时间更长，或者有特定需求，我们可以做定制套餐。可加购的项目包括音响系统、DJ设备、专属布置和扩充餐饮。请联系LINE @lengolf。\n\n**室外企业高尔夫日（对比）**\n- 果岭费：人均1,500–4,000泰铢\n- 球童费：人均300–400泰铢\n- 球车租借：每辆700–1,000泰铢\n- 餐饮与赛后聚会：人均500–2,000泰铢\n- 交通：团体商务车2,000–5,000泰铢\n- 人均合计：3,000–7,000泰铢\n- 时间成本：一整天（往返交通、5小时一轮、加上晚餐）\n\n**室内企业活动为什么行得通**\n- 人人都能参与，不打高尔夫的同事也不例外\n- 3小时搞定，不必占掉一整天\n- 全包价格，没有意料之外的开销\n- 位置在BTS Chidlom，对所有人都方便\n- 空调环境，不受天气影响\n- 餐、饮、活动在同一个场地解决\n\nLENGOLF位于The Mercury Ville，BTS Chidlom站（4号出口）。活动事宜可通过LINE @lengolf联系我们的活动团队，或到len.golf/events填写咨询表单。\n\n以上价格截至2026年7月。',
+        '下面是曼谷企业高尔夫活动费用的完整拆解。\n\n**LENGOLF室内活动套餐**\n\n**小型套餐——9,999泰铢**\n- 10–15人\n- 2个高尔夫模拟器球位，3小时\n- 10瓶啤酒（Singha或Asahi）、5杯鸡尾酒、软饮无限量\n- Smith & Co.提供的自助餐点\n- 人均约667–1,000泰铢，全包\n\n**中型套餐——21,999泰铢**\n- 15–25人\n- 4个高尔夫模拟器球位，3小时\n- 整场独家包场\n- 20瓶啤酒、10杯鸡尾酒、软饮无限量\n- Smith & Co.与Pizza Mania提供的餐点\n- 人均约880–1,467泰铢，全包\n\n**定制套餐**\n人数更多（25–50人以上）、时间更长，或者有特定需求，我们可以做定制套餐。可加购的项目包括音响系统、DJ设备、专属布置和扩充餐饮。请联系LINE @lengolf。\n\n**室外企业高尔夫日（对比）**\n- 果岭费：人均1,000以下至5,000+泰铢（高端球会通常已含球童和球车）\n- 球童费：人均300–400泰铢\n- 球车租借：每辆700–1,000泰铢\n- 餐饮与赛后聚会：人均500–2,000泰铢\n- 交通：团体商务车2,000–5,000泰铢\n- 人均合计：3,000–7,000泰铢\n- 时间成本：一整天（往返交通、5小时一轮、加上晚餐）\n\n**室内企业活动为什么行得通**\n- 人人都能参与，不打高尔夫的同事也不例外\n- 3小时搞定，不必占掉一整天\n- 全包价格，没有意料之外的开销\n- 位置在BTS Chidlom，对所有人都方便\n- 空调环境，不受天气影响\n- 餐、饮、活动在同一个场地解决\n\nLENGOLF位于The Mercury Ville，BTS Chidlom站（4号出口）。活动事宜可通过LINE @lengolf联系我们的活动团队，或到len.golf/events填写咨询表单。\n\n以上价格截至2026年7月。',
       related_questions: [
         { slug: 'how-much-does-indoor-golf-cost-in-bangkok', question: '曼谷室内高尔夫收费 — 每小时550–1,000泰铢的价格全解析' },
         { slug: 'how-long-does-simulator-golf-take', question: '模拟高尔夫打完18洞要多久？ — 单人、组队与真实球场对比' },

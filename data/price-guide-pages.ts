@@ -124,7 +124,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     slug: 'how-much-does-golf-cost-bangkok',
     title: 'How Much Does Golf Cost in Bangkok? (2026 Complete Guide)',
     meta_description:
-      'Golf in Bangkok costs 400–4,000 THB depending on format. Compare indoor simulator rates (from 550 THB/hr for 5 people in central Bangkok) vs outdoor green fees, ranges, and lessons.',
+      'Golf in Bangkok typically costs 400–4,000 THB depending on format. Compare indoor simulator rates (from 550 THB/hr for 5 people in central Bangkok) vs outdoor green fees, ranges, and lessons.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -132,15 +132,15 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'en',
     related_slugs: ['/cost/golf-simulator-prices-bangkok', '/cost/lengolf-pricing-guide', '/cost/golf-lesson-prices-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-26T00:00:00.000Z',
     content: {
       intro:
-        'Golf in Bangkok typically costs between 400 and 4,000 THB, depending on whether you play indoors on a simulator or outdoors on a course. Indoor golf simulators in central Bangkok start at 550 THB per hour for up to 5 people — just 110 THB per person — while suburban screen-golf venues start around 400 THB. Outdoor courses range from 1,500 to 4,000 THB per round, plus caddie fees and transport.',
+        'Golf in Bangkok typically costs between 400 and 4,000 THB, depending on whether you play indoors on a simulator or outdoors on a course. Indoor golf simulators in central Bangkok start at 550 THB per hour for up to 5 people — just 110 THB per person — while suburban screen-golf venues start around 400 THB. Outdoor green fees range from under 1,000 THB on a weekday at the cheapest courses up to 5,000 THB or more at the premium clubs, where caddie and cart are usually included. Most courses charge caddie fees on top, and transport is extra.',
       price_breakdown: [
         { item: 'Indoor golf simulator (LENGOLF)', price: '550–950 THB/hr', notes: 'Per bay, up to 5 players. Free club rental included. BTS Chidlom.' },
         { item: 'Indoor golf simulator (other venues)', price: '400–1,400 THB/hr', notes: 'Varies by venue, time, and day. Some exclude tax; the cheapest rates are at car-access venues outside the centre.' },
-        { item: 'Outdoor course green fee (weekday)', price: '1,500–3,000 THB', notes: 'Per round. Courses like Alpine, Lakewood, Bangkok Golf Club.' },
-        { item: 'Outdoor course green fee (weekend)', price: '2,500–4,000 THB', notes: 'Premium rates on Sat–Sun and public holidays.' },
+        { item: 'Outdoor course green fee (weekday)', price: '1,000–3,000 THB', notes: 'Per round, typical range at courses like Lakewood and Bangkok Golf Club. Premium clubs such as Alpine charge 5,000+ THB, usually with caddie and cart included.' },
+        { item: 'Outdoor course green fee (weekend)', price: '1,500–4,000 THB', notes: 'Premium rates on Sat–Sun and public holidays.' },
         { item: 'Caddie fee (outdoor courses)', price: '300–400 THB', notes: 'Required at most Thai courses. Tip of 300–500 THB is customary.' },
         { item: 'Golf cart (outdoor courses)', price: '600–800 THB', notes: 'Optional at most courses. Shared between 2 players.' },
         { item: 'Driving range', price: '100–300 THB', notes: 'Per bucket of balls (50–100 balls). No club rental usually.' },
@@ -165,7 +165,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
       sections: [
         {
           heading: 'Outdoor Golf: Full Cost Breakdown',
-          body: 'A typical outdoor golf day in Bangkok includes: green fees (1,500–4,000 THB), caddie fee (300–400 THB + 300–500 THB tip), golf cart (600–800 THB, often shared), club rental if you don\'t have your own (1,000–2,500 THB), and transport (taxi to most courses is 400–800 THB each way, or join a van service for 200–400 THB). The total for a solo player renting clubs comes to 4,500–8,000 THB for a single round. Outdoor courses are generally 45–90 minutes from central Bangkok, which means a full golf day is a 6–8 hour commitment.',
+          body: 'A typical outdoor golf day in Bangkok includes: green fees (under 1,000 to 5,000+ THB), caddie fee (300–400 THB + 300–500 THB tip), golf cart (600–800 THB, often shared), club rental if you don\'t have your own (1,000–2,500 THB), and transport (taxi to most courses is 400–800 THB each way, or join a van service for 200–400 THB). The total for a solo player renting clubs comes to 3,500–8,000 THB for a single round. Outdoor courses are generally 45–90 minutes from central Bangkok, which means a full golf day is a 6–8 hour commitment.',
         },
         {
           heading: 'Indoor Simulator Golf: What You Get',
@@ -189,7 +189,10 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
   // (เล่นกอล์ฟ...ราคาเท่าไหร่) rather than translating the EN explainer framing.
   // Every figure traces to the EN price-1 entry; currency spelled บาท, ranges
   // with ASCII '-', as-of marker set to กุมภาพันธ์ 2026 = this entry's own
-  // last_verified (2026-02-19), not invented. price_breakdown item labels carry
+  // last_verified (2026-02-19), not invented. Exception since 2026-09-26: the intro's
+  // marker reads กันยายน 2026, because its green-fee sentence was re-measured against the
+  // course files on 2026-09-25 and its other figures (550 bay rate, ~400 suburban screen
+  // golf) are current per price-2 (verified 2026-07-26). last_verified stays 2026-02-19. price_breakdown item labels carry
   // NO ' — ' because the EN entry has none: PriceGuidePage.groupPriceRows()
   // splits on that exact em dash, so introducing one would restructure the table.
   // Simulator = ซิมูเลเตอร์ per glossary preferred (the guide corpus form);
@@ -200,7 +203,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     slug: 'how-much-does-golf-cost-bangkok',
     title: 'เล่นกอล์ฟในกรุงเทพฯ ราคาเท่าไหร่ (คู่มือราคาฉบับเต็ม 2026)',
     meta_description:
-      'เล่นกอล์ฟในกรุงเทพฯ ราคา 400-4,000 บาท ขึ้นอยู่กับรูปแบบที่เลือก เทียบราคากอล์ฟซิมูเลเตอร์ในร่มใจกลางเมือง (เริ่ม 550 บาท/ชั่วโมง สำหรับ 5 คน) กับค่ากรีนฟีสนามกลางแจ้ง สนามไดรฟ์ และคอร์สเรียน',
+      'เล่นกอล์ฟในกรุงเทพฯ ราคาโดยทั่วไป 400-4,000 บาท ขึ้นอยู่กับรูปแบบที่เลือก เทียบราคากอล์ฟซิมูเลเตอร์ในร่มใจกลางเมือง (เริ่ม 550 บาท/ชั่วโมง สำหรับ 5 คน) กับค่ากรีนฟีสนามกลางแจ้ง สนามไดรฟ์ และคอร์สเรียน',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -208,15 +211,15 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'th',
     related_slugs: ['/cost/golf-simulator-prices-bangkok', '/cost/lengolf-pricing-guide', '/cost/golf-lesson-prices-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-26T00:00:00.000Z',
     content: {
       intro:
-        'การเล่นกอล์ฟในกรุงเทพฯ โดยทั่วไปมีค่าใช้จ่ายอยู่ระหว่าง 400 ถึง 4,000 บาท ขึ้นอยู่กับว่าคุณเล่นในร่มบนกอล์ฟซิมูเลเตอร์หรือออกรอบในสนามกลางแจ้ง กอล์ฟซิมูเลเตอร์ในร่มใจกลางกรุงเทพฯ เริ่มต้นที่ 550 บาทต่อชั่วโมงสำหรับผู้เล่นสูงสุด 5 คน หรือเพียง 110 บาทต่อคน ขณะที่สถานที่สกรีนกอล์ฟย่านชานเมืองเริ่มต้นราว 400 บาท ส่วนสนามกลางแจ้งอยู่ที่ 1,500 ถึง 4,000 บาทต่อรอบ บวกค่าแคดดี้และค่าเดินทาง (ข้อมูล ณ กุมภาพันธ์ 2026)',
+        'การเล่นกอล์ฟในกรุงเทพฯ โดยทั่วไปมีค่าใช้จ่ายอยู่ระหว่าง 400 ถึง 4,000 บาท ขึ้นอยู่กับว่าคุณเล่นในร่มบนกอล์ฟซิมูเลเตอร์หรือออกรอบในสนามกลางแจ้ง กอล์ฟซิมูเลเตอร์ในร่มใจกลางกรุงเทพฯ เริ่มต้นที่ 550 บาทต่อชั่วโมงสำหรับผู้เล่นสูงสุด 5 คน หรือเพียง 110 บาทต่อคน ขณะที่สถานที่สกรีนกอล์ฟย่านชานเมืองเริ่มต้นราว 400 บาท ส่วนค่ากรีนฟีสนามกลางแจ้งมีตั้งแต่ต่ำกว่า 1,000 บาทในวันธรรมดาที่สนามราคาถูกที่สุด ไปจนถึง 5,000 บาทขึ้นไปที่สนามระดับพรีเมียม ซึ่งโดยทั่วไปรวมค่าแคดดี้และรถกอล์ฟแล้ว แต่สนามส่วนใหญ่จะคิดค่าแคดดี้เพิ่ม และยังมีค่าเดินทางด้วย (ข้อมูล ณ กันยายน 2026)',
       price_breakdown: [
         { item: 'กอล์ฟซิมูเลเตอร์ในร่ม (LENGOLF)', price: '550-950 บาท/ชม.', notes: 'คิดต่อเบย์ ผู้เล่นสูงสุด 5 คน รวมบริการเช่าไม้กอล์ฟฟรี BTS ชิดลม' },
         { item: 'กอล์ฟซิมูเลเตอร์ในร่ม (สถานที่อื่น)', price: '400-1,400 บาท/ชม.', notes: 'แตกต่างกันตามสถานที่ ช่วงเวลา และวัน บางแห่งยังไม่รวมภาษี ส่วนราคาถูกที่สุดอยู่ที่สถานที่นอกใจกลางเมืองซึ่งต้องเดินทางด้วยรถยนต์' },
-        { item: 'ค่ากรีนฟีสนามกลางแจ้ง (วันธรรมดา)', price: '1,500-3,000 บาท', notes: 'ต่อรอบ สนามอย่าง Alpine, Lakewood, Bangkok Golf Club' },
-        { item: 'ค่ากรีนฟีสนามกลางแจ้ง (วันหยุด)', price: '2,500-4,000 บาท', notes: 'ราคาช่วงพีคในวันเสาร์-อาทิตย์ และวันนักขัตฤกษ์' },
+        { item: 'ค่ากรีนฟีสนามกลางแจ้ง (วันธรรมดา)', price: '1,000-3,000 บาท', notes: 'ต่อรอบ เป็นช่วงราคาทั่วไปของสนามอย่าง Lakewood และ Bangkok Golf Club ส่วนสนามระดับพรีเมียมอย่าง Alpine อยู่ที่ 5,000 บาทขึ้นไป ซึ่งโดยทั่วไปรวมค่าแคดดี้และรถกอล์ฟแล้ว' },
+        { item: 'ค่ากรีนฟีสนามกลางแจ้ง (วันหยุด)', price: '1,500-4,000 บาท', notes: 'ราคาช่วงพีคในวันเสาร์-อาทิตย์ และวันนักขัตฤกษ์' },
         { item: 'ค่าแคดดี้ (สนามกลางแจ้ง)', price: '300-400 บาท', notes: 'สนามส่วนใหญ่ในไทยกำหนดให้ใช้แคดดี้ ทิปตามธรรมเนียมอยู่ที่ 300-500 บาท' },
         { item: 'รถกอล์ฟ (สนามกลางแจ้ง)', price: '600-800 บาท', notes: 'เลือกใช้หรือไม่ก็ได้ในสนามส่วนใหญ่ ใช้ร่วมกัน 2 คน' },
         { item: 'สนามไดรฟ์', price: '100-300 บาท', notes: 'ต่อถังลูกกอล์ฟ (50-100 ลูก) โดยทั่วไปไม่มีบริการเช่าไม้กอล์ฟ' },
@@ -277,7 +280,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
       sections: [
         {
           heading: 'กอล์ฟกลางแจ้ง: แจกแจงค่าใช้จ่ายทั้งหมด',
-          body: 'วันเล่นกอล์ฟกลางแจ้งในกรุงเทพฯ โดยทั่วไปประกอบด้วย ค่ากรีนฟี (1,500-4,000 บาท) ค่าแคดดี้ (300-400 บาท บวกทิป 300-500 บาท) รถกอล์ฟ (600-800 บาท ส่วนใหญ่แชร์กัน) ค่าเช่าไม้กอล์ฟหากคุณไม่มีของตัวเอง (1,000-2,500 บาท) และค่าเดินทาง (แท็กซี่ไปสนามส่วนใหญ่อยู่ที่ 400-800 บาทต่อเที่ยว หรือใช้บริการรถตู้ร่วม 200-400 บาท) รวมแล้วผู้เล่นคนเดียวที่ต้องเช่าไม้กอล์ฟด้วยจะมีค่าใช้จ่าย 4,500-8,000 บาทต่อการออกรอบหนึ่งครั้ง สนามกลางแจ้งโดยทั่วไปอยู่ห่างจากใจกลางกรุงเทพฯ ราว 45-90 นาที นั่นหมายความว่าการเล่นกอล์ฟหนึ่งวันกินเวลาไปทั้งสิ้น 6-8 ชั่วโมง',
+          body: 'วันเล่นกอล์ฟกลางแจ้งในกรุงเทพฯ โดยทั่วไปประกอบด้วย ค่ากรีนฟี (ต่ำกว่า 1,000 ถึง 5,000+ บาท) ค่าแคดดี้ (300-400 บาท บวกทิป 300-500 บาท) รถกอล์ฟ (600-800 บาท ส่วนใหญ่แชร์กัน) ค่าเช่าไม้กอล์ฟหากคุณไม่มีของตัวเอง (1,000-2,500 บาท) และค่าเดินทาง (แท็กซี่ไปสนามส่วนใหญ่อยู่ที่ 400-800 บาทต่อเที่ยว หรือใช้บริการรถตู้ร่วม 200-400 บาท) รวมแล้วผู้เล่นคนเดียวที่ต้องเช่าไม้กอล์ฟด้วยจะมีค่าใช้จ่าย 3,500-8,000 บาทต่อการออกรอบหนึ่งครั้ง สนามกลางแจ้งโดยทั่วไปอยู่ห่างจากใจกลางกรุงเทพฯ ราว 45-90 นาที นั่นหมายความว่าการเล่นกอล์ฟหนึ่งวันกินเวลาไปทั้งสิ้น 6-8 ชั่วโมง',
         },
         {
           heading: 'กอล์ฟซิมูเลเตอร์ในร่ม: ได้อะไรบ้าง',
@@ -307,11 +310,14 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
 
   // ─── JA: how-much-does-golf-cost-bangkok ───
   // Title/meta front-load the JA cost query (バンコク ゴルフ 料金). Every figure
-  // traces to the EN price-1 entry (400〜4,000 / 550 / 110 / 1,500〜4,000 /
+  // traces to the EN price-1 entry (400〜4,000 / 550 / 110 / green fees 1,000未満〜5,000以上 since 2026-09-26 /
   // 5,100 / 1,100 …) and is rendered per the JA ruling: half-width digits,
   // THB with no space, 〜 ranges, "1時間550THB" for "550 THB/hr". As-of marker
   // uses the entry's OWN last_verified month (（2026年2月現在）), not a blanket
-  // July. venue_comparison: names/tech verbatim Latin, locations verbatim
+  // July. Exception since 2026-09-26: the intro reads （2026年9月現在）, because its
+  // green-fee sentence was re-measured against the course files on 2026-09-25 and its
+  // other figures (550 bay rate, ~400 screen golf) are current per price-2 (2026-07-26).
+  // venue_comparison: names/tech verbatim Latin, locations verbatim
   // except the "(car access)" connective; every rate numeral and the (promo)
   // qualifier preserved. related_slugs unchanged — all four are JA-translated.
   {
@@ -320,7 +326,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     slug: 'how-much-does-golf-cost-bangkok',
     title: 'バンコクのゴルフ料金はいくら？ — 2026年の費用まるごとガイド',
     meta_description:
-      'バンコクのゴルフ料金はプレースタイル次第で400〜4,000THB。市内中心部のインドアゴルフシミュレーターは最大5名で1時間550THBから。屋外コースのグリーンフィー、ドライビングレンジ、レッスンの相場とあわせて比較します（2026年2月現在）。',
+      'バンコクのゴルフ料金はプレースタイル次第でおおむね400〜4,000THB。市内中心部のインドアゴルフシミュレーターは最大5名で1時間550THBから。屋外コースのグリーンフィー、ドライビングレンジ、レッスンの相場とあわせて比較します（2026年2月現在）。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -328,15 +334,15 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/cost/golf-simulator-prices-bangkok', '/cost/lengolf-pricing-guide', '/cost/golf-lesson-prices-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-26T00:00:00.000Z',
     content: {
       intro:
-        'バンコクのゴルフ料金は、インドアのシミュレーターでプレーするか屋外コースに出るかによって、おおむね400〜4,000THBの幅に収まります。市内中心部のインドアゴルフシミュレーターは最大5名で1時間550THBから——1人あたりにすると110THBです。郊外のスクリーンゴルフ施設なら400THB前後から。屋外コースは1ラウンド1,500〜4,000THBが目安で、これにキャディーフィーと移動費が加わります（2026年2月現在）。',
+        'バンコクのゴルフ料金は、インドアのシミュレーターでプレーするか屋外コースに出るかによって、おおむね400〜4,000THBの幅に収まります。市内中心部のインドアゴルフシミュレーターは最大5名で1時間550THBから——1人あたりにすると110THBです。郊外のスクリーンゴルフ施設なら400THB前後から。屋外コースのグリーンフィーは、最も安いコースの平日料金なら1,000THB未満から、高級コースでは5,000THB以上まで幅があります（高級コースは多くの場合、キャディー・カート込みの料金です）。多くのコースではこれにキャディーフィーがかかり、移動費も別途必要です（2026年9月現在）。',
       price_breakdown: [
         { item: 'インドアゴルフシミュレーター（LENGOLF）', price: '1時間550〜950THB', notes: 'ベイ単位の料金で最大5名。クラブレンタル無料。BTSチットロム。' },
         { item: 'インドアゴルフシミュレーター（その他の施設）', price: '1時間400〜1,400THB', notes: '施設・時間帯・曜日によって変動します。税別表示の施設もあり、最も安いのは中心部を離れた車でのアクセスとなる施設です。' },
-        { item: '屋外コースのグリーンフィー（平日）', price: '1,500〜3,000THB', notes: '1ラウンドあたり。Alpine、Lakewood、Bangkok Golf Clubといったコースの場合。' },
-        { item: '屋外コースのグリーンフィー（週末）', price: '2,500〜4,000THB', notes: '土日と祝日は割高なレートになります。' },
+        { item: '屋外コースのグリーンフィー（平日）', price: '1,000〜3,000THB', notes: '1ラウンドあたり。LakewoodやBangkok Golf Clubといったコースの一般的な目安です。Alpineなどの高級コースは5,000THB以上で、多くの場合キャディー・カート込みです。' },
+        { item: '屋外コースのグリーンフィー（週末）', price: '1,500〜4,000THB', notes: '土日と祝日は割高なレートになります。' },
         { item: 'キャディーフィー（屋外コース）', price: '300〜400THB', notes: 'タイのコースではほぼ必須です。300〜500THB程度のチップが慣例。' },
         { item: 'ゴルフカート（屋外コース）', price: '600〜800THB', notes: '多くのコースで任意。2名で1台をシェアします。' },
         { item: 'ドライビングレンジ', price: '100〜300THB', notes: 'ボール1カゴ（50〜100球）あたり。クラブレンタルは通常ありません。' },
@@ -397,7 +403,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
       sections: [
         {
           heading: '屋外ゴルフ — 費用の全内訳',
-          body: 'バンコクで屋外ゴルフに出る1日には、グリーンフィー（1,500〜4,000THB）、キャディーフィー（300〜400THB、これに300〜500THBのチップ）、ゴルフカート（600〜800THB、シェアすることが多い）、自前のクラブがない場合のレンタル（1,000〜2,500THB）、そして移動費（多くのコースへはタクシーで片道400〜800THB、乗合バンなら200〜400THB）がかかります。クラブを借りて1人で回る場合、1ラウンドの合計は4,500〜8,000THBほど。屋外コースは中心部からおおむね45〜90分の距離にあるため、ゴルフの日は6〜8時間がかりの予定になります。',
+          body: 'バンコクで屋外ゴルフに出る1日には、グリーンフィー（1,000THB未満から5,000THB以上）、キャディーフィー（300〜400THB、これに300〜500THBのチップ）、ゴルフカート（600〜800THB、シェアすることが多い）、自前のクラブがない場合のレンタル（1,000〜2,500THB）、そして移動費（多くのコースへはタクシーで片道400〜800THB、乗合バンなら200〜400THB）がかかります。クラブを借りて1人で回る場合、1ラウンドの合計は3,500〜8,000THBほど。屋外コースは中心部からおおむね45〜90分の距離にあるため、ゴルフの日は6〜8時間がかりの予定になります。',
         },
         {
           heading: 'インドアシミュレーターゴルフ — 何ができるのか',
@@ -427,10 +433,12 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
 
   // ─── KO: how-much-does-golf-cost-bangkok ───
   // Title/meta front-load the KO cost query (방콕 골프 비용). Every figure traces to
-  // the EN entry (400~4,000바트 spread, 550바트/시간, 110바트 1인당, 1,500~4,000바트
+  // the EN entry (400~4,000바트 spread, 550바트/시간, 110바트 1인당, since 2026-09-26 1,000바트 미만~5,000바트 이상
   // green fees, 5,100바트 outdoor total); hedges carried as 보통/안팎/약/최소. Currency
   // follows the KO ruling (바트 attached, ASCII ~ ranges); as-of marker uses this
-  // entry's OWN last_verified month — (2026년 2월 기준), not the July of price-2.
+  // entry's OWN last_verified month — (2026년 2월 기준), not the July of price-2, except
+  // the intro since 2026-09-26 (2026년 9월 기준): its green-fee sentence was re-measured on
+  // 2026-09-25 and its other figures (550 bay rate, ~400 screen golf) are current per price-2.
   // venue_comparison: venue names, tech and figures verbatim Latin/numeric; only the
   // currency word, the /hr unit and the prose notes localized. Front 9's "(promo)"
   // and Groove & Grit-style approximations preserved. related_slugs unchanged — all
@@ -441,7 +449,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     slug: 'how-much-does-golf-cost-bangkok',
     title: '방콕 골프 비용은 얼마일까 — 2026년 실내·실외 요금 총정리',
     meta_description:
-      '방콕에서 골프를 치는 비용은 형식에 따라 400~4,000바트예요. 도심 실내 골프 시뮬레이터는 5명까지 시간당 550바트부터, 실외 코스는 그린피에 캐디피와 이동 비용이 더해져요 (2026년 2월 기준).',
+      '방콕에서 골프를 치는 비용은 형식에 따라 보통 400~4,000바트예요. 도심 실내 골프 시뮬레이터는 5명까지 시간당 550바트부터, 실외 코스는 그린피에 캐디피와 이동 비용이 더해져요 (2026년 2월 기준).',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -449,15 +457,15 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/cost/golf-simulator-prices-bangkok', '/cost/lengolf-pricing-guide', '/cost/golf-lesson-prices-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-26T00:00:00.000Z',
     content: {
       intro:
-        '방콕에서 골프를 치는 비용은 실내 시뮬레이터냐 실외 코스냐에 따라 보통 400~4,000바트예요. 도심의 실내 골프 시뮬레이터는 5명까지 시간당 550바트부터 시작해서 1인당 110바트 수준이고, 외곽의 스크린골프 매장은 400바트 안팎부터예요. 실외 코스는 1라운드에 1,500~4,000바트에 캐디피와 이동 비용이 더 붙어요 (2026년 2월 기준).',
+        '방콕에서 골프를 치는 비용은 실내 시뮬레이터냐 실외 코스냐에 따라 보통 400~4,000바트예요. 도심의 실내 골프 시뮬레이터는 5명까지 시간당 550바트부터 시작해서 1인당 110바트 수준이고, 외곽의 스크린골프 매장은 400바트 안팎부터예요. 실외 코스의 그린피는 가장 저렴한 코스의 평일 요금 1,000바트 미만부터 프리미엄 클럽의 5,000바트 이상(보통 캐디와 카트 포함)까지 다양해요. 대부분의 코스에서는 캐디피가 따로 붙고, 이동 비용도 들어요 (2026년 9월 기준).',
       price_breakdown: [
         { item: '실내 골프 시뮬레이터 (LENGOLF)', price: '550~950바트/시간', notes: '베이 단위, 최대 5명. 기본 클럽 대여 무료 포함. BTS 칫롬역.' },
         { item: '실내 골프 시뮬레이터 (그 외 매장)', price: '400~1,400바트/시간', notes: '매장과 시간대, 요일에 따라 달라요. 세금이 빠진 곳도 있고, 가장 저렴한 요금은 도심 밖 차량 접근 매장이에요.' },
-        { item: '실외 코스 그린피 (평일)', price: '1,500~3,000바트', notes: '1라운드당. Alpine, Lakewood, Bangkok Golf Club 같은 코스.' },
-        { item: '실외 코스 그린피 (주말)', price: '2,500~4,000바트', notes: '토·일요일과 공휴일 프리미엄 요금.' },
+        { item: '실외 코스 그린피 (평일)', price: '1,000~3,000바트', notes: 'Lakewood, Bangkok Golf Club 같은 코스의 1라운드당 일반적인 범위. Alpine 같은 프리미엄 클럽은 5,000바트 이상(보통 캐디와 카트 포함).' },
+        { item: '실외 코스 그린피 (주말)', price: '1,500~4,000바트', notes: '토·일요일과 공휴일 프리미엄 요금.' },
         { item: '캐디피 (실외 코스)', price: '300~400바트', notes: '태국 대부분의 코스에서 필수예요. 300~500바트 팁이 관례예요.' },
         { item: '골프 카트 (실외 코스)', price: '600~800바트', notes: '대부분의 코스에서 선택 사항이고, 2명이 함께 써요.' },
         { item: '드라이빙 레인지', price: '100~300바트', notes: '볼 한 바구니(50~100개)당. 보통 클럽 대여는 없어요.' },
@@ -518,7 +526,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
       sections: [
         {
           heading: '실외 골프: 전체 비용 뜯어보기',
-          body: '방콕에서 실외 골프를 하루 치면 보통 이런 항목이 들어가요. 그린피 1,500~4,000바트, 캐디피 300~400바트에 팁 300~500바트, 골프 카트 600~800바트(보통 2명이 나눠 부담), 클럽이 없다면 대여 1,000~2,500바트, 그리고 이동 비용이 붙어요. 대부분의 코스는 택시로 편도 400~800바트, 밴 셰어 서비스를 이용하면 200~400바트예요. 클럽까지 빌리는 혼자 오신 분이라면 1라운드에 4,500~8,000바트가 들어요. 실외 코스는 대체로 방콕 도심에서 45~90분 거리라, 골프에 하루를 쓴다면 6~8시간을 잡아야 해요.',
+          body: '방콕에서 실외 골프를 하루 치면 보통 이런 항목이 들어가요. 그린피 1,000바트 미만부터 5,000바트 이상, 캐디피 300~400바트에 팁 300~500바트, 골프 카트 600~800바트(보통 2명이 나눠 부담), 클럽이 없다면 대여 1,000~2,500바트, 그리고 이동 비용이 붙어요. 대부분의 코스는 택시로 편도 400~800바트, 밴 셰어 서비스를 이용하면 200~400바트예요. 클럽까지 빌리는 혼자 오신 분이라면 1라운드에 3,500~8,000바트가 들어요. 실외 코스는 대체로 방콕 도심에서 45~90분 거리라, 골프에 하루를 쓴다면 6~8시간을 잡아야 해요.',
         },
         {
           heading: '실내 시뮬레이터 골프: 무엇이 포함될까',
@@ -548,10 +556,14 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
 
   // ─── ZH: how-much-does-golf-cost-bangkok ───
   // Every figure traces to EN price-1 (400–4,000泰铢; 550泰铢/小时最多5人=110泰铢/人;
-  // 市郊约400泰铢起; 室外1,500–4,000泰铢; 2,500+400+700+1,500=5,100泰铢; 4,500–8,000泰铢;
+  // 市郊约400泰铢起; 室外果岭费1,000以下至5,000+泰铢 (since 2026-09-26); 2,500+400+700+1,500=5,100泰铢; 3,500–8,000泰铢;
   // 1,100泰铢/275泰铢; 100+世界名场是price-2的说法故未引入). Currency 泰铢, ranges –,
   // as-of 截至2026年2月 = this entry's own last_verified (2026-02-19), NOT price-2's
   // July date — harmonizing them would assert a re-verification that did not happen.
+  // Exception since 2026-09-26: the intro reads 截至2026年9月, because its green-fee sentence
+  // was re-measured against the course files on 2026-09-25 and its other figures (550 bay
+  // rate, ~400 screen golf) are current per price-2 (2026-07-26). Meta and last_verified
+  // stay February.
   // price_breakdown items deliberately contain NO ' — ' separator: groupPriceRows()
   // in components/prices/PriceGuidePage.tsx splits on that exact string to build
   // venue groups, and the EN entry is a flat table. venue_comparison names/tech/
@@ -571,15 +583,15 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/cost/golf-simulator-prices-bangkok', '/cost/lengolf-pricing-guide', '/cost/golf-lesson-prices-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-09-26T00:00:00.000Z',
     content: {
       intro:
-        '在曼谷打一场高尔夫，通常要花400–4,000泰铢，差别在于你是在室内用模拟器打，还是到室外球场下场。市中心的室内高尔夫模拟器每小时550泰铢起，最多可5人同用——平摊下来一个人只要110泰铢；市郊的屏幕高尔夫场馆则从约400泰铢起。室外球场一轮1,500–4,000泰铢，另外还得算上球童费和往返交通，截至2026年2月。',
+        '在曼谷打一场高尔夫，通常要花400–4,000泰铢，差别在于你是在室内用模拟器打，还是到室外球场下场。市中心的室内高尔夫模拟器每小时550泰铢起，最多可5人同用——平摊下来一个人只要110泰铢；市郊的屏幕高尔夫场馆则从约400泰铢起。室外球场的果岭费，从最便宜的球场平日不到1,000泰铢，到高端球会的5,000泰铢或以上不等，后者通常已含球童和球车；在大多数球场，还得另算球童费，再加上往返交通，截至2026年9月。',
       price_breakdown: [
         { item: '室内高尔夫模拟器（LENGOLF）', price: '550–950泰铢/小时', notes: '按球位计费，最多5人。含免费球杆租借。BTS Chidlom。' },
         { item: '室内高尔夫模拟器（其他场馆）', price: '400–1,400泰铢/小时', notes: '因场馆、时段与星期而异。部分场馆标价不含税；最便宜的价格出现在市区外需自驾的场馆。' },
-        { item: '室外球场果岭费（平日）', price: '1,500–3,000泰铢', notes: '每轮。Alpine、Lakewood、Bangkok Golf Club一类的球场。' },
-        { item: '室外球场果岭费（周末）', price: '2,500–4,000泰铢', notes: '周六日与公众假期的高价时段。' },
+        { item: '室外球场果岭费（平日）', price: '1,000–3,000泰铢', notes: '每轮，Lakewood、Bangkok Golf Club等球场的常见区间。Alpine等高端球会为5,000泰铢以上，通常含球童和球车。' },
+        { item: '室外球场果岭费（周末）', price: '1,500–4,000泰铢', notes: '周六日与公众假期的高价时段。' },
         { item: '球童费（室外球场）', price: '300–400泰铢', notes: '泰国多数球场都必须请球童。另给300–500泰铢小费是惯例。' },
         { item: '高尔夫球车（室外球场）', price: '600–800泰铢', notes: '多数球场可选。2人共用一辆。' },
         { item: '练习场', price: '100–300泰铢', notes: '每桶球（50–100颗）。通常不含球杆租借。' },
@@ -640,7 +652,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
       sections: [
         {
           heading: '室外高尔夫：完整费用拆解',
-          body: '在曼谷打一天室外高尔夫，通常包括：果岭费（1,500–4,000泰铢）、球童费（300–400泰铢，另加300–500泰铢小费）、球车（600–800泰铢，常由两人分摊）、球杆租借（自己没带的话1,000–2,500泰铢），以及交通（打车去大多数球场单程400–800泰铢，拼商务车服务则是200–400泰铢）。一个人单独去、还要租球杆的话，一轮下来合计4,500–8,000泰铢。室外球场一般距曼谷市中心45–90分钟车程，也就是说，一整天高尔夫要占掉6–8小时。',
+          body: '在曼谷打一天室外高尔夫，通常包括：果岭费（1,000以下至5,000+泰铢）、球童费（300–400泰铢，另加300–500泰铢小费）、球车（600–800泰铢，常由两人分摊）、球杆租借（自己没带的话1,000–2,500泰铢），以及交通（打车去大多数球场单程400–800泰铢，拼商务车服务则是200–400泰铢）。一个人单独去、还要租球杆的话，一轮下来合计3,500–8,000泰铢。室外球场一般距曼谷市中心45–90分钟车程，也就是说，一整天高尔夫要占掉6–8小时。',
         },
         {
           heading: '室内模拟器高尔夫：你能得到什么',

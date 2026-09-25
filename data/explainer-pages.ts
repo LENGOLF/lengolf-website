@@ -2151,18 +2151,18 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/golf-in-thailand-guide",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "Bangkok gives golfers an unusual luxury: genuinely good options on both ends of the spectrum. You can be on a championship course by 7am, or swinging in an air-conditioned simulator bay in the middle of the city at 9pm. Neither is a compromise — they are different experiences that suit different trips, different days, and different goals.",
       sections: [
         {
           heading: "At a Glance: Simulator vs Real Course",
-          body: "| Factor | Golf Simulator | Real Course |\n|---|---|---|\n| Time commitment | 1–2 hours total | 6–7 hours door to door |\n| Green fee / bay fee | 550–1,500 THB/hour | 1,500–5,000+ THB/round |\n| Travel logistics | BTS-accessible, central Bangkok | 30–60 min drive; early departure required |\n| Tee time | Book any hour, same day | Usually 7am; must leave by 5:30–6am |\n| Weather dependency | None — fully air-conditioned | Heat and humidity are real factors |\n| Full 18-hole experience | No | Yes |\n| Caddie, buggy, course scenery | No | Yes |\n| Club rental available | Yes | Yes (most courses) |",
+          body: "| Factor | Golf Simulator | Real Course |\n|---|---|---|\n| Time commitment | 1–2 hours total | 6–7 hours door to door |\n| Green fee / bay fee | 550–1,500 THB/hour | Under 1,000 to 5,000+ THB/round |\n| Travel logistics | BTS-accessible, central Bangkok | 30–60 min drive; early departure required |\n| Tee time | Book any hour, same day | Usually 7am; must leave by 5:30–6am |\n| Weather dependency | None — fully air-conditioned | Heat and humidity are real factors |\n| Full 18-hole experience | No | Yes |\n| Caddie, buggy, course scenery | No | Yes |\n| Club rental available | Yes | Yes (most courses) |",
         },
         {
           heading: "When a Real Course Is the Right Call",
-          body: "If you have a full free day and want the complete Thai golf experience, book a course. Bangkok sits within an hour of 50+ courses, many well-maintained, scenic, and significantly cheaper than comparable courses in the US, Europe, or Japan.\n\nReal courses make sense when:\n1. You have a dedicated golf day — a full round runs 4.5–5.5 hours plus travel, requiring a 5:30–6am hotel departure\n2. You want the caddie and buggy experience — caddies are mandatory at virtually all Bangkok courses and are a genuine highlight\n3. Green fees fit your budget — 1,500–5,000+ THB still represents strong value for the facilities\n4. You are playing with a group — a group round is a social experience simulators cannot replicate",
+          body: "If you have a full free day and want the complete Thai golf experience, book a course. Bangkok sits within an hour of 50+ courses, many well-maintained, scenic, and significantly cheaper than comparable courses in the US, Europe, or Japan.\n\nReal courses make sense when:\n1. You have a dedicated golf day: a full round runs 4.5–5.5 hours plus travel, requiring a 5:30–6am hotel departure\n2. You want the caddie and buggy experience: caddies are mandatory at virtually all Bangkok courses and are a genuine highlight\n3. Green fees fit your budget: under 1,000 to 5,000+ THB still represents strong value for the facilities\n4. You are playing with a group: a group round is a social experience simulators cannot replicate",
         },
         {
           heading: "When a Simulator Is the Right Call",
@@ -2177,7 +2177,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         "Real courses offer the full Thai golf experience (caddies, scenery, 18 holes) but require 6–7 hours door-to-door and an early start",
         "Simulators are ideal for tight schedules, hot weather days, evening sessions, or visitors without clubs",
         "Using both on the same trip is the most effective approach — simulator first to warm up, course days for the full experience",
-        "Simulator bay fees run 550–1,500 THB/hour vs 1,500–5,000+ THB for a real course round",
+        "Simulator bay fees run 550–1,500 THB/hour vs under 1,000 to 5,000+ THB for a real course round",
       ],
       comparison_table: [],
     },
@@ -2256,7 +2256,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/golf-in-thailand-guide",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         'Bangkok offers some of the best-value golf in the world. A round at a well-maintained, caddie-served course with cart costs less than a budget round at many Western public courses. That said, "green fee" in Thailand rarely tells the whole story — understanding how fees are structured prevents surprises at the cashier.',
@@ -2267,7 +2267,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "Bangkok Golf Courses by Price Tier",
-          body: "Weekday rates apply; weekend rates are typically 20–40% higher.\n\n| Tier | Weekday Green Fee (THB) | What's Usually Included |\n|---|---|---|\n| Budget | 1,500–2,500 | Green fee only; caddie + cart extra |\n| Mid-range | 2,500–4,000 | Green fee + caddie; cart optional |\n| Premium | 4,000–5,500+ | Green fee + caddie + cart; sometimes meals |\n| All-inclusive | 5,500–7,500 | Everything bundled — no hidden extras |",
+          body: "Weekday rates apply; weekend rates are typically 20–40% higher.\n\n| Tier | Weekday Green Fee (THB) | What's Usually Included |\n|---|---|---|\n| Budget | Up to 2,500 | Green fee only; caddie + cart extra |\n| Mid-range | 2,500–4,000 | Green fee + caddie; cart optional |\n| Premium | 4,000–5,500+ | Green fee + caddie + cart; sometimes meals |\n| All-inclusive | 5,500–7,500 | Everything bundled — no hidden extras |",
         },
         {
           heading: "Named Course Examples",
@@ -2284,7 +2284,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       ],
       key_takeaways: [
         "Always calculate the all-in cost including caddie fee, buggy, tip, and any levies — the headline green fee is rarely the final price",
-        "Nikanti offers the most transparent all-inclusive pricing (~5,500 THB weekday); Alpine is similarly priced but bills caddie and cart separately",
+        "Nikanti offers the most transparent all-inclusive pricing (~5,500 THB weekday); Alpine is similarly priced and also includes caddie and cart",
         "Weekends cost 20–40% more; twilight rates save 500–1,500 THB vs morning rounds",
         "A weekday twilight round in low season at a mid-range course can be under 2,500 THB all-in",
       ],
@@ -2305,7 +2305,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     slug: "green-fees-bangkok-golf-courses",
     title: "バンコクのゴルフ場料金 — グリーンフィーをグレード別に比較",
     meta_description:
-      "バンコクのゴルフ場料金をグレード別に比較。平日1,500THB〜の格安コースからオールインクルーシブのプレミアムコースまで、キャディーフィーやチップを含めた実際の総額を解説します（料金は変動するため要確認）。",
+      "バンコクのゴルフ場料金をグレード別に比較。2,000THB未満の格安コースからオールインクルーシブのプレミアムコースまで、キャディーフィーやチップを含めた実際の総額を解説します（料金は変動するため要確認）。",
     featured_image: null,
     schema_markup: null,
     status: "published",
@@ -2318,7 +2318,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/golf-course-club-rental",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "バンコクは世界でも有数のコストパフォーマンスでゴルフを楽しめる街です。手入れの行き届いた、キャディー付きのコースをカート込みでラウンドしても、欧米の多くのパブリックコースの格安ラウンドより安く済みます。とはいえ、タイの「グリーンフィー」が総額を表していることはほとんどありません。料金の仕組みを理解しておけば、精算時に驚くことはなくなります。",
@@ -2329,7 +2329,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "グレード別に見るバンコクのゴルフ場料金",
-          body: "以下は平日料金です。週末は通常20〜40%高くなります。\n\n| グレード | 平日グリーンフィー（THB） | 通常含まれるもの |\n|---|---|---|\n| 格安 | 1,500〜2,500 | グリーンフィーのみ。キャディーとカートは別料金 |\n| 中級 | 2,500〜4,000 | グリーンフィー＋キャディー。カートは任意 |\n| プレミアム | 4,000〜5,500以上 | グリーンフィー＋キャディー＋カート。食事付きの場合も |\n| オールインクルーシブ | 5,500〜7,500 | すべて込み — 追加料金なし |",
+          body: "以下は平日料金です。週末は通常20〜40%高くなります。\n\n| グレード | 平日グリーンフィー（THB） | 通常含まれるもの |\n|---|---|---|\n| 格安 | 2,500まで | グリーンフィーのみ。キャディーとカートは別料金 |\n| 中級 | 2,500〜4,000 | グリーンフィー＋キャディー。カートは任意 |\n| プレミアム | 4,000〜5,500以上 | グリーンフィー＋キャディー＋カート。食事付きの場合も |\n| オールインクルーシブ | 5,500〜7,500 | すべて込み — 追加料金なし |",
         },
         {
           heading: "代表的なコースの料金例",
@@ -2346,7 +2346,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       ],
       key_takeaways: [
         "キャディーフィー、カート代、チップ、雑費まで含めた総額で必ず計算を — 表示のグリーンフィーが最終価格であることはほとんどありません",
-        "Nikantiは最も明朗なオールインクルーシブ料金（平日約5,500THB）。Alpineも同水準ですが、キャディーとカートは別計上です",
+        "Nikantiは最も明朗なオールインクルーシブ料金（平日約5,500THB）。Alpineも同水準で、こちらもキャディー・カート込みです",
         "週末は20〜40%高く、トワイライト料金なら午前のラウンドより500〜1,500THBの節約に",
         "ローシーズンの平日トワイライトなら、中級コースで総額2,500THB以下も可能",
       ],
@@ -2367,7 +2367,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     slug: "green-fees-bangkok-golf-courses",
     title: "방콕 골프장 그린피 — 코스 등급별 비교",
     meta_description:
-      "방콕 골프장 그린피를 등급별로 비교했습니다. 평일 1,500바트부터 시작하는 저렴한 코스부터 올인클루시브 프리미엄 코스까지, 캐디피와 팁을 포함한 실제 총액을 정리했어요(요금은 변동되니 확인 필요).",
+      "방콕 골프장 그린피를 등급별로 비교했습니다. 2,000바트 미만의 저렴한 코스부터 올인클루시브 프리미엄 코스까지, 캐디피와 팁을 포함한 실제 총액을 정리했어요(요금은 변동되니 확인 필요).",
     featured_image: null,
     schema_markup: null,
     status: "published",
@@ -2380,7 +2380,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/golf-course-club-rental",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         '방콕은 세계에서도 손꼽히는 가성비 골프를 즐길 수 있는 곳이에요. 잘 관리된, 캐디가 함께하는 코스를 카트까지 포함해 라운딩해도, 서구의 많은 퍼블릭 코스의 저렴한 라운딩보다 싸게 끝나요. 다만 태국에서 "그린피"가 총액을 뜻하는 경우는 드물어요 — 요금 구조를 이해해 두면 정산할 때 놀랄 일이 없어요.',
@@ -2391,7 +2391,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "가격 등급별 방콕 골프장",
-          body: "아래는 평일 요금이에요. 주말은 보통 20~40% 높아져요.\n\n| 등급 | 평일 그린피(바트) | 보통 포함되는 것 |\n|---|---|---|\n| 저렴 | 1,500~2,500 | 그린피만. 캐디와 카트는 별도 |\n| 중급 | 2,500~4,000 | 그린피+캐디. 카트는 선택 |\n| 프리미엄 | 4,000~5,500 이상 | 그린피+캐디+카트. 식사 포함인 경우도 |\n| 올인클루시브 | 5,500~7,500 | 전부 포함 — 추가 요금 없음 |",
+          body: "아래는 평일 요금이에요. 주말은 보통 20~40% 높아져요.\n\n| 등급 | 평일 그린피(바트) | 보통 포함되는 것 |\n|---|---|---|\n| 저렴 | 2,500 이하 | 그린피만. 캐디와 카트는 별도 |\n| 중급 | 2,500~4,000 | 그린피+캐디. 카트는 선택 |\n| 프리미엄 | 4,000~5,500 이상 | 그린피+캐디+카트. 식사 포함인 경우도 |\n| 올인클루시브 | 5,500~7,500 | 전부 포함 — 추가 요금 없음 |",
         },
         {
           heading: "대표 코스 요금 예시",
@@ -2408,7 +2408,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       ],
       key_takeaways: [
         "캐디피, 카트비, 팁, 기타 비용까지 포함한 총액으로 반드시 계산하세요 — 표시된 그린피가 최종 가격인 경우는 드물어요",
-        "Nikanti는 가장 명확한 올인클루시브 요금(평일 약 5,500바트)이에요. Alpine도 비슷한 수준이지만 캐디와 카트를 따로 청구해요",
+        "Nikanti는 가장 명확한 올인클루시브 요금(평일 약 5,500바트)이에요. Alpine도 비슷한 수준이고 캐디와 카트가 포함돼요",
         "주말은 20~40% 비싸고, 트와일라잇 요금이면 오전 라운딩보다 500~1,500바트 절약돼요",
         "비수기 평일 트와일라잇이라면 중급 코스에서 총액 2,500바트 이하도 가능해요",
       ],
@@ -2418,7 +2418,7 @@ export const explainerPages: ExplainerSeoPage[] = [
 
   // ─── exp-35 (ZH): 简体中文版 — 曼谷高尔夫球场果岭费比较 ─────────────────────
   // Faithful translation of the EN guide, mirroring the JA/KO twins. ALL figures
-  // — the four-tier price table (1,500–2,500 / 2,500–4,000 / 4,000–5,500+ /
+  // — the four-tier price table (up to 2,500, floor dropped 2026-09-26 / 2,500–4,000 / 4,000–5,500+ /
   // 5,500–7,500), Nikanti (~5,500/6,500) and Alpine (~5,400/7,400) rates, and the
   // caddie tip of 100–200泰铢 — follow THIS guide's EN source exactly. WARNING:
   // the caddie tip here (100–200) intentionally DIFFERS from
@@ -2447,7 +2447,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/golf-course-club-rental",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "曼谷拥有全球顶级性价比的高尔夫。在一座维护良好、配有球童并含球车的球场打一轮，比许多西方公众球场的平价一轮还便宜。话虽如此，在泰国，“果岭费”很少能说明全部——弄懂费用的构成，才能避免在收银台被吓一跳。",
@@ -2458,7 +2458,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "按价格分档看曼谷高尔夫球场",
-          body: "以下为平日价格；周末通常高出20%–40%。\n\n| 等级 | 平日果岭费（泰铢） | 通常包含 |\n|---|---|---|\n| 平价 | 1,500–2,500 | 仅果岭费；球童和球车另计 |\n| 中档 | 2,500–4,000 | 果岭费＋球童；球车可选 |\n| 高级 | 4,000–5,500以上 | 果岭费＋球童＋球车；有时含餐 |\n| 全包 | 5,500–7,500 | 全部打包——没有隐藏费用 |",
+          body: "以下为平日价格；周末通常高出20%–40%。\n\n| 等级 | 平日果岭费（泰铢） | 通常包含 |\n|---|---|---|\n| 平价 | 2,500以内 | 仅果岭费；球童和球车另计 |\n| 中档 | 2,500–4,000 | 果岭费＋球童；球车可选 |\n| 高级 | 4,000–5,500以上 | 果岭费＋球童＋球车；有时含餐 |\n| 全包 | 5,500–7,500 | 全部打包——没有隐藏费用 |",
         },
         {
           heading: "具名球场示例",
@@ -2475,7 +2475,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       ],
       key_takeaways: [
         "务必按含球童费、球车、小费和各种杂费的合计来计算——标示的果岭费很少是最终价格",
-        "Nikanti的全包定价最透明（平日约5,500泰铢）；Alpine价格相近，但球童和球车分开计费",
+        "Nikanti的全包定价最透明（平日约5,500泰铢）；Alpine价格相近，同样含球童和球车",
         "周末贵20%–40%；黄昏时段比上午一轮省500–1,500泰铢",
         "淡季平日的黄昏时段，中档球场合计可低于2,500泰铢",
       ],
@@ -2530,7 +2530,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/golf-course-club-rental",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         'ค่ากรีนฟี คือ ค่าธรรมเนียมที่จ่ายให้สนามกอล์ฟเพื่อสิทธิ์ในการออกรอบ กรุงเทพฯ มีกอล์ฟที่คุ้มค่าที่สุดแห่งหนึ่งของโลก การออกรอบในสนามที่ดูแลดี มีแคดดี้ พร้อมรถกอล์ฟ อาจถูกกว่าการออกรอบราคาประหยัดในสนามสาธารณะหลายแห่งในตะวันตกเสียอีก แต่ถึงอย่างนั้น "ค่ากรีนฟี" ในไทยมักไม่ได้บอกราคาทั้งหมด — การเข้าใจโครงสร้างค่าธรรมเนียมช่วยป้องกันความประหลาดใจตอนจ่ายเงินที่เคาน์เตอร์',
@@ -2541,7 +2541,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "สนามกอล์ฟกรุงเทพฯ แบ่งตามระดับราคา",
-          body: "ราคาที่แสดงเป็นราคาวันธรรมดา ส่วนวันหยุดสุดสัปดาห์มักแพงกว่า 20-40%\n\n| ระดับ | ค่ากรีนฟีวันธรรมดา (บาท) | สิ่งที่มักรวมอยู่ด้วย |\n|---|---|---|\n| ประหยัด | 1,500-2,500 | เฉพาะค่ากรีนฟี ค่าแคดดี้และรถกอล์ฟจ่ายเพิ่ม |\n| ระดับกลาง | 2,500-4,000 | ค่ากรีนฟี + ค่าแคดดี้ รถกอล์ฟเป็นทางเลือก |\n| พรีเมียม | 4,000-5,500+ | ค่ากรีนฟี + ค่าแคดดี้ + รถกอล์ฟ บางที่รวมอาหารด้วย |\n| ออลอินคลูซีฟ | 5,500-7,500 | รวมทุกอย่าง — ไม่มีค่าใช้จ่ายแอบแฝง |",
+          body: "ราคาที่แสดงเป็นราคาวันธรรมดา ส่วนวันหยุดสุดสัปดาห์มักแพงกว่า 20-40%\n\n| ระดับ | ค่ากรีนฟีวันธรรมดา (บาท) | สิ่งที่มักรวมอยู่ด้วย |\n|---|---|---|\n| ประหยัด | ไม่เกิน 2,500 | เฉพาะค่ากรีนฟี ค่าแคดดี้และรถกอล์ฟจ่ายเพิ่ม |\n| ระดับกลาง | 2,500-4,000 | ค่ากรีนฟี + ค่าแคดดี้ รถกอล์ฟเป็นทางเลือก |\n| พรีเมียม | 4,000-5,500+ | ค่ากรีนฟี + ค่าแคดดี้ + รถกอล์ฟ บางที่รวมอาหารด้วย |\n| ออลอินคลูซีฟ | 5,500-7,500 | รวมทุกอย่าง — ไม่มีค่าใช้จ่ายแอบแฝง |",
         },
         {
           heading: "ตัวอย่างราคาสนามกอล์ฟชื่อดัง",
@@ -2558,7 +2558,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       ],
       key_takeaways: [
         "คำนวณค่าใช้จ่ายรวมเสมอ ทั้งค่าแคดดี้ รถกอล์ฟ ทิป และค่าธรรมเนียมอื่นๆ — ค่ากรีนฟีที่แจ้งไว้แทบไม่ใช่ราคาสุดท้าย",
-        "Nikanti มีราคาออลอินคลูซีฟที่โปร่งใสที่สุด (วันธรรมดาประมาณ 5,500 บาท) ส่วน Alpine ราคาใกล้เคียงกันแต่แยกคิดค่าแคดดี้และรถกอล์ฟ",
+        "Nikanti มีราคาออลอินคลูซีฟที่โปร่งใสที่สุด (วันธรรมดาประมาณ 5,500 บาท) ส่วน Alpine ราคาใกล้เคียงกันและรวมค่าแคดดี้กับรถกอล์ฟด้วย",
         "วันหยุดสุดสัปดาห์แพงกว่า 20-40% ส่วนราคาช่วงพลบค่ำประหยัดได้ 500-1,500 บาท เทียบกับรอบเช้า",
         "การออกรอบวันธรรมดาช่วงพลบค่ำในโลว์ซีซั่นที่สนามระดับกลาง อาจต่ำกว่า 2,500 บาทรวมทุกอย่าง",
       ],
@@ -3568,7 +3568,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     slug: "round-of-golf-cost-bangkok",
     title: "How Much Does a Round of Golf Cost in Bangkok?",
     meta_description:
-      "Green fees, caddie fees, and all-in costs for a round of golf in Bangkok — from budget courses at 1,500 THB to premium clubs at 7,000+ THB.",
+      "Green fees, caddie fees, and all-in costs for a round of golf in Bangkok, from budget courses under 1,000 THB to premium clubs at 7,000+ THB.",
     featured_image: null,
     schema_markup: null,
     status: "published",
@@ -3581,18 +3581,18 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/golf-in-thailand-guide",
     ],
     created_at: now,
-    updated_at: "2026-09-25T00:00:00.000Z",
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "Bangkok is one of the best-value golf destinations in Asia. A full round at a well-maintained, caddie-served course costs a fraction of what you would pay in Japan, Australia, or the UK — and the quality of courses is genuinely impressive.",
       sections: [
         {
           heading: "All-In Cost Breakdown",
-          body: "A typical weekday round at a mid-range Bangkok course:\n\n| Item | Cost (THB) |\n|---|---|\n| Green fee (mid-range, weekday) | 2,500–3,500 |\n| Caddie fee (mandatory) | 300–500 |\n| Caddie tip (customary) | 200–300 |\n| Buggy / cart hire (optional) | 300–600 |\n| **All-in total (est.)** | **3,300–4,900** |\n\nAt premium courses the all-in figure climbs to 6,000–8,000 THB or more. At budget public courses, 2,000–2,500 THB all-in is achievable.\n\n*Green fees change seasonally. Always confirm current rates directly with the course before booking.*",
+          body: "A typical weekday round at a mid-range Bangkok course:\n\n| Item | Cost (THB) |\n|---|---|\n| Green fee (mid-range, weekday) | 2,500–3,500 |\n| Caddie fee (mandatory) | 300–500 |\n| Caddie tip (customary) | 200–300 |\n| Buggy / cart hire (optional) | 300–600 |\n| **All-in total (est.)** | **3,300–4,900** |\n\nAt premium courses the all-in figure climbs to 6,000–8,000 THB or more. At budget courses, 2,000–2,500 THB all-in is typical, and the cheapest come in under 2,000 THB.\n\n*Green fees change seasonally. Always confirm current rates directly with the course before booking.*",
         },
         {
           heading: "Green Fees by Tier",
-          body: "**1. Budget Courses: up to 2,000 THB (weekday green fee)**\nThe largest group within 90 minutes of Bangkok. Most have a driving range, and a few add on-site accommodation and a spa. Perfectly playable golf.\n\n**2. Mid-Range Courses: 2,500–3,500 THB (weekday)**\nWell-maintained private member courses open to visitors. Good course conditioning, full clubhouses, organised tee-time systems. The sweet spot for most visiting golfers.\n\n**3. Premium Courses: 4,500 THB+ (weekday)**\n- **Nikanti Golf Club:** ~5,500 THB weekday / ~6,500 THB weekend (all-inclusive — caddie, tip, beverages, two meals included)\n- **Alpine Golf Club:** ~5,400 THB weekday / ~7,400 THB weekend (caddie and cart typically included)\n\nChampionship-standard layouts and immaculate conditioning. Prices are indicative — confirm directly with the club.",
+          body: "**1. Budget Courses: up to 2,000 THB (weekday green fee)**\nThe largest group within 90 minutes of Bangkok. Most have a driving range, and a few add on-site accommodation and a spa. Perfectly playable golf.\n\n**2. Mid-Range Courses: 2,000–3,500 THB (weekday)**\nWell-maintained private member courses open to visitors. Good course conditioning, full clubhouses, organised tee-time systems. The sweet spot for most visiting golfers.\n\n**3. Premium Courses: 3,500 THB+ (weekday)**\n- **Nikanti Golf Club:** ~5,500 THB weekday / ~6,500 THB weekend (all-inclusive — caddie, tip, beverages, two meals included)\n- **Alpine Golf Club:** ~5,400 THB weekday / ~7,400 THB weekend (caddie and cart typically included)\n\nChampionship-standard layouts and immaculate conditioning. Prices are indicative — confirm directly with the club.",
         },
         {
           heading: "Mandatory and Optional Extras",
@@ -3630,7 +3630,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     title:
       "バンコクのゴルフラウンドの費用は？グリーンフィー・キャディー代の相場",
     meta_description:
-      "バンコクでゴルフを1ラウンドする費用は？グリーンフィー、キャディーフィー、キャディーへのチップ、カート代まで、格安コースの1,500THBからプレミアムコースの7,000THB超まで、総額の相場を解説します（料金は変動するため要確認）。",
+      "バンコクでゴルフを1ラウンドする費用は？格安コースの1,000THB未満からプレミアムコースの7,000THB超まで、グリーンフィー、キャディーフィー、キャディーへのチップ、カート代と総額の相場を解説します（料金は変動するため要確認）。",
     featured_image: null,
     schema_markup: null,
     status: "published",
@@ -3643,18 +3643,18 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/guide/golf-lessons-bangkok-coaches",
     ],
     created_at: now,
-    updated_at: "2026-09-25T00:00:00.000Z",
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "バンコクはアジア屈指のコストパフォーマンスを誇るゴルフ目的地です。手入れの行き届いた、キャディー付きのコースでの1ラウンドは、日本、オーストラリア、英国で支払う金額のほんの一部で楽しめます——しかもコースの質は本当に見事です。",
       sections: [
         {
           heading: "総額の内訳",
-          body: "バンコク近郊の中級コースでの平日1ラウンドの目安:\n\n| 項目 | 費用（THB） |\n|---|---|\n| グリーンフィー（中級・平日） | 2,500〜3,500 |\n| キャディーフィー（必須） | 300〜500 |\n| キャディーへのチップ（慣習） | 200〜300 |\n| カート代（任意） | 300〜600 |\n| **総額（概算）** | **3,300〜4,900** |\n\nプレミアムコースでは総額が6,000〜8,000THB以上になります。格安のパブリックコースなら、総額2,000〜2,500THBも可能です。\n\n*グリーンフィーは季節によって変動します。予約前に必ずゴルフ場へ直接、最新料金をご確認ください。*",
+          body: "バンコク近郊の中級コースでの平日1ラウンドの目安:\n\n| 項目 | 費用（THB） |\n|---|---|\n| グリーンフィー（中級・平日） | 2,500〜3,500 |\n| キャディーフィー（必須） | 300〜500 |\n| キャディーへのチップ（慣習） | 200〜300 |\n| カート代（任意） | 300〜600 |\n| **総額（概算）** | **3,300〜4,900** |\n\nプレミアムコースでは総額が6,000〜8,000THB以上になります。格安コースなら総額2,000〜2,500THBが一般的で、最も安いコースでは2,000THB未満に収まります。\n\n*グリーンフィーは季節によって変動します。予約前に必ずゴルフ場へ直接、最新料金をご確認ください。*",
         },
         {
           heading: "グレード別のグリーンフィー",
-          body: "**1. 格安コース: 2,000THBまで（平日グリーンフィー）**\nバンコクから90分圏内で、最もコース数の多い価格帯です。大半のコースにドライビングレンジがあり、宿泊施設とスパを併設したコースもいくつかあります。プレーも問題なく楽しめます。\n\n**2. 中級コース: 2,500〜3,500THB（平日）**\nビジターも受け入れる、手入れの行き届いたメンバーコース。良好なコースコンディション、充実したクラブハウス、整ったティータイムシステム。多くの旅行ゴルファーにとって最もバランスの取れた選択です。\n\n**3. プレミアムコース: 4,500THB〜（平日）**\n- **Nikanti Golf Club:** 平日約5,500THB / 週末約6,500THB（キャディー、チップ、飲み物、食事2回込みのオールインクルーシブ）\n- **Alpine Golf Club:** 平日約5,400THB / 週末約7,400THB（通常キャディーとカート込み）\n\nチャンピオンシップ水準のレイアウトと、非の打ちどころのないコンディション。価格は目安です——クラブへ直接ご確認ください。",
+          body: "**1. 格安コース: 2,000THBまで（平日グリーンフィー）**\nバンコクから90分圏内で、最もコース数の多い価格帯です。大半のコースにドライビングレンジがあり、宿泊施設とスパを併設したコースもいくつかあります。プレーも問題なく楽しめます。\n\n**2. 中級コース: 2,000〜3,500THB（平日）**\nビジターも受け入れる、手入れの行き届いたメンバーコース。良好なコースコンディション、充実したクラブハウス、整ったティータイムシステム。多くの旅行ゴルファーにとって最もバランスの取れた選択です。\n\n**3. プレミアムコース: 3,500THB〜（平日）**\n- **Nikanti Golf Club:** 平日約5,500THB / 週末約6,500THB（キャディー、チップ、飲み物、食事2回込みのオールインクルーシブ）\n- **Alpine Golf Club:** 平日約5,400THB / 週末約7,400THB（通常キャディーとカート込み）\n\nチャンピオンシップ水準のレイアウトと、非の打ちどころのないコンディション。価格は目安です——クラブへ直接ご確認ください。",
         },
         {
           heading: "必須の費用と任意の費用",
@@ -3692,7 +3692,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     slug: "round-of-golf-cost-bangkok",
     title: "방콕 골프 라운딩 비용은? 그린피·캐디피 총정리",
     meta_description:
-      "방콕에서 골프 1라운딩 비용은 얼마일까요? 그린피, 캐디피, 캐디 팁, 카트비까지 — 저렴한 코스 1,500바트부터 프리미엄 클럽 7,000바트 이상까지 총액 상세를 정리했습니다.",
+      "방콕에서 골프 1라운딩 비용은 얼마일까요? 저렴한 코스의 1,000바트 미만 그린피부터 프리미엄 클럽의 7,000바트 이상까지, 캐디피와 캐디 팁, 카트비를 포함한 총액을 자세히 정리했습니다.",
     featured_image: null,
     schema_markup: null,
     status: "published",
@@ -3705,18 +3705,18 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/golf",
     ],
     created_at: now,
-    updated_at: "2026-09-25T00:00:00.000Z",
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "방콕은 아시아에서도 손꼽히는 가성비 좋은 골프 여행지예요. 잘 관리된, 캐디가 함께하는 코스에서의 18홀 라운딩 비용이 일본, 호주, 영국에서 내는 금액의 일부에 불과하고 — 코스의 수준도 정말 인상적이에요.",
       sections: [
         {
           heading: "라운딩 총액 내역",
-          body: "방콕 근교 중급 코스에서의 평일 18홀 라운딩 기준이에요:\n\n| 항목 | 비용(바트) |\n|---|---|\n| 그린피(중급·평일) | 2,500~3,500 |\n| 캐디피(필수) | 300~500 |\n| 캐디 팁(관례) | 200~300 |\n| 카트 대여(선택) | 300~600 |\n| **총액(예상)** | **3,300~4,900** |\n\n프리미엄 코스라면 총액이 6,000~8,000바트 이상으로 올라가요. 저렴한 퍼블릭 코스라면 총액 2,000~2,500바트도 가능합니다.\n\n*그린피는 계절에 따라 달라져요. 예약 전에 반드시 골프장에 직접 최신 요금을 확인하세요.*",
+          body: "방콕 근교 중급 코스에서의 평일 18홀 라운딩 기준이에요:\n\n| 항목 | 비용(바트) |\n|---|---|\n| 그린피(중급·평일) | 2,500~3,500 |\n| 캐디피(필수) | 300~500 |\n| 캐디 팁(관례) | 200~300 |\n| 카트 대여(선택) | 300~600 |\n| **총액(예상)** | **3,300~4,900** |\n\n프리미엄 코스라면 총액이 6,000~8,000바트 이상으로 올라가요. 저렴한 코스라면 총액 2,000~2,500바트가 일반적이고, 가장 저렴한 코스에서는 2,000바트 미만으로도 가능해요.\n\n*그린피는 계절에 따라 달라져요. 예약 전에 반드시 골프장에 직접 최신 요금을 확인하세요.*",
         },
         {
           heading: "등급별 그린피",
-          body: "**1. 저렴한 코스: 2,000바트 이하(평일 그린피)**\n방콕에서 90분 이내 거리의 코스가 가장 많이 몰려 있는 가격대예요. 대부분 드라이빙 레인지가 있고, 몇몇 곳은 숙박 시설과 스파까지 갖추고 있어요. 골프를 즐기기에 전혀 부족함이 없어요.\n\n**2. 중급 코스: 2,500~3,500바트(평일)**\n비지터도 받는, 잘 관리된 멤버 코스예요. 좋은 코스 컨디션, 충실한 클럽하우스, 잘 정비된 티타임 시스템을 갖추고 있어요. 여행으로 찾는 대부분의 골퍼에게 가장 균형 잡힌 선택이에요.\n\n**3. 프리미엄 코스: 4,500바트 이상(평일)**\n- **Nikanti Golf Club:** 평일 약 5,500바트 / 주말 약 6,500바트(캐디, 팁, 음료, 식사 2회 포함 올인클루시브)\n- **Alpine Golf Club:** 평일 약 5,400바트 / 주말 약 7,400바트(보통 캐디와 카트 포함)\n\n챔피언십 수준의 레이아웃과 흠잡을 데 없는 컨디션이에요. 가격은 참고용이니 클럽에 직접 확인하세요.",
+          body: "**1. 저렴한 코스: 2,000바트 이하(평일 그린피)**\n방콕에서 90분 이내 거리의 코스가 가장 많이 몰려 있는 가격대예요. 대부분 드라이빙 레인지가 있고, 몇몇 곳은 숙박 시설과 스파까지 갖추고 있어요. 골프를 즐기기에 전혀 부족함이 없어요.\n\n**2. 중급 코스: 2,000~3,500바트(평일)**\n비지터도 받는, 잘 관리된 멤버 코스예요. 좋은 코스 컨디션, 충실한 클럽하우스, 잘 정비된 티타임 시스템을 갖추고 있어요. 여행으로 찾는 대부분의 골퍼에게 가장 균형 잡힌 선택이에요.\n\n**3. 프리미엄 코스: 3,500바트 이상(평일)**\n- **Nikanti Golf Club:** 평일 약 5,500바트 / 주말 약 6,500바트(캐디, 팁, 음료, 식사 2회 포함 올인클루시브)\n- **Alpine Golf Club:** 평일 약 5,400바트 / 주말 약 7,400바트(보통 캐디와 카트 포함)\n\n챔피언십 수준의 레이아웃과 흠잡을 데 없는 컨디션이에요. 가격은 참고용이니 클럽에 직접 확인하세요.",
         },
         {
           heading: "필수 비용과 선택 비용",
@@ -3758,7 +3758,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     slug: "round-of-golf-cost-bangkok",
     title: "曼谷打一场高尔夫要多少钱？果岭费与球童费全解析",
     meta_description:
-      "曼谷打一场高尔夫的费用有多少？果岭费、球童费、球童小费到球车费——从平价球场的1,500泰铢到高级球会7,000泰铢以上，为你拆解总额。",
+      "曼谷打一场高尔夫的费用有多少？从平价球场不到1,000泰铢的果岭费，到高级球会7,000泰铢以上，为你拆解果岭费、球童费、球童小费和球车费的总额。",
     featured_image: null,
     schema_markup: null,
     status: "published",
@@ -3771,18 +3771,18 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/golf",
     ],
     created_at: now,
-    updated_at: "2026-09-25T00:00:00.000Z",
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "曼谷是亚洲性价比最高的高尔夫目的地之一。在一座维护良好、配有球童的球场打完整一轮，花费只是你在日本、澳大利亚或英国所付的一小部分——而球场的品质确实令人惊艳。",
       sections: [
         {
           heading: "总费用拆解",
-          body: "曼谷中档球场平日一轮的典型花费：\n\n| 项目 | 费用（泰铢） |\n|---|---|\n| 果岭费（中档、平日） | 2,500–3,500 |\n| 球童费（强制） | 300–500 |\n| 球童小费（惯例） | 200–300 |\n| 球车租用（可选） | 300–600 |\n| **全部合计（估算）** | **3,300–4,900** |\n\n在高级球场，合计金额会升到6,000–8,000泰铢甚至更高。在平价的公众球场，合计2,000–2,500泰铢也做得到。\n\n*果岭费会随季节变动。预订前请务必直接向球场确认最新价格。*",
+          body: "曼谷中档球场平日一轮的典型花费：\n\n| 项目 | 费用（泰铢） |\n|---|---|\n| 果岭费（中档、平日） | 2,500–3,500 |\n| 球童费（强制） | 300–500 |\n| 球童小费（惯例） | 200–300 |\n| 球车租用（可选） | 300–600 |\n| **全部合计（估算）** | **3,300–4,900** |\n\n在高级球场，合计金额会升到6,000–8,000泰铢甚至更高。在平价球场，合计通常为2,000–2,500泰铢，最便宜的球场则不到2,000泰铢。\n\n*果岭费会随季节变动。预订前请务必直接向球场确认最新价格。*",
         },
         {
           heading: "分档看果岭费",
-          body: "**1. 平价球场：2,000泰铢以内（平日果岭费）**\n在曼谷90分钟车程范围内，这一档的球场数量最多。其中大多数设有练习场，少数还配有住宿和水疗设施。打球体验完全没问题。\n\n**2. 中档球场：2,500–3,500泰铢（平日）**\n对访客开放、维护良好的会员制球场。球场状态好、会所设施完整、开球时间系统规范。对大多数到访球友而言最为均衡的选择。\n\n**3. 高级球场：4,500泰铢起（平日）**\n- **Nikanti Golf Club：** 平日约5,500泰铢 / 周末约6,500泰铢（全包——含球童、小费、饮料和两餐）\n- **Alpine Golf Club：** 平日约5,400泰铢 / 周末约7,400泰铢（通常含球童和球车）\n\n锦标赛水准的球道设计，保养无可挑剔。价格仅供参考——请直接向球会确认。",
+          body: "**1. 平价球场：2,000泰铢以内（平日果岭费）**\n在曼谷90分钟车程范围内，这一档的球场数量最多。其中大多数设有练习场，少数还配有住宿和水疗设施。打球体验完全没问题。\n\n**2. 中档球场：2,000–3,500泰铢（平日）**\n对访客开放、维护良好的会员制球场。球场状态好、会所设施完整、开球时间系统规范。对大多数到访球友而言最为均衡的选择。\n\n**3. 高级球场：3,500泰铢起（平日）**\n- **Nikanti Golf Club：** 平日约5,500泰铢 / 周末约6,500泰铢（全包——含球童、小费、饮料和两餐）\n- **Alpine Golf Club：** 平日约5,400泰铢 / 周末约7,400泰铢（通常含球童和球车）\n\n锦标赛水准的球道设计，保养无可挑剔。价格仅供参考——请直接向球会确认。",
         },
         {
           heading: "强制与可选的额外费用",
@@ -3834,7 +3834,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     slug: "round-of-golf-cost-bangkok",
     title: "ออกรอบกอล์ฟในกรุงเทพฯ ค่าใช้จ่ายเท่าไหร่ — ค่ากรีนฟีและค่าแคดดี้",
     meta_description:
-      "ค่ากรีนฟี ค่าแคดดี้ และค่าใช้จ่ายรวมสำหรับการออกรอบกอล์ฟในกรุงเทพฯ ตั้งแต่สนามระดับประหยัดที่ 1,500 บาท ไปจนถึงสนามพรีเมียมที่ 7,000 บาทขึ้นไป",
+      "ค่ากรีนฟี ค่าแคดดี้ และค่าใช้จ่ายรวมสำหรับการออกรอบกอล์ฟในกรุงเทพฯ ตั้งแต่สนามระดับประหยัดที่ต่ำกว่า 1,000 บาท ไปจนถึงสนามพรีเมียมที่ 7,000 บาทขึ้นไป",
     featured_image: null,
     schema_markup: null,
     status: "published",
@@ -3847,18 +3847,18 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/golf-course-club-rental",
     ],
     created_at: now,
-    updated_at: "2026-09-25T00:00:00.000Z",
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "กรุงเทพฯ เป็นหนึ่งในจุดหมายกอล์ฟที่คุ้มค่าที่สุดในเอเชีย การออกรอบเต็มรอบในสนามที่ดูแลดีและมีแคดดี้ประจำ มีค่าใช้จ่ายเพียงเศษเสี้ยวของที่ต้องจ่ายในญี่ปุ่น ออสเตรเลีย หรือสหราชอาณาจักร และคุณภาพของสนามก็น่าประทับใจอย่างแท้จริง",
       sections: [
         {
           heading: "แจกแจงค่าใช้จ่ายรวม",
-          body: "การออกรอบวันธรรมดาที่สนามระดับกลางในกรุงเทพฯ โดยทั่วไป:\n\n| รายการ | ค่าใช้จ่าย (บาท) |\n|---|---|\n| ค่ากรีนฟี (ระดับกลาง วันธรรมดา) | 2,500-3,500 |\n| ค่าแคดดี้ (บังคับ) | 300-500 |\n| ทิปแคดดี้ (ตามธรรมเนียม) | 200-300 |\n| ค่าเช่ารถกอล์ฟ (ทางเลือก) | 300-600 |\n| **รวมทั้งหมด (ประมาณการ)** | **3,300-4,900** |\n\nที่สนามระดับพรีเมียม ค่าใช้จ่ายรวมจะขึ้นไปถึง 6,000-8,000 บาทหรือมากกว่านั้น ส่วนสนามสาธารณะระดับประหยัด ค่าใช้จ่ายรวม 2,000-2,500 บาทเป็นไปได้\n\n*ค่ากรีนฟีเปลี่ยนแปลงตามฤดูกาล ควรตรวจสอบราคาปัจจุบันกับสนามโดยตรงก่อนจองเสมอ*",
+          body: "การออกรอบวันธรรมดาที่สนามระดับกลางในกรุงเทพฯ โดยทั่วไป:\n\n| รายการ | ค่าใช้จ่าย (บาท) |\n|---|---|\n| ค่ากรีนฟี (ระดับกลาง วันธรรมดา) | 2,500-3,500 |\n| ค่าแคดดี้ (บังคับ) | 300-500 |\n| ทิปแคดดี้ (ตามธรรมเนียม) | 200-300 |\n| ค่าเช่ารถกอล์ฟ (ทางเลือก) | 300-600 |\n| **รวมทั้งหมด (ประมาณการ)** | **3,300-4,900** |\n\nที่สนามระดับพรีเมียม ค่าใช้จ่ายรวมจะขึ้นไปถึง 6,000-8,000 บาทหรือมากกว่านั้น ส่วนสนามระดับประหยัด ค่าใช้จ่ายรวมโดยทั่วไปอยู่ที่ 2,000-2,500 บาท และสนามที่ถูกที่สุดจะต่ำกว่า 2,000 บาท\n\n*ค่ากรีนฟีเปลี่ยนแปลงตามฤดูกาล ควรตรวจสอบราคาปัจจุบันกับสนามโดยตรงก่อนจองเสมอ*",
         },
         {
           heading: "ค่ากรีนฟีแบ่งตามระดับ",
-          body: "**1. สนามระดับประหยัด: ไม่เกิน 2,000 บาท (ค่ากรีนฟีวันธรรมดา)**\nเป็นกลุ่มที่มีจำนวนสนามมากที่สุดในบรรดาสนามที่ขับรถจากกรุงเทพฯ ไม่เกิน 90 นาที สนามในกลุ่มนี้ส่วนใหญ่มีสนามไดรฟ์ และบางแห่งยังมีที่พักและสปาในตัวด้วย ออกรอบได้สบายไม่มีปัญหา\n\n**2. สนามระดับกลาง: 2,500-3,500 บาท (วันธรรมดา)**\nสนามสมาชิกที่ดูแลดีและเปิดรับผู้เล่นทั่วไป สภาพสนามดี คลับเฮาส์ครบครัน และระบบทีไทม์เป็นระเบียบ เป็นจุดที่ลงตัวที่สุดสำหรับนักกอล์ฟที่เดินทางมาเล่นส่วนใหญ่\n\n**3. สนามระดับพรีเมียม: 4,500 บาทขึ้นไป (วันธรรมดา)**\n- **Nikanti Golf Club:** วันธรรมดาประมาณ 5,500 บาท / วันหยุดสุดสัปดาห์ประมาณ 6,500 บาท (ออลอินคลูซีฟ — รวมค่าแคดดี้ ทิป เครื่องดื่ม และอาหาร 2 มื้อ)\n- **Alpine Golf Club:** วันธรรมดาประมาณ 5,400 บาท / วันหยุดสุดสัปดาห์ประมาณ 7,400 บาท (โดยทั่วไปรวมค่าแคดดี้และรถกอล์ฟ)\n\nเลย์เอาต์ระดับแชมเปียนชิพและการดูแลสนามที่ไร้ที่ติ ราคาเป็นเพียงข้อมูลอ้างอิง — ควรตรวจสอบกับสนามโดยตรง",
+          body: "**1. สนามระดับประหยัด: ไม่เกิน 2,000 บาท (ค่ากรีนฟีวันธรรมดา)**\nเป็นกลุ่มที่มีจำนวนสนามมากที่สุดในบรรดาสนามที่ขับรถจากกรุงเทพฯ ไม่เกิน 90 นาที สนามในกลุ่มนี้ส่วนใหญ่มีสนามไดรฟ์ และบางแห่งยังมีที่พักและสปาในตัวด้วย ออกรอบได้สบายไม่มีปัญหา\n\n**2. สนามระดับกลาง: 2,000-3,500 บาท (วันธรรมดา)**\nสนามสมาชิกที่ดูแลดีและเปิดรับผู้เล่นทั่วไป สภาพสนามดี คลับเฮาส์ครบครัน และระบบทีไทม์เป็นระเบียบ เป็นจุดที่ลงตัวที่สุดสำหรับนักกอล์ฟที่เดินทางมาเล่นส่วนใหญ่\n\n**3. สนามระดับพรีเมียม: 3,500 บาทขึ้นไป (วันธรรมดา)**\n- **Nikanti Golf Club:** วันธรรมดาประมาณ 5,500 บาท / วันหยุดสุดสัปดาห์ประมาณ 6,500 บาท (ออลอินคลูซีฟ — รวมค่าแคดดี้ ทิป เครื่องดื่ม และอาหาร 2 มื้อ)\n- **Alpine Golf Club:** วันธรรมดาประมาณ 5,400 บาท / วันหยุดสุดสัปดาห์ประมาณ 7,400 บาท (โดยทั่วไปรวมค่าแคดดี้และรถกอล์ฟ)\n\nเลย์เอาต์ระดับแชมเปียนชิพและการดูแลสนามที่ไร้ที่ติ ราคาเป็นเพียงข้อมูลอ้างอิง — ควรตรวจสอบกับสนามโดยตรง",
         },
         {
           heading: "ค่าใช้จ่ายที่บังคับและที่เป็นทางเลือก",
@@ -3902,7 +3902,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/guide/best-golf-courses-near-bangkok",
     ],
     created_at: "2026-03-28T00:00:00.000Z",
-    updated_at: "2026-03-28T00:00:00.000Z",
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro: `If you've booked tee times in the US, UK, or Australia, GolfNow is probably already in your browser history. It's one of the world's largest golf booking platforms, with a slick interface and a reputation for last-minute deals. But when you land in Bangkok and want to book a round, is GolfNow the right tool for the job? The honest answer is: it depends — and in Thailand, the answer is more often "not quite" than "yes."`,
       sections: [
@@ -3920,7 +3920,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "Direct Booking — Often the Best Option",
-          body: `Many Bangkok golf courses are well-staffed and equipped to handle direct reservations by phone, email, or their own website booking forms. Green fees in Bangkok typically range from around 1,500 THB at more accessible courses up to 5,000 THB or more at premium venues — and direct booking sometimes comes in below any platform price, because you're not paying the platform's margin.\n\nIf you have a specific course in mind, it's worth calling or emailing directly before assuming a platform is offering the best rate.`,
+          body: `Many Bangkok golf courses are well-staffed and equipped to handle direct reservations by phone, email, or their own website booking forms. Green fees in Bangkok range from under 1,000 THB on a weekday at the cheapest courses up to 5,000 THB or more at the premium clubs, where caddie and cart are usually included. Direct booking sometimes comes in below any platform price, because you're not paying the platform's margin.\n\nIf you have a specific course in mind, it's worth calling or emailing directly before assuming a platform is offering the best rate.`,
         },
         {
           heading: "Price Comparison Tips",
@@ -3958,17 +3958,17 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/guide/best-golf-courses-phuket",
     ],
     created_at: "2026-03-28T00:00:00.000Z",
-    updated_at: "2026-03-28T00:00:00.000Z",
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro: `Southeast Asia is home to three of the most popular golf destinations outside of Japan and South Korea. Thailand, Bali, and Vietnam each offer compelling reasons to book a flight with your clubs — and each has genuine drawbacks. This guide compares all three honestly, so you can choose the destination that fits your priorities.`,
       sections: [
         {
           heading: "At a Glance: Comparison Table",
-          body: `| Factor | Thailand | Bali | Vietnam |\n|---|---|---|---|\n| Total courses | 250–300 | ~5 operational | 80–100 |\n| Green fees (approx.) | $40–135 USD | $80–150 USD | $60–180 USD |\n| Best golf season | Nov–Feb | Apr–Sep | Varies by region |\n| Course quality ceiling | World-class | Championship-standard | World-class (Da Nang) |\n| Caddie system | Mandatory | Optional / mixed | Optional / mixed |\n| International flights | Bangkok hub; excellent | Direct from most Asian cities | Improving; Da Nang growing |\n| City golf options | Strong (Bangkok) | Limited | Moderate (Ho Chi Minh City) |\n| Non-golf attractions | Excellent | Excellent | Good |`,
+          body: `| Factor | Thailand | Bali | Vietnam |\n|---|---|---|---|\n| Total courses | 250–300 | ~5 operational | 80–100 |\n| Green fees (approx.) | $27–135 USD | $80–150 USD | $60–180 USD |\n| Best golf season | Nov–Feb | Apr–Sep | Varies by region |\n| Course quality ceiling | World-class | Championship-standard | World-class (Da Nang) |\n| Caddie system | Mandatory | Optional / mixed | Optional / mixed |\n| International flights | Bangkok hub; excellent | Direct from most Asian cities | Improving; Da Nang growing |\n| City golf options | Strong (Bangkok) | Limited | Moderate (Ho Chi Minh City) |\n| Non-golf attractions | Excellent | Excellent | Good |`,
         },
         {
           heading: "Thailand",
-          body: `**Strengths:**\n\nThailand has more golf infrastructure than any other destination in the region — roughly 250–300 courses nationally, with over 50 within an hour of Bangkok. Green fees run from around 1,500 THB (~$40 USD) to 5,000 THB+ (~$135 USD) at marquee venues.\n\nCourse quality at the top end is legitimately world-class. Black Mountain Hua Hin, Nikanti Golf Club, Alpine Golf Resort, and Thai Country Club are regularly cited among Asia's best. Bangkok also has a strong indoor simulator scene — LENGOLF in central Bangkok lets visitors practice or play full rounds without leaving the city.\n\nThe caddie system is a distinctive feature: caddies are mandatory at most Thai courses, adding local knowledge and service that experienced golfers tend to appreciate. November through February is the sweet spot — cooler temperatures, lower humidity, and reliable dry weather.\n\n**Weaknesses:**\n\nMandatory caddies mean less flexibility if you prefer to walk alone. Bangkok-area courses can be crowded on weekends. Traffic around Bangkok means early tee times are essential — courses that look close on a map can take 90 minutes to reach during peak hours.`,
+          body: `**Strengths:**\n\nThailand has more golf infrastructure than any other destination in the region — roughly 250–300 courses nationally, with over 50 within an hour of Bangkok. Green fees run from under 1,000 THB (~$27 USD) on a weekday at the cheapest courses to 5,000 THB+ (~$135 USD) at marquee venues.\n\nCourse quality at the top end is legitimately world-class. Black Mountain Hua Hin, Nikanti Golf Club, Alpine Golf Resort, and Thai Country Club are regularly cited among Asia's best. Bangkok also has a strong indoor simulator scene — LENGOLF in central Bangkok lets visitors practice or play full rounds without leaving the city.\n\nThe caddie system is a distinctive feature: caddies are mandatory at most Thai courses, adding local knowledge and service that experienced golfers tend to appreciate. November through February is the sweet spot — cooler temperatures, lower humidity, and reliable dry weather.\n\n**Weaknesses:**\n\nMandatory caddies mean less flexibility if you prefer to walk alone. Bangkok-area courses can be crowded on weekends. Traffic around Bangkok means early tee times are essential — courses that look close on a map can take 90 minutes to reach during peak hours.`,
         },
         {
           heading: "Bali",
@@ -4446,7 +4446,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     slug: "best-golf-courses-near-bangkok",
     title: "7 Best Golf Courses Near Bangkok (2026 Green Fees)",
     meta_description:
-      "The 7 best golf courses near Bangkok for 2026 — Nikanti, Alpine and airport-side courses from ~2,000 THB, with green fees, drive times and how to book.",
+      "The 7 best golf courses near Bangkok for 2026 — Nikanti, Alpine and airport-side courses from ~1,200 THB, with green fees, drive times and how to book.",
     featured_image: null,
     schema_markup: null,
     status: "published",
@@ -4469,13 +4469,13 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/guide/black-mountain-golf-club-hua-hin",
     ],
     created_at: "2026-03-28T00:00:00.000Z",
-    updated_at: "2026-03-28T00:00:00.000Z",
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro: `Bangkok is one of the best cities in the world for a golfer to be based. With 50+ courses within roughly an hour of the city centre, you could play a different course every day for several weeks without repeating. Prices are a fraction of equivalent courses in Europe, Japan, or Australia. Caddies are included, and tee times are available year-round.\n\nThis guide is our editorial shortlist — the seven standout rounds most worth your time, plus the closest courses to both Bangkok airports. If you want the complete directory instead — all 58 Bangkok-area courses with green fees, distances and an interactive map — use the Bangkok golf courses hub linked at the foot of this page.`,
       sections: [
         {
           heading: "How to Choose a Course",
-          body: `Before booking, narrow down by four factors:\n\n1. **Location from your hotel** — Bangkok's traffic is significant. A course 40km away can take 90 minutes in peak hour. Check the direction from your hotel and plan accordingly.\n2. **Budget** — Green fees range from around 1,500 THB at accessible daily-fee courses to 6,500+ THB at premium clubs. Weekends cost 20–40% more.\n3. **Skill level and style** — Some courses are genuine championship challenges; others are resort-friendly and forgiving.\n4. **Public access** — Most Bangkok-area courses accept visiting golfers. A few operate primarily for members and require advance arrangement.`,
+          body: `Before booking, narrow down by four factors:\n\n1. **Location from your hotel** — Bangkok's traffic is significant. A course 40km away can take 90 minutes in peak hour. Check the direction from your hotel and plan accordingly.\n2. **Budget** — Green fees range from under 1,000 THB on a weekday at the cheapest courses to 6,500+ THB at premium clubs. Weekends cost 20–40% more.\n3. **Skill level and style** — Some courses are genuine championship challenges; others are resort-friendly and forgiving.\n4. **Public access** — Most Bangkok-area courses accept visiting golfers. A few operate primarily for members and require advance arrangement.`,
         },
         {
           heading: "The 7 Best Golf Courses Near Bangkok",
@@ -4491,7 +4491,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "Green Fees — What to Expect",
-          body: `| Category | Typical weekday range | Typical weekend range |\n|----------|----------------------|----------------------|\n| Accessible daily-fee courses | 1,500–2,500 THB | 2,000–3,500 THB |\n| Mid-range championship courses | 2,500–3,500 THB | 3,000–4,500 THB |\n| Premium / prestige courses | 3,500–5,000+ THB | 4,500–6,000+ THB |\n\nFees above do not include caddie fees or buggy hire. Always confirm current rates directly with the course — prices change seasonally.`,
+          body: `| Category | Typical weekday range | Typical weekend range |\n|----------|----------------------|----------------------|\n| Accessible daily-fee courses | Up to 2,500 THB | Up to 3,500 THB |\n| Mid-range championship courses | 2,500–3,500 THB | 3,000–4,500 THB |\n| Premium / prestige courses | 3,500–5,000+ THB | 4,500–6,000+ THB |\n\nFees above do not include caddie fees or buggy hire. Always confirm current rates directly with the course — prices change seasonally.`,
         },
         {
           heading: "Best Time to Play",
@@ -4577,7 +4577,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     slug: "is-thailand-good-for-golf",
     title: "Is Thailand Good for Golf? — The Honest Guide",
     meta_description:
-      "Thailand has 250–300 golf courses, year-round sunshine, and green fees from 1,500 THB. Here's an honest look at whether it lives up to the hype.",
+      "Thailand has 250–300 golf courses, year-round sunshine, and green fees from under 1,000 THB. Here's an honest look at whether it lives up to the hype.",
     featured_image: null,
     schema_markup: null,
     status: "published",
@@ -4590,13 +4590,13 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/guide/best-time-play-golf-thailand",
     ],
     created_at: "2026-03-28T00:00:00.000Z",
-    updated_at: "2026-09-25T00:00:00.000Z",
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro: `Thailand is one of the best golf destinations in the world. The combination of well-maintained courses, low costs, warm weather, and a deeply ingrained caddie culture makes it genuinely hard to match anywhere else. But "good for golf" covers a lot of ground, so this guide gives you the full picture.`,
       sections: [
         {
           heading: "The Numbers: Courses, Cost, and Season",
-          body: `Thailand has between 250 and 300 golf courses nationwide, with around 100–150 considered tourist-suitable — open to visitors, operating in English, and maintaining a reasonable standard. Bangkok alone has more than 50 courses within an hour of the city centre. Chiang Mai, Phuket, Hua Hin, and Pattaya each have their own clusters.\n\n**Cost at a glance:**\n\n| Item | Typical range |\n|------|-------------|\n| Green fee (weekday) | 1,500–3,500 THB |\n| Green fee (weekend / peak) | 2,500–5,000+ THB |\n| Caddie fee | 400–600 THB |\n| Caddie tip (customary) | 400–500 THB |\n| Cart hire | 300–600 THB |\n\nAt the mid-range — say, 2,500 THB green fee plus caddie — a round works out to around 3,400–3,600 THB all-in (approximately £75–80 / US$95–100). That same experience at a comparable-quality course in the UK or Australia would cost two to three times as much.\n\n**Season:** Golf is possible year-round. The best window is November through February — temperatures between 25–30°C, lower humidity, minimal rainfall. March through May is hotter (30–35°C), and the monsoon season (June–October) brings afternoon rain, but mornings are usually playable.`,
+          body: `Thailand has between 250 and 300 golf courses nationwide, with around 100–150 considered tourist-suitable — open to visitors, operating in English, and maintaining a reasonable standard. Bangkok alone has more than 50 courses within an hour of the city centre. Chiang Mai, Phuket, Hua Hin, and Pattaya each have their own clusters.\n\n**Cost at a glance:**\n\n| Item | Typical range |\n|------|-------------|\n| Green fee (weekday) | 1,000–3,000 THB |\n| Green fee (weekend / peak) | 1,500–5,000+ THB |\n| Caddie fee | 400–600 THB |\n| Caddie tip (customary) | 400–500 THB |\n| Cart hire | 300–600 THB |\n\nAt the mid-range — say, 2,500 THB green fee plus caddie — a round works out to around 3,400–3,600 THB all-in (approximately £75–80 / US$95–100). That same experience at a comparable-quality course in the UK or Australia would cost two to three times as much.\n\n**Season:** Golf is possible year-round. The best window is November through February — temperatures between 25–30°C, lower humidity, minimal rainfall. March through May is hotter (30–35°C), and the monsoon season (June–October) brings afternoon rain, but mornings are usually playable.`,
         },
         {
           heading: "Course Quality: What Standard Are Thai Courses?",
@@ -4621,7 +4621,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       ],
       key_takeaways: [
         "Thailand has 250–300 golf courses; 50+ within an hour of Bangkok alone",
-        "Green fees run 1,500–3,500 THB on weekdays — 50–70% less than comparable UK or US courses",
+        "Green fees typically run 1,000–3,000 THB on weekdays, 50–70% less than comparable UK or US courses",
         "Caddies are mandatory at almost all courses — budget 400–500 THB tip per round in cash",
         "November–February is the best season; golf is playable year-round with morning tee times",
         "Course quality ranges from world-class (Black Mountain, Nikanti, Alpine) to basic resort tracks",
@@ -4834,13 +4834,13 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/guide/bring-golf-clubs-thailand-or-rent",
     ],
     created_at: "2026-03-28T00:00:00.000Z",
-    updated_at: "2026-03-28T00:00:00.000Z",
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro: `A week of golf in Thailand costs roughly $600–$2,500 USD on the ground depending on your choices. This guide breaks down every line item — green fees, caddies, transport, accommodation, and food — so you can build a realistic budget before you book. Flights are excluded throughout; this covers on-the-ground costs from arrival to departure.`,
       sections: [
         {
           heading: "Per-Day and Per-Round Cost Breakdown",
-          body: `| Item | Budget | Mid-Range | Premium |\n|---|---|---|---|\n| Green fee (per round) | 1,500–2,000 THB (~$41–54) | 2,500–3,500 THB (~$68–95) | 4,000–5,000+ THB (~$108–135+) |\n| Caddie fee (mandatory) | 400–500 THB (~$11–14) | 500–600 THB (~$14–16) | 500–600 THB (~$14–16) |\n| Caddie tip (per round) | 400 THB (~$11) | 450 THB (~$12) | 500 THB (~$14) |\n| Transport to course | 300–400 THB (~$8–11) | 400–550 THB (~$11–15) | 600–1,200 THB (~$16–32) |\n| Hotel (per night) | 2,000–3,000 THB (~$54–81) | 3,500–5,000 THB (~$95–135) | 8,000–20,000+ THB (~$216–540+) |\n| Food and incidentals | 500–800 THB (~$14–22) | 1,000–1,500 THB (~$27–41) | 1,500–3,000+ THB (~$41–81+) |\n\n*Conversion: ~37 THB = 1 USD (approximate)*`,
+          body: `| Item | Budget | Mid-Range | Premium |\n|---|---|---|---|\n| Green fee (per round) | Up to 2,000 THB (up to ~$54) | 2,500–3,500 THB (~$68–95) | 4,000–5,000+ THB (~$108–135+) |\n| Caddie fee (mandatory) | 400–500 THB (~$11–14) | 500–600 THB (~$14–16) | 500–600 THB (~$14–16) |\n| Caddie tip (per round) | 400 THB (~$11) | 450 THB (~$12) | 500 THB (~$14) |\n| Transport to course | 300–400 THB (~$8–11) | 400–550 THB (~$11–15) | 600–1,200 THB (~$16–32) |\n| Hotel (per night) | 2,000–3,000 THB (~$54–81) | 3,500–5,000 THB (~$95–135) | 8,000–20,000+ THB (~$216–540+) |\n| Food and incidentals | 500–800 THB (~$14–22) | 1,000–1,500 THB (~$27–41) | 1,500–3,000+ THB (~$41–81+) |\n\n*Conversion: ~37 THB = 1 USD (approximate)*`,
         },
         {
           heading: "Sample 7-Day Golf Trip Costs",
@@ -4848,7 +4848,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "Green Fees in Detail",
-          body: `Green fees are the biggest variable in your budget. Rates at Bangkok-area courses run from about 1,500 THB at value public courses on weekdays up to 5,000 THB or more at premium courses.\n\nThree factors drive the price gap:\n1. **Day of the week.** Weekend rates at most courses are 300–600 THB higher than weekday rates.\n2. **Course tier.** Bangkok's top-ranked courses carry premium fees.\n3. **Season.** November through February is peak season — cooler temperatures, drier conditions, and higher demand.`,
+          body: `Green fees are the biggest variable in your budget. Rates at Bangkok-area courses run from under 1,000 THB on a weekday at the cheapest courses up to 5,000 THB or more at the premium clubs.\n\nThree factors drive the price gap:\n1. **Day of the week.** Weekend rates at most courses are 300–600 THB higher than weekday rates.\n2. **Course tier.** Bangkok's top-ranked courses carry premium fees.\n3. **Season.** November through February is peak season — cooler temperatures, drier conditions, and higher demand.`,
         },
         {
           heading: "Caddie Costs — Mandatory, Not Optional",
@@ -6346,18 +6346,18 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "ja",
     related_slugs: ["/guide/best-golf-simulators-bangkok"],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "バンコクのゴルファーには、めったにない贅沢が用意されています。両極端のどちらにも、本当に質の高い選択肢がそろっているのです。朝7時にはチャンピオンシップコースに立つこともできれば、夜9時に都心の空調の効いたシミュレーターベイでスイングすることもできます。どちらも妥協ではありません — 旅行の内容、その日の予定、そして目的によって、それぞれに合う異なる体験です。",
       sections: [
         {
           heading: "ひと目で比較：シミュレーター vs 実際のコース",
-          body: "| 項目 | ゴルフシミュレーター | 実際のコース |\n|---|---|---|\n| 所要時間 | 合計1〜2時間 | 移動込みで6〜7時間 |\n| グリーンフィー／ベイ料金 | 1時間あたり550〜1,500THB | 1ラウンド1,500〜5,000THB以上 |\n| 移動・アクセス | BTSで行ける都心 | 車で30〜60分、早朝の出発が必要 |\n| ティータイム | 当日・任意の時間に予約可 | 通常は午前7時、午前5時30分〜6時には出発 |\n| 天候の影響 | なし — 完全空調 | 暑さと湿度が大きく影響 |\n| 18ホールのフルラウンド | なし | あり |\n| キャディー・カート・コースの景観 | なし | あり |\n| クラブレンタル | あり | あり（ほとんどのコース） |",
+          body: "| 項目 | ゴルフシミュレーター | 実際のコース |\n|---|---|---|\n| 所要時間 | 合計1〜2時間 | 移動込みで6〜7時間 |\n| グリーンフィー／ベイ料金 | 1時間あたり550〜1,500THB | 1ラウンド1,000THB未満から5,000THB以上 |\n| 移動・アクセス | BTSで行ける都心 | 車で30〜60分、早朝の出発が必要 |\n| ティータイム | 当日・任意の時間に予約可 | 通常は午前7時、午前5時30分〜6時には出発 |\n| 天候の影響 | なし — 完全空調 | 暑さと湿度が大きく影響 |\n| 18ホールのフルラウンド | なし | あり |\n| キャディー・カート・コースの景観 | なし | あり |\n| クラブレンタル | あり | あり（ほとんどのコース） |",
         },
         {
           heading: "実際のコースが向いているとき",
-          body: "まる一日自由に使える日があり、タイのゴルフをフルに味わいたいなら、コースを予約しましょう。バンコクは1時間以内に50以上のコースがあり、その多くはよく整備され、景観も美しく、米国・ヨーロッパ・日本の同等コースよりも大幅に手頃です。\n\n実際のコースが理にかなうのは、次のような場合です：\n1. ゴルフに専念できる日がある — フルラウンドで4.5〜5.5時間、さらに移動時間が加わるため、ホテルを午前5時30分〜6時に出発する必要があります\n2. キャディーとカートの体験を味わいたい — バンコクではほぼすべてのコースでキャディーが必須で、それ自体が大きな見どころになります\n3. グリーンフィーが予算に合う — 1,500〜5,000THB以上でも、施設の充実ぶりを考えれば十分な価値があります\n4. グループでプレーする — グループでのラウンドは、シミュレーターでは再現できない社交的な体験です",
+          body: "まる一日自由に使える日があり、タイのゴルフをフルに味わいたいなら、コースを予約しましょう。バンコクは1時間以内に50以上のコースがあり、その多くはよく整備され、景観も美しく、米国・ヨーロッパ・日本の同等コースよりも大幅に手頃です。\n\n実際のコースが理にかなうのは、次のような場合です：\n1. ゴルフに専念できる日がある：フルラウンドで4.5〜5.5時間、さらに移動時間が加わるため、ホテルを午前5時30分〜6時に出発する必要があります\n2. キャディーとカートの体験を味わいたい：バンコクではほぼすべてのコースでキャディーが必須で、それ自体が大きな見どころになります\n3. グリーンフィーが予算に合う：1,000THB未満から5,000THB以上まで、どの価格帯でも施設の充実ぶりを考えれば十分な価値があります\n4. グループでプレーする：グループでのラウンドは、シミュレーターでは再現できない社交的な体験です",
         },
         {
           heading: "シミュレーターが向いているとき",
@@ -6372,7 +6372,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         "実際のコースはタイのゴルフをフルに味わえます（キャディー、景観、18ホール）が、往復の移動を含めて6〜7時間と早い出発が必要です",
         "シミュレーターは、タイトなスケジュール、暑い日、夜のセッション、クラブを持たない旅行者に最適です",
         "同じ旅行で両方を使うのが最も効果的です — まずシミュレーターでウォームアップし、コースの日にフルな体験を楽しみます",
-        "シミュレーターのベイ料金は1時間あたり550〜1,500THB、実際のコースの1ラウンドは1,500〜5,000THB以上です",
+        "シミュレーターのベイ料金は1時間あたり550〜1,500THB、実際のコースの1ラウンドは1,000THB未満から5,000THB以上です",
       ],
       comparison_table: [],
     },
@@ -6391,18 +6391,18 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "ko",
     related_slugs: ["/guide/best-golf-simulators-bangkok"],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "방콕은 골퍼에게 흔치 않은 호사를 안겨줘요. 양극단 모두에 정말 좋은 선택지가 있거든요. 오전 7시면 챔피언십 코스에 나가 있을 수도 있고, 밤 9시에 도심 한복판의 냉방 시뮬레이터 베이에서 스윙을 하고 있을 수도 있죠. 어느 쪽도 타협이 아니에요 — 서로 다른 여행, 다른 날, 다른 목표에 어울리는 다른 경험일 뿐이에요.",
       sections: [
         {
           heading: "한눈에 보기: 시뮬레이터 vs 실제 코스",
-          body: "| 항목 | 골프 시뮬레이터 | 실제 코스 |\n|---|---|---|\n| 소요 시간 | 총 1~2시간 | 왕복 6~7시간 |\n| 그린피 / 베이 요금 | 시간당 550~1,500바트 | 라운드당 1,500~5,000바트 이상 |\n| 이동/교통 | BTS 이용 가능, 방콕 도심 | 차로 30~60분, 이른 출발 필요 |\n| 티타임 | 당일 아무 시간대나 예약 | 보통 오전 7시, 오전 5시 30분~6시 출발 |\n| 날씨 영향 | 없음 — 완전 냉방 | 더위와 습도가 실제 변수 |\n| 정식 18홀 경험 | 없음 | 있음 |\n| 캐디, 카트, 코스 경관 | 없음 | 있음 |\n| 클럽 대여 가능 | 가능 | 가능(대부분 코스) |",
+          body: "| 항목 | 골프 시뮬레이터 | 실제 코스 |\n|---|---|---|\n| 소요 시간 | 총 1~2시간 | 왕복 6~7시간 |\n| 그린피 / 베이 요금 | 시간당 550~1,500바트 | 라운드당 1,000바트 미만부터 5,000바트 이상 |\n| 이동/교통 | BTS 이용 가능, 방콕 도심 | 차로 30~60분, 이른 출발 필요 |\n| 티타임 | 당일 아무 시간대나 예약 | 보통 오전 7시, 오전 5시 30분~6시 출발 |\n| 날씨 영향 | 없음 — 완전 냉방 | 더위와 습도가 실제 변수 |\n| 정식 18홀 경험 | 없음 | 있음 |\n| 캐디, 카트, 코스 경관 | 없음 | 있음 |\n| 클럽 대여 가능 | 가능 | 가능(대부분 코스) |",
         },
         {
           heading: "실제 코스가 정답인 경우",
-          body: "하루를 온전히 비울 수 있고 태국 골프를 제대로 경험하고 싶다면, 코스를 예약하세요. 방콕은 1시간 이내에 50곳이 넘는 코스가 있고, 상당수가 관리가 잘 되어 있고 경관도 좋으면서 미국, 유럽, 일본의 비슷한 코스보다 훨씬 저렴해요.\n\n실제 코스가 잘 맞는 경우는 다음과 같아요:\n1. 골프에만 집중하는 날이 있을 때 — 한 라운드는 이동 시간을 빼고도 4.5~5.5시간이 걸려서, 호텔에서 오전 5시 30분~6시에는 출발해야 해요\n2. 캐디와 카트를 경험하고 싶을 때 — 방콕의 거의 모든 코스에서 캐디는 필수이고, 그 자체가 진짜 하이라이트예요\n3. 그린피가 예산에 맞을 때 — 1,500~5,000바트 이상이라도 시설을 생각하면 여전히 가성비가 좋아요\n4. 여럿이 함께 칠 때 — 그룹 라운딩은 시뮬레이터가 대신할 수 없는 사교의 경험이에요",
+          body: "하루를 온전히 비울 수 있고 태국 골프를 제대로 경험하고 싶다면, 코스를 예약하세요. 방콕은 1시간 이내에 50곳이 넘는 코스가 있고, 상당수가 관리가 잘 되어 있고 경관도 좋으면서 미국, 유럽, 일본의 비슷한 코스보다 훨씬 저렴해요.\n\n실제 코스가 잘 맞는 경우는 다음과 같아요:\n1. 골프에만 집중하는 날이 있을 때: 한 라운드는 이동 시간을 빼고도 4.5~5.5시간이 걸려서, 호텔에서 오전 5시 30분~6시에는 출발해야 해요\n2. 캐디와 카트를 경험하고 싶을 때: 방콕의 거의 모든 코스에서 캐디는 필수이고, 그 자체가 진짜 하이라이트예요\n3. 그린피가 예산에 맞을 때: 1,000바트 미만에서 5,000바트 이상까지, 어느 가격대든 시설을 생각하면 여전히 가성비가 좋아요\n4. 여럿이 함께 칠 때: 그룹 라운딩은 시뮬레이터가 대신할 수 없는 사교의 경험이에요",
         },
         {
           heading: "시뮬레이터가 정답인 경우",
@@ -6417,7 +6417,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         "실제 코스는 태국 골프의 완전한 경험(캐디, 경관, 18홀)을 주지만, 왕복 6~7시간과 이른 출발이 필요해요",
         "시뮬레이터는 빠듯한 일정, 더운 날, 저녁 세션, 또는 클럽 없이 온 여행객에게 안성맞춤이에요",
         "같은 여행에서 둘 다 활용하는 것이 가장 효과적이에요 — 먼저 시뮬레이터로 몸을 풀고, 코스에서 보내는 날로 완전한 경험을 즐기는 거죠",
-        "시뮬레이터 베이 요금은 시간당 550~1,500바트, 실제 코스 라운드는 1,500~5,000바트 이상이에요",
+        "시뮬레이터 베이 요금은 시간당 550~1,500바트, 실제 코스 라운드는 1,000바트 미만부터 5,000바트 이상이에요",
       ],
       comparison_table: [],
     },
@@ -6436,18 +6436,18 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "zh",
     related_slugs: ["/guide/best-golf-simulators-bangkok"],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "曼谷给了高尔夫球友一种难得的奢侈：光谱的两端，都有真正出色的选择。你可以早上7点就置身于锦标赛级球场，也可以晚上9点在市中心一间空调模拟器球位里挥杆。两者都不是将就——它们是适合不同行程、不同日子、不同目标的不同体验。",
       sections: [
         {
           heading: "速览：模拟器与真实球场对比",
-          body: "| 对比项 | 高尔夫模拟器 | 真实球场 |\n|---|---|---|\n| 所需时间 | 共1–2小时 | 往返共6–7小时 |\n| 果岭费/球位费 | 550–1,500泰铢/小时 | 1,500–5,000+泰铢/场 |\n| 交通 | BTS可直达，位于曼谷市中心 | 车程30–60分钟；需要提早出发 |\n| 开球时间 | 当天任意时段皆可预订 | 通常为早上7点；须在5:30–6:00前出发 |\n| 天气影响 | 无——全程空调恒温 | 高温和潮湿是实实在在的因素 |\n| 完整18洞体验 | 否 | 是 |\n| 球童、球车、球场景观 | 否 | 是 |\n| 提供球杆租借 | 是 | 是（大多数球场） |",
+          body: "| 对比项 | 高尔夫模拟器 | 真实球场 |\n|---|---|---|\n| 所需时间 | 共1–2小时 | 往返共6–7小时 |\n| 果岭费/球位费 | 550–1,500泰铢/小时 | 1,000以下至5,000+泰铢/场 |\n| 交通 | BTS可直达，位于曼谷市中心 | 车程30–60分钟；需要提早出发 |\n| 开球时间 | 当天任意时段皆可预订 | 通常为早上7点；须在5:30–6:00前出发 |\n| 天气影响 | 无——全程空调恒温 | 高温和潮湿是实实在在的因素 |\n| 完整18洞体验 | 否 | 是 |\n| 球童、球车、球场景观 | 否 | 是 |\n| 提供球杆租借 | 是 | 是（大多数球场） |",
         },
         {
           heading: "什么时候该选真实球场",
-          body: "如果你有一整天空闲，又想体验完整的泰式高尔夫，那就去订一场真实球场吧。曼谷周边一小时车程内就有50多座球场，其中不少维护精良、风景优美，而且比美国、欧洲或日本的同级别球场便宜得多。\n\n以下几种情况适合选真实球场：\n1. 你有一整天专门用来打球——完整打一场要4.5–5.5小时，再加上路程，需要早上5:30–6:00从酒店出发\n2. 你想体验球童和球车——几乎所有曼谷球场都强制要求配球童，而这正是一大亮点\n3. 果岭费在你的预算之内——1,500–5,000+泰铢，就其设施而言依然物有所值\n4. 你和一群人一起打——一群人下场是模拟器无法复制的社交体验",
+          body: "如果你有一整天空闲，又想体验完整的泰式高尔夫，那就去订一场真实球场吧。曼谷周边一小时车程内就有50多座球场，其中不少维护精良、风景优美，而且比美国、欧洲或日本的同级别球场便宜得多。\n\n以下几种情况适合选真实球场：\n1. 你有一整天专门用来打球：完整打一场要4.5–5.5小时，再加上路程，需要早上5:30–6:00从酒店出发\n2. 你想体验球童和球车：几乎所有曼谷球场都强制要求配球童，而这正是一大亮点\n3. 果岭费在你的预算之内：从不到1,000泰铢到5,000+泰铢，就其设施而言依然物有所值\n4. 你和一群人一起打：一群人下场是模拟器无法复制的社交体验",
         },
         {
           heading: "什么时候该选模拟器",
@@ -6462,7 +6462,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         "真实球场能带来完整的泰式高尔夫体验（球童、景观、18洞），但往返需要6–7小时，还得早起",
         "模拟器非常适合日程紧张、天气炎热的日子、晚间时段，或没带球杆的到访球友",
         "同一趟旅行两者兼顾是最有效的做法——先用模拟器热身，再把下场的日子留给完整的球场体验",
-        "模拟器球位费为每小时550–1,500泰铢，而真实球场打一场则要1,500–5,000+泰铢",
+        "模拟器球位费为每小时550–1,500泰铢，而真实球场打一场则从不到1,000泰铢到5,000+泰铢不等",
       ],
       comparison_table: [],
     },
@@ -6481,18 +6481,18 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "th",
     related_slugs: ["/guide/best-golf-simulators-bangkok"],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "กรุงเทพฯ มอบสิ่งที่นักกอล์ฟไม่ค่อยได้สัมผัส นั่นคือตัวเลือกที่ดีจริงทั้งสองด้านสุดขั้ว คุณจะได้ออกรอบในสนามระดับแชมเปียนชิพตั้งแต่ 07:00 น. หรือจะสวิงอยู่ในเบย์ซิมูเลเตอร์ติดแอร์ใจกลางเมืองตอน 21:00 น. ก็ได้ ทั้งสองแบบไม่ใช่ทางเลือกที่ต้องประนีประนอม — แต่เป็นประสบการณ์คนละแบบที่เหมาะกับทริปที่ต่างกัน วันที่ต่างกัน และเป้าหมายที่ต่างกัน",
       sections: [
         {
           heading: "สรุปภาพรวม: ซิมูเลเตอร์ vs สนามจริง",
-          body: "| ปัจจัย | กอล์ฟซิมูเลเตอร์ | สนามจริง |\n|---|---|---|\n| เวลาที่ต้องใช้ | รวม 1-2 ชั่วโมง | 6-7 ชั่วโมง รวมเดินทางไป-กลับ |\n| ค่ากรีนฟี / ค่าเบย์ | 550-1,500 บาท/ชั่วโมง | 1,500-5,000+ บาท/รอบ |\n| การเดินทาง | เดินทางด้วย BTS ได้ อยู่ใจกลางกรุงเทพฯ | ขับรถ 30-60 นาที ต้องออกเดินทางแต่เช้า |\n| ทีไทม์ | จองได้ทุกชั่วโมง ภายในวันเดียวกัน | ปกติ 07:00 น. ต้องออกก่อน 05:30-06:00 น. |\n| ผลกระทบจากสภาพอากาศ | ไม่มี — ติดแอร์ทั้งหมด | ความร้อนและความชื้นเป็นปัจจัยที่ต้องคำนึง |\n| ประสบการณ์ครบ 18 หลุม | ไม่มี | มี |\n| แคดดี้ รถกอล์ฟ วิวสนาม | ไม่มี | มี |\n| มีบริการเช่าไม้กอล์ฟ | มี | มี (สนามส่วนใหญ่) |\n\n(ข้อมูล ณ กรกฎาคม 2026)",
+          body: "| ปัจจัย | กอล์ฟซิมูเลเตอร์ | สนามจริง |\n|---|---|---|\n| เวลาที่ต้องใช้ | รวม 1-2 ชั่วโมง | 6-7 ชั่วโมง รวมเดินทางไป-กลับ |\n| ค่ากรีนฟี / ค่าเบย์ | 550-1,500 บาท/ชั่วโมง | ต่ำกว่า 1,000 ถึง 5,000+ บาท/รอบ |\n| การเดินทาง | เดินทางด้วย BTS ได้ อยู่ใจกลางกรุงเทพฯ | ขับรถ 30-60 นาที ต้องออกเดินทางแต่เช้า |\n| ทีไทม์ | จองได้ทุกชั่วโมง ภายในวันเดียวกัน | ปกติ 07:00 น. ต้องออกก่อน 05:30-06:00 น. |\n| ผลกระทบจากสภาพอากาศ | ไม่มี — ติดแอร์ทั้งหมด | ความร้อนและความชื้นเป็นปัจจัยที่ต้องคำนึง |\n| ประสบการณ์ครบ 18 หลุม | ไม่มี | มี |\n| แคดดี้ รถกอล์ฟ วิวสนาม | ไม่มี | มี |\n| มีบริการเช่าไม้กอล์ฟ | มี | มี (สนามส่วนใหญ่) |\n\n(ข้อมูล ณ กรกฎาคม 2026)",
         },
         {
           heading: "เมื่อสนามจริงคือตัวเลือกที่ใช่",
-          body: "ถ้าคุณมีเวลาว่างทั้งวันและอยากได้ประสบการณ์กอล์ฟสไตล์ไทยเต็มรูปแบบ ให้จองสนามจริง กรุงเทพฯ อยู่ห่างจากสนามกว่า 50 แห่งไม่เกินหนึ่งชั่วโมง หลายแห่งดูแลอย่างดี วิวสวย และราคาถูกกว่าสนามระดับเดียวกันในสหรัฐฯ ยุโรป หรือญี่ปุ่นอย่างเห็นได้ชัด\n\nสนามจริงเหมาะกับตอนที่:\n1. คุณมีวันสำหรับเล่นกอล์ฟโดยเฉพาะ — การออกรอบเต็มใช้เวลา 4.5-5.5 ชั่วโมง บวกเวลาเดินทาง จึงต้องออกจากโรงแรมตอน 05:30-06:00 น.\n2. คุณอยากได้ประสบการณ์แคดดี้และรถกอล์ฟ — สนามในกรุงเทพฯ แทบทุกแห่งกำหนดให้ต้องมีแคดดี้ และนี่คือไฮไลต์ที่ดีจริง\n3. ค่ากรีนฟีอยู่ในงบของคุณ — 1,500-5,000+ บาท ยังถือว่าคุ้มค่ามากเมื่อเทียบกับสิ่งอำนวยความสะดวกที่ได้\n4. คุณเล่นกันเป็นกลุ่ม — การออกรอบเป็นกลุ่มคือประสบการณ์ทางสังคมที่ซิมูเลเตอร์เลียนแบบไม่ได้",
+          body: "ถ้าคุณมีเวลาว่างทั้งวันและอยากได้ประสบการณ์กอล์ฟสไตล์ไทยเต็มรูปแบบ ให้จองสนามจริง กรุงเทพฯ อยู่ห่างจากสนามกว่า 50 แห่งไม่เกินหนึ่งชั่วโมง หลายแห่งดูแลอย่างดี วิวสวย และราคาถูกกว่าสนามระดับเดียวกันในสหรัฐฯ ยุโรป หรือญี่ปุ่นอย่างเห็นได้ชัด\n\nสนามจริงเหมาะกับตอนที่:\n1. คุณมีวันสำหรับเล่นกอล์ฟโดยเฉพาะ: การออกรอบเต็มใช้เวลา 4.5-5.5 ชั่วโมง บวกเวลาเดินทาง จึงต้องออกจากโรงแรมตอน 05:30-06:00 น.\n2. คุณอยากได้ประสบการณ์แคดดี้และรถกอล์ฟ: สนามในกรุงเทพฯ แทบทุกแห่งกำหนดให้ต้องมีแคดดี้ และนี่คือไฮไลต์ที่ดีจริง\n3. ค่ากรีนฟีอยู่ในงบของคุณ: ตั้งแต่ต่ำกว่า 1,000 ไปจนถึง 5,000+ บาท ยังถือว่าคุ้มค่ามากเมื่อเทียบกับสิ่งอำนวยความสะดวกที่ได้\n4. คุณเล่นกันเป็นกลุ่ม: การออกรอบเป็นกลุ่มคือประสบการณ์ทางสังคมที่ซิมูเลเตอร์เลียนแบบไม่ได้",
         },
         {
           heading: "เมื่อซิมูเลเตอร์คือตัวเลือกที่ใช่",
@@ -6507,7 +6507,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         "สนามจริงให้ประสบการณ์กอล์ฟสไตล์ไทยเต็มรูปแบบ (แคดดี้ วิวสนาม ครบ 18 หลุม) แต่ต้องใช้เวลา 6-7 ชั่วโมงแบบไป-กลับ และต้องเริ่มแต่เช้า",
         "ซิมูเลเตอร์เหมาะที่สุดสำหรับตารางที่แน่น วันที่อากาศร้อน การเล่นช่วงเย็น หรือผู้ที่มาโดยไม่ได้เอาไม้กอล์ฟมา",
         "การใช้ทั้งสองแบบในทริปเดียวกันคือแนวทางที่ได้ผลที่สุด — เริ่มด้วยซิมูเลเตอร์เพื่ออุ่นเครื่อง แล้วเก็บวันออกสนามจริงไว้สำหรับประสบการณ์เต็มรูปแบบ",
-        "ค่าเบย์ซิมูเลเตอร์อยู่ที่ 550-1,500 บาท/ชั่วโมง เทียบกับ 1,500-5,000+ บาท สำหรับการออกรอบในสนามจริง",
+        "ค่าเบย์ซิมูเลเตอร์อยู่ที่ 550-1,500 บาท/ชั่วโมง เทียบกับค่ากรีนฟีตั้งแต่ต่ำกว่า 1,000 ไปจนถึง 5,000+ บาท สำหรับการออกรอบในสนามจริง",
       ],
       comparison_table: [],
     },
@@ -7105,14 +7105,14 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "ja",
     related_slugs: [],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "タイでの1週間のゴルフにかかる現地費用は、選ぶ内容によっておおよそ600〜2,500米ドルです。本ガイドでは、グリーンフィー、キャディー、交通費、宿泊、食事といった各項目を一つずつ分解し、予約前に現実的な予算を組めるように解説します。航空券は本ガイドの対象外とし、到着から出発までにかかる現地の費用を扱います。",
       sections: [
         {
           heading: "1日あたり・1ラウンドあたりの費用内訳",
-          body: "| 項目 | エコノミー | スタンダード | プレミアム |\n|---|---|---|---|\n| グリーンフィー（1ラウンド） | 1,500〜2,000THB（約41〜54米ドル） | 2,500〜3,500THB（約68〜95米ドル） | 4,000〜5,000THB以上（約108〜135米ドル以上） |\n| キャディーフィー（必須） | 400〜500THB（約11〜14米ドル） | 500〜600THB（約14〜16米ドル） | 500〜600THB（約14〜16米ドル） |\n| キャディーへのチップ（1ラウンド） | 400THB（約11米ドル） | 450THB（約12米ドル） | 500THB（約14米ドル） |\n| コースへの交通費 | 300〜400THB（約8〜11米ドル） | 400〜550THB（約11〜15米ドル） | 600〜1,200THB（約16〜32米ドル） |\n| ホテル（1泊） | 2,000〜3,000THB（約54〜81米ドル） | 3,500〜5,000THB（約95〜135米ドル） | 8,000〜20,000THB以上（約216〜540米ドル以上） |\n| 食事・雑費 | 500〜800THB（約14〜22米ドル） | 1,000〜1,500THB（約27〜41米ドル） | 1,500〜3,000THB以上（約41〜81米ドル以上） |\n\n*換算：約37THB = 1米ドル（概算）*",
+          body: "| 項目 | エコノミー | スタンダード | プレミアム |\n|---|---|---|---|\n| グリーンフィー（1ラウンド） | 2,000THBまで（約54米ドルまで） | 2,500〜3,500THB（約68〜95米ドル） | 4,000〜5,000THB以上（約108〜135米ドル以上） |\n| キャディーフィー（必須） | 400〜500THB（約11〜14米ドル） | 500〜600THB（約14〜16米ドル） | 500〜600THB（約14〜16米ドル） |\n| キャディーへのチップ（1ラウンド） | 400THB（約11米ドル） | 450THB（約12米ドル） | 500THB（約14米ドル） |\n| コースへの交通費 | 300〜400THB（約8〜11米ドル） | 400〜550THB（約11〜15米ドル） | 600〜1,200THB（約16〜32米ドル） |\n| ホテル（1泊） | 2,000〜3,000THB（約54〜81米ドル） | 3,500〜5,000THB（約95〜135米ドル） | 8,000〜20,000THB以上（約216〜540米ドル以上） |\n| 食事・雑費 | 500〜800THB（約14〜22米ドル） | 1,000〜1,500THB（約27〜41米ドル） | 1,500〜3,000THB以上（約41〜81米ドル以上） |\n\n*換算：約37THB = 1米ドル（概算）*",
         },
         {
           heading: "7日間のゴルフ旅行の費用例",
@@ -7120,7 +7120,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "グリーンフィーの詳細",
-          body: "グリーンフィーは予算の中で最も変動が大きい項目です。バンコク近郊のコースの料金は、平日の手頃なパブリックコースで約1,500THB、プレミアムコースでは5,000THB以上まで幅があります。\n\n価格差を生む要因は3つあります。\n1. **曜日** — ほとんどのコースで、週末料金は平日より300〜600THB高くなります。\n2. **コースのグレード** — バンコクの上位ランクのコースはプレミアム料金です。\n3. **シーズン** — 11月から2月にかけてがピークシーズンで、気温が下がって空気も乾き、需要が高まります。",
+          body: "グリーンフィーは予算の中で最も変動が大きい項目です。バンコク近郊のコースの料金は、最も安いコースの平日料金なら1,000THB未満から、高級コースでは5,000THB以上まで幅があります。\n\n価格差を生む要因は3つあります。\n1. **曜日** — ほとんどのコースで、週末料金は平日より300〜600THB高くなります。\n2. **コースのグレード** — バンコクの上位ランクのコースはプレミアム料金です。\n3. **シーズン** — 11月から2月にかけてがピークシーズンで、気温が下がって空気も乾き、需要が高まります。",
         },
         {
           heading: "キャディー費用 — 任意ではなく必須",
@@ -7156,14 +7156,14 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "ko",
     related_slugs: [],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "태국에서 일주일 동안 골프를 즐기면 현지 경비는 선택에 따라 대략 600~2,500달러 정도예요. 이 가이드는 그린피, 캐디 비용, 교통비, 숙박비, 식비까지 모든 항목을 하나하나 나눠서 정리하니, 예약 전에 현실적인 예산을 세울 수 있어요. 항공권은 전체에서 제외했고, 도착부터 출발까지 현지에서 드는 비용만 다룹니다.",
       sections: [
         {
           heading: "하루·라운드당 비용 분석",
-          body: "| 항목 | 알뜰 | 중급 | 프리미엄 |\n|---|---|---|---|\n| 그린피 (라운드당) | 1,500~2,000바트 (약 41~54달러) | 2,500~3,500바트 (약 68~95달러) | 4,000~5,000+바트 (약 108~135+달러) |\n| 캐디피 (필수) | 400~500바트 (약 11~14달러) | 500~600바트 (약 14~16달러) | 500~600바트 (약 14~16달러) |\n| 캐디 팁 (라운드당) | 400바트 (약 11달러) | 450바트 (약 12달러) | 500바트 (약 14달러) |\n| 골프장 교통비 | 300~400바트 (약 8~11달러) | 400~550바트 (약 11~15달러) | 600~1,200바트 (약 16~32달러) |\n| 호텔 (1박당) | 2,000~3,000바트 (약 54~81달러) | 3,500~5,000바트 (약 95~135달러) | 8,000~20,000+바트 (약 216~540+달러) |\n| 식비·기타 비용 | 500~800바트 (약 14~22달러) | 1,000~1,500바트 (약 27~41달러) | 1,500~3,000+바트 (약 41~81+달러) |\n\n*환율: 약 37바트 = 1달러 (근사치)*",
+          body: "| 항목 | 알뜰 | 중급 | 프리미엄 |\n|---|---|---|---|\n| 그린피 (라운드당) | 2,000바트 이하 (약 54달러 이하) | 2,500~3,500바트 (약 68~95달러) | 4,000~5,000+바트 (약 108~135+달러) |\n| 캐디피 (필수) | 400~500바트 (약 11~14달러) | 500~600바트 (약 14~16달러) | 500~600바트 (약 14~16달러) |\n| 캐디 팁 (라운드당) | 400바트 (약 11달러) | 450바트 (약 12달러) | 500바트 (약 14달러) |\n| 골프장 교통비 | 300~400바트 (약 8~11달러) | 400~550바트 (약 11~15달러) | 600~1,200바트 (약 16~32달러) |\n| 호텔 (1박당) | 2,000~3,000바트 (약 54~81달러) | 3,500~5,000바트 (약 95~135달러) | 8,000~20,000+바트 (약 216~540+달러) |\n| 식비·기타 비용 | 500~800바트 (약 14~22달러) | 1,000~1,500바트 (약 27~41달러) | 1,500~3,000+바트 (약 41~81+달러) |\n\n*환율: 약 37바트 = 1달러 (근사치)*",
         },
         {
           heading: "7일 골프 여행 비용 예시",
@@ -7171,7 +7171,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "그린피 자세히 알아보기",
-          body: "그린피는 예산에서 변동 폭이 가장 큰 항목이에요. 방콕 인근 코스의 요금은 평일 저가 퍼블릭 코스의 약 1,500바트부터 프리미엄 코스의 5,000바트 이상까지 다양해요.\n\n가격 차이를 만드는 요인은 세 가지예요:\n1. **요일.** 대부분의 코스에서 주말 요금은 평일보다 300~600바트 높아요.\n2. **코스 등급.** 방콕 상위권 코스에는 프리미엄 요금이 붙어요.\n3. **시즌.** 11월부터 2월까지가 성수기예요 — 선선한 기온, 건조한 날씨, 그리고 높은 수요가 겹치는 시기죠.",
+          body: "그린피는 예산에서 변동 폭이 가장 큰 항목이에요. 방콕 인근에서는 가장 저렴한 코스의 평일 요금 1,000바트 미만부터 프리미엄 클럽의 5,000바트 이상까지 다양해요.\n\n가격 차이를 만드는 요인은 세 가지예요:\n1. **요일.** 대부분의 코스에서 주말 요금은 평일보다 300~600바트 높아요.\n2. **코스 등급.** 방콕 상위권 코스에는 프리미엄 요금이 붙어요.\n3. **시즌.** 11월부터 2월까지가 성수기예요 — 선선한 기온, 건조한 날씨, 그리고 높은 수요가 겹치는 시기죠.",
         },
         {
           heading: "캐디 비용 — 선택이 아닌 필수",
@@ -7207,14 +7207,14 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "zh",
     related_slugs: [],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "在泰国打一周高尔夫，落地后的花费大致在600–2,500美元之间，具体取决于你的选择。本指南拆解每一项开支——果岭费、球童、交通、住宿和餐饮——让你在预订前就能制定出一份贴合实际的预算。全文不含机票；涵盖的是从抵达到离开、在当地产生的各项费用。",
       sections: [
         {
           heading: "每日与每轮费用明细",
-          body: "| 项目 | 经济型 | 中档 | 高端 |\n|---|---|---|---|\n| 果岭费（每轮） | 1,500–2,000泰铢（约41–54美元） | 2,500–3,500泰铢（约68–95美元） | 4,000–5,000+泰铢（约108–135+美元） |\n| 球童费（强制） | 400–500泰铢（约11–14美元） | 500–600泰铢（约14–16美元） | 500–600泰铢（约14–16美元） |\n| 球童小费（每轮） | 400泰铢（约11美元） | 450泰铢（约12美元） | 500泰铢（约14美元） |\n| 前往球场交通 | 300–400泰铢（约8–11美元） | 400–550泰铢（约11–15美元） | 600–1,200泰铢（约16–32美元） |\n| 酒店（每晚） | 2,000–3,000泰铢（约54–81美元） | 3,500–5,000泰铢（约95–135美元） | 8,000–20,000+泰铢（约216–540+美元） |\n| 餐饮及杂费 | 500–800泰铢（约14–22美元） | 1,000–1,500泰铢（约27–41美元） | 1,500–3,000+泰铢（约41–81+美元） |\n\n*汇率换算：约37泰铢 = 1美元（近似值）*",
+          body: "| 项目 | 经济型 | 中档 | 高端 |\n|---|---|---|---|\n| 果岭费（每轮） | 2,000泰铢以内（约54美元以内） | 2,500–3,500泰铢（约68–95美元） | 4,000–5,000+泰铢（约108–135+美元） |\n| 球童费（强制） | 400–500泰铢（约11–14美元） | 500–600泰铢（约14–16美元） | 500–600泰铢（约14–16美元） |\n| 球童小费（每轮） | 400泰铢（约11美元） | 450泰铢（约12美元） | 500泰铢（约14美元） |\n| 前往球场交通 | 300–400泰铢（约8–11美元） | 400–550泰铢（约11–15美元） | 600–1,200泰铢（约16–32美元） |\n| 酒店（每晚） | 2,000–3,000泰铢（约54–81美元） | 3,500–5,000泰铢（约95–135美元） | 8,000–20,000+泰铢（约216–540+美元） |\n| 餐饮及杂费 | 500–800泰铢（约14–22美元） | 1,000–1,500泰铢（约27–41美元） | 1,500–3,000+泰铢（约41–81+美元） |\n\n*汇率换算：约37泰铢 = 1美元（近似值）*",
         },
         {
           heading: "7天高尔夫之旅费用示例",
@@ -7222,7 +7222,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "果岭费详解",
-          body: "果岭费是预算中变数最大的一项。曼谷周边球场的价格，从平价公共球场工作日的约1,500泰铢，到高端球场的5,000泰铢甚至更高不等。\n\n价格差距主要由三个因素决定：\n1. **星期几。**大多数球场周末的价格比工作日高出300–600泰铢。\n2. **球场档次。**曼谷排名靠前的球场收费更高。\n3. **季节。**11月到2月是旺季——气温更凉爽、天气更干燥，需求也更高。",
+          body: "果岭费是预算中变数最大的一项。曼谷周边球场的价格，从最便宜的球场工作日不到1,000泰铢，到高端球会的5,000泰铢或以上不等。\n\n价格差距主要由三个因素决定：\n1. **星期几。**大多数球场周末的价格比工作日高出300–600泰铢。\n2. **球场档次。**曼谷排名靠前的球场收费更高。\n3. **季节。**11月到2月是旺季——气温更凉爽、天气更干燥，需求也更高。",
         },
         {
           heading: "球童费用 — 强制，而非可选",
@@ -7258,14 +7258,14 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "th",
     related_slugs: [],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "ทริปกอล์ฟหนึ่งสัปดาห์ในประเทศไทยมีค่าใช้จ่ายในพื้นที่ราว 600-2,500 ดอลลาร์สหรัฐ ขึ้นอยู่กับตัวเลือกของคุณ คู่มือนี้จะแจกแจงค่าใช้จ่ายทุกรายการ — ทั้งค่ากรีนฟี ค่าแคดดี้ ค่าเดินทาง ที่พัก และค่าอาหาร — เพื่อให้คุณวางงบประมาณได้ตามจริงก่อนจอง ทั้งหมดนี้ไม่รวมค่าตั๋วเครื่องบิน และครอบคลุมเฉพาะค่าใช้จ่ายในพื้นที่ตั้งแต่เดินทางมาถึงจนถึงเดินทางกลับ",
       sections: [
         {
           heading: "แจกแจงค่าใช้จ่ายต่อวันและต่อรอบ",
-          body: "| รายการ | ประหยัด | ปานกลาง | พรีเมียม |\n|---|---|---|---|\n| ค่ากรีนฟี (ต่อรอบ) | 1,500-2,000 บาท (~41-54 ดอลลาร์) | 2,500-3,500 บาท (~68-95 ดอลลาร์) | 4,000-5,000+ บาท (~108-135+ ดอลลาร์) |\n| ค่าแคดดี้ (บังคับ) | 400-500 บาท (~11-14 ดอลลาร์) | 500-600 บาท (~14-16 ดอลลาร์) | 500-600 บาท (~14-16 ดอลลาร์) |\n| ทิปแคดดี้ (ต่อรอบ) | 400 บาท (~11 ดอลลาร์) | 450 บาท (~12 ดอลลาร์) | 500 บาท (~14 ดอลลาร์) |\n| ค่าเดินทางไปสนาม | 300-400 บาท (~8-11 ดอลลาร์) | 400-550 บาท (~11-15 ดอลลาร์) | 600-1,200 บาท (~16-32 ดอลลาร์) |\n| ที่พัก (ต่อคืน) | 2,000-3,000 บาท (~54-81 ดอลลาร์) | 3,500-5,000 บาท (~95-135 ดอลลาร์) | 8,000-20,000+ บาท (~216-540+ ดอลลาร์) |\n| ค่าอาหารและค่าใช้จ่ายเบ็ดเตล็ด | 500-800 บาท (~14-22 ดอลลาร์) | 1,000-1,500 บาท (~27-41 ดอลลาร์) | 1,500-3,000+ บาท (~41-81+ ดอลลาร์) |\n\n*อัตราแลกเปลี่ยน: ~37 บาท = 1 ดอลลาร์สหรัฐ (โดยประมาณ)*\n(ข้อมูล ณ กรกฎาคม 2026)",
+          body: "| รายการ | ประหยัด | ปานกลาง | พรีเมียม |\n|---|---|---|---|\n| ค่ากรีนฟี (ต่อรอบ) | ไม่เกิน 2,000 บาท (ไม่เกิน ~54 ดอลลาร์) | 2,500-3,500 บาท (~68-95 ดอลลาร์) | 4,000-5,000+ บาท (~108-135+ ดอลลาร์) |\n| ค่าแคดดี้ (บังคับ) | 400-500 บาท (~11-14 ดอลลาร์) | 500-600 บาท (~14-16 ดอลลาร์) | 500-600 บาท (~14-16 ดอลลาร์) |\n| ทิปแคดดี้ (ต่อรอบ) | 400 บาท (~11 ดอลลาร์) | 450 บาท (~12 ดอลลาร์) | 500 บาท (~14 ดอลลาร์) |\n| ค่าเดินทางไปสนาม | 300-400 บาท (~8-11 ดอลลาร์) | 400-550 บาท (~11-15 ดอลลาร์) | 600-1,200 บาท (~16-32 ดอลลาร์) |\n| ที่พัก (ต่อคืน) | 2,000-3,000 บาท (~54-81 ดอลลาร์) | 3,500-5,000 บาท (~95-135 ดอลลาร์) | 8,000-20,000+ บาท (~216-540+ ดอลลาร์) |\n| ค่าอาหารและค่าใช้จ่ายเบ็ดเตล็ด | 500-800 บาท (~14-22 ดอลลาร์) | 1,000-1,500 บาท (~27-41 ดอลลาร์) | 1,500-3,000+ บาท (~41-81+ ดอลลาร์) |\n\n*อัตราแลกเปลี่ยน: ~37 บาท = 1 ดอลลาร์สหรัฐ (โดยประมาณ)*\n(ข้อมูล ณ กรกฎาคม 2026)",
         },
         {
           heading: "ตัวอย่างค่าใช้จ่ายทริปกอล์ฟ 7 วัน",
@@ -7273,7 +7273,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "เจาะลึกค่ากรีนฟี",
-          body: "ค่ากรีนฟีคือตัวแปรที่ผันผวนมากที่สุดในงบประมาณของคุณ อัตราค่าบริการของสนามในย่านกรุงเทพฯ เริ่มตั้งแต่ราว 1,500 บาท ที่สนามสาธารณะราคาประหยัดในวันธรรมดา ไปจนถึง 5,000 บาทหรือมากกว่า ที่สนามระดับพรีเมียม\n\nมี 3 ปัจจัยที่ทำให้ราคาแตกต่างกัน:\n1. **วันในสัปดาห์** อัตราค่าบริการในวันหยุดสุดสัปดาห์ของสนามส่วนใหญ่สูงกว่าวันธรรมดา 300-600 บาท\n2. **ระดับของสนาม** สนามอันดับต้น ๆ ของกรุงเทพฯ มีค่าบริการระดับพรีเมียม\n3. **ฤดูกาล** เดือนพฤศจิกายนถึงกุมภาพันธ์คือช่วงไฮซีซัน — อากาศเย็นลง แห้งสบาย และมีความต้องการสูงขึ้น",
+          body: "ค่ากรีนฟีคือตัวแปรที่ผันผวนมากที่สุดในงบประมาณของคุณ อัตราค่าบริการของสนามใกล้กรุงเทพฯ มีตั้งแต่ต่ำกว่า 1,000 บาทในวันธรรมดาที่สนามราคาถูกที่สุด ไปจนถึง 5,000 บาทขึ้นไปที่สนามระดับพรีเมียม\n\nมี 3 ปัจจัยที่ทำให้ราคาแตกต่างกัน:\n1. **วันในสัปดาห์** อัตราค่าบริการในวันหยุดสุดสัปดาห์ของสนามส่วนใหญ่สูงกว่าวันธรรมดา 300-600 บาท\n2. **ระดับของสนาม** สนามอันดับต้น ๆ ของกรุงเทพฯ มีค่าบริการระดับพรีเมียม\n3. **ฤดูกาล** เดือนพฤศจิกายนถึงกุมภาพันธ์คือช่วงไฮซีซัน — อากาศเย็นลง แห้งสบาย และมีความต้องการสูงขึ้น",
         },
         {
           heading: "ค่าแคดดี้ — บังคับ ไม่ใช่ทางเลือก",
@@ -7739,7 +7739,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     slug: "best-golf-courses-near-bangkok",
     title: "バンコク近郊のおすすめゴルフ場7選 — 2026年グリーンフィー",
     meta_description:
-      "バンコク近郊のおすすめゴルフ場7選（2026年）。Nikanti、Alpineや空港近くのコースを約2,000THBから紹介。グリーンフィー、各空港からの移動時間、予約方法までまとめて解説します。",
+      "バンコク近郊のおすすめゴルフ場7選（2026年）。Nikanti、Alpineや空港近くのコースを約1,200THBから紹介。グリーンフィー、各空港からの移動時間、予約方法までまとめて解説します。",
     featured_image: null,
     schema_markup: null,
     status: "published",
@@ -7751,14 +7751,14 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/guide/thai-country-club-bangkok",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "バンコクは、ゴルファーが拠点にするのに世界でも屈指の都市です。市中心部から車でおよそ1時間以内に50以上のコースがあり、数週間にわたり、毎日違うコースをプレーしても同じコースを繰り返さずに済むほどです。料金はヨーロッパや日本、オーストラリアの同等コースのごく一部。キャディーは料金に含まれ、ティータイムは一年を通して利用できます。\n\nこのガイドは編集部が厳選したショートリスト——時間をかける価値が最も高い7ラウンドに、バンコクの2つの空港それぞれに最も近いコースを加えて紹介します。すべてを網羅した一覧をお探しの場合は——グリーンフィー、距離、インタラクティブマップを備えたバンコク近郊の全58コースを掲載——ページ下部にリンクしたバンコクのゴルフ場ハブをご覧ください。",
       sections: [
         {
           heading: "コースの選び方",
-          body: "予約の前に、次の4つの要素で絞り込みましょう。\n\n1. **ホテルからの立地** — バンコクの渋滞は深刻です。40km離れたコースでも、ピーク時には90分かかることがあります。ホテルからの方角を確認し、それに合わせて計画を立てましょう。\n2. **予算** — グリーンフィーは、利用しやすいパブリックコースの約1,500THBから、プレミアムクラブの6,500THB以上まで幅があります。週末は20〜40%高くなります。\n3. **レベルとプレースタイル** — 本格的なチャンピオンシップの難関コースもあれば、リゾート仕様でやさしいコースもあります。\n4. **一般利用の可否** — バンコク近郊のほとんどのコースはビジターを受け入れています。一部は主に会員向けに運営されており、事前の手配が必要です。",
+          body: "予約の前に、次の4つの要素で絞り込みましょう。\n\n1. **ホテルからの立地** — バンコクの渋滞は深刻です。40km離れたコースでも、ピーク時には90分かかることがあります。ホテルからの方角を確認し、それに合わせて計画を立てましょう。\n2. **予算** — グリーンフィーは、最も安いコースの平日料金なら1,000THB未満から、プレミアムクラブでは6,500THB以上まで幅があります。週末は20〜40%高くなります。\n3. **レベルとプレースタイル** — 本格的なチャンピオンシップの難関コースもあれば、リゾート仕様でやさしいコースもあります。\n4. **一般利用の可否** — バンコク近郊のほとんどのコースはビジターを受け入れています。一部は主に会員向けに運営されており、事前の手配が必要です。",
         },
         {
           heading: "バンコク近郊のおすすめゴルフ場7選",
@@ -7774,7 +7774,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "グリーンフィーの目安",
-          body: "| カテゴリー | 平日の目安 | 週末の目安 |\n|---|---|---|\n| 利用しやすいパブリックコース | 1,500〜2,500THB | 2,000〜3,500THB |\n| ミドルレンジのチャンピオンシップコース | 2,500〜3,500THB | 3,000〜4,500THB |\n| プレミアム／名門コース | 3,500〜5,000THB以上 | 4,500〜6,000THB以上 |\n\n上記の料金には、キャディーフィーやバギー（カート）代は含まれません。料金は季節で変動するため、必ずコースに直接、最新の料金をご確認ください。",
+          body: "| カテゴリー | 平日の目安 | 週末の目安 |\n|---|---|---|\n| 利用しやすいパブリックコース | 2,500THBまで | 3,500THBまで |\n| ミドルレンジのチャンピオンシップコース | 2,500〜3,500THB | 3,000〜4,500THB |\n| プレミアム／名門コース | 3,500〜5,000THB以上 | 4,500〜6,000THB以上 |\n\n上記の料金には、キャディーフィーやバギー（カート）代は含まれません。料金は季節で変動するため、必ずコースに直接、最新の料金をご確認ください。",
         },
         {
           heading: "プレーに最適な時期",
@@ -7797,7 +7797,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     slug: "best-golf-courses-near-bangkok",
     title: "방콕 근교 골프 코스 베스트 7 — 2026 그린피",
     meta_description:
-      "2026년 방콕 근교 베스트 골프 코스 7곳 — Nikanti, Alpine과 약 2,000바트부터의 공항 인근 코스까지. 그린피, 이동 시간, 예약 방법을 함께 정리했어요.",
+      "2026년 방콕 근교 베스트 골프 코스 7곳 — Nikanti, Alpine과 약 1,200바트부터의 공항 인근 코스까지. 그린피, 이동 시간, 예약 방법을 함께 정리했어요.",
     featured_image: null,
     schema_markup: null,
     status: "published",
@@ -7809,14 +7809,14 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/guide/thai-country-club-bangkok",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "방콕은 골퍼가 거점으로 삼기에 세계에서 손꼽히는 도시예요. 시내에서 차로 대략 1시간 거리에 50개가 넘는 코스가 있어, 몇 주 동안 매일 다른 코스를 돌아도 겹치지 않을 정도예요. 요금은 유럽, 일본, 호주의 비슷한 코스에 비하면 극히 일부 수준이고, 캐디가 포함되며 티타임은 연중 잡을 수 있어요.\n\n이 가이드는 저희 편집진이 직접 고른 추천 리스트예요 — 시간을 들일 가치가 가장 큰 7개의 라운드, 그리고 방콕 두 공항에서 가장 가까운 코스들을 담았어요. 전체 목록이 필요하시다면 — 그린피, 거리, 인터랙티브 지도까지 담긴 방콕 인근 58개 코스 전부 — 이 페이지 하단에 링크된 방콕 골프 코스 허브를 이용하세요.",
       sections: [
         {
           heading: "코스를 고르는 방법",
-          body: "예약하기 전에 4가지 기준으로 좁혀 보세요:\n\n1. **호텔에서의 위치** — 방콕은 교통 정체가 심해요. 40km 떨어진 코스도 혼잡 시간대에는 90분이 걸릴 수 있어요. 호텔에서의 방향을 확인하고 그에 맞춰 계획하세요.\n2. **예산** — 그린피는 누구나 이용하는 데일리피 코스의 약 1,500바트부터 프리미엄 클럽의 6,500바트 이상까지 다양해요. 주말은 20~40% 더 비싸요.\n3. **실력과 스타일** — 진짜 챔피언십급 난도를 자랑하는 코스가 있는가 하면, 리조트풍으로 너그러운 코스도 있어요.\n4. **일반 이용 가능 여부** — 방콕 인근 대부분의 코스는 방문 골퍼를 받아요. 일부는 주로 회원제로 운영되어 사전 예약이 필요해요.",
+          body: "예약하기 전에 4가지 기준으로 좁혀 보세요:\n\n1. **호텔에서의 위치** — 방콕은 교통 정체가 심해요. 40km 떨어진 코스도 혼잡 시간대에는 90분이 걸릴 수 있어요. 호텔에서의 방향을 확인하고 그에 맞춰 계획하세요.\n2. **예산** — 그린피는 가장 저렴한 코스의 평일 요금 1,000바트 미만부터 프리미엄 클럽의 6,500바트 이상까지 다양해요. 주말은 20~40% 더 비싸요.\n3. **실력과 스타일** — 진짜 챔피언십급 난도를 자랑하는 코스가 있는가 하면, 리조트풍으로 너그러운 코스도 있어요.\n4. **일반 이용 가능 여부** — 방콕 인근 대부분의 코스는 방문 골퍼를 받아요. 일부는 주로 회원제로 운영되어 사전 예약이 필요해요.",
         },
         {
           heading: "방콕 근교 베스트 골프 코스 7곳",
@@ -7832,7 +7832,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "그린피 — 예상 비용",
-          body: "| 구분 | 주중 일반 범위 | 주말 일반 범위 |\n|----------|----------------------|----------------------|\n| 누구나 이용하는 데일리피 코스 | 1,500~2,500바트 | 2,000~3,500바트 |\n| 중급 챔피언십 코스 | 2,500~3,500바트 | 3,000~4,500바트 |\n| 프리미엄·프레스티지 코스 | 3,500~5,000바트 이상 | 4,500~6,000바트 이상 |\n\n위 요금에는 캐디피나 카트 대여료가 포함되지 않아요. 요금은 시즌에 따라 바뀌니 코스에 현재 가격을 직접 확인하세요.",
+          body: "| 구분 | 주중 일반 범위 | 주말 일반 범위 |\n|----------|----------------------|----------------------|\n| 누구나 이용하는 데일리피 코스 | 2,500바트 이하 | 3,500바트 이하 |\n| 중급 챔피언십 코스 | 2,500~3,500바트 | 3,000~4,500바트 |\n| 프리미엄·프레스티지 코스 | 3,500~5,000바트 이상 | 4,500~6,000바트 이상 |\n\n위 요금에는 캐디피나 카트 대여료가 포함되지 않아요. 요금은 시즌에 따라 바뀌니 코스에 현재 가격을 직접 확인하세요.",
         },
         {
           heading: "플레이하기 좋은 시기",
@@ -7855,7 +7855,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     slug: "best-golf-courses-near-bangkok",
     title: "曼谷周边7大最佳高尔夫球场 — 2026年果岭费一览",
     meta_description:
-      "2026年曼谷周边7大最佳高尔夫球场：Nikanti、Alpine 及机场周边球场约2,000泰铢起，附果岭费、车程与预订方式。",
+      "2026年曼谷周边7大最佳高尔夫球场：Nikanti、Alpine 及机场周边球场约1,200泰铢起，附果岭费、车程与预订方式。",
     featured_image: null,
     schema_markup: null,
     status: "published",
@@ -7867,14 +7867,14 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/guide/thai-country-club-bangkok",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "对高尔夫球友来说，曼谷是全球最理想的落脚城市之一。市中心一小时车程内就有50多座球场，你可以连着好几周每天换一座球场打，都不会重样。价格只是欧洲、日本或澳大利亚同级球场的零头。含球童服务，全年都能约到开球时间。\n\n这份指南是我们的编辑精选——最值得你花时间的七座球场，外加距曼谷两座机场最近的球场。如果你要的是完整名录——涵盖曼谷地区全部58座球场的果岭费、距离和一张互动地图——请查看本页页脚链接的曼谷高尔夫球场汇总页。",
       sections: [
         {
           heading: "如何挑选球场",
-          body: "预订前，先从四个方面缩小范围：\n\n1. **离酒店的距离** — 曼谷的交通状况相当严峻。一座40公里外的球场，高峰时段可能要开上90分钟。先看清它相对酒店的方位，再据此安排。\n2. **预算** — 果岭费从大众日费制球场的约1,500泰铢，到高端俱乐部的6,500+泰铢不等。周末要贵20–40%。\n3. **水平与风格** — 有些球场是货真价实的锦标赛级挑战，有些则对度假型球友友好、容错度高。\n4. **是否对外开放** — 曼谷地区大多数球场都接待到访球友，少数主要面向会员，需要提前安排。",
+          body: "预订前，先从四个方面缩小范围：\n\n1. **离酒店的距离** — 曼谷的交通状况相当严峻。一座40公里外的球场，高峰时段可能要开上90分钟。先看清它相对酒店的方位，再据此安排。\n2. **预算** — 果岭费从最便宜的球场平日不到1,000泰铢，到高端俱乐部的6,500+泰铢不等。周末要贵20–40%。\n3. **水平与风格** — 有些球场是货真价实的锦标赛级挑战，有些则对度假型球友友好、容错度高。\n4. **是否对外开放** — 曼谷地区大多数球场都接待到访球友，少数主要面向会员，需要提前安排。",
         },
         {
           heading: "曼谷周边7大最佳高尔夫球场",
@@ -7890,7 +7890,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "果岭费 — 大致行情",
-          body: "| 类别 | 平日常见区间 | 周末常见区间 |\n|----------|----------------------|----------------------|\n| 大众日费制球场 | 1,500–2,500泰铢 | 2,000–3,500泰铢 |\n| 中端锦标赛级球场 | 2,500–3,500泰铢 | 3,000–4,500泰铢 |\n| 高端／名门球场 | 3,500–5,000+泰铢 | 4,500–6,000+泰铢 |\n\n以上价格不含球童费和球车租金。请始终直接向球场确认当前价格——价格随季节变动。",
+          body: "| 类别 | 平日常见区间 | 周末常见区间 |\n|----------|----------------------|----------------------|\n| 大众日费制球场 | 2,500泰铢以内 | 3,500泰铢以内 |\n| 中端锦标赛级球场 | 2,500–3,500泰铢 | 3,000–4,500泰铢 |\n| 高端／名门球场 | 3,500–5,000+泰铢 | 4,500–6,000+泰铢 |\n\n以上价格不含球童费和球车租金。请始终直接向球场确认当前价格——价格随季节变动。",
         },
         {
           heading: "最佳打球时节",
@@ -7913,7 +7913,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     slug: "best-golf-courses-near-bangkok",
     title: "7 สนามกอล์ฟที่ดีที่สุดใกล้กรุงเทพฯ (ค่ากรีนฟี 2026)",
     meta_description:
-      "7 สนามกอล์ฟที่ดีที่สุดใกล้กรุงเทพฯ ประจำปี 2026 — Nikanti, Alpine และสนามใกล้สนามบิน เริ่มต้นประมาณ 2,000 บาท พร้อมค่ากรีนฟี เวลาขับรถ และวิธีจอง",
+      "7 สนามกอล์ฟที่ดีที่สุดใกล้กรุงเทพฯ ประจำปี 2026 — Nikanti, Alpine และสนามใกล้สนามบิน เริ่มต้นประมาณ 1,200 บาท พร้อมค่ากรีนฟี เวลาขับรถ และวิธีจอง",
     featured_image: null,
     schema_markup: null,
     status: "published",
@@ -7925,14 +7925,14 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/guide/thai-country-club-bangkok",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "กรุงเทพฯ เป็นหนึ่งในเมืองที่ดีที่สุดในโลกสำหรับนักกอล์ฟที่จะใช้เป็นฐานในการออกรอบ ด้วยสนามกอล์ฟกว่า 50 แห่งที่อยู่ห่างจากใจกลางเมืองราวหนึ่งชั่วโมง คุณจึงสามารถเล่นสนามใหม่ได้ทุกวันติดต่อกันหลายสัปดาห์โดยไม่ต้องเล่นซ้ำ ราคาเป็นเพียงเศษเสี้ยวของสนามระดับเดียวกันในยุโรป ญี่ปุ่น หรือออสเตรเลีย ค่าบริการรวมแคดดี้ไว้แล้ว และมีทีไทม์ให้จองได้ตลอดทั้งปี\n\nคู่มือนี้คือรายชื่อสนามที่กองบรรณาธิการของเราคัดสรรมาแล้ว — 7 รอบการเล่นที่โดดเด่นและคุ้มค่าเวลาของคุณมากที่สุด พร้อมด้วยสนามที่อยู่ใกล้สนามบินทั้งสองแห่งของกรุงเทพฯ แต่หากคุณต้องการไดเรกทอรีฉบับสมบูรณ์แทน — สนามกอล์ฟทั้ง 58 แห่งในย่านกรุงเทพฯ พร้อมค่ากรีนฟี ระยะทาง และแผนที่แบบอินเทอร์แอกทีฟ — สามารถใช้ศูนย์รวมสนามกอล์ฟกรุงเทพฯ ที่ลิงก์ไว้ด้านล่างของหน้านี้",
       sections: [
         {
           heading: "วิธีเลือกสนามกอล์ฟ",
-          body: "ก่อนจอง ลองจำกัดตัวเลือกด้วย 4 ปัจจัยนี้:\n\n1. **ทำเลจากโรงแรมของคุณ** — การจราจรในกรุงเทพฯ ค่อนข้างหนัก สนามที่อยู่ห่างออกไป 40 กม. อาจใช้เวลาถึง 90 นาทีในช่วงชั่วโมงเร่งด่วน ลองตรวจสอบทิศทางจากโรงแรมของคุณแล้ววางแผนให้เหมาะสม\n2. **งบประมาณ** — ค่ากรีนฟีมีตั้งแต่ราว 1,500 บาท ที่สนามแบบจ่ายรายวันซึ่งเข้าเล่นได้ง่าย ไปจนถึง 6,500 บาทขึ้นไป ที่สโมสรระดับพรีเมียม ส่วนวันหยุดสุดสัปดาห์จะแพงกว่า 20-40% (ข้อมูล ณ กรกฎาคม 2026)\n3. **ระดับฝีมือและสไตล์การเล่น** — บางสนามเป็นสนามแชมเปียนชิพที่ท้าทายอย่างแท้จริง ขณะที่บางแห่งเล่นสบายสไตล์รีสอร์ตและให้อภัยความผิดพลาดของผู้เล่น\n4. **การเปิดให้บุคคลทั่วไปเข้าเล่น** — สนามส่วนใหญ่ในย่านกรุงเทพฯ รับนักกอล์ฟที่มาเยือน มีบางแห่งที่เน้นให้บริการเฉพาะสมาชิกและต้องนัดหมายล่วงหน้า",
+          body: "ก่อนจอง ลองจำกัดตัวเลือกด้วย 4 ปัจจัยนี้:\n\n1. **ทำเลจากโรงแรมของคุณ** — การจราจรในกรุงเทพฯ ค่อนข้างหนัก สนามที่อยู่ห่างออกไป 40 กม. อาจใช้เวลาถึง 90 นาทีในช่วงชั่วโมงเร่งด่วน ลองตรวจสอบทิศทางจากโรงแรมของคุณแล้ววางแผนให้เหมาะสม\n2. **งบประมาณ** — ค่ากรีนฟีมีตั้งแต่ต่ำกว่า 1,000 บาทในวันธรรมดาที่สนามราคาถูกที่สุด ไปจนถึง 6,500 บาทขึ้นไปที่สโมสรระดับพรีเมียม ส่วนวันหยุดสุดสัปดาห์จะแพงกว่า 20-40% (ข้อมูล ณ กันยายน 2026)\n3. **ระดับฝีมือและสไตล์การเล่น** — บางสนามเป็นสนามแชมเปียนชิพที่ท้าทายอย่างแท้จริง ขณะที่บางแห่งเล่นสบายสไตล์รีสอร์ตและให้อภัยความผิดพลาดของผู้เล่น\n4. **การเปิดให้บุคคลทั่วไปเข้าเล่น** — สนามส่วนใหญ่ในย่านกรุงเทพฯ รับนักกอล์ฟที่มาเยือน มีบางแห่งที่เน้นให้บริการเฉพาะสมาชิกและต้องนัดหมายล่วงหน้า",
         },
         {
           heading: "7 สนามกอล์ฟที่ดีที่สุดใกล้กรุงเทพฯ",
@@ -7948,7 +7948,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "ค่ากรีนฟี — สิ่งที่ควรรู้",
-          body: "| ประเภทสนาม | ช่วงราคาวันธรรมดาโดยทั่วไป | ช่วงราคาวันหยุดสุดสัปดาห์โดยทั่วไป |\n|----------|----------------------|----------------------|\n| สนามแบบจ่ายรายวันที่เข้าเล่นได้ง่าย | 1,500-2,500 บาท | 2,000-3,500 บาท |\n| สนามแชมเปียนชิพระดับกลาง | 2,500-3,500 บาท | 3,000-4,500 บาท |\n| สนามระดับพรีเมียม / ทรงเกียรติ | 3,500-5,000 บาทขึ้นไป | 4,500-6,000 บาทขึ้นไป |\n\nราคาข้างต้นยังไม่รวมค่าแคดดี้หรือค่าเช่ารถกอล์ฟ ควรตรวจสอบอัตราปัจจุบันกับทางสนามโดยตรงเสมอ — ราคาเปลี่ยนแปลงตามฤดูกาล",
+          body: "| ประเภทสนาม | ช่วงราคาวันธรรมดาโดยทั่วไป | ช่วงราคาวันหยุดสุดสัปดาห์โดยทั่วไป |\n|----------|----------------------|----------------------|\n| สนามแบบจ่ายรายวันที่เข้าเล่นได้ง่าย | ไม่เกิน 2,500 บาท | ไม่เกิน 3,500 บาท |\n| สนามแชมเปียนชิพระดับกลาง | 2,500-3,500 บาท | 3,000-4,500 บาท |\n| สนามระดับพรีเมียม / ทรงเกียรติ | 3,500-5,000 บาทขึ้นไป | 4,500-6,000 บาทขึ้นไป |\n\nราคาข้างต้นยังไม่รวมค่าแคดดี้หรือค่าเช่ารถกอล์ฟ ควรตรวจสอบอัตราปัจจุบันกับทางสนามโดยตรงเสมอ — ราคาเปลี่ยนแปลงตามฤดูกาล",
         },
         {
           heading: "ช่วงเวลาที่ดีที่สุดในการเล่น",
@@ -11349,7 +11349,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "ja",
     related_slugs: [],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "アメリカ、イギリス、オーストラリアでティータイムを予約したことがあるなら、GolfNowはおそらくすでにブラウザの履歴に入っているはずです。洗練されたインターフェースと直前割引の評判で知られる、世界最大級のゴルフ予約プラットフォームのひとつです。しかし、バンコクに着いてラウンドを予約したいとき、GolfNowは最適な手段でしょうか。正直な答えは「場合による」 — そしてタイでは、その答えは「はい」よりも「そうとは言い切れない」であることのほうが多いのです。",
@@ -11368,7 +11368,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "直接予約 — 多くの場合いちばんの選択肢",
-          body: "バンコクのゴルフ場の多くはスタッフが充実しており、電話、メール、あるいは自社サイトの予約フォームから直接予約に対応できる体制が整っています。バンコクのグリーンフィーは、アクセスの良いコースで約1,500THBから、高級な施設では5,000THB以上までが一般的です——そして直接予約なら、プラットフォームの利幅が上乗せされない分、どのプラットフォームの料金より安くなることもあります。\n\n狙っているコースが決まっているなら、プラットフォームが最安値を提示していると決めつける前に、直接電話やメールで問い合わせてみる価値があります。",
+          body: "バンコクのゴルフ場の多くはスタッフが充実しており、電話、メール、あるいは自社サイトの予約フォームから直接予約に対応できる体制が整っています。バンコクのグリーンフィーは、最も安いコースの平日料金なら1,000THB未満から、高級コースでは5,000THB以上まで幅があります（高級コースは多くの場合、キャディー・カート込みの料金です）。直接予約なら、プラットフォームの利幅が上乗せされない分、どのプラットフォームの料金より安くなることもあります。\n\n狙っているコースが決まっているなら、プラットフォームが最安値を提示していると決めつける前に、直接電話やメールで問い合わせてみる価値があります。",
         },
         {
           heading: "料金を比較するコツ",
@@ -11399,7 +11399,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "ko",
     related_slugs: [],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "미국, 영국, 호주에서 티타임을 예약해 본 적이 있다면 GolfNow는 이미 브라우저 방문 기록에 남아 있을 거예요. 세련된 인터페이스와 막판 특가로 잘 알려진, 세계에서 가장 큰 골프 예약 플랫폼 중 하나죠. 하지만 막상 방콕에 도착해 라운딩을 예약하려 할 때, GolfNow가 정말 알맞은 도구일까요? 솔직한 답은 '경우에 따라 다르다'예요. 그리고 태국에서는 그 답이 '네'보다 '글쎄요'에 가까운 경우가 더 많습니다.",
@@ -11418,7 +11418,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "직접 예약 — 종종 최선의 선택",
-          body: "방콕의 많은 골프장은 인력과 시스템이 잘 갖춰져 있어, 전화·이메일이나 자체 웹사이트 예약 양식을 통한 직접 예약을 처리할 수 있어요. 방콕의 그린피는 접근성이 좋은 코스에서 대략 1,500바트부터, 프리미엄 코스에서는 5,000바트 이상까지가 일반적이에요 — 그리고 직접 예약은 플랫폼 수수료가 붙지 않기 때문에, 때로는 어떤 플랫폼 가격보다도 낮게 나오기도 해요.\n\n마음에 둔 코스가 있다면, 플랫폼이 최저가를 준다고 넘겨짚기 전에 직접 전화하거나 이메일을 보내 볼 만해요.",
+          body: "방콕의 많은 골프장은 인력과 시스템이 잘 갖춰져 있어, 전화·이메일이나 자체 웹사이트 예약 양식을 통한 직접 예약을 처리할 수 있어요. 방콕의 그린피는 가장 저렴한 코스의 평일 요금 1,000바트 미만부터 프리미엄 클럽의 5,000바트 이상(보통 캐디와 카트 포함)까지 다양해요. 직접 예약은 플랫폼 수수료가 붙지 않기 때문에, 때로는 어떤 플랫폼 가격보다도 낮게 나오기도 해요.\n\n마음에 둔 코스가 있다면, 플랫폼이 최저가를 준다고 넘겨짚기 전에 직접 전화하거나 이메일을 보내 볼 만해요.",
         },
         {
           heading: "가격 비교 팁",
@@ -11449,7 +11449,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "zh",
     related_slugs: [],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "如果你在美国、英国或澳大利亚订过开球时间，那GolfNow大概早就在你的浏览记录里了。它是全球最大的高尔夫预订平台之一，界面精致，以临时特价著称。但当你落地曼谷、想订一场球时，GolfNow会是合适的工具吗？实话说：这要看情况——而在泰国，答案更多时候是“不太行”，而不是“可以”。",
@@ -11468,7 +11468,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "直接预订 — 往往是最好的选择",
-          body: "曼谷很多高尔夫球场人手充足，也有条件通过电话、电子邮件或自家网站的预订表单直接受理预订。曼谷的果岭费通常从较为亲民的球场约1,500泰铢起，到高端球会的5,000泰铢甚至更高——而直接预订有时比任何平台的报价都低，因为你不用替平台付那一份差价。\n\n如果你心里已经有了某家特定球场，不妨先打电话或发邮件直接问一问，别想当然地以为平台给的就是最优价。",
+          body: "曼谷很多高尔夫球场人手充足，也有条件通过电话、电子邮件或自家网站的预订表单直接受理预订。曼谷的果岭费，从最便宜的球场平日不到1,000泰铢，到高端球会的5,000泰铢或以上不等，后者通常已含球童和球车。直接预订有时比任何平台的报价都低，因为你不用替平台付那一份差价。\n\n如果你心里已经有了某家特定球场，不妨先打电话或发邮件直接问一问，别想当然地以为平台给的就是最优价。",
         },
         {
           heading: "比价小贴士",
@@ -11499,7 +11499,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "th",
     related_slugs: [],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         'ถ้าคุณเคยจองทีไทม์ในสหรัฐอเมริกา สหราชอาณาจักร หรือออสเตรเลีย GolfNow ก็คงอยู่ในประวัติการเข้าเว็บของคุณอยู่แล้ว เพราะเป็นหนึ่งในแพลตฟอร์มจองกอล์ฟที่ใหญ่ที่สุดในโลก มาพร้อมหน้าตาการใช้งานที่ลื่นไหลและชื่อเสียงด้านดีลนาทีสุดท้าย แต่พอมาถึงกรุงเทพฯ แล้วอยากจองสักรอบ GolfNow เป็นเครื่องมือที่ใช่สำหรับงานนี้หรือเปล่า? คำตอบตามตรงคือ ขึ้นอยู่กับหลายปัจจัย — และสำหรับประเทศไทย คำตอบมักจะเป็น "ยังไม่ค่อยใช่" มากกว่า "ใช่"',
@@ -11518,7 +11518,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "การจองตรงกับสนาม — มักเป็นตัวเลือกที่ดีที่สุด",
-          body: "สนามกอล์ฟหลายแห่งในกรุงเทพฯ มีพนักงานและระบบพร้อมรองรับการจองโดยตรงทางโทรศัพท์ อีเมล หรือแบบฟอร์มจองบนเว็บไซต์ของสนามเอง ค่ากรีนฟีในกรุงเทพฯ โดยทั่วไปอยู่ที่ประมาณ 1,500 บาท สำหรับสนามที่เข้าถึงง่าย ไปจนถึง 5,000 บาทขึ้นไป สำหรับสนามระดับพรีเมียม (ข้อมูล ณ กรกฎาคม 2026) — และการจองตรงบางครั้งก็ได้ราคาต่ำกว่าราคาบนแพลตฟอร์มใด ๆ เพราะคุณไม่ต้องจ่ายส่วนต่างที่แพลตฟอร์มบวกเพิ่ม\n\nหากคุณมีสนามในใจอยู่แล้ว ก็คุ้มค่าที่จะโทรหรืออีเมลไปสอบถามโดยตรง ก่อนจะสรุปว่าแพลตฟอร์มให้ราคาที่ดีที่สุด",
+          body: "สนามกอล์ฟหลายแห่งในกรุงเทพฯ มีพนักงานและระบบพร้อมรองรับการจองโดยตรงทางโทรศัพท์ อีเมล หรือแบบฟอร์มจองบนเว็บไซต์ของสนามเอง ค่ากรีนฟีของสนามใกล้กรุงเทพฯ มีตั้งแต่ต่ำกว่า 1,000 บาทในวันธรรมดาที่สนามราคาถูกที่สุด ไปจนถึง 5,000 บาทขึ้นไปที่สนามระดับพรีเมียม ซึ่งโดยทั่วไปรวมค่าแคดดี้และรถกอล์ฟแล้ว (ข้อมูล ณ กันยายน 2026) ส่วนการจองตรงบางครั้งก็ได้ราคาต่ำกว่าราคาบนแพลตฟอร์มใด ๆ เพราะคุณไม่ต้องจ่ายส่วนต่างที่แพลตฟอร์มบวกเพิ่ม\n\nหากคุณมีสนามในใจอยู่แล้ว ก็คุ้มค่าที่จะโทรหรืออีเมลไปสอบถามโดยตรง ก่อนจะสรุปว่าแพลตฟอร์มให้ราคาที่ดีที่สุด",
         },
         {
           heading: "เคล็ดลับเปรียบเทียบราคา",
@@ -11944,7 +11944,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     slug: "is-thailand-good-for-golf",
     title: "タイはゴルフに向いている？ — 本音で語るガイド",
     meta_description:
-      "タイには250〜300のゴルフコースがあり、一年中晴天に恵まれ、グリーンフィーは1,500THBから。評判どおりの実力なのか、費用・コースの質・キャディー文化まで本音で解説します。",
+      "タイには250〜300のゴルフコースがあり、一年中晴天に恵まれ、グリーンフィーは1,000THB未満から。評判どおりの実力なのか、費用・コースの質・キャディー文化まで本音で解説します。",
     featured_image: null,
     schema_markup: null,
     status: "published",
@@ -11952,14 +11952,14 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "ja",
     related_slugs: ["/guide/best-golf-courses-phuket"],
     created_at: now,
-    updated_at: "2026-09-25T00:00:00.000Z",
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "タイは、世界でも屈指のゴルフ目的地のひとつです。整備の行き届いたコース、低コスト、温暖な気候、そして深く根づいたキャディー文化——この組み合わせは、ほかのどこでもなかなか真似できるものではありません。ただ、ひとくちに「ゴルフに向いている」といっても幅が広いので、このガイドで全体像をお伝えします。",
       sections: [
         {
           heading: "数字で見る — コース数・費用・シーズン",
-          body: "タイには全国で250〜300のゴルフコースがあり、そのうち約100〜150が旅行者向けとされています——観光客を受け入れ、英語で運営され、一定の水準を保っているコースです。バンコクだけでも、市中心部から1時間以内に50を超えるコースがあります。チェンマイ、プーケット、ホアヒン、パタヤにも、それぞれ独自のゴルフエリアが広がっています。\n\n**料金の目安:**\n\n| 項目 | 一般的な価格帯 |\n|------|-------------|\n| グリーンフィー（平日） | 1,500〜3,500THB |\n| グリーンフィー（週末・ピーク時） | 2,500〜5,000THB以上 |\n| キャディーフィー | 400〜600THB |\n| キャディーへのチップ（慣習） | 400〜500THB |\n| カート代 | 300〜600THB |\n\n中価格帯——たとえばグリーンフィー2,500THBにキャディーを加えた場合——1ラウンドの総額はおよそ3,400〜3,600THB（約75〜80ポンド／95〜100米ドル）になります。同じ体験をイギリスやオーストラリアの同等クオリティのコースで得ようとすれば、その2〜3倍はかかります。\n\n**シーズン:** ゴルフは一年中楽しめます。ベストシーズンは11月〜2月——気温は25〜30℃、湿度は低めで、雨もほとんど降りません。3月〜5月はより暑く（30〜35℃）、モンスーン（雨季）にあたる6月〜10月は午後に雨が降りますが、午前中はたいていプレー可能です。",
+          body: "タイには全国で250〜300のゴルフコースがあり、そのうち約100〜150が旅行者向けとされています——観光客を受け入れ、英語で運営され、一定の水準を保っているコースです。バンコクだけでも、市中心部から1時間以内に50を超えるコースがあります。チェンマイ、プーケット、ホアヒン、パタヤにも、それぞれ独自のゴルフエリアが広がっています。\n\n**料金の目安:**\n\n| 項目 | 一般的な価格帯 |\n|------|-------------|\n| グリーンフィー（平日） | 1,000〜3,000THB |\n| グリーンフィー（週末・ピーク時） | 1,500〜5,000THB以上 |\n| キャディーフィー | 400〜600THB |\n| キャディーへのチップ（慣習） | 400〜500THB |\n| カート代 | 300〜600THB |\n\n中価格帯——たとえばグリーンフィー2,500THBにキャディーを加えた場合——1ラウンドの総額はおよそ3,400〜3,600THB（約75〜80ポンド／95〜100米ドル）になります。同じ体験をイギリスやオーストラリアの同等クオリティのコースで得ようとすれば、その2〜3倍はかかります。\n\n**シーズン:** ゴルフは一年中楽しめます。ベストシーズンは11月〜2月——気温は25〜30℃、湿度は低めで、雨もほとんど降りません。3月〜5月はより暑く（30〜35℃）、モンスーン（雨季）にあたる6月〜10月は午後に雨が降りますが、午前中はたいていプレー可能です。",
         },
         {
           heading: "コースの質 — タイのコースの水準は？",
@@ -11984,7 +11984,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       ],
       key_takeaways: [
         "タイには250〜300のゴルフコースがあり、そのうち50以上がバンコクから1時間以内にある",
-        "グリーンフィーは平日で1,500〜3,500THB——同等のイギリスやアメリカのコースより50〜70%安い",
+        "グリーンフィーは平日でおおむね1,000〜3,000THBと、同等のイギリスやアメリカのコースより50〜70%安い",
         "ほぼすべてのコースでキャディーが必須——1ラウンドあたり400〜500THBのチップを現金で用意しておく",
         "ベストシーズンは11月〜2月。午前中のティータイムなら、ゴルフは一年中プレー可能",
         "コースの質は、ワールドクラス（Black Mountain、Nikanti、Alpine）から基本的なリゾートコースまでさまざま",
@@ -11999,7 +11999,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     slug: "is-thailand-good-for-golf",
     title: "태국 골프, 정말 좋을까? — 솔직한 가이드",
     meta_description:
-      "태국에는 골프장이 250~300개 있고 연중 화창하며, 그린피는 1,500바트부터 시작해요. 소문만큼 정말 좋은 골프 여행지인지 솔직하게 살펴봤습니다.",
+      "태국에는 골프장이 250~300개 있고 연중 화창하며, 그린피는 1,000바트 미만부터 시작해요. 소문만큼 정말 좋은 골프 여행지인지 솔직하게 살펴봤습니다.",
     featured_image: null,
     schema_markup: null,
     status: "published",
@@ -12007,14 +12007,14 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "ko",
     related_slugs: ["/guide/best-golf-courses-phuket"],
     created_at: now,
-    updated_at: "2026-09-25T00:00:00.000Z",
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         '태국은 세계에서 손꼽히는 골프 여행지예요. 잘 관리된 코스, 저렴한 비용, 따뜻한 날씨, 그리고 깊이 자리 잡은 캐디 문화가 어우러져, 다른 어디에서도 좀처럼 견주기 힘든 곳이죠. 다만 "골프 치기 좋다"는 말은 그 안에 담긴 이야기가 넓으니, 이 가이드에서 전체적인 그림을 짚어 드릴게요.',
       sections: [
         {
           heading: "숫자로 보는 태국 골프: 코스·비용·시즌",
-          body: "태국 전역에는 골프장이 250~300개 있고, 그중 100~150개 정도가 여행자에게 적합하다고 평가돼요 — 방문객에게 열려 있고, 영어로 운영되며, 어느 정도 수준을 유지하는 곳들이죠. 방콕만 해도 도심에서 1시간 이내 거리에 50개가 넘는 코스가 있어요. 치앙마이, 푸껫, 후아힌, 파타야에도 각각 골프장이 모여 있는 지역이 있습니다.\n\n**비용 한눈에 보기:**\n\n| 항목 | 일반적인 범위 |\n|------|-------------|\n| 그린피(평일) | 1,500~3,500바트 |\n| 그린피(주말/성수기) | 2,500~5,000바트 이상 |\n| 캐디피 | 400~600바트 |\n| 캐디 팁(관례) | 400~500바트 |\n| 카트 대여 | 300~600바트 |\n\n중간 가격대라면 — 예를 들어 그린피 2,500바트에 캐디를 더하면 — 1라운드에 모두 포함해 대략 3,400~3,600바트(약 75~80파운드 / 95~100달러)가 들어요. 같은 경험을 영국이나 호주의 비슷한 수준 코스에서 하려면 2~3배는 더 들 거예요.\n\n**시즌:** 골프는 일 년 내내 칠 수 있어요. 가장 좋은 시기는 11월부터 2월까지로 — 기온은 25~30°C, 습도는 낮고, 비도 거의 오지 않아요. 3월부터 5월까지는 더 덥고(30~35°C), 우기(6월~10월)에는 오후에 비가 내리지만, 오전에는 대체로 플레이할 수 있어요.",
+          body: "태국 전역에는 골프장이 250~300개 있고, 그중 100~150개 정도가 여행자에게 적합하다고 평가돼요 — 방문객에게 열려 있고, 영어로 운영되며, 어느 정도 수준을 유지하는 곳들이죠. 방콕만 해도 도심에서 1시간 이내 거리에 50개가 넘는 코스가 있어요. 치앙마이, 푸껫, 후아힌, 파타야에도 각각 골프장이 모여 있는 지역이 있습니다.\n\n**비용 한눈에 보기:**\n\n| 항목 | 일반적인 범위 |\n|------|-------------|\n| 그린피(평일) | 1,000~3,000바트 |\n| 그린피(주말/성수기) | 1,500~5,000바트 이상 |\n| 캐디피 | 400~600바트 |\n| 캐디 팁(관례) | 400~500바트 |\n| 카트 대여 | 300~600바트 |\n\n중간 가격대라면 — 예를 들어 그린피 2,500바트에 캐디를 더하면 — 1라운드에 모두 포함해 대략 3,400~3,600바트(약 75~80파운드 / 95~100달러)가 들어요. 같은 경험을 영국이나 호주의 비슷한 수준 코스에서 하려면 2~3배는 더 들 거예요.\n\n**시즌:** 골프는 일 년 내내 칠 수 있어요. 가장 좋은 시기는 11월부터 2월까지로 — 기온은 25~30°C, 습도는 낮고, 비도 거의 오지 않아요. 3월부터 5월까지는 더 덥고(30~35°C), 우기(6월~10월)에는 오후에 비가 내리지만, 오전에는 대체로 플레이할 수 있어요.",
         },
         {
           heading: "코스 퀄리티: 태국 코스의 수준은?",
@@ -12039,7 +12039,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       ],
       key_takeaways: [
         "태국에는 골프장이 250~300개 있고, 방콕만 해도 1시간 이내에 50개 이상이 있어요",
-        "그린피는 평일 기준 1,500~3,500바트로, 비슷한 영국이나 미국 코스보다 50~70% 저렴해요",
+        "그린피는 평일 기준 대체로 1,000~3,000바트로, 비슷한 영국이나 미국 코스보다 50~70% 저렴해요",
         "거의 모든 코스에서 캐디는 필수예요 — 라운드당 400~500바트의 팁을 현금으로 준비하세요",
         "11월~2월이 가장 좋은 시즌이지만, 오전 티타임을 이용하면 일 년 내내 플레이할 수 있어요",
         "코스 퀄리티는 세계적 수준(Black Mountain, Nikanti, Alpine)부터 기본적인 리조트 코스까지 다양해요",
@@ -12054,7 +12054,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     slug: "is-thailand-good-for-golf",
     title: "泰国适合打高尔夫吗？——诚实解读费用、球场与球童文化",
     meta_description:
-      "泰国适合打高尔夫吗？全国有250–300座高尔夫球场、全年充沛的阳光，果岭费1,500泰铢起。这份诚实指南带你看清，它是否真的名副其实。",
+      "泰国适合打高尔夫吗？全国有250–300座高尔夫球场、全年充沛的阳光，果岭费最低不到1,000泰铢。这份诚实指南带你看清，它是否真的名副其实。",
     featured_image: null,
     schema_markup: null,
     status: "published",
@@ -12062,14 +12062,14 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "zh",
     related_slugs: ["/guide/best-golf-courses-phuket"],
     created_at: now,
-    updated_at: "2026-09-25T00:00:00.000Z",
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "泰国是全球最出色的高尔夫目的地之一。维护精良的球场、低廉的费用、温暖的气候，再加上根深蒂固的球童文化，这样的组合放眼各地都很难匹敌。不过，“适合打高尔夫”这句话涵盖的层面很广，所以这份指南会为你完整地梳理一遍。",
       sections: [
         {
           heading: "先看数字：球场、费用与季节",
-          body: "泰国全国有250到300座高尔夫球场，其中约100–150座被认为适合游客——向游客开放、以英语运营，并维持着合理的水准。光是曼谷，市中心一小时车程内就有超过50座球场。清迈、普吉、华欣和芭提雅也各自拥有自己的球场群。\n\n**费用一览：**\n\n| 项目 | 常见区间 |\n|------|-------------|\n| 果岭费（平日） | 1,500–3,500泰铢 |\n| 果岭费（周末／旺季） | 2,500–5,000+泰铢 |\n| 球童费 | 400–600泰铢 |\n| 球童小费（惯例） | 400–500泰铢 |\n| 球车租金 | 300–600泰铢 |\n\n以中档水平来算——比如2,500泰铢的果岭费再加球童——一场球下来的全包花费大约在3,400–3,600泰铢（约合75–80英镑／95–100美元）。同样的体验，若换到英国或澳大利亚水准相当的球场，价格会是这里的两到三倍。\n\n**季节：**全年都可以打球。最佳时段是11月至2月——气温介于25–30°C之间，湿度较低，降雨极少。3月至5月更热（30–35°C），而季风季（6月至10月）午后常有降雨，但上午通常仍可下场。",
+          body: "泰国全国有250到300座高尔夫球场，其中约100–150座被认为适合游客——向游客开放、以英语运营，并维持着合理的水准。光是曼谷，市中心一小时车程内就有超过50座球场。清迈、普吉、华欣和芭提雅也各自拥有自己的球场群。\n\n**费用一览：**\n\n| 项目 | 常见区间 |\n|------|-------------|\n| 果岭费（平日） | 1,000–3,000泰铢 |\n| 果岭费（周末／旺季） | 1,500–5,000+泰铢 |\n| 球童费 | 400–600泰铢 |\n| 球童小费（惯例） | 400–500泰铢 |\n| 球车租金 | 300–600泰铢 |\n\n以中档水平来算——比如2,500泰铢的果岭费再加球童——一场球下来的全包花费大约在3,400–3,600泰铢（约合75–80英镑／95–100美元）。同样的体验，若换到英国或澳大利亚水准相当的球场，价格会是这里的两到三倍。\n\n**季节：**全年都可以打球。最佳时段是11月至2月——气温介于25–30°C之间，湿度较低，降雨极少。3月至5月更热（30–35°C），而季风季（6月至10月）午后常有降雨，但上午通常仍可下场。",
         },
         {
           heading: "球场质量：泰国球场是什么水准？",
@@ -12094,7 +12094,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       ],
       key_takeaways: [
         "泰国有250–300座高尔夫球场；光是曼谷一小时车程内就有50多座",
-        "平日果岭费在1,500–3,500泰铢之间——比英国或美国同类球场低50–70%",
+        "平日果岭费一般在1,000–3,000泰铢之间，比英国或美国同类球场低50–70%",
         "几乎所有球场都强制配备球童——记得每场预留400–500泰铢现金作为小费",
         "11月至2月是最佳季节；选择上午的开球时间，全年皆可下场",
         "球场质量从世界级（Black Mountain、Nikanti、Alpine）到基础的度假村球场不等",
@@ -12109,7 +12109,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     slug: "is-thailand-good-for-golf",
     title: "เมืองไทยเหมาะกับการเล่นกอล์ฟไหม? — คู่มือฉบับตรงไปตรงมา",
     meta_description:
-      "ประเทศไทยมีสนามกอล์ฟ 250-300 แห่ง แดดดีตลอดทั้งปี และค่ากรีนฟีเริ่มต้นที่ 1,500 บาท มาดูกันแบบตรงไปตรงมาว่าดีสมคำร่ำลืออย่างที่เขาว่าไหม",
+      "ประเทศไทยมีสนามกอล์ฟ 250-300 แห่ง แดดดีตลอดทั้งปี และค่ากรีนฟีเริ่มต้นต่ำกว่า 1,000 บาท มาดูกันแบบตรงไปตรงมาว่าดีสมคำร่ำลืออย่างที่เขาว่าไหม",
     featured_image: null,
     schema_markup: null,
     status: "published",
@@ -12117,14 +12117,14 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "th",
     related_slugs: ["/guide/best-golf-courses-phuket"],
     created_at: now,
-    updated_at: "2026-09-25T00:00:00.000Z",
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         'ประเทศไทยคือหนึ่งในจุดหมายปลายทางด้านกอล์ฟที่ดีที่สุดในโลก การผสมผสานกันของสนามที่ดูแลอย่างดี ค่าใช้จ่ายที่ไม่แพง อากาศอบอุ่น และวัฒนธรรมแคดดี้ที่หยั่งรากลึก ทำให้แทบไม่มีที่ไหนเทียบได้จริงๆ แต่คำว่า "เหมาะกับกอล์ฟ" นั้นครอบคลุมหลายแง่มุม คู่มือนี้จึงขอพาคุณไปดูภาพรวมแบบครบทุกด้าน',
       sections: [
         {
           heading: "ตัวเลขน่ารู้: จำนวนสนาม ค่าใช้จ่าย และฤดูกาล",
-          body: "ประเทศไทยมีสนามกอล์ฟทั่วประเทศ 250-300 แห่ง โดยราว 100-150 แห่งถือว่าเหมาะสำหรับนักท่องเที่ยว — เปิดรับผู้มาเยือน ให้บริการเป็นภาษาอังกฤษ และรักษามาตรฐานได้ในเกณฑ์ที่ดีพอสมควร เฉพาะกรุงเทพฯ ก็มีสนามมากกว่า 50 แห่งภายในระยะหนึ่งชั่วโมงจากใจกลางเมือง ส่วนเชียงใหม่ ภูเก็ต หัวหิน และพัทยา ต่างก็มีกลุ่มสนามของตัวเอง\n\n**ค่าใช้จ่ายโดยสังเขป (ข้อมูล ณ กรกฎาคม 2026):**\n\n| รายการ | ช่วงราคาโดยทั่วไป |\n|------|-------------|\n| ค่ากรีนฟี (วันธรรมดา) | 1,500-3,500 บาท |\n| ค่ากรีนฟี (สุดสัปดาห์ / ช่วงพีค) | 2,500-5,000+ บาท |\n| ค่าแคดดี้ | 400-600 บาท |\n| ทิปแคดดี้ (ตามธรรมเนียม) | 400-500 บาท |\n| ค่าเช่ารถกอล์ฟ | 300-600 บาท |\n\nในระดับกลาง — เช่น ค่ากรีนฟี 2,500 บาท บวกค่าแคดดี้ — การออกรอบหนึ่งครั้งจะตกอยู่ที่ราว 3,400-3,600 บาทแบบรวมทุกอย่าง (ประมาณ £75-80 / US$95-100) ประสบการณ์แบบเดียวกันในสนามคุณภาพใกล้เคียงกันที่สหราชอาณาจักรหรือออสเตรเลียจะมีราคาสูงกว่านี้สองถึงสามเท่า\n\n**ฤดูกาล:** เล่นกอล์ฟได้ตลอดทั้งปี ช่วงที่ดีที่สุดคือเดือนพฤศจิกายนถึงกุมภาพันธ์ — อุณหภูมิอยู่ระหว่าง 25-30°C ความชื้นต่ำ และฝนตกน้อย ช่วงเดือนมีนาคมถึงพฤษภาคมจะร้อนกว่า (30-35°C) และฤดูมรสุม (มิถุนายน-ตุลาคม) จะมีฝนตกในช่วงบ่าย แต่โดยทั่วไปแล้วช่วงเช้ายังพอเล่นได้",
+          body: "ประเทศไทยมีสนามกอล์ฟทั่วประเทศ 250-300 แห่ง โดยราว 100-150 แห่งถือว่าเหมาะสำหรับนักท่องเที่ยว — เปิดรับผู้มาเยือน ให้บริการเป็นภาษาอังกฤษ และรักษามาตรฐานได้ในเกณฑ์ที่ดีพอสมควร เฉพาะกรุงเทพฯ ก็มีสนามมากกว่า 50 แห่งภายในระยะหนึ่งชั่วโมงจากใจกลางเมือง ส่วนเชียงใหม่ ภูเก็ต หัวหิน และพัทยา ต่างก็มีกลุ่มสนามของตัวเอง\n\n**ค่าใช้จ่ายโดยสังเขป (ข้อมูล ณ กรกฎาคม 2026):**\n\n| รายการ | ช่วงราคาโดยทั่วไป |\n|------|-------------|\n| ค่ากรีนฟี (วันธรรมดา) | 1,000-3,000 บาท |\n| ค่ากรีนฟี (สุดสัปดาห์ / ช่วงพีค) | 1,500-5,000+ บาท |\n| ค่าแคดดี้ | 400-600 บาท |\n| ทิปแคดดี้ (ตามธรรมเนียม) | 400-500 บาท |\n| ค่าเช่ารถกอล์ฟ | 300-600 บาท |\n\nในระดับกลาง — เช่น ค่ากรีนฟี 2,500 บาท บวกค่าแคดดี้ — การออกรอบหนึ่งครั้งจะตกอยู่ที่ราว 3,400-3,600 บาทแบบรวมทุกอย่าง (ประมาณ £75-80 / US$95-100) ประสบการณ์แบบเดียวกันในสนามคุณภาพใกล้เคียงกันที่สหราชอาณาจักรหรือออสเตรเลียจะมีราคาสูงกว่านี้สองถึงสามเท่า\n\n**ฤดูกาล:** เล่นกอล์ฟได้ตลอดทั้งปี ช่วงที่ดีที่สุดคือเดือนพฤศจิกายนถึงกุมภาพันธ์ — อุณหภูมิอยู่ระหว่าง 25-30°C ความชื้นต่ำ และฝนตกน้อย ช่วงเดือนมีนาคมถึงพฤษภาคมจะร้อนกว่า (30-35°C) และฤดูมรสุม (มิถุนายน-ตุลาคม) จะมีฝนตกในช่วงบ่าย แต่โดยทั่วไปแล้วช่วงเช้ายังพอเล่นได้",
         },
         {
           heading: "คุณภาพสนาม: สนามกอล์ฟในไทยมีมาตรฐานแค่ไหน?",
@@ -12149,7 +12149,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       ],
       key_takeaways: [
         "ประเทศไทยมีสนามกอล์ฟ 250-300 แห่ง เฉพาะในกรุงเทพฯ ก็มีมากกว่า 50 แห่งภายในระยะหนึ่งชั่วโมง",
-        "ค่ากรีนฟีวันธรรมดาอยู่ที่ 1,500-3,500 บาท — ถูกกว่าสนามคุณภาพใกล้เคียงกันในสหราชอาณาจักรหรือสหรัฐฯ ถึง 50-70%",
+        "ค่ากรีนฟีวันธรรมดาโดยทั่วไปอยู่ที่ 1,000-3,000 บาท ซึ่งถูกกว่าสนามคุณภาพใกล้เคียงกันในสหราชอาณาจักรหรือสหรัฐฯ ถึง 50-70%",
         "สนามเกือบทุกแห่งกำหนดให้ต้องมีแคดดี้ — ควรเตรียมเงินสดสำหรับทิป 400-500 บาทต่อรอบ",
         "เดือนพฤศจิกายน-กุมภาพันธ์เป็นช่วงที่ดีที่สุด แต่เล่นได้ตลอดทั้งปีด้วยการออกรอบทีไทม์ช่วงเช้า",
         "คุณภาพสนามมีตั้งแต่ระดับเวิลด์คลาส (Black Mountain, Nikanti, Alpine) ไปจนถึงสนามรีสอร์ตทั่วไป",
@@ -12838,18 +12838,18 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "ja",
     related_slugs: [],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "東南アジアには、日本と韓国を別にすれば最も人気の高いゴルフ旅行先が3つそろっています。タイ、バリ、ベトナム。いずれも自分のクラブを携えて航空券を予約したくなる確かな理由があり、その一方で見過ごせない弱点も抱えています。本ガイドでは、この3つを正直に比較し、ご自身が優先する条件に合った旅行先を選べるよう整理しました。",
       sections: [
         {
           heading: "ひと目でわかる比較表",
-          body: "| 項目 | タイ | バリ | ベトナム |\n|---|---|---|---|\n| コース総数 | 250〜300 | 稼働中は約5 | 80〜100 |\n| グリーンフィー（目安） | 40〜135米ドル | 80〜150米ドル | 60〜180米ドル |\n| ベストシーズン | 11〜2月 | 4〜9月 | 地域による |\n| コースの最高水準 | ワールドクラス | チャンピオンシップ級 | ワールドクラス（ダナン） |\n| キャディー制度 | 必須 | 任意／混在 | 任意／混在 |\n| 国際線 | バンコクがハブ、非常に充実 | アジアの多くの都市から直行便 | 改善中、ダナンが拡大 |\n| 市街地でのゴルフ | 充実（バンコク） | 限定的 | まずまず（ホーチミン） |\n| ゴルフ以外の魅力 | 非常に充実 | 非常に充実 | 良好 |",
+          body: "| 項目 | タイ | バリ | ベトナム |\n|---|---|---|---|\n| コース総数 | 250〜300 | 稼働中は約5 | 80〜100 |\n| グリーンフィー（目安） | 27〜135米ドル | 80〜150米ドル | 60〜180米ドル |\n| ベストシーズン | 11〜2月 | 4〜9月 | 地域による |\n| コースの最高水準 | ワールドクラス | チャンピオンシップ級 | ワールドクラス（ダナン） |\n| キャディー制度 | 必須 | 任意／混在 | 任意／混在 |\n| 国際線 | バンコクがハブ、非常に充実 | アジアの多くの都市から直行便 | 改善中、ダナンが拡大 |\n| 市街地でのゴルフ | 充実（バンコク） | 限定的 | まずまず（ホーチミン） |\n| ゴルフ以外の魅力 | 非常に充実 | 非常に充実 | 良好 |",
         },
         {
           heading: "タイ",
-          body: "**強み：**\n\nタイのゴルフインフラは、この地域のどの旅行先よりも充実しています。全国におよそ250〜300のコースがあり、バンコクから1時間以内だけでも50以上を数えます。グリーンフィーは約1,500THB（約40米ドル）から、有名コースでは5,000THB超（約135米ドル）まで幅があります。\n\nトップクラスのコースの質は、まぎれもなくワールドクラスです。Black Mountain Hua Hin、Nikanti Golf Club、Alpine Golf Resort、Thai Country Clubは、アジア屈指のコースとして繰り返し名前が挙がります。バンコクにはインドアシミュレーターの充実したシーンもあり、中心部のLENGOLFでは、街を出ることなく練習やフルラウンドのプレーができます。\n\nキャディー制度も特徴のひとつです。タイのほとんどのコースではキャディーが必須で、地元ならではの知識とサービスが加わる点を、経験豊富なゴルファーは評価する傾向があります。ベストシーズンは11月から2月。気温が下がり、湿度も低く、安定して乾いた天気が続きます。\n\n**弱み：**\n\nキャディーが必須ということは、一人で歩いてプレーしたい人には自由度が下がることを意味します。バンコク周辺のコースは、週末には混み合うこともあります。バンコク周辺は渋滞するため、早いティータイムの確保が欠かせません。地図では近く見えるコースでも、ピーク時には到着まで90分かかることがあります。",
+          body: "**強み：**\n\nタイのゴルフインフラは、この地域のどの旅行先よりも充実しています。全国におよそ250〜300のコースがあり、バンコクから1時間以内だけでも50以上を数えます。グリーンフィーは、最も安いコースの平日料金なら1,000THB未満（約27米ドル）から、有名コースでは5,000THB超（約135米ドル）まで幅があります。\n\nトップクラスのコースの質は、まぎれもなくワールドクラスです。Black Mountain Hua Hin、Nikanti Golf Club、Alpine Golf Resort、Thai Country Clubは、アジア屈指のコースとして繰り返し名前が挙がります。バンコクにはインドアシミュレーターの充実したシーンもあり、中心部のLENGOLFでは、街を出ることなく練習やフルラウンドのプレーができます。\n\nキャディー制度も特徴のひとつです。タイのほとんどのコースではキャディーが必須で、地元ならではの知識とサービスが加わる点を、経験豊富なゴルファーは評価する傾向があります。ベストシーズンは11月から2月。気温が下がり、湿度も低く、安定して乾いた天気が続きます。\n\n**弱み：**\n\nキャディーが必須ということは、一人で歩いてプレーしたい人には自由度が下がることを意味します。バンコク周辺のコースは、週末には混み合うこともあります。バンコク周辺は渋滞するため、早いティータイムの確保が欠かせません。地図では近く見えるコースでも、ピーク時には到着まで90分かかることがあります。",
         },
         {
           heading: "バリ",
@@ -12888,18 +12888,18 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "ko",
     related_slugs: [],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "동남아시아에는 일본과 한국을 제외하면 가장 인기 있는 골프 여행지 세 곳이 모여 있어요. 태국, 발리, 베트남은 저마다 클럽을 챙겨 비행기에 오를 만한 분명한 이유가 있고, 동시에 각기 진짜 단점도 안고 있습니다. 이 가이드는 세 곳을 솔직하게 비교해, 우선순위에 맞는 여행지를 고르실 수 있도록 정리했어요.",
       sections: [
         {
           heading: "한눈에 보기: 비교표",
-          body: "| 항목 | 태국 | 발리 | 베트남 |\n|---|---|---|---|\n| 전체 코스 수 | 250~300개 | 약 5개 운영 | 80~100개 |\n| 그린피(대략) | 40~135달러 | 80~150달러 | 60~180달러 |\n| 베스트 시즌 | 11월~2월 | 4월~9월 | 지역별로 다름 |\n| 코스 품질 정점 | 월드클래스 | 챔피언십급 | 월드클래스(다낭) |\n| 캐디 시스템 | 필수 | 선택/혼합 | 선택/혼합 |\n| 국제선 항공편 | 방콕 허브, 우수 | 대부분의 아시아 도시에서 직항 | 개선 중, 다낭 성장세 |\n| 도심 골프 선택지 | 풍부(방콕) | 제한적 | 보통(호치민시) |\n| 골프 외 즐길거리 | 우수 | 우수 | 좋음 |",
+          body: "| 항목 | 태국 | 발리 | 베트남 |\n|---|---|---|---|\n| 전체 코스 수 | 250~300개 | 약 5개 운영 | 80~100개 |\n| 그린피(대략) | 27~135달러 | 80~150달러 | 60~180달러 |\n| 베스트 시즌 | 11월~2월 | 4월~9월 | 지역별로 다름 |\n| 코스 품질 정점 | 월드클래스 | 챔피언십급 | 월드클래스(다낭) |\n| 캐디 시스템 | 필수 | 선택/혼합 | 선택/혼합 |\n| 국제선 항공편 | 방콕 허브, 우수 | 대부분의 아시아 도시에서 직항 | 개선 중, 다낭 성장세 |\n| 도심 골프 선택지 | 풍부(방콕) | 제한적 | 보통(호치민시) |\n| 골프 외 즐길거리 | 우수 | 우수 | 좋음 |",
         },
         {
           heading: "태국",
-          body: "**강점:**\n\n태국은 이 지역의 어느 여행지보다 골프 인프라가 풍부해요. 전국에 대략 250~300개 코스가 있고, 그중 50개 이상이 방콕에서 1시간 이내에 있습니다. 그린피는 유명 코스 기준 약 1,500바트(약 40달러)부터 5,000바트 이상(약 135달러)까지예요.\n\n최상위권 코스의 품질은 그야말로 세계적 수준이에요. Black Mountain Hua Hin, Nikanti Golf Club, Alpine Golf Resort, Thai Country Club은 아시아 최고의 코스로 꾸준히 꼽힙니다. 방콕에는 실내 골프 시뮬레이터 문화도 잘 발달해 있어요 — 방콕 중심가의 LENGOLF에서는 도심을 벗어나지 않고도 연습을 하거나 풀 라운드를 즐길 수 있습니다.\n\n캐디 시스템은 태국만의 특징이에요. 대부분의 태국 코스에서 캐디가 필수라, 경험 많은 골퍼가 반기는 현지 지식과 서비스를 더해 줍니다. 11월부터 2월까지가 최적기예요 — 선선한 기온, 낮은 습도, 그리고 안정적인 건조한 날씨가 이어집니다.\n\n**약점:**\n\n캐디가 필수라는 건 혼자 걸으며 플레이하고 싶은 사람에게는 유연성이 떨어진다는 뜻이에요. 방콕 인근 코스는 주말에 붐빌 수 있어요. 방콕 주변 교통 탓에 이른 티타임이 필수예요 — 지도상으로는 가까워 보이는 코스도 혼잡 시간대에는 도착하는 데 90분이 걸릴 수 있습니다.",
+          body: "**강점:**\n\n태국은 이 지역의 어느 여행지보다 골프 인프라가 풍부해요. 전국에 대략 250~300개 코스가 있고, 그중 50개 이상이 방콕에서 1시간 이내에 있습니다. 그린피는 가장 저렴한 코스의 평일 요금 1,000바트 미만(약 27달러)부터 유명 코스의 5,000바트 이상(약 135달러)까지예요.\n\n최상위권 코스의 품질은 그야말로 세계적 수준이에요. Black Mountain Hua Hin, Nikanti Golf Club, Alpine Golf Resort, Thai Country Club은 아시아 최고의 코스로 꾸준히 꼽힙니다. 방콕에는 실내 골프 시뮬레이터 문화도 잘 발달해 있어요 — 방콕 중심가의 LENGOLF에서는 도심을 벗어나지 않고도 연습을 하거나 풀 라운드를 즐길 수 있습니다.\n\n캐디 시스템은 태국만의 특징이에요. 대부분의 태국 코스에서 캐디가 필수라, 경험 많은 골퍼가 반기는 현지 지식과 서비스를 더해 줍니다. 11월부터 2월까지가 최적기예요 — 선선한 기온, 낮은 습도, 그리고 안정적인 건조한 날씨가 이어집니다.\n\n**약점:**\n\n캐디가 필수라는 건 혼자 걸으며 플레이하고 싶은 사람에게는 유연성이 떨어진다는 뜻이에요. 방콕 인근 코스는 주말에 붐빌 수 있어요. 방콕 주변 교통 탓에 이른 티타임이 필수예요 — 지도상으로는 가까워 보이는 코스도 혼잡 시간대에는 도착하는 데 90분이 걸릴 수 있습니다.",
         },
         {
           heading: "발리",
@@ -12938,18 +12938,18 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "zh",
     related_slugs: [],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "在日本和韩国之外，东南亚坐拥三个最受欢迎的高尔夫目的地。泰国、巴厘岛和越南各有值得你带上球杆飞过去的理由——但也各有实实在在的短板。这份指南会诚实地对比这三地，帮你选出最符合自身需求的目的地。",
       sections: [
         {
           heading: "一览：对比表格",
-          body: "| 对比项 | 泰国 | 巴厘岛 | 越南 |\n|---|---|---|---|\n| 球场总数 | 250–300 | 约5座在运营 | 80–100 |\n| 果岭费（约） | 40–135美元 | 80–150美元 | 60–180美元 |\n| 最佳打球季节 | 11月–2月 | 4月–9月 | 因地区而异 |\n| 球场品质上限 | 世界级 | 锦标赛级 | 世界级（岘港） |\n| 球童制度 | 强制 | 可选／混合 | 可选／混合 |\n| 国际航班 | 曼谷枢纽；非常出色 | 亚洲多数城市可直飞 | 持续改善；岘港增长中 |\n| 城市高尔夫选择 | 丰富（曼谷） | 有限 | 中等（胡志明市） |\n| 非高尔夫景点 | 极佳 | 极佳 | 良好 |",
+          body: "| 对比项 | 泰国 | 巴厘岛 | 越南 |\n|---|---|---|---|\n| 球场总数 | 250–300 | 约5座在运营 | 80–100 |\n| 果岭费（约） | 27–135美元 | 80–150美元 | 60–180美元 |\n| 最佳打球季节 | 11月–2月 | 4月–9月 | 因地区而异 |\n| 球场品质上限 | 世界级 | 锦标赛级 | 世界级（岘港） |\n| 球童制度 | 强制 | 可选／混合 | 可选／混合 |\n| 国际航班 | 曼谷枢纽；非常出色 | 亚洲多数城市可直飞 | 持续改善；岘港增长中 |\n| 城市高尔夫选择 | 丰富（曼谷） | 有限 | 中等（胡志明市） |\n| 非高尔夫景点 | 极佳 | 极佳 | 良好 |",
         },
         {
           heading: "泰国",
-          body: "**优势：**\n\n泰国拥有全区域最完善的高尔夫基础设施——全国约有250–300座球场，其中50多座就在曼谷一小时车程之内。果岭费从约1,500泰铢（约40美元）起，到顶级球场的5,000泰铢以上（约135美元）不等。\n\n顶尖球场的品质是货真价实的世界级。Black Mountain Hua Hin、Nikanti Golf Club、Alpine Golf Resort 和 Thai Country Club 经常被列入亚洲最佳球场之列。曼谷还有相当活跃的室内模拟器场景——位于曼谷市中心的 LENGOLF，让到访者无需离开市区就能练球，或打完整的18洞。\n\n球童制度是一大特色：泰国大多数球场都强制配备球童，他们带来的本地经验与服务，往往正是资深球友所欣赏的。11月至次年2月是最佳时段——气温更凉爽、湿度更低，干燥天气也稳定可靠。\n\n**不足：**\n\n强制球童意味着，如果你更喜欢独自步行打球，灵活性会有所折扣。曼谷周边的球场在周末可能比较拥挤。曼谷的交通状况也意味着清晨开球必不可少——地图上看似很近的球场，在高峰时段可能要90分钟才能抵达。",
+          body: "**优势：**\n\n泰国拥有全区域最完善的高尔夫基础设施——全国约有250–300座球场，其中50多座就在曼谷一小时车程之内。果岭费从最便宜的球场平日不到1,000泰铢（约27美元），到顶级球场的5,000泰铢以上（约135美元）不等。\n\n顶尖球场的品质是货真价实的世界级。Black Mountain Hua Hin、Nikanti Golf Club、Alpine Golf Resort 和 Thai Country Club 经常被列入亚洲最佳球场之列。曼谷还有相当活跃的室内模拟器场景——位于曼谷市中心的 LENGOLF，让到访者无需离开市区就能练球，或打完整的18洞。\n\n球童制度是一大特色：泰国大多数球场都强制配备球童，他们带来的本地经验与服务，往往正是资深球友所欣赏的。11月至次年2月是最佳时段——气温更凉爽、湿度更低，干燥天气也稳定可靠。\n\n**不足：**\n\n强制球童意味着，如果你更喜欢独自步行打球，灵活性会有所折扣。曼谷周边的球场在周末可能比较拥挤。曼谷的交通状况也意味着清晨开球必不可少——地图上看似很近的球场，在高峰时段可能要90分钟才能抵达。",
         },
         {
           heading: "巴厘岛",
@@ -12988,18 +12988,18 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "th",
     related_slugs: [],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-26T00:00:00.000Z",
     content: {
       intro:
         "เอเชียตะวันออกเฉียงใต้เป็นที่ตั้งของสามจุดหมายปลายทางกอล์ฟที่ได้รับความนิยมมากที่สุดนอกเหนือจากญี่ปุ่นและเกาหลีใต้ ทั้งไทย บาหลี และเวียดนาม ต่างมีเหตุผลน่าสนใจให้คุณจองเที่ยวบินพร้อมนำไม้กอล์ฟไปด้วย — และแต่ละแห่งก็มีจุดด้อยที่มีอยู่จริงเช่นกัน คู่มือนี้เปรียบเทียบทั้งสามแห่งอย่างตรงไปตรงมา เพื่อให้คุณเลือกจุดหมายที่ตรงกับสิ่งที่คุณให้ความสำคัญได้",
       sections: [
         {
           heading: "ภาพรวม: ตารางเปรียบเทียบ",
-          body: "| ปัจจัย | ไทย | บาหลี | เวียดนาม |\n|---|---|---|---|\n| จำนวนสนามทั้งหมด | 250-300 | ราว 5 แห่งที่เปิดให้บริการ | 80-100 |\n| ค่ากรีนฟี (โดยประมาณ) | 40-135 ดอลลาร์สหรัฐ | 80-150 ดอลลาร์สหรัฐ | 60-180 ดอลลาร์สหรัฐ |\n| ฤดูกาลกอล์ฟที่ดีที่สุด | พ.ย.-ก.พ. | เม.ย.-ก.ย. | แตกต่างตามภูมิภาค |\n| ระดับคุณภาพสูงสุด | ระดับโลก | ระดับแชมเปียนชิพ | ระดับโลก (ดานัง) |\n| ระบบแคดดี้ | บังคับ | ไม่บังคับ / คละกัน | ไม่บังคับ / คละกัน |\n| เที่ยวบินระหว่างประเทศ | ฮับการบินกรุงเทพฯ; ดีเยี่ยม | บินตรงจากเมืองส่วนใหญ่ในเอเชีย | กำลังพัฒนา; ดานังกำลังเติบโต |\n| ตัวเลือกกอล์ฟในเมือง | โดดเด่น (กรุงเทพฯ) | จำกัด | ปานกลาง (โฮจิมินห์ซิตี้) |\n| แหล่งท่องเที่ยวนอกเหนือจากกอล์ฟ | ดีเยี่ยม | ดีเยี่ยม | ดี |",
+          body: "| ปัจจัย | ไทย | บาหลี | เวียดนาม |\n|---|---|---|---|\n| จำนวนสนามทั้งหมด | 250-300 | ราว 5 แห่งที่เปิดให้บริการ | 80-100 |\n| ค่ากรีนฟี (โดยประมาณ) | 27-135 ดอลลาร์สหรัฐ | 80-150 ดอลลาร์สหรัฐ | 60-180 ดอลลาร์สหรัฐ |\n| ฤดูกาลกอล์ฟที่ดีที่สุด | พ.ย.-ก.พ. | เม.ย.-ก.ย. | แตกต่างตามภูมิภาค |\n| ระดับคุณภาพสูงสุด | ระดับโลก | ระดับแชมเปียนชิพ | ระดับโลก (ดานัง) |\n| ระบบแคดดี้ | บังคับ | ไม่บังคับ / คละกัน | ไม่บังคับ / คละกัน |\n| เที่ยวบินระหว่างประเทศ | ฮับการบินกรุงเทพฯ; ดีเยี่ยม | บินตรงจากเมืองส่วนใหญ่ในเอเชีย | กำลังพัฒนา; ดานังกำลังเติบโต |\n| ตัวเลือกกอล์ฟในเมือง | โดดเด่น (กรุงเทพฯ) | จำกัด | ปานกลาง (โฮจิมินห์ซิตี้) |\n| แหล่งท่องเที่ยวนอกเหนือจากกอล์ฟ | ดีเยี่ยม | ดีเยี่ยม | ดี |",
         },
         {
           heading: "ไทย",
-          body: "**จุดแข็ง:**\n\nไทยมีโครงสร้างพื้นฐานด้านกอล์ฟมากกว่าจุดหมายอื่นใดในภูมิภาค — ราว 250-300 สนามทั่วประเทศ โดยมีมากกว่า 50 สนามอยู่ภายในระยะเดินทางหนึ่งชั่วโมงจากกรุงเทพฯ ค่ากรีนฟีอยู่ที่ตั้งแต่ราว 1,500 บาท (ราว 40 ดอลลาร์สหรัฐ) ไปจนถึง 5,000 บาทขึ้นไป (ราว 135 ดอลลาร์สหรัฐ) ที่สนามชั้นนำ\n\nคุณภาพสนามระดับท็อปนั้นเป็นระดับโลกอย่างแท้จริง Black Mountain Hua Hin, Nikanti Golf Club, Alpine Golf Resort และ Thai Country Club ได้รับการยกย่องให้เป็นหนึ่งในสนามที่ดีที่สุดของเอเชียอยู่เสมอ นอกจากนี้กรุงเทพฯ ยังมีวงการกอล์ฟซิมูเลเตอร์ในร่มที่คึกคัก — LENGOLF ใจกลางกรุงเทพฯ ให้ผู้มาเยือนได้ฝึกซ้อมหรือเล่นเต็มรอบโดยไม่ต้องออกไปนอกเมือง\n\nระบบแคดดี้ถือเป็นจุดเด่นเฉพาะตัว แคดดี้เป็นข้อบังคับในสนามส่วนใหญ่ของไทย ซึ่งช่วยเพิ่มทั้งความรู้ท้องถิ่นและการบริการที่นักกอล์ฟผู้มีประสบการณ์มักชื่นชอบ ช่วงเดือนพฤศจิกายนถึงกุมภาพันธ์คือช่วงเวลาที่เหมาะที่สุด — อากาศเย็นสบายกว่า ความชื้นต่ำกว่า และสภาพอากาศแห้งที่ไว้ใจได้\n\n**จุดอ่อน:**\n\nการที่แคดดี้เป็นข้อบังคับหมายความว่าคุณจะมีความยืดหยุ่นน้อยลงหากชอบเดินออกรอบตามลำพัง สนามในเขตกรุงเทพฯ อาจแออัดในช่วงสุดสัปดาห์ และการจราจรรอบกรุงเทพฯ ทำให้การจองทีไทม์ช่วงเช้าตรู่เป็นสิ่งจำเป็น — สนามที่ดูใกล้บนแผนที่อาจใช้เวลาเดินทางถึง 90 นาทีในช่วงเวลาเร่งด่วน",
+          body: "**จุดแข็ง:**\n\nไทยมีโครงสร้างพื้นฐานด้านกอล์ฟมากกว่าจุดหมายอื่นใดในภูมิภาค — ราว 250-300 สนามทั่วประเทศ โดยมีมากกว่า 50 สนามอยู่ภายในระยะเดินทางหนึ่งชั่วโมงจากกรุงเทพฯ ค่ากรีนฟีมีตั้งแต่ต่ำกว่า 1,000 บาท (ราว 27 ดอลลาร์สหรัฐ) ในวันธรรมดาที่สนามราคาถูกที่สุด ไปจนถึง 5,000 บาทขึ้นไป (ราว 135 ดอลลาร์สหรัฐ) ที่สนามชั้นนำ\n\nคุณภาพสนามระดับท็อปนั้นเป็นระดับโลกอย่างแท้จริง Black Mountain Hua Hin, Nikanti Golf Club, Alpine Golf Resort และ Thai Country Club ได้รับการยกย่องให้เป็นหนึ่งในสนามที่ดีที่สุดของเอเชียอยู่เสมอ นอกจากนี้กรุงเทพฯ ยังมีวงการกอล์ฟซิมูเลเตอร์ในร่มที่คึกคัก — LENGOLF ใจกลางกรุงเทพฯ ให้ผู้มาเยือนได้ฝึกซ้อมหรือเล่นเต็มรอบโดยไม่ต้องออกไปนอกเมือง\n\nระบบแคดดี้ถือเป็นจุดเด่นเฉพาะตัว แคดดี้เป็นข้อบังคับในสนามส่วนใหญ่ของไทย ซึ่งช่วยเพิ่มทั้งความรู้ท้องถิ่นและการบริการที่นักกอล์ฟผู้มีประสบการณ์มักชื่นชอบ ช่วงเดือนพฤศจิกายนถึงกุมภาพันธ์คือช่วงเวลาที่เหมาะที่สุด — อากาศเย็นสบายกว่า ความชื้นต่ำกว่า และสภาพอากาศแห้งที่ไว้ใจได้\n\n**จุดอ่อน:**\n\nการที่แคดดี้เป็นข้อบังคับหมายความว่าคุณจะมีความยืดหยุ่นน้อยลงหากชอบเดินออกรอบตามลำพัง สนามในเขตกรุงเทพฯ อาจแออัดในช่วงสุดสัปดาห์ และการจราจรรอบกรุงเทพฯ ทำให้การจองทีไทม์ช่วงเช้าตรู่เป็นสิ่งจำเป็น — สนามที่ดูใกล้บนแผนที่อาจใช้เวลาเดินทางถึง 90 นาทีในช่วงเวลาเร่งด่วน",
         },
         {
           heading: "บาหลี",

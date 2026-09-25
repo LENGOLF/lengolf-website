@@ -3,7 +3,7 @@ id: GG-055
 slug: is-thailand-good-for-golf
 page_type: explainer
 title: "Is Thailand Good for Golf? — The Honest Guide"
-meta_description: "Thailand has 250–300 golf courses, year-round sunshine, and green fees from 1,500 THB. Here's an honest look at whether it lives up to the hype."
+meta_description: "Thailand has 250–300 golf courses, year-round sunshine, and green fees from under 1,000 THB. Here's an honest look at whether it lives up to the hype."
 target_keywords:
   - is thailand good for golf
   - golf in thailand overview
@@ -27,8 +27,8 @@ Thailand has between **250 and 300 golf courses** nationwide, with somewhere bet
 
 | Item | Typical range |
 |------|--------------|
-| Green fee (weekday) | 1,500–3,500 THB |
-| Green fee (weekend / peak) | 2,500–5,000+ THB |
+| Green fee (weekday) | 1,000–3,000 THB |
+| Green fee (weekend / peak) | 1,500–5,000+ THB |
 | Caddie fee | 400–600 THB |
 | Caddie tip (customary) | 400–500 THB |
 | Cart hire | 300–600 THB |
