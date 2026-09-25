@@ -190,7 +190,7 @@ December brings Bangkok's most consistently pleasant weather of the year. Temper
 
 **Twilight rates** (typically available from around 2–3pm depending on the course) offer good value during the cool season — November through February — when afternoon temperatures are pleasant and afternoon rain is not a concern. During the rainy season (May–October), twilight tee times carry the risk of interruption from thunderstorms, which can result in a suspended or shortened round.
 
-Green fees at Bangkok-area courses generally range from 1,500 THB at municipal tracks up to 5,000 THB or more at premium resort-style venues. Twilight and weekday rates can reduce this significantly. Always confirm current pricing directly with the course before booking.
+Green fees at Bangkok-area courses range from under 1,000 THB on a weekday at the cheapest courses up to 5,000 THB or more at the premium clubs, where caddie and cart are usually included. Weekend rates run higher, and twilight rates can bring the price down. Always confirm current pricing directly with the course before booking.
 
 ---
 

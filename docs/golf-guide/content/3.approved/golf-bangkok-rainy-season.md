@@ -78,7 +78,7 @@ On the days when morning storms arrive early, or you simply don't want to risk a
 
 A simulator session is also worth considering if you've just arrived in Bangkok with jet lag and want a low-pressure way to warm up your swing before your first outdoor round. Or as a way to extend your golf when an afternoon storm has ended outdoor play for the day.
 
-Green fees at Bangkok's outdoor courses typically range from around 1,500 THB at weekday public courses up to 5,000 THB or more at premium private clubs. Indoor simulator pricing varies by session length and time of day — worth checking directly for current rates.
+Green fees at Bangkok's outdoor courses range from under 1,000 THB on a weekday at the cheapest courses up to 5,000 THB or more at the premium clubs, where caddie and cart are usually included. Indoor simulator pricing varies by session length and time of day — worth checking directly for current rates.
 
 ---
 
