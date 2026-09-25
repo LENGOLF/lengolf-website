@@ -37,7 +37,7 @@ The table below uses current indicative ranges. Weekday rates apply; weekend rat
 
 | Tier | Weekday Green Fee (THB) | What's Usually Included |
 |---|---|---|
-| 1. Budget | 1,500–2,500 | Green fee only; caddie + cart extra |
+| 1. Budget | Up to 2,500 | Green fee only; caddie + cart extra |
 | 2. Mid-range | 2,500–4,000 | Green fee + caddie; cart optional |
 | 3. Premium | 4,000–5,500+ | Green fee + caddie + cart; sometimes meals |
 | 4. All-inclusive | 5,500–7,500 | Everything bundled — no hidden extras |

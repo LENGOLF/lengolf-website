@@ -24,7 +24,7 @@ This guide lays out the real differences so you can decide what fits your time i
 | Factor | Golf Simulator | Real Course |
 |---|---|---|
 | **Time commitment** | 1–2 hours total | 6–7 hours door to door |
-| **Green fee / bay fee** | 500–1,500 THB/hour | 1,500–5,000+ THB/round |
+| **Green fee / bay fee** | 500–1,500 THB/hour | Under 1,000 to 5,000+ THB/round |
 | **Travel logistics** | BTS-accessible, central Bangkok | 30–60 min drive from city; early departure required |
 | **Tee time** | Book any hour, same day | Usually 7am start; must leave by 5:30–6am |
 | **Weather dependency** | None — fully air-conditioned | Heat and humidity are real factors |
@@ -43,7 +43,7 @@ Real courses make sense when:
 
 1. **You have a dedicated golf day.** A full round runs 4.5–5.5 hours on the course, plus travel. You need to plan your morning around a 5:30–6am departure to reach most courses for a 7am tee time.
 2. **You want the caddie and buggy experience.** Caddies are mandatory at virtually all Bangkok-area courses. Many visitors find this one of the highlights of playing golf in Thailand — attentive, knowledgeable, and part of the culture.
-3. **Green fees fit your budget.** A typical round ranges from 1,500 THB at a mid-range venue to 5,000 THB or more at a premium club. That still represents strong value for the quality of facilities on offer.
+3. **Green fees fit your budget.** A round ranges from under 1,000 THB at the cheapest courses to 5,000 THB or more at a premium club. That still represents strong value for the quality of facilities on offer.
 4. **You are playing with a group.** A group round on a real course is a social experience that simulators cannot replicate.
 
 For course options, see our guide to the [best golf courses near Bangkok](/guide/best-golf-courses-near-bangkok).
