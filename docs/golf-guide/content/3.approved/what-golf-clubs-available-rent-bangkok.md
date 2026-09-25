@@ -27,7 +27,7 @@ Higher-end Bangkok golf courses and indoor simulators invest in name-brand renta
 
 LENGOLF specifically uses Callaway rental sets across all categories — a consistent choice that suits most mid-handicap players and beginners alike.
 
-### Budget and Municipal Courses
+### Budget Courses
 
 Older or mixed-brand sets are standard at budget courses around Bangkok. Clubs may be from several generations back, grips can be worn, and the overall condition varies from venue to venue and even set to set. If you are particular about equipment, it is worth calling ahead before you arrive.
 

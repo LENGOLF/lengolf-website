@@ -3011,7 +3011,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/golf-in-thailand-guide",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "Virtually every golf course in Thailand offers rental clubs. Whether you're flying in without equipment or simply left the sticks at home, you will almost always find a set available at the pro shop. The real variable isn't availability — it's quality.",
@@ -3022,7 +3022,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "The Quality Spectrum",
-          body: "**Budget and municipal courses:** Sets that have seen years of use. Grips may be worn smooth, shafts can be mismatched, lofts sometimes vary. Playable but not consistent.\n\n**Mid-range resort courses:** Inventory rotated more frequently; often a standard and \"premium\" tier. Generally playable and representative of the club specs.\n\n**Top-tier resort and championship courses:** Near-new sets, properly fitted to standard specs, stored in good condition. If you're playing a well-known resort course in Bangkok, Phuket, Hua Hin, or Chiang Mai, you're unlikely to be disappointed.\n\nAt mid-range and premium courses, common brands include Callaway (often Rogue or Edge series), TaylorMade, Titleist (at some premium clubs), and occasionally Honma or Mizuno at Japanese-frequented courses.",
+          body: "**Budget courses:** Sets that have seen years of use. Grips may be worn smooth, shafts can be mismatched, lofts sometimes vary. Playable but not consistent.\n\n**Mid-range resort courses:** Inventory rotated more frequently; often a standard and \"premium\" tier. Generally playable and representative of the club specs.\n\n**Top-tier resort and championship courses:** Near-new sets, properly fitted to standard specs, stored in good condition. If you're playing a well-known resort course in Bangkok, Phuket, Hua Hin, or Chiang Mai, you're unlikely to be disappointed.\n\nAt mid-range and premium courses, common brands include Callaway (often Rogue or Edge series), TaylorMade, Titleist (at some premium clubs), and occasionally Honma or Mizuno at Japanese-frequented courses.",
         },
         {
           heading: "What to Check Before You Tee Off",
@@ -3062,7 +3062,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/golf-course-club-rental",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "タイのゴルフ場では、ほぼどこでもレンタルクラブが用意されています。クラブを持たずに渡航しても、プロショップでセットを借りられないことはまずありません。問題は「借りられるか」ではなく「品質」です。このガイドでは、レンタルの流れ、料金相場、そしてティーオフ前に確認すべきポイントを解説します。",
@@ -3073,7 +3073,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "レンタルクラブの品質はピンキリ",
-          body: "**格安・パブリックコース** — 長年使い込まれたセットが中心。グリップは摩耗し、シャフトはバラバラ、ロフトが揃っていないことも。プレーはできますが、一貫性は期待できません。\n\n**中級リゾートコース** — 入れ替えが比較的頻繁で、スタンダードとプレミアムの2ティア制のことも多いです。概ね問題なくプレーできます。\n\n**高級リゾート・チャンピオンシップコース** — ほぼ新品のセットが標準スペックで揃い、保管状態も良好。バンコク、プーケット、ホアヒン、チェンマイの有名リゾートコースなら、まず失望することはありません。\n\n中級以上のコースで多いブランドはCallaway（RogueやEdgeシリーズ）、TaylorMade、一部の高級クラブではTitleist。日本人ゴルファーの多いコースではHonmaやMizunoが置かれていることもあります。",
+          body: "**格安コース:** 長年使い込まれたセットが中心。グリップは摩耗し、シャフトはバラバラ、ロフトが揃っていないことも。プレーはできますが、一貫性は期待できません。\n\n**中級リゾートコース:** 入れ替えが比較的頻繁で、スタンダードとプレミアムの2ティア制のことも多いです。概ね問題なくプレーできます。\n\n**高級リゾート・チャンピオンシップコース:** ほぼ新品のセットが標準スペックで揃い、保管状態も良好。バンコク、プーケット、ホアヒン、チェンマイの有名リゾートコースなら、まず失望することはありません。\n\n中級以上のコースで多いブランドはCallaway（RogueやEdgeシリーズ）、TaylorMade、一部の高級クラブではTitleist。日本人ゴルファーの多いコースではHonmaやMizunoが置かれていることもあります。",
         },
         {
           heading: "ティーオフ前のチェックリスト",
@@ -3114,7 +3114,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/golf-course-club-rental",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         '태국 골프장에는 거의 어디에나 렌탈 클럽이 준비되어 있습니다. 클럽 없이 입국해도 프로샵에서 세트를 못 빌리는 경우는 거의 없습니다. 문제는 "빌릴 수 있느냐"가 아니라 "품질"입니다. 이 가이드에서는 렌탈 절차, 요금 시세, 티오프 전에 확인할 포인트를 설명합니다.',
@@ -3125,7 +3125,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "렌탈 클럽 품질은 천차만별",
-          body: "**저가·퍼블릭 코스** — 수년간 사용된 세트가 대부분. 그립은 닳고, 샤프트는 제각각, 로프트가 안 맞는 경우도 있습니다. 칠 수는 있지만 일관성은 기대하기 어렵습니다.\n\n**중급 리조트 코스** — 교체 주기가 비교적 짧고, 스탠다드와 프리미엄 2개 등급을 운영하는 곳도 많습니다. 대체로 무난하게 플레이할 수 있습니다.\n\n**고급 리조트·챔피언십 코스** — 거의 새 세트가 표준 스펙으로 갖춰져 있고 보관 상태도 좋습니다. 방콕, 푸켓, 후아힌, 치앙마이의 유명 리조트 코스라면 실망할 일이 거의 없습니다.\n\n중급 이상 코스에서 흔한 브랜드는 Callaway(Rogue·Edge 시리즈), TaylorMade, 일부 고급 클럽에서는 Titleist입니다.",
+          body: "**저가 코스:** 수년간 사용된 세트가 대부분. 그립은 닳고, 샤프트는 제각각, 로프트가 안 맞는 경우도 있습니다. 칠 수는 있지만 일관성은 기대하기 어렵습니다.\n\n**중급 리조트 코스:** 교체 주기가 비교적 짧고, 스탠다드와 프리미엄 2개 등급을 운영하는 곳도 많습니다. 대체로 무난하게 플레이할 수 있습니다.\n\n**고급 리조트·챔피언십 코스:** 거의 새 세트가 표준 스펙으로 갖춰져 있고 보관 상태도 좋습니다. 방콕, 푸켓, 후아힌, 치앙마이의 유명 리조트 코스라면 실망할 일이 거의 없습니다.\n\n중급 이상 코스에서 흔한 브랜드는 Callaway(Rogue·Edge 시리즈), TaylorMade, 일부 고급 클럽에서는 Titleist입니다.",
         },
         {
           heading: "티오프 전 체크리스트",
@@ -3166,7 +3166,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/golf-course-club-rental",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "泰国的高尔夫球场几乎都提供租借球杆。就算你不带球具入境，在职业球具店（Pro Shop）也几乎总能借到一套。真正的变量不是“有没有”，而是“品质”。本指南将说明租借的流程、价格区间，以及开球前应确认的要点。",
@@ -3177,7 +3177,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "品质参差不齐",
-          body: "**廉价及市政球场** — 多是用了多年的套装。握把可能已磨得发亮，杆身型号不一，杆面倾角有时也不统一。能打，但一致性欠佳。\n\n**中档度假村球场** — 球具更换较勤，往往设有标准和“高级”两档。总体可正常使用，也基本符合球杆标称规格。\n\n**顶级度假村及锦标赛球场** — 近乎全新的套装，按标准规格适配，保存状态良好。如果你在曼谷、普吉、华欣或清迈的知名度假村球场打球，基本不会失望。\n\n中档以上球场常见的品牌有Callaway（多为Rogue或Edge系列）、TaylorMade、部分高级俱乐部有Titleist，日本球友较多的球场偶尔也会有Honma或Mizuno。",
+          body: "**廉价球场：**多是用了多年的套装。握把可能已磨得发亮，杆身型号不一，杆面倾角有时也不统一。能打，但一致性欠佳。\n\n**中档度假村球场：**球具更换较勤，往往设有标准和“高级”两档。总体可正常使用，也基本符合球杆标称规格。\n\n**顶级度假村及锦标赛球场：**近乎全新的套装，按标准规格适配，保存状态良好。如果你在曼谷、普吉、华欣或清迈的知名度假村球场打球，基本不会失望。\n\n中档以上球场常见的品牌有Callaway（多为Rogue或Edge系列）、TaylorMade、部分高级俱乐部有Titleist，日本球友较多的球场偶尔也会有Honma或Mizuno。",
         },
         {
           heading: "开球前该检查什么",
@@ -3232,7 +3232,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/golf-course-club-rental",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "สนามกอล์ฟในไทยแทบทุกแห่งมีชุดไม้กอล์ฟให้เช่า ไม่ว่าคุณจะบินมาโดยไม่มีอุปกรณ์ติดตัว หรือแค่ไม่ได้พาไม้กอล์ฟมาด้วยในวันนั้น ก็แทบไม่มีครั้งไหนที่หาชุดไม้ที่โปรช็อปไม่ได้ ตัวแปรที่แท้จริงจึงไม่ใช่ว่ามีให้เช่าหรือไม่ แต่คือคุณภาพ",
@@ -3243,7 +3243,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "คุณภาพแตกต่างกันมากตามระดับของสนาม",
-          body: "**สนามระดับประหยัดและสนามของหน่วยงานท้องถิ่น:** ชุดไม้ที่ผ่านการใช้งานมาหลายปี กริปอาจสึกจนลื่น ก้านคละรุ่น องศาหน้าไม้บางครั้งไม่สม่ำเสมอ ใช้เล่นได้แต่ไม่สม่ำเสมอนัก\n\n**สนามรีสอร์ตระดับกลาง:** หมุนเวียนเปลี่ยนชุดใหม่บ่อยกว่า และมักมีให้เลือกทั้งระดับมาตรฐานและระดับพรีเมียม โดยทั่วไปเล่นได้ดีและสเปกตรงกับที่ระบุไว้\n\n**สนามรีสอร์ตและสนามระดับแชมเปียนชิพชั้นนำ:** ชุดไม้เกือบใหม่ สเปกมาตรฐานถูกต้อง และเก็บรักษาในสภาพดี หากคุณเล่นที่สนามรีสอร์ตชื่อดังในกรุงเทพฯ ภูเก็ต หัวหิน หรือเชียงใหม่ โอกาสผิดหวังมีน้อยมาก\n\nที่สนามระดับกลางขึ้นไป แบรนด์ที่พบบ่อยได้แก่ Callaway (มักเป็นซีรีส์ Rogue หรือ Edge), TaylorMade, Titleist (ในบางสนามระดับพรีเมียม) และบางครั้งพบ Honma หรือ Mizuno ในสนามที่มีนักกอล์ฟญี่ปุ่นใช้บริการมาก",
+          body: "**สนามระดับประหยัด:** ชุดไม้ที่ผ่านการใช้งานมาหลายปี กริปอาจสึกจนลื่น ก้านคละรุ่น องศาหน้าไม้บางครั้งไม่สม่ำเสมอ ใช้เล่นได้แต่ไม่สม่ำเสมอนัก\n\n**สนามรีสอร์ตระดับกลาง:** หมุนเวียนเปลี่ยนชุดใหม่บ่อยกว่า และมักมีให้เลือกทั้งระดับมาตรฐานและระดับพรีเมียม โดยทั่วไปเล่นได้ดีและสเปกตรงกับที่ระบุไว้\n\n**สนามรีสอร์ตและสนามระดับแชมเปียนชิพชั้นนำ:** ชุดไม้เกือบใหม่ สเปกมาตรฐานถูกต้อง และเก็บรักษาในสภาพดี หากคุณเล่นที่สนามรีสอร์ตชื่อดังในกรุงเทพฯ ภูเก็ต หัวหิน หรือเชียงใหม่ โอกาสผิดหวังมีน้อยมาก\n\nที่สนามระดับกลางขึ้นไป แบรนด์ที่พบบ่อยได้แก่ Callaway (มักเป็นซีรีส์ Rogue หรือ Edge), TaylorMade, Titleist (ในบางสนามระดับพรีเมียม) และบางครั้งพบ Honma หรือ Mizuno ในสนามที่มีนักกอล์ฟญี่ปุ่นใช้บริการมาก",
         },
         {
           heading: "สิ่งที่ควรตรวจสอบก่อนออกรอบ",
@@ -4590,7 +4590,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/guide/best-time-play-golf-thailand",
     ],
     created_at: "2026-03-28T00:00:00.000Z",
-    updated_at: "2026-03-28T00:00:00.000Z",
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro: `Thailand is one of the best golf destinations in the world. The combination of well-maintained courses, low costs, warm weather, and a deeply ingrained caddie culture makes it genuinely hard to match anywhere else. But "good for golf" covers a lot of ground, so this guide gives you the full picture.`,
       sections: [
@@ -4600,7 +4600,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "Course Quality: What Standard Are Thai Courses?",
-          body: `Thai courses range from basic resort tracks to genuinely world-class layouts. At the top end, courses like Black Mountain (Hua Hin), Nikanti Golf Club (Nakhon Pathom), Alpine Golf Club (Bangkok), and Thai Country Club (Chonburi) are regularly cited among the best in Asia. Several have hosted Asian Tour and other professional events.\n\nMid-tier courses — and there are many — are well-kept, professionally staffed, and offer a solid round of golf. The standard of agronomy is generally high; Thai operators understand that visiting golfers are their core business.\n\nLower-tier municipal or older resort courses exist but are easy to avoid. Booking through a reputable platform or checking recent reviews will steer you clear of the outliers.`,
+          body: `Thai courses range from basic resort tracks to genuinely world-class layouts. At the top end, courses like Black Mountain (Hua Hin), Nikanti Golf Club (Nakhon Pathom), Alpine Golf Club (Bangkok), and Thai Country Club (Chonburi) are regularly cited among the best in Asia. Several have hosted Asian Tour and other professional events.\n\nMid-tier courses — and there are many — are well-kept, professionally staffed, and offer a solid round of golf. The standard of agronomy is generally high; Thai operators understand that visiting golfers are their core business.\n\nA few weaker courses exist, but they are easy to avoid. Booking through a reputable platform or checking recent reviews will steer you clear of the outliers.`,
         },
         {
           heading: "The Caddie Culture: How It Differs from Home",
@@ -4890,13 +4890,13 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/faq/golf-fitness-heat-thailand",
     ],
     created_at: "2026-07-12T00:00:00.000Z",
-    updated_at: "2026-07-12T00:00:00.000Z",
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro: `Golf in Thailand comes with two clothing considerations most visitors underestimate: a fairly traditional dress code at the majority of courses, and heat and humidity that make the wrong fabrics genuinely uncomfortable. Turn up in the wrong outfit and you can be refused play; turn up in cotton on a 38°C April morning and you'll spend 18 holes soaked and drained.\n\nThe good news is that dressing correctly for Thai golf is simple once you know the rules. This guide covers what courses expect, what actually keeps you comfortable in the tropics, and what to leave at home.`,
       sections: [
         {
           heading: `The Standard Thai Golf Course Dress Code`,
-          body: `Most Bangkok-area and resort courses enforce a dress code broadly in line with international golf clubs. The core requirements almost everywhere:\n\n- **Collared shirt** — a proper golf polo (short or long sleeve). Mock necks are usually fine; round-neck t-shirts and tank tops are not.\n- **Tailored shorts or trousers** — golf shorts or slacks. Many courses specify a minimum short length (roughly knee-ish).\n- **Golf shoes** — soft spikes or spikeless. See our dedicated note on footwear below.\n- **No denim** — jeans are refused at the large majority of courses, even smart dark ones.\n\nMore prestigious and members' clubs apply stricter standards (tucked-in shirts, no cargo shorts, sometimes trousers only). Municipal and relaxed resort courses are more forgiving, but the collared-shirt rule is close to universal. When in doubt, dress up rather than down — you will never be turned away for being too smart.`,
+          body: `Most Bangkok-area and resort courses enforce a dress code broadly in line with international golf clubs. The core requirements almost everywhere:\n\n- **Collared shirt** — a proper golf polo (short or long sleeve). Mock necks are usually fine; round-neck t-shirts and tank tops are not.\n- **Tailored shorts or trousers** — golf shorts or slacks. Many courses specify a minimum short length (roughly knee-ish).\n- **Golf shoes** — soft spikes or spikeless. See our dedicated note on footwear below.\n- **No denim** — jeans are refused at the large majority of courses, even smart dark ones.\n\nMore prestigious and members' clubs apply stricter standards (tucked-in shirts, no cargo shorts, sometimes trousers only). A few relaxed courses are more forgiving, but the collared-shirt rule is close to universal. When in doubt, dress up rather than down — you will never be turned away for being too smart.`,
         },
         {
           heading: `Dressing for the Heat — Fabric Matters More Than You Think`,
@@ -11952,7 +11952,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "ja",
     related_slugs: ["/guide/best-golf-courses-phuket"],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "タイは、世界でも屈指のゴルフ目的地のひとつです。整備の行き届いたコース、低コスト、温暖な気候、そして深く根づいたキャディー文化——この組み合わせは、ほかのどこでもなかなか真似できるものではありません。ただ、ひとくちに「ゴルフに向いている」といっても幅が広いので、このガイドで全体像をお伝えします。",
@@ -11963,7 +11963,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "コースの質 — タイのコースの水準は？",
-          body: "タイのコースは、基本的なリゾートコースから、正真正銘ワールドクラスのレイアウトまで、幅広くそろっています。トップクラスでは、Black Mountain（ホアヒン）、Nikanti Golf Club（ナコンパトム）、Alpine Golf Club（バンコク）、Thai Country Club（チョンブリ）といったコースが、アジアでも屈指の存在として常に名前が挙がります。いくつかはアジアンツアーやその他のプロトーナメントを開催してきました。\n\n中価格帯のコース——数多くあります——も手入れが行き届き、スタッフも専門的で、しっかりとした1ラウンドを楽しめます。芝の管理水準は総じて高く、タイの運営者は訪問ゴルファーこそが自分たちの主力顧客だと理解しています。\n\n低価格帯の公営コースや古いリゾートコースも存在しますが、見分けるのは難しくありません。信頼できる予約プラットフォームを利用するか、最近のレビューを確認すれば、そうした例外的なコースを避けられます。",
+          body: "タイのコースは、基本的なリゾートコースから、正真正銘ワールドクラスのレイアウトまで、幅広くそろっています。トップクラスでは、Black Mountain（ホアヒン）、Nikanti Golf Club（ナコンパトム）、Alpine Golf Club（バンコク）、Thai Country Club（チョンブリ）といったコースが、アジアでも屈指の存在として常に名前が挙がります。いくつかはアジアンツアーやその他のプロトーナメントを開催してきました。\n\n中価格帯のコース——数多くあります——も手入れが行き届き、スタッフも専門的で、しっかりとした1ラウンドを楽しめます。芝の管理水準は総じて高く、タイの運営者は訪問ゴルファーこそが自分たちの主力顧客だと理解しています。\n\n質の劣るコースも一部にはありますが、見分けるのは難しくありません。信頼できる予約プラットフォームを利用するか、最近のレビューを確認すれば、そうした例外的なコースを避けられます。",
         },
         {
           heading: "キャディー文化 — 自国とはどう違うか",
@@ -12007,7 +12007,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "ko",
     related_slugs: ["/guide/best-golf-courses-phuket"],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         '태국은 세계에서 손꼽히는 골프 여행지예요. 잘 관리된 코스, 저렴한 비용, 따뜻한 날씨, 그리고 깊이 자리 잡은 캐디 문화가 어우러져, 다른 어디에서도 좀처럼 견주기 힘든 곳이죠. 다만 "골프 치기 좋다"는 말은 그 안에 담긴 이야기가 넓으니, 이 가이드에서 전체적인 그림을 짚어 드릴게요.',
@@ -12018,7 +12018,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "코스 퀄리티: 태국 코스의 수준은?",
-          body: "태국 코스는 기본적인 리조트 코스부터 진짜 세계적인 수준의 레이아웃까지 폭이 넓어요. 최상위권에는 Black Mountain(후아힌), Nikanti Golf Club(나콘빠톰), Alpine Golf Club(방콕), Thai Country Club(촌부리) 같은 코스가 있는데, 아시아 최고의 코스로 자주 꼽히는 곳들이에요. 그중 몇 곳은 아시안 투어를 비롯한 프로 대회를 개최한 적도 있습니다.\n\n중급 코스는 — 그 수도 많은데 — 관리가 잘 되어 있고 전문 인력이 상주해, 만족스러운 라운딩을 즐길 수 있어요. 잔디 관리 수준도 대체로 높은 편이에요. 태국 운영사들은 방문 골퍼가 자신들의 핵심 사업이라는 점을 잘 이해하고 있거든요.\n\n수준이 낮은 시립 코스나 오래된 리조트 코스도 있지만, 피하기는 어렵지 않아요. 평판 좋은 플랫폼으로 예약하거나 최근 후기를 확인하면 이런 예외적인 곳들은 걸러낼 수 있습니다.",
+          body: "태국 코스는 기본적인 리조트 코스부터 진짜 세계적인 수준의 레이아웃까지 폭이 넓어요. 최상위권에는 Black Mountain(후아힌), Nikanti Golf Club(나콘빠톰), Alpine Golf Club(방콕), Thai Country Club(촌부리) 같은 코스가 있는데, 아시아 최고의 코스로 자주 꼽히는 곳들이에요. 그중 몇 곳은 아시안 투어를 비롯한 프로 대회를 개최한 적도 있습니다.\n\n중급 코스는 — 그 수도 많은데 — 관리가 잘 되어 있고 전문 인력이 상주해, 만족스러운 라운딩을 즐길 수 있어요. 잔디 관리 수준도 대체로 높은 편이에요. 태국 운영사들은 방문 골퍼가 자신들의 핵심 사업이라는 점을 잘 이해하고 있거든요.\n\n수준이 떨어지는 코스도 일부 있지만, 피하기는 어렵지 않아요. 평판 좋은 플랫폼으로 예약하거나 최근 후기를 확인하면 이런 예외적인 곳들은 걸러낼 수 있습니다.",
         },
         {
           heading: "캐디 문화: 익숙한 골프와 어떻게 다를까",
@@ -12062,7 +12062,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "zh",
     related_slugs: ["/guide/best-golf-courses-phuket"],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "泰国是全球最出色的高尔夫目的地之一。维护精良的球场、低廉的费用、温暖的气候，再加上根深蒂固的球童文化，这样的组合放眼各地都很难匹敌。不过，“适合打高尔夫”这句话涵盖的层面很广，所以这份指南会为你完整地梳理一遍。",
@@ -12073,7 +12073,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "球场质量：泰国球场是什么水准？",
-          body: "泰国的球场从基础的度假村球场，到真正世界级的球场设计，跨度很大。在顶端，像Black Mountain（华欣）、Nikanti Golf Club（佛统）、Alpine Golf Club（曼谷）以及Thai Country Club（春武里）这样的球场，常被列入亚洲最佳之列。其中数座曾举办亚巡赛（Asian Tour）及其他职业赛事。\n\n中档球场——数量很多——维护良好、配备专业人员，能带来扎实的一场球。草坪养护的水准普遍很高；泰国的球场经营者明白，到访的球友才是他们的核心客源。\n\n更低档的市政球场或老旧度假村球场确实存在，但很容易避开。通过口碑良好的平台预订，或查看近期评价，就能帮你避开少数不理想的球场。",
+          body: "泰国的球场从基础的度假村球场，到真正世界级的球场设计，跨度很大。在顶端，像Black Mountain（华欣）、Nikanti Golf Club（佛统）、Alpine Golf Club（曼谷）以及Thai Country Club（春武里）这样的球场，常被列入亚洲最佳之列。其中数座曾举办亚巡赛（Asian Tour）及其他职业赛事。\n\n中档球场——数量很多——维护良好、配备专业人员，能带来扎实的一场球。草坪养护的水准普遍很高；泰国的球场经营者明白，到访的球友才是他们的核心客源。\n\n水准较差的球场确实有一些，但很容易避开。通过口碑良好的平台预订，或查看近期评价，就能帮你避开少数不理想的球场。",
         },
         {
           heading: "球童文化：与你家乡有何不同",
@@ -12117,7 +12117,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "th",
     related_slugs: ["/guide/best-golf-courses-phuket"],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         'ประเทศไทยคือหนึ่งในจุดหมายปลายทางด้านกอล์ฟที่ดีที่สุดในโลก การผสมผสานกันของสนามที่ดูแลอย่างดี ค่าใช้จ่ายที่ไม่แพง อากาศอบอุ่น และวัฒนธรรมแคดดี้ที่หยั่งรากลึก ทำให้แทบไม่มีที่ไหนเทียบได้จริงๆ แต่คำว่า "เหมาะกับกอล์ฟ" นั้นครอบคลุมหลายแง่มุม คู่มือนี้จึงขอพาคุณไปดูภาพรวมแบบครบทุกด้าน',
@@ -12128,7 +12128,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "คุณภาพสนาม: สนามกอล์ฟในไทยมีมาตรฐานแค่ไหน?",
-          body: "สนามในเมืองไทยมีตั้งแต่สนามรีสอร์ตทั่วไปไปจนถึงสนามระดับเวิลด์คลาสอย่างแท้จริง ในระดับท็อป สนามอย่าง Black Mountain (หัวหิน), Nikanti Golf Club (นครปฐม), Alpine Golf Club (กรุงเทพฯ) และ Thai Country Club (ชลบุรี) มักได้รับการยกให้เป็นหนึ่งในสนามที่ดีที่สุดในเอเชียอยู่เสมอ หลายแห่งเคยเป็นเจ้าภาพจัดการแข่งขัน Asian Tour และรายการระดับมืออาชีพอื่นๆ\n\nสนามระดับกลาง — ซึ่งมีอยู่จำนวนมาก — ได้รับการดูแลอย่างดี มีทีมงานมืออาชีพ และให้ประสบการณ์การออกรอบที่ดีน่าพอใจ มาตรฐานการดูแลสภาพสนามโดยทั่วไปอยู่ในระดับสูง เพราะผู้ประกอบการชาวไทยเข้าใจดีว่านักกอล์ฟที่มาเยือนคือหัวใจหลักของธุรกิจ\n\nสนามระดับเทศบาลหรือสนามรีสอร์ตเก่าๆ ที่คุณภาพรองลงมาก็มีอยู่ แต่หลีกเลี่ยงได้ไม่ยาก เพียงจองผ่านแพลตฟอร์มที่น่าเชื่อถือหรือดูรีวิวล่าสุด ก็ช่วยให้คุณเลี่ยงสนามที่ด้อยกว่ามาตรฐานได้",
+          body: "สนามในเมืองไทยมีตั้งแต่สนามรีสอร์ตทั่วไปไปจนถึงสนามระดับเวิลด์คลาสอย่างแท้จริง ในระดับท็อป สนามอย่าง Black Mountain (หัวหิน), Nikanti Golf Club (นครปฐม), Alpine Golf Club (กรุงเทพฯ) และ Thai Country Club (ชลบุรี) มักได้รับการยกให้เป็นหนึ่งในสนามที่ดีที่สุดในเอเชียอยู่เสมอ หลายแห่งเคยเป็นเจ้าภาพจัดการแข่งขัน Asian Tour และรายการระดับมืออาชีพอื่นๆ\n\nสนามระดับกลาง — ซึ่งมีอยู่จำนวนมาก — ได้รับการดูแลอย่างดี มีทีมงานมืออาชีพ และให้ประสบการณ์การออกรอบที่ดีน่าพอใจ มาตรฐานการดูแลสภาพสนามโดยทั่วไปอยู่ในระดับสูง เพราะผู้ประกอบการชาวไทยเข้าใจดีว่านักกอล์ฟที่มาเยือนคือหัวใจหลักของธุรกิจ\n\nสนามที่คุณภาพรองลงมาก็มีอยู่บ้าง แต่หลีกเลี่ยงได้ไม่ยาก เพียงจองผ่านแพลตฟอร์มที่น่าเชื่อถือหรือดูรีวิวล่าสุด ก็ช่วยให้คุณเลี่ยงสนามที่ด้อยกว่ามาตรฐานได้",
         },
         {
           heading: "วัฒนธรรมแคดดี้: แตกต่างจากที่อื่นอย่างไร",
@@ -13039,14 +13039,14 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "ja",
     related_slugs: [],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "タイでのゴルフには、多くの旅行者が軽く見がちな2つの服装のポイントがあります。1つは大半のコースで採用されている比較的伝統的なドレスコード、もう1つは素材選びを間違えると本当に不快になる暑さと湿度です。ふさわしくない服装で行けばプレーを断られることもありますし、38°Cの4月の朝にコットンを着ていけば、18ホールを汗だくのまま消耗して過ごすことになります。\n\nうれしいのは、ルールさえ分かってしまえば、タイのゴルフにふさわしい服装選びはとてもシンプルだということです。このガイドでは、コース側が求める服装、熱帯の気候で本当に快適に過ごせる装い、そして持っていかない方がよいものを紹介します。",
       sections: [
         {
           heading: "タイのゴルフ場の標準的なドレスコード",
-          body: "バンコク近郊やリゾートの多くのコースでは、国際的なゴルフクラブとおおむね同じ水準のドレスコードが設けられています。ほぼどこでも共通する基本の条件は次のとおりです。\n\n- **襟付きシャツ** — きちんとしたゴルフポロシャツ（半袖でも長袖でも可）。モックネックはたいてい問題ありませんが、丸首のTシャツやタンクトップは認められません。\n- **仕立てのよいショートパンツまたはロングパンツ** — ゴルフ用のショートパンツやスラックス。多くのコースでは、ショートパンツの丈の下限（おおむね膝あたり）を定めています。\n- **ゴルフシューズ** — ソフトスパイクまたはスパイクレス。シューズについては後述の専用の項目をご覧ください。\n- **デニム不可** — ジーンズは大半のコースで断られます。ダークカラーのきれいめなものでも同様です。\n\nより格式の高いクラブや会員制クラブでは、さらに厳しい基準（シャツの裾を入れる、カーゴショーツ不可、ロングパンツのみの場合もあり）が適用されます。公営コースやカジュアルなリゾートコースはもう少し寛容ですが、襟付きシャツのルールはほぼ例外がありません。迷ったときは、控えめよりもきちんとした装いを。きちんとしすぎて断られることは決してありません。",
+          body: "バンコク近郊やリゾートの多くのコースでは、国際的なゴルフクラブとおおむね同じ水準のドレスコードが設けられています。ほぼどこでも共通する基本の条件は次のとおりです。\n\n- **襟付きシャツ** — きちんとしたゴルフポロシャツ（半袖でも長袖でも可）。モックネックはたいてい問題ありませんが、丸首のTシャツやタンクトップは認められません。\n- **仕立てのよいショートパンツまたはロングパンツ** — ゴルフ用のショートパンツやスラックス。多くのコースでは、ショートパンツの丈の下限（おおむね膝あたり）を定めています。\n- **ゴルフシューズ** — ソフトスパイクまたはスパイクレス。シューズについては後述の専用の項目をご覧ください。\n- **デニム不可** — ジーンズは大半のコースで断られます。ダークカラーのきれいめなものでも同様です。\n\nより格式の高いクラブや会員制クラブでは、さらに厳しい基準（シャツの裾を入れる、カーゴショーツ不可、ロングパンツのみの場合もあり）が適用されます。カジュアルな雰囲気の一部のコースはもう少し寛容ですが、襟付きシャツのルールはほぼ例外がありません。迷ったときは、控えめよりもきちんとした装いを。きちんとしすぎて断られることは決してありません。",
         },
         {
           heading: "暑さに合わせた服選び — 素材は思っている以上に重要",
@@ -13093,14 +13093,14 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "ko",
     related_slugs: [],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "태국에서 골프를 칠 때, 여행객 대부분이 가볍게 보는 두 가지 복장 고려사항이 있어요. 하나는 상당수 골프장이 지키는 꽤 전통적인 드레스 코드이고, 다른 하나는 잘못된 원단을 입으면 정말 불편해지는 더위와 습도예요. 옷차림이 맞지 않으면 플레이를 거부당할 수 있고, 38°C의 4월 아침에 면 소재를 입고 나가면 18홀 내내 땀에 흠뻑 젖어 지친 채로 보내게 돼요.\n\n다행히 태국 골프에 맞게 옷을 입는 건 규칙만 알면 간단해요. 이 가이드에서는 골프장이 요구하는 것, 열대 기후에서 실제로 쾌적함을 유지해 주는 것, 그리고 집에 두고 와야 할 것을 정리했어요.",
       sections: [
         {
           heading: "태국 골프장의 표준 드레스 코드",
-          body: "방콕 인근과 리조트 골프장 대부분은 국제 골프 클럽과 대체로 비슷한 드레스 코드를 적용해요. 거의 모든 곳에서 요구하는 핵심 사항은 다음과 같아요.\n\n- **칼라가 있는 셔츠** — 제대로 된 골프 폴로(반팔 또는 긴팔)예요. 모크넥은 대개 괜찮지만, 라운드넥 티셔츠와 민소매는 안 돼요.\n- **테일러드 반바지 또는 긴바지** — 골프 반바지나 슬랙스예요. 반바지 최소 길이(대략 무릎 정도)를 정해 둔 골프장도 많아요.\n- **골프화** — 소프트 스파이크 또는 스파이크리스예요. 신발에 관한 별도 안내는 아래를 참고하세요.\n- **데님 금지** — 청바지는 어두운 색의 단정한 것이라도 대다수 골프장에서 거부당해요.\n\n더 격식 있는 클럽이나 회원제 클럽은 더 엄격한 기준(셔츠 넣어 입기, 카고 반바지 금지, 때로는 긴바지만 허용)을 적용해요. 시립 골프장이나 편안한 분위기의 리조트 골프장은 좀 더 너그럽지만, 칼라 셔츠 규칙은 거의 어디서나 통해요. 애매할 때는 격식을 낮추기보다 갖춰 입으세요 — 너무 단정하다는 이유로 입장을 거부당하는 일은 절대 없으니까요.",
+          body: "방콕 인근과 리조트 골프장 대부분은 국제 골프 클럽과 대체로 비슷한 드레스 코드를 적용해요. 거의 모든 곳에서 요구하는 핵심 사항은 다음과 같아요.\n\n- **칼라가 있는 셔츠** — 제대로 된 골프 폴로(반팔 또는 긴팔)예요. 모크넥은 대개 괜찮지만, 라운드넥 티셔츠와 민소매는 안 돼요.\n- **테일러드 반바지 또는 긴바지** — 골프 반바지나 슬랙스예요. 반바지 최소 길이(대략 무릎 정도)를 정해 둔 골프장도 많아요.\n- **골프화** — 소프트 스파이크 또는 스파이크리스예요. 신발에 관한 별도 안내는 아래를 참고하세요.\n- **데님 금지** — 청바지는 어두운 색의 단정한 것이라도 대다수 골프장에서 거부당해요.\n\n더 격식 있는 클럽이나 회원제 클럽은 더 엄격한 기준(셔츠 넣어 입기, 카고 반바지 금지, 때로는 긴바지만 허용)을 적용해요. 편안한 분위기의 일부 골프장은 좀 더 너그럽지만, 칼라 셔츠 규칙은 거의 어디서나 통해요. 애매할 때는 격식을 낮추기보다 갖춰 입으세요 — 너무 단정하다는 이유로 입장을 거부당하는 일은 절대 없으니까요.",
         },
         {
           heading: "더위에 맞춘 옷차림 — 원단이 생각보다 훨씬 중요해요",
@@ -13147,14 +13147,14 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "zh",
     related_slugs: [],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "在泰国打高尔夫，有两件关于穿着的事最容易被到访球友低估：大多数球场都有相当传统的着装规定，以及会让错误面料变得格外难受的高温与潮湿。穿错了服装，你可能会被拒绝下场；在38°C的四月清晨穿一身棉质，你就得在18洞的过程里一直湿透、精疲力竭。\n\n好消息是，只要摸清规则，为泰国高尔夫穿对衣服其实很简单。这份指南会讲清楚球场的要求、在热带真正让你舒服的穿着，以及哪些东西可以留在家里。",
       sections: [
         {
           heading: "泰国高尔夫球场的标准着装规定",
-          body: "曼谷周边和度假村的大多数球场，执行的着装规定与国际高尔夫球会大体一致。几乎所有地方的核心要求包括：\n\n- **有领上衣** — 正规的高尔夫polo衫（短袖或长袖均可）。半高领通常没问题；圆领T恤和背心则不行。\n- **剪裁得体的短裤或长裤** — 高尔夫短裤或休闲长裤。许多球场对短裤规定了最短长度（大致到膝盖附近）。\n- **高尔夫球鞋** — 软钉或无钉皆可。关于鞋子，详见下文的专门说明。\n- **不能穿牛仔** — 绝大多数球场都不接受牛仔裤，哪怕是深色的正装款也不行。\n\n更有名望的球会和会员制球会标准更严（要求把上衣扎进裤子、不能穿工装短裤，有时只允许长裤）。市政球场和氛围轻松的度假村球场则宽松一些，但有领上衣这一条规定几乎放之四海皆准。拿不准时，宁可穿得正式些，也别太随便——你绝不会因为穿得太讲究而被拒之门外。",
+          body: "曼谷周边和度假村的大多数球场，执行的着装规定与国际高尔夫球会大体一致。几乎所有地方的核心要求包括：\n\n- **有领上衣** — 正规的高尔夫polo衫（短袖或长袖均可）。半高领通常没问题；圆领T恤和背心则不行。\n- **剪裁得体的短裤或长裤** — 高尔夫短裤或休闲长裤。许多球场对短裤规定了最短长度（大致到膝盖附近）。\n- **高尔夫球鞋** — 软钉或无钉皆可。关于鞋子，详见下文的专门说明。\n- **不能穿牛仔** — 绝大多数球场都不接受牛仔裤，哪怕是深色的正装款也不行。\n\n更有名望的球会和会员制球会标准更严（要求把上衣扎进裤子、不能穿工装短裤，有时只允许长裤）。少数氛围轻松的球场则宽松一些，但有领上衣这一条规定几乎放之四海皆准。拿不准时，宁可穿得正式些，也别太随便——你绝不会因为穿得太讲究而被拒之门外。",
         },
         {
           heading: "应对高温的穿着 — 面料比你以为的更重要",
@@ -13202,14 +13202,14 @@ export const explainerPages: ExplainerSeoPage[] = [
     locale: "th",
     related_slugs: [],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-09-25T00:00:00.000Z",
     content: {
       intro:
         "การเล่นกอล์ฟในประเทศไทยมาพร้อมกับเรื่องการแต่งตัวสองประการที่นักท่องเที่ยวส่วนใหญ่มักประเมินต่ำไป ได้แก่ กฎการแต่งกายที่ค่อนข้างดั้งเดิมของสนามส่วนใหญ่ และความร้อนกับความชื้นที่ทำให้การเลือกเนื้อผ้าผิดประเภทกลายเป็นเรื่องอึดอัดไม่สบายตัวอย่างมาก หากคุณมาในชุดที่ไม่เหมาะสม ก็อาจถูกปฏิเสธไม่ให้ลงเล่น และหากใส่ผ้าฝ้ายในเช้าเดือนเมษายนที่อุณหภูมิ 38°C คุณก็จะต้องเล่นจนครบ 18 หลุมในสภาพเปียกโชกและหมดแรง\n\nข่าวดีคือการแต่งตัวให้ถูกต้องสำหรับกอล์ฟในเมืองไทยนั้นง่ายมากเมื่อคุณรู้กฎ คู่มือนี้จะอธิบายว่าสนามกอล์ฟคาดหวังอะไร อะไรที่ช่วยให้คุณสบายตัวจริงๆ ในเขตร้อน และอะไรที่ควรเก็บไว้ที่บ้าน",
       sections: [
         {
           heading: "กฎการแต่งกายมาตรฐานของสนามกอล์ฟในไทย",
-          body: "สนามกอล์ฟส่วนใหญ่ในเขตกรุงเทพฯ และสนามในรีสอร์ตต่างบังคับใช้กฎการแต่งกายที่โดยรวมสอดคล้องกับสโมสรกอล์ฟระดับสากล ข้อกำหนดหลักที่ใช้กันแทบทุกที่มีดังนี้\n\n- **เสื้อมีปก** — เสื้อโปโลกอล์ฟที่เหมาะสม (แขนสั้นหรือแขนยาว) เสื้อคอตั้งแบบ mock neck มักใส่ได้ ส่วนเสื้อยืดคอกลมและเสื้อกล้ามใส่ไม่ได้\n- **กางเกงขาสั้นหรือขายาวทรงสุภาพ** — กางเกงกอล์ฟขาสั้นหรือกางเกงสแล็ก หลายสนามกำหนดความยาวขั้นต่ำของกางเกงขาสั้น (ประมาณระดับหัวเข่า)\n- **รองเท้ากอล์ฟ** — แบบปุ่มนุ่ม (soft spikes) หรือแบบไม่มีปุ่ม (spikeless) ดูรายละเอียดเรื่องรองเท้าของเราด้านล่าง\n- **ห้ามผ้ายีนส์** — กางเกงยีนส์ถูกปฏิเสธที่สนามส่วนใหญ่ แม้แต่ตัวสีเข้มที่ดูเรียบร้อยก็ตาม\n\nสโมสรชั้นนำและสโมสรสมาชิกจะใช้มาตรฐานที่เข้มงวดกว่า (ต้องสอดชายเสื้อเข้าในกางเกง ห้ามกางเกงคาร์โก้ บางแห่งอนุญาตเฉพาะกางเกงขายาว) สนามสาธารณะและสนามรีสอร์ตที่ผ่อนคลายจะยืดหยุ่นกว่า แต่กฎเรื่องเสื้อมีปกนั้นแทบจะใช้กันทุกที่ หากไม่แน่ใจ ให้แต่งตัวเรียบร้อยไว้ก่อนดีกว่าแต่งน้อยเกินไป เพราะคุณจะไม่มีวันถูกปฏิเสธเพราะแต่งตัวเรียบร้อยเกินไป",
+          body: "สนามกอล์ฟส่วนใหญ่ในเขตกรุงเทพฯ และสนามในรีสอร์ตต่างบังคับใช้กฎการแต่งกายที่โดยรวมสอดคล้องกับสโมสรกอล์ฟระดับสากล ข้อกำหนดหลักที่ใช้กันแทบทุกที่มีดังนี้\n\n- **เสื้อมีปก** — เสื้อโปโลกอล์ฟที่เหมาะสม (แขนสั้นหรือแขนยาว) เสื้อคอตั้งแบบ mock neck มักใส่ได้ ส่วนเสื้อยืดคอกลมและเสื้อกล้ามใส่ไม่ได้\n- **กางเกงขาสั้นหรือขายาวทรงสุภาพ** — กางเกงกอล์ฟขาสั้นหรือกางเกงสแล็ก หลายสนามกำหนดความยาวขั้นต่ำของกางเกงขาสั้น (ประมาณระดับหัวเข่า)\n- **รองเท้ากอล์ฟ** — แบบปุ่มนุ่ม (soft spikes) หรือแบบไม่มีปุ่ม (spikeless) ดูรายละเอียดเรื่องรองเท้าของเราด้านล่าง\n- **ห้ามผ้ายีนส์** — กางเกงยีนส์ถูกปฏิเสธที่สนามส่วนใหญ่ แม้แต่ตัวสีเข้มที่ดูเรียบร้อยก็ตาม\n\nสโมสรชั้นนำและสโมสรสมาชิกจะใช้มาตรฐานที่เข้มงวดกว่า (ต้องสอดชายเสื้อเข้าในกางเกง ห้ามกางเกงคาร์โก้ บางแห่งอนุญาตเฉพาะกางเกงขายาว) สนามบางแห่งที่บรรยากาศสบายๆ จะยืดหยุ่นกว่า แต่กฎเรื่องเสื้อมีปกนั้นแทบจะใช้กันทุกที่ หากไม่แน่ใจ ให้แต่งตัวเรียบร้อยไว้ก่อนดีกว่าแต่งน้อยเกินไป เพราะคุณจะไม่มีวันถูกปฏิเสธเพราะแต่งตัวเรียบร้อยเกินไป",
         },
         {
           heading: "แต่งตัวรับมือความร้อน — เนื้อผ้าสำคัญกว่าที่คุณคิด",
