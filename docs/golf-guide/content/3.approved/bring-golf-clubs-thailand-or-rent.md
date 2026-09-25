@@ -70,7 +70,7 @@ For a full overview of rental options across Bangkok — including which courses
 
 ## LENGOLF Rental Clubs
 
-At LENGOLF, rental clubs are Callaway sets available in men's standard, ladies', and left-handed configurations. The equipment is maintained at a level consistent with a premium indoor golf simulator venue — the same clubs used by up to five players sharing a bay, kept in proper condition for serious practice sessions and casual rounds alike.
+At LENGOLF, the men's and ladies' premium rental sets are Callaway; left-handed golfers get free standard clubs with every bay booking, plus one left-handed premium set on request. The equipment is maintained at a level consistent with a premium indoor golf simulator venue — the same clubs used by up to five players sharing a bay, kept in proper condition for serious practice sessions and casual rounds alike.
 
 For golfers using LENGOLF as a warm-up before heading to a course, or for those who want to evaluate their game on a simulator without committing to their own equipment, the Callaway rental sets provide a reliable baseline. They are a sensible option for first-time visitors who want to test the simulator experience before deciding whether to invest in their own clubs for future trips.
 

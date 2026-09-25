@@ -34,7 +34,7 @@ export const course: GolfCourse = {
     layout_and_experience: `The three nines at Laem Chabang each present a distinct visual and strategic identity. The Lake nine (3,419 yards) is routed alongside a stream that winds through the course, requiring accurate carries and disciplined approaches. The Mountain nine (3,446 yards) climbs and falls across hilly terrain, favouring a controlled ball flight and placing a premium on positioning from the tee. The Valley nine (3,619 yards) is the longest of the three and plays through a more open landscape surrounded by ridgelines — it suits the longer hitter but is also the most exposed to wind. The Nicklaus design philosophy of risk-and-reward is present throughout: every hole offers a clear choice between a conservative and an aggressive line, with the payoff calibrated carefully. Caddies are knowledgeable and familiar with the contours of all three nines.`,
     tips: `The most popular 18-hole combination is Mountain and Valley, which packages the most varied terrain in a single round. For a first visit, the Lake nine pairs well with either of the others to give a complete cross-section of the course's character. Night golf is a genuine attraction — the course is well-lit and the cooler evening air makes for more comfortable conditions from around 15:30. Caddie tip (~300 THB) is paid separately in cash after the round. Golfers staying in Pattaya can combine Laem Chabang with a morning round at Burapha, as the two courses are approximately 15 minutes apart.`,
     location_and_access: `Laem Chabang International Country Club is located approximately 100km southeast of central Bangkok in Bueng sub-district, Sriracha, Chonburi. The drive from Bangkok takes around 80 minutes via the Bang Na–Trat Expressway (Highway 7). The course is roughly 40 minutes' drive from central Pattaya and about 15 minutes from the Burapha Golf & Resort. Grab taxis and pre-arranged golf transfers from Bangkok or Pattaya hotels are the recommended transport options.`,
-    rental_cta_context: `Teeing it up at Laem Chabang on your Thailand trip? Rent TaylorMade or Callaway clubs delivered to your Bangkok hotel and travel light to the Eastern Seaboard.`,
+    rental_cta_context: `Teeing it up at Laem Chabang on your Thailand trip? Rent premium Callaway clubs delivered to your Bangkok hotel and travel light to the Eastern Seaboard.`,
   },
   locales: {
     en: {
@@ -49,7 +49,7 @@ export const course: GolfCourse = {
         layout_and_experience: `ลูป 9 หลุมทั้งสามของ Laem Chabang ต่างมีเอกลักษณ์เฉพาะตัวทั้งในเชิงภาพและเชิงกลยุทธ์ ลูป Lake (3,419 หลา) ทอดตัวเลียบลำธารที่คดเคี้ยวผ่านสนาม จึงต้องอาศัยการตีข้ามอุปสรรคอย่างแม่นยำและช็อตเข้ากรีนที่มีวินัย ลูป Mountain (3,446 หลา) ไต่ขึ้นลงไปตามภูมิประเทศเนินเขา เอื้อต่อวิถีลูกที่ควบคุมได้และให้ความสำคัญกับการวางตำแหน่งจากแท่นทีเป็นพิเศษ ส่วนลูป Valley (3,619 หลา) ยาวที่สุดในสามลูป และเล่นผ่านภูมิทัศน์ที่เปิดโล่งกว่าโดยมีแนวสันเขาโอบล้อม จึงเหมาะกับผู้ที่ตีได้ไกล แต่ก็เป็นลูปที่เปิดรับลมมากที่สุดเช่นกัน ปรัชญาการออกแบบแบบเสี่ยงแลกผลตอบแทนของ Nicklaus ปรากฏอยู่ตลอดทั้งสนาม ทุกหลุมมีทางเลือกชัดเจนระหว่างไลน์ที่ปลอดภัยกับไลน์ที่เล่นเชิงรุก พร้อมผลตอบแทนที่ถูกคำนวณไว้อย่างพิถีพิถัน แคดดี้ที่นี่มีความรู้ดีและคุ้นเคยกับความลาดเอียงของทั้งสามลูปเป็นอย่างดี`,
         tips: `ชุดผสม 18 หลุมที่ได้รับความนิยมที่สุดคือ Mountain กับ Valley ซึ่งรวมภูมิประเทศที่หลากหลายที่สุดไว้ในรอบเดียว สำหรับการมาเล่นครั้งแรก ลูป Lake จับคู่ได้ดีกับลูปใดลูปหนึ่งในสองลูปที่เหลือ เพื่อให้เห็นภาพรวมบุคลิกของสนามได้ครบถ้วน ไนต์กอล์ฟเป็นจุดดึงดูดที่น่าสนใจอย่างแท้จริง สนามมีไฟส่องสว่างทั่วถึง และอากาศช่วงเย็นที่เย็นลงทำให้สภาพการเล่นสบายขึ้นตั้งแต่ประมาณ 15:30 น. เป็นต้นไป ทิปแคดดี้ (ประมาณ 300 บาท) จ่ายแยกต่างหากเป็นเงินสดหลังจบรอบ นักกอล์ฟที่พักในพัทยาสามารถจับคู่ Laem Chabang เข้ากับรอบเช้าที่ Burapha ได้ เพราะสนามทั้งสองอยู่ห่างกันประมาณ 15 นาที`,
         location_and_access: `Laem Chabang International Country Club ตั้งอยู่ห่างจากใจกลางกรุงเทพฯ ไปทางตะวันออกเฉียงใต้ประมาณ 100 กิโลเมตร ในตำบลบึง อำเภอศรีราชา จังหวัดชลบุรี การขับรถจากกรุงเทพฯ ใช้เวลาประมาณ 80 นาทีผ่านทางด่วนบางนา-ตราด (ทางหลวงหมายเลข 7) สนามอยู่ห่างจากใจกลางพัทยาโดยรถยนต์ราว 40 นาที และห่างจาก Burapha Golf & Resort ประมาณ 15 นาที แท็กซี่ Grab และรถรับส่งสำหรับนักกอล์ฟที่จัดเตรียมไว้ล่วงหน้าจากโรงแรมในกรุงเทพฯ หรือพัทยาเป็นทางเลือกการเดินทางที่แนะนำ`,
-        rental_cta_context: `วางแผนออกรอบที่ Laem Chabang ในทริปเมืองไทยของคุณอยู่ใช่ไหม LENGOLF มีบริการส่งไม้กอล์ฟเช่าแบรนด์ TaylorMade หรือ Callaway ถึงโรงแรมของคุณในกรุงเทพฯ ให้คุณเดินทางไปชายฝั่งทะเลตะวันออกแบบเบาสบาย`,
+        rental_cta_context: `วางแผนออกรอบที่ Laem Chabang ในทริปเมืองไทยของคุณอยู่ใช่ไหม LENGOLF มีบริการส่งไม้กอล์ฟเช่าพรีเมียม Callaway ถึงโรงแรมของคุณในกรุงเทพฯ ให้คุณเดินทางไปชายฝั่งทะเลตะวันออกแบบเบาสบาย`,
       },
     },
     ko: {
@@ -60,7 +60,7 @@ export const course: GolfCourse = {
         layout_and_experience: `Laem Chabang의 세 개 9홀은 저마다 다른 경관과 전략성을 지니고 있어요. Lake(3,419야드)는 코스 안을 굽이치는 개울을 따라 루팅돼 있어 정확한 캐리와 차분한 어프로치가 필요해요. Mountain(3,446야드)은 구릉 지형을 오르내리는 레이아웃이라 낮게 억제한 탄도가 유리하고, 티샷의 위치 선정이 무엇보다 중요해져요. 셋 중 가장 긴 Valley(3,619야드)는 능선에 둘러싸인 트인 경관 속을 지나가 장타자에게 어울리지만, 바람의 영향을 가장 많이 받는 9홀이기도 해요. 리스크와 리워드라는 니클라우스의 설계 철학은 코스 전체에 살아 있어요. 어느 홀에나 안전한 라인과 공격적인 라인의 선택이 분명하게 놓여 있고, 그 보상도 꼼꼼하게 계산돼 있죠. 캐디는 지식이 풍부하고 세 개 9홀의 굴곡을 모두 훤히 알고 있어요.`,
         tips: `18홀 조합 가운데 가장 인기 있는 것은 Mountain과 Valley로, 가장 변화무쌍한 지형을 한 라운드에 담을 수 있어요. 처음 방문한다면 Lake를 나머지 둘 중 하나와 묶으면 이 코스의 성격을 두루 맛볼 수 있고요. 야간 골프도 놓치기 아까운 매력이에요. 조명이 잘 갖춰져 있고, 15:30 무렵부터는 선선해진 저녁 공기 속에서 한결 편하게 플레이할 수 있어요. 캐디 팁(약 300바트)은 라운딩이 끝난 뒤 현금으로 따로 건네요. 파타야에 머무는 골퍼라면 Burapha에서의 오전 라운딩과 Laem Chabang을 묶어도 좋아요. 두 코스는 약 15분 거리예요.`,
         location_and_access: `Laem Chabang International Country Club은 방콕 도심에서 남동쪽으로 약 100km 떨어진 촌부리주 Sriracha의 Bueng 지역에 있어요. 방콕에서는 Bang Na-Trat 고속도로(7번 국도)를 이용해 차로 약 80분 걸려요. 파타야 도심에서는 차로 약 40분, Burapha Golf & Resort에서는 약 15분 거리예요. 이동 수단으로는 Grab 택시나, 방콕 또는 파타야 호텔에서 미리 예약하는 골프 이동 서비스를 추천해 드려요.`,
-        rental_cta_context: `태국 여행 중에 Laem Chabang에서 티오프할 예정이라면, LENGOLF가 TaylorMade나 Callaway 대여 클럽을 방콕 호텔까지 배달해 드려요. 가볍게 동부 해안 지역으로 향할 수 있어요.`,
+        rental_cta_context: `태국 여행 중에 Laem Chabang에서 티오프할 예정이라면, LENGOLF가 Callaway 프리미엄 대여 클럽을 방콕 호텔까지 배달해 드려요. 가볍게 동부 해안 지역으로 향할 수 있어요.`,
       },
     },
     zh: {
@@ -71,7 +71,7 @@ export const course: GolfCourse = {
         layout_and_experience: `Laem Chabang的三组九洞各有各的景观与策略气质。Lake（3,419码）沿着蜿蜒穿场的小溪布线，要求精准的飞越与克制的攻果岭球。Mountain（3,446码）在丘陵地形上起伏跌宕，压低的弹道更占优势，发球台上的落点选择尤为关键。三者中最长的Valley（3,619码）穿行于被山脊环抱的开阔地貌，适合远距离击球者，同时也是最容易受风影响的九洞。Nicklaus那套风险与回报的设计哲学贯穿全场：每个洞都有稳妥路线与强攻路线的明确取舍，回报也经过细致权衡。球童经验老到，对三组九洞的坡度起伏了如指掌。`,
         tips: `最受欢迎的18洞组合是Mountain加Valley，把最富变化的地形浓缩进一轮之中。第一次来的话，用Lake搭配其余任意一组，就能完整领略这座球场的性格。夜间高尔夫是货真价实的亮点——场地照明充足，约15:30之后凉下来的空气也让条件更舒适。球童小费（约300泰铢）在打完一轮后以现金另行支付。住在芭提雅的球友，可以把Laem Chabang与Burapha的上午一轮串在一起，两座球场相距约15分钟车程。`,
         location_and_access: `Laem Chabang International Country Club位于春武里府Sriracha的Bueng分区，距曼谷市中心东南约100公里。从曼谷出发，经Bang Na–Trat高速公路（7号公路）驾车约80分钟。球场距芭提雅市中心约40分钟车程，距Burapha Golf & Resort约15分钟。出行方面，推荐Grab出租车，或从曼谷、芭提雅酒店事先安排的高尔夫接送。`,
-        rental_cta_context: `这趟泰国之行想在Laem Chabang开球？LENGOLF可以把TaylorMade或Callaway的租借球杆送到你曼谷的酒店，让你轻装前往东部沿海。`,
+        rental_cta_context: `这趟泰国之行想在Laem Chabang开球？LENGOLF可以把Callaway高级租借球杆送到你曼谷的酒店，让你轻装前往东部沿海。`,
       },
     },
     ja: {
@@ -82,7 +82,7 @@ export const course: GolfCourse = {
         layout_and_experience: `Laem Chabangの3つの9ホールは、それぞれ異なる景観と戦略性を備えています。Lake（3,419ヤード）はコース内を蛇行する小川に沿ってルーティングされており、正確なキャリーと落ち着いたアプローチが求められます。Mountain（3,446ヤード）は丘陵地形を上り下りするレイアウトで、抑えた弾道が有利に働き、ティーショットの位置取りが何より重要になります。3つのなかで最も長いValley（3,619ヤード）は、尾根に囲まれた開放的な景観のなかを進み、飛距離のあるプレーヤー向きである一方、風の影響を最も受けやすい9ホールでもあります。リスクとリワードというNicklausの設計思想はコース全体に息づいており、どのホールにも安全なラインと攻めるラインの明確な選択があり、その見返りも入念に計算されています。キャディーは知識が豊富で、3つの9ホールすべての起伏を熟知しています。`,
         tips: `18ホールの組み合わせで最も人気があるのはMountainとValleyで、最も変化に富んだ地形を1ラウンドにまとめられます。初めての訪問なら、Lakeを他のどちらかと組み合わせると、このコースの性格を一通り味わえます。ナイトゴルフも見逃せない魅力のひとつ。照明がしっかり整っており、15:30頃からは夕方の涼しい空気のなかで快適にプレーできます。キャディーへのチップ（300THB程度）は、ラウンド後に現金で別途お渡しください。パタヤ滞在中のゴルファーなら、Buraphaでの午前のラウンドとLaem Chabangを組み合わせるのもおすすめです。2つのコースは約15分の距離にあります。`,
         location_and_access: `Laem Chabang International Country Clubは、バンコク中心部から南東へ約100km、チョンブリー県シラチャ郡ブン地区に位置します。バンコクからは、バンナー・トラート高速道路（国道7号線）経由で車で約80分。パタヤ中心部からは車で約40分、Burapha Golf & Resortからは約15分の距離です。移動手段としては、Grabのタクシー、またはバンコクやパタヤのホテルから事前手配するゴルフ送迎がおすすめです。`,
-        rental_cta_context: `タイ旅行中にLaem Chabangでティーオフする予定なら、LENGOLFがTaylorMadeやCallawayのレンタルクラブをバンコクのホテルまでお届けします。身軽なまま東部臨海地域へ向かえます。`,
+        rental_cta_context: `タイ旅行中にLaem Chabangでティーオフする予定なら、LENGOLFがCallawayのプレミアムレンタルクラブをバンコクのホテルまでお届けします。身軽なまま東部臨海地域へ向かえます。`,
       },
     },
   },
