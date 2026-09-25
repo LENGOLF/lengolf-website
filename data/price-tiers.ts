@@ -57,7 +57,7 @@ export const PRICE_TIERS: readonly PriceTier[] = [
     slug: '7500-baht',
     title: 'Best Bangkok-Area Golf Courses Under ฿7,500',
     framing:
-      'The top end of the visiting-tourist market. Trophy courses here include all-inclusive premium experiences (Nikanti, a Schmidt-Curley design) and a former Asian Tour venue.',
+      'The top end of the visiting-tourist market. Trophy courses here include all-inclusive premium experiences (Nikanti) and a former Asian Tour venue.',
     catch:
       'Weekend rates frequently exceed the headline tier on these courses; if your trip dates are flexible, weekday play is dramatically better value. Dress codes are enforced and online booking through the course’s own site is usually cheapest.',
   },
@@ -72,7 +72,8 @@ export const PRICE_TIER_SLUGS = PRICE_TIERS.map((t) => t.slug)
  * Bump it when something these pages render changes WITHOUT that pass: the copy
  * in this file, the roster rule in lib/golf-courses-derived.ts
  * (getCoursesUnderPrice), or a course-file edit that moves a course onto or off
- * a tier (a fee, drive time or status change).
+ * a tier (a fee, drive time or status change, or a popularityScore input such
+ * as the website, driving range or layout prose, which reorders a full band).
  * 2026-09-25: rosters became Bangkok-area price bands.
  */
 export const PRICE_TIERS_UPDATED_AT = '2026-09-25'
@@ -300,28 +301,28 @@ export const PRICE_TIER_I18N: Partial<
     th: {
       title: 'สนามกอล์ฟใกล้กรุงเทพฯ ที่ดีที่สุด ราคาไม่เกิน ฿7,500',
       framing:
-        'ระดับบนสุดของตลาดนักท่องเที่ยวที่มาเยือน สนามระดับแชมป์ในกลุ่มนี้มีทั้งประสบการณ์พรีเมียมแบบครบวงจร (Nikanti ซึ่งออกแบบโดย Schmidt-Curley) และสนามที่เคยเป็นเจ้าภาพการแข่งขัน Asian Tour',
+        'ระดับบนสุดของตลาดนักท่องเที่ยวที่มาเยือน สนามระดับแชมป์ในกลุ่มนี้มีทั้งประสบการณ์พรีเมียมแบบครบวงจร (Nikanti) และสนามที่เคยเป็นเจ้าภาพการแข่งขัน Asian Tour',
       catch:
         'ราคาวันหยุดสุดสัปดาห์ของสนามกลุ่มนี้มักสูงกว่าราคาหลักที่ประกาศไว้ หากวันเดินทางของคุณยืดหยุ่นได้ การเล่นวันธรรมดาคุ้มค่ากว่ามาก มีการบังคับใช้กฎการแต่งกาย และการจองออนไลน์ผ่านเว็บไซต์ของสนามเองมักมีราคาถูกที่สุด',
     },
     ja: {
       title: 'バンコク近郊の名門ゴルフ場 ฿7,500以下 — おすすめコースと注意点',
       framing:
-        '観光で訪れるゴルファー向け市場の最上位帯です。この価格帯の名門コースには、Schmidt-Curley（シュミット・カーリー）設計で、オールインクルーシブのプレミアム体験を提供するNikanti（ニカンティ）や、Asian Tourの開催実績を持つコースが含まれます。',
+        '観光で訪れるゴルファー向け市場の最上位帯です。この価格帯の名門コースには、オールインクルーシブのプレミアム体験を提供するNikanti（ニカンティ）や、Asian Tourの開催実績を持つコースが含まれます。',
       catch:
         'この価格帯のコースでは、週末料金が見出しの上限額を上回ることも珍しくありません。旅行日程に融通が利くなら、平日プレーのほうがはるかに割安です。ドレスコードは厳格に運用されており、コース公式サイトからのオンライン予約が最も安く済むのが一般的です。',
     },
     ko: {
       title: '방콕 근교 명문 골프장 ฿7,500 이하 — 추천 코스와 주의할 점',
       framing:
-        '방문 관광객 시장의 최상위 가격대예요. 이 가격대의 명문 코스에는 올인클루시브 프리미엄 경험을 제공하는 Nikanti(Schmidt-Curley 설계), 그리고 Asian Tour 대회를 개최했던 코스가 포함돼요.',
+        '방문 관광객 시장의 최상위 가격대예요. 이 가격대의 명문 코스에는 올인클루시브 프리미엄 경험을 제공하는 Nikanti, 그리고 Asian Tour 대회를 개최했던 코스가 포함돼요.',
       catch:
         '이 가격대 코스들은 주말 요금이 표시된 상한 금액을 넘어서는 경우가 많아요. 여행 날짜에 여유가 있다면 평일 플레이가 훨씬 더 이득이에요. 드레스 코드가 엄격히 적용되며, 코스 공식 사이트를 통한 온라인 예약이 보통 가장 저렴해요.',
     },
     zh: {
       title: '曼谷周边顶级高尔夫球场 ฿7,500以下 — 推荐球场与注意事项',
       framing:
-        '到访游客市场的最高价位段。这里的名场包括全包式高端体验（Nikanti，Schmidt-Curley设计）以及曾承办亚洲巡回赛（Asian Tour）赛事的球场。',
+        '到访游客市场的最高价位段。这里的名场包括全包式高端体验（Nikanti）以及曾承办亚洲巡回赛（Asian Tour）赛事的球场。',
       catch:
         '这些球场的周末价格经常超出本页标示的上限；如果你的行程日期灵活，平日打球划算得多。着装要求会被严格执行，而通过球场官网在线预订通常最便宜。',
     },

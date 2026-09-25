@@ -192,7 +192,8 @@ of Search Console data.
   migrate the 27, then delete all 149 blobs.
 - ~~Tier/best-for pages titled "Bangkok-Area" still list courses from all 14
   regions~~ **DONE 2026-09-25** (backlog item 7): the rosters are Bangkok-area,
-  and non-Bangkok course pages no longer carry a tier or best-for link to them.
+  and course pages more than 90 minutes from Bangkok no longer carry a tier or
+  best-for link to them.
 - `club_rental_available === false` exists in code but not in data (134 true /
   15 null / 0 false) — the strongest rental pitch never renders. If research
   confirms any course genuinely lacks rentals, set it to `false`.

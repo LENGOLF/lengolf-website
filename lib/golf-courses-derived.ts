@@ -62,9 +62,10 @@ export function isPlayable(c: GolfCourse): boolean {
 }
 
 /**
- * The radius behind "Bangkok-area": the tier and use-case pages say so in their
- * titles in all five locales, and their intro copy says "within 90 minutes of
- * Bangkok". Their rosters used to rank every published course nationally, so a
+ * The radius behind "Bangkok-area": the tier pages say so in their titles in
+ * all five locales and the use-case pages in EN, and three of their intros
+ * (฿2,500, ฿3,500, beginners) say "within 90 minutes of Bangkok". Their
+ * rosters used to rank every published course nationally, so a
  * Chiang Rai course (720 min) sat on "Best Bangkok-Area Golf Courses Under
  * ฿1,500" and three Phuket courses on the beginners page.
  *
@@ -335,8 +336,9 @@ function priceBandFloor(thb: number): number {
  *
  * A band, not every course under the ceiling: each tier's intro describes its
  * band ("premium daily-fee golf without crossing into trophy-course territory")
- * and the ja/ko/zh titles name it (安い / プレミアム / 名門), so a ฿2,500 course on
- * "Under ฿5,000" read as "premium" one page after it read as "cheap". Within 90
+ * and the ja/ko/zh titles name it (安い / プレミアム / 名門), so without bands a
+ * ฿2,500 course sat on "Under ฿5,000" as "premium" two tiers after it appeared
+ * as "cheap". Within 90
  * minutes of Bangkok the upper bands are thin (8, 5 and 6 courses for ฿3,500,
  * ฿5,000 and ฿7,500 on 2026-09-25), so those pages list fewer than N. It also
  * matches the course page's tier link, which already picks the course's band.

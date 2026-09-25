@@ -7107,19 +7107,30 @@ async function runPriceTierRoundupLanguageTests() {
     }
   }
 
-  // Real number, not `> 0`. True value 172 on 2026-09-25: the tiers are
-  // Bangkok-area price BANDS, which list 12 / 12 / 8 / 5 / 6 courses
-  // (฿1,500 → ฿7,500), x 4 locales. It was an exact 240 while every tier filled
-  // 12; the three sparse bands now move with fee edits (a course crossing a band
-  // edge moves one band's count by 1 per locale), so this floor sits one course
-  // per sparse band below true (172 - 3 x 4 = 160) and the EXACT per-page count
-  // is section L7's job. An earlier floor of 100 against a true 240 let more
-  // than half the population vanish while this printed a success line; keep
-  // this one close to true and re-derive it when the band counts change.
-  if (itemsChecked < 160) {
+  // EXACT, and derived rather than hardcoded. It was a literal 240 while every
+  // tier filled 12; since the tiers became Bangkok-area price BANDS they list
+  // 12 / 12 / 8 / 5 / 6 courses (฿1,500 → ฿7,500), 172 items across the 20
+  // translated pages on 2026-09-25, and the sparse bands move with ordinary fee
+  // edits. So the expectation comes from the same course-file oracle L7 uses,
+  // and an exact equality keeps what the old 240 caught: this loop dropping
+  // items before `itemsChecked++`. The derived value carries its own floor,
+  // because a degraded oracle (no course files read) would otherwise collapse
+  // both sides together (the checkPackageNoun lesson in CLAUDE.md).
+  const oracle = await loadRosterOracle();
+  let expectedItems = 0;
+  for (const { tier } of params) {
+    const t = oracle.PRICE_TIERS.find((x) => x.slug === tier);
+    if (t) expectedItems += oracle.expectedCount(TIER_ROSTER_SIZE, oracle.bandRule(t.thb).test);
+  }
+  if (expectedItems < 150) {
     fail(
-      `L6 checked only ${itemsChecked} ItemList offer(s)`,
-      "expected 160+ (derived 172: 20 translated tier pages listing 12/12/8/5/6 courses per locale). A low count means the ItemList isn't being found, not that it is correct.",
+      `L6 roster oracle expects only ${expectedItems} item(s)`,
+      "the course-file oracle collapsed (derived 172 on 2026-09-25); check loadCourseFiles before trusting the count below.",
+    );
+  } else if (itemsChecked !== expectedItems) {
+    fail(
+      `L6 checked ${itemsChecked} ItemList offer(s)`,
+      `expected exactly ${expectedItems} (sum over the 20 translated tier pages of min(12, eligible courses in the band)). Fewer means ItemList items went missing or were skipped before counting; more means a tier roster outgrew its Bangkok-area band. Either way it says nothing about the labels; section L7 names the page.`,
     );
   } else {
     pass(`L6 asserted localized ItemList Offer.description on ${itemsChecked} item(s)`);
@@ -7171,7 +7182,7 @@ async function runPriceTierRoundupLanguageTests() {
   // argument for the same operator.
   //
   // THIS CHECK HAS NO TEETH OF ITS OWN: (0, 0) satisfies it. All of its
-  // non-vacuity is inherited from the `itemsChecked < 160` floor above, so
+  // non-vacuity is inherited from the exact `itemsChecked` check above, so
   // lowering or deleting that floor silently degrades this to nothing. The
   // pass line is gated on a non-empty run accordingly - it otherwise printed
   // "judged every one of the 0 offer(s)" inside an already-red run, which is a
@@ -7188,8 +7199,9 @@ async function runPriceTierRoundupLanguageTests() {
 
 // ── L7) Tier and best-for rosters keep their Bangkok-area claim ──────
 // `/golf-courses/under/<tier>/` and `/golf-courses/best-for/<useCase>/` are
-// titled "Bangkok-Area" in all five locales and their intros say "within 90
-// minutes of Bangkok", yet until 2026-09-25 both rosters ranked every course in
+// titled "Bangkok-Area" (the tiers in all five locales, best-for in EN) and
+// three of their intros say "within 90 minutes of Bangkok", yet until
+// 2026-09-25 both rosters ranked every course in
 // Thailand (a 720-minute Chiang Rai course sat on the ฿1,500 page). The rule now
 // lives in lib/golf-courses-derived.ts (isBangkokArea, matchesUseCase, and the
 // price BAND in getCoursesUnderPrice), and before this section nothing guarded
@@ -7213,17 +7225,22 @@ async function runPriceTierRoundupLanguageTests() {
 // Anti-vacuity: REQUIRED_ROSTER_PAGES is an exact pin on pages JUDGED (the
 // counter sits after the count verdict), paths must be unique, itemsJudged sits
 // after each per-item verdict and must equal itemsSeen, and MIN_ROSTER_ITEMS
-// floors the total. Mutation-tested on 2026-09-25 against a dev server: the
-// 90-minute filter reverted (122 failures), the band floor dropped (115) and
-// matchesUseCase back to the bare predicate (15, far canary included) all go
-// red; the unmutated control is green. KNOWN LIMITS: `<` for `<=` SURVIVES,
-// because every band holding a course at exactly 90 minutes has more eligible
-// courses than slots, so the page still lists a full, valid roster and only
-// which course fills the last slot changes; seeing that would mean re-ranking
-// with popularityScore here, which is the derived-top-N pin CLAUDE.md warns
-// against. And a counter proves a comparison ran, not that it discriminates:
-// `if (false && …)` over a verdict, or an early `return` after the floors,
-// stays green. Smoke has no contract suite.
+// floors the total. Mutation-tested (L6 + L7 together) on 2026-09-25 against a
+// dev server, each mutant in lib/golf-courses-derived.ts: radius lifted with
+// null still excluded (124 failures, the over-90 canary among them), null
+// included too (157), band floor dropped (116), matchesUseCase back to the bare
+// predicate (17, all three negative canaries), and isPlayable alone dropped
+// from matchesUseCase (caught ONLY by the closed-course canary, because the
+// roster callers already filter to playable courses; that run also hit one
+// dev-server fetch flake). The unmutated control is green. KNOWN LIMITS: `<`
+// for `<=` SURVIVES. Only the ฿1,500 and ฿2,500 bands hold courses at exactly
+// 90 minutes and both have more eligible courses than slots, so the page still
+// lists a full, valid roster; only which courses fill the lower slots changes
+// (one on ฿1,500, three on ฿2,500). Seeing that would mean re-ranking with
+// popularityScore here, the derived-top-N pin CLAUDE.md warns against. And a
+// counter proves a comparison ran, not that it discriminates: `if (false && …)`
+// over a verdict, or an early `return` after the floors, stays green. Smoke has
+// no contract suite.
 const ROSTER_MAX_DRIVE_MIN = 90;
 // The page-side N: getCoursesUnderPrice(meta.thb, 12) in the tier page and
 // getCoursesForUseCase(useCase, 8) in the best-for page.
@@ -7239,28 +7256,42 @@ const REQUIRED_ROSTER_PAGES = 31;
 // per-page count equality below is the exact check.
 const MIN_ROSTER_ITEMS = 240;
 
-async function runRosterClaimTests() {
-  console.log("\n\x1b[1mL7) Tier and best-for rosters are Bangkok-area\x1b[0m");
-  const { PRICE_TIERS, getTranslatedPriceTierParams } = await import("../data/price-tiers");
-  const { USE_CASES, USE_CASE_RULES } = await import("../data/golf-courses-use-cases");
+/**
+ * The roster oracle, rebuilt from the course files. Shared by L7 (per-page
+ * membership and count) and L6 (its exact item total), so the two cannot
+ * disagree about what a tier should list. Independent of lib by construction:
+ * nothing here imports lib/golf-courses-derived.ts.
+ */
+async function loadRosterOracle() {
+  const { PRICE_TIERS } = await import("../data/price-tiers");
   const { loadCourseFiles } = await import("./course-files");
-  type Course = Awaited<ReturnType<typeof loadCourseFiles>>[number]["course"];
-  const courses = (await loadCourseFiles()).map((e) => e.course);
+  const courses: GolfCourse[] = (await loadCourseFiles()).map((e) => e.course);
   const byPath = new Map(courses.map((c) => [`/golf-courses/${c.region}/${c.slug}/`, c]));
-  const playable = (c: Course) =>
+  const playable = (c: GolfCourse) =>
     c.status === "published" && (!c.operational_status || c.operational_status === "open");
-  const near = (c: Course) =>
+  const near = (c: GolfCourse) =>
     c.drive_time_from_bangkok_min !== null && c.drive_time_from_bangkok_min <= ROSTER_MAX_DRIVE_MIN;
-
   const ceilings = PRICE_TIERS.map((t) => t.thb);
   const bandRule = (thb: number) => {
     const floor = Math.max(0, ...ceilings.filter((x) => x < thb));
     return {
       what: `weekday fee in (${floor}, ${thb}]`,
-      test: (c: Course) =>
+      test: (c: GolfCourse) =>
         c.green_fee_weekday_thb !== null && c.green_fee_weekday_thb > floor && c.green_fee_weekday_thb <= thb,
     };
   };
+  // What a page listing up to `size` courses matching `test` must show.
+  const expectedCount = (size: number, test: (c: GolfCourse) => boolean) =>
+    Math.min(size, courses.filter((c) => playable(c) && near(c) && test(c)).length);
+  return { PRICE_TIERS, courses, byPath, playable, near, bandRule, expectedCount };
+}
+
+async function runRosterClaimTests() {
+  console.log("\n\x1b[1mL7) Tier and best-for rosters are Bangkok-area\x1b[0m");
+  const { getTranslatedPriceTierParams } = await import("../data/price-tiers");
+  const { USE_CASES, USE_CASE_RULES } = await import("../data/golf-courses-use-cases");
+  const { PRICE_TIERS, courses, byPath, playable, near, bandRule, expectedCount } = await loadRosterOracle();
+  type Course = GolfCourse;
   const pages: { path: string; size: number; rule: { what: string; test: (c: Course) => boolean } }[] = [];
   for (const t of PRICE_TIERS) {
     pages.push({ path: `/golf-courses/under/${t.slug}/`, size: TIER_ROSTER_SIZE, rule: bandRule(t.thb) });
@@ -7341,7 +7372,7 @@ async function runRosterClaimTests() {
         }
       }
       const eligible = courses.filter((c) => playable(c) && near(c) && pg.rule.test(c)).length;
-      const expected = Math.min(pg.size, eligible);
+      const expected = expectedCount(pg.size, pg.rule.test);
       const countOk = items.length === expected;
       pagesJudged++; // after the count verdict
       if (!countOk) {
@@ -7377,22 +7408,32 @@ async function runRosterClaimTests() {
     );
   }
 
-  // The course page's "best for" cross-link, both directions, on DERIVED
-  // canaries rather than pinned slugs: the first playable course that matches a
-  // use-case rule but lies outside 90 minutes must carry NO best-for link (it
-  // would point at a Bangkok-area list that can never show it), and the first
-  // one within 90 minutes must carry one. The best-for link is the only
-  // /golf-courses/best-for/ href a course page renders, so the negative is clean.
+  // The course page's "best for" cross-link, on DERIVED canaries rather than
+  // pinned slugs, one per way the link can be wrong. Every canary matches at
+  // least one use-case rule, so only the Bangkok-area and playable gates decide
+  // whether it links:
+  //   - a playable course with NO drive time (Phuket, Chiang Mai): no link;
+  //   - a playable course with a REAL drive time over 90 minutes: no link
+  //     (without this, a `?? 0`-style null fix-up could pass the first canary
+  //     while a 120-minute course still linked);
+  //   - a CLOSED course within 90 minutes: no link (its page still renders, and
+  //     dropping isPlayable from matchesUseCase is invisible to the rosters,
+  //     whose callers already filter to playable courses);
+  //   - a playable course within 90 minutes: a link.
+  // The best-for link is the only /golf-courses/best-for/ href a course page
+  // renders, so each negative is clean.
   const matchesAny = (c: Course) => USE_CASES.some((u) => USE_CASE_RULES[u].predicate(c));
-  const canaries: [Course | undefined, boolean][] = [
-    [courses.find((c) => playable(c) && !near(c) && matchesAny(c)), false],
-    [courses.find((c) => playable(c) && near(c) && matchesAny(c)), true],
+  const canaries: [string, Course | undefined, boolean][] = [
+    ["no drive time", courses.find((c) => playable(c) && c.drive_time_from_bangkok_min === null && matchesAny(c)), false],
+    ["over 90 min", courses.find((c) => playable(c) && c.drive_time_from_bangkok_min !== null && !near(c) && matchesAny(c)), false],
+    ["closed, within 90 min", courses.find((c) => !playable(c) && near(c) && matchesAny(c)), false],
+    ["playable, within 90 min", courses.find((c) => playable(c) && near(c) && matchesAny(c)), true],
   ];
-  for (const [c, wantLink] of canaries) {
+  for (const [kind, c, wantLink] of canaries) {
     if (!c) {
       fail(
-        "L7 best-for cross-link canary",
-        `no playable course ${wantLink ? "within" : "beyond"} ${ROSTER_MAX_DRIVE_MIN} min matches any use-case rule, so this check has no subject`,
+        `L7 best-for cross-link canary (${kind})`,
+        "no course of this kind matches any use-case rule, so this check has no subject",
       );
       continue;
     }
@@ -7409,10 +7450,10 @@ async function runRosterClaimTests() {
           `L7 ${path} best-for cross-link`,
           wantLink
             ? "a playable course within 90 minutes that matches a use-case rule rendered no best-for link"
-            : `${c.drive_time_from_bangkok_min === null ? "no drive time" : `drive time ${c.drive_time_from_bangkok_min} min`}, yet the course links to a Bangkok-area best-for list that cannot include it (route the link through matchesUseCase, not the bare predicate)`,
+            : `${kind}, yet the course links to a Bangkok-area best-for list that cannot include it (route the link through matchesUseCase, not the bare predicate)`,
         );
       } else {
-        pass(`L7 ${path} ${wantLink ? "links" : "does not link"} to a best-for list, as its drive time requires`);
+        pass(`L7 ${path} (${kind}) ${wantLink ? "links" : "does not link"} to a best-for list`);
       }
     } catch (err) {
       fail(`L7 ${path} fetch error`, String(err));
@@ -7796,8 +7837,10 @@ async function runLocalizedDriveTimeTests() {
 // course has NO translated prose.overview, so the EN fallback fires and there is
 // something to compare. Every translation batch REMOVES comparisons, so unlike
 // MIN_COURSES/packageOfferSeen this number shrinks and the floor must be lowered
-// deliberately rather than raised. The one other thing that moves it is a change
-// to the ROSTER rule (getCoursesUnderPrice), which can move it either way.
+// deliberately rather than raised. It also moves whenever tier-roster
+// membership changes: the roster rule itself (getCoursesUnderPrice), or a
+// course edit (fee, drive time, status, a popularityScore input); either can
+// move it in either direction.
 //
 // Today: 88, across TWENTY-TWO courses. The tiers used to rank every course in
 // Thailand under each ceiling; they are now Bangkok-area price bands (within 90
