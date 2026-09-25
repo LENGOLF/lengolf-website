@@ -25,7 +25,7 @@ The most common rental brands at quality Bangkok golf venues are **Callaway**, *
 
 Higher-end Bangkok golf courses and indoor simulators invest in name-brand rental inventory. Callaway and TaylorMade are the most widely stocked, while Titleist sets appear at a smaller number of quality venues. You can generally expect clubs that are less than a few years old, clean grips, and a complete set from driver to putter.
 
-LENGOLF's premium rental sets for men and women are all Callaway — a consistent choice that suits most mid-handicap players and beginners alike.
+LENGOLF's premium rental sets for men and women are all Callaway, a consistent choice that suits most mid-handicap players and beginners alike.
 
 ### Budget and Municipal Courses
 

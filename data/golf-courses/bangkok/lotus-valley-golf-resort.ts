@@ -40,7 +40,7 @@ export const course: GolfCourse = {
       meta_description: `Lotus Valley Golf Resort green fees, Thailand's only Gary Player-designed course overview, tips for visiting, and golf club rentals delivered to your Bangkok hotel.`,
     },
     th: {
-      title: `Lotus Valley Golf Resort ฉะเชิงเทรา — ค่ากรีนฟี รีวิวสนาม และเช่าไม้กอล์ฟ`,
+      title: `Lotus Valley Golf Resort ฉะเชิงเทรา · ค่ากรีนฟี รีวิวสนาม และเช่าไม้กอล์ฟ`,
       meta_description: `ค่ากรีนฟี Lotus Valley Golf Resort วันธรรมดา 2,500 บาท เสาร์อาทิตย์ 3,500 บาท สนามแห่งเดียวในไทยที่ออกแบบโดย Gary Player ในจังหวัดฉะเชิงเทรา พร้อมบริการเช่าไม้กอล์ฟส่งถึงโรงแรมในกรุงเทพฯ`,
       prose: {
         overview: `Lotus Valley Golf Resort มีความโดดเด่นเฉพาะตัวในวงการกอล์ฟไทย เพราะเป็นสนามแห่งเดียวในประเทศไทยที่ออกแบบโดย Gary Player ตั้งอยู่ในจังหวัดฉะเชิงเทราทางตะวันออกของกรุงเทพฯ และอยู่ห่างจากสนามบินสุวรรณภูมิราว 45 นาที สนามสไตล์รีสอร์ตแห่งนี้เปิดให้บริการครั้งแรกในปี 1988 และต่อมาได้รับการปรับปรุงโดยดีไซเนอร์ John Morrow และ Craig Bertram แนวคิดการออกแบบสไตล์สกอตแลนด์ของ Gary Player ปรากฏให้เห็นตลอดทั้งสนาม แฟร์เวย์และขอบกรีนถูกตัดให้สั้นชิด น้ำเข้ามามีบทบาทในเกือบทุกหลุม และโจทย์เสี่ยง-ผลตอบแทนถูกกำหนดไว้อย่างชัดเจน สนามคว้ารางวัล Best Value for Money Experience จากงาน Asian Golf Awards ปี 2015 และชื่อเสียงนั้นก็ยั่งยืน ค่ากรีนฟียังคงอยู่ในระดับปานกลางขณะที่คุณภาพการออกแบบและการดูแลสนามยังคงสูง Lotus Valley ใช้นโยบายไร้เงินสดภายในสนาม`,
@@ -51,7 +51,7 @@ export const course: GolfCourse = {
       },
     },
     ko: {
-      title: `Lotus Valley Golf Resort 차층사오 그린피 — 코스 가이드와 클럽 대여`,
+      title: `Lotus Valley Golf Resort 차층사오 그린피: 코스 가이드와 클럽 대여`,
       meta_description: `Lotus Valley Golf Resort 그린피는 평일 2,500바트, 주말 3,500바트예요. 태국 유일의 게리 플레이어 설계 코스로, 방콕 동쪽 차층사오의 18홀 리조트 코스 안내와 호텔로 배달되는 LENGOLF 클럽 대여를 정리했어요.`,
       prose: {
         overview: `Lotus Valley Golf Resort는 태국에서 유일한 게리 플레이어(Gary Player) 설계 코스로, 태국 골프에서 독특한 이력을 지녔어요. 방콕 동쪽 차층사오(Chachoengsao)에 자리하며 수완나품 공항에서 약 45분 거리인 이 리조트형 코스는 1988년 처음 문을 열었고, 이후 설계가 John Morrow와 Craig Bertram의 손을 거쳐 리노베이션됐습니다. 게리 플레이어의 스코틀랜드풍 설계 철학이 곳곳에 드러나요. 페어웨이와 프린지를 바짝 깎아 두고, 물이 거의 모든 홀에 개입하며, 위험과 보상의 선택이 뚜렷하게 짜여 있죠. 이 코스는 2015년 아시안 골프 어워드에서 '베스트 밸류 포 머니 경험'을 수상했고, 그 명성은 지금까지 이어져요. 그린피는 여전히 적당한 수준이면서도 설계와 코스 관리의 질은 높게 유지됩니다. Lotus Valley는 코스 안에서 현금 없는 결제 정책을 운영해요.`,
@@ -73,7 +73,7 @@ export const course: GolfCourse = {
       },
     },
     ja: {
-      title: `Lotus Valley Golf Resort（チャチューンサオ県）— グリーンフィー・コース紹介・クラブレンタル`,
+      title: `Lotus Valley Golf Resort（チャチューンサオ県）：グリーンフィー・コース紹介・クラブレンタル`,
       meta_description: `グリーンフィーは平日2,500THB・週末3,500THB。Lotus Valley Golf Resortはチャチューンサオ県にある、タイで唯一のGary Player設計コースです。ホテルへ届くLENGOLFのクラブレンタルもご案内します。`,
       prose: {
         overview: `Lotus Valley Golf Resortは、タイで唯一のGary Player設計コースという、タイのゴルフ界における独自の栄誉を持っています。バンコク東方のチャチューンサオ県にあり、スワンナプーム空港からは約45分。リゾートスタイルのこのコースは、もともと1988年に開業し、のちに設計家John MorrowとCraig Bertramの手で改修されました。Gary Playerのスコットランド流の設計思想は随所に表れています。フェアウェイもフリンジも短く刈り込まれ、ほぼすべてのホールで水が絡み、リスクとリワードの選択が明快に示されています。コースは2015年のアジアゴルフアワードで「Best Value for Money Experience」を受賞し、その評判は今も続いています。グリーンフィーは手頃なままに、設計とコンディショニングの質は高く保たれています。Lotus Valleyはコース内でキャッシュレス方式を採用しています。`,

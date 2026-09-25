@@ -40,7 +40,7 @@ export const course: GolfCourse = {
       meta_description: `Muang Ake Wang Noi Golf Course (Wang Noi Prestige) green fees, course guide, visitor tips, and golf club rentals delivered to your Bangkok hotel.`,
     },
     th: {
-      title: `Muang Ake Wang Noi Golf Course อยุธยา — ค่ากรีนฟี รีวิวสนาม และเช่าไม้กอล์ฟ`,
+      title: `Muang Ake Wang Noi Golf Course อยุธยา · ค่ากรีนฟี รีวิวสนาม และเช่าไม้กอล์ฟ`,
       meta_description: `ค่ากรีนฟี Muang Ake Wang Noi Golf Course (Wang Noi Prestige) วันธรรมดา 1,200 บาท เสาร์อาทิตย์ 1,800 บาท สนามแชมเปียนชิพในจังหวัดพระนครศรีอยุธยา พร้อมบริการเช่าไม้กอล์ฟส่งถึงโรงแรมในกรุงเทพฯ`,
       prose: {
         overview: `สนามที่สามและอยู่เหนือสุดในบรรดาสนามที่พัฒนาโดยกลุ่ม Muang Ake สนาม Wang Noi เปิดให้บริการในปี 2006 ในจังหวัดพระนครศรีอยุธยา ตั้งอยู่ทางเหนือของสนามบินดอนเมือง และห่างจากใจกลางกรุงเทพฯ ประมาณ 80 นาที เดิมทำการตลาดในชื่อ Muang Ake Wang Noi Golf Course ก่อนที่สนามจะได้รับการปรับปรุงครั้งใหญ่ในปี 2018 ทั้งการปูหญ้าใหม่ทั้งสนาม คลับเฮาส์ใหม่ และการบริหารชุดใหม่ และนับแต่นั้นก็ดำเนินงานภายใต้ชื่อ Wang Noi Prestige Golf & Country Club (ต่อมาใช้ชื่อ The Wangnoi Ayudhaya) ด้วยระยะ 6,830 หลาพาร์ 72 จึงเป็นสนามที่ยาวและท้าทายที่สุดในบรรดาสามเลย์เอาต์ของ Muang Ake สนามตั้งอยู่ในภูมิทัศน์ที่อุดมสมบูรณ์ด้วยการทำนาในย่านอำเภอวังน้อย มอบพื้นที่ราบเปิดโล่งพร้อมแฟร์เวย์กว้างที่ขนาบด้วยพืชพรรณใหญ่และอุปสรรคน้ำ ตำแหน่งที่อยู่ใกล้เมืองเก่าอยุธยาทำให้เป็นจุดหมายผสมผสานยอดนิยมสำหรับนักเดินทางที่สนใจประวัติศาสตร์`,
@@ -51,7 +51,7 @@ export const course: GolfCourse = {
       },
     },
     ko: {
-      title: `Muang Ake Wang Noi Golf Course 아유타야 그린피 — 코스 가이드와 클럽 대여`,
+      title: `Muang Ake Wang Noi Golf Course 아유타야 그린피: 코스 가이드와 클럽 대여`,
       meta_description: `Muang Ake Wang Noi Golf Course 그린피는 평일 약 1,200바트, 주말 약 1,800바트예요. 돈므앙 공항 북쪽 아유타야의 6,830야드 18홀 챔피언십 코스(현 Wang Noi Prestige) 안내와, 호텔로 배달되는 LENGOLF 클럽 대여를 정리했어요.`,
       prose: {
         overview: `Muang Ake 그룹이 세 번째이자 가장 북쪽에 조성한 왕노이 코스는 2006년 아유타야(Ayutthaya)에서 문을 열었어요. 돈므앙 공항 바로 북쪽에 자리하며 방콕 도심에서 약 80분 거리입니다. 처음에는 Muang Ake Wang Noi Golf Course라는 이름으로 알려졌지만, 2018년 코스 전면 재잔디 조성과 새 클럽하우스, 새 운영진을 갖춘 대대적 리노베이션을 거쳐 이후로는 Wang Noi Prestige Golf & Country Club이라는 이름으로 운영되고 있어요(이후 'The Wangnoi Ayudhaya'로도 브랜딩됨). 6,830야드에 파 72로, Muang Ake의 세 레이아웃 가운데 가장 길고 가장 도전적입니다. 코스는 왕노이 지역의 비옥한 벼농사 풍경 속에 자리해 평탄하고 트인 지형을 이루며, 넓은 페어웨이를 아름드리 식생과 워터 해저드가 감싸요. 아유타야 옛 도읍과 가까운 위치 덕에 역사에 관심 있는 여행자에게는 함께 묶어 찾기 좋은 인기 목적지가 됩니다.`,
@@ -73,7 +73,7 @@ export const course: GolfCourse = {
       },
     },
     ja: {
-      title: `Muang Ake Wang Noi Golf Course（アユタヤ県）— グリーンフィー・コース紹介・クラブレンタル`,
+      title: `Muang Ake Wang Noi Golf Course（アユタヤ県）：グリーンフィー・コース紹介・クラブレンタル`,
       meta_description: `グリーンフィーは平日1,200THB・週末1,800THB。Muang Ake Wang Noi Golf Course（現Wang Noi Prestige）はアユタヤ県にある18ホール・パー72コースです。ホテルへ届くLENGOLFのクラブレンタルもご案内します。`,
       prose: {
         overview: `Muang Akeグループが開発した3つのコースのうち、3番目にして最も北に位置するのがこのワンノイコースで、2006年にアユタヤ県で開業しました。ドンムアン空港のすぐ北にあり、バンコク中心部からは約80分です。当初はMuang Ake Wang Noi Golf Courseとして売り出されていましたが、この施設は2018年に大規模な改修を受け、コースの全面芝張り替え、新しいクラブハウス、新体制の運営が行われました。以来、Wang Noi Prestige Golf & Country Clubの名で運営されています（その後「The Wangnoi Ayudhaya」としてブランド展開）。全長6,830ヤード、パー72で、3つのMuang Akeレイアウトの中で最も長く、最も手ごわいコースです。肥沃な稲作地帯であるワンノイ地区に広がり、成熟した植生と水景に縁取られた広いフェアウェイを備えた、フラットで開けた地形が特徴です。アユタヤの古都に近い立地は、歴史に関心を持つ旅行者にとって組み合わせて訪れる目的地として人気があります。`,
