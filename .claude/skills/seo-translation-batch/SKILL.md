@@ -139,7 +139,8 @@ one.
 
 Adding one translated slug (locale L) touches **three files**:
 
-1. **`data/explainer-pages.ts`** — new entry. Conventions (verify against the
+1. **`data/explainer-pages.ts`** — new entry. Conventions (verify the field and
+   ordering conventions, not the punctuation, against the
    `golf-lessons-bangkok-coaches` cluster, ids `exp-32` / `exp-32-ja` / …):
    - id = EN id + `-<locale>` suffix (`exp-32-ja`); `slug` identical across locales;
      `locale: '<L>'`, `status: 'published'`, same `category` as EN.

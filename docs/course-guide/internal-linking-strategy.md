@@ -139,7 +139,7 @@ Bangkok has 14 published location pages (`/location/indoor-golf-[neighborhood]`)
 | Summit Windmill (Bangna — SE) | `/location/indoor-golf-asok`, `/location/indoor-golf-sukhumvit` |
 | Phoenix Gold (Bangna — SE) | `/location/indoor-golf-asok`, `/location/indoor-golf-sukhumvit` |
 
-**Anchor text pattern:** "The nearest LENGOLF simulator is in [neighbourhood] — [15 min by BTS from Asok](/location/indoor-golf-asok/)"
+**Anchor text pattern:** "The nearest LENGOLF simulator is in [neighbourhood], [15 min by BTS from Asok](/location/indoor-golf-asok/)"
 
 **For Phase 2 Bangkok courses:** Apply the same proximity logic (use `latitude`/`longitude` and `drive_time_from_bangkok_min` from course data to assign the closest 1–2 location pages).
 
