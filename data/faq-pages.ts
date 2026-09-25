@@ -509,7 +509,8 @@ export const faqPages: FaqSeoPage[] = [
   // Title/meta front-load the rainy-day query (曼谷 下雨 高尔夫) and keep the
   // 室内高尔夫 hook. Every figure traces to the EN entry (1,500毫米, 5–10月,
   // 9:00–23:00, 约550泰铢, 最多5人, 4号出口) and is rendered per the ZH
-  // conventions (泰铢 spelled out, half-width digits, – ranges, —— for asides);
+  // conventions (泰铢 spelled out, half-width digits, – ranges); its em dashes
+  // are legacy debt, not a model (the zh glossary style_notes bans them);
   // the LENGOLF bay price carries the as-of marker 截至2026年7月. Place and
   // brand names stay in Latin per the ZH transliteration note (BTS Chidlom,
   // The Mercury Ville, Bravo, Pebble Beach, St Andrews). related_* retargeted
@@ -730,7 +731,8 @@ export const faqPages: FaqSeoPage[] = [
   // with 没打过高尔夫. Every figure traces to the EN entry (2分钟, 大约一半,
   // 最多5人, 约550泰铢, 4号出口); the bay price carries the as-of marker
   // 截至2026年7月. Rendered per the ZH conventions (泰铢, half-width digits,
-  // —— for asides, 你 register). related_* retargeted to ZH-translated pages —
+  // 你 register); its em dashes are legacy debt, not a model (the zh glossary
+  // style_notes bans them). related_* retargeted to ZH-translated pages —
   // the EN entry's what-to-wear-to-indoor-golf-bar and
   // how-long-does-simulator-golf-take FAQs have no ZH translation, so they are
   // replaced with the ZH non-golfers guide and the ZH simulator-accuracy FAQ.
