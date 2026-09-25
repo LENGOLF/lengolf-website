@@ -27,7 +27,7 @@ Bangkok hotels. Not Phuket, Hua Hin, or Pattaya (as of April 2026).
 Source: lengolf.com | Verified: 2026-04
 
 **CTA framing:**
-The value proposition for course pages is: "Skip airline baggage fees — rent clubs delivered to your Bangkok hotel."
+The value proposition for course pages is: "Skip airline baggage fees: rent clubs delivered to your Bangkok hotel."
 This is relevant for courses in all regions because most visitors stay in Bangkok before/after playing.
 
 ---
