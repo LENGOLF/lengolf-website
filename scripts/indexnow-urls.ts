@@ -1507,12 +1507,14 @@ const CONSUMERS: Record<string, Record<string, string>> = {
   },
   'data/price-tiers.ts': {
     'app/[locale]/golf-courses/under/[tier]/page.tsx': 'pinged: the tier page',
+    'app/[locale]/golf-courses/under/[tier]/opengraph-image.tsx': 'ignored: the share card; an image is not a pinged URL, and its tier page is',
     'app/[locale]/golf-courses/page.tsx': 'pinged: tier list (PRICE_TIERS)',
     'app/[locale]/golf-courses/[region]/[slug]/page.tsx': "ignored: a course's tier cross-link, category (3)",
     'lib/golf-courses-derived.ts': 'ignored: derives the tier rosters rendered by the tier page',
   },
   'data/bts-stations.ts': {
     'app/[locale]/golf-courses/near/[station]/page.tsx': 'pinged: the station page',
+    'app/[locale]/golf-courses/near/[station]/opengraph-image.tsx': 'ignored: the share card; an image is not a pinged URL, and its station page is',
     'app/[locale]/golf-courses/page.tsx': 'pinged: station list (EN only)',
     'app/[locale]/golf-courses/[region]/[slug]/page.tsx': 'ignored: nearest-station line on a course, category (3)',
     'lib/golf-courses-derived.ts': 'ignored: derives the proximity rosters rendered by the station page',
@@ -1520,12 +1522,14 @@ const CONSUMERS: Record<string, Record<string, string>> = {
   },
   'data/airports.ts': {
     'app/[locale]/golf-courses/near/[station]/page.tsx': 'pinged: the airport page',
+    'app/[locale]/golf-courses/near/[station]/opengraph-image.tsx': 'ignored: the share card; an image is not a pinged URL, and its airport page is',
     'app/[locale]/golf-courses/page.tsx': 'pinged: airport list (EN only)',
     'lib/golf-courses-derived.ts': 'ignored: derives the proximity rosters rendered by the airport page',
     'lib/seo-links.ts': 'ignored: related-link labels, category (3)',
   },
   'data/golf-courses-use-cases.ts': {
     'app/[locale]/golf-courses/best-for/[useCase]/page.tsx': 'pinged: the use-case page',
+    'app/[locale]/golf-courses/best-for/[useCase]/opengraph-image.tsx': 'ignored: the share card; an image is not a pinged URL, and its use-case page is',
     'app/[locale]/golf-courses/page.tsx': 'pinged: use-case list (EN only)',
     'app/[locale]/golf-courses/[region]/[slug]/page.tsx': "ignored: a course's use-case cross-links, category (3)",
     'app/sitemap.ts': 'ignored: the sitemap is not a pinged URL',

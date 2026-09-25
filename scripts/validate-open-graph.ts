@@ -26,16 +26,18 @@
  * Both are now asserted on the RENDERED tag in smoke section D, where the
  * resolver has already run and there is nothing to predict. The TRADE, stated
  * plainly and without the inflation an earlier version of this paragraph
- * carried: the walk yields 47 files under app/, of which 36 reach the audit
+ * carried: the walk yields 53 files under app/, of which 36 reach the audit
  * (measured against THIS token list — the figure was 33 under the previous
  * one, and quoting it forward after widening the filter was its own stale
- * number), and — the part that matters — NO page file
+ * number; the walk read 47 here while the tree already held 49, and the four
+ * roundup opengraph-image.tsx cards took it to 53 without moving the 36,
+ * since none of them carries a metadata token), and — the part that matters — NO page file
  * declares `twitter` or `icons` today, only the layout. So nothing LIVE was
  * given up; what was given up is coverage of a hypothetical future page-level
- * declaration. Section D fetches 35 URLs, and 12 of the 31 openGraph
- * declarations are unreachable from any of them; 7 of those 12 are under
- * /golf-courses/ (measured), the other 5 being activities, best, cost, hotels
- * and second-hand-club detail. Coverage of the SUPPLIER (the layout, sole
+ * declaration. Section D fetches 41 URLs, and 7 of the 31 openGraph
+ * declarations are unreachable from any of them; 2 of those 7 are under
+ * /golf-courses/ (the hub and region-hub pages, measured), the other 5 being
+ * activities, best, cost, hotels and second-hand-club detail. Coverage of the SUPPLIER (the layout, sole
  * source of both keys) is complete; coverage of a future page-level
  * declaration is not. Do not re-add a source-level version without reading
  * Next's resolver first.

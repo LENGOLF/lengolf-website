@@ -33,15 +33,16 @@ type OpenGraphMeta = NonNullable<Metadata['openGraph']>
  *   - `images`: defaulting it is tempting and NOT safe here. Next's
  *     file-based merge is guarded on `!source.openGraph.hasOwnProperty
  *     ('images')`, so supplying a default would make every segment "own" an
- *     images key and would silently SUPPRESS the three colocated
+ *     images key and would silently SUPPRESS the seven colocated
  *     opengraph-image.tsx cards under /golf-courses/. Confirmed live: /faq/
  *     and /guide/<slug>/ emit NO og:image today, while /golf-courses/ and
  *     /golf-courses/<region>/ emit exactly one (from the colocated file). The
  *     families with neither an `images` argument nor a colocated file are
- *     /location/, /guide/, /faq/, /cost/, /best/, /activities/, /hotels/
- *     <slug>, and the four /golf-courses/{under,near,best-for,compare}/
- *     routes — the last four because a child openGraph discards the PARENT
- *     segment's colocated card. Fixing it needs those segments exempted or
+ *     /location/, /guide/, /faq/, /cost/, /best/, /activities/ and /hotels/
+ *     <slug>. The four /golf-courses/{under,near,best-for,compare}/ routes
+ *     were on that list until each got a card of its own: a child openGraph
+ *     discards the PARENT segment's card, so inheriting the hub's was never
+ *     available to them. Fixing the rest needs those segments exempted or
  *     the default applied per-family, which is a separate change. (Page count
  *     not stated here: the sitemap fetch needed to derive it was blocked by
  *     bot protection, and this repo's rule is not to quote a number nobody
