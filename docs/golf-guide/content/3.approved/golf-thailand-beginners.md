@@ -75,7 +75,7 @@ Golf in Thailand has a dress code, even as a beginner, and courses do enforce it
 The rules are simple:
 1. Collared shirt required — polo shirts work perfectly
 2. No cargo shorts or jeans — tailored shorts or trousers only
-3. Soft-spike or spikeless golf shoes preferred; trainers are accepted at many courses but check in advance
+3. Soft-spike or spikeless golf shoes are expected at most courses; a few accept clean trainers, so check in advance
 4. No sleeveless shirts unless they have a collar
 
 When in doubt, a plain polo shirt and tailored shorts covers you at virtually every course in Bangkok.
