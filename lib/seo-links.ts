@@ -91,9 +91,10 @@ export async function buildRelatedLabels(
       // guide's own title and carries no golf/course tokens.
       //
       // Deliberately a SHORTENED form of the target's own <title>, not a
-      // mirror of it: the route appends ": Distances & Green Fees" (airports)
-      // and uses "Best Golf Courses Near {name} BTS — Drive Times & Green
-      // Fees" (stations), both too long for a related-link card. The leading
+      // mirror of it: the route appends ": Distances & <noun>s" (airports)
+      // and uses "Best Golf Courses Near {name} BTS: Drive Times & <noun>s"
+      // (stations; plain {name} for an area entry such as Silom), both too
+      // long for a related-link card, the noun following each roster. The leading
       // "Golf Courses Near {place}" is what carries the topical tokens, so
       // that is what we keep. The course-detail branch below CAN mirror
       // exactly, because a course title is already card-length.

@@ -5,7 +5,7 @@ import { Link } from '@/i18n/navigation'
 import { SITE_URL } from '@/lib/constants'
 import { getBreadcrumbJsonLd } from '@/lib/jsonld'
 import { getCourseRoundupJsonLd } from '@/lib/jsonld-courses'
-import { BTS_STATIONS } from '@/data/bts-stations'
+import { BTS_STATIONS, stationPlaceName, stationTitleName } from '@/data/bts-stations'
 import { AIRPORTS } from '@/data/airports'
 import { pricesByDayOfWeek, feeBasisNoteEn, feeNounEn } from '@/lib/course-fees'
 import {
@@ -74,8 +74,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const meta = BTS_STATIONS[station]
   if (!meta) return { title: 'Not Found' }
 
-  const title = `Best Golf Courses Near ${meta.name} BTS — Drive Times & Green Fees` // fee-noun-ok: page chrome, roster not in scope
-  const description = `Top golf courses ranked by distance from ${meta.name} BTS station, with drive times, green fees, and on-site facilities.` // fee-noun-ok: page chrome, roster not in scope
+  // The same derivation as the airport branch above, for the same reason: this
+  // used to hardcode "Green Fees" behind a fee-noun-ok escape while
+  // krungthep-kreetha (fee_is_package) ranked #1 or #2 on all 8 station
+  // rosters, so every station title claimed green fees over an all-in package.
+  // The noun now follows the roster StationPage renders. Title-cased (not a
+  // literal) so a roster with no package course reads "Green Fees", the wording
+  // it had before, and "Rates" otherwise.
+  const metaItems = await getCoursesNearStation(station, 8)
+  const metaNoun = feeNounEn(metaItems.map(({ course }) => course))
+  const titleNoun = `${metaNoun.split(' ').map((w) => w[0].toUpperCase() + w.slice(1)).join(' ')}s`
+  // A real station reads "Asok BTS" / "Asok BTS station"; an area entry (Silom,
+  // Sathorn) is not a BTS station, so its title names the area and its
+  // description names the station its coordinates sit on.
+  const title = `Best Golf Courses Near ${stationTitleName(meta)}: Drive Times & ${titleNoun}`
+  const from = meta.btsStation ? stationPlaceName(meta) : `${meta.name} BTS station`
+  const description = `Top golf courses ranked by distance from ${from}, with drive times, ${metaNoun.toLowerCase()}s, and on-site facilities.`
   const canonicalUrl = `${SITE_URL}/golf-courses/near/${station}/`
 
   return {
@@ -343,7 +357,7 @@ async function StationPage({ station }: { station: string }) {
   const listJsonLd = getCourseRoundupJsonLd(
     items.map((i) => i.course),
     canonicalUrl,
-    `Best golf courses near ${meta.name} BTS`
+    `Best golf courses near ${stationPlaceName(meta)}`
   )
 
   // Sibling station cross-links
@@ -396,7 +410,7 @@ async function StationPage({ station }: { station: string }) {
           <RoundupList
             items={items.map(({ course, km }) => ({
               course,
-              reason: `${km.toFixed(1)} km from ${meta.name} BTS (straight line).`,
+              reason: `${km.toFixed(1)} km from ${stationPlaceName(meta)} in a straight line.`,
             }))}
           />
         </section>

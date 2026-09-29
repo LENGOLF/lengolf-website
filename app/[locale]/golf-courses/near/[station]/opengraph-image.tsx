@@ -64,10 +64,8 @@ export default async function Image({ params }: Props) {
     // The page's H1.
     title: `Best Golf Courses Near ${meta.name}`,
     chips: [`${items.length} nearest courses`, `Closest ~${items[0].km.toFixed(1)} km, straight line`],
-    // No fee noun. The station page's <title>, which a link preview shows
-    // beside this card, hardcodes "Green Fees", while its roster's noun is
-    // "Rate" on every station today; naming either here would contradict the
-    // page or the roster.
-    footer: 'Course Guides · Golf Club Rental',
+    // The station page's <title> takes the same noun from the same roster
+    // (its generateMetadata), so a link preview shows one noun on both.
+    footer: `${feeNounEn(items.map(({ course }) => course))}s · Course Guides · Golf Club Rental`,
   })
 }

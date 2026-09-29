@@ -21,6 +21,29 @@ export interface BtsStation {
   areaSlug?: string
   /** 1–2 sentences describing the district context (hotels, business, nightlife). */
   description: string
+  /** Set ONLY on an AREA entry, i.e. one whose `name` is not itself a BTS
+   *  station: the BTS station its coordinates sit on, so distances are really
+   *  measured from there. Silom is served by BTS Sala Daeng and Sathorn by BTS
+   *  Chong Nonsi, so "Silom BTS" names a station that does not exist. Leave it
+   *  unset for a real station, where `name` already is the station. */
+  btsStation?: string
+}
+
+/**
+ * How copy names an entry as a place: "Asok BTS" for a real station, "Silom
+ * (BTS Sala Daeng)" for an area entry. Route every "<name> BTS" through this
+ * rather than interpolating `name` next to a literal "BTS".
+ */
+export function stationPlaceName(s: BtsStation): string {
+  return s.btsStation ? `${s.name} (BTS ${s.btsStation})` : `${s.name} BTS`
+}
+
+/**
+ * The shorter form for a <title>, where the area form would run past the SERP
+ * cut-off: "Asok BTS" for a real station, plain "Silom" for an area entry.
+ */
+export function stationTitleName(s: BtsStation): string {
+  return s.btsStation ? s.name : `${s.name} BTS`
 }
 
 export const BTS_STATIONS: Record<string, BtsStation> = {
@@ -73,6 +96,7 @@ export const BTS_STATIONS: Record<string, BtsStation> = {
     name: 'Silom',
     lat: 13.7290,
     lng: 100.5340,
+    btsStation: 'Sala Daeng',
     description:
       'Silom is the Bangkok financial district, served by BTS Sala Daeng and MRT Silom. Hotels here (Pullman, Le Meridien, Banyan Tree) host conference and incentive travellers who often want a single-day golf escape.',
   },
@@ -81,6 +105,7 @@ export const BTS_STATIONS: Record<string, BtsStation> = {
     name: 'Sathorn',
     lat: 13.7240,
     lng: 100.5292,
+    btsStation: 'Chong Nonsi',
     description:
       'Sathorn runs along the south side of Lumpini Park and is dense with five-star hotels (Sukhothai, St. Regis, Sofitel So). The closest BTS is Chong Nonsi; many guests are on multi-day stays with one or two reserved tee times.',
   },
