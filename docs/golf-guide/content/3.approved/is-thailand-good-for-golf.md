@@ -47,7 +47,7 @@ Thai courses range from basic resort tracks to genuinely world-class layouts. At
 
 Mid-tier courses — and there are many — are well-kept, professionally staffed, and offer a solid round of golf. The standard of agronomy is generally high; Thai operators understand that visiting golfers are their core business.
 
-Lower-tier municipal or older resort courses exist but are easy to avoid. Booking through a reputable platform or checking recent reviews will steer you clear of the outliers. For course-by-course detail, see the [best golf courses near Bangkok](/guide/best-golf-courses-near-bangkok).
+A few weaker courses exist, but they are easy to avoid. Booking through a reputable platform or checking recent reviews will steer you clear of the outliers. For course-by-course detail, see the [best golf courses near Bangkok](/guide/best-golf-courses-near-bangkok).
 
 ---
 

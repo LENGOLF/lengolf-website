@@ -22,7 +22,7 @@ category: golf-in-thailand
 
 | Course Tier | Tip Range (THB) | Notes |
 |---|---|---|
-| Public / municipal | 300–400 | Lower end of market |
+| Budget | 300–400 | Lower end of market |
 | Mid-range | 400–500 | Most common amount |
 | Premium / resort | 500–600 | Expected baseline at top venues |
 | Exceptional service (any tier) | 700–1,000 | Great reads, lost balls found, extra effort in heat |
@@ -33,7 +33,7 @@ category: golf-in-thailand
 
 Most golfers playing mid-range courses in Thailand leave **400–500 THB** for a standard 18-hole round. This covers normal caddie duties: carrying the bag, cleaning clubs, advising on yardages, and raking bunkers.
 
-At public or municipal tracks where green fees are lower, **300–400 THB** is perfectly respectful. At resort and championship venues — think courses ranked among the best in the region — caddie expectations shift upward and **500–600 THB** is the baseline.
+At budget courses, **300–400 THB** is perfectly respectful. At resort and championship venues — think courses ranked among the best in the region — caddie expectations shift upward and **500–600 THB** is the baseline.
 
 Tipping is not legally required, but it is a firmly established norm in Thai golf culture. Caddies rely on tips as a meaningful part of their income, so withholding a tip without good reason is considered poor etiquette.
 
