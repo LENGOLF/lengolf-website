@@ -47,7 +47,8 @@
     { "term": "球杆", "use": "球杆", "avoid": ["球棒"], "note": "golf clubs. Golf bag = 球包." },
     { "term": "廉价航空", "use": "廉价航空", "avoid": ["低成本航空"], "note": "budget carrier / LCC. Gloss once as 廉价航空（LCC）." },
     { "term": "全服务航空", "use": "全服务航空", "avoid": ["传统航空"], "note": "full-service carrier." },
-    { "term": "室内高尔夫模拟器", "use": "室内高尔夫模拟器", "avoid": ["室内高尔夫仿真器"], "note": "indoor golf simulator; 模拟器 for simulator." }
+    { "term": "室内高尔夫模拟器", "use": "室内高尔夫模拟器", "avoid": ["室内高尔夫仿真器"], "note": "indoor golf simulator; 模拟器 for simulator." },
+    { "term": "Callaway", "use": "Callaway", "avoid": ["美巨人", "Majesty"], "note": "Callaway's women's line is REVA. The Majesty set is retired (rental_club_sets.website_visible=false), and 'Callaway (Majesty)' shipped once in ja/ko catalogs and six ja content strings until Batch 12. Nothing on this site should name Majesty." }
   ],
   "conventions": {
     "currency": {

@@ -6460,14 +6460,15 @@ async function runCourseDetailRegistryLivenessTests() {
 
   // The Offer floor cannot be exact — courses with a null weekday fee emit no
   // makesOffer, and only some have a second rate — so it is a real number
-  // derived from the corpus rather than `> 0`. Measured at 824: 115 registered
+  // derived from the corpus rather than `> 0`. Measured at 888: 124 registered
   // courses x 4 locales, each emitting one Offer per non-null rate — NOT a clean
-  // product. Of the 115, **sixteen** are exceptions: EIGHT emit no makesOffer at
+  // product. Of the 124, **eighteen** are exceptions: EIGHT emit no makesOffer at
   // all (both fees null — amata-spring-country-club, st-andrews-2000,
-  // kumlung-ake-golf-course, rajpruek-club, batch 10 added
-  // mountain-creek-golf-resort + seoul-siam-resort-country-club, and batch 11
-  // added river-kwai-golf-country-club + mae-moh-golf-course) and EIGHT emit a
-  // single Offer (null weekend fee). So 99*2 + 8*1 = 206 per locale, x4 = 824.
+  // kumlung-ake-golf-course, rajpruek-club, mountain-creek-golf-resort,
+  // seoul-siam-resort-country-club, river-kwai-golf-country-club,
+  // mae-moh-golf-course) and TEN emit a single Offer (null weekend fee — batch 12
+  // added flora-ville-golf-country-club + panya-indra-golf-club to the eight).
+  // So 106*2 + 10*1 = 222 per locale, x4 = 888.
   // THIS COMMENT SHIPPED STALE ONCE: the batch-11 commit raised the constant
   // below and the fail() string beside it to 824 but left this block describing
   // 106/fourteen/SIX/768, so a reader re-deriving from the comment concluded the
@@ -6478,10 +6479,10 @@ async function runCourseDetailRegistryLivenessTests() {
   // packageOfferSeen 19 lines below was being raised in the same commit. That
   // is the "raise one ratchet, miss its sibling" shape CLAUDE.md documents,
   // reproduced inside the file that documents it. Re-derive on every batch.
-  if (offerChecked < 824) {
+  if (offerChecked < 888) {
     fail(
       `L2 Offer-label check ran on only ${offerChecked} label(s)`,
-      "expected 824 (99 registered courses emit 2 Offers, 8 emit 1, and 8 emit none — 206 per locale x 4). A low count means makesOffer is absent or the catalog lookup is failing, not that the labels are correct.",
+      "expected 888 (106 registered courses emit 2 Offers, 10 emit 1, and 8 emit none — 222 per locale x 4). A low count means makesOffer is absent or the catalog lookup is failing, not that the labels are correct.",
     );
   } else {
     pass(`L2 asserted localized JSON-LD Offer labels on ${offerChecked} label(s)`);
@@ -7091,8 +7092,8 @@ async function runPriceTierRoundupLanguageTests() {
         // nothing guards this assertion's own body either. Do not read this fix
         // as closing the class - a repo-wide sweep on 2026-08-31 found this
         // shape in a dozen-odd other gates, of which TWO are confirmed by
-        // mutation: L2's `offerChecked++` (line 5471, 824 assertions) and
-        // validate-course-slots.ts:557 (3,220). See CLAUDE.md for the rest,
+        // mutation: L2's `offerChecked++` (888 assertions) and
+        // validate-course-slots.ts's string loop (3,472). See CLAUDE.md for the rest,
         // which are candidates rather than measurements.
         judged++;
         if (!labelOk) {
@@ -7855,15 +7856,30 @@ async function runLocalizedDriveTimeTests() {
 // course edit (fee, drive time, status, a popularityScore input); either can
 // move it in either direction.
 //
-// Today: 88, across TWENTY-TWO courses. The tiers used to rank every course in
-// Thailand under each ceiling; they are now Bangkok-area price bands (within 90
-// minutes, above the next-lower ceiling), which took it 72 -> 88: the courses
-// that joined carry fewer translated overviews than the ones that left, and the
-// bands list 43 items per locale instead of 60. Derived per (tier, locale) from
-// the registry against the applied tree, and checked by reproducing the
-// previous 72 from the previous rule; not obtained by adding up the swaps.
-// Each translation batch that reaches a tier roster retires 4 per tier slot it
-// occupies (one per translated locale).
+// Today: 64, across SIXTEEN courses, one tier slot each (the bands are
+// disjoint, so no course sits on two tiers). The tiers used to rank every
+// course in Thailand under each ceiling; #146 made them Bangkok-area price
+// bands (within 90 minutes, above the next-lower ceiling), which took it
+// 72 -> 88 against the registry of the time: the courses that joined carry
+// fewer translated overviews than the ones that left, and the bands list 43
+// items per locale instead of 60. Batch 12 Tranche 1 (nine bangkok courses)
+// then took it 88 -> 64: six of its courses sit on the banded rosters, 6 x 4
+// locales = 24 retired. Derived per (tier, locale) from the registry against
+// the applied tree (getCoursesUnderPrice(thb, 12) under --conditions=
+// react-server), and checked by reproducing main's 88 with the same script on
+// main's tree; not obtained by subtraction. Each translation batch that
+// reaches a tier roster retires 4 per tier slot it occupies (one per
+// translated locale).
+//
+// All sixteen are untranslated BANGKOK courses, so bangkok tranches 2 and 3
+// take this to ZERO: the re-scope below is due within that series. The
+// re-scope target named below (region hubs) does not work either: hubs render
+// no pull quote (RoundupList is used only by /under/, /near/ and /best-for/,
+// and the last two pin locale 'en'), and the bangkok hub keeps its closed
+// courses untranslated. Once the tier rosters are fully translated no
+// localized surface renders an EN-fallback pull quote at all; replace this
+// section with a unit-level check of localizedOverview + firstSentence over a
+// fixture course before tranche 3.
 //
 // Pinned AT the true value on purpose, same discipline as the ratchets above: a
 // floor below the population is a guard gone slack, and here it would also hide
@@ -7877,7 +7893,7 @@ async function runLocalizedDriveTimeTests() {
 // tier pages once every rostered course is translated. The re-scope is to point
 // it at a surface that still has untranslated courses — the region hubs, whose
 // rosters are the full region roster rather than a derived top-12.
-const FALLBACK_MIN_COMPARISONS = 88;
+const FALLBACK_MIN_COMPARISONS = 64;
 
 async function runFallbackPullQuoteTests() {
   console.log(

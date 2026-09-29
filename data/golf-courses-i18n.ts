@@ -665,7 +665,10 @@ export const COURSE_DETAIL_I18N: {
   // check: its prose says "40 km south of central Bangkok" three times, but its
   // coordinates compute to ESE (119 deg, 61 deg off) and sit ~24 km east of the
   // Mueang Samut Prakan address the same file states. Needs verify:coordinates,
-  // not a translation.
+  // not a translation. RESOLVED in Batch 12 tranche 1: the owner supplied the
+  // real pin (13.5408, 100.6721 — south-east, near the coast, matching the
+  // address), the prose bearing was corrected to south-east in EN and every
+  // locale, and the course is now registered below.
   //
   // `royal-dusit-golf-club` (5 imp) is excluded permanently: operational_status
   // is `permanently_closed`.
@@ -730,6 +733,21 @@ export const COURSE_DETAIL_I18N: {
   { region: 'kanchanaburi', slug: 'royal-ratchaburi-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'kanchanaburi', slug: 'woo-sung-castle-hill', locales: ['th', 'ja', 'ko', 'zh'] },
   { region: 'north-misc', slug: 'mae-moh-golf-course', locales: ['th', 'ja', 'ko', 'zh'] },
+  // Batch 12, Tranche 1 (2026-09) — the first of three Bangkok-region tranches
+  // that finish the last untranslated region. Nine ordinary courses (no
+  // fee_is_package, no closed status); all six provinces they span already
+  // sit in PROVINCE_L10N. bangpoo was first registered with its Batch 9
+  // coordinate hold (above) overlooked — this tranche's pre-flight missed the
+  // note — and pr-rigor caught it; the hold was then resolved in the same batch.
+  { region: 'bangkok', slug: 'bangkok-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'bangpoo-golf-sports-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'dynasty-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'flora-ville-golf-country-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'krung-kavee-golf-course', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'lotus-valley-golf-resort', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'muang-ake-wang-noi-golf-course', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'panya-indra-golf-club', locales: ['th', 'ja', 'ko', 'zh'] },
+  { region: 'bangkok', slug: 'subhapruek-golf-course', locales: ['th', 'ja', 'ko', 'zh'] },
 ]
 
 /**

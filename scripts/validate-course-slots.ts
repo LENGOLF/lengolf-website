@@ -487,7 +487,7 @@ const corpus = registered.filter(
  *
  * These are a ratchet, not a description. Raise them when the corpus grows;
  * lowering one has to be a deliberate edit with a reason, which is the whole
- * point. Today: 115 courses, 460 slots, 3,220 strings.
+ * point. Today: 124 courses, 496 slots, 3,472 strings.
  *
  * This line shipped STALE in the commit that raised the two constants below
  * from 71/1,988 - a docblock two lines from the values it describes. Update
@@ -497,11 +497,12 @@ const corpus = registered.filter(
  * previous fix left two contradictory "Today:" lines in one docblock.)
  * Batch 10 (khao-yai, the region's full 12-course roster) raised them again,
  * 94/2,632 -> 106/2,968, and Batch 11 (kanchanaburi roster + Mae Moh, 9
- * courses) raised them once more, 106/2,968 -> 115/3,220. Both re-derived from
- * the validator's own output on the applied tree, not incremented by hand.
+ * courses) raised them once more, 106/2,968 -> 115/3,220, and Batch 12
+ * tranche 1 (nine bangkok courses) to 124/3,472. Each re-derived from the
+ * validator's own output on the applied tree, not incremented by hand.
  */
-const MIN_COURSES = 115
-const MIN_STRINGS = 3220
+const MIN_COURSES = 124
+const MIN_STRINGS = 3472
 
 let problems = 0
 let checked = 0

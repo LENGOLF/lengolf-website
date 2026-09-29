@@ -67,7 +67,8 @@
       "use": "กรีน / แฟร์เวย์ / สวิง",
       "avoid": [],
       "note": "familiar Thai golf loanwords — keep, do not force pure-Thai equivalents (per tone)."
-    }
+    },
+    { "term": "Callaway", "use": "Callaway", "avoid": ["มาเจสตี้", "Majesty"], "note": "Callaway's women's line is REVA. The Majesty set is retired (rental_club_sets.website_visible=false), and 'Callaway (Majesty)' shipped once in ja/ko catalogs and six ja content strings until Batch 12. Nothing on this site should name Majesty." }
   ],
   "conventions": {
     "currency": {

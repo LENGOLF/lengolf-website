@@ -320,9 +320,9 @@ export default async function GolfCourseClubRentalPage({ params }: { params: Pro
                       </li>
                     ))}
                   </ul>
-                  {/* Japanese-brand callout — differentiator for JA/KO/ZH golf
-                      travelers who know the brand. Slug-keyed; self-empties when
-                      the set retires. */}
+                  {/* Brand callout (now the REVA women's-line note; it was the
+                      Majesty note before that set retired). Slug-keyed;
+                      self-empties when the set retires. */}
                   {BRAND_CALLOUT.has(set.slug) && (
                     <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3">
                       <p className="mb-1 text-xs font-bold uppercase tracking-wider text-amber-800">{t('brandCalloutTitle')}</p>
