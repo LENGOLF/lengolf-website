@@ -1704,8 +1704,11 @@ if (process.argv.includes('--self-test')) {
     )
     {
       // Swap whichever month the real date line names for a different one, so
-      // a version bump cannot turn this into a no-op replace (it did once: the
-      // month was hardcoded as สิงหาคม and the bump to ตุลาคม left it inert).
+      // a version bump does not break this case. It used to replace a
+      // hardcoded สิงหาคม; the bump to ตุลาคม made that replace change nothing,
+      // the correct line produced 0 problems, and the case went red (a false
+      // failure, not a silent pass). The `!== thLine` guard keeps a missed
+      // lookup red too.
       const thLine = real('th').lastUpdated
       const thMonths = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม']
       const i = thMonths.findIndex((m) => thLine.includes(m))

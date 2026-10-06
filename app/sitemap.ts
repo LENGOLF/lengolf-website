@@ -14,6 +14,7 @@ import {
 } from '@/lib/golf-courses-derived'
 import { USE_CASES, USE_CASES_UPDATED_AT } from '@/data/golf-courses-use-cases'
 import { PRICE_TIERS_UPDATED_AT } from '@/data/price-tiers'
+import { RENTAL_AGREEMENT_VERSION } from '@/data/rental-agreement/types'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Stable "last reviewed" date for content without a real per-item edit date.
@@ -89,7 +90,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/blog/`, lastModified: reviewed, changeFrequency: 'weekly', priority: 0.8, alternates: { languages: getAlternates('/blog/') } },
     { url: `${SITE_URL}/menu/`, lastModified: reviewed, changeFrequency: 'monthly', priority: 0.7, alternates: { languages: getAlternates('/menu/') } },
     { url: `${SITE_URL}/faq/`, lastModified: reviewed, changeFrequency: 'monthly', priority: 0.7, alternates: { languages: getAlternates('/faq/') } },
-    { url: `${SITE_URL}/golf-course-club-rental-agreement/`, lastModified: reviewed, changeFrequency: 'yearly', priority: 0.3, alternates: { languages: getAlternates('/golf-course-club-rental-agreement/') } },
+    { url: `${SITE_URL}/golf-course-club-rental-agreement/`, lastModified: laterOf(RENTAL_AGREEMENT_VERSION, reviewed), changeFrequency: 'yearly', priority: 0.3, alternates: { languages: getAlternates('/golf-course-club-rental-agreement/') } },
   ]
 
   // Hub / index pages for SEO section groups
