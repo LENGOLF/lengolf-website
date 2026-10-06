@@ -29,8 +29,8 @@ export const en: RentalAgreementContent = {
       heading: '2. Fees and Payment',
       items: [
         'Rental fees, delivery fees, and add-on prices are those shown at booking, in Thai Baht (THB) and inclusive of VAT.',
-        'Payment is normally made online by credit or debit card at booking time. Delivery orders must be paid in advance. Pickup orders may instead be paid at LENGOLF when you collect the Equipment, using any payment method we accept there, such as cash, QR code payment, or card.',
-        'In some cases, such as bookings made with our team by LINE, phone, email, or in person, we may instead send you a payment link or bank transfer details.',
+        'Payment is normally made online by credit or debit card at booking time. Delivery orders must be paid in full before delivery: online at booking, or by bank transfer as arranged with our team where online payment is not available for your booking. Pickup orders may instead be paid at LENGOLF when you collect the Equipment, using any payment method we accept there, such as cash, QR code payment, or card.',
+        'In some cases, such as bookings made with our team by LINE, phone, email, or in person, we may instead send you a payment link or bank transfer details. If we send you a payment link or bank transfer details, payment is due by the time we tell you. If it is not received in time, we may cancel the booking and release the Equipment.',
         'No security deposit is required.',
         'If you pay online at booking, your reservation is held for up to 2 hours while you complete payment. If payment is not completed within that time, the reservation is automatically cancelled and the Equipment released.',
       ],

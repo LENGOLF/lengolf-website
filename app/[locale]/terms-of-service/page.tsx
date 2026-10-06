@@ -27,7 +27,7 @@ export default async function TermsOfServicePage({ params }: { params: Promise<{
     <SectionWrapper>
       <div className="mx-auto max-w-3xl prose prose-headings:text-foreground prose-p:text-muted-foreground prose-li:text-muted-foreground prose-strong:text-foreground">
         <h1>Terms of Service</h1>
-        <p>Last updated: 7 August 2026</p>
+        <p>Last updated: 7 October 2026</p>
         <p>
           Welcome to LENGOLF Booking System (&quot;the Service&quot;). These Terms of Service (&quot;Terms&quot;) govern your use of our website and services. By using our Service, you agree to these Terms. If you do not agree, please do not use our Service.
         </p>
@@ -69,9 +69,11 @@ export default async function TermsOfServicePage({ params }: { params: Promise<{
             person at LENGOLF where that option is offered for your booking type.
           </li>
           <li>
-            Bookings that require online payment, including golf course club rentals, are confirmed once payment is
-            completed and we have sent you a confirmation. If payment is not completed within the time shown at
-            checkout, the reservation is released automatically.
+            Bookings paid online at checkout, including golf course club rentals paid online, are confirmed once
+            payment is completed and we have sent you a confirmation. If payment is not completed within the time
+            shown at checkout, the reservation is released automatically. Golf course club rentals may also be paid
+            at LENGOLF on pickup, or by payment link or bank transfer, as set out in the{' '}
+            <a href={`${SITE_URL}/golf-course-club-rental-agreement/`}>Golf Course Club Rental Agreement</a>.
           </li>
           <li>
             Simulator bay bookings, lessons and events are confirmed when we send you a booking confirmation. Payment
@@ -96,8 +98,8 @@ export default async function TermsOfServicePage({ params }: { params: Promise<{
             is treated before you cancel.
           </li>
           <li>
-            Refunds are returned to the original payment method used at booking. Card refunds are typically credited
-            by your bank within 5 to 10 business days of us processing them.
+            Refunds are made to the original payment method where possible, or otherwise by bank transfer. Card
+            refunds are typically credited by your bank within 5 to 10 business days of us processing them.
           </li>
           <li>
             If we cannot provide a service you have booked and paid for, you may choose an alternative where one is
