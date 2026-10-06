@@ -8,7 +8,7 @@
  * A translation-only change is not a new version: §12 makes the English text
  * the one that governs.
  */
-export const RENTAL_AGREEMENT_VERSION = '2026-08-07'
+export const RENTAL_AGREEMENT_VERSION = '2026-10-06'
 
 export interface RentalAgreementSection {
   /** Includes the section number, e.g. "1. The Rental". */

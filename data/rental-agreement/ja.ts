@@ -21,7 +21,7 @@ import type { RentalAgreementContent } from './types'
 //   So "(or part-day)" is 端数日 (not 1日未満) and "standard daily rate" is
 //   日額料金 (not 1日料金). `lastUpdated` is exempt in one way: its numbers
 //   may be the agreement date with the month spelled out or as a number, so
-//   2026年8月7日 is valid.
+//   2026年10月6日 is valid.
 // - REUSED SITE WORDING: the §9 bold sentence is CourseClubRental.
 //   heroCancellationNote verbatim (+ 。); デポジット / 通常の摩耗 / 修理費用 follow
 //   CourseClubRentalFaq a2 and a16; the title's head noun 規約 matches
@@ -30,12 +30,12 @@ import type { RentalAgreementContent } from './types'
 // - Company name, Tax ID and registered address come from BUSINESS_INFO and
 //   stay in English; there is no Japanese company name or address.
 export const ja: RentalAgreementContent = {
-  sourceVersion: '2026-08-07',
+  sourceVersion: '2026-10-06',
   title: 'ゴルフコース用クラブレンタル規約',
   metaTitle: 'ゴルフコース用クラブレンタル規約',
   metaDescription:
     'LENGOLFのゴルフコース用クラブレンタル規約。店外（コース）でのゴルフクラブのレンタルすべてに適用される条件を定めています。',
-  lastUpdated: '最終更新日：2026年8月7日',
+  lastUpdated: '最終更新日：2026年10月6日',
   notice: {
     text: 'この日本語版は便宜のために提供する翻訳です。内容に齟齬がある場合は、英語版が優先します。',
     linkText: '英語版を読む',
@@ -56,9 +56,11 @@ export const ja: RentalAgreementContent = {
     {
       heading: '第2条（料金および支払い）',
       items: [
-        'レンタル料金、配送料金およびアドオン品目の価格は、予約時に表示された金額とし、いずれもタイバーツ（THB）建て、VAT込みです。支払いは、予約時に、チェックアウト画面で提示される支払方法のいずれかを用いてオンラインで行います。配送の注文にはオンラインでの事前支払いが必要です。店頭ピックアップの注文については、代わりに受取時に現金で支払うこともできます。',
+        'レンタル料金、配送料金およびアドオン品目の価格は、予約時に表示された金額とし、いずれもタイバーツ（THB）建て、VAT込みです。',
+        '支払いは、通常、予約時にクレジットカードまたはデビットカードを用いてオンラインで行います。配送の注文には事前支払いが必要です。店頭ピックアップの注文については、代わりにレンタル品の受取時にLENGOLFで支払うこともでき、その場合は現金、QRコード決済、カードなど、当社が店頭で取り扱う支払方法のいずれかを利用できます。',
+        '場合によっては、たとえばLINE、電話、メールまたは対面で当社のスタッフを通じて行われた予約について、当社は代わりに支払いリンクまたは銀行振込先の情報を借主に送付することがあります。',
         'デポジットは不要です。',
-        '借主の予約は、支払いが完了するまでの間、最大2時間確保されます。この時間内に支払いが完了しない場合、予約は自動的にキャンセルされ、レンタル品の確保は解除されます。',
+        '予約時にオンラインで支払う場合、借主の予約は、支払いが完了するまでの間、最大2時間確保されます。この時間内に支払いが完了しない場合、予約は自動的にキャンセルされ、レンタル品の確保は解除されます。',
       ],
     },
     {
@@ -112,7 +114,7 @@ export const ja: RentalAgreementContent = {
         `**レンタル開始の24時間前まで無料キャンセル可能。**レンタル期間開始の24時間以上前にキャンセルした場合、当社は借主が支払った全額を返金し、キャンセル料は発生しません。キャンセルするには、LINE @lengolf、電話（${BUSINESS_INFO.phone}）、またはメール（${BUSINESS_INFO.email}）で当社にご連絡ください。`,
         'レンタル期間の開始まで24時間未満の時点で行われたキャンセルについては、個別に判断します。当社は、処理を行う前に、返金の有無および返金額を借主にお知らせします。',
         '借主がレンタル品を受け取りに来ない場合、または受け取りに対応できない場合（ノーショー）、当該予約はキャンセルされたものとして取り扱われることがあります。返金については個別に対応します。',
-        '返金は、予約時に使用された元の支払方法に対して行われます。カードへの返金は、当社が処理を行ってから通常5〜10営業日以内に、借主の取引銀行によって反映されます。',
+        '返金は、可能な場合は元の支払方法に対して行い、それ以外の場合は銀行振込により行います。カードへの返金は、当社が処理を行ってから通常5〜10営業日以内に、借主の取引銀行によって反映されます。',
         '当社が借主の予約したレンタル品を提供できない場合、借主は、利用可能な代替品または全額返金のいずれかを選択することができます。',
       ],
     },
