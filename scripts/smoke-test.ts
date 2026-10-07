@@ -5512,6 +5512,30 @@ const LESSONS_LOCALE_PATHS = [
 // would contradict LessonsFaq.a15 on the same page, and is the overclaim
 // the /ja/ title (日本語予約OK = booking, not coaching) invites.
 const ALLOWED_TEACHING_LANGUAGES = new Set(["th", "en"]);
+// Credential count per coach, pinned. A locale missing its `education` array
+// makes t.raw return the key path as a string, so education[i] yields single
+// characters ("L", "e", ...) that are non-empty and would pass a name check.
+const EXPECTED_CREDENTIAL_COUNTS: Record<string, number> = {
+  "Parin Phokan": 1,
+  "Ratchavin Tanakasempipat": 5,
+  "Varuth Kjonkittiskul": 2,
+};
+
+/** The outerHTML of the <div> whose opening tag starts at `start`, found by
+ *  counting nested divs. A fixed-width slice ran past the trial callout into
+ *  the intro's own LINE button, so the callout could lose its link and stay
+ *  green (measured by mutation). */
+function divAt(body: string, start: number): string {
+  const open = body.lastIndexOf("<div", start);
+  let depth = 0;
+  const re = /<div\b|<\/div>/g;
+  re.lastIndex = open;
+  for (let m = re.exec(body); m; m = re.exec(body)) {
+    depth += m[0] === "</div>" ? -1 : 1;
+    if (depth === 0) return body.slice(open, m.index + 6);
+  }
+  return body.slice(open);
+}
 
 async function runLessonsCoachTests() {
   console.log("\n\x1b[1mH2) /lessons/ coaches schema + trial\x1b[0m");
@@ -5583,10 +5607,21 @@ async function runLessonsCoachTests() {
         const creds = Array.isArray(p.hasCredential) ? p.hasCredential : [];
         if (knowsAbout.length === 0) issues.push(`${who}: knowsAbout is empty`);
         if (creds.length === 0) issues.push(`${who}: hasCredential is empty`);
+        const wantCreds = EXPECTED_CREDENTIAL_COUNTS[who];
+        if (wantCreds !== undefined && creds.length !== wantCreds) {
+          issues.push(`${who}: ${creds.length} credentials, expected ${wantCreds}`);
+        }
         for (const c of creds as Record<string, unknown>[]) {
-          if (typeof c.name !== "string" || !c.name.trim()) {
-            issues.push(`${who}: a hasCredential entry has no name (index drift in credentialIndices?)`);
+          if (typeof c.name !== "string" || c.name.trim().length < 3) {
+            issues.push(
+              `${who}: hasCredential name ${JSON.stringify(c.name)} is missing or too short ` +
+                `(index drift in credentialIndices, or an untranslated education list?)`,
+            );
           }
+        }
+        // The @id names the person and must not vary by locale.
+        if (!/^https:\/\/www\.len\.golf\/lessons\/#coach-[a-z]+$/.test(String(p["@id"]))) {
+          issues.push(`${who}: '@id' ${JSON.stringify(p["@id"])} is not the locale-independent coach id`);
         }
       }
 
@@ -5597,11 +5632,25 @@ async function runLessonsCoachTests() {
       if (trialStart < 0) {
         issues.push('no id="free-trial" callout');
       } else {
-        const trial = body.slice(trialStart, trialStart + 4000);
+        const trial = divAt(body, trialStart);
         if (!trial.includes("https://lin.ee/uxQpIXn")) issues.push("free-trial callout has no LINE link");
         if (trial.includes("booking.len.golf")) issues.push("free-trial callout links booking.len.golf");
         const coachesAt = body.indexOf('id="coaches"');
         if (coachesAt >= 0 && trialStart > coachesAt) issues.push("free-trial callout renders below the coaches section");
+      }
+      // The CTA band's BOOK A LESSON went to booking.len.golf (bays only)
+      // until 2026-10-07; it must stay on LINE.
+      const ctaStart = body.indexOf('id="lessons-cta"');
+      if (ctaStart < 0) {
+        issues.push('no id="lessons-cta" band');
+      } else {
+        const sectionEnd = body.indexOf("</section>", ctaStart);
+        const cta = body.slice(ctaStart, sectionEnd < 0 ? undefined : sectionEnd);
+        if (!cta.includes("https://lin.ee/uxQpIXn")) issues.push("CTA band has no LINE link");
+        if (cta.includes("booking.len.golf")) issues.push("CTA band links booking.len.golf");
+      }
+      for (const key of ["boss", "ratchavin", "min"]) {
+        if (!body.includes(`id="coach-${key}"`)) issues.push(`no id="coach-${key}" card for the Person @id fragment`);
       }
 
       if (issues.length === 0) {

@@ -282,7 +282,7 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
               const achievements = t.raw(`coaches.${coach.i18nKey}.achievements`) as string[]
               const education = t.raw(`coaches.${coach.i18nKey}.education`) as string[]
               return (
-              <div key={coach.nickname} className={`flex flex-col items-start gap-8 lg:flex-row ${i % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
+              <div key={coach.nickname} id={`coach-${coach.i18nKey}`} className={`scroll-mt-24 flex flex-col items-start gap-8 lg:flex-row ${i % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
                 <div className="w-full lg:w-1/3">
                   <Image
                     src={coach.photo}
@@ -394,12 +394,14 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
       </section>
 
       {/* ── CTA Band ── */}
-      <section className="py-12 lg:py-16 bg-primary">
+      <section id="lessons-cta" className="py-12 lg:py-16 bg-primary">
         <div className="section-max-width section-padding text-center">
           <h2 className="mb-3 text-2xl font-bold text-white lg:text-3xl">{t('ctaTitle')}</h2>
           <p className="mb-6 text-white/80">{t('ctaSubtitle')}</p>
-          {/* Both buttons go to LINE: coaching is not bookable on
-              booking.len.golf, which books bays only. */}
+          {/* Booking goes to LINE (coaching is not bookable on
+              booking.len.golf, which books bays only); the second button
+              jumps to the free-trial callout. LessonsFaq.a5 still mentions
+              booking.len.golf: kept by David's call, 2026-10-07. */}
           <div className="flex flex-wrap items-center justify-center gap-4">
             <a
               href="https://lin.ee/uxQpIXn"
@@ -414,7 +416,7 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
               href="#free-trial"
               className="inline-flex h-12 items-center gap-2 rounded-md border-2 border-white px-8 text-sm font-semibold text-white transition-colors hover:bg-white/10"
             >
-              {t('trialCta')}
+              {t('trialBadge')}
             </a>
           </div>
         </div>

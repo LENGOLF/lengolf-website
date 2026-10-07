@@ -171,9 +171,14 @@ export function getWebSiteJsonLd() {
     // reuse the shared NAP helpers so they cannot drift from the
     // EntertainmentBusiness node above.
     //
-    // Known gap, named rather than fixed: only the layout's
-    // EntertainmentBusiness carries an '@id' (BUSINESS_ENTITY_ID, referenced
-    // so far only by the /lessons/ coach and lesson nodes). This publisher
+    // Known gap, named rather than fixed: the layout's EntertainmentBusiness
+    // is the only LENGOLF business/Organization node with an '@id'
+    // (BUSINESS_ENTITY_ID, referenced so far only by the /lessons/ coach and
+    // lesson nodes). Before the /location/* DB nodes below get this '@id',
+    // fix their data: measured 2026-10-07, all 85 say openingHours 10:00-23:00
+    // (the venue opens 09:00), carry a different geo point, and 84 of 85 have
+    // a `url` missing the /location/ prefix that 404s. Sharing the id would
+    // merge those values into the canonical business entity. This publisher
     // node does not, and the thinner publisher Organizations elsewhere in the repo
     // (/guide/, /blog/, /blog/[slug]) describe the same business with less
     // detail and nothing ties them together. The in-repo nodes are NOT the
@@ -715,7 +720,7 @@ export function getCoachesJsonLd(
       alternateName: c.alternateName,
       jobTitle: c.jobTitle,
       image: c.image,
-      url: `${pageUrl}#coaches`,
+      url: `${pageUrl}#coach-${c.key}`,
       worksFor: getBusinessRef(),
       knowsAbout: c.knowsAbout,
       knowsLanguage: c.knowsLanguage,
