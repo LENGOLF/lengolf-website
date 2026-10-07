@@ -217,12 +217,12 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
               </h2>
               <p className="mt-2 leading-relaxed text-muted-foreground">{t('trialText')}</p>
             </div>
-            <div className="flex shrink-0 flex-col gap-2 md:max-w-[16rem]">
+            <div className="flex shrink-0 flex-col gap-2 md:max-w-[18rem]">
               <a
                 href="https://lin.ee/uxQpIXn"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-primary px-6 text-sm font-semibold text-white transition-colors hover:bg-primary-light"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-primary px-6 py-3 text-center text-sm font-semibold text-white transition-colors hover:bg-primary-light"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                 {t('trialCta')}
