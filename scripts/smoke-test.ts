@@ -3323,21 +3323,15 @@ const seoTests: SeoTest[] = [
   // routes that emit og:type="article", so without one of them the
   // allowlist's article arm is never exercised by any real page.
   { path: "/blog/golf-simulator-in-bangkok/", locale: "en" },
-  // A /location/ page, and it is load-bearing rather than decorative: it is
-  // the ONLY route that renders a third business node (the DB-sourced
-  // LocalBusiness from location_pages.schema_markup) alongside the layout's
-  // two. Without it, the telephone cross-check below iterates a set that has
-  // exactly one telephone-bearing node on every URL in this list, so widening
-  // it from .find() to a loop asserts nothing new.
-  //
-  // HISTORY, in the past tense on purpose: when this entry was added, all 85
-  // /location/ pages served the local format on the layout node and E.164 on
-  // the DB-sourced one -- two spellings of one number per indexed page. PR
-  // #109 deployed on 2026-08-24 and that is no longer true: re-measured across
-  // all 85, it is now 0/85 carrying both and 85/85 E.164 on every node. Do NOT
-  // restate this in the present tense; the check's VALUE is unchanged (this is
-  // still the only multi-node route) but its original evidence no longer
-  // reproduces.
+  // A /location/ page. Until 2026-10-07 it was the ONLY route rendering a
+  // third business node (the DB-sourced LocalBusiness from
+  // location_pages.schema_markup), which is why the telephone cross-check
+  // below loops over every node rather than taking the first. That node is
+  // gone: the page now renders a WebPage (getLocationWebPageJsonLd) that
+  // points at the layout's business by '@id', so today only the layout's
+  // node carries a telephone here. The entry stays because section H pins
+  // that WebPage shape on this URL, and the loop is kept for the next
+  // multi-node route.
   //
   // And do not read the check as guarding display format: it parses
   // application/ld+json only. The 6 visible "096-668-2335" occurrences on this
@@ -4584,10 +4578,10 @@ async function runSeoTests() {
           // is document-order dependent, and the order is not stable in a way
           // worth relying on: the layout emits its EntertainmentBusiness at
           // the top of <body>, but getAggregateRatingJsonLd() emits a SECOND,
-          // telephone-less EntertainmentBusiness on / and /about-us/, and a
-          // /location/<slug>/ page renders a THIRD node — the DB-sourced
-          // LocalBusiness from location_pages.schema_markup — which a
-          // first-match check would never compare. Nodes with no telephone
+          // telephone-less EntertainmentBusiness on / and /about-us/, and
+          // /location/<slug>/ pages rendered a THIRD node (the DB-sourced
+          // LocalBusiness, replaced 2026-10-07 by a WebPage) which a
+          // first-match check would never have compared. Nodes with no telephone
           // are skipped rather than failed, because the rating node legitimately
           // omits it. `@type` may be an array (lib/jsonld.ts:1192 writes one,
           // though nested under `provider` and so not reached from here).
@@ -5825,23 +5819,133 @@ async function runLlmDiscoverabilityTests() {
     fail("GET /robots.txt", `fetch error: ${(err as Error).message}`);
   }
 
-  // 3) LocalBusiness schema opening hours are consistent (regression guard: 09:00, not stale 10:00)
-  try {
-    const res = await fetch(`${BASE}/`, { redirect: "follow" });
-    const body = await res.text();
-    const issues: string[] = [];
-    if (!body.includes('"opens":"09:00"'))
-      issues.push('LocalBusiness schema missing "opens":"09:00"');
-    if (body.includes('"opens":"10:00"'))
-      issues.push('stale "opens":"10:00" still present');
-    if (issues.length > 0)
-      fail("LocalBusiness opening hours", issues.join("; "));
-    else pass("LocalBusiness opening hours (09:00, consistent with site copy)");
-  } catch (err) {
-    fail(
-      "LocalBusiness opening hours",
-      `fetch error: ${(err as Error).message}`,
-    );
+  // 3) Business hours, geo and identity agree with BUSINESS_INFO in EVERY
+  // JSON-LD node, in BOTH hours spellings. This used to be a substring check
+  // for '"opens":"10:00"', which only matches the openingHoursSpecification
+  // form. All 85 /location/* pages shipped the TEXT form ("openingHours":
+  // "Mo-Su 10:00-23:00", from location_pages.schema_markup) and stayed green
+  // (measured 2026-10-07); the check also fetched only `/`, which renders no
+  // DB node. Now: every node on both pages is walked, nested ones too, and
+  // each hours statement in either form must say 09:00-23:00.
+  //
+  // The /location/ page is load-bearing: it is the only route that ever
+  // rendered a DB-sourced business node. It now renders a WebPage built by
+  // getLocationWebPageJsonLd, and the checks below pin that shape, so moving
+  // the page back to printing the DB blob goes red on the missing WebPage
+  // and on the extra id-less business node, whatever the blob says.
+  {
+    const { BUSINESS_INFO, SITE_URL } = await import("../lib/constants");
+    const ENTITY_ID = `${SITE_URL}/#organization`;
+    const OPENS = "09:00";
+    const CLOSES = "23:00";
+    const HOURS_PAGES = ["/", "/location/golf-near-sathorn/"];
+    let pagesJudged = 0;
+    for (const path of HOURS_PAGES) {
+      const label = `Business hours/geo/identity JSON-LD on ${path}`;
+      try {
+        const res = await fetch(`${BASE}${path}`, { redirect: "manual" });
+        const body = await res.text();
+        const issues: string[] = [];
+        if (res.status !== 200) issues.push(`expected 200, got ${res.status}`);
+        // Raw-string guards first: they still fire if a block fails to parse.
+        if (body.includes('"opens":"10:00"')) issues.push('stale "opens":"10:00" present');
+        if (/"openingHours":\s*(?:\[[^\]]*)?"[^"]*10:00/.test(body))
+          issues.push('stale "openingHours" text form with 10:00 present');
+
+        // Match on the opening TAG only. Next's inline RSC payload scripts
+        // also contain the text "application/ld+json" (they serialize the
+        // tree), and they are not JSON, so a body-wide match would report
+        // them as unparseable blocks.
+        const chunks = body
+          .split("<script")
+          .filter((c) => c.slice(0, c.indexOf(">")).includes("application/ld+json"));
+        const blocks: unknown[] = [];
+        for (const chunk of chunks) {
+          const start = chunk.indexOf(">") + 1;
+          const end = chunk.indexOf("</script>");
+          try {
+            blocks.push(JSON.parse(chunk.slice(start, end)));
+          } catch {
+            issues.push("an application/ld+json block does not parse");
+          }
+        }
+        // Every object at any depth, so a nested node (a @graph member, a
+        // publisher, an `about`) cannot hide a stale value.
+        const objects: Record<string, unknown>[] = [];
+        const walk = (v: unknown) => {
+          if (Array.isArray(v)) v.forEach(walk);
+          else if (v && typeof v === "object") {
+            objects.push(v as Record<string, unknown>);
+            Object.values(v as Record<string, unknown>).forEach(walk);
+          }
+        };
+        blocks.forEach(walk);
+        const typeIs = (n: Record<string, unknown>, t: string) =>
+          Array.isArray(n["@type"]) ? (n["@type"] as unknown[]).includes(t) : n["@type"] === t;
+
+        let hoursStatements = 0;
+        for (const o of objects) {
+          const text = o.openingHours;
+          for (const h of Array.isArray(text) ? text : text === undefined ? [] : [text]) {
+            hoursStatements++;
+            const m = /(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})/.exec(String(h));
+            if (!m || m[1] !== OPENS || m[2] !== CLOSES)
+              issues.push(`openingHours "${String(h)}" is not ${OPENS}-${CLOSES}`);
+          }
+          const spec = o.openingHoursSpecification;
+          for (const sp of Array.isArray(spec) ? spec : spec === undefined ? [] : [spec]) {
+            hoursStatements++;
+            const r = sp as Record<string, unknown>;
+            if (r.opens !== OPENS || r.closes !== CLOSES)
+              issues.push(`openingHoursSpecification ${String(r.opens)}-${String(r.closes)} is not ${OPENS}-${CLOSES}`);
+          }
+          // Geo on any LENGOLF node must be the canonical point. The DB
+          // blobs carried 13.7437,100.5436, ~50 m off.
+          const geo = o.geo as Record<string, unknown> | undefined;
+          if (geo && (o.name === BUSINESS_INFO.name || o["@id"] === ENTITY_ID)) {
+            if (Number(geo.latitude) !== BUSINESS_INFO.coordinates.lat || Number(geo.longitude) !== BUSINESS_INFO.coordinates.lng)
+              issues.push(`geo ${String(geo.latitude)},${String(geo.longitude)} is not BUSINESS_INFO.coordinates`);
+          }
+          // Anything carrying the business '@id' is merged into one entity by
+          // consumers, so its url must be the business URL, not a page URL.
+          if (o["@id"] === ENTITY_ID && o.url !== undefined && o.url !== SITE_URL)
+            issues.push(`node with '@id' ${ENTITY_ID} has url ${String(o.url)}, expected ${SITE_URL}`);
+        }
+        // Anti-vacuity: the layout's EntertainmentBusiness states hours on
+        // every page, so zero statements means the walk saw nothing.
+        if (hoursStatements === 0) issues.push("no opening-hours statement found in any JSON-LD node");
+
+        const top = blocks.filter((b): b is Record<string, unknown> => !!b && typeof b === "object" && !Array.isArray(b));
+        if (!top.some((b) => typeIs(b, "EntertainmentBusiness") && b["@id"] === ENTITY_ID))
+          issues.push(`no EntertainmentBusiness with '@id' ${ENTITY_ID}`);
+        if (path.startsWith("/location/")) {
+          const pageUrl = `${SITE_URL}${path}`;
+          const wp = top.find((b) => typeIs(b, "WebPage"));
+          if (!wp) issues.push("no WebPage node (getLocationWebPageJsonLd)");
+          else {
+            if (wp.url !== pageUrl || wp["@id"] !== pageUrl)
+              issues.push(`WebPage url/@id ${String(wp.url)} / ${String(wp["@id"])}, expected ${pageUrl}`);
+            const about = wp.about as Record<string, unknown> | undefined;
+            if (about?.["@id"] !== ENTITY_ID) issues.push(`WebPage.about '@id' is ${String(about?.["@id"])}, expected ${ENTITY_ID}`);
+          }
+          // The DB blob was an id-less LocalBusiness. A business node without
+          // the shared '@id' is a second, unlinked LENGOLF entity.
+          const stray = top.filter(
+            (b) => (typeIs(b, "LocalBusiness") || typeIs(b, "EntertainmentBusiness")) && b["@id"] !== ENTITY_ID,
+          );
+          if (stray.length > 0) issues.push(`${stray.length} business node(s) without '@id' ${ENTITY_ID}`);
+        } else if (!body.includes(`"opens":"${OPENS}"`)) {
+          issues.push(`LocalBusiness schema missing "opens":"${OPENS}"`);
+        }
+        if (issues.length > 0) fail(label, issues.join("; "));
+        else pass(`${label} (${hoursStatements} hours statement(s), all ${OPENS}-${CLOSES})`);
+      } catch (err) {
+        fail(label, `fetch error: ${(err as Error).message}`);
+      }
+      pagesJudged++;
+    }
+    if (pagesJudged !== HOURS_PAGES.length)
+      fail("Business hours/geo/identity JSON-LD", `judged ${pagesJudged} of ${HOURS_PAGES.length} pages`);
   }
 
   // 4) Visible FAQ copy must match the corrected hours (no stale "10 AM" opening on the blog FAQ)

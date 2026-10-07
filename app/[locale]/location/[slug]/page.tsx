@@ -5,6 +5,7 @@ import { getLocationBySlug, getAllLocationSlugs } from '@/lib/locations'
 import { SITE_URL } from '@/lib/constants'
 import LocationPageComponent from '@/components/location/LocationPage'
 import { siteOpenGraph } from '@/lib/open-graph'
+import { getLocationWebPageJsonLd } from '@/lib/jsonld'
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>
@@ -68,13 +69,16 @@ export default async function LocationPage({ params }: Props) {
 
   return (
     <>
-      {/* JSON-LD Schema */}
-      {page.schema_markup && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(page.schema_markup) }}
-        />
-      )}
+      {/* Built from code, not location_pages.schema_markup: see
+          getLocationWebPageJsonLd for why the DB blob is no longer rendered. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            getLocationWebPageJsonLd({ slug, title: page.h1_title, description: page.meta_description }),
+          ),
+        }}
+      />
       <LocationPageComponent data={page} />
     </>
   )
