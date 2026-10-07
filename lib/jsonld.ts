@@ -107,10 +107,30 @@ export function getContactPointJsonLd() {
   ]
 }
 
+/**
+ * The site-wide EntertainmentBusiness node's '@id'. Rendered by the locale
+ * layout on every page, so a node elsewhere can point at the business with
+ * `getBusinessRef()` instead of restating it. First consumer: the coaches'
+ * `worksFor` on /lessons/.
+ */
+export const BUSINESS_ENTITY_ID = `${SITE_URL}/#organization`
+
+/** A reference to the layout's EntertainmentBusiness node. name/url ride
+ *  along so a consumer that does not resolve '@id' still reads the entity. */
+export function getBusinessRef() {
+  return {
+    '@type': 'EntertainmentBusiness' as const,
+    '@id': BUSINESS_ENTITY_ID,
+    name: BUSINESS_INFO.name,
+    url: SITE_URL,
+  }
+}
+
 export function getLocalBusinessJsonLd() {
   return {
     '@context': 'https://schema.org',
     '@type': 'EntertainmentBusiness',
+    '@id': BUSINESS_ENTITY_ID,
     name: BUSINESS_INFO.name,
     legalName: BUSINESS_INFO.legalName,
     url: SITE_URL,
@@ -151,8 +171,15 @@ export function getWebSiteJsonLd() {
     // reuse the shared NAP helpers so they cannot drift from the
     // EntertainmentBusiness node above.
     //
-    // Known gap, named rather than fixed: no node in this file carries an
-    // '@id', so the thinner publisher Organizations elsewhere in the repo
+    // Known gap, named rather than fixed: the layout's EntertainmentBusiness
+    // is the only LENGOLF business/Organization node with an '@id'
+    // (BUSINESS_ENTITY_ID, referenced so far only by the /lessons/ coach and
+    // lesson nodes). Before the /location/* DB nodes below get this '@id',
+    // fix their data: measured 2026-10-07, all 85 say openingHours 10:00-23:00
+    // (the venue opens 09:00), carry a different geo point, and 84 of 85 have
+    // a `url` missing the /location/ prefix that 404s. Sharing the id would
+    // merge those values into the canonical business entity. This publisher
+    // node does not, and the thinner publisher Organizations elsewhere in the repo
     // (/guide/, /blog/, /blog/[slug]) describe the same business with less
     // detail and nothing ties them together. The in-repo nodes are NOT the
     // whole set: each of the 85 /location/* pages also renders a DB-sourced
@@ -440,11 +467,7 @@ export function getLessonsPricingJsonLd(dynamicLessonPricing?: LessonPackage[]) 
     '@type': 'OfferCatalog',
     name: 'LENGOLF Golf Lesson Packages',
     description: 'Golf coaching packages with Thailand PGA-certified professionals at LENGOLF Bangkok. Simulator usage included.',
-    provider: {
-      '@type': 'EntertainmentBusiness',
-      name: BUSINESS_INFO.name,
-      url: SITE_URL,
-    },
+    provider: getBusinessRef(),
     itemListElement: offers,
   }
 }
@@ -652,11 +675,7 @@ export function getLessonsServiceJsonLd(startingPrice?: string) {
     '@type': 'Service',
     name: 'Golf Lessons at LENGOLF',
     description: 'One-on-one and group golf coaching with Thailand PGA-certified professionals on indoor golf simulators. Lessons include real-time swing data analysis, video playback, and simulator bay usage.',
-    provider: {
-      '@type': 'EntertainmentBusiness',
-      name: BUSINESS_INFO.name,
-      url: SITE_URL,
-    },
+    provider: getBusinessRef(),
     serviceType: 'Golf Coaching',
     areaServed: {
       '@type': 'City',
@@ -668,6 +687,53 @@ export function getLessonsServiceJsonLd(startingPrice?: string) {
       priceCurrency: 'THB',
       description: '1-hour lesson with a PGA-certified coach, simulator usage included',
     },
+  }
+}
+
+/**
+ * One Person node per coach, each `worksFor` the layout's business node.
+ * Every string arrives already localized (the page reads it from the
+ * catalog), so this builder adds no English to a ja/ko/zh/th page beyond
+ * proper names. The '@id' is locale-independent: it names the person, and
+ * the same coach is one entity on all five locale pages.
+ */
+export function getCoachesJsonLd(
+  coaches: {
+    key: string
+    name: string
+    alternateName: string
+    jobTitle: string
+    image: string
+    knowsAbout: string[]
+    knowsLanguage: string[]
+    credentials: string[]
+    alumniOf: string[]
+  }[],
+  pageUrl: string,
+) {
+  return {
+    '@context': 'https://schema.org',
+    '@graph': coaches.map((c) => ({
+      '@type': 'Person',
+      '@id': `${SITE_URL}/lessons/#coach-${c.key}`,
+      name: c.name,
+      alternateName: c.alternateName,
+      jobTitle: c.jobTitle,
+      image: c.image,
+      url: `${pageUrl}#coach-${c.key}`,
+      worksFor: getBusinessRef(),
+      knowsAbout: c.knowsAbout,
+      knowsLanguage: c.knowsLanguage,
+      ...(c.credentials.length > 0 && {
+        hasCredential: c.credentials.map((name) => ({
+          '@type': 'EducationalOccupationalCredential',
+          name,
+        })),
+      }),
+      ...(c.alumniOf.length > 0 && {
+        alumniOf: c.alumniOf.map((name) => ({ '@type': 'EducationalOrganization', name })),
+      }),
+    })),
   }
 }
 

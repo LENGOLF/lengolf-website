@@ -682,7 +682,7 @@ export const RULES: Rule[] = [
   recordRule('data/airports.ts', 'AIRPORTS', (s) => `/golf-courses/near/${s}/`, (reg) => inLocale(reg, 'en', '/golf-courses/')),
   recordRule('data/bts-stations.ts', 'BTS_STATIONS', (s) => `/golf-courses/near/${s}/`, (reg) => inLocale(reg, 'en', '/golf-courses/')),
   recordRule('data/golf-courses-use-cases.ts', 'USE_CASE_RULES', (s) => `/golf-courses/best-for/${s}/`, (reg) => inLocale(reg, 'en', '/golf-courses/')),
-  fixedRule('data/coaches.ts', ['/lessons/']),
+  fixedRule('data/coaches.ts', ['/lessons/', '/llms.txt']),
   fixedRule('data/event-clients.ts', ['/events/']),
   fixedRule('data/food-menu.ts', ['/menu/']),
   fixedRule('data/pricing.ts', ['/', '/golf/', '/lessons/', '/events/', '/corporate-golf-packages/', '/llms-full.txt']),
@@ -1307,12 +1307,12 @@ const CASES: Case[] = [
     wantWarn: true,
   },
   {
-    name: 'coaches.ts pings /lessons/ in every locale that serves it',
+    name: 'coaches.ts pings /lessons/ in every locale that serves it, plus /llms.txt',
     changes: [{ status: 'M', file: 'data/coaches.ts' }],
     base: { 'data/coaches.ts': { coaches: [1] } },
     head: { 'data/coaches.ts': { coaches: [2] } },
     registered: ['th:/lessons', 'ja:/lessons'],
-    want: ['/lessons/', '/th/lessons/', '/ja/lessons/'],
+    want: ['/lessons/', '/th/lessons/', '/ja/lessons/', '/llms.txt'],
   },
   {
     name: 'event-clients.ts pings /events/',
@@ -1491,7 +1491,7 @@ const CONSUMERS: Record<string, Record<string, string>> = {
     'app/[locale]/corporate-golf-packages/page.tsx': 'pinged',
     'app/llms-full.txt/route.ts': 'pinged',
   },
-  'data/coaches.ts': { 'app/[locale]/lessons/page.tsx': 'pinged' },
+  'data/coaches.ts': { 'app/[locale]/lessons/page.tsx': 'pinged', 'app/llms.txt/route.ts': 'pinged' },
   'data/event-clients.ts': { 'app/[locale]/events/page.tsx': 'pinged' },
   'data/food-menu.ts': { 'app/[locale]/menu/page.tsx': 'pinged' },
   'data/faq-hub.ts': {

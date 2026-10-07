@@ -5488,6 +5488,182 @@ async function runUnknownSlugCacheTests() {
   }
 }
 
+// ── H2) /lessons/ coaches: Person JSON-LD, trial callout, CTA routing ──
+// The coaches are the reason /lessons/ exists for AI answer surfaces
+// ("golf lessons bangkok" competitors lead with named coaches), so their
+// structured data is asserted on the rendered page in every locale.
+//
+// EXPECTED_COACH_NAMES is pinned by hand, not imported from data/coaches.ts:
+// a list derived from the same array the page renders would agree with any
+// deletion. Update it deliberately when a coach joins or leaves.
+const EXPECTED_COACH_NAMES = [
+  "Parin Phokan",
+  "Ratchavin Tanakasempipat",
+  "Varuth Kjonkittiskul",
+];
+const LESSONS_LOCALE_PATHS = [
+  "/lessons/",
+  "/th/lessons/",
+  "/ja/lessons/",
+  "/ko/lessons/",
+  "/zh/lessons/",
+];
+// Lessons are taught in Thai and English only. A Person claiming ja/ko/zh
+// would contradict LessonsFaq.a15 on the same page, and is the overclaim
+// the /ja/ title (日本語予約OK = booking, not coaching) invites.
+const ALLOWED_TEACHING_LANGUAGES = new Set(["th", "en"]);
+// Credential count per coach, pinned. A locale missing its `education` array
+// makes t.raw return the key path as a string, so education[i] yields single
+// characters ("L", "e", ...) that are non-empty and would pass a name check.
+const EXPECTED_CREDENTIAL_COUNTS: Record<string, number> = {
+  "Parin Phokan": 1,
+  "Ratchavin Tanakasempipat": 5,
+  "Varuth Kjonkittiskul": 2,
+};
+
+/** The outerHTML of the <div> whose opening tag starts at `start`, found by
+ *  counting nested divs. A fixed-width slice ran past the trial callout into
+ *  the intro's own LINE button, so the callout could lose its link and stay
+ *  green (measured by mutation). */
+function divAt(body: string, start: number): string {
+  const open = body.lastIndexOf("<div", start);
+  let depth = 0;
+  const re = /<div\b|<\/div>/g;
+  re.lastIndex = open;
+  for (let m = re.exec(body); m; m = re.exec(body)) {
+    depth += m[0] === "</div>" ? -1 : 1;
+    if (depth === 0) return body.slice(open, m.index + 6);
+  }
+  return body.slice(open);
+}
+
+async function runLessonsCoachTests() {
+  console.log("\n\x1b[1mH2) /lessons/ coaches schema + trial\x1b[0m");
+  for (const path of LESSONS_LOCALE_PATHS) {
+    const label = `H2) ${path} coaches`;
+    try {
+      const res = await fetch(`${BASE}${path}`, { redirect: "manual" });
+      const body = await res.text();
+      const issues: string[] = [];
+      if (res.status !== 200) issues.push(`expected 200, got ${res.status}`);
+
+      const blocks = body
+        .split("<script")
+        .filter((chunk) => chunk.includes("application/ld+json"))
+        .map((chunk) => {
+          const start = chunk.indexOf(">") + 1;
+          const end = chunk.indexOf("</script>");
+          if (start <= 0 || end < start) return null;
+          try {
+            return JSON.parse(chunk.slice(start, end));
+          } catch {
+            return null;
+          }
+        })
+        .filter((node) => node !== null);
+      // Flatten @graph so a Person emitted inside one is found.
+      const nodes: Record<string, unknown>[] = blocks.flatMap((b) =>
+        Array.isArray(b["@graph"]) ? b["@graph"] : [b],
+      );
+      const typeIs = (n: Record<string, unknown>, t: string) =>
+        Array.isArray(n["@type"]) ? (n["@type"] as unknown[]).includes(t) : n["@type"] === t;
+
+      const businessIds = new Set(
+        nodes
+          .filter((n) => typeIs(n, "EntertainmentBusiness") && typeof n["@id"] === "string")
+          .map((n) => n["@id"] as string),
+      );
+      if (businessIds.size !== 1) {
+        issues.push(
+          `expected exactly one EntertainmentBusiness '@id' on the page, found ${JSON.stringify([...businessIds])}`,
+        );
+      }
+
+      const persons = nodes.filter((n) => typeIs(n, "Person"));
+      const names = persons.map((p) => String(p.name)).sort();
+      if (JSON.stringify(names) !== JSON.stringify([...EXPECTED_COACH_NAMES].sort())) {
+        issues.push(`Person names ${JSON.stringify(names)} != ${JSON.stringify(EXPECTED_COACH_NAMES)}`);
+      }
+      for (const p of persons) {
+        const who = String(p.name);
+        const worksFor = p.worksFor as Record<string, unknown> | undefined;
+        if (!worksFor || !businessIds.has(String(worksFor["@id"]))) {
+          issues.push(`${who}: worksFor '@id' ${JSON.stringify(worksFor?.["@id"])} does not resolve to the page's business node`);
+        }
+        const langs = Array.isArray(p.knowsLanguage) ? (p.knowsLanguage as unknown[]) : [];
+        if (!langs.includes("th") || !langs.includes("en")) {
+          issues.push(`${who}: knowsLanguage ${JSON.stringify(langs)} is missing th/en`);
+        }
+        const extra = langs.filter((l) => !ALLOWED_TEACHING_LANGUAGES.has(String(l)));
+        if (extra.length > 0) {
+          issues.push(`${who}: knowsLanguage claims ${JSON.stringify(extra)}; lessons are Thai and English only`);
+        }
+        // An unresolved next-intl key renders as its dotted path.
+        const jobTitle = String(p.jobTitle ?? "");
+        if (!jobTitle.trim() || jobTitle.includes("Lessons.")) {
+          issues.push(`${who}: jobTitle is empty or an unresolved key (${JSON.stringify(jobTitle)})`);
+        }
+        const knowsAbout = Array.isArray(p.knowsAbout) ? p.knowsAbout : [];
+        const creds = Array.isArray(p.hasCredential) ? p.hasCredential : [];
+        if (knowsAbout.length === 0) issues.push(`${who}: knowsAbout is empty`);
+        if (creds.length === 0) issues.push(`${who}: hasCredential is empty`);
+        const wantCreds = EXPECTED_CREDENTIAL_COUNTS[who];
+        if (wantCreds !== undefined && creds.length !== wantCreds) {
+          issues.push(`${who}: ${creds.length} credentials, expected ${wantCreds}`);
+        }
+        for (const c of creds as Record<string, unknown>[]) {
+          if (typeof c.name !== "string" || c.name.trim().length < 3) {
+            issues.push(
+              `${who}: hasCredential name ${JSON.stringify(c.name)} is missing or too short ` +
+                `(index drift in credentialIndices, or an untranslated education list?)`,
+            );
+          }
+        }
+        // The @id names the person and must not vary by locale.
+        if (!/^https:\/\/www\.len\.golf\/lessons\/#coach-[a-z]+$/.test(String(p["@id"]))) {
+          issues.push(`${who}: '@id' ${JSON.stringify(p["@id"])} is not the locale-independent coach id`);
+        }
+      }
+
+      // Visible: the coaches section and the trial callout, with the trial
+      // booking route on LINE. Coaching cannot be booked on booking.len.golf.
+      if (!body.includes('id="coaches"')) issues.push('no id="coaches" section');
+      const trialStart = body.indexOf('id="free-trial"');
+      if (trialStart < 0) {
+        issues.push('no id="free-trial" callout');
+      } else {
+        const trial = divAt(body, trialStart);
+        if (!trial.includes("https://lin.ee/uxQpIXn")) issues.push("free-trial callout has no LINE link");
+        if (trial.includes("booking.len.golf")) issues.push("free-trial callout links booking.len.golf");
+        const coachesAt = body.indexOf('id="coaches"');
+        if (coachesAt >= 0 && trialStart > coachesAt) issues.push("free-trial callout renders below the coaches section");
+      }
+      // The CTA band's BOOK A LESSON went to booking.len.golf (bays only)
+      // until 2026-10-07; it must stay on LINE.
+      const ctaStart = body.indexOf('id="lessons-cta"');
+      if (ctaStart < 0) {
+        issues.push('no id="lessons-cta" band');
+      } else {
+        const sectionEnd = body.indexOf("</section>", ctaStart);
+        const cta = body.slice(ctaStart, sectionEnd < 0 ? undefined : sectionEnd);
+        if (!cta.includes("https://lin.ee/uxQpIXn")) issues.push("CTA band has no LINE link");
+        if (cta.includes("booking.len.golf")) issues.push("CTA band links booking.len.golf");
+      }
+      for (const key of ["boss", "ratchavin", "min"]) {
+        if (!body.includes(`id="coach-${key}"`)) issues.push(`no id="coach-${key}" card for the Person @id fragment`);
+      }
+
+      if (issues.length === 0) {
+        pass(`${label} (${persons.length} Person nodes linked to the business)`);
+      } else {
+        fail(label, issues.join("; "));
+      }
+    } catch (err) {
+      fail(label, (err as Error).message);
+    }
+  }
+}
+
 async function runLlmDiscoverabilityTests() {
   console.log("\n\x1b[1mH) LLM / AI discoverability\x1b[0m");
 
@@ -8934,6 +9110,7 @@ async function main() {
   await runNotFoundTests();
   await runUnknownSlugCacheTests();
   await runLlmDiscoverabilityTests();
+  await runLessonsCoachTests();
   await runRegistryConsistencyTests();
   await runRegionHubRegistryConsistencyTests();
   await runPriceTierRegistryConsistencyTests();
