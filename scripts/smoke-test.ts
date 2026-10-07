@@ -5838,8 +5838,18 @@ async function runLlmDiscoverabilityTests() {
     const ENTITY_ID = `${SITE_URL}/#organization`;
     const OPENS = "09:00";
     const CLOSES = "23:00";
-    const HOURS_PAGES = ["/", "/location/golf-near-sathorn/"];
+    const LOCATION_PAGE = "/location/golf-near-sathorn/";
+    const HOURS_PAGES = ["/", LOCATION_PAGE];
+    // Pinned by identity, not length: a counter compared to the list's own
+    // length passed with the list cut to ["/"] while the /location/ page
+    // rendered the DB blob (measured). The location branch is keyed on the
+    // same constant and counted, so renaming its condition cannot skip it.
+    for (const required of ["/", "/location/golf-near-sathorn/"]) {
+      if (!HOURS_PAGES.includes(required))
+        fail("Business hours/geo/identity JSON-LD", `required page ${required} is not in HOURS_PAGES`);
+    }
     let pagesJudged = 0;
+    let locationBranchJudged = 0;
     for (const path of HOURS_PAGES) {
       const label = `Business hours/geo/identity JSON-LD on ${path}`;
       try {
@@ -5888,8 +5898,10 @@ async function runLlmDiscoverabilityTests() {
           const text = o.openingHours;
           for (const h of Array.isArray(text) ? text : text === undefined ? [] : [text]) {
             hoursStatements++;
-            const m = /(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})/.exec(String(h));
-            if (!m || m[1] !== OPENS || m[2] !== CLOSES)
+            // EVERY range in the string: "Mo-Fr 09:00-23:00, Sa-Su 09:00-22:00"
+            // passed a first-match read (measured).
+            const ranges = [...String(h).matchAll(/(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})/g)];
+            if (ranges.length === 0 || ranges.some((m) => m[1] !== OPENS || m[2] !== CLOSES))
               issues.push(`openingHours "${String(h)}" is not ${OPENS}-${CLOSES}`);
           }
           const spec = o.openingHoursSpecification;
@@ -5899,12 +5911,15 @@ async function runLlmDiscoverabilityTests() {
             if (r.opens !== OPENS || r.closes !== CLOSES)
               issues.push(`openingHoursSpecification ${String(r.opens)}-${String(r.closes)} is not ${OPENS}-${CLOSES}`);
           }
-          // Geo on any LENGOLF node must be the canonical point. The DB
-          // blobs carried 13.7437,100.5436, ~50 m off.
-          const geo = o.geo as Record<string, unknown> | undefined;
-          if (geo && (o.name === BUSINESS_INFO.name || o["@id"] === ENTITY_ID)) {
-            if (Number(geo.latitude) !== BUSINESS_INFO.coordinates.lat || Number(geo.longitude) !== BUSINESS_INFO.coordinates.lng)
-              issues.push(`geo ${String(geo.latitude)},${String(geo.longitude)} is not BUSINESS_INFO.coordinates`);
+          // Every coordinate pair on these two pages must be the canonical
+          // point: neither page describes any other place. Read from ANY
+          // object holding latitude/longitude (a GeoCoordinates, or a node
+          // stating them directly), not only nodes named LENGOLF, which let a
+          // nested Place with another name carry the old point (measured).
+          // The DB blobs carried 13.7437,100.5436, ~59 m off.
+          if (o.latitude !== undefined || o.longitude !== undefined) {
+            if (Number(o.latitude) !== BUSINESS_INFO.coordinates.lat || Number(o.longitude) !== BUSINESS_INFO.coordinates.lng)
+              issues.push(`coordinates ${String(o.latitude)},${String(o.longitude)} are not BUSINESS_INFO.coordinates`);
           }
           // Anything carrying the business '@id' is merged into one entity by
           // consumers, so its url must be the business URL, not a page URL.
@@ -5914,11 +5929,17 @@ async function runLlmDiscoverabilityTests() {
         // Anti-vacuity: the layout's EntertainmentBusiness states hours on
         // every page, so zero statements means the walk saw nothing.
         if (hoursStatements === 0) issues.push("no opening-hours statement found in any JSON-LD node");
+        // ...and the walk must have gone below the top level: the publisher
+        // is nested under WebSite, and a top-level-only walk kept the hours
+        // count at 1 while never reading it (measured).
+        if (!objects.some((o) => typeIs(o, "Organization") && o["@id"] === ENTITY_ID))
+          issues.push(`walk never reached the nested publisher Organization with '@id' ${ENTITY_ID}`);
 
         const top = blocks.filter((b): b is Record<string, unknown> => !!b && typeof b === "object" && !Array.isArray(b));
         if (!top.some((b) => typeIs(b, "EntertainmentBusiness") && b["@id"] === ENTITY_ID))
           issues.push(`no EntertainmentBusiness with '@id' ${ENTITY_ID}`);
-        if (path.startsWith("/location/")) {
+        if (path === LOCATION_PAGE) {
+          locationBranchJudged++;
           const pageUrl = `${SITE_URL}${path}`;
           const wp = top.find((b) => typeIs(b, "WebPage"));
           if (!wp) issues.push("no WebPage node (getLocationWebPageJsonLd)");
@@ -5928,10 +5949,19 @@ async function runLlmDiscoverabilityTests() {
             const about = wp.about as Record<string, unknown> | undefined;
             if (about?.["@id"] !== ENTITY_ID) issues.push(`WebPage.about '@id' is ${String(about?.["@id"])}, expected ${ENTITY_ID}`);
           }
-          // The DB blob was an id-less LocalBusiness. A business node without
-          // the shared '@id' is a second, unlinked LENGOLF entity.
-          const stray = top.filter(
-            (b) => (typeIs(b, "LocalBusiness") || typeIs(b, "EntertainmentBusiness")) && b["@id"] !== ENTITY_ID,
+          // The DB blob was an id-less LocalBusiness. Any node, at any depth,
+          // NAMED as the business, other than the WebSite and this WebPage, is
+          // a statement about the business and must carry the shared '@id';
+          // without it it is a second, unlinked LENGOLF entity. Keyed on the
+          // name, not a type list: a list of LocalBusiness/EntertainmentBusiness
+          // let an id-less SportsActivityLocation through, and a top-level-only
+          // read let one nested under `mentions` through (both measured).
+          const stray = objects.filter(
+            (b) =>
+              b.name === BUSINESS_INFO.name &&
+              !typeIs(b, "WebSite") &&
+              !typeIs(b, "WebPage") &&
+              b["@id"] !== ENTITY_ID,
           );
           if (stray.length > 0) issues.push(`${stray.length} business node(s) without '@id' ${ENTITY_ID}`);
         } else if (!body.includes(`"opens":"${OPENS}"`)) {
@@ -5946,6 +5976,8 @@ async function runLlmDiscoverabilityTests() {
     }
     if (pagesJudged !== HOURS_PAGES.length)
       fail("Business hours/geo/identity JSON-LD", `judged ${pagesJudged} of ${HOURS_PAGES.length} pages`);
+    if (locationBranchJudged !== 1)
+      fail("Business hours/geo/identity JSON-LD", `the /location/ checks ran ${locationBranchJudged} time(s), expected 1`);
   }
 
   // 4) Visible FAQ copy must match the corrected hours (no stale "10 AM" opening on the blog FAQ)
@@ -6178,7 +6210,15 @@ async function runLlmDiscoverabilityTests() {
   } catch (err) {
     fail("FAQ dateModified", `fetch error: ${(err as Error).message}`);
   }
+  llmTestsCompleted = true;
 }
+
+/**
+ * Set on the LAST line of runLlmDiscoverabilityTests and checked by main(),
+ * the seoTestsCompleted pattern. Measured: `if (issues.length > 0) return;`
+ * inside the hours block skipped every later H check and exited green.
+ */
+let llmTestsCompleted = false;
 
 // ── I) Translated-guide/FAQ registry consistency ─────────────────────
 // The middleware allowlist (lib/translated-routes.ts) cannot import the
@@ -9214,6 +9254,9 @@ async function main() {
   await runNotFoundTests();
   await runUnknownSlugCacheTests();
   await runLlmDiscoverabilityTests();
+  if (!llmTestsCompleted) {
+    fail("H) section completion", "runLlmDiscoverabilityTests returned before its last check ran");
+  }
   await runLessonsCoachTests();
   await runRegistryConsistencyTests();
   await runRegionHubRegistryConsistencyTests();

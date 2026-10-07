@@ -249,7 +249,7 @@ All types are defined in `types/supabase.ts`.
 | `unique_intro` | text | Introductory paragraph |
 | `area_pain_point` | text | Area-specific content |
 | `lengolf_pitch` | text | LENGOLF value proposition for this area |
-| `schema_markup` | jsonb | JSON-LD structured data |
+| `schema_markup` | jsonb | Legacy JSON-LD, NOT rendered since 2026-10-07 (see `getLocationWebPageJsonLd`) |
 | `internal_links` | text | Semicolon-separated related page URLs |
 | `status` | text | `published` or `draft` |
 | ... | | Additional template-specific fields |
@@ -352,7 +352,7 @@ title: {
 ### JSON-LD Structured Data
 
 - **Global**: A `LocalBusiness`/`EntertainmentBusiness` schema is injected in the root layout via `lib/jsonld.ts`.
-- **Per-page**: Location pages include their own `schema_markup` from the database, rendered as a `<script type="application/ld+json">` tag.
+- **Per-page**: Location pages render a `WebPage` node built by `getLocationWebPageJsonLd()` in `lib/jsonld.ts`, whose `about` points at the layout's business node by `@id`. The database `schema_markup` column is no longer rendered (since 2026-10-07).
 
 ### Sitemap
 
