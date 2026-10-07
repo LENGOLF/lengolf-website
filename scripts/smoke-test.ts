@@ -5488,6 +5488,133 @@ async function runUnknownSlugCacheTests() {
   }
 }
 
+// ── H2) /lessons/ coaches: Person JSON-LD, trial callout, CTA routing ──
+// The coaches are the reason /lessons/ exists for AI answer surfaces
+// ("golf lessons bangkok" competitors lead with named coaches), so their
+// structured data is asserted on the rendered page in every locale.
+//
+// EXPECTED_COACH_NAMES is pinned by hand, not imported from data/coaches.ts:
+// a list derived from the same array the page renders would agree with any
+// deletion. Update it deliberately when a coach joins or leaves.
+const EXPECTED_COACH_NAMES = [
+  "Parin Phokan",
+  "Ratchavin Tanakasempipat",
+  "Varuth Kjonkittiskul",
+];
+const LESSONS_LOCALE_PATHS = [
+  "/lessons/",
+  "/th/lessons/",
+  "/ja/lessons/",
+  "/ko/lessons/",
+  "/zh/lessons/",
+];
+// Lessons are taught in Thai and English only. A Person claiming ja/ko/zh
+// would contradict LessonsFaq.a15 on the same page, and is the overclaim
+// the /ja/ title (日本語予約OK = booking, not coaching) invites.
+const ALLOWED_TEACHING_LANGUAGES = new Set(["th", "en"]);
+
+async function runLessonsCoachTests() {
+  console.log("\n\x1b[1mH2) /lessons/ coaches schema + trial\x1b[0m");
+  for (const path of LESSONS_LOCALE_PATHS) {
+    const label = `H2) ${path} coaches`;
+    try {
+      const res = await fetch(`${BASE}${path}`, { redirect: "manual" });
+      const body = await res.text();
+      const issues: string[] = [];
+      if (res.status !== 200) issues.push(`expected 200, got ${res.status}`);
+
+      const blocks = body
+        .split("<script")
+        .filter((chunk) => chunk.includes("application/ld+json"))
+        .map((chunk) => {
+          const start = chunk.indexOf(">") + 1;
+          const end = chunk.indexOf("</script>");
+          if (start <= 0 || end < start) return null;
+          try {
+            return JSON.parse(chunk.slice(start, end));
+          } catch {
+            return null;
+          }
+        })
+        .filter((node) => node !== null);
+      // Flatten @graph so a Person emitted inside one is found.
+      const nodes: Record<string, unknown>[] = blocks.flatMap((b) =>
+        Array.isArray(b["@graph"]) ? b["@graph"] : [b],
+      );
+      const typeIs = (n: Record<string, unknown>, t: string) =>
+        Array.isArray(n["@type"]) ? (n["@type"] as unknown[]).includes(t) : n["@type"] === t;
+
+      const businessIds = new Set(
+        nodes
+          .filter((n) => typeIs(n, "EntertainmentBusiness") && typeof n["@id"] === "string")
+          .map((n) => n["@id"] as string),
+      );
+      if (businessIds.size !== 1) {
+        issues.push(
+          `expected exactly one EntertainmentBusiness '@id' on the page, found ${JSON.stringify([...businessIds])}`,
+        );
+      }
+
+      const persons = nodes.filter((n) => typeIs(n, "Person"));
+      const names = persons.map((p) => String(p.name)).sort();
+      if (JSON.stringify(names) !== JSON.stringify([...EXPECTED_COACH_NAMES].sort())) {
+        issues.push(`Person names ${JSON.stringify(names)} != ${JSON.stringify(EXPECTED_COACH_NAMES)}`);
+      }
+      for (const p of persons) {
+        const who = String(p.name);
+        const worksFor = p.worksFor as Record<string, unknown> | undefined;
+        if (!worksFor || !businessIds.has(String(worksFor["@id"]))) {
+          issues.push(`${who}: worksFor '@id' ${JSON.stringify(worksFor?.["@id"])} does not resolve to the page's business node`);
+        }
+        const langs = Array.isArray(p.knowsLanguage) ? (p.knowsLanguage as unknown[]) : [];
+        if (!langs.includes("th") || !langs.includes("en")) {
+          issues.push(`${who}: knowsLanguage ${JSON.stringify(langs)} is missing th/en`);
+        }
+        const extra = langs.filter((l) => !ALLOWED_TEACHING_LANGUAGES.has(String(l)));
+        if (extra.length > 0) {
+          issues.push(`${who}: knowsLanguage claims ${JSON.stringify(extra)}; lessons are Thai and English only`);
+        }
+        // An unresolved next-intl key renders as its dotted path.
+        const jobTitle = String(p.jobTitle ?? "");
+        if (!jobTitle.trim() || jobTitle.includes("Lessons.")) {
+          issues.push(`${who}: jobTitle is empty or an unresolved key (${JSON.stringify(jobTitle)})`);
+        }
+        const knowsAbout = Array.isArray(p.knowsAbout) ? p.knowsAbout : [];
+        const creds = Array.isArray(p.hasCredential) ? p.hasCredential : [];
+        if (knowsAbout.length === 0) issues.push(`${who}: knowsAbout is empty`);
+        if (creds.length === 0) issues.push(`${who}: hasCredential is empty`);
+        for (const c of creds as Record<string, unknown>[]) {
+          if (typeof c.name !== "string" || !c.name.trim()) {
+            issues.push(`${who}: a hasCredential entry has no name (index drift in credentialIndices?)`);
+          }
+        }
+      }
+
+      // Visible: the coaches section and the trial callout, with the trial
+      // booking route on LINE. Coaching cannot be booked on booking.len.golf.
+      if (!body.includes('id="coaches"')) issues.push('no id="coaches" section');
+      const trialStart = body.indexOf('id="free-trial"');
+      if (trialStart < 0) {
+        issues.push('no id="free-trial" callout');
+      } else {
+        const trial = body.slice(trialStart, trialStart + 4000);
+        if (!trial.includes("https://lin.ee/uxQpIXn")) issues.push("free-trial callout has no LINE link");
+        if (trial.includes("booking.len.golf")) issues.push("free-trial callout links booking.len.golf");
+        const coachesAt = body.indexOf('id="coaches"');
+        if (coachesAt >= 0 && trialStart > coachesAt) issues.push("free-trial callout renders below the coaches section");
+      }
+
+      if (issues.length === 0) {
+        pass(`${label} (${persons.length} Person nodes linked to the business)`);
+      } else {
+        fail(label, issues.join("; "));
+      }
+    } catch (err) {
+      fail(label, (err as Error).message);
+    }
+  }
+}
+
 async function runLlmDiscoverabilityTests() {
   console.log("\n\x1b[1mH) LLM / AI discoverability\x1b[0m");
 
@@ -8934,6 +9061,7 @@ async function main() {
   await runNotFoundTests();
   await runUnknownSlugCacheTests();
   await runLlmDiscoverabilityTests();
+  await runLessonsCoachTests();
   await runRegistryConsistencyTests();
   await runRegionHubRegistryConsistencyTests();
   await runPriceTierRegistryConsistencyTests();

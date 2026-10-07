@@ -8,7 +8,7 @@ import { storageUrl, SITE_URL, BUSINESS_INFO } from '@/lib/constants'
 import { getAlternates, getCanonical } from '@/lib/translated-routes'
 import { coaches } from '@/data/coaches'
 import { getLessonPricingData, type LessonPackage } from '@/data/pricing'
-import { getLessonsPricingJsonLd, getLessonsServiceJsonLd, getFaqPageJsonLd, getBreadcrumbJsonLd } from '@/lib/jsonld'
+import { getLessonsPricingJsonLd, getLessonsServiceJsonLd, getFaqPageJsonLd, getBreadcrumbJsonLd, getCoachesJsonLd } from '@/lib/jsonld'
 import FaqSection from '@/components/shared/FaqSection'
 import ClickableImage from '@/components/shared/ClickableImage'
 import PricingTable from '@/components/shared/PricingTable'
@@ -115,6 +115,23 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
   const pricingJsonLd = getLessonsPricingJsonLd(lessonPricing)
   const serviceJsonLd = getLessonsServiceJsonLd(lessonPricing[0]?.oneGolfer)
   const faqJsonLd = getFaqPageJsonLd(faqItems)
+  const coachesJsonLd = getCoachesJsonLd(
+    coaches.map((coach) => {
+      const education = t.raw(`coaches.${coach.i18nKey}.education`) as string[]
+      return {
+        key: coach.i18nKey,
+        name: coach.fullName,
+        alternateName: coach.name,
+        jobTitle: t('coachJobTitle'),
+        image: coach.photo,
+        knowsAbout: t.raw(`coaches.${coach.i18nKey}.expertise`) as string[],
+        knowsLanguage: coach.teachingLanguages,
+        credentials: coach.credentialIndices.map((i) => education[i]),
+        alumniOf: coach.alumniOf,
+      }
+    }),
+    getCanonical(locale, '/lessons/'),
+  )
   const breadcrumbJsonLd = getBreadcrumbJsonLd([
     { name: 'Home', url: `${SITE_URL}/` },
     { name: t('metaTitle'), url: `${SITE_URL}/lessons/` },
@@ -140,6 +157,11 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      {/* JSON-LD coaches (Person, worksFor the layout's business node) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(coachesJsonLd) }}
       />
 
       {/* ── Hero ── */}
@@ -173,9 +195,42 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
         </div>
       </section>
 
-      {/* ── Intro + Stat Chips ── */}
+      {/* ── Free trial + Intro + Stat Chips ── */}
       <SectionWrapper>
         <div className="mx-auto max-w-4xl text-center">
+          {/* Free trial, first thing under the hero. Booking route is LINE:
+              coaching is not bookable on booking.len.golf. */}
+          <div
+            id="free-trial"
+            className="mb-10 flex flex-col gap-6 rounded-xl border-2 border-primary/20 p-6 text-left md:flex-row md:items-center md:p-8"
+            style={{ backgroundColor: '#F6FFFA' }}
+          >
+            <div className="flex-1">
+              <span
+                className="inline-block rounded px-3 py-1 text-xs font-bold uppercase tracking-widest text-white"
+                style={{ backgroundColor: '#7CB342' }}
+              >
+                {t('trialBadge')}
+              </span>
+              <h2 className="mt-3 text-2xl font-bold lg:text-3xl" style={{ color: '#007429' }}>
+                {t('trialTitle')}
+              </h2>
+              <p className="mt-2 leading-relaxed text-muted-foreground">{t('trialText')}</p>
+            </div>
+            <div className="flex shrink-0 flex-col gap-2 md:max-w-[16rem]">
+              <a
+                href="https://lin.ee/uxQpIXn"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-primary px-6 text-sm font-semibold text-white transition-colors hover:bg-primary-light"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                {t('trialCta')}
+              </a>
+              <p className="text-xs leading-relaxed text-muted-foreground">{t('trialHowTo')}</p>
+            </div>
+          </div>
+
           <p className="text-base leading-relaxed text-muted-foreground md:text-lg">
             {t('introText')}
           </p>
@@ -211,13 +266,16 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
         </div>
       </SectionWrapper>
 
-      {/* ── Our Coach ── */}
-      <section className="py-16 lg:py-24" style={{ backgroundColor: '#F6FFFA' }}>
+      {/* ── Meet the Coaches ── */}
+      <section id="coaches" className="py-16 lg:py-24" style={{ backgroundColor: '#F6FFFA' }}>
         <div className="section-max-width section-padding">
-          <h2 className="mb-12 text-center text-3xl font-bold italic lg:text-4xl">
+          <h2 className="mb-4 text-center text-3xl font-bold italic lg:text-4xl">
             <span style={{ color: '#007429' }}>{t('ourCoachTitle')}</span>{' '}
             <span className="text-foreground">{t('ourCoachTitleSuffix')}</span>
           </h2>
+          <p className="mx-auto mb-12 max-w-3xl text-center text-base leading-relaxed text-muted-foreground">
+            {t('coachesIntro')}
+          </p>
           <div className="space-y-20">
             {coaches.map((coach, i) => {
               const expertise = t.raw(`coaches.${coach.i18nKey}.expertise`) as string[]
@@ -243,6 +301,10 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
                     {coach.name}
                   </h3>
                   <p className="text-muted-foreground">({coach.fullName})</p>
+                  <p className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-white px-3 py-1 text-xs font-medium" style={{ color: '#007429' }}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+                    {t('coachLanguages')}
+                  </p>
 
                   <div className="mt-6 grid gap-6 sm:grid-cols-3">
                     <div>
@@ -336,24 +398,23 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
         <div className="section-max-width section-padding text-center">
           <h2 className="mb-3 text-2xl font-bold text-white lg:text-3xl">{t('ctaTitle')}</h2>
           <p className="mb-6 text-white/80">{t('ctaSubtitle')}</p>
+          {/* Both buttons go to LINE: coaching is not bookable on
+              booking.len.golf, which books bays only. */}
           <div className="flex flex-wrap items-center justify-center gap-4">
-            <a
-              href="https://booking.len.golf/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex h-12 items-center gap-2 rounded-md bg-white text-primary px-8 text-sm font-semibold transition-colors hover:bg-white/90"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
-              {t('bookALesson')}
-            </a>
             <a
               href="https://lin.ee/uxQpIXn"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-12 items-center gap-2 rounded-md border-2 border-white px-8 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+              className="inline-flex h-12 items-center gap-2 rounded-md bg-white text-primary px-8 text-sm font-semibold transition-colors hover:bg-white/90"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-              {tCommon('lineAtLengolf')}
+              {t('bookALesson')}
+            </a>
+            <a
+              href="#free-trial"
+              className="inline-flex h-12 items-center gap-2 rounded-md border-2 border-white px-8 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+            >
+              {t('trialCta')}
             </a>
           </div>
         </div>
