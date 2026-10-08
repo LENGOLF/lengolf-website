@@ -6,12 +6,12 @@ import type { RentalAgreementContent } from './types'
 // ./types.ts, the date in `lastUpdated`, the mirror in lengolf-booking-new,
 // and every translation's `sourceVersion` (typecheck enforces the last one).
 export const en: RentalAgreementContent = {
-  sourceVersion: '2026-08-07',
+  sourceVersion: '2026-10-06',
   title: 'Golf Course Club Rental Agreement',
   metaTitle: 'Golf Course Club Rental Agreement',
   metaDescription:
     'LENGOLF Golf Course Club Rental Agreement - the terms that apply to every off-site (course) golf club rental.',
-  lastUpdated: 'Last updated: 7 August 2026',
+  lastUpdated: 'Last updated: 6 October 2026',
   intro: [
     'This Agreement governs the rental of golf club sets and related equipment (the "Equipment") by LENGOLF CO., LTD. ("LENGOLF", "we", "us") to you ("you", the "Renter") for off-site use at golf courses. It applies to every off-site (course) rental you make with us, whether booked at booking.len.golf, by LINE, phone, email, or in person. Indoor and in-store simulator club rentals are not covered by this Agreement.',
     'By confirming a course rental booking with us, you agree to this Agreement.',
@@ -28,9 +28,11 @@ export const en: RentalAgreementContent = {
     {
       heading: '2. Fees and Payment',
       items: [
-        'Rental fees, delivery fees, and add-on prices are those shown at booking, in Thai Baht (THB) and inclusive of VAT. Payment is made online at booking time using one of the payment methods offered at checkout. Delivery orders require online prepayment; pickup orders may alternatively pay cash on collection.',
+        'Rental fees, delivery fees, and add-on prices are those shown at booking, in Thai Baht (THB) and inclusive of VAT.',
+        'Payment is normally made online by credit or debit card at booking time. Delivery orders must be paid in full before delivery: online at booking, or by bank transfer as arranged with our team where online payment is not available for your booking. Pickup orders may instead be paid at LENGOLF when you collect the Equipment, using any payment method we accept there, such as cash, QR code payment, or card.',
+        'In some cases, such as bookings made with our team by LINE, phone, email, or in person, we may instead send you a payment link or bank transfer details. If we send you a payment link or bank transfer details, payment is due by the time we tell you. If it is not received in time, we may cancel the booking and release the Equipment.',
         'No security deposit is required.',
-        'Your reservation is held for up to 2 hours while you complete payment. If payment is not completed within that time, the reservation is automatically cancelled and the Equipment released.',
+        'If you pay online at booking, your reservation is held for up to 2 hours while you complete payment. If payment is not completed within that time, the reservation is automatically cancelled and the Equipment released.',
       ],
     },
     {
@@ -84,7 +86,7 @@ export const en: RentalAgreementContent = {
         `**Free cancellation up to 24 hours before your rental starts.** Cancel at least 24 hours before the start of your rental period and we refund the full amount you paid, with no cancellation fee. To cancel, contact us on LINE @lengolf, by phone on ${BUSINESS_INFO.phone}, or by email at ${BUSINESS_INFO.email}.`,
         'Cancellations made less than 24 hours before the start of the rental period are assessed case by case. We will tell you what, if anything, will be refunded before we process it.',
         'If you do not collect, or are not available to receive the Equipment (no-show), the booking may be treated as cancelled; refunds are handled case by case.',
-        'Refunds are returned to the original payment method used at booking. Card refunds are typically credited by your bank within 5 to 10 business days of us processing them.',
+        'Refunds are made to the original payment method where possible, or otherwise by bank transfer. Card refunds are typically credited by your bank within 5 to 10 business days of us processing them.',
         'If we cannot supply the Equipment you booked, you may choose an available alternative or a full refund.',
       ],
     },

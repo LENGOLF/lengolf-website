@@ -17,7 +17,7 @@ import type { RentalAgreementContent } from './types'
 // - Section cross-references use 제N조. Numbers are Arabic digits and the digit
 //   multiset per section matches EN (validate-i18n enforces it), so do not
 //   write "1일" for "day" or add a floor number to the venue name.
-// - lastUpdated uses the Korean date form (2026년 8월 7일). The parity check
+// - lastUpdated uses the Korean date form (2026년 10월 6일). The parity check
 //   accepts the agreement date with a numeric month on this one line.
 // - Particles after Latin names: LENGOLF reads 렌골프 (vowel-final), so it takes
 //   는/가/와. Every other Latin token (LINE @lengolf, booking.len.golf, VAT,
@@ -25,18 +25,17 @@ import type { RentalAgreementContent } from './types'
 //   a consonant-invariant particle (에서/에/의), never by an allomorphic one.
 // - Reused site wording: §9's bold sentence is CourseClubRental
 //   .heroCancellationNote with a 합니다체 ending; 정상 마모 / 수리 비용 / 보증금
-//   follow CourseClubRentalFaq a2/a16; the pickup-cash clause follows
-//   CourseClubRental.paymentDesc; 개인정보 처리방침 and 사업자등록번호 (Tax ID)
+//   follow CourseClubRentalFaq a2/a16; 개인정보 처리방침 and 사업자등록번호 (Tax ID)
 //   follow the Footer namespace rendered on the same page; 전화 / 이메일 labels
 //   follow CourseClubRental.contact*Label.
 // - Currency is spelled 바트 (glossary); Latin "THB" is not used in prose.
 export const ko: RentalAgreementContent = {
-  sourceVersion: '2026-08-07',
+  sourceVersion: '2026-10-06',
   title: '골프장 클럽 대여 약관',
   metaTitle: '골프장 클럽 대여 약관',
   metaDescription:
     'LENGOLF 골프장 클럽 대여 약관: 모든 외부(골프장) 골프 클럽 대여에 적용되는 조건입니다.',
-  lastUpdated: '최종 수정일: 2026년 8월 7일',
+  lastUpdated: '최종 수정일: 2026년 10월 6일',
   notice: {
     text: '이 한국어 번역본은 편의를 위해 제공되며, 영문본과 내용이 상충하는 경우 영문본이 우선합니다.',
     linkText: '영문본 보기',
@@ -57,9 +56,11 @@ export const ko: RentalAgreementContent = {
     {
       heading: '2. 요금 및 결제',
       items: [
-        '대여 요금, 배송비 및 추가 품목 가격은 예약 시 표시된 금액이며, 태국 바트 기준 VAT 포함 가격입니다. 결제는 예약 시점에 결제 단계에서 제공되는 결제 수단 중 하나를 이용하여 온라인으로 이루어집니다. 배송 주문은 온라인 선결제가 필요하며, 픽업 주문은 픽업 시 현금 결제도 선택할 수 있습니다.',
+        '대여 요금, 배송비 및 추가 품목 가격은 예약 시 표시된 금액이며, 태국 바트 기준 VAT 포함 가격입니다.',
+        '결제는 일반적으로 예약 시점에 신용카드 또는 체크카드로 온라인으로 이루어집니다. 배송 주문은 배송 전에 전액 결제되어야 하며, 예약 시 온라인으로 결제하거나, 귀하의 예약에 온라인 결제를 이용할 수 없는 경우에는 당사 직원과 협의한 대로 은행 송금으로 결제합니다. 픽업 주문은 장비를 수령할 때 LENGOLF에서 결제하는 방식도 선택할 수 있으며, 이 경우 현금, QR 코드 결제, 카드 등 당사가 현장에서 허용하는 결제 수단 중 어느 것이든 이용할 수 있습니다.',
+        'LINE, 전화, 이메일 또는 직접 방문을 통해 당사 직원과 진행한 예약 등 일부 경우에는, 당사가 대신 결제 링크 또는 은행 송금 정보를 귀하에게 보내 드릴 수 있습니다. 당사가 결제 링크 또는 은행 송금 정보를 보내 드린 경우, 결제 기한은 당사가 안내하는 시점까지입니다. 기한 내에 결제가 확인되지 않으면 당사는 예약을 취소하고 장비 확보를 해제할 수 있습니다.',
         '보증금은 필요하지 않습니다.',
-        '결제를 완료하실 때까지 예약은 최대 2시간 동안 유지됩니다. 이 시간 내에 결제가 완료되지 않으면 예약은 자동으로 취소되며 장비 확보도 해제됩니다.',
+        '예약 시 온라인으로 결제하시는 경우, 결제를 완료하실 때까지 예약은 최대 2시간 동안 유지됩니다. 이 시간 내에 결제가 완료되지 않으면 예약은 자동으로 취소되며 장비 확보도 해제됩니다.',
       ],
     },
     {
@@ -113,7 +114,7 @@ export const ko: RentalAgreementContent = {
         `**대여 시작 24시간 전까지 무료 취소가 가능합니다.** 대여 기간 시작 24시간 이상 전에 취소하시면 취소 수수료 없이 결제하신 금액 전액을 환불해 드립니다. 취소하시려면 LINE @lengolf, 전화(${BUSINESS_INFO.phone}) 또는 이메일(${BUSINESS_INFO.email})로 당사에 연락해 주십시오.`,
         '대여 기간 시작까지 24시간 미만을 남기고 이루어진 취소는 사안별로 검토됩니다. 당사는 환불을 처리하기 전에 환불되는 금액이 있는지, 있다면 무엇이 환불되는지를 귀하에게 알려 드립니다.',
         '귀하가 장비를 수령하지 않거나 장비를 받을 수 있도록 대기하지 않는 경우(노쇼), 해당 예약은 취소된 것으로 처리될 수 있으며, 환불은 사안별로 처리됩니다.',
-        '환불은 예약 시 사용한 원래 결제 수단으로 이루어집니다. 카드 환불은 일반적으로 당사가 환불을 처리한 날로부터 영업일 기준 5~10일 이내에 귀하의 은행을 통해 반영됩니다.',
+        '환불은 가능한 경우 원래 결제 수단으로, 그 외의 경우에는 은행 송금으로 이루어집니다. 카드 환불은 일반적으로 당사가 환불을 처리한 날로부터 영업일 기준 5~10일 이내에 귀하의 은행을 통해 반영됩니다.',
         '귀하가 예약한 장비를 당사가 제공할 수 없는 경우, 귀하는 이용 가능한 대체 장비 또는 전액 환불 중에서 선택할 수 있습니다.',
       ],
     },

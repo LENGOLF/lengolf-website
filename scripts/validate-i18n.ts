@@ -1696,16 +1696,28 @@ if (process.argv.includes('--self-test')) {
     )
     assert('agreement: dropped intro paragraph → 1', count('ja', { ...real('ja'), intro: real('ja').intro.slice(0, 1) }) === 1)
     assert('agreement: dropped section → 1', count('ja', { ...real('ja'), sections: real('ja').sections.slice(1) }) === 1)
-    assert('agreement: wrong day (2026年8月8日) → 1', count('ja', { ...real('ja'), lastUpdated: '最終更新日：2026年8月8日' }) === 1)
-    assert('agreement: day/month swapped (2026年7月8日) → 1', count('ja', { ...real('ja'), lastUpdated: '最終更新日：2026年7月8日' }) === 1)
+    assert('agreement: wrong day (2026年10月7日) → 1', count('ja', { ...real('ja'), lastUpdated: '最終更新日：2026年10月7日' }) === 1)
+    assert('agreement: day/month swapped (2026年6月10日) → 1', count('ja', { ...real('ja'), lastUpdated: '最終更新日：2026年6月10日' }) === 1)
     assert(
       'agreement: Buddhist-era year (th 2569) → 1',
       count('th', { ...real('th'), lastUpdated: real('th').lastUpdated.replace('2026', '2569') }) === 1
     )
-    assert(
-      'agreement: wrong month name (th กันยายน) → 1',
-      count('th', { ...real('th'), lastUpdated: real('th').lastUpdated.replace('สิงหาคม', 'กันยายน') }) === 1
-    )
+    {
+      // Swap whichever month the real date line names for a different one, so
+      // a version bump does not break this case. It used to replace a
+      // hardcoded สิงหาคม; the bump to ตุลาคม made that replace change nothing,
+      // the correct line produced 0 problems, and the case went red (a false
+      // failure, not a silent pass). The `!== thLine` guard keeps a missed
+      // lookup red too.
+      const thLine = real('th').lastUpdated
+      const thMonths = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม']
+      const i = thMonths.findIndex((m) => thLine.includes(m))
+      const wrongMonth = thLine.replace(thMonths[i] ?? '', thMonths[(i + 1) % 12])
+      assert(
+        'agreement: wrong month name (th, next month) → 1',
+        i >= 0 && wrongMonth !== thLine && count('th', { ...real('th'), lastUpdated: wrongMonth }) === 1
+      )
+    }
     assert(
       'agreement: blank clause → 1',
       count('ja', mapSection(real('ja'), 0, (s) => ({ ...s, items: s.items!.map((x, k) => (k === 0 ? '' : x)) }))) === 1
@@ -1724,7 +1736,7 @@ if (process.argv.includes('--self-test')) {
     assert('agreement: EN date line matches the version → 0', rentalAgreementEnProblems(en).length === 0)
     assert(
       'agreement: EN wrong day → 1',
-      rentalAgreementEnProblems({ ...en, lastUpdated: 'Last updated: 8 August 2026' }).length === 1
+      rentalAgreementEnProblems({ ...en, lastUpdated: 'Last updated: 7 October 2026' }).length === 1
     )
     // checkScript: ko must not count Han as its own, or a Chinese paragraph in
     // the ko slot scores 100% "own" (the zh-in-ko swap passed every gate).
