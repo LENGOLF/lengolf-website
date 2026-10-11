@@ -128,6 +128,9 @@ export function PaperCard({
       className={cn('relative rounded-[3px] p-6 md:p-7', className)}
       style={{
         backgroundColor: JA.card,
+        // Own text color: a card inside a forest section would otherwise
+        // inherit the section's cream text onto a cream card.
+        color: JA.ink,
         boxShadow: '0 1px 0 rgba(0,0,0,0.05), 0 10px 24px -12px rgba(38,80,32,0.35)',
         transform: tilt ? `rotate(${tilt}deg)` : undefined,
       }}

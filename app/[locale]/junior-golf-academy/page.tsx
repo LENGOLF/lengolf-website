@@ -152,7 +152,11 @@ export default async function JuniorGolfAcademyPage({ params }: Props) {
         {/* ── Hero ── */}
         <section className="relative overflow-hidden pb-10 pt-10 md:pb-16 md:pt-14" style={paperStyle}>
           <div className="section-max-width section-padding grid items-center gap-10 md:grid-cols-[1.1fr_0.9fr]">
-            <div>
+            <div className="relative">
+              {/* Decorative repeat of the age, beside the title on wide screens
+                  only: the poster carries its own burst, and below lg the stat
+                  chips state the ages a few lines down. */}
+              <SunBurst label={c.hero.ageBadge} className="absolute right-0 top-10 hidden lg:grid xl:right-6" />
               <p className="mb-4 text-xs font-bold uppercase tracking-[0.08em]" style={{ color: JA.forest }}>
                 {c.hero.eyebrow}
               </p>
@@ -191,8 +195,11 @@ export default async function JuniorGolfAcademyPage({ params }: Props) {
             </div>
 
             <div className="relative mx-auto w-full max-w-[420px]">
-              <SunBurst label={c.hero.ageBadge} className="absolute -left-4 -top-6 z-10 md:-left-10" />
-              <div className="relative rotate-[1.5deg] bg-white p-2 shadow-lg">
+              {/* Not rotated: Chrome left a priority <img> inside a rotated
+                  parent unpainted (white) here, in two separate Chromium
+                  builds, while the decoded pixels were fine. The tape carries
+                  the collage look instead. */}
+              <div className="relative bg-white p-2 shadow-lg">
                 <Tape className="-top-3 left-1/2 -translate-x-1/2 -rotate-3" />
                 <Image
                   src={JUNIOR_ACADEMY_IMAGES.poster.src}
