@@ -147,6 +147,11 @@ const routeTests: RouteTest[] = [
     contentMarker: '<main id="main-content">',
   },
   {
+    path: "/junior-golf-academy/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
     path: "/events/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
@@ -229,6 +234,11 @@ const routeTests: RouteTest[] = [
   },
   {
     path: "/th/lessons/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/junior-golf-academy/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
@@ -3318,6 +3328,8 @@ const seoTests: SeoTest[] = [
   { path: "/golf-club-rental/", locale: "en" },
   { path: "/golf-course-club-rental/", locale: "en" },
   { path: "/golf-club-specs/", locale: "en" },
+  { path: "/junior-golf-academy/", locale: "en" },
+  { path: "/th/junior-golf-academy/", locale: "th" },
   { path: "/second-hand-golf-clubs-bangkok/", locale: "en" },
   // A blog POST, not the hub: /blog/[slug] and /guide/[slug] are the only
   // routes that emit og:type="article", so without one of them the
@@ -3488,7 +3500,7 @@ const seoTests: SeoTest[] = [
  * pinned entry and adding any other URL holds this count. Nor does it cover
  * the share-card assertions; see REQUIRED_OWN_OG_CARDS.
  */
-const MIN_SEO_URLS = 43;
+const MIN_SEO_URLS = 45;
 
 /**
  * Anti-vacuity for the `titleContains` assertions in `seoTests`. Two-sided by
@@ -3581,6 +3593,10 @@ const thaiRedirectTests: ThaiRedirectTest[] = [
     expectedLocation: "/terms-of-service/",
     label: "Untranslated terms of service",
   },
+  // /junior-golf-academy/ is EN + TH only (data/junior-academy.ts).
+  { path: "/ja/junior-golf-academy/", expectedLocation: "/junior-golf-academy/", label: "Junior Academy, ja (EN + TH only)" },
+  { path: "/ko/junior-golf-academy/", expectedLocation: "/junior-golf-academy/", label: "Junior Academy, ko (EN + TH only)" },
+  { path: "/zh/junior-golf-academy/", expectedLocation: "/junior-golf-academy/", label: "Junior Academy, zh (EN + TH only)" },
   // NOTE: the former "untranslated KO golf-courses hub must 301" test is gone
   // on purpose — the structural-parity batch added the GolfCourseHub namespace
   // to messages/{ko,zh}.json, so all four locales now serve the hub and no
@@ -8748,7 +8764,8 @@ const MIN_RAW_HOSTILE_PATHS = 10;
  *  2026-09-24. At the true value, so a filter that silently drops pages goes
  *  red. It is a floor, so a NEW routeTests/seoTests entry adds slack until
  *  this is raised with it; lower it only when an entry is removed. */
-const MIN_IMAGE_PAGES = 482;
+// +2 on 2026-10-11 for /junior-golf-academy/ and /th/junior-golf-academy/.
+const MIN_IMAGE_PAGES = 484;
 /** Used-club detail pages reached from the listing. DB rows (43 on
  *  2026-09-24), so a floor of one rather than an exact count. Today they add
  *  no pair the listing lacks (the listing shows every club's photo); the crawl
@@ -8766,13 +8783,16 @@ const CODE_ONLY_FOLDERS = new Set([
   "events",
   "golf",
   "icons",
+  "junior-academy",
 ]);
 /** Distinct (src, q) pairs under CODE_ONLY_FOLDERS. Measured 98 on 2026-09-24
  *  (branding 6, venue 10, menus 4, lessons 36, events 25, golf 11, icons 6)
  *  out of 173 in total. Floored on the code-only subset because a floor on the
  *  total let up to 75 DB-driven pairs stand in for lost code-owned ones: an
- *  extractor that dropped lessons/ and events/ passed at 112 (measured). */
-const MIN_CODE_FOLDER_PAIRS = 98;
+ *  extractor that dropped lessons/ and events/ passed at 112 (measured).
+ *  99 since 2026-10-11: junior-academy/ adds the poster at q=75 (its /lessons/
+ *  callout reuses lessons/student-kids-02.jpg, an existing pair). */
+const MIN_CODE_FOLDER_PAIRS = 99;
 
 /** `/_next/image/?url=…&amp;w=…&amp;q=…`, in any src, srcSet or imageSrcSet. */
 const OPTIMIZER_REF_RE =

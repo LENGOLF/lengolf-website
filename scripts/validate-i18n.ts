@@ -80,6 +80,7 @@ import type { GolfCourse, GolfCourseProse } from '@/types/golf-courses'
 import { faqPages } from '@/data/faq-pages'
 import { PRICE_TIER_I18N } from '@/data/price-tiers'
 import { getFaqHubContent } from '@/data/faq-hub'
+import { JUNIOR_ACADEMY_CONTENT, JUNIOR_ACADEMY_PATH } from '@/data/junior-academy'
 import { priceGuidePages } from '@/data/price-guide-pages'
 import { activityOccasionPages } from '@/data/activity-occasions'
 import { bestOfListiclePages } from '@/data/best-of-listicle-pages'
@@ -312,6 +313,33 @@ for (const locale of LOCALES) {
   // <main>) would still pass. Worth a real parity assertion.
   const units = leaves
     .filter(([field]) => !/\.categories\[|^faqLinks\./.test(field))
+    .map(([field, value]) => ({ locale, entryId, field, value }))
+  if (units.length > 0) entries.push({ entryId, locale, units })
+}
+
+// data/junior-academy.ts — /junior-golf-academy/ (EN + TH). Reads the RAW
+// per-locale map, never getJuniorAcademyContent(): that getter falls back to
+// EN, and checkScript ignores Latin, so an EN fallback in a th slot would lint
+// clean. A registered locale with no block would render EN under /th/, and a
+// block for an unregistered locale is unreachable, so both are ERRORs.
+// URLs (faqLinks, related hrefs) are not prose and are filtered out.
+for (const locale of LOCALES) {
+  const entryId = `junior:${locale}`
+  const content = JUNIOR_ACADEMY_CONTENT[locale]
+  const registered = hasTranslationForLocale(locale, JUNIOR_ACADEMY_PATH)
+  if (registered && !content) {
+    add('error', locale, entryId, '(registry)', 'junior-academy',
+      `${JUNIOR_ACADEMY_PATH} is registered for ${locale} but data/junior-academy.ts has no ${locale} block (the page renders English)`)
+  }
+  if (!content) continue
+  if (!registered) {
+    add('error', locale, entryId, '(registry)', 'junior-academy',
+      `data/junior-academy.ts has a ${locale} block but ${JUNIOR_ACADEMY_PATH} is not registered for ${locale} (unreachable)`)
+  }
+  const leaves: Array<[string, string]> = []
+  flattenMessages(content, '', leaves)
+  const units = leaves
+    .filter(([field]) => !/^faqLinks\.|\.href$/.test(field))
     .map(([field, value]) => ({ locale, entryId, field, value }))
   if (units.length > 0) entries.push({ entryId, locale, units })
 }
@@ -1365,7 +1393,7 @@ if (process.argv.includes('--self-test')) {
   // it, so there was no count and no floor at all: deleting assert() lines
   // silently reduced coverage while it still printed ALL SELF-TESTS PASS.
   // Raise MIN_ASSERTIONS in the same commit that adds one; never lower it.
-  const MIN_ASSERTIONS = 93
+  const MIN_ASSERTIONS = 94
   let asserted = 0
   const assert = (label: string, cond: boolean) => {
     asserted++
@@ -1568,6 +1596,12 @@ if (process.argv.includes('--self-test')) {
     LOCALES.every((l) => entries.some((e) => e.entryId === `faqhub:${l}` && e.units.length > 0))
   )
   assert('corpus: price-tier entries present', entries.some((e) => e.entryId.startsWith('tier:')))
+  // Added with the junior-academy corpus, same shape as faq-hub's: a widened
+  // field filter would drop every th unit while the other checks passed.
+  assert(
+    'corpus: junior-academy th entry present',
+    entries.some((e) => e.entryId === 'junior:th' && e.units.length > 20)
+  )
 
   // Checks 10/11 — UI-message namespace parity, on synthetic catalogs
   const parityIssues = (

@@ -390,6 +390,7 @@ export default async function JuniorGolfAcademyPage({ params }: Props) {
             <p className="mt-4 font-semibold" style={{ color: JA.lime }}>
               {c.price.validity}
             </p>
+            <p className="mt-1 text-xs text-white/70">{c.price.asOf}</p>
             <ul className="mx-auto mt-8 max-w-xl space-y-3 text-left">
               {c.price.items.map((item) => (
                 <li key={item} className="flex gap-3 leading-relaxed text-white/90">

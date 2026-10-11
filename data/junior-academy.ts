@@ -121,6 +121,8 @@ export interface JuniorAcademyContent {
     amount: string
     items: string[]
     validity: string
+    /** Dated price line (the TH house style asks for one wherever a price appears). */
+    asOf: string
     cta: string
     note: string
   }
@@ -248,6 +250,7 @@ const en: JuniorAcademyContent = {
       'Assessments at lessons 5 and 10, Level 1 and Level 2 certificates, graduation',
     ],
     validity: 'Package valid for 1 year',
+    asOf: 'Price as of October 2026.',
     cta: 'Ask on LINE @lengolf',
     note: 'Lesson times are arranged with you on LINE.',
   },
@@ -448,6 +451,7 @@ const th: JuniorAcademyContent = {
       'ประเมินทักษะในครั้งที่ 5 และ 10 ใบประกาศ Level 1 และ Level 2 และการจบหลักสูตร',
     ],
     validity: 'แพ็กเกจใช้ได้ 1 ปี',
+    asOf: '(ข้อมูล ณ ตุลาคม 2026)',
     cta: 'สอบถามทาง LINE @lengolf',
     note: 'นัดวันและเวลาเรียนกับทีมงานทาง LINE ได้เลย',
   },
