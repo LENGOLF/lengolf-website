@@ -339,7 +339,7 @@ for (const locale of LOCALES) {
   const leaves: Array<[string, string]> = []
   flattenMessages(content, '', leaves)
   const units = leaves
-    .filter(([field]) => !/^faqLinks\.|\.href$/.test(field))
+    .filter(([field]) => !/^faqLinks\.|\.href$|^listSeparator$/.test(field))
     .map(([field, value]) => ({ locale, entryId, field, value }))
   if (units.length > 0) entries.push({ entryId, locale, units })
 }

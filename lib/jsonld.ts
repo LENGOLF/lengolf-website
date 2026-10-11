@@ -748,6 +748,8 @@ export function getJuniorAcademyCourseJsonLd(c: {
   name: string
   description: string
   pageUrl: string
+  /** Locale-independent: the same program is one entity on every locale page. */
+  entityId: string
   image: string
   priceThb: number
   offerDescription: string
@@ -756,7 +758,7 @@ export function getJuniorAcademyCourseJsonLd(c: {
   return {
     '@context': 'https://schema.org',
     '@type': 'Course',
-    '@id': `${c.pageUrl}#course`,
+    '@id': c.entityId,
     name: c.name,
     description: c.description,
     url: c.pageUrl,

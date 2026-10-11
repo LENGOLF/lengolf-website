@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
+import Image, { getImageProps } from 'next/image'
 import RawLink from 'next/link'
 import { setRequestLocale } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
@@ -115,10 +115,15 @@ export default async function JuniorGolfAcademyPage({ params }: Props) {
     name: c.course.name,
     description: c.course.description,
     pageUrl,
+    // One program, one entity: the EN URL names it on both locale pages (the
+    // coaches' Person @ids follow the same rule).
+    entityId: `${getCanonical('en', JUNIOR_ACADEMY_PATH)}#course`,
     image: JUNIOR_ACADEMY_IMAGES.poster.src,
     priceThb: JUNIOR_ACADEMY_PRICE_THB,
-    offerDescription: [...c.price.items, c.price.validity].join('. '),
-    credentials: 'Level 1 and Level 2 certificates',
+    // Thai has no full stop, so the items are joined with the locale's own
+    // separator rather than a hardcoded '. '.
+    offerDescription: [...c.price.items, c.price.validity].join(c.listSeparator),
+    credentials: c.course.credentials,
   })
   const faqJsonLd = getFaqPageJsonLd(c.faq.items)
   const videoJsonLd = getVideoObjectJsonLd({
@@ -136,6 +141,16 @@ export default async function JuniorGolfAcademyPage({ params }: Props) {
     { name: c.breadcrumb.lessons, url: getCanonical(locale, '/lessons/') },
     { name: c.breadcrumb.self, url: pageUrl },
   ])
+
+  // The video's poster frame goes through the image optimizer (WebP at about
+  // 2x the 300 px it renders at) rather than the 720x1280 JPEG: a poster
+  // downloads with the page even under preload="none".
+  const { props: videoPoster } = getImageProps({
+    src: JUNIOR_ACADEMY_VIDEO.poster,
+    alt: '',
+    width: 300,
+    height: 533,
+  })
 
   const [titleFirstWord, ...titleRest] = c.hero.titleMain.split(' ')
   // One hitter at a time · soft balls · parent supervision (data order).
@@ -156,21 +171,25 @@ export default async function JuniorGolfAcademyPage({ params }: Props) {
               {/* Decorative repeat of the age, beside the title on wide screens
                   only: the poster carries its own burst, and below lg the stat
                   chips state the ages a few lines down. */}
-              <SunBurst label={c.hero.ageBadge} className="absolute right-0 top-10 hidden lg:grid xl:right-6" />
+              <div aria-hidden="true">
+                <SunBurst label={c.hero.ageBadge} className="absolute right-0 top-10 hidden lg:grid xl:right-6" />
+              </div>
               <p className="mb-4 text-xs font-bold uppercase tracking-[0.08em]" style={{ color: JA.forest }}>
                 {c.hero.eyebrow}
               </p>
               <h1>
                 <span className="mb-4 block text-2xl font-bold leading-snug md:text-3xl" style={{ color: JA.forest }}>
                   {c.hero.titleLead}
-                </span>
+                </span>{' '}
+                {/* The {' '} separators keep the H1's text content word-separated
+                    for crawlers and LLM fetchers; they collapse visually. */}
                 <span className="flex flex-wrap items-end gap-2">
                   <span
                     className="inline-block px-4 py-2 text-5xl font-black uppercase italic leading-none md:text-6xl lg:text-7xl"
                     style={{ backgroundColor: JA.forest, color: JA.card, transform: 'rotate(-1.5deg)' }}
                   >
                     {titleFirstWord}
-                  </span>
+                  </span>{' '}
                   {titleRest.length > 0 && (
                     <span
                       className="inline-block px-4 py-2 text-5xl font-black uppercase italic leading-none md:text-6xl lg:text-7xl"
@@ -327,7 +346,7 @@ export default async function JuniorGolfAcademyPage({ params }: Props) {
                 controls
                 playsInline
                 preload="none"
-                poster={JUNIOR_ACADEMY_VIDEO.poster}
+                poster={videoPoster.src}
                 width={JUNIOR_ACADEMY_VIDEO.width}
                 height={JUNIOR_ACADEMY_VIDEO.height}
                 aria-label={c.video.label}

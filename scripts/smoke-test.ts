@@ -8790,9 +8790,10 @@ const CODE_ONLY_FOLDERS = new Set([
  *  out of 173 in total. Floored on the code-only subset because a floor on the
  *  total let up to 75 DB-driven pairs stand in for lost code-owned ones: an
  *  extractor that dropped lessons/ and events/ passed at 112 (measured).
- *  99 since 2026-10-11: junior-academy/ adds the poster at q=75 (its /lessons/
- *  callout reuses lessons/student-kids-02.jpg, an existing pair). */
-const MIN_CODE_FOLDER_PAIRS = 99;
+ *  100 since 2026-10-11: junior-academy/ adds the hero poster and the video
+ *  poster frame, both at q=75 (its /lessons/ callout reuses
+ *  lessons/student-kids-02.jpg, an existing pair). */
+const MIN_CODE_FOLDER_PAIRS = 100;
 
 /** `/_next/image/?url=…&amp;w=…&amp;q=…`, in any src, srcSet or imageSrcSet. */
 const OPTIMIZER_REF_RE =

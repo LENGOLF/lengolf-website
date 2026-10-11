@@ -167,6 +167,8 @@ export function CollageHeading({
       >
         {lead}
       </span>
+      {/* Keeps "lead suffix" word-separated in the heading's text content
+          (crawlers, LLM fetchers); collapses visually between flex items. */}{' '}
       <span
         className="inline-block px-4 py-1.5 text-2xl font-extrabold uppercase italic leading-tight md:text-3xl"
         style={{

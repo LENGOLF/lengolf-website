@@ -672,7 +672,10 @@ export const RULES: Rule[] = [
     derive(ctx, base, head) {
       const content = (mod: Loaded) =>
         new Map(Object.entries((mod?.JUNIOR_ACADEMY_CONTENT as Record<string, unknown> | undefined) ?? {}))
-      const omit = ['JUNIOR_ACADEMY_CONTENT', 'getJuniorAcademyContent']
+      // JUNIOR_ACADEMY_UPDATED_AT feeds the sitemap only (not a pinged URL), and
+      // every copy edit bumps it: counting it as shared would turn a th-only
+      // edit into an every-locale ping.
+      const omit = ['JUNIOR_ACADEMY_CONTENT', 'getJuniorAcademyContent', 'JUNIOR_ACADEMY_UPDATED_AT']
       if (moduleSig(base, omit) !== moduleSig(head, omit)) {
         return { kind: 'records', urls: LOCALES.flatMap((l) => juniorAcademyUrls(ctx.reg, l)), note: 'a shared export changed: every locale' }
       }
@@ -1364,10 +1367,11 @@ const CASES: Case[] = [
   {
     // ja serves /lessons/ but not the Academy page, so ja /lessons/ (no
     // callout there) must not ping.
+    // ...including the JUNIOR_ACADEMY_UPDATED_AT bump every copy edit carries.
     name: 'junior-academy.ts: a th copy edit pings the th page and th /lessons/ alone',
     changes: [{ status: 'M', file: 'data/junior-academy.ts' }],
-    base: { 'data/junior-academy.ts': { JUNIOR_ACADEMY_CONTENT: { en: 'e', th: 't-old' }, JUNIOR_ACADEMY_PRICE_THB: 16900 } },
-    head: { 'data/junior-academy.ts': { JUNIOR_ACADEMY_CONTENT: { en: 'e', th: 't-new' }, JUNIOR_ACADEMY_PRICE_THB: 16900 } },
+    base: { 'data/junior-academy.ts': { JUNIOR_ACADEMY_CONTENT: { en: 'e', th: 't-old' }, JUNIOR_ACADEMY_PRICE_THB: 16900, JUNIOR_ACADEMY_UPDATED_AT: '2026-10-11' } },
+    head: { 'data/junior-academy.ts': { JUNIOR_ACADEMY_CONTENT: { en: 'e', th: 't-new' }, JUNIOR_ACADEMY_PRICE_THB: 16900, JUNIOR_ACADEMY_UPDATED_AT: '2026-11-02' } },
     registered: ['th:/junior-golf-academy', 'th:/lessons', 'ja:/lessons'],
     want: ['/th/junior-golf-academy/', '/th/lessons/'],
   },

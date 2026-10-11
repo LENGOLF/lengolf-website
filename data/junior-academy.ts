@@ -68,6 +68,8 @@ export interface JuniorAcademyQa {
 export interface JuniorAcademyContent {
   metaTitle: string
   metaDescription: string
+  /** Joins list items into one sentence for structured data ('. ' in EN; Thai has no full stop). */
+  listSeparator: string
   breadcrumb: { home: string; lessons: string; self: string }
   hero: {
     eyebrow: string
@@ -131,7 +133,7 @@ export interface JuniorAcademyContent {
   faqLinks: Record<string, { href: string; external?: boolean }>
   related: { title: string; links: { label: string; href: string }[] }
   /** Structured-data name/description for the Course node. */
-  course: { name: string; description: string }
+  course: { name: string; description: string; credentials: string }
   /** Callout on /lessons/ (rendered only where this page is published). */
   lessonsCallout: { badge: string; title: string; body: string; cta: string; imageAlt: string }
 }
@@ -140,6 +142,7 @@ const en: JuniorAcademyContent = {
   metaTitle: 'Kids Golf Lessons Bangkok, Ages 4 to 12: Junior Academy',
   metaDescription:
     'LENGOLF Junior Academy: 10 private 60-minute golf lessons for kids aged 4 to 12 with our PGA coaches, plus 5 hours family practice. 16,900 THB at BTS Chidlom.',
+  listSeparator: '. ',
   breadcrumb: { home: 'Home', lessons: 'Golf Lessons', self: 'Junior Academy' },
   hero: {
     eyebrow: 'LENGOLF Junior Academy · Ages 4 to 12',
@@ -232,7 +235,10 @@ const en: JuniorAcademyContent = {
     title: 'Safe in',
     titleSuffix: 'the Bay',
     items: [
-      { title: 'One hitter at a time', body: 'Only one child swings at a time. Everyone else waits their turn.' },
+      {
+        title: 'One hitter at a time',
+        body: 'Only one person swings at a time in the bay, in lessons and during family practice.',
+      },
       { title: 'Soft balls for beginners', body: 'Children who are just starting out hit soft balls, not regular golf balls.' },
       {
         title: 'Parents supervise practice hours',
@@ -327,6 +333,7 @@ const en: JuniorAcademyContent = {
     name: 'LENGOLF Junior Academy',
     description:
       "Kids golf program for ages 4 to 12 at LENGOLF in Bangkok: 10 private 60-minute lessons with LENGOLF's PGA coaches, each hour half movement and games and half golf, assessments at lessons 5 and 10, Level 1 and Level 2 certificates, graduation, 5 hours of family practice time, and junior clubs fitted to height.",
+    credentials: 'Level 1 and Level 2 certificates',
   },
   lessonsCallout: {
     badge: 'Ages 4 to 12',
@@ -341,6 +348,7 @@ const th: JuniorAcademyContent = {
   metaTitle: 'เรียนกอล์ฟเด็ก กรุงเทพฯ อายุ 4-12 ปี: Junior Academy',
   metaDescription:
     'LENGOLF Junior Academy คอร์สเรียนกอล์ฟสำหรับเด็กอายุ 4-12 ปี เรียนตัวต่อตัวกับโค้ช PGA 10 ครั้ง ครั้งละ 60 นาที พร้อมเวลาซ้อมสำหรับครอบครัว 5 ชั่วโมง ราคา 16,900 บาท ที่ BTS ชิดลม',
+  listSeparator: ' ',
   breadcrumb: { home: 'หน้าแรก', lessons: 'เรียนกอล์ฟ', self: 'Junior Academy' },
   hero: {
     eyebrow: 'LENGOLF Junior Academy · อายุ 4-12 ปี',
@@ -433,8 +441,9 @@ const th: JuniorAcademyContent = {
     title: 'ความปลอดภัย',
     titleSuffix: 'ในเบย์',
     items: [
-      { title: 'ตีทีละคน', body: 'ให้เด็กสวิงทีละคน คนอื่นรอคิวของตัวเอง' },
-      { title: 'ลูกนิ่มสำหรับผู้เริ่มต้น', body: 'เด็กที่เพิ่งเริ่มเรียนจะตีลูกกอล์ฟนิ่มแทนลูกกอล์ฟจริง' },
+      { title: 'ตีทีละคน', body: 'ในเบย์จะตีทีละคนเท่านั้น ทั้งตอนเรียนและตอนซ้อมกับครอบครัว' },
+      // "ลูกนิ่ม" alone can read as "soft child" (ลูก = your child on this page).
+      { title: 'ลูกกอล์ฟนิ่มสำหรับมือใหม่', body: 'เด็กที่เพิ่งเริ่มเรียนจะตีลูกกอล์ฟนิ่มแทนลูกกอล์ฟจริง' },
       {
         title: 'ผู้ปกครองดูแลช่วงซ้อม',
         body: 'ระหว่างเวลาซ้อมสำหรับครอบครัว 5 ชั่วโมง ผู้ปกครองต้องอยู่ดูแลลูกในเบย์',
@@ -525,6 +534,7 @@ const th: JuniorAcademyContent = {
     name: 'LENGOLF Junior Academy',
     description:
       'คอร์สเรียนกอล์ฟสำหรับเด็กอายุ 4-12 ปีที่ LENGOLF กรุงเทพฯ เรียนตัวต่อตัวกับโค้ช PGA จาก LENGOLF 10 ครั้ง ครั้งละ 60 นาที ทุกชั่วโมงแบ่งเป็นการเคลื่อนไหวและเกมครึ่งหนึ่ง และกอล์ฟอีกครึ่งหนึ่ง ประเมินทักษะในครั้งที่ 5 และ 10 รับใบประกาศ Level 1 และ Level 2 จบหลักสูตร พร้อมเวลาซ้อมสำหรับครอบครัว 5 ชั่วโมง และไม้กอล์ฟจูเนียร์ที่เลือกขนาดตามส่วนสูง',
+    credentials: 'ใบประกาศ Level 1 และ Level 2',
   },
   lessonsCallout: {
     badge: 'อายุ 4-12 ปี',
