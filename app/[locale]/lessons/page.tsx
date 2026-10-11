@@ -5,7 +5,8 @@ import { Link } from '@/i18n/navigation'
 import SectionWrapper from '@/components/shared/SectionWrapper'
 import ImageGallery from '@/components/shared/ImageGallery'
 import { storageUrl, SITE_URL, BUSINESS_INFO } from '@/lib/constants'
-import { getAlternates, getCanonical } from '@/lib/translated-routes'
+import { getAlternates, getCanonical, hasTranslationForLocale } from '@/lib/translated-routes'
+import { getJuniorAcademyContent, JUNIOR_ACADEMY_PATH } from '@/data/junior-academy'
 import { coaches } from '@/data/coaches'
 import { getLessonPricingData, type LessonPackage } from '@/data/pricing'
 import { getLessonsPricingJsonLd, getLessonsServiceJsonLd, getFaqPageJsonLd, getBreadcrumbJsonLd, getCoachesJsonLd } from '@/lib/jsonld'
@@ -25,6 +26,9 @@ const faqLinks: Record<string, { href: string; external?: boolean }> = {
   'booking.len.golf': { href: 'https://booking.len.golf/', external: true },
   '@lengolf': { href: 'https://lin.ee/uxQpIXn', external: true },
   'Google Maps': { href: BUSINESS_INFO.googleMapsUrl, external: true },
+  // LessonsFaq.a7 in en/th; the phrase does not occur in ja/ko/zh.
+  'Junior Academy page': { href: '/junior-golf-academy' },
+  'หน้า Junior Academy': { href: '/junior-golf-academy' },
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -136,6 +140,13 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
     { name: 'Home', url: `${SITE_URL}/` },
     { name: t('metaTitle'), url: `${SITE_URL}/lessons/` },
   ])
+
+  // The Junior Academy page is EN + TH only, so the callout renders only where
+  // it can link to the reader's own language.
+  const juniorCallout =
+    locale === 'en' || hasTranslationForLocale(locale, JUNIOR_ACADEMY_PATH)
+      ? getJuniorAcademyContent(locale).lessonsCallout
+      : null
 
   return (
     <>
@@ -263,6 +274,46 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
               {t('pricing')}
             </a>
           </div>
+
+          {/* Junior Academy: kids-golf searches land on this page today.
+              Outside #free-trial and #lessons-cta, and no JSON-LD (smoke H2
+              pins this page's structured data). */}
+          {juniorCallout && (
+            <div
+              id="junior-academy"
+              className="mt-12 flex flex-col overflow-hidden rounded-xl border-2 border-primary/20 text-left md:flex-row"
+              style={{ backgroundColor: '#F6FFFA' }}
+            >
+              <div className="shrink-0 md:w-2/5">
+                <Image
+                  src={storageUrl('lessons/student-kids-02.jpg')}
+                  alt={juniorCallout.imageAlt}
+                  width={1200}
+                  height={800}
+                  className="h-52 w-full object-cover md:h-full"
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                />
+              </div>
+              <div className="flex flex-col justify-center p-6 md:p-8">
+                <span
+                  className="inline-block w-fit rounded px-3 py-1 text-xs font-bold uppercase tracking-widest text-white"
+                  style={{ backgroundColor: '#7CB342' }}
+                >
+                  {juniorCallout.badge}
+                </span>
+                <h2 className="mt-3 text-2xl font-bold lg:text-3xl" style={{ color: '#007429' }}>
+                  {juniorCallout.title}
+                </h2>
+                <p className="mt-2 leading-relaxed text-muted-foreground">{juniorCallout.body}</p>
+                <Link
+                  href="/junior-golf-academy"
+                  className="mt-5 inline-flex min-h-12 w-fit items-center justify-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-light"
+                >
+                  {juniorCallout.cta}
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
       </SectionWrapper>
 

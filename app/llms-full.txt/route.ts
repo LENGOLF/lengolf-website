@@ -5,6 +5,7 @@ import { getSiteFacts } from '@/lib/site-facts'
 import { getPricingCatalog } from '@/lib/pricing'
 import { isFaqPage } from '@/types/seo-pages'
 import { getFaqHubContent } from '@/data/faq-hub'
+import { getJuniorAcademyContent, JUNIOR_ACADEMY_PATH } from '@/data/junior-academy'
 import {
   getBayRatesData,
   getEventPackagesData,
@@ -122,6 +123,20 @@ export async function GET() {
       ) +
       '\n\n' +
       lessons.lessonNotes.map((n) => `- ${n}`).join('\n')
+  )
+
+  // The Junior Academy's facts and Q&A, from the same data file its page
+  // renders. Its URL line is deliberately NOT prefixed "Source:": smoke
+  // section H counts that marker against the /faq/ corpus.
+  const junior = getJuniorAcademyContent('en')
+  sections.push(
+    '## LENGOLF Junior Academy (kids golf, ages 4 to 12)\n' +
+      `Page: ${SITE_URL}${JUNIOR_ACADEMY_PATH}\n\n` +
+      `${junior.course.description} ${junior.price.amount}, ${junior.price.validity.toLowerCase()}. ` +
+      `${junior.price.note}\n\n` +
+      junior.included.items.map((i) => `- ${i}`).join('\n') +
+      '\n\n' +
+      junior.faq.items.map((q) => `Q: ${q.question}\nA: ${q.answer}`).join('\n\n')
   )
 
   sections.push(

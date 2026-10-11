@@ -42,6 +42,7 @@ const DERIVED_PREFIXES = new Set(['near', 'under', 'compare', 'best-for'])
 const STATIC_LABEL_PATHS = new Set([
   'golf',
   'lessons',
+  'junior-golf-academy',
   'events',
   'golf-club-rental',
   'golf-course-club-rental',

@@ -12,6 +12,7 @@ const FOOTER_MENU_KEYS = [
   { key: 'simulatorBays', href: '/golf' as const },
   { key: 'events', href: '/events' as const },
   { key: 'lessons', href: '/lessons' as const },
+  { key: 'juniorAcademy', href: '/junior-golf-academy' as const },
   { key: 'foodDrinks', href: '/menu' as const },
   { key: 'clubsAtLengolf', href: '/golf-club-rental' as const },
   { key: 'clubsCourseRental', href: '/golf-course-club-rental' as const },
@@ -137,17 +138,28 @@ export default async function Footer() {
               {t('menu')}
             </h3>
             <ul>
-              {FOOTER_MENU_KEYS.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="block transition-colors hover:text-[#005a32]"
-                    style={linkStyle}
-                  >
-                    {tNav(item.key)}
-                  </Link>
-                </li>
-              ))}
+              {FOOTER_MENU_KEYS.map((item) => {
+                // Same derived rule as DISCOVER_LINKS below: /junior-golf-academy
+                // is EN + TH only, so a prefixed Link from ja/ko/zh would 301
+                // back to English on every page. Every other menu target is
+                // translated in th/ja/ko/zh, so their hrefs do not change; EN
+                // (never in the registry) takes RawLink, which renders the same
+                // unprefixed href the locale-aware Link did.
+                const LinkTag = hasTranslationForLocale(locale, item.href)
+                  ? Link
+                  : RawLink
+                return (
+                  <li key={item.href}>
+                    <LinkTag
+                      href={item.href}
+                      className="block transition-colors hover:text-[#005a32]"
+                      style={linkStyle}
+                    >
+                      {tNav(item.key)}
+                    </LinkTag>
+                  </li>
+                )
+              })}
             </ul>
           </div>
 

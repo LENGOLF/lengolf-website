@@ -21,6 +21,7 @@
  *   - data/activity-occasions.ts — /activities entries, same locales
  *   - data/best-of-listicle-pages.ts — /best entries, same locales
  *   - data/rental-agreement/    — the course club rental agreement per locale
+ *   - data/junior-academy.ts    — /junior-golf-academy/ copy (th; raw per-locale map)
  * Every module in that list is a plain data module — none imports lib/pricing.
  *
  * This paragraph used to justify an import that no longer exists: it said
@@ -80,6 +81,7 @@ import type { GolfCourse, GolfCourseProse } from '@/types/golf-courses'
 import { faqPages } from '@/data/faq-pages'
 import { PRICE_TIER_I18N } from '@/data/price-tiers'
 import { getFaqHubContent } from '@/data/faq-hub'
+import { JUNIOR_ACADEMY_CONTENT, JUNIOR_ACADEMY_PATH } from '@/data/junior-academy'
 import { priceGuidePages } from '@/data/price-guide-pages'
 import { activityOccasionPages } from '@/data/activity-occasions'
 import { bestOfListiclePages } from '@/data/best-of-listicle-pages'
@@ -314,6 +316,36 @@ for (const locale of LOCALES) {
     .filter(([field]) => !/\.categories\[|^faqLinks\./.test(field))
     .map(([field, value]) => ({ locale, entryId, field, value }))
   if (units.length > 0) entries.push({ entryId, locale, units })
+}
+
+// data/junior-academy.ts — /junior-golf-academy/ (EN + TH). Reads the RAW
+// per-locale map, never getJuniorAcademyContent(): that getter falls back to
+// EN, and checkScript ignores Latin, so an EN fallback in a th slot would lint
+// clean. A registered locale with no block would render EN under /th/, and a
+// block for an unregistered locale is unreachable, so both are ERRORs.
+// URLs (faqLinks, related hrefs) are not prose and are filtered out.
+for (const locale of LOCALES) {
+  const entryId = `junior:${locale}`
+  const content = JUNIOR_ACADEMY_CONTENT[locale]
+  const registered = hasTranslationForLocale(locale, JUNIOR_ACADEMY_PATH)
+  if (registered && !content) {
+    add('error', locale, entryId, '(registry)', 'junior-academy',
+      `${JUNIOR_ACADEMY_PATH} is registered for ${locale} but data/junior-academy.ts has no ${locale} block (the page renders English)`)
+  }
+  if (!content) continue
+  if (!registered) {
+    add('error', locale, entryId, '(registry)', 'junior-academy',
+      `data/junior-academy.ts has a ${locale} block but ${JUNIOR_ACADEMY_PATH} is not registered for ${locale} (unreachable)`)
+  }
+  const units = juniorAcademyUnits(content).map(([field, value]) => ({ locale, entryId, field, value }))
+  if (units.length > 0) entries.push({ entryId, locale, units })
+}
+
+/** The prose leaves of one JuniorAcademyContent block (URLs and the list separator are not prose). */
+function juniorAcademyUnits(content: unknown): Array<[string, string]> {
+  const leaves: Array<[string, string]> = []
+  flattenMessages(content, '', leaves)
+  return leaves.filter(([field]) => !/^faqLinks\.|\.href$|^listSeparator$/.test(field))
 }
 
 // data/rental-agreement/ — the Golf Course Club Rental Agreement. Legal text,
@@ -1356,6 +1388,40 @@ function checkNamespaceParity(
 
 checkNamespaceParity(uiCatalogs, SSG_UI_NAMESPACES)
 
+/**
+ * Nav and Footer render on EVERY page in every locale (the header and the
+ * footer), and i18n/request.ts loads one catalog with no message fallback, so a
+ * key missing from a locale prints its literal dotted path ("Nav.juniorAcademy")
+ * site-wide. checkNamespaceParity only WARNs on a key gap, and neither namespace
+ * is in SSG_UI_NAMESPACES, so deleting the footer's Junior Academy label from
+ * ja.json went through every gate green (mutation-tested on PR #155). For these
+ * two namespaces a gap is an ERROR. Both were at full key parity when this
+ * landed, so it fires on nothing today.
+ */
+const SITE_CHROME_NAMESPACES = ['Nav', 'Footer'] as const
+function siteChromeGaps(catalogs: Record<'en' | Locale, MessageCatalog>): Array<[Locale | 'en', string]> {
+  const gaps: Array<[Locale | 'en', string]> = []
+  for (const ns of SITE_CHROME_NAMESPACES) {
+    const en = catalogs.en[ns]
+    if (!en || typeof en !== 'object') {
+      gaps.push(['en', ns])
+      continue
+    }
+    const enKeys = flattenKeys(en)
+    for (const locale of LOCALES) {
+      const have = new Set(flattenKeys(catalogs[locale]?.[ns]))
+      for (const key of enKeys) if (!have.has(key)) gaps.push([locale, `${ns}.${key}`])
+    }
+  }
+  return gaps
+}
+for (const [locale, key] of siteChromeGaps(uiCatalogs)) {
+  add('error', locale === 'en' ? 'th' : locale, `messages/${locale}.json`, key, 'ui-chrome-key-gap',
+    locale === 'en'
+      ? `site-chrome namespace "${key}" missing from messages/en.json, so nothing below it is checked`
+      : `${key} is missing: every ${locale} page renders the literal key in its header or footer`)
+}
+
 // ── Optional self-test: drives every ERROR check through the real functions on
 // synthetic inputs, proving each detector fires (and that correct forms don't).
 // Run: npx tsx scripts/validate-i18n.ts --self-test
@@ -1365,7 +1431,7 @@ if (process.argv.includes('--self-test')) {
   // it, so there was no count and no floor at all: deleting assert() lines
   // silently reduced coverage while it still printed ALL SELF-TESTS PASS.
   // Raise MIN_ASSERTIONS in the same commit that adds one; never lower it.
-  const MIN_ASSERTIONS = 93
+  const MIN_ASSERTIONS = 95
   let asserted = 0
   const assert = (label: string, cond: boolean) => {
     asserted++
@@ -1568,6 +1634,38 @@ if (process.argv.includes('--self-test')) {
     LOCALES.every((l) => entries.some((e) => e.entryId === `faqhub:${l}` && e.units.length > 0))
   )
   assert('corpus: price-tier entries present', entries.some((e) => e.entryId.startsWith('tier:')))
+  // Added with the junior-academy corpus. EXACT, not a floor: a floor of 20
+  // stayed green when a widened field filter dropped the whole FAQ (24 of 122
+  // units, the ones shipped as FAQPage JSON-LD) and a Chinese answer was
+  // injected into it (mutation-tested). The expectation is counted by VALUE
+  // (every string leaf that is not a URL or path), independently of the
+  // field-regex filter, because comparing two outputs of the same filter
+  // would shrink in step with it. th must also match en, which catches a th
+  // list missing an item.
+  const proseLeafCount = (content: unknown) => {
+    const leaves: Array<[string, string]> = []
+    flattenMessages(content, '', leaves)
+    return leaves.filter(([field, value]) => field !== 'listSeparator' && !/^(https?:\/\/|\/)/.test(value)).length
+  }
+  // Site-chrome key gaps (Nav/Footer): the real function, on the real catalogs
+  // with one key removed from ja, must report exactly that key; untouched, none.
+  {
+    const mutated = JSON.parse(JSON.stringify(uiCatalogs)) as Record<'en' | Locale, MessageCatalog>
+    delete (mutated.ja.Nav as Record<string, unknown>).juniorAcademy
+    const gaps = siteChromeGaps(mutated)
+    assert(
+      'chrome: a Nav key missing from ja is an ERROR, and the real catalogs have none',
+      gaps.length === 1 && gaps[0][0] === 'ja' && gaps[0][1] === 'Nav.juniorAcademy' && siteChromeGaps(uiCatalogs).length === 0
+    )
+  }
+  const juniorTh = entries.find((e) => e.entryId === 'junior:th')
+  assert(
+    'corpus: junior-academy th lints every prose leaf, and as many as en has',
+    !!juniorTh &&
+      juniorTh.units.length > 0 &&
+      juniorTh.units.length === proseLeafCount(JUNIOR_ACADEMY_CONTENT.th) &&
+      proseLeafCount(JUNIOR_ACADEMY_CONTENT.th) === proseLeafCount(JUNIOR_ACADEMY_CONTENT.en)
+  )
 
   // Checks 10/11 — UI-message namespace parity, on synthetic catalogs
   const parityIssues = (

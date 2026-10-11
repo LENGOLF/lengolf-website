@@ -168,6 +168,18 @@ function inLocale(reg: Registry, locale: string, p: string): string[] {
   return locale === 'en' || reg.hasTranslationForLocale(locale, p) ? [pageUrl(locale, p)] : []
 }
 
+/**
+ * /junior-golf-academy/ in `locale` plus that locale's /lessons/ (which renders
+ * the Academy callout only where the page is published), and for EN the two
+ * llms files. Nothing for a locale that does not publish the page.
+ */
+function juniorAcademyUrls(reg: Registry, locale: string): string[] {
+  const page = inLocale(reg, locale, '/junior-golf-academy/')
+  if (page.length === 0) return []
+  const llms = locale === 'en' ? [pageUrl('en', '/llms.txt'), pageUrl('en', '/llms-full.txt')] : []
+  return [...page, ...inLocale(reg, locale, '/lessons/'), ...llms]
+}
+
 /** Every URL `p` has at head OR had at base: for records added or removed. */
 function servedEither(ctx: Ctx, p: string): string[] {
   return [...served(ctx.reg, p), ...served(ctx.baseReg, p)]
@@ -648,6 +660,30 @@ export const RULES: Rule[] = [
       return { kind: 'records', urls, note: `hub content changed for ${locales.join(', ')}` }
     },
     coarse: (ctx) => [...served(ctx.reg, '/faq/'), pageUrl('en', '/llms-full.txt')],
+  },
+  {
+    // /junior-golf-academy/, one content block per locale (JUNIOR_ACADEMY_CONTENT).
+    // A locale's block also renders the callout on that locale's /lessons/,
+    // which exists only where the Academy page is published, and EN's block is
+    // printed into llms.txt and llms-full.txt. Any other export (price, video,
+    // images, the date) reaches every locale that serves the page.
+    id: 'junior-academy',
+    match: (f) => (f === 'data/junior-academy.ts' ? [f] : null),
+    derive(ctx, base, head) {
+      const content = (mod: Loaded) =>
+        new Map(Object.entries((mod?.JUNIOR_ACADEMY_CONTENT as Record<string, unknown> | undefined) ?? {}))
+      // JUNIOR_ACADEMY_UPDATED_AT feeds the sitemap only (not a pinged URL), and
+      // every copy edit bumps it: counting it as shared would turn a th-only
+      // edit into an every-locale ping.
+      const omit = ['JUNIOR_ACADEMY_CONTENT', 'getJuniorAcademyContent', 'JUNIOR_ACADEMY_UPDATED_AT']
+      if (moduleSig(base, omit) !== moduleSig(head, omit)) {
+        return { kind: 'records', urls: LOCALES.flatMap((l) => juniorAcademyUrls(ctx.reg, l)), note: 'a shared export changed: every locale' }
+      }
+      const locales = touched(diffKeyed(content(base), content(head)))
+      if (locales.length === 0) return { kind: 'none' }
+      return { kind: 'records', urls: locales.flatMap((l) => juniorAcademyUrls(ctx.reg, l)), note: `content changed for ${locales.join(', ')}` }
+    },
+    coarse: (ctx) => LOCALES.flatMap((l) => juniorAcademyUrls(ctx.reg, l)),
   },
   {
     // Mirror of the DB's translated blog slugs: a slug entering or leaving a
@@ -1329,6 +1365,25 @@ const CASES: Case[] = [
     want: ['/menu/'],
   },
   {
+    // ja serves /lessons/ but not the Academy page, so ja /lessons/ (no
+    // callout there) must not ping.
+    // ...including the JUNIOR_ACADEMY_UPDATED_AT bump every copy edit carries.
+    name: 'junior-academy.ts: a th copy edit pings the th page and th /lessons/ alone',
+    changes: [{ status: 'M', file: 'data/junior-academy.ts' }],
+    base: { 'data/junior-academy.ts': { JUNIOR_ACADEMY_CONTENT: { en: 'e', th: 't-old' }, JUNIOR_ACADEMY_PRICE_THB: 16900, JUNIOR_ACADEMY_UPDATED_AT: '2026-10-11' } },
+    head: { 'data/junior-academy.ts': { JUNIOR_ACADEMY_CONTENT: { en: 'e', th: 't-new' }, JUNIOR_ACADEMY_PRICE_THB: 16900, JUNIOR_ACADEMY_UPDATED_AT: '2026-11-02' } },
+    registered: ['th:/junior-golf-academy', 'th:/lessons', 'ja:/lessons'],
+    want: ['/th/junior-golf-academy/', '/th/lessons/'],
+  },
+  {
+    name: 'junior-academy.ts: a shared export (the price) pings every locale publishing the page, its /lessons/, and both llms files',
+    changes: [{ status: 'M', file: 'data/junior-academy.ts' }],
+    base: { 'data/junior-academy.ts': { JUNIOR_ACADEMY_CONTENT: { en: 'e', th: 't' }, JUNIOR_ACADEMY_PRICE_THB: 16900 } },
+    head: { 'data/junior-academy.ts': { JUNIOR_ACADEMY_CONTENT: { en: 'e', th: 't' }, JUNIOR_ACADEMY_PRICE_THB: 17900 } },
+    registered: ['th:/junior-golf-academy', 'th:/lessons', 'ja:/lessons'],
+    want: ['/junior-golf-academy/', '/lessons/', '/llms.txt', '/llms-full.txt', '/th/junior-golf-academy/', '/th/lessons/'],
+  },
+  {
     name: 'a ja rental-agreement edit pings the ja agreement page alone',
     changes: [{ status: 'M', file: 'data/rental-agreement/ja.ts' }],
     base: { 'data/rental-agreement/ja.ts': { ja: { title: 'a' } } },
@@ -1497,6 +1552,13 @@ const CONSUMERS: Record<string, Record<string, string>> = {
   'data/faq-hub.ts': {
     'app/[locale]/faq/page.tsx': 'pinged',
     'app/llms-full.txt/route.ts': 'pinged: EN only',
+  },
+  'data/junior-academy.ts': {
+    'app/[locale]/junior-golf-academy/page.tsx': 'pinged',
+    'app/[locale]/lessons/page.tsx': 'pinged: the callout, in locales publishing the Academy page',
+    'app/llms.txt/route.ts': 'pinged: EN only',
+    'app/llms-full.txt/route.ts': 'pinged: EN only',
+    'app/sitemap.ts': 'ignored: the sitemap is not a pinged URL',
   },
   'data/golf-courses-i18n.ts': {
     'app/[locale]/golf-courses/[region]/page.tsx': 'pinged: the hub',
@@ -2015,8 +2077,8 @@ async function selfTest(): Promise<void> {
   // trigger-path coverage, workflow trigger, locales, two loader checks); one
   // consumer verdict per CONSUMERS key; four CLI verdicts.
   const expected = CASES.length + 1 + 3 + SEO_SECTIONS.length + 8 + Object.keys(CONSUMERS).length + 4
-  if (CASES.length !== 55 || examined !== expected) {
-    console.log(`FAIL: examined ${examined} verdict(s), expected ${expected} (CASES=${CASES.length}, want 55)`)
+  if (CASES.length !== 57 || examined !== expected) {
+    console.log(`FAIL: examined ${examined} verdict(s), expected ${expected} (CASES=${CASES.length}, want 57)`)
     process.exit(1)
   }
   if (failures > 0) {

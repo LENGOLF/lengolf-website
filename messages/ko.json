@@ -5,6 +5,7 @@
     "simulatorBays": "베이 요금",
     "events": "이벤트",
     "lessons": "레슨",
+    "juniorAcademy": "Junior Academy",
     "foodDrinks": "음식 & 음료",
     "clubRental": "클럽 렌탈",
     "clubs": "클럽",
@@ -1388,6 +1389,7 @@
     "pathLabels": {
       "golf": "실내 골프 시뮬레이터",
       "lessons": "골프 레슨",
+      "junior-golf-academy": "Junior Academy",
       "events": "이벤트·파티",
       "golf-club-rental": "매장 내 무료 클럽",
       "golf-course-club-rental": "골프장 클럽 렌탈",

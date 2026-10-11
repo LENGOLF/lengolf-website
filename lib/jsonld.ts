@@ -737,6 +737,83 @@ export function getCoachesJsonLd(
   }
 }
 
+/**
+ * The Junior Academy as a schema.org Course, provided by the layout's business
+ * node (by '@id', not a second LENGOLF entity). Strings arrive localized from
+ * data/junior-academy.ts; this builder adds only schema vocabulary. Google
+ * retired the Course Info rich result in 2025, so this is for entity grounding
+ * (search, AI assistants), not a SERP feature.
+ */
+export function getJuniorAcademyCourseJsonLd(c: {
+  name: string
+  description: string
+  pageUrl: string
+  /** Locale-independent: the same program is one entity on every locale page. */
+  entityId: string
+  image: string
+  priceThb: number
+  offerDescription: string
+  credentials: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Course',
+    '@id': c.entityId,
+    name: c.name,
+    description: c.description,
+    url: c.pageUrl,
+    image: c.image,
+    provider: getBusinessRef(),
+    typicalAgeRange: '4-12',
+    educationalCredentialAwarded: c.credentials,
+    hasCourseInstance: {
+      '@type': 'CourseInstance',
+      courseMode: 'onsite',
+      // 10 lessons of 60 minutes.
+      courseWorkload: 'PT10H',
+      location: getBusinessRef(),
+    },
+    offers: {
+      '@type': 'Offer',
+      name: c.name,
+      description: c.offerDescription,
+      price: String(c.priceThb),
+      priceCurrency: 'THB',
+      category: 'Paid',
+      availability: 'https://schema.org/InStock',
+      url: c.pageUrl,
+      seller: getBusinessRef(),
+    },
+  }
+}
+
+export function getVideoObjectJsonLd(v: {
+  name: string
+  description: string
+  thumbnailUrl: string
+  contentUrl: string
+  /** ISO 8601 date-time with offset. A literal, never `new Date()`. */
+  uploadDate: string
+  /** ISO 8601 duration, e.g. 'PT25S'. */
+  duration: string
+  inLanguage: string
+  transcript: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'VideoObject',
+    name: v.name,
+    description: v.description,
+    thumbnailUrl: [v.thumbnailUrl],
+    contentUrl: v.contentUrl,
+    uploadDate: v.uploadDate,
+    duration: v.duration,
+    inLanguage: v.inLanguage,
+    transcript: v.transcript,
+    publisher: getBusinessRef(),
+  }
+}
+
 export function getClubRentalServiceJsonLd() {
   return {
     '@context': 'https://schema.org',
