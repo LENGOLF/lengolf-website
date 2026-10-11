@@ -5,13 +5,16 @@ export const routing = defineRouting({
   defaultLocale: 'en',
   localePrefix: 'as-needed',
   // next-intl's middleware otherwise emits an HTTP `Link: rel="alternate";
-  // hreflang=...` header for ALL five locales plus x-default on every page,
-  // blind to lib/translated-routes.ts, so /privacy-policy/ advertised
-  // ja/ko/zh URLs that 301 back to English. The HTML <link rel="alternate">
-  // tags (getAlternates() in generateMetadata) and app/sitemap.ts already list
-  // only the locales a route is translated into; two conflicting hreflang
-  // clusters on one URL is worse than one. middleware.ts still appends the
-  // llms.txt Link header itself (withLlmsLink), so nothing else rides on this.
+  // hreflang=...` header for ALL five locales plus x-default on every
+  // non-redirect page, built from `locales` and blind to
+  // lib/translated-routes.ts: /privacy-policy/ (EN-only) advertised ja/ko/zh
+  // URLs that 301 to English, and /golf-club-specs/ (EN+TH) advertised ko/ja/zh.
+  // Where a page has HTML <link rel="alternate" hreflang> tags (getAlternates()
+  // in generateMetadata) the header contradicted them; where it has none the
+  // header was its only, wrong, hreflang. The HTML tags and app/sitemap.ts are
+  // registry-aware, so they are the sources. Cost: x-default, which only the
+  // header carried, is now advertised nowhere. middleware.ts still appends the
+  // llms.txt Link header itself (withLlmsLink); nothing else rides on this.
   alternateLinks: false,
   localeCookie: {
     name: 'NEXT_LOCALE',

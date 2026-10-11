@@ -5893,24 +5893,21 @@ async function runLlmDiscoverabilityTests() {
 
   // 6) Every page advertises llms.txt via an HTTP Link header, appended in
   // middleware.ts (withLlmsLink). Middleware, not next.config headers() and
-  // not metadata: next-intl's middleware sets its own `link` header (hreflang)
-  // which REPLACES a config-attached Link on the same response — measured —
-  // and page-level `alternates` (canonical) would per-key-replace a
-  // layout-level alternates.types, the og:site_name failure shape. Assert on
+  // not metadata: page-level `alternates` (canonical) would per-key-replace a
+  // layout-level alternates.types, the og:site_name failure shape. (Before
+  // `alternateLinks: false`, next-intl's own hreflang `link` header also
+  // replaced a config-attached Link; it no longer exists, see 6b.) Assert on
   // the homepage; every page route flows through the same middleware return.
   // TWO fetches, because middleware.ts has two decorated return paths and one
   // URL cannot cover both. `/` takes the ordinary return; an untranslated path
-  // requested by a non-English browser takes the /en-fallback REWRITE branch,
-  // whose response carries no next-intl hreflang Link at all. Asserting only
-  // `/` left that branch unguarded: deleting its withLlmsLink() call kept every
-  // gate green while stripping the header from every page a ja/ko/zh/th browser
-  // sees on an untranslated route (measured by mutation).
+  // requested by a non-English browser takes the /en-fallback REWRITE branch.
+  // Asserting only `/` left that branch unguarded: deleting its withLlmsLink()
+  // call kept every gate green while stripping the header from every page a
+  // ja/ko/zh/th browser sees on an untranslated route (measured by mutation).
   //
-  // Attributes are asserted on the llms ENTRY, not on the whole header. The
-  // header is a comma-join of next-intl's hreflang entries plus ours, and every
-  // hreflang entry carries rel="alternate" — so a whole-header regex passed
-  // even with our link removed entirely, and would pass with our link stripped
-  // of its rel or pointed at the wrong host.
+  // Attributes are asserted on the llms ENTRY, found by splitting the header
+  // on the entry boundary. The header is now the llms entry alone, but the
+  // split stays so an entry added later (a second Link) cannot hide ours.
   const llmsLinkChecks: { label: string; url: string; headers?: Record<string, string> }[] = [
     { label: "/", url: `${BASE}/` },
     {
@@ -5954,23 +5951,41 @@ async function runLlmDiscoverabilityTests() {
     }
   }
 
-  // 6b) The HTTP Link header must not carry hreflang for a locale the registry
-  // does not serve. next-intl's middleware emits `rel="alternate"; hreflang=...`
-  // for ALL five locales plus x-default on every page unless
-  // `alternateLinks: false` is set in i18n/routing.ts, blind to
-  // lib/translated-routes.ts — so /privacy-policy/ advertised ja/ko/zh URLs
-  // that 301 back to English, a second hreflang cluster contradicting the
-  // HTML <link> tags and the sitemap (which both derive from getAlternates).
-  // Two fixtures, both derived from the registry rather than assumed: an
-  // EN-only route and an EN+TH route. `servedLocales` comes from
-  // getLocalesForPath (the sitemap's own source) and each fixture must leave at
-  // least one locale UNserved, or the check is vacuous.
+  // 6b) The HTTP Link header must not advertise hreflang for a locale the
+  // registry does not serve. next-intl's middleware emitted `rel="alternate";
+  // hreflang=...` for ALL five locales plus x-default on every non-redirect
+  // page, blind to lib/translated-routes.ts, until `alternateLinks: false` in
+  // i18n/routing.ts: /privacy-policy/ advertised ja/ko/zh URLs that 301 to
+  // English. This guards "no phantom locales", NOT "header absent": a header
+  // naming exactly the served locales would pass, as would no header at all.
+  // Two hardcoded fixtures, an EN-only route and an EN+TH route; the served
+  // set comes from getLocalesForPath (the sitemap's own source) and each
+  // fixture must leave at least `minUnserved` locales unserved or the check is
+  // vacuous. REQUIRED_HREFLANG_FIXTURES pins identity AND minUnserved with its
+  // own length floor, because the loop compares against its own list (an
+  // emptied list iterates zero times and prints nothing). Each response must
+  // be the real page (200, ending at the requested path), since "no hreflang"
+  // is also what a 404 looks like. An entry that mentions hreflang but cannot
+  // be parsed fails rather than reading as "advertises nothing".
   {
     const { getLocalesForPath } = await import("../lib/translated-routes");
-    const hreflangChecks: { path: string; minUnserved: number }[] = [
+    const REQUIRED_HREFLANG_FIXTURES = [
       { path: "/privacy-policy/", minUnserved: 4 },
       { path: "/golf-club-specs/", minUnserved: 3 },
     ];
+    const MIN_HREFLANG_FIXTURES = 2;
+    const hreflangChecks = [
+      { path: "/privacy-policy/", minUnserved: 4 },
+      { path: "/golf-club-specs/", minUnserved: 3 },
+    ];
+    if (
+      hreflangChecks.length < MIN_HREFLANG_FIXTURES ||
+      JSON.stringify(hreflangChecks) !== JSON.stringify(REQUIRED_HREFLANG_FIXTURES)
+    )
+      fail(
+        "Link header hreflang fixtures",
+        `fixture list drifted from the pinned identity (${JSON.stringify(hreflangChecks)})`,
+      );
     let judged = 0;
     for (const check of hreflangChecks) {
       const label = `Link header hreflang ⊆ registry ${check.path}`;
@@ -5986,18 +6001,30 @@ async function runLlmDiscoverabilityTests() {
           continue;
         }
         const res = await fetch(`${BASE}${check.path}`, { redirect: "follow" });
-        // Every Link header value, entry-split like the llms check above.
-        const link = res.headers.get("link") || "";
-        const advertised = link
-          .split(/,\s*(?=<)/)
-          .map((e) => /hreflang="?([A-Za-z-]+)"?/i.exec(e)?.[1]?.toLowerCase())
-          .filter((l): l is string => !!l);
-        const leaked = advertised.filter((l) => l === "x-default" ? false : !served.has(l));
-        if (leaked.length > 0)
+        const finalPath = new URL(res.url).pathname;
+        if (res.status !== 200 || finalPath !== check.path) {
           fail(
             label,
+            `not the real page: status ${res.status}, ended at ${finalPath} (an absent hreflang proves nothing here)`,
+          );
+          judged++;
+          continue;
+        }
+        const link = res.headers.get("link") || "";
+        const issues: string[] = [];
+        const advertised: string[] = [];
+        for (const entry of link.split(/,\s*(?=<)/)) {
+          if (!/hreflang/i.test(entry)) continue;
+          const m = /hreflang="([A-Za-z0-9-]+)"/i.exec(entry);
+          if (!m) issues.push(`unparsable hreflang entry: "${entry.slice(0, 120)}"`);
+          else advertised.push(m[1].toLowerCase());
+        }
+        const leaked = advertised.filter((l) => l !== "x-default" && !served.has(l));
+        if (leaked.length > 0)
+          issues.push(
             `Link header advertises hreflang ${leaked.join(",")} the registry does not serve (those URLs 301 to English); got: "${link.slice(0, 200)}"`,
           );
+        if (issues.length > 0) fail(label, issues.join("; "));
         else pass(label);
       } catch (err) {
         fail(label, `fetch error: ${(err as Error).message}`);

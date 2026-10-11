@@ -10,17 +10,15 @@ const LOCALE_PREFIXES = ['th', 'ko', 'ja', 'zh'] as const
 
 // Advertise the curated AI-assistant site map (app/llms.txt/route.ts) on
 // every PAGE response. This lives HERE, not in next.config.js headers() and
-// not in metadata, because both lose: next-intl's middleware sets its own
-// `link` header (hreflang alternates), which REPLACES any Link that
-// next.config attached to the same response — measured, not guessed — and a
-// layout-level metadata `alternates.types` would be per-key-replaced by every
-// page that declares `alternates` for its canonical (the og:site_name trap,
-// see validate:open-graph in CLAUDE.md). Appending on the middleware's own
-// response is the one spot that composes with the hreflang header instead of
-// fighting it. Absolute URL: the header names one canonical file regardless
-// of which host/port served the page. SITE_URL is imported rather than
-// duplicated — lib/constants.ts has no imports of its own, so it is safe in
-// the edge bundle.
+// not in metadata: a layout-level metadata `alternates.types` would be
+// per-key-replaced by every page that declares `alternates` for its canonical
+// (the og:site_name trap, see validate:open-graph in CLAUDE.md). (Historically
+// it was also because next-intl's own hreflang `link` header replaced a
+// config-attached Link; `alternateLinks: false` in i18n/routing.ts removed that
+// header, so only the metadata reason still applies.) Absolute URL: the header
+// names one canonical file regardless of which host/port served the page.
+// SITE_URL is imported rather than duplicated — lib/constants.ts has no imports
+// of its own, so it is safe in the edge bundle.
 const LLMS_LINK_HEADER =
   `<${SITE_URL}/llms.txt>; rel="alternate"; type="text/plain"; title="LLM-friendly site map"`
 

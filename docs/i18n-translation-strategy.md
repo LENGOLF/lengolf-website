@@ -278,7 +278,6 @@ Pages with translations include hreflang tags for all available language version
 ```html
 <link rel="alternate" hreflang="en" href="https://www.len.golf/golf/" />
 <link rel="alternate" hreflang="th" href="https://www.len.golf/th/golf/" />
-<link rel="alternate" hreflang="x-default" href="https://www.len.golf/golf/" />
 ```
 
 Pages without Thai translation do **not** include a `hreflang="th"` tag, as the Thai URL doesn't exist (it redirects).
