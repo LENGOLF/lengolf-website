@@ -134,7 +134,10 @@ export default async function JuniorGolfAcademyPage({ params }: Props) {
     uploadDate: JUNIOR_ACADEMY_VIDEO.uploadDate,
     duration: JUNIOR_ACADEMY_VIDEO.duration,
     inLanguage: 'th',
-    transcript: c.video.transcript.join(' '),
+    // What the audio says, in the language it says it, on both pages: the EN
+    // page's visible transcript is a translation, which `transcript` beside
+    // `inLanguage: 'th'` would misstate.
+    transcript: getJuniorAcademyContent('th').video.transcript.join(' '),
   })
   const breadcrumbJsonLd = getBreadcrumbJsonLd([
     { name: c.breadcrumb.home, url: getCanonical(locale, '/') },

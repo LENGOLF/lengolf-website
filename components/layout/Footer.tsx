@@ -142,7 +142,9 @@ export default async function Footer() {
                 // Same derived rule as DISCOVER_LINKS below: /junior-golf-academy
                 // is EN + TH only, so a prefixed Link from ja/ko/zh would 301
                 // back to English on every page. Every other menu target is
-                // translated in all locales, so their hrefs do not change.
+                // translated in th/ja/ko/zh, so their hrefs do not change; EN
+                // (never in the registry) takes RawLink, which renders the same
+                // unprefixed href the locale-aware Link did.
                 const LinkTag = hasTranslationForLocale(locale, item.href)
                   ? Link
                   : RawLink

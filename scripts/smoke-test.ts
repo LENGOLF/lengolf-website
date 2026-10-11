@@ -3329,7 +3329,19 @@ const seoTests: SeoTest[] = [
   { path: "/golf-course-club-rental/", locale: "en" },
   { path: "/golf-club-specs/", locale: "en" },
   { path: "/junior-golf-academy/", locale: "en" },
-  { path: "/th/junior-golf-academy/", locale: "th" },
+  {
+    path: "/th/junior-golf-academy/",
+    locale: "th",
+    titleContains: {
+      needle: "เรียนกอล์ฟเด็ก",
+      why:
+        "The Thai Junior Academy page reads its copy from data/junior-academy.ts, whose getter " +
+        "falls back to ENGLISH for a locale with no block. If the th block went missing or the " +
+        "page read the wrong locale, /th/ would still 200 with lang=th and a canonical, and " +
+        "every other check here would pass; only the Thai <title> shows it. The needle is the " +
+        "query term in the TH metaTitle.",
+    },
+  },
   { path: "/second-hand-golf-clubs-bangkok/", locale: "en" },
   // A blog POST, not the hub: /blog/[slug] and /guide/[slug] are the only
   // routes that emit og:type="article", so without one of them the
@@ -3535,6 +3547,7 @@ const REQUIRED_TITLE_ASSERTIONS: { path: string; needle: string }[] = [
     path: "/golf-courses/bangkok/phoenix-gold-golf-country-club/",
     needle: "formerly Suvarnabhumi Golf & Country Club",
   },
+  { path: "/th/junior-golf-academy/", needle: "เรียนกอล์ฟเด็ก" },
 ];
 
 /**
@@ -3543,7 +3556,7 @@ const REQUIRED_TITLE_ASSERTIONS: { path: string; needle: string }[] = [
  * empty-input vacuity path CLAUDE.md names explicitly, and the one shape the
  * two-sided pin above cannot catch on its own.
  */
-const MIN_TITLE_ASSERTIONS = 1;
+const MIN_TITLE_ASSERTIONS = 2;
 
 /**
  * Pages whose share card must be the opengraph-image.tsx in their OWN segment.

@@ -25,8 +25,12 @@ import { storageUrl } from '@/lib/constants'
  *
  * The price is hand-maintained: it is not read from the POS catalog, which
  * would pull this page into the 30-day pricing cache and the
- * validate:pricing-revalidate route set. If POS changes 16,900, change it here
- * and in the LIFF coaching page (lengolf-booking-new).
+ * validate:pricing-revalidate route set. The price and the program facts are
+ * also written out by hand in LessonsFaq.a7 (messages/en.json, th.json), in
+ * the EN and TH can-kids-play-golf-simulators entries of data/faq-pages.ts
+ * (faq-9, faq-9-th), in lib/jsonld.ts (typicalAgeRange, courseWorkload), in
+ * the poster, share card and reel, and in the LIFF coaching card
+ * (lengolf-booking-new lib/liff/coaching-data.ts). Change them together.
  */
 
 export const JUNIOR_ACADEMY_PATH = '/junior-golf-academy/'
@@ -252,7 +256,7 @@ const en: JuniorAcademyContent = {
     items: [
       '10 private lessons of 60 minutes',
       '5 hours of family practice time',
-      'Junior clubs fitted to height',
+      'Junior clubs provided, fitted to height',
       'Assessments at lessons 5 and 10, Level 1 and Level 2 certificates, graduation',
     ],
     validity: 'Package valid for 1 year',
@@ -271,7 +275,7 @@ const en: JuniorAcademyContent = {
       {
         question: 'How much does the Junior Academy cost?',
         answer:
-          '16,900 THB for the whole program: 10 private lessons of 60 minutes, 5 hours of family practice time, junior clubs, assessments at lessons 5 and 10, the Level 1 and Level 2 certificates, and graduation. The package is valid for 1 year.',
+          '16,900 THB for the whole program: 10 private lessons of 60 minutes, 5 hours of family practice time, use of junior clubs, assessments at lessons 5 and 10, the Level 1 and Level 2 certificates, and graduation. The package is valid for 1 year.',
       },
       {
         question: 'What happens in a lesson?',
@@ -290,7 +294,7 @@ const en: JuniorAcademyContent = {
       {
         question: 'What is the family practice time?',
         answer:
-          'The package includes 5 hours of practice time in a simulator bay for your family. A parent supervises the child during these practice hours.',
+          'The package includes 5 hours of practice time in a simulator bay for your family. A parent supervises the child during these practice hours, and practice times are booked with our team on LINE.',
       },
       {
         question: 'How do you keep kids safe in the bay?',
@@ -304,7 +308,7 @@ const en: JuniorAcademyContent = {
       },
       {
         question: 'Who teaches the Junior Academy?',
-        answer: "LENGOLF's PGA coaches. You can read about them on our golf lessons page.",
+        answer: "Lessons are taught by LENGOLF's PGA coaches.",
       },
       {
         question: 'Where is the LENGOLF Junior Academy?',
@@ -320,34 +324,33 @@ const en: JuniorAcademyContent = {
   },
   faqLinks: {
     'LINE @lengolf': { href: JUNIOR_ACADEMY_LINE_URL, external: true },
-    'golf lessons page': { href: '/lessons' },
   },
   related: {
     title: 'Related',
     links: [
-      { label: 'Golf lessons for adults', href: '/lessons' },
+      { label: 'Golf lessons', href: '/lessons' },
       { label: 'Can kids play golf simulators?', href: '/faq/can-kids-play-golf-simulators' },
     ],
   },
   course: {
     name: 'LENGOLF Junior Academy',
     description:
-      "Kids golf program for ages 4 to 12 at LENGOLF in Bangkok: 10 private 60-minute lessons with LENGOLF's PGA coaches, each hour half movement and games and half golf, assessments at lessons 5 and 10, Level 1 and Level 2 certificates, graduation, 5 hours of family practice time, and junior clubs fitted to height.",
+      "Kids golf program for ages 4 to 12 at LENGOLF in Bangkok: 10 private 60-minute lessons with LENGOLF's PGA coaches, each hour half movement and games and half golf, assessments at lessons 5 and 10, Level 1 and Level 2 certificates, graduation, 5 hours of family practice time, and junior clubs provided, fitted to height.",
     credentials: 'Level 1 and Level 2 certificates',
   },
   lessonsCallout: {
     badge: 'Ages 4 to 12',
     title: 'Golf Lessons for Kids: LENGOLF Junior Academy',
-    body: '10 private lessons of 60 minutes, assessments at lessons 5 and 10, Level 1 and Level 2 certificates, 5 hours of family practice time and junior clubs. 16,900 THB, valid for 1 year.',
+    body: '10 private lessons of 60 minutes, assessments at lessons 5 and 10, Level 1 and Level 2 certificates, 5 hours of family practice time and junior clubs provided. 16,900 THB, valid for 1 year.',
     cta: 'See the Junior Academy',
     imageAlt: 'Child swinging a junior-sized golf club on a simulator at LENGOLF',
   },
 }
 
 const th: JuniorAcademyContent = {
-  metaTitle: 'เรียนกอล์ฟเด็ก กรุงเทพฯ อายุ 4-12 ปี: Junior Academy',
+  metaTitle: 'คอร์สเรียนกอล์ฟเด็ก กรุงเทพฯ อายุ 4-12 ปี: Junior Academy',
   metaDescription:
-    'LENGOLF Junior Academy คอร์สเรียนกอล์ฟสำหรับเด็กอายุ 4-12 ปี เรียนตัวต่อตัวกับโค้ช PGA 10 ครั้ง ครั้งละ 60 นาที พร้อมเวลาซ้อมสำหรับครอบครัว 5 ชั่วโมง ราคา 16,900 บาท ที่ BTS ชิดลม',
+    'LENGOLF Junior Academy คอร์สเรียนกอล์ฟสำหรับเด็กอายุ 4-12 ปี โค้ช PGA สอนตัวต่อตัว 10 ครั้ง ครั้งละ 60 นาที พร้อมเวลาซ้อมสำหรับครอบครัว 5 ชั่วโมง ราคา 16,900 บาท ที่ BTS ชิดลม',
   listSeparator: ' ',
   breadcrumb: { home: 'หน้าแรก', lessons: 'เรียนกอล์ฟ', self: 'Junior Academy' },
   hero: {
@@ -355,12 +358,12 @@ const th: JuniorAcademyContent = {
     titleLead: 'เรียนกอล์ฟเด็กในกรุงเทพฯ',
     titleMain: 'Junior Academy',
     subtitle:
-      'เรียนตัวต่อตัว 10 ครั้ง ครั้งละ 60 นาที กับโค้ช PGA จาก LENGOLF ที่กอล์ฟซิมูเลเตอร์ในร่ม The Mercury Ville @ BTS ชิดลม ทุกชั่วโมงแบ่งเป็นการเคลื่อนไหวและเกมครึ่งหนึ่ง และกอล์ฟอีกครึ่งหนึ่ง',
+      'เรียนตัวต่อตัว 10 ครั้ง ครั้งละ 60 นาที กับโค้ช PGA จาก LENGOLF ที่กอล์ฟซิมูเลเตอร์ในร่ม The Mercury Ville @ BTS ชิดลม ทุกชั่วโมงแบ่งเป็นกิจกรรมเคลื่อนไหวและเกมครึ่งหนึ่ง และกอล์ฟอีกครึ่งหนึ่ง',
     cta: 'สอบถามทาง LINE @lengolf',
-    secondaryCta: 'ดูว่าได้อะไรบ้าง',
+    secondaryCta: 'ดูว่าในแพ็กเกจมีอะไรบ้าง',
     ageBadge: 'อายุ 4-12 ปี',
     posterAlt:
-      'โปสเตอร์ LENGOLF Junior Academy กอล์ฟซิมูเลเตอร์ในร่ม Mercury Ville @ BTS ชิดลม สำหรับเด็กอายุ 4-12 ปี ทำให้การเรียนกอล์ฟสนุกสำหรับลูก เปลี่ยนเวลาหน้าจอเป็นเวลาออกรอบ เรียน 10 ครั้ง ครั้งละ 60 นาที พร้อมเวลาซ้อม 5 ชั่วโมง มีเกมและภารกิจท้าทายทุกครั้ง มีไม้กอล์ฟให้ ฝึกการพัตต์ การชิพ ฟูลสวิง กติกา และการนับสกอร์ วัดผลในครั้งที่ 5 และครั้งที่ 10 ราคา 16,900 บาท แพ็กเกจใช้ได้ 1 ปี สอบถามทาง LINE @lengolf',
+      'โปสเตอร์ LENGOLF Junior Academy กอล์ฟซิมูเลเตอร์ในร่ม Mercury Ville @ BTS ชิดลม สำหรับเด็กอายุ 4-12 ปี เราทำให้การเรียนกอล์ฟสนุกสำหรับลูกของคุณ เปลี่ยนเวลาติดจอเป็นเวลาตีกอล์ฟ เรียน 10 ครั้ง ครั้งละ 60 นาที พร้อมเวลาซ้อม 5 ชั่วโมง มีเกมและภารกิจท้าทายทุกครั้ง มีไม้กอล์ฟให้ ฝึกการพัตต์ การชิพ ฟูลสวิง กติกา และการนับสกอร์ วัดผลในครั้งที่ 5 และครั้งที่ 10 ราคา 16,900 บาท แพ็กเกจใช้ได้ 1 ปี สอบถามทาง LINE @lengolf',
   },
   stats: [
     { value: '4-12 ปี', label: 'อายุ' },
@@ -369,12 +372,12 @@ const th: JuniorAcademyContent = {
     { value: '16,900 บาท', label: 'ใช้ได้ 1 ปี' },
   ],
   included: {
-    title: 'สิ่งที่',
-    titleSuffix: 'ได้รับ',
+    title: 'ในแพ็กเกจ',
+    titleSuffix: 'มีอะไรบ้าง',
     intro: 'Junior Academy คือแพ็กเกจเรียน 10 ครั้งในราคาเดียว ประกอบด้วย',
     items: [
       'เรียนตัวต่อตัว 10 ครั้ง ครั้งละ 60 นาที กับโค้ช PGA จาก LENGOLF',
-      'ทุกชั่วโมงแบ่งเป็นการเคลื่อนไหวและเกมครึ่งหนึ่ง และกอล์ฟอีกครึ่งหนึ่ง',
+      'ทุกชั่วโมงแบ่งเป็นกิจกรรมเคลื่อนไหวและเกมครึ่งหนึ่ง และกอล์ฟอีกครึ่งหนึ่ง',
       'ประเมินทักษะในครั้งที่ 5 และครั้งที่ 10',
       'ใบประกาศ Level 1 และ Level 2 พร้อมการจบหลักสูตร',
       'เวลาซ้อมสำหรับครอบครัว 5 ชั่วโมงในเบย์กอล์ฟซิมูเลเตอร์',
@@ -391,8 +394,8 @@ const th: JuniorAcademyContent = {
     halves: [
       {
         label: '30 นาที',
-        title: 'การเคลื่อนไหวและเกม',
-        body: 'ครึ่งหนึ่งของทุกชั่วโมงเป็นการเคลื่อนไหวและเกม มีภารกิจท้าทายทุกครั้ง',
+        title: 'กิจกรรมเคลื่อนไหวและเกม',
+        body: 'ครึ่งหนึ่งของทุกชั่วโมงเป็นกิจกรรมเคลื่อนไหวและเกม มีภารกิจท้าทายทุกครั้ง',
       },
       {
         label: '30 นาที',
@@ -402,8 +405,8 @@ const th: JuniorAcademyContent = {
     ],
   },
   progress: {
-    title: 'เห็นพัฒนาการ',
-    titleSuffix: 'ของลูก',
+    title: 'พัฒนาการของลูก',
+    titleSuffix: 'ที่เห็นได้จริง',
     intro: 'คุณพ่อคุณแม่จะเห็นพัฒนาการของลูกในสองช่วง',
     steps: [
       {
@@ -441,9 +444,9 @@ const th: JuniorAcademyContent = {
     title: 'ความปลอดภัย',
     titleSuffix: 'ในเบย์',
     items: [
-      { title: 'ตีทีละคน', body: 'ในเบย์จะตีทีละคนเท่านั้น ทั้งตอนเรียนและตอนซ้อมกับครอบครัว' },
+      { title: 'ตีทีละคน', body: 'ในเบย์จะสวิงหรือตีได้ทีละคนเท่านั้น ทั้งตอนเรียนและตอนซ้อมกับครอบครัว' },
       // "ลูกนิ่ม" alone can read as "soft child" (ลูก = your child on this page).
-      { title: 'ลูกกอล์ฟนิ่มสำหรับมือใหม่', body: 'เด็กที่เพิ่งเริ่มเรียนจะตีลูกกอล์ฟนิ่มแทนลูกกอล์ฟจริง' },
+      { title: 'ลูกกอล์ฟนิ่มสำหรับมือใหม่', body: 'เด็กที่เพิ่งเริ่มเรียนจะตีลูกกอล์ฟนิ่มแทนลูกกอล์ฟปกติ' },
       {
         title: 'ผู้ปกครองดูแลช่วงซ้อม',
         body: 'ระหว่างเวลาซ้อมสำหรับครอบครัว 5 ชั่วโมง ผู้ปกครองต้องอยู่ดูแลลูกในเบย์',
@@ -456,8 +459,8 @@ const th: JuniorAcademyContent = {
     items: [
       'เรียนตัวต่อตัว 10 ครั้ง ครั้งละ 60 นาที',
       'เวลาซ้อมสำหรับครอบครัว 5 ชั่วโมง',
-      'ไม้กอล์ฟจูเนียร์ที่เลือกขนาดตามส่วนสูง',
-      'ประเมินทักษะในครั้งที่ 5 และ 10 ใบประกาศ Level 1 และ Level 2 และการจบหลักสูตร',
+      'มีไม้กอล์ฟจูเนียร์ให้ใช้ เลือกขนาดตามส่วนสูง',
+      'ประเมินทักษะในครั้งที่ 5 และครั้งที่ 10 รับใบประกาศ Level 1 และ Level 2 และจบหลักสูตร',
     ],
     validity: 'แพ็กเกจใช้ได้ 1 ปี',
     asOf: '(ข้อมูล ณ ตุลาคม 2026)',
@@ -475,12 +478,12 @@ const th: JuniorAcademyContent = {
       {
         question: 'Junior Academy ราคาเท่าไร?',
         answer:
-          '16,900 บาทสำหรับทั้งคอร์ส ได้เรียนตัวต่อตัว 10 ครั้ง ครั้งละ 60 นาที เวลาซ้อมสำหรับครอบครัว 5 ชั่วโมง ไม้กอล์ฟจูเนียร์ การประเมินทักษะในครั้งที่ 5 และ 10 ใบประกาศ Level 1 และ Level 2 และการจบหลักสูตร แพ็กเกจใช้ได้ 1 ปี',
+          'ราคา 16,900 บาทสำหรับทั้งคอร์ส ได้เรียนตัวต่อตัว 10 ครั้ง ครั้งละ 60 นาที เวลาซ้อมสำหรับครอบครัว 5 ชั่วโมง มีไม้กอล์ฟจูเนียร์ให้ใช้ ประเมินทักษะในครั้งที่ 5 และครั้งที่ 10 พร้อมรับใบประกาศ Level 1 และ Level 2 และจบหลักสูตร แพ็กเกจใช้ได้ 1 ปี',
       },
       {
         question: 'แต่ละครั้งเรียนอะไรบ้าง?',
         answer:
-          'เรียนครั้งละ 60 นาที ครึ่งชั่วโมงเป็นการเคลื่อนไหวและเกม อีกครึ่งเป็นกอล์ฟ ทั้งการพัตต์ การชิพ ฟูลสวิง กติกา และการนับสกอร์',
+          'เรียนครั้งละ 60 นาที ครึ่งชั่วโมงเป็นกิจกรรมเคลื่อนไหวและเกม อีกครึ่งเป็นกอล์ฟ ทั้งการพัตต์ การชิพ ฟูลสวิง กติกา และการนับสกอร์',
       },
       {
         question: 'จะรู้ได้อย่างไรว่าลูกพัฒนาขึ้น?',
@@ -494,19 +497,19 @@ const th: JuniorAcademyContent = {
       {
         question: 'เวลาซ้อมสำหรับครอบครัวคืออะไร?',
         answer:
-          'แพ็กเกจมีเวลาซ้อมในเบย์กอล์ฟซิมูเลเตอร์ 5 ชั่วโมงสำหรับครอบครัว โดยผู้ปกครองต้องอยู่ดูแลลูกตลอดช่วงซ้อม',
+          'แพ็กเกจมีเวลาซ้อมในเบย์กอล์ฟซิมูเลเตอร์ 5 ชั่วโมงสำหรับครอบครัว โดยผู้ปกครองต้องอยู่ดูแลลูกตลอดช่วงซ้อม นัดเวลาซ้อมกับทีมงานทาง LINE ได้เลย',
       },
       {
         question: 'ดูแลความปลอดภัยของเด็กในเบย์อย่างไร?',
-        answer: 'ให้ตีทีละคน เด็กที่เพิ่งเริ่มใช้ลูกกอล์ฟนิ่ม และผู้ปกครองดูแลลูกระหว่างเวลาซ้อมสำหรับครอบครัว',
+        answer: 'ในเบย์จะสวิงหรือตีได้ทีละคน เด็กที่เพิ่งเริ่มเรียนจะใช้ลูกกอล์ฟนิ่ม และผู้ปกครองต้องอยู่ดูแลลูกระหว่างเวลาซ้อมสำหรับครอบครัว',
       },
       {
         question: 'เรียนวันและเวลาไหนได้บ้าง?',
-        answer: 'นัดวันและเวลาเรียนกับทีมงานทาง LINE @lengolf ได้เลย แจ้งอายุของลูกและวันที่สะดวกมาได้',
+        answer: 'นัดวันและเวลาเรียนกับทีมงานทาง LINE @lengolf ได้เลย แจ้งอายุของลูกและวันที่สะดวกมาได้เลย',
       },
       {
-        question: 'ใครเป็นคนสอน?',
-        answer: 'โค้ช PGA ของ LENGOLF อ่านประวัติโค้ชได้ที่หน้าเรียนกอล์ฟ',
+        question: 'ใครเป็นผู้สอน Junior Academy?',
+        answer: 'สอนโดยโค้ช PGA จาก LENGOLF',
       },
       {
         question: 'LENGOLF Junior Academy อยู่ที่ไหน?',
@@ -515,32 +518,31 @@ const th: JuniorAcademyContent = {
       },
       {
         question: 'สมัครได้อย่างไร?',
-        answer: 'ทักมาที่ LINE @lengolf แจ้งชื่อ อายุ และส่วนสูงของลูก ทีมงานจะตอบคำถามและนัดเรียนครั้งแรกให้',
+        answer: 'ส่งข้อความมาที่ LINE @lengolf แจ้งชื่อ อายุ และส่วนสูงของลูก ทีมงานจะตอบคำถามและนัดเรียนครั้งแรกให้',
       },
     ],
   },
   faqLinks: {
     'LINE @lengolf': { href: JUNIOR_ACADEMY_LINE_URL, external: true },
-    'หน้าเรียนกอล์ฟ': { href: '/lessons' },
   },
   related: {
     title: 'อ่านเพิ่มเติม',
     links: [
-      { label: 'เรียนกอล์ฟสำหรับผู้ใหญ่', href: '/lessons' },
+      { label: 'เรียนกอล์ฟ', href: '/lessons' },
       { label: 'เด็กเล่นกอล์ฟซิมมูเลเตอร์ได้ไหม', href: '/faq/can-kids-play-golf-simulators' },
     ],
   },
   course: {
     name: 'LENGOLF Junior Academy',
     description:
-      'คอร์สเรียนกอล์ฟสำหรับเด็กอายุ 4-12 ปีที่ LENGOLF กรุงเทพฯ เรียนตัวต่อตัวกับโค้ช PGA จาก LENGOLF 10 ครั้ง ครั้งละ 60 นาที ทุกชั่วโมงแบ่งเป็นการเคลื่อนไหวและเกมครึ่งหนึ่ง และกอล์ฟอีกครึ่งหนึ่ง ประเมินทักษะในครั้งที่ 5 และ 10 รับใบประกาศ Level 1 และ Level 2 จบหลักสูตร พร้อมเวลาซ้อมสำหรับครอบครัว 5 ชั่วโมง และไม้กอล์ฟจูเนียร์ที่เลือกขนาดตามส่วนสูง',
-    credentials: 'ใบประกาศ Level 1 และ Level 2',
+      'คอร์สเรียนกอล์ฟสำหรับเด็กอายุ 4-12 ปี ที่ LENGOLF กรุงเทพฯ เรียนตัวต่อตัวกับโค้ช PGA จาก LENGOLF 10 ครั้ง ครั้งละ 60 นาที ทุกชั่วโมงแบ่งเป็นกิจกรรมเคลื่อนไหวและเกมครึ่งหนึ่ง และกอล์ฟอีกครึ่งหนึ่ง ประเมินทักษะในครั้งที่ 5 และครั้งที่ 10 รับใบประกาศ Level 1 และ Level 2 และจบหลักสูตร พร้อมเวลาซ้อมสำหรับครอบครัว 5 ชั่วโมง และมีไม้กอล์ฟจูเนียร์ให้ใช้ เลือกขนาดตามส่วนสูง',
+    credentials: 'ใบประกาศนียบัตร Level 1 และ Level 2',
   },
   lessonsCallout: {
     badge: 'อายุ 4-12 ปี',
     title: 'เรียนกอล์ฟสำหรับเด็ก: LENGOLF Junior Academy',
-    body: 'เรียนตัวต่อตัว 10 ครั้ง ครั้งละ 60 นาที ประเมินทักษะในครั้งที่ 5 และ 10 รับใบประกาศ Level 1 และ Level 2 พร้อมเวลาซ้อมสำหรับครอบครัว 5 ชั่วโมงและไม้กอล์ฟจูเนียร์ ราคา 16,900 บาท ใช้ได้ 1 ปี',
-    cta: 'ดู Junior Academy',
+    body: 'เรียนตัวต่อตัว 10 ครั้ง ครั้งละ 60 นาที ประเมินทักษะในครั้งที่ 5 และครั้งที่ 10 รับใบประกาศ Level 1 และ Level 2 พร้อมเวลาซ้อมสำหรับครอบครัว 5 ชั่วโมง และมีไม้กอล์ฟจูเนียร์ให้ใช้ ราคา 16,900 บาท แพ็กเกจใช้ได้ 1 ปี',
+    cta: 'ดูรายละเอียด Junior Academy',
     imageAlt: 'เด็กฝึกสวิงด้วยไม้กอล์ฟจูเนียร์บนกอล์ฟซิมูเลเตอร์ที่ LENGOLF',
   },
 }

@@ -131,7 +131,7 @@ export const USE_CASE_RULES: Record<UseCase, UseCaseMeta> = {
       if (c.driving_range) parts.push('range on site')
       return parts.join(' · ')
     },
-    crossLink: { href: '/lessons', label: 'Junior lessons at LENGOLF' },
+    crossLink: { href: '/junior-golf-academy', label: 'Kids golf lessons: LENGOLF Junior Academy' },
   },
   'high-handicappers': {
     slug: 'high-handicappers',
@@ -163,5 +163,6 @@ export const USE_CASE_SLUGS = USE_CASES.map((u) => u)
  * list (a fee, drive time, facility or status change, or a popularityScore
  * input such as the website or layout prose, which reorders a full list).
  * 2026-09-25: rosters limited to courses within 90 minutes of Bangkok.
+ * 2026-10-11: the families page's cross-link points at /junior-golf-academy/.
  */
-export const USE_CASES_UPDATED_AT = '2026-09-25'
+export const USE_CASES_UPDATED_AT = '2026-10-11'
