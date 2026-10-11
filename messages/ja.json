@@ -5,6 +5,7 @@
     "simulatorBays": "ベイ料金",
     "events": "イベント",
     "lessons": "レッスン",
+    "juniorAcademy": "Junior Academy",
     "foodDrinks": "フード＆ドリンク",
     "clubRental": "クラブレンタル",
     "clubs": "クラブ",
@@ -1386,6 +1387,7 @@
     "pathLabels": {
       "golf": "インドアゴルフシミュレーター",
       "lessons": "ゴルフレッスン",
+      "junior-golf-academy": "Junior Academy",
       "events": "イベント・パーティー",
       "golf-club-rental": "店内クラブ無料利用",
       "golf-course-club-rental": "コース用クラブレンタル",

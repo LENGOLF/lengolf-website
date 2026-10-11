@@ -5,6 +5,7 @@
     "simulatorBays": "球位收费",
     "events": "活动",
     "lessons": "教学",
+    "juniorAcademy": "Junior Academy",
     "foodDrinks": "餐饮菜单",
     "clubRental": "球杆租借",
     "clubs": "球杆",
@@ -1389,6 +1390,7 @@
     "pathLabels": {
       "golf": "室内高尔夫模拟器",
       "lessons": "高尔夫课程",
+      "junior-golf-academy": "Junior Academy",
       "events": "活动与派对",
       "golf-club-rental": "店内免费球杆",
       "golf-course-club-rental": "球场球杆租赁",

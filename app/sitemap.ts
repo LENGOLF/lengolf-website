@@ -15,6 +15,7 @@ import {
 import { USE_CASES, USE_CASES_UPDATED_AT } from '@/data/golf-courses-use-cases'
 import { PRICE_TIERS_UPDATED_AT } from '@/data/price-tiers'
 import { RENTAL_AGREEMENT_VERSION } from '@/data/rental-agreement/types'
+import { JUNIOR_ACADEMY_UPDATED_AT } from '@/data/junior-academy'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Stable "last reviewed" date for content without a real per-item edit date.
@@ -86,6 +87,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // rental pages it supports, and it only changes when a set changes.
     { url: `${SITE_URL}/golf-club-specs/`, lastModified: reviewed, changeFrequency: 'monthly', priority: 0.6, alternates: { languages: getAlternates('/golf-club-specs/') } },
     { url: `${SITE_URL}/lessons/`, lastModified: reviewed, changeFrequency: 'weekly', priority: 0.9, alternates: { languages: getAlternates('/lessons/') } },
+    // EN + TH. Dated by its own data file, since it postdates CONTENT_LAST_UPDATED.
+    { url: `${SITE_URL}/junior-golf-academy/`, lastModified: laterOf(JUNIOR_ACADEMY_UPDATED_AT, reviewed), changeFrequency: 'monthly', priority: 0.8, alternates: { languages: getAlternates('/junior-golf-academy/') } },
     { url: `${SITE_URL}/about-us/`, lastModified: reviewed, changeFrequency: 'monthly', priority: 0.7, alternates: { languages: getAlternates('/about-us/') } },
     { url: `${SITE_URL}/blog/`, lastModified: reviewed, changeFrequency: 'weekly', priority: 0.8, alternates: { languages: getAlternates('/blog/') } },
     { url: `${SITE_URL}/menu/`, lastModified: reviewed, changeFrequency: 'monthly', priority: 0.7, alternates: { languages: getAlternates('/menu/') } },

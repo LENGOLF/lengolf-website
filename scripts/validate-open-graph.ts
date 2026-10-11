@@ -149,10 +149,10 @@ const HELPER_MODULE = '@/lib/open-graph'
  * would catch a page bypassing the wrap check; 31 − 25 left SIX free
  * bypasses. Verified against an independent `ts` AST count: 31 openGraph
  * property assignments across 30 files, `golf-courses/near/[station]` holding
- * two. On mismatch the failure prints the per-file inventory, because "bump
+ * two (32 across 31 since /junior-golf-academy/, 2026-10-11). On mismatch the failure prints the per-file inventory, because "bump
  * the number" is the right advice only when you added a page.
  */
-const EXPECTED_DECLARATIONS = Number(process.env.OG_EXPECTED_DECLARATIONS ?? 31)
+const EXPECTED_DECLARATIONS = Number(process.env.OG_EXPECTED_DECLARATIONS ?? 32)
 
 /**
  * Anti-vacuity floor for --self-test: the number of cases that must EXECUTE.
