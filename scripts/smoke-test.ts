@@ -5954,6 +5954,60 @@ async function runLlmDiscoverabilityTests() {
     }
   }
 
+  // 6b) The HTTP Link header must not carry hreflang for a locale the registry
+  // does not serve. next-intl's middleware emits `rel="alternate"; hreflang=...`
+  // for ALL five locales plus x-default on every page unless
+  // `alternateLinks: false` is set in i18n/routing.ts, blind to
+  // lib/translated-routes.ts — so /privacy-policy/ advertised ja/ko/zh URLs
+  // that 301 back to English, a second hreflang cluster contradicting the
+  // HTML <link> tags and the sitemap (which both derive from getAlternates).
+  // Two fixtures, both derived from the registry rather than assumed: an
+  // EN-only route and an EN+TH route. `servedLocales` comes from
+  // getLocalesForPath (the sitemap's own source) and each fixture must leave at
+  // least one locale UNserved, or the check is vacuous.
+  {
+    const { getLocalesForPath } = await import("../lib/translated-routes");
+    const hreflangChecks: { path: string; minUnserved: number }[] = [
+      { path: "/privacy-policy/", minUnserved: 4 },
+      { path: "/golf-club-specs/", minUnserved: 3 },
+    ];
+    let judged = 0;
+    for (const check of hreflangChecks) {
+      const label = `Link header hreflang ⊆ registry ${check.path}`;
+      try {
+        const served = new Set<string>(getLocalesForPath(check.path));
+        const unserved = ["en", "th", "ko", "ja", "zh"].filter((l) => !served.has(l));
+        if (unserved.length < check.minUnserved) {
+          fail(
+            label,
+            `fixture no longer discriminates: only ${unserved.length} unserved locale(s) (${unserved.join(",")}), expected >= ${check.minUnserved}. Pick another EN-only / EN+TH route.`,
+          );
+          judged++;
+          continue;
+        }
+        const res = await fetch(`${BASE}${check.path}`, { redirect: "follow" });
+        // Every Link header value, entry-split like the llms check above.
+        const link = res.headers.get("link") || "";
+        const advertised = link
+          .split(/,\s*(?=<)/)
+          .map((e) => /hreflang="?([A-Za-z-]+)"?/i.exec(e)?.[1]?.toLowerCase())
+          .filter((l): l is string => !!l);
+        const leaked = advertised.filter((l) => l === "x-default" ? false : !served.has(l));
+        if (leaked.length > 0)
+          fail(
+            label,
+            `Link header advertises hreflang ${leaked.join(",")} the registry does not serve (those URLs 301 to English); got: "${link.slice(0, 200)}"`,
+          );
+        else pass(label);
+      } catch (err) {
+        fail(label, `fetch error: ${(err as Error).message}`);
+      }
+      judged++;
+    }
+    if (judged !== hreflangChecks.length)
+      fail("Link header hreflang coverage", `judged ${judged} of ${hreflangChecks.length} fixtures`);
+  }
+
   // 7) IndexNow key file: exactly one 32-hex .txt in public/, its stem equals
   // the KEY constant in scripts/indexnow-ping.ts, and the server returns it
   // with the stem as its body (that equality is IndexNow's own ownership
