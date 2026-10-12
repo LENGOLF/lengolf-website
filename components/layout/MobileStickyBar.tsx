@@ -8,7 +8,7 @@ import { BOOKING_URL } from '@/lib/constants'
 import { pushRentalIntent } from '@/lib/analytics'
 
 // Pages that have their own CTAs — hide the generic "Book Your Bay" bar
-const HIDDEN_PATHS = ['/events', '/lessons', '/second-hand-golf-clubs-bangkok', '/golf-course-club-rental']
+const HIDDEN_PATHS = ['/events', '/lessons', '/second-hand-golf-clubs-bangkok', '/golf-course-club-rental', '/junior-golf-academy']
 
 export default function MobileStickyBar() {
   const [visible, setVisible] = useState(false)

@@ -132,9 +132,9 @@ export async function GET() {
   sections.push(
     '## LENGOLF Junior Academy (kids golf, ages 4 to 12)\n' +
       `Page: ${SITE_URL}${JUNIOR_ACADEMY_PATH}\n\n` +
-      `${junior.course.description} ${junior.price.amount}, ${junior.price.validity.toLowerCase()}. ` +
-      `${junior.price.note}\n\n` +
-      junior.included.items.map((i) => `- ${i}`).join('\n') +
+      `${junior.course.description} ${junior.price.amount} ${junior.price.unit}, ${junior.price.validity.toLowerCase()}.\n\n` +
+      `${junior.price.includedTitle}:\n` +
+      junior.price.items.map((i) => `- ${i}`).join('\n') +
       '\n\n' +
       junior.faq.items.map((q) => `Q: ${q.question}\nA: ${q.answer}`).join('\n\n')
   )

@@ -1,104 +1,56 @@
-import type { CSSProperties, ReactNode } from 'react'
+import type { ReactNode } from 'react'
+import { FaLine } from 'react-icons/fa'
 import { cn } from '@/lib/utils'
 
 /**
  * Paper-collage pieces for /junior-golf-academy/ ONLY.
  *
- * The Junior Academy's look (cream paper, torn-paper edges, taped labels, the
- * sun-yellow age burst) belongs to that program alone, per the owner's team
- * feedback: it must not leak into shared components or other pages. Keep every
- * collage element in this folder and import it from nowhere else.
+ * The Junior Academy's look (cream paper, taped labels, the sun-yellow age
+ * sticker) belongs to that program alone, per the owner's team feedback: it
+ * must not leak into shared components or other pages. Keep every collage
+ * element in this folder and import it from nowhere else.
  *
  * Colors follow the poster and the lengolf-design tokens (forest #265020, lime
- * #8dc743), not the legacy site greens. All server components, no motion.
+ * #8dc743), not the legacy site greens; the cream, muted and soft-yellow
+ * values come from the owner's v2 redesign (2026-10-12). Everything here is a
+ * server component with no motion. The two client pieces (the hero reel and
+ * the phone LINE bar) live in their own files beside this one.
  */
 
 export const JA = {
-  paper: '#f4eee2',
-  card: '#fcf9f2',
+  cream: '#f0e9dc',
+  paper: '#fcf9f2',
   forest: '#265020',
   forestDark: '#1a3308',
   lime: '#8dc743',
   sun: '#f2c14e',
+  sunSoft: '#f8e2a6',
   ink: '#22301d',
+  muted: '#56634f',
 } as const
 
-// Fractal noise tinted to look like recycled paper fibres. Inline, ~400 bytes,
-// no request.
-const PAPER_NOISE = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.36 0 0 0 0 0.24 0 0 0 0.13 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`
+/** The card shadow from the v2 redesign. */
+export const JA_SHADOW = '0 18px 40px -22px rgba(38,80,32,.45)'
 
-export const paperStyle: CSSProperties = {
-  backgroundColor: JA.paper,
-  backgroundImage: PAPER_NOISE,
-}
-
-/** A full-width section on cream paper. */
-export function PaperSection({
-  children,
-  id,
-  className,
-  tone = 'paper',
-}: {
-  children: ReactNode
-  id?: string
-  className?: string
-  tone?: 'paper' | 'forest'
-}) {
-  const style: CSSProperties =
-    tone === 'forest'
-      ? { backgroundColor: JA.forest, backgroundImage: PAPER_NOISE, color: JA.card }
-      : paperStyle
+/** The poster's JUNIOR / ACADEMY lockup, as two taped labels. */
+export function AcademyLockup({ className }: { className?: string }) {
   return (
-    <section id={id} className={cn('relative py-14 lg:py-20', className)} style={style}>
-      <div className="section-max-width section-padding">{children}</div>
-    </section>
-  )
-}
-
-// Deterministic jagged edge: same markup on every render, no hydration risk.
-function tornPath(seed: number, teeth = 48): string {
-  let s = seed
-  const rand = () => {
-    s = (s * 9301 + 49297) % 233280
-    return s / 233280
-  }
-  const pts: string[] = ['M0,24', 'L0,10']
-  for (let i = 1; i <= teeth; i++) {
-    const x = (1200 / teeth) * i
-    const y = 4 + rand() * 12
-    pts.push(`L${x.toFixed(1)},${y.toFixed(1)}`)
-  }
-  pts.push('L1200,24', 'Z')
-  return pts.join(' ')
-}
-
-/**
- * A torn-paper strip in `color`, with the white fibre edge real torn paper
- * shows. Place it at the top of a section of the same color (default) or flip
- * it to sit at the bottom.
- */
-export function TornEdge({
-  color,
-  seed = 7,
-  flip = false,
-  className,
-}: {
-  color: string
-  seed?: number
-  flip?: boolean
-  className?: string
-}) {
-  const d = tornPath(seed)
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 1200 24"
-      preserveAspectRatio="none"
-      className={cn('block h-4 w-full md:h-6', flip && 'rotate-180', className)}
-    >
-      <path d={d} fill="#ffffff" opacity="0.85" transform="translate(0,-3)" />
-      <path d={d} fill={color} />
-    </svg>
+    <p className={cn('mb-5 flex flex-wrap gap-1.5', className)}>
+      <span
+        className="px-3 pb-[5px] pt-1 text-[15px] font-bold italic leading-tight tracking-[0.04em]"
+        style={{ backgroundColor: JA.forest, color: JA.paper, transform: 'rotate(-2deg)' }}
+      >
+        JUNIOR
+      </span>
+      {/* Keeps the text content "JUNIOR ACADEMY", two words, for screen
+          readers and crawlers; collapses visually between flex items. */}{' '}
+      <span
+        className="px-3 pb-[5px] pt-1 text-[15px] font-bold italic leading-tight tracking-[0.04em]"
+        style={{ backgroundColor: JA.lime, color: JA.forest, transform: 'rotate(1.5deg)' }}
+      >
+        ACADEMY
+      </span>
+    </p>
   )
 }
 
@@ -107,117 +59,133 @@ export function Tape({ className }: { className?: string }) {
   return (
     <span
       aria-hidden="true"
-      className={cn('absolute h-6 w-20 rounded-[2px] bg-white/60', className)}
-      style={{ boxShadow: '0 1px 2px rgba(0,0,0,0.08)' }}
+      className={cn('absolute h-7 w-28 rounded-[2px]', className)}
+      style={{ backgroundColor: 'rgba(252,249,242,.75)', boxShadow: '0 2px 6px rgba(0,0,0,.08)' }}
     />
   )
 }
 
-/** Paper card with a soft drop shadow and an optional slight tilt. */
-export function PaperCard({
-  children,
+// The poster's star burst, as a clip path (24 points).
+const BURST =
+  'polygon(50% 0%,61% 12%,75% 6%,79% 21%,94% 25%,89% 39%,100% 50%,89% 61%,94% 75%,79% 79%,75% 94%,61% 88%,50% 100%,39% 88%,25% 94%,21% 79%,6% 75%,11% 61%,0% 50%,11% 39%,6% 25%,21% 21%,25% 6%,39% 12%)'
+
+/** The sun-yellow age sticker. Decorative: the subtitle states the ages. */
+export function AgeSticker({ label, className }: { label: string; className?: string }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={cn('absolute grid h-[118px] w-[118px] place-items-center px-1 text-center text-[19px] font-bold leading-tight', className)}
+      style={{ backgroundColor: JA.sun, color: JA.forest, transform: 'rotate(-10deg)', clipPath: BURST }}
+    >
+      {label}
+    </span>
+  )
+}
+
+/**
+ * The page's one call to action: a forest pill to the Junior Academy LINE
+ * link. Every LINE button on the page is this component.
+ */
+export function LineButton({
+  href,
+  label,
+  id,
   className,
-  tilt = 0,
 }: {
-  children: ReactNode
+  href: string
+  label: string
+  id?: string
   className?: string
-  tilt?: number
 }) {
   return (
-    <div
-      className={cn('relative rounded-[3px] p-6 md:p-7', className)}
-      style={{
-        backgroundColor: JA.card,
-        // Own text color: a card inside a forest section would otherwise
-        // inherit the section's cream text onto a cream card.
-        color: JA.ink,
-        boxShadow: '0 1px 0 rgba(0,0,0,0.05), 0 10px 24px -12px rgba(38,80,32,0.35)',
-        transform: tilt ? `rotate(${tilt}deg)` : undefined,
-      }}
+    <a
+      id={id}
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={cn(
+        'inline-flex min-h-[52px] items-center justify-center gap-2.5 whitespace-nowrap rounded-full px-6 font-semibold transition-transform duration-200 hover:-translate-y-0.5 active:translate-y-px',
+        className
+      )}
+      style={{ backgroundColor: JA.forest, color: JA.paper, boxShadow: JA_SHADOW }}
     >
+      <FaLine className="h-[22px] w-[22px]" aria-hidden="true" />
+      <span>{label}</span>
+    </a>
+  )
+}
+
+/** A rounded surface in one of the v2 tones. */
+export function Surface({
+  children,
+  tone = 'paper',
+  className,
+}: {
+  children: ReactNode
+  tone?: 'paper' | 'cream' | 'lime' | 'sun' | 'forest'
+  className?: string
+}) {
+  const backgroundColor = {
+    paper: JA.paper,
+    cream: JA.cream,
+    lime: JA.lime,
+    sun: JA.sunSoft,
+    forest: JA.forest,
+  }[tone]
+  return (
+    <div className={cn('rounded-[18px]', className)} style={{ backgroundColor }}>
       {children}
     </div>
   )
 }
 
 /**
- * Section heading set on two torn-paper blocks, the poster's JUNIOR / ACADEMY
- * treatment: `lead` on forest, `suffix` on lime. Renders a real <h2>.
+ * The 10-lesson path: lessons 1 to 5 along the top, Level 1 at the turn, 6 to
+ * 10 back along the bottom to Level 2. The flag numbers and LEVEL labels are
+ * the same in every language; `start` and `label` are localized.
  */
-export function CollageHeading({
-  lead,
-  suffix,
-  onForest = false,
-  className,
-}: {
-  lead: string
-  suffix: string
-  onForest?: boolean
-  className?: string
-}) {
+export function JourneyMap({ start, label }: { start: string; label: string }) {
+  const top = [1, 2, 3, 4, 5].map((n, i) => ({ n, x: 150 + i * 100, y: 100 }))
+  const bottom = [6, 7, 8, 9, 10].map((n, i) => ({ n, x: 550 - i * 100, y: 300 }))
+  const path = 'M60 100 L560 100 C650 100 650 300 560 300 L110 300'
   return (
-    <h2 className={cn('mb-8 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center', className)}>
-      <span
-        className="inline-block px-4 py-1.5 text-2xl font-extrabold uppercase italic leading-tight md:text-3xl"
-        style={{
-          backgroundColor: onForest ? JA.lime : JA.forest,
-          color: onForest ? JA.forest : JA.card,
-          transform: 'rotate(-1deg)',
-        }}
-      >
-        {lead}
-      </span>
-      {/* Keeps "lead suffix" word-separated in the heading's text content
-          (crawlers, LLM fetchers); collapses visually between flex items. */}{' '}
-      <span
-        className="inline-block px-4 py-1.5 text-2xl font-extrabold uppercase italic leading-tight md:text-3xl"
-        style={{
-          backgroundColor: onForest ? JA.card : JA.lime,
-          color: JA.forest,
-          transform: 'rotate(0.8deg)',
-        }}
-      >
-        {suffix}
-      </span>
-    </h2>
-  )
-}
-
-/** The sun-yellow burst badge from the poster (ages). Text stays real text. */
-export function SunBurst({ label, className }: { label: string; className?: string }) {
-  const points: string[] = []
-  const spikes = 16
-  for (let i = 0; i < spikes * 2; i++) {
-    const r = i % 2 === 0 ? 50 : 41
-    const a = (Math.PI * i) / spikes - Math.PI / 2
-    points.push(`${(50 + r * Math.cos(a)).toFixed(2)},${(50 + r * Math.sin(a)).toFixed(2)}`)
-  }
-  return (
-    <div className={cn('relative grid h-28 w-28 place-items-center md:h-32 md:w-32', className)}>
-      <svg aria-hidden="true" viewBox="0 0 100 100" className="absolute inset-0 h-full w-full" style={{ transform: 'rotate(-8deg)' }}>
-        <polygon points={points.join(' ')} fill={JA.sun} stroke="#ffffff" strokeWidth="1.5" />
-      </svg>
-      <span
-        className="relative px-3 text-center text-sm font-extrabold uppercase leading-tight md:text-base"
-        style={{ color: JA.forest, transform: 'rotate(-8deg)' }}
-      >
-        {label}
-      </span>
-    </div>
-  )
-}
-
-/** Round green check, as on the poster's checklist. */
-export function CheckDot() {
-  return (
-    <span
-      aria-hidden="true"
-      className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full"
-      style={{ backgroundColor: JA.lime }}
-    >
-      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke={JA.forest} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M5 12.5l4.5 4.5L19 7.5" />
-      </svg>
-    </span>
+    <svg viewBox="0 0 700 400" role="img" aria-label={label} className="mx-auto block h-auto w-full max-w-[820px]">
+      <path d={path} fill="none" stroke={JA.lime} strokeWidth="62" strokeLinecap="round" strokeLinejoin="round" />
+      <path d={path} fill="none" stroke={JA.paper} strokeWidth="3" strokeDasharray="1 13" strokeLinecap="round" />
+      <g transform="translate(58 100)">
+        <circle r="36" fill={JA.forest} />
+        <text y="8" textAnchor="middle" fontSize="21" fontWeight="700" fill={JA.paper}>
+          {start}
+        </text>
+      </g>
+      {[...top, ...bottom].map(({ n, x, y }) => (
+        <g key={n} transform={`translate(${x} ${y})`}>
+          <line x1="0" y1="0" x2="0" y2="-56" stroke={JA.forest} strokeWidth="3.5" />
+          <path d="M0 -56 L28 -46 L0 -36 Z" fill={JA.sun} stroke={JA.forest} strokeWidth="2" strokeLinejoin="round" />
+          <circle r="25" fill={JA.paper} stroke={JA.forest} strokeWidth="3" />
+          <text y="9" textAnchor="middle" fontSize="27" fontWeight="700" fill={JA.forest}>
+            {n}
+          </text>
+        </g>
+      ))}
+      <g transform="translate(628 200)">
+        <circle r="50" fill={JA.sun} stroke={JA.forest} strokeWidth="3" />
+        <text y="-8" textAnchor="middle" fontSize="16" fontWeight="700" fill={JA.forest} letterSpacing="1">
+          LEVEL
+        </text>
+        <text y="24" textAnchor="middle" fontSize="34" fontWeight="700" fill={JA.forest}>
+          1
+        </text>
+      </g>
+      <g transform="translate(62 300)">
+        <circle r="52" fill={JA.forest} stroke={JA.lime} strokeWidth="4" />
+        <text y="-8" textAnchor="middle" fontSize="16" fontWeight="700" fill={JA.sun} letterSpacing="1">
+          LEVEL
+        </text>
+        <text y="24" textAnchor="middle" fontSize="34" fontWeight="700" fill={JA.paper}>
+          2
+        </text>
+      </g>
+    </svg>
   )
 }
