@@ -8806,9 +8806,10 @@ const CODE_ONLY_FOLDERS = new Set([
  *  100 since 2026-10-11: junior-academy/ added the hero poster and the video
  *  poster frame, both at q=75 (its /lessons/ callout reuses
  *  lessons/student-kids-02.jpg, an existing pair). 99 since 2026-10-13: the
- *  redesign dropped the poster from the page, leaving the reel cover as the
- *  hero image; its three photos are lessons/student-kids-0{1,2,3}.jpg at the
- *  default q=75, pairs the /lessons/ gallery already renders. */
+ *  redesign dropped the poster from the page, leaving one junior-academy/
+ *  pair, the hero image (the reel's first frame, reel-hero-frame0.jpg).
+ *  Its three photos are lessons/student-kids-0{1,2,3}.jpg at the default
+ *  q=75, pairs the /lessons/ gallery already renders. */
 const MIN_CODE_FOLDER_PAIRS = 99;
 
 /** `/_next/image/?url=…&amp;w=…&amp;q=…`, in any src, srcSet or imageSrcSet. */

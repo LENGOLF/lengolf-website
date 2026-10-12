@@ -12,9 +12,10 @@ import { cn } from '@/lib/utils'
  *
  * Colors follow the poster and the lengolf-design tokens (forest #265020, lime
  * #8dc743), not the legacy site greens; the cream, muted and soft-yellow
- * values come from the owner's v2 redesign (2026-10-12). Everything here is a
- * server component with no motion. The two client pieces (the hero reel and
- * the phone LINE bar) live in their own files beside this one.
+ * values come from the owner's v2 redesign (2026-10-12). Nothing here is a
+ * client component, but the two client pieces beside it (the hero reel and
+ * the phone LINE bar) import JA and LineButton, so this module also ships to
+ * the browser. The only motion is LineButton's 200 ms hover and press lift.
  */
 
 export const JA = {

@@ -23,12 +23,17 @@ import { storageUrl } from '@/lib/constants'
  *
  * THE FACTS ARE A CLOSED LIST (owner brief, 2026-10-11, checked against the
  * junior-academy skill): ages 4 to 12; 10 private 60-minute lessons with
- * LENGOLF's PGA coaches, in Thai or English; each hour half movement and games,
+ * LENGOLF's PGA coaches; each hour half movement and games,
  * half golf; assessments at lessons 5 and 10; Level 1 and Level 2 certificates
  * and a graduation; 5 hours family practice time; junior clubs fitted to
- * height; 16,900 THB, valid 1 year; enquiries on LINE @lengolf. The venue facts
+ * height; 16,900 THB, valid 1 year; enquiries on LINE @lengolf. Also stated,
+ * from the junior-academy skill: one hitter at a time, soft balls for
+ * beginners, a parent stays in the bay during family practice; and from the
+ * v2 redesign (2026-10-12): lessons in Thai or English, matching the
+ * /lessons/ coaches' knowsLanguage (th, en). The venue facts
  * (4th floor, skywalk, 9am to 11pm, indoors and air-conditioned) are the
- * site's own. The skill topics (putting, chipping, full swing, rules, scoring)
+ * site's own, written out here by hand in both locales (place.items,
+ * trust.items): if BUSINESS_INFO.hours changes, change them too. The skill topics (putting, chipping, full swing, rules, scoring)
  * come from the published poster. Do NOT add: the trial-only pilot price,
  * coach names or pay (owner decision, 2026-10-11, kept for the redesign on
  * 2026-10-13), group classes, or lesson times ("arranged on LINE").
@@ -62,27 +67,30 @@ export const JUNIOR_ACADEMY_IMAGES = {
   /** The program poster: the Course node's image (no longer shown on the page). */
   poster: { src: storageUrl('junior-academy/poster-4x5.jpg'), width: 1080, height: 1350 },
   og: { src: storageUrl('junior-academy/og-1200x630.jpg'), width: 1200, height: 630 },
-  /** Real lesson photos (portrait, 1440x2560), also in the /lessons/ gallery. */
+  /** Real lesson photos (portrait files), also in the /lessons/ gallery. */
   photos: {
     benefits: storageUrl('lessons/student-kids-01.jpg'),
     trust: storageUrl('lessons/student-kids-03.jpg'),
     place: storageUrl('lessons/student-kids-02.jpg'),
-    width: 1440,
-    height: 2560,
   },
 } as const
 
 /**
  * The 24.7 s short cut, re-encoded for the hero (540x960, H.264, about 1.3 MB,
  * against 5.1 MB for the 720p version it replaced). It autoplays muted in the
- * hero while on screen (owner decision, 2026-10-13); its poster frame is the
- * page's first image.
+ * hero while on screen (owner decision, 2026-10-13).
  */
 export const JUNIOR_ACADEMY_VIDEO = {
   src: storageUrl('videos/junior-academy-reel-hero-540.mp4'),
-  poster: storageUrl('junior-academy/reel-cover.jpg'),
-  posterWidth: 1080,
-  posterHeight: 1920,
+  width: 540,
+  height: 960,
+  /**
+   * The image under the reel, and the page's LCP element: the clip's own
+   * first frame (1080x1920), so nothing jumps when playback starts.
+   */
+  heroPoster: storageUrl('junior-academy/reel-hero-frame0.jpg'),
+  /** The designed cover, used as the VideoObject thumbnail. */
+  thumbnail: storageUrl('junior-academy/reel-cover.jpg'),
   duration: 'PT25S',
   /** First published on this page. A literal (Bangkok time), never `new Date()`. */
   uploadDate: '2026-10-11T00:00:00+07:00',
@@ -106,6 +114,8 @@ export interface JuniorAcademyContent {
     soundOff: string
     pause: string
     play: string
+    /** Label of the transcript toggle under the reel. */
+    transcriptTitle: string
     /** What the voiceover says (EN: translated from the Thai audio). */
     transcript: string[]
     name: string
@@ -155,7 +165,7 @@ const en: JuniorAcademyContent = {
   breadcrumb: { home: 'Home', lessons: 'Golf Lessons', self: 'Junior Academy' },
   hero: {
     title: "Your child's first swing starts with fun",
-    subtitle: 'Private golf lessons with PGA coaches for kids aged 4 to 12, at LENGOLF by BTS Chidlom.',
+    subtitle: 'Private golf lessons in Bangkok for kids aged 4 to 12, with PGA coaches at LENGOLF by BTS Chidlom.',
     cta: 'Ask us on LINE',
     ageSticker: 'Ages 4-12',
   },
@@ -165,6 +175,7 @@ const en: JuniorAcademyContent = {
     soundOff: 'Turn sound off',
     pause: 'Pause video',
     play: 'Play video',
+    transcriptTitle: 'What the video says (translated from Thai)',
     transcript: [
       "Your child's first swing starts with fun.",
       'At LENGOLF Junior Academy we make golf fun for kids aged 4 to 12.',
@@ -319,7 +330,7 @@ const th: JuniorAcademyContent = {
   breadcrumb: { home: 'หน้าแรก', lessons: 'เรียนกอล์ฟ', self: 'Junior Academy' },
   hero: {
     title: 'วงสวิงแรกของลูก เริ่มต้นด้วยความสนุก',
-    subtitle: 'คอร์สกอล์ฟสำหรับน้องๆ 4-12 ขวบ เรียนตัวต่อตัวกับโค้ช PGA ที่ LENGOLF ติด BTS ชิดลม',
+    subtitle: 'เรียนกอล์ฟเด็ก 4-12 ขวบ ตัวต่อตัวกับโค้ช PGA ที่ LENGOLF ติด BTS ชิดลม กรุงเทพฯ',
     cta: 'ทัก LINE สอบถาม',
     ageSticker: '4-12 ขวบ',
   },
@@ -329,6 +340,7 @@ const th: JuniorAcademyContent = {
     soundOff: 'ปิดเสียง',
     pause: 'หยุดคลิป',
     play: 'เล่นคลิป',
+    transcriptTitle: 'คำบรรยายในคลิป',
     // The voiceover verbatim (so "จาก LENGOLF" stays: it is what is said).
     transcript: [
       'วงสวิงแรกของลูก เริ่มต้นด้วยความสนุก',
@@ -396,7 +408,7 @@ const th: JuniorAcademyContent = {
     asOf: 'ข้อมูล ณ ตุลาคม 2026',
   },
   place: {
-    photoAlt: 'โค้ชนั่งสอนเด็กพัตต์บนกรีนในร้าน LENGOLF',
+    photoAlt: 'โค้ชนั่งสอนเด็กพัตต์บนกรีนที่ LENGOLF',
     items: ['ชั้น 4 The Mercury Ville @ BTS ชิดลม', 'มีสกายวอล์กเชื่อมกับสถานี BTS ชิดลม', 'LENGOLF เปิดทุกวัน 9.00-23.00 น.'],
   },
   faq: {
@@ -447,7 +459,7 @@ const th: JuniorAcademyContent = {
   course: {
     name: 'LENGOLF Junior Academy',
     description:
-      'คอร์สเรียนกอล์ฟสำหรับน้องๆ 4-12 ขวบ ที่ LENGOLF ชิดลม กรุงเทพฯ เรียนตัวต่อตัวกับโค้ช PGA ของ LENGOLF 10 ครั้ง ครั้งละ 60 นาที ทุกครั้งเล่นเกม ขยับร่างกายครึ่งชั่วโมง และฝึกกอล์ฟอีกครึ่งชั่วโมง โค้ชวัดผลในครั้งที่ 5 และ 10 พร้อมประกาศนียบัตร Level 1 และ Level 2 และจบหลักสูตรในครั้งที่ 10 มีเวลาซ้อมสำหรับครอบครัว 5 ชั่วโมง และมีไม้กอล์ฟเด็กให้ใช้ เลือกขนาดตามส่วนสูง',
+      'คอร์สเรียนกอล์ฟสำหรับน้องๆ 4-12 ขวบ ที่ LENGOLF ชิดลม กรุงเทพฯ เรียนตัวต่อตัวกับโค้ช PGA ของ LENGOLF 10 ครั้ง ครั้งละ 60 นาที ทุกครั้งเล่นเกม ขยับร่างกายครึ่งชั่วโมง และฝึกกอล์ฟอีกครึ่งชั่วโมง โค้ชวัดผลในครั้งที่ 5 และ 10 พร้อมประกาศนียบัตร Level 1 และ Level 2 จบหลักสูตรในครั้งที่ 10 มีเวลาซ้อมสำหรับครอบครัว 5 ชั่วโมง และมีไม้กอล์ฟเด็กให้ใช้ เลือกขนาดตามส่วนสูง',
     credentials: 'ประกาศนียบัตร Level 1 และ Level 2',
   },
   lessonsCallout: {
@@ -455,7 +467,7 @@ const th: JuniorAcademyContent = {
     title: 'เรียนกอล์ฟเด็ก: LENGOLF Junior Academy',
     body: 'เรียนตัวต่อตัวกับโค้ช PGA 10 ครั้ง ครั้งละ 60 นาที โค้ชวัดผลในครั้งที่ 5 และ 10 พร้อมประกาศนียบัตร Level 1 และ Level 2 มีเวลาซ้อมสำหรับครอบครัว 5 ชั่วโมง และมีไม้กอล์ฟเด็กให้ใช้ ราคา 16,900 บาท แพ็กเกจใช้ได้ 1 ปี',
     cta: 'ดูรายละเอียด Junior Academy',
-    imageAlt: 'โค้ชนั่งสอนเด็กพัตต์บนกรีนในร้าน LENGOLF',
+    imageAlt: 'โค้ชนั่งสอนเด็กพัตต์บนกรีนที่ LENGOLF',
   },
 }
 

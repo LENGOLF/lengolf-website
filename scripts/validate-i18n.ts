@@ -1636,7 +1636,8 @@ if (process.argv.includes('--self-test')) {
   assert('corpus: price-tier entries present', entries.some((e) => e.entryId.startsWith('tier:')))
   // Added with the junior-academy corpus. EXACT, not a floor: a floor of 20
   // stayed green when a widened field filter dropped the whole FAQ (24 of 122
-  // units, the ones shipped as FAQPage JSON-LD) and a Chinese answer was
+  // units in #155's shape, 12 of 104 since the 2026-10-13 redesign: the ones
+  // shipped as FAQPage JSON-LD) and a Chinese answer was
   // injected into it (mutation-tested). The expectation is counted by VALUE
   // (every string leaf that is not a URL or path), independently of the
   // field-regex filter, because comparing two outputs of the same filter

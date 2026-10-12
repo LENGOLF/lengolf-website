@@ -9,7 +9,7 @@ interface StickyLineBarProps {
   label: string
   /** The hero's LINE button: the bar appears once it has scrolled up out of view. */
   heroCtaId: string
-  /** The closing call-to-action section: the bar hides while it is on screen. */
+  /** The closing call-to-action section: the bar hides once it is reached, and stays hidden below it. */
   endId: string
 }
 
@@ -17,7 +17,9 @@ interface StickyLineBarProps {
  * The phone-only LINE button at the foot of the screen (owner's v2 redesign):
  * on a phone the next step stays one tap away between the hero and the closing
  * section, which carry their own buttons. The site-wide "Book your bay" bar
- * (MobileStickyBar) lists this page in HIDDEN_PATHS so the two never stack.
+ * (MobileStickyBar) and the floating LINE bubble (LineChatWidget) both skip
+ * this page, so it is the only fixed button here and every LINE tap goes
+ * through the Junior Academy's tracked link.
  */
 export default function StickyLineBar({ href, label, heroCtaId, endId }: StickyLineBarProps) {
   const [show, setShow] = useState(false)
@@ -29,12 +31,17 @@ export default function StickyLineBar({ href, label, heroCtaId, endId }: StickyL
     let heroGone = false
     let endSeen = false
     const update = () => setShow(heroGone && !endSeen)
-    const heroObserver = new IntersectionObserver(([entry]) => {
+    // The newest entry wins when several are queued.
+    const heroObserver = new IntersectionObserver((entries) => {
+      const entry = entries[entries.length - 1]
       heroGone = !entry.isIntersecting && entry.boundingClientRect.top < 0
       update()
     })
-    const endObserver = new IntersectionObserver(([entry]) => {
-      endSeen = entry.isIntersecting
+    // On screen OR already scrolled past: below the closing section sit the
+    // related links and the site footer, which the bar must not cover.
+    const endObserver = new IntersectionObserver((entries) => {
+      const entry = entries[entries.length - 1]
+      endSeen = entry.isIntersecting || entry.boundingClientRect.top < 0
       update()
     })
     heroObserver.observe(heroCta)

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Image, { getImageProps } from 'next/image'
+import Image from 'next/image'
 import RawLink from 'next/link'
 import { setRequestLocale } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
@@ -112,15 +112,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 /**
  * Thai on screen (natural-thai rendering rules): a no-break space between a
  * number and the Thai word beside it, so "10 ครั้ง" or "ครั้งที่ 5" never splits
- * across lines, and a word joiner inside พัตต์, which Chrome's dictionary
- * otherwise breaks as พัต / ต์ at phone width. Applied at render time only, so
- * the data, the JSON-LD and the llms files keep plain text.
+ * across lines. Applied at render time only, so the data, the JSON-LD and the
+ * llms files keep plain text. (The skill's other rule, a word joiner inside
+ * พัตต์, is met by whitespace-nowrap on the one place it renders, the skill
+ * chips, which keeps an invisible character out of copy-paste and find.)
  */
 function thaiText(text: string): string {
   return text
-    .replace(/(\d) (?=[฀-๿])/g, '$1 ')
-    .replace(/([฀-๿]) (?=\d)/g, '$1 ')
-    .replace(/พัตต์/g, 'พัต⁠ต์')
+    .replace(/(\d) (?=[\u0E00-\u0E7F])/g, '$1\u00a0')
+    .replace(/([\u0E00-\u0E7F]) (?=\d)/g, '$1\u00a0')
 }
 
 const TRANSCRIPT_ID = 'junior-academy-transcript'
@@ -153,7 +153,7 @@ export default async function JuniorGolfAcademyPage({ params }: Props) {
   const videoJsonLd = getVideoObjectJsonLd({
     name: c.video.name,
     description: c.video.description,
-    thumbnailUrl: JUNIOR_ACADEMY_VIDEO.poster,
+    thumbnailUrl: JUNIOR_ACADEMY_VIDEO.thumbnail,
     contentUrl: JUNIOR_ACADEMY_VIDEO.src,
     uploadDate: JUNIOR_ACADEMY_VIDEO.uploadDate,
     duration: JUNIOR_ACADEMY_VIDEO.duration,
@@ -169,14 +169,9 @@ export default async function JuniorGolfAcademyPage({ params }: Props) {
     { name: c.breadcrumb.self, url: pageUrl },
   ])
 
-  // The poster the reel shows when it does not autoplay (reduced motion, data
-  // saver): the optimizer's WebP at about 2x the 340 px the hero renders at.
-  const { props: stillPoster } = getImageProps({
-    src: JUNIOR_ACADEMY_VIDEO.poster,
-    alt: '',
-    width: 400,
-    height: 711,
-  })
+  // FAQ link keys go through the same Thai spacing as the answers, so a key
+  // with a number beside a Thai word still matches after thaiText().
+  const faqLinks = Object.fromEntries(Object.entries(c.faqLinks).map(([key, link]) => [tx(key), link]))
 
   // In data order: off the phone · focus · confidence · family.
   const benefitIcons = [PhoneOff, Target, Medal, Users]
@@ -236,18 +231,17 @@ export default async function JuniorGolfAcademyPage({ params }: Props) {
                 style={{ borderColor: JA.paper, backgroundColor: JA.paper, boxShadow: JA_SHADOW }}
               >
                 <Image
-                  src={JUNIOR_ACADEMY_VIDEO.poster}
+                  src={JUNIOR_ACADEMY_VIDEO.heroPoster}
                   alt=""
                   fill
-                  sizes="(min-width: 768px) 340px, min(400px, calc(100vw - 40px))"
+                  sizes="(min-width: 768px) 340px, (min-width: 440px) 400px, calc(100vw - 40px)"
                   className="object-cover"
                   priority
                 />
                 <HeroReel
                   src={JUNIOR_ACADEMY_VIDEO.src}
-                  posterSrc={stillPoster.src}
-                  width={540}
-                  height={960}
+                  width={JUNIOR_ACADEMY_VIDEO.width}
+                  height={JUNIOR_ACADEMY_VIDEO.height}
                   label={c.video.label}
                   soundOn={c.video.soundOn}
                   soundOff={c.video.soundOff}
@@ -257,11 +251,19 @@ export default async function JuniorGolfAcademyPage({ params }: Props) {
                 />
               </div>
               <AgeSticker label={tx(c.hero.ageSticker)} className="-left-2.5 bottom-7" />
-              <ol id={TRANSCRIPT_ID} className="sr-only">
-                {c.video.transcript.map((line) => (
-                  <li key={line}>{line}</li>
-                ))}
-              </ol>
+              <figcaption className="mt-3 text-[15px]" style={{ color: JA.muted }}>
+                <details className="group">
+                  <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 font-semibold underline-offset-4 hover:underline [&::-webkit-details-marker]:hidden">
+                    {tx(c.video.transcriptTitle)}
+                    <ChevronDown className="h-4 w-4 transition-transform duration-200 group-open:rotate-180" aria-hidden="true" />
+                  </summary>
+                  <ol id={TRANSCRIPT_ID} className="mt-2 list-none space-y-1 p-0">
+                    {c.video.transcript.map((line) => (
+                      <li key={line}>{tx(line)}</li>
+                    ))}
+                  </ol>
+                </details>
+              </figcaption>
             </figure>
           </div>
         </section>
@@ -350,7 +352,7 @@ export default async function JuniorGolfAcademyPage({ params }: Props) {
                     {c.journey.golf.skills.map((skill) => (
                       <li
                         key={skill}
-                        className="rounded-full border-[1.5px] px-3.5 py-[3px] text-[15px] font-semibold"
+                        className="whitespace-nowrap rounded-full border-[1.5px] px-3.5 py-[3px] text-[15px] font-semibold"
                         style={{ backgroundColor: 'rgba(141,199,67,.2)', borderColor: JA.lime }}
                       >
                         {tx(skill)}
@@ -412,7 +414,9 @@ export default async function JuniorGolfAcademyPage({ params }: Props) {
               </h2>
               <p className="mt-2.5 text-[clamp(48px,9vw,68px)] font-bold leading-[1.1]" style={{ color: JA.forest }}>
                 {c.price.amount}
-                <span className="ml-1.5 text-[0.42em]">{c.price.unit}</span>
+                {/* The space sits inside the small unit, so it reads as one in
+                    the text content without widening the gap on screen. */}
+                <span className="text-[0.42em]">{' '}{c.price.unit}</span>
               </p>
               <p className="mt-1 font-semibold" style={{ color: JA.forest }}>
                 {tx(c.price.validity)}
@@ -476,7 +480,7 @@ export default async function JuniorGolfAcademyPage({ params }: Props) {
                   <ChevronDown className="h-5 w-5 flex-none transition-transform duration-200 group-open:rotate-180" aria-hidden="true" />
                 </summary>
                 <p className="pb-[18px]" style={{ color: JA.muted }}>
-                  {renderFaqAnswer(tx(item.answer), c.faqLinks)}
+                  {renderFaqAnswer(tx(item.answer), faqLinks)}
                 </p>
               </details>
             ))}
@@ -514,7 +518,7 @@ export default async function JuniorGolfAcademyPage({ params }: Props) {
             <div className="flex flex-wrap items-center gap-3">
               <LineButton href={JUNIOR_ACADEMY_LINE_URL} label={c.start.cta} />
               <a href={`tel:${BUSINESS_INFO.phoneRaw}`} className="font-semibold underline-offset-4 hover:underline" style={{ color: JA.forest }}>
-                {c.start.callLead} {BUSINESS_INFO.phone}
+                {tx(`${c.start.callLead} ${BUSINESS_INFO.phone}`)}
               </a>
             </div>
           </div>
