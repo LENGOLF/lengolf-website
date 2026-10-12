@@ -53,7 +53,7 @@ const LOCALE_PAGE_TYPES: { type: SeoPageType; label: string; urlPrefix: string }
 const KEY_PAGES: { title: string; path: string; desc: string }[] = [
   { title: 'Bay Rates & Simulators', path: '/golf/', desc: 'Indoor golf simulator bay rates, monthly packages, and how booking works.' },
   { title: 'Golf Lessons', path: '/lessons/', desc: `One-on-one and group coaching on the simulators with ${coaches.length} Thailand PGA-certified coaches (${coaches.map((c) => `${c.name}, ${c.fullName}`).join('; ')}), taught in Thai and English. Free 1-hour trial lesson for new students, booked on LINE @lengolf.` },
-  { title: 'Junior Golf Academy (kids aged 4 to 12)', path: JUNIOR_ACADEMY_PATH, desc: `${juniorAcademy.course.description} ${juniorAcademy.price.amount}, ${juniorAcademy.price.validity.toLowerCase()}. Enquiries on LINE @lengolf.` },
+  { title: 'Junior Golf Academy (kids aged 4 to 12)', path: JUNIOR_ACADEMY_PATH, desc: `${juniorAcademy.course.description} ${juniorAcademy.price.amount} ${juniorAcademy.price.unit}, ${juniorAcademy.price.validity.toLowerCase()}. Enquiries on LINE @lengolf.` },
   { title: 'Private Events & Parties', path: '/events/', desc: 'Corporate team-building, birthdays, and private parties with bays, bar, and catering.' },
   { title: 'Food & Drinks Menu', path: '/menu/', desc: 'Full menu with THB prices: Smith & Co burgers, Sexy Pizza, cocktails, beer, wine, and unlimited soft drinks.' },
   { title: 'Golf Club Rental', path: '/golf-club-rental/', desc: 'Free house sets plus premium Callaway rentals at the venue.' },

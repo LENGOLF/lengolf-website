@@ -1,21 +1,44 @@
 import type { Metadata } from 'next'
-import Image, { getImageProps } from 'next/image'
+import Image from 'next/image'
 import RawLink from 'next/link'
 import { setRequestLocale } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
-import { MessageCircle, Users, CircleDot, ShieldCheck } from 'lucide-react'
+import {
+  CalendarCheck,
+  ChevronDown,
+  CircleCheck,
+  Clock,
+  Eye,
+  Feather,
+  FlagTriangleRight,
+  MapPin,
+  Medal,
+  MessageCircleMore,
+  NotebookPen,
+  PersonStanding,
+  PhoneOff,
+  Ruler,
+  ScanFace,
+  Snowflake,
+  Target,
+  TrainFront,
+  Users,
+} from 'lucide-react'
 import { renderFaqAnswer } from '@/components/shared/FaqSection'
 import {
-  PaperSection,
-  PaperCard,
-  CollageHeading,
-  SunBurst,
-  TornEdge,
-  Tape,
-  CheckDot,
+  AcademyLockup,
+  AgeSticker,
   JA,
-  paperStyle,
+  JA_SHADOW,
+  JourneyMap,
+  LineButton,
+  Surface,
+  Tape,
 } from '@/components/junior-academy/Collage'
+import HeroReel from '@/components/junior-academy/HeroReel'
+import StickyLineBar from '@/components/junior-academy/StickyLineBar'
+import { BUSINESS_INFO } from '@/lib/constants'
+import { cn } from '@/lib/utils'
 import {
   ALL_LOCALES,
   getAlternates,
@@ -86,29 +109,30 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-function LineButton({ label, variant = 'forest' }: { label: string; variant?: 'forest' | 'lime' }) {
-  const colors =
-    variant === 'lime'
-      ? { backgroundColor: JA.lime, color: JA.forest }
-      : { backgroundColor: JA.forest, color: JA.card }
-  return (
-    <a
-      href={JUNIOR_ACADEMY_LINE_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md px-7 py-3 text-sm font-bold uppercase tracking-wide transition-opacity hover:opacity-90"
-      style={colors}
-    >
-      <MessageCircle className="h-4 w-4" aria-hidden="true" />
-      {label}
-    </a>
-  )
+/**
+ * Thai on screen (natural-thai rendering rules): a no-break space between a
+ * number and the Thai word beside it, so "10 ครั้ง" or "ครั้งที่ 5" never splits
+ * across lines. Applied at render time only, so the data, the JSON-LD and the
+ * llms files keep plain text. (The skill's other rule, a word joiner inside
+ * พัตต์, is met by whitespace-nowrap on the one place it renders, the skill
+ * chips, which keeps an invisible character out of copy-paste and find.)
+ */
+function thaiText(text: string): string {
+  return text
+    .replace(/(\d) (?=[\u0E00-\u0E7F])/g, '$1\u00a0')
+    .replace(/([\u0E00-\u0E7F]) (?=\d)/g, '$1\u00a0')
 }
+
+const TRANSCRIPT_ID = 'junior-academy-transcript'
+const HERO_CTA_ID = 'junior-academy-hero-cta'
+const START_ID = 'start'
 
 export default async function JuniorGolfAcademyPage({ params }: Props) {
   const { locale } = await params
   setRequestLocale(locale)
   const c = getJuniorAcademyContent(locale)
+  const isThai = locale === 'th'
+  const tx = (text: string) => (isThai ? thaiText(text) : text)
   const pageUrl = getCanonical(locale, JUNIOR_ACADEMY_PATH)
 
   const courseJsonLd = getJuniorAcademyCourseJsonLd({
@@ -129,13 +153,13 @@ export default async function JuniorGolfAcademyPage({ params }: Props) {
   const videoJsonLd = getVideoObjectJsonLd({
     name: c.video.name,
     description: c.video.description,
-    thumbnailUrl: JUNIOR_ACADEMY_VIDEO.poster,
+    thumbnailUrl: JUNIOR_ACADEMY_VIDEO.thumbnail,
     contentUrl: JUNIOR_ACADEMY_VIDEO.src,
     uploadDate: JUNIOR_ACADEMY_VIDEO.uploadDate,
     duration: JUNIOR_ACADEMY_VIDEO.duration,
     inLanguage: 'th',
     // What the audio says, in the language it says it, on both pages: the EN
-    // page's visible transcript is a translation, which `transcript` beside
+    // page's transcript is a translation, which `transcript` beside
     // `inLanguage: 'th'` would misstate.
     transcript: getJuniorAcademyContent('th').video.transcript.join(' '),
   })
@@ -145,19 +169,23 @@ export default async function JuniorGolfAcademyPage({ params }: Props) {
     { name: c.breadcrumb.self, url: pageUrl },
   ])
 
-  // The video's poster frame goes through the image optimizer (WebP at about
-  // 2x the 300 px it renders at) rather than the 720x1280 JPEG: a poster
-  // downloads with the page even under preload="none".
-  const { props: videoPoster } = getImageProps({
-    src: JUNIOR_ACADEMY_VIDEO.poster,
-    alt: '',
-    width: 300,
-    height: 533,
-  })
+  // FAQ link keys go through the same Thai spacing as the answers, so a key
+  // with a number beside a Thai word still matches after thaiText().
+  const faqLinks = Object.fromEntries(Object.entries(c.faqLinks).map(([key, link]) => [tx(key), link]))
 
-  const [titleFirstWord, ...titleRest] = c.hero.titleMain.split(' ')
-  // One hitter at a time · soft balls · parent supervision (data order).
-  const safetyIcons = [Users, CircleDot, ShieldCheck]
+  // In data order: off the phone · focus · confidence · family.
+  const benefitIcons = [PhoneOff, Target, Medal, Users]
+  const benefitTones = ['lime', 'cream', 'sun', 'forest'] as const
+  // One hitter · soft balls · parent present · clubs · indoors.
+  const trustIcons = [ScanFace, Feather, Eye, Ruler, Snowflake]
+  const placeIcons = [MapPin, TrainFront, Clock]
+  const stepIcons = [MessageCircleMore, NotebookPen, CalendarCheck]
+
+  const sectionHeading = cn(
+    'mb-7 text-[clamp(28px,5vw,42px)] font-bold [text-wrap:balance]',
+    isThai ? 'leading-[1.35]' : 'leading-[1.15] tracking-[-0.015em]'
+  )
+  const photo = JUNIOR_ACADEMY_IMAGES.photos
 
   return (
     <>
@@ -166,323 +194,372 @@ export default async function JuniorGolfAcademyPage({ params }: Props) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(videoJsonLd) }} />
 
-      <div style={{ color: JA.ink }}>
+      <div
+        className={cn('overflow-x-clip leading-[1.7]', isThai ? 'text-[18px]' : 'text-[17px]')}
+        style={{ backgroundColor: JA.cream, color: JA.ink }}
+      >
         {/* ── Hero ── */}
-        <section className="relative overflow-hidden pb-10 pt-10 md:pb-16 md:pt-14" style={paperStyle}>
-          <div className="section-max-width section-padding grid items-center gap-10 md:grid-cols-[1.1fr_0.9fr]">
-            <div className="relative">
-              {/* Decorative repeat of the age, beside the title on wide screens
-                  only: the poster carries its own burst, and below lg the stat
-                  chips state the ages a few lines down. */}
-              <div aria-hidden="true">
-                <SunBurst label={c.hero.ageBadge} className="absolute right-0 top-10 hidden lg:grid xl:right-6" />
-              </div>
-              <p className="mb-4 text-xs font-bold uppercase tracking-[0.08em]" style={{ color: JA.forest }}>
-                {c.hero.eyebrow}
-              </p>
-              <h1>
-                <span className="mb-4 block text-2xl font-bold leading-snug md:text-3xl" style={{ color: JA.forest }}>
-                  {c.hero.titleLead}
-                </span>{' '}
-                {/* The {' '} separators keep the H1's text content word-separated
-                    for crawlers and LLM fetchers; they collapse visually. */}
-                <span className="flex flex-wrap items-end gap-2">
-                  <span
-                    className="inline-block px-4 py-2 text-5xl font-black uppercase italic leading-none md:text-6xl lg:text-7xl"
-                    style={{ backgroundColor: JA.forest, color: JA.card, transform: 'rotate(-1.5deg)' }}
-                  >
-                    {titleFirstWord}
-                  </span>{' '}
-                  {titleRest.length > 0 && (
-                    <span
-                      className="inline-block px-4 py-2 text-5xl font-black uppercase italic leading-none md:text-6xl lg:text-7xl"
-                      style={{ backgroundColor: JA.lime, color: JA.forest, transform: 'rotate(1deg)' }}
-                    >
-                      {titleRest.join(' ')}
-                    </span>
-                  )}
-                </span>
+        <section className="pb-14 pt-7 md:pb-[72px] md:pt-11">
+          <div className="mx-auto grid max-w-[1180px] gap-7 px-5 md:grid-cols-[1.15fr_0.85fr] md:items-center md:gap-12">
+            <div>
+              <AcademyLockup />
+              <h1
+                className={cn(
+                  'font-bold [text-wrap:balance]',
+                  isThai
+                    ? 'text-[clamp(32px,7.6vw,56px)] leading-[1.35]'
+                    : 'text-[clamp(32px,6.2vw,48px)] leading-[1.15] tracking-[-0.015em]'
+                )}
+                style={{ color: JA.forest }}
+              >
+                {tx(c.hero.title)}
               </h1>
-              <p className="mt-6 max-w-xl text-base leading-relaxed md:text-lg">{c.hero.subtitle}</p>
-              <div className="mt-8 flex flex-wrap items-center gap-4">
-                <LineButton label={c.hero.cta} />
-                <a
-                  href="#program"
-                  className="inline-flex min-h-12 items-center justify-center rounded-md border-2 px-6 py-3 text-sm font-bold uppercase tracking-wide transition-colors hover:bg-white/60"
-                  style={{ borderColor: JA.forest, color: JA.forest }}
-                >
-                  {c.hero.secondaryCta}
-                </a>
+              <p className="mt-3.5 max-w-[34ch] text-[clamp(17px,2.2vw,20px)]" style={{ color: JA.muted }}>
+                {tx(c.hero.subtitle)}
+              </p>
+              <div className="mt-6">
+                <LineButton id={HERO_CTA_ID} href={JUNIOR_ACADEMY_LINE_URL} label={c.hero.cta} />
               </div>
             </div>
 
-            <div className="relative mx-auto w-full max-w-[420px]">
-              {/* Not rotated: Chrome left a priority <img> inside a rotated
-                  parent unpainted (white) here, in two separate Chromium
-                  builds, while the decoded pixels were fine. The tape carries
-                  the collage look instead. */}
-              <div className="relative bg-white p-2 shadow-lg">
-                <Tape className="-top-3 left-1/2 -translate-x-1/2 -rotate-3" />
+            <figure className="relative m-0 w-full max-w-[400px] justify-self-center md:max-w-[340px]">
+              <Tape className="-top-3 left-1/2 z-10 -translate-x-1/2 -rotate-[4deg]" />
+              {/* Not rotated, unlike the v2 mock-up: Chrome left a priority
+                  <img> inside a rotated parent unpainted here (PR #155). */}
+              <div
+                className="relative aspect-[9/16] overflow-hidden rounded-[18px] border-8"
+                style={{ borderColor: JA.paper, backgroundColor: JA.paper, boxShadow: JA_SHADOW }}
+              >
                 <Image
-                  src={JUNIOR_ACADEMY_IMAGES.poster.src}
-                  alt={c.hero.posterAlt}
-                  width={JUNIOR_ACADEMY_IMAGES.poster.width}
-                  height={JUNIOR_ACADEMY_IMAGES.poster.height}
-                  sizes="(max-width: 768px) 90vw, 420px"
-                  className="h-auto w-full"
+                  src={JUNIOR_ACADEMY_VIDEO.heroPoster}
+                  alt=""
+                  fill
+                  sizes="(min-width: 768px) 340px, (min-width: 440px) 400px, calc(100vw - 40px)"
+                  className="object-cover"
                   priority
                 />
+                <HeroReel
+                  src={JUNIOR_ACADEMY_VIDEO.src}
+                  width={JUNIOR_ACADEMY_VIDEO.width}
+                  height={JUNIOR_ACADEMY_VIDEO.height}
+                  label={c.video.label}
+                  soundOn={c.video.soundOn}
+                  soundOff={c.video.soundOff}
+                  pause={c.video.pause}
+                  play={c.video.play}
+                  describedBy={TRANSCRIPT_ID}
+                />
+              </div>
+              <AgeSticker label={tx(c.hero.ageSticker)} className="-left-2.5 bottom-7" />
+              <figcaption className="mt-3 text-[15px]" style={{ color: JA.muted }}>
+                <details className="group">
+                  <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 font-semibold underline-offset-4 hover:underline [&::-webkit-details-marker]:hidden">
+                    {tx(c.video.transcriptTitle)}
+                    <ChevronDown className="h-4 w-4 transition-transform duration-200 group-open:rotate-180" aria-hidden="true" />
+                  </summary>
+                  <ol id={TRANSCRIPT_ID} className="mt-2 list-none space-y-1 p-0">
+                    {c.video.transcript.map((line) => (
+                      <li key={line}>{tx(line)}</li>
+                    ))}
+                  </ol>
+                </details>
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
+        {/* ── What your child gets ── */}
+        <section className="py-14" style={{ backgroundColor: JA.paper }}>
+          <div className="mx-auto max-w-[1180px] px-5">
+            <h2 className={sectionHeading} style={{ color: JA.forest }}>
+              {tx(c.benefits.title)}
+            </h2>
+            <div className="grid gap-3.5 md:grid-cols-[1.15fr_1fr_1fr] md:grid-rows-[auto_auto]">
+              <figure className="relative m-0 aspect-[4/3] overflow-hidden rounded-[18px] md:row-span-2 md:aspect-auto md:min-h-[380px]">
+                <Image
+                  src={photo.benefits}
+                  alt={c.benefits.photoAlt}
+                  fill
+                  sizes="(min-width: 768px) 420px, calc(100vw - 40px)"
+                  className="object-cover object-[50%_80%] md:object-[50%_78%]"
+                />
+              </figure>
+              {c.benefits.items.map((item, i) => {
+                const Icon = benefitIcons[i % benefitIcons.length]
+                const tone = benefitTones[i % benefitTones.length]
+                const onForest = tone === 'forest'
+                return (
+                  <Surface key={item.title} tone={tone} className="px-[22px] py-6">
+                    <Icon className="h-[34px] w-[34px]" style={{ color: onForest ? JA.paper : JA.forest }} aria-hidden="true" />
+                    <h3 className="mb-1.5 mt-3 text-[22px] font-bold leading-snug" style={{ color: onForest ? JA.paper : JA.forest }}>
+                      {tx(item.title)}
+                    </h3>
+                    <p style={{ color: onForest ? '#d9e4cf' : tone === 'lime' ? JA.ink : JA.muted }}>{tx(item.body)}</p>
+                  </Surface>
+                )
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Ten lessons ── */}
+        <section className="pb-16 pt-[72px]">
+          <div className="mx-auto max-w-[1180px] px-5">
+            <h2 className={sectionHeading} style={{ color: JA.forest }}>
+              {tx(c.journey.title)}
+            </h2>
+            <div className="rounded-[18px] px-3.5 pb-2 pt-[22px]" style={{ backgroundColor: JA.paper, boxShadow: JA_SHADOW }}>
+              <JourneyMap start={c.journey.start} label={c.journey.mapLabel} />
+            </div>
+            <div className="mt-4 grid gap-3 md:grid-cols-2">
+              {c.journey.milestones.map((m, i) => (
+                <div key={m.badge} className="flex items-start gap-3.5 rounded-[18px] px-[18px] py-4" style={{ backgroundColor: JA.paper }}>
+                  <span
+                    className="flex-none rounded-full px-2.5 py-[5px] text-[13px] font-bold italic tracking-[0.04em]"
+                    style={i === 0 ? { backgroundColor: JA.sun, color: JA.forest } : { backgroundColor: JA.forest, color: JA.paper }}
+                  >
+                    {m.badge}
+                  </span>
+                  <p>{tx(m.body)}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-11">
+              <h3 className="mb-4 text-[clamp(22px,3.4vw,28px)] font-bold" style={{ color: JA.forest }}>
+                {tx(c.journey.lessonTitle)}
+              </h3>
+              <div className="grid gap-3.5 md:grid-cols-[1fr_auto_1fr] md:items-center">
+                <article
+                  className="relative -rotate-1 rounded-[18px] border-2 border-dashed p-[22px]"
+                  style={{ backgroundColor: JA.paper, borderColor: 'rgba(38,80,32,.25)' }}
+                >
+                  <MinutesBadge label={tx(c.journey.minutes)} />
+                  <PersonStanding className="h-9 w-9" style={{ color: JA.forest }} aria-hidden="true" />
+                  <h4 className="mb-1 mt-2.5 text-xl font-bold" style={{ color: JA.forest }}>
+                    {tx(c.journey.play.title)}
+                  </h4>
+                  <p>{tx(c.journey.play.body)}</p>
+                </article>
+                <span className="hidden text-[40px] font-bold md:block" style={{ color: JA.forest }} aria-hidden="true">
+                  +
+                </span>
+                <article className="relative rotate-[0.8deg] rounded-[18px] p-[22px]" style={{ backgroundColor: JA.forest, color: JA.paper }}>
+                  <MinutesBadge label={tx(c.journey.minutes)} />
+                  <FlagTriangleRight className="h-9 w-9" style={{ color: JA.lime }} aria-hidden="true" />
+                  <h4 className="mb-1 mt-2.5 text-xl font-bold">{tx(c.journey.golf.title)}</h4>
+                  <ul className="mt-3 flex list-none flex-wrap gap-2 p-0">
+                    {c.journey.golf.skills.map((skill) => (
+                      <li
+                        key={skill}
+                        className="whitespace-nowrap rounded-full border-[1.5px] px-3.5 py-[3px] text-[15px] font-semibold"
+                        style={{ backgroundColor: 'rgba(141,199,67,.2)', borderColor: JA.lime }}
+                      >
+                        {tx(skill)}
+                      </li>
+                    ))}
+                  </ul>
+                </article>
               </div>
             </div>
           </div>
-
-          {/* Stat chips */}
-          <div className="section-max-width section-padding mt-12">
-            <ul className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-              {c.stats.map((s, i) => (
-                <li key={s.label}>
-                  <PaperCard className="px-4 py-4 text-center md:px-4 md:py-5" tilt={i % 2 === 0 ? -0.8 : 0.8}>
-                    <div className="text-xl font-extrabold md:text-2xl" style={{ color: JA.forest }}>
-                      {s.value}
-                    </div>
-                    <div className="mt-1 text-xs font-semibold uppercase tracking-wide opacity-75">{s.label}</div>
-                  </PaperCard>
-                </li>
-              ))}
-            </ul>
-          </div>
         </section>
 
-        {/* ── What's included ── */}
-        <section id="program" className="scroll-mt-24 bg-white py-14 lg:py-20">
-          <div className="section-max-width section-padding">
-            <CollageHeading lead={c.included.title} suffix={c.included.titleSuffix} />
-            <p className="mx-auto mb-10 max-w-2xl text-center text-base leading-relaxed md:text-lg">{c.included.intro}</p>
-            <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-[1.4fr_1fr]">
-              <PaperCard>
-                <ul className="space-y-4">
-                  {c.included.items.map((item) => (
-                    <li key={item} className="flex gap-3 text-base leading-relaxed">
-                      <CheckDot />
-                      <span>{item}</span>
+        {/* ── Who teaches, and safety (no coach names: owner decision) ── */}
+        <section className="py-16" style={{ backgroundColor: JA.paper }}>
+          <div className="mx-auto grid max-w-[1180px] items-center gap-9 px-5 md:grid-cols-2 md:gap-14">
+            <figure className="relative m-0 mx-auto w-full max-w-[420px] bg-white p-2 pb-2.5" style={{ borderRadius: 14, boxShadow: JA_SHADOW }}>
+              <Tape className="-top-3 left-6 z-10 -rotate-6" />
+              <div className="relative aspect-[4/5] overflow-hidden rounded-[9px]">
+                <Image
+                  src={photo.trust}
+                  alt={c.trust.photoAlt}
+                  fill
+                  sizes="(min-width: 768px) 420px, calc(100vw - 56px)"
+                  className="object-cover object-[50%_60%]"
+                />
+              </div>
+            </figure>
+            <div>
+              <h2 className={sectionHeading} style={{ color: JA.forest }}>
+                {tx(c.trust.title)}
+              </h2>
+              <p className="-mt-3 mb-[22px]" style={{ color: JA.muted }}>
+                {tx(c.trust.lead)}
+              </p>
+              <ul className="grid list-none gap-2.5 p-0">
+                {c.trust.items.map((item, i) => {
+                  const Icon = trustIcons[i % trustIcons.length]
+                  return (
+                    <li key={item} className="flex items-start gap-3.5">
+                      <Icon className="mt-[5px] h-6 w-6 flex-none" style={{ color: JA.lime }} aria-hidden="true" />
+                      <span>{tx(item)}</span>
                     </li>
-                  ))}
-                </ul>
-              </PaperCard>
-              <PaperCard tilt={1}>
-                <h3 className="mb-5 text-lg font-bold uppercase tracking-wide" style={{ color: JA.forest }}>
-                  {c.included.skillsTitle}
-                </h3>
-                <ul className="flex flex-wrap gap-3">
-                  {c.included.skills.map((skill) => (
-                    <li
-                      key={skill}
-                      className="rounded-full px-4 py-2 text-sm font-bold"
-                      style={{ backgroundColor: JA.sun, color: JA.forest }}
-                    >
-                      {skill}
-                    </li>
-                  ))}
-                </ul>
-              </PaperCard>
+                  )
+                })}
+              </ul>
             </div>
           </div>
         </section>
 
-        {/* ── How a lesson works ── */}
-        <PaperSection>
-          <CollageHeading lead={c.lesson.title} suffix={c.lesson.titleSuffix} />
-          <p className="mx-auto mb-10 max-w-2xl text-center text-base leading-relaxed md:text-lg">{c.lesson.intro}</p>
-          <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
-            {c.lesson.halves.map((half, i) => (
-              <PaperCard key={half.title} tilt={i === 0 ? -1 : 1}>
-                <span
-                  className="mb-3 inline-block px-3 py-1 text-xs font-extrabold uppercase tracking-wide"
-                  style={{ backgroundColor: i === 0 ? JA.sun : JA.lime, color: JA.forest }}
+        {/* ── Course fee and place ── */}
+        <section id="price" className="py-[72px]">
+          <div className="mx-auto grid max-w-[1180px] items-stretch gap-[22px] px-5 md:grid-cols-2 md:gap-7">
+            <div
+              className="rounded-[18px] border-t-[10px] px-6 py-[30px] md:px-[38px] md:py-10"
+              style={{ backgroundColor: JA.paper, borderTopColor: JA.lime, boxShadow: JA_SHADOW }}
+            >
+              <h2 className={cn(sectionHeading, 'mb-0')} style={{ color: JA.forest }}>
+                {tx(c.price.title)}
+              </h2>
+              <p className="mt-2.5 text-[clamp(48px,9vw,68px)] font-bold leading-[1.1]" style={{ color: JA.forest }}>
+                {c.price.amount}
+                {/* The space sits inside the small unit, so it reads as one in
+                    the text content without widening the gap on screen. */}
+                <span className="text-[0.42em]">{' '}{c.price.unit}</span>
+              </p>
+              <p className="mt-1 font-semibold" style={{ color: JA.forest }}>
+                {tx(c.price.validity)}
+              </p>
+              <h3 className="mb-2.5 mt-[22px] text-lg font-bold" style={{ color: JA.forest }}>
+                {tx(c.price.includedTitle)}
+              </h3>
+              <ul className="mb-[26px] grid list-none gap-2 p-0">
+                {c.price.items.map((item) => (
+                  <li key={item} className="flex gap-2.5">
+                    <CircleCheck className="mt-1 h-[22px] w-[22px] flex-none" style={{ color: JA.lime }} aria-hidden="true" />
+                    <span>{tx(item)}</span>
+                  </li>
+                ))}
+              </ul>
+              <LineButton href={JUNIOR_ACADEMY_LINE_URL} label={c.price.cta} />
+              <p className="mt-3.5 text-sm" style={{ color: JA.muted }}>
+                {tx(c.price.asOf)}
+              </p>
+            </div>
+            <div className="grid gap-3.5 md:flex md:flex-col">
+              <figure className="relative m-0 aspect-[4/3] overflow-hidden rounded-[18px] md:aspect-auto md:min-h-[300px] md:flex-1">
+                <Image
+                  src={photo.place}
+                  alt={c.place.photoAlt}
+                  fill
+                  sizes="(min-width: 768px) 560px, calc(100vw - 40px)"
+                  className="object-cover object-[50%_62%]"
+                />
+              </figure>
+              <ul className="grid list-none gap-2 rounded-[18px] px-5 py-[18px]" style={{ backgroundColor: JA.forest, color: JA.paper }}>
+                {c.place.items.map((item, i) => {
+                  const Icon = placeIcons[i % placeIcons.length]
+                  return (
+                    <li key={item} className="flex items-start gap-3">
+                      <Icon className="mt-1 h-[22px] w-[22px] flex-none" style={{ color: JA.lime }} aria-hidden="true" />
+                      <span>{tx(item)}</span>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* ── FAQ: <details> keeps every answer in the HTML (unlike a Radix
+            accordion, which unmounts closed answers), so crawlers and AI
+            assistants read them all while parents scan the questions. ── */}
+        <section id="faq" className="pb-[72px] pt-6">
+          <div className="mx-auto max-w-[820px] px-5">
+            <h2 className={sectionHeading} style={{ color: JA.forest }}>
+              {tx(c.faq.title)}
+            </h2>
+            {c.faq.items.map((item) => (
+              <details key={item.question} className="group mb-2.5 rounded-[14px] px-5" style={{ backgroundColor: JA.paper }}>
+                <summary
+                  className="flex cursor-pointer list-none items-center justify-between gap-4 py-[18px] text-lg font-semibold [&::-webkit-details-marker]:hidden"
+                  style={{ color: JA.forest }}
                 >
-                  {half.label}
-                </span>
-                <h3 className="mb-2 text-xl font-bold" style={{ color: JA.forest }}>
-                  {half.title}
-                </h3>
-                <p className="leading-relaxed">{half.body}</p>
-              </PaperCard>
+                  <span>{tx(item.question)}</span>
+                  <ChevronDown className="h-5 w-5 flex-none transition-transform duration-200 group-open:rotate-180" aria-hidden="true" />
+                </summary>
+                <p className="pb-[18px]" style={{ color: JA.muted }}>
+                  {renderFaqAnswer(tx(item.answer), faqLinks)}
+                </p>
+              </details>
             ))}
           </div>
-        </PaperSection>
-
-        {/* ── Progress ── */}
-        <section className="bg-white py-14 lg:py-20">
-          <div className="section-max-width section-padding">
-            <CollageHeading lead={c.progress.title} suffix={c.progress.titleSuffix} />
-            <p className="mx-auto mb-10 max-w-2xl text-center text-base leading-relaxed md:text-lg">{c.progress.intro}</p>
-            <ol className="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
-              {c.progress.steps.map((step, i) => (
-                <li key={step.label}>
-                  <PaperCard tilt={i === 0 ? 0.6 : -0.6} className="h-full">
-                    <p className="text-xs font-bold uppercase tracking-[0.08em] opacity-75">{step.label}</p>
-                    <h3
-                      className="my-3 inline-block px-3 py-1 text-xl font-extrabold uppercase italic"
-                      style={{ backgroundColor: JA.forest, color: JA.card }}
-                    >
-                      {step.title}
-                    </h3>
-                    <p className="leading-relaxed">{step.body}</p>
-                  </PaperCard>
-                </li>
-              ))}
-            </ol>
-          </div>
         </section>
 
-        {/* ── Video (below the fold, never the LCP element) ── */}
-        <TornEdge color={JA.forest} seed={11} />
-        <PaperSection tone="forest">
-          <CollageHeading lead={c.video.title} suffix={c.video.titleSuffix} onForest />
-          <p className="mx-auto mb-10 max-w-2xl text-center text-base leading-relaxed text-white/85 md:text-lg">
-            {c.video.intro}
-          </p>
-          <div className="mx-auto grid max-w-4xl items-start gap-8 md:grid-cols-[300px_1fr]">
-            <div className="relative mx-auto w-full max-w-[300px] bg-white p-2 shadow-lg">
-              <Tape className="-top-3 left-6 -rotate-6" />
-              <video
-                controls
-                playsInline
-                preload="none"
-                poster={videoPoster.src}
-                width={JUNIOR_ACADEMY_VIDEO.width}
-                height={JUNIOR_ACADEMY_VIDEO.height}
-                aria-label={c.video.label}
-                aria-describedby="junior-academy-transcript"
-                className="block h-auto w-full bg-black"
-              >
-                <source src={JUNIOR_ACADEMY_VIDEO.src} type="video/mp4" />
-                {c.video.fallback}
-              </video>
-            </div>
-            <div id="junior-academy-transcript">
-              <PaperCard>
-                <h3 className="mb-4 text-lg font-bold" style={{ color: JA.forest }}>
-                  {c.video.transcriptTitle}
-                </h3>
-                <ol className="space-y-3 leading-relaxed">
-                  {c.video.transcript.map((line) => (
-                    <li key={line}>{line}</li>
-                  ))}
-                </ol>
-              </PaperCard>
-            </div>
-          </div>
-        </PaperSection>
-        <TornEdge color={JA.forest} seed={23} flip />
-
-        {/* ── Safety ── */}
-        <section className="bg-white py-14 lg:py-20">
-          <div className="section-max-width section-padding">
-            <CollageHeading lead={c.safety.title} suffix={c.safety.titleSuffix} />
-            <ul className="mx-auto grid max-w-5xl gap-6 md:grid-cols-3">
-              {c.safety.items.map((item, i) => {
-                const Icon = safetyIcons[i % safetyIcons.length]
+        {/* ── How to start ── */}
+        <section id={START_ID} className="pb-[72px] pt-16" style={{ backgroundColor: JA.lime }}>
+          <div className="mx-auto max-w-[1180px] px-5">
+            <h2 className={cn(sectionHeading, 'mb-0')} style={{ color: JA.forest }}>
+              {tx(c.start.title)}
+            </h2>
+            <ol className="my-7 grid list-none gap-3 p-0 md:grid-cols-3 md:gap-0 md:rounded-[18px] md:bg-[rgba(252,249,242,.85)] md:px-2.5 md:py-[26px]">
+              {c.start.steps.map((step, i) => {
+                const Icon = stepIcons[i % stepIcons.length]
+                const last = i === c.start.steps.length - 1
                 return (
-                  <li key={item.title}>
-                    <PaperCard className="h-full" tilt={i === 1 ? 0.8 : -0.5}>
-                      <span
-                        className="mb-4 grid h-12 w-12 place-items-center rounded-full"
-                        style={{ backgroundColor: JA.sun }}
-                        aria-hidden="true"
-                      >
-                        <Icon className="h-6 w-6" style={{ color: JA.forest }} />
-                      </span>
-                      <h3 className="mb-2 text-lg font-bold" style={{ color: JA.forest }}>
-                        {item.title}
-                      </h3>
-                      <p className="leading-relaxed">{item.body}</p>
-                    </PaperCard>
+                  <li
+                    key={step}
+                    className={cn(
+                      'relative flex items-center gap-3.5 rounded-[18px] bg-[rgba(252,249,242,.85)] px-[18px] py-4 font-semibold md:flex-col md:items-start md:rounded-none md:bg-transparent md:px-[26px] md:py-0',
+                      !last &&
+                        "md:after:absolute md:after:left-[84px] md:after:right-[-6px] md:after:top-[22px] md:after:border-t-[2.5px] md:after:border-dashed md:after:border-[#265020] md:after:opacity-[.45] md:after:content-['']"
+                    )}
+                    style={{ color: JA.forest }}
+                  >
+                    <span className="grid h-[46px] w-[46px] flex-none place-items-center rounded-full" style={{ backgroundColor: JA.forest, color: JA.paper }}>
+                      <Icon className="h-6 w-6" aria-hidden="true" />
+                    </span>
+                    <span>{tx(step)}</span>
                   </li>
                 )
               })}
-            </ul>
+            </ol>
+            <div className="flex flex-wrap items-center gap-3">
+              <LineButton href={JUNIOR_ACADEMY_LINE_URL} label={c.start.cta} />
+              <a href={`tel:${BUSINESS_INFO.phoneRaw}`} className="font-semibold underline-offset-4 hover:underline" style={{ color: JA.forest }}>
+                {tx(`${c.start.callLead} ${BUSINESS_INFO.phone}`)}
+              </a>
+            </div>
           </div>
         </section>
-
-        {/* ── Price + CTA ── */}
-        <TornEdge color={JA.forest} seed={37} />
-        <PaperSection tone="forest" id="price">
-          <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-2xl font-extrabold uppercase italic md:text-3xl">{c.price.title}</h2>
-            <p
-              className="mx-auto mt-6 inline-block px-6 py-3 text-5xl font-black md:text-6xl"
-              style={{ backgroundColor: JA.forestDark, color: JA.sun, transform: 'rotate(-1deg)' }}
-            >
-              {c.price.amount}
-            </p>
-            <p className="mt-4 font-semibold" style={{ color: JA.lime }}>
-              {c.price.validity}
-            </p>
-            <p className="mt-1 text-xs text-white/70">{c.price.asOf}</p>
-            <ul className="mx-auto mt-8 max-w-xl space-y-3 text-left">
-              {c.price.items.map((item) => (
-                <li key={item} className="flex gap-3 leading-relaxed text-white/90">
-                  <CheckDot />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-10">
-              <LineButton label={c.price.cta} variant="lime" />
-            </div>
-            <p className="mt-4 text-sm text-white/80">{c.price.note}</p>
-          </div>
-        </PaperSection>
-        <TornEdge color={JA.forest} seed={41} flip />
-
-        {/* ── FAQ: always-visible Q&A (an accordion unmounts closed answers) ── */}
-        <PaperSection id="faq">
-          <CollageHeading lead={c.faq.title} suffix={c.faq.titleSuffix} />
-          <div className="mx-auto max-w-3xl space-y-4">
-            {c.faq.items.map((item) => (
-              <PaperCard key={item.question}>
-                <h3 className="mb-2 text-lg font-bold" style={{ color: JA.forest }}>
-                  {item.question}
-                </h3>
-                <p className="leading-relaxed">{renderFaqAnswer(item.answer, c.faqLinks)}</p>
-              </PaperCard>
-            ))}
-          </div>
-        </PaperSection>
 
         {/* ── Related ── */}
-        <section className="bg-white py-12 lg:py-16">
-          <div className="section-max-width section-padding text-center">
-            <h2 className="mb-6 text-xl font-bold uppercase tracking-wide" style={{ color: JA.forest }}>
-              {c.related.title}
-            </h2>
-            <ul className="flex flex-wrap items-center justify-center gap-3">
-              {c.related.links.map((link) => {
-                const className =
-                  'inline-block rounded-full border-2 px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-[#f4eee2]'
-                const style = { borderColor: JA.forest, color: JA.forest }
-                return (
-                  <li key={link.href}>
-                    {/* A locale-prefixed Link to a page this locale does not
-                        publish would 301 back to English, so such targets get
-                        a plain unprefixed link (the Footer's rule). */}
-                    {hasTranslationForLocale(locale, link.href) ? (
-                      <Link href={link.href as Parameters<typeof Link>[0]['href']} className={className} style={style}>
-                        {link.label}
-                      </Link>
-                    ) : (
-                      <RawLink href={`${link.href}/`} className={className} style={style}>
-                        {link.label}
-                      </RawLink>
-                    )}
-                  </li>
-                )
-              })}
-            </ul>
+        <nav aria-label={c.related.title} className="py-10">
+          <div className="mx-auto flex max-w-[1180px] flex-wrap items-center gap-x-5 gap-y-2 px-5 text-[15px]">
+            <span style={{ color: JA.muted }}>{c.related.title}:</span>
+            {c.related.links.map((link) => {
+              const className = 'font-semibold underline underline-offset-4'
+              const style = { color: JA.forest }
+              // A locale-prefixed Link to a page this locale does not publish
+              // would 301 back to English, so such targets get a plain
+              // unprefixed link (the Footer's rule).
+              return hasTranslationForLocale(locale, link.href) ? (
+                <Link key={link.href} href={link.href as Parameters<typeof Link>[0]['href']} className={className} style={style}>
+                  {link.label}
+                </Link>
+              ) : (
+                <RawLink key={link.href} href={`${link.href}/`} className={className} style={style}>
+                  {link.label}
+                </RawLink>
+              )
+            })}
           </div>
-        </section>
+        </nav>
       </div>
+
+      <StickyLineBar href={JUNIOR_ACADEMY_LINE_URL} label={c.hero.cta} heroCtaId={HERO_CTA_ID} endId={START_ID} />
     </>
+  )
+}
+
+function MinutesBadge({ label }: { label: string }) {
+  return (
+    <span
+      className="absolute right-[18px] top-[18px] rounded-full px-3 py-0.5 text-[15px] font-bold"
+      style={{ backgroundColor: JA.sun, color: JA.forest }}
+    >
+      {label}
+    </span>
   )
 }
