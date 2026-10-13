@@ -44,9 +44,11 @@
  *  10. UI-message namespace parity: a next-intl namespace consumed by
  *      translated SSG routes (SSG_UI_NAMESPACES below) is entirely missing
  *      from a locale's messages/<locale>.json. next-intl does NOT fail the
- *      build on this — it logs MISSING_MESSAGE per render and silently falls
- *      back to English (precedent: GolfCourseShared absent from ja/ko/zh,
- *      ~480 warnings/build, fixed in PR #78). The locales each namespace must
+ *      build on this — it logs MISSING_MESSAGE per render and the page shows
+ *      the literal dotted key path (i18n/request.ts loads one catalog with no
+ *      EN merge, so use-intl's default fallback applies; precedent:
+ *      GolfCourseShared absent from ja/ko/zh, ~480 warnings/build, fixed in
+ *      PR #78). The locales each namespace must
  *      cover are derived from the translated-route registry
  *      (lib/translated-routes.ts) — a mirror of the generateStaticParams
  *      data sources, kept in sync by smoke-test sections I/J.
@@ -66,7 +68,8 @@
  *   9. Price figures in an entry that carries no 'as of' marker anywhere.
  *  11. UI-message key gaps: the namespace exists in the locale catalog but
  *      individual keys present in messages/en.json are missing (each one is a
- *      MISSING_MESSAGE + English fallback at render time).
+ *      MISSING_MESSAGE at render time and shows the dotted key path, e.g.
+ *      "LessonsFaq.q16", as visible page text).
  *
  * Usage: npx tsx scripts/validate-i18n.ts
  */
@@ -1221,7 +1224,7 @@ runCorpusChecks(entries)
 // above; this covers the OTHER half of a translated page: the UI chrome strings
 // next-intl serves from messages/*.json. A namespace absent from a locale that
 // SSGs pages consuming it doesn't fail the build — every render logs
-// MISSING_MESSAGE and silently falls back to English.
+// MISSING_MESSAGE and renders the literal dotted key path as visible text.
 //
 // Allowlist of namespaces consumed by translated SSG routes, each mapped to
 // the registry helper whose registered paths prove a locale SSGs pages that
@@ -1264,8 +1267,8 @@ const SSG_UI_NAMESPACES: Record<string, Locale[]> = (() => {
   // The club spec sheet (/golf-club-specs). Like `hub` above it is a single
   // static path with no registry helper, so its SSG locales come straight from
   // the route registry — currently en + th. Registered here so the next EN-only
-  // key added to ClubSpecs fails CI instead of silently English-falling-back on
-  // the Thai sheet.
+  // key added to ClubSpecs fails CI instead of silently rendering a raw key path
+  // on the Thai sheet.
   const clubSpecs = LOCALES.filter((l) => hasTranslationForLocale(l, '/golf-club-specs'))
   // The /lessons FAQ accordion. Registered because raising `FAQ_COUNT` in
   // app/[locale]/lessons/page.tsx was, until this entry existed, an entirely
@@ -1289,8 +1292,8 @@ const SSG_UI_NAMESPACES: Record<string, Locale[]> = (() => {
   // guard. Closing it properly needs either a smoke assertion on the rendered
   // accordion or promoting ui-key-gap to ERROR for FAQ_COUNT-driven namespaces,
   // where a missing key is a visible defect rather than an untranslated string.
-  // (Note the WARN's own text says "English fallback at render", which is
-  // wrong for the same no-EN-merge reason — pre-existing, not fixed here.)
+  // (The WARN's own text used to say "English fallback at render", which was
+  // wrong for the same no-EN-merge reason; it now names the key-path render.)
   //
   // The same argument applies to every other FAQ_COUNT namespace; this is the
   // one the q15 batch exercised, so it is the one registered here rather than a
@@ -1372,7 +1375,7 @@ function checkNamespaceParity(
       const entryId = `messages/${locale}.json`
       if (!(ns in catalogs[locale])) {
         add('error', locale, entryId, ns, 'ui-namespace',
-          `namespace "${ns}" missing entirely — ${locale} SSG pages consuming it fall back to English (${enKeys.length} MISSING_MESSAGE per render)`)
+          `namespace "${ns}" missing entirely — ${locale} SSG pages consuming it render raw key paths (${enKeys.length} MISSING_MESSAGE per render)`)
         continue
       }
       const locKeys = new Set(flattenKeys(catalogs[locale][ns]))
@@ -1380,7 +1383,7 @@ function checkNamespaceParity(
       if (gaps.length > 0) {
         const shown = gaps.slice(0, 5).join(', ')
         add('warn', locale, entryId, ns, 'ui-key-gap',
-          `${gaps.length} key(s) in en.json missing here (English fallback at render): ${shown}${gaps.length > 5 ? ', …' : ''}`)
+          `${gaps.length} key(s) in en.json missing here (rendered as the literal key path): ${shown}${gaps.length > 5 ? ', …' : ''}`)
       }
     }
   }
