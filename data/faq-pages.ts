@@ -1383,7 +1383,7 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/faq/do-i-need-experience-to-play-golf-simulator', '/lessons', '/faq/best-way-to-learn-golf-in-bangkok'],
     created_at: now,
-    updated_at: '2026-10-11T00:00:00.000Z',
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       answer_intro:
         '子どもでもゴルフシミュレーターで遊べます。しかも、ほとんどの子が夢中になります。4歳以上であれば、たいていはジュニア用クラブを十分に振れて、この体験を楽しめるでしょう。画面に描かれる弾道、すぐ出るスコア、ゲームのような形式と、実際のゴルフ場よりも子どもを引きつける要素が揃っているのです。LENGOLFは営業時間中いつでもご家族を歓迎しており、体の小さい方向けの軽いクラブもご用意しています。',
@@ -1432,7 +1432,7 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/faq/do-i-need-experience-to-play-golf-simulator', '/lessons', '/faq/best-way-to-learn-golf-in-bangkok'],
     created_at: now,
-    updated_at: '2026-10-11T00:00:00.000Z',
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       answer_intro:
         '아이도 골프 시뮬레이터를 칠 수 있고, 대부분 아주 좋아해요. 4세 이상이면 대체로 주니어 클럽을 휘둘러 충분히 즐길 수 있어요. 화면에 그려지는 볼 비행, 바로 나오는 스코어, 게임 같은 진행 방식 덕분에 아이에게는 실제 골프장보다 시뮬레이터가 훨씬 재미있어요. LENGOLF는 영업시간 내내 가족 손님을 환영하고, 체구가 작은 플레이어에게 맞는 가벼운 클럽도 갖추고 있어요.',
@@ -1480,7 +1480,7 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/faq/do-i-need-experience-to-play-golf-simulator', '/faq/best-way-to-learn-golf-in-bangkok', '/lessons'],
     created_at: now,
-    updated_at: '2026-10-11T00:00:00.000Z',
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       answer_intro:
         '可以，而且多数小朋友都很喜欢。4岁以上的孩子大多已经能把儿童球杆挥起来，足够享受这项活动。动画呈现的球飞行轨迹、即时计分和游戏化的形式，让模拟器对孩子的吸引力比真实球场更大。LENGOLF在营业时间内全天欢迎家庭客人，也备有适合小球员的轻量球杆。',
