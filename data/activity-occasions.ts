@@ -818,7 +818,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
         },
         {
           heading: 'What Is Included in a Birthday Party Booking',
-          body: "**The bays.** Four Bravo golf simulators with club sets provided, so no guest has to bring anything. Five players fit in a bay, which is what makes a party of 20 workable: the group splits across bays and rotates rather than queueing behind one screen.\n\n**The food.** A catered spread from Smith & Co, served straight to the bay. The Small Package covers burgers, sliders, calamari, sandos (crab or shrimp ebiko), crispy chicken, pulled pork, fries, and a salad. The Medium Package roughly doubles that and adds large pizzas.\n\n**The drinks.** Bottled beer and cocktails come with the package (10 and 5 on the Small, 20 and 10 on the Medium), unlimited soft drinks run throughout, and the full bar stays open for anything beyond the allocation.\n\n**The room.** The Medium Package is an exclusive full-venue rental: no other customers in the space for those three hours. Decorations, a sound system, and a DJ setup can be added on.\n\n**The staff.** Staff set up the simulators and run the games, so the person whose birthday it is (or the friend organising it) is not the one explaining the software to 20 people.",
+          body: "**The bays.** Four Bravo golf simulators with club sets provided, so no guest has to bring anything. Five players fit in a bay, which is what makes a party of 20 workable: the group splits across bays and rotates rather than queueing behind one screen.\n\n**The food.** A catered spread from Smith & Co, served straight to the bay. The Small Package covers burgers, sliders, calamari, sandos (pulled pork or shrimp ebiko), crispy chicken, fries, and a salad. The Medium Package roughly doubles that and adds large pizzas.\n\n**The drinks.** Bottled beer and cocktails come with the package (10 and 5 on the Small, 20 and 10 on the Medium), unlimited soft drinks run throughout, and the full bar stays open for anything beyond the allocation.\n\n**The room.** The Medium Package is an exclusive full-venue rental: no other customers in the space for those three hours. Decorations, a sound system, and a DJ setup can be added on.\n\n**The staff.** Staff set up the simulators and run the games, so the person whose birthday it is (or the friend organising it) is not the one explaining the software to 20 people.",
         },
         {
           heading: 'Food and Drinks for a Birthday Party',
@@ -925,7 +925,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
         },
         {
           heading: 'สิ่งที่รวมอยู่ในการจองปาร์ตี้วันเกิด',
-          body: '**เบย์** ซิมูเลเตอร์ Bravo Golf 4 เบย์ พร้อมชุดไม้กอล์ฟให้ใช้ แขกจึงไม่ต้องเตรียมอะไรมาเอง เบย์หนึ่งรองรับผู้เล่นได้ 5 คน ซึ่งเป็นเหตุผลที่งาน 20 คนจัดได้จริง กลุ่มจะกระจายกันไปตามเบย์และสลับกันเล่น แทนที่จะต้องต่อแถวรอหน้าจอเดียว\n\n**อาหาร** อาหารจัดเลี้ยงจาก Smith & Co เสิร์ฟถึงเบย์ Small Package มีเบอร์เกอร์ สไลเดอร์ ปลาหมึกทอด แซนโด ปูหรือกุ้งเอบิโกะ ไก่ทอดกรอบ พูลด์พอร์ค เฟรนช์ฟรายส์ และสลัด ส่วน Medium Package เพิ่มปริมาณขึ้นราวเท่าตัวและเพิ่มพิซซ่าถาดใหญ่\n\n**เครื่องดื่ม** เบียร์ขวดและค็อกเทลรวมอยู่ในแพ็กเกจ (10 ขวดกับ 5 แก้วสำหรับ Small และ 20 ขวดกับ 10 แก้วสำหรับ Medium) น้ำอัดลมไม่อั้นตลอดงาน และบาร์เปิดให้สั่งเพิ่มได้ตลอดสำหรับส่วนที่เกินจากแพ็กเกจ\n\n**พื้นที่** Medium Package เป็นการเหมาทั้งร้านแบบส่วนตัว ไม่มีลูกค้ากลุ่มอื่นในพื้นที่ตลอด 3 ชั่วโมงนั้น ของตกแต่ง ระบบเสียง และชุดดีเจสั่งเพิ่มได้\n\n**ทีมงาน** ทีมงานเป็นคนตั้งค่าซิมูเลเตอร์และดำเนินเกมให้ เจ้าของวันเกิด (หรือเพื่อนที่รับหน้าที่จัดงาน) จึงไม่ต้องมาคอยอธิบายวิธีใช้โปรแกรมให้คน 20 คนฟัง',
+          body: '**เบย์** ซิมูเลเตอร์ Bravo Golf 4 เบย์ พร้อมชุดไม้กอล์ฟให้ใช้ แขกจึงไม่ต้องเตรียมอะไรมาเอง เบย์หนึ่งรองรับผู้เล่นได้ 5 คน ซึ่งเป็นเหตุผลที่งาน 20 คนจัดได้จริง กลุ่มจะกระจายกันไปตามเบย์และสลับกันเล่น แทนที่จะต้องต่อแถวรอหน้าจอเดียว\n\n**อาหาร** อาหารจัดเลี้ยงจาก Smith & Co เสิร์ฟถึงเบย์ Small Package มีเบอร์เกอร์ สไลเดอร์ ปลาหมึกทอด แซนโด พูลด์พอร์คหรือกุ้งเอบิโกะ ไก่ทอดกรอบ เฟรนช์ฟรายส์ และสลัด ส่วน Medium Package เพิ่มปริมาณขึ้นราวเท่าตัวและเพิ่มพิซซ่าถาดใหญ่\n\n**เครื่องดื่ม** เบียร์ขวดและค็อกเทลรวมอยู่ในแพ็กเกจ (10 ขวดกับ 5 แก้วสำหรับ Small และ 20 ขวดกับ 10 แก้วสำหรับ Medium) น้ำอัดลมไม่อั้นตลอดงาน และบาร์เปิดให้สั่งเพิ่มได้ตลอดสำหรับส่วนที่เกินจากแพ็กเกจ\n\n**พื้นที่** Medium Package เป็นการเหมาทั้งร้านแบบส่วนตัว ไม่มีลูกค้ากลุ่มอื่นในพื้นที่ตลอด 3 ชั่วโมงนั้น ของตกแต่ง ระบบเสียง และชุดดีเจสั่งเพิ่มได้\n\n**ทีมงาน** ทีมงานเป็นคนตั้งค่าซิมูเลเตอร์และดำเนินเกมให้ เจ้าของวันเกิด (หรือเพื่อนที่รับหน้าที่จัดงาน) จึงไม่ต้องมาคอยอธิบายวิธีใช้โปรแกรมให้คน 20 คนฟัง',
         },
         {
           heading: 'อาหารและเครื่องดื่มสำหรับปาร์ตี้วันเกิด',
@@ -1034,7 +1034,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
         },
         {
           heading: '誕生日パーティーの予約に含まれるもの',
-          body: '**ベイ。** Bravo Golfシミュレーターが4台、クラブセットもご用意しているので、ゲストは手ぶらで来られます。1ベイに5名入れるため、20名規模でも成立します。1画面の後ろに全員が並ぶのではなく、グループがベイに分かれて交代していく形です。\n\n**料理。** Smith & Coのケータリングを、ベイまで直接お運びします。Smallパッケージはバーガー、スライダー、カラマリ、サンド、カニまたはエビのエビコ、クリスピーチキン、プルドポーク、フライドポテト、サラダ。Mediumパッケージはこれをおよそ倍にし、ラージピザが加わります。\n\n**ドリンク。** 瓶ビールとカクテルがパッケージに含まれ（Smallは10杯と5杯、Mediumは20杯と10杯）、ソフトドリンクは時間内飲み放題。含まれる分を超えたご注文にも、フルバーが最後まで開いています。\n\n**空間。** Mediumパッケージは全館貸切で、その3時間はほかのお客様が入りません。装飾、音響設備、DJ機材はオプションで追加できます。\n\n**スタッフ。** シミュレーターの設定とゲームの進行はスタッフが担当します。主役の方も、幹事の方も、20名にソフトの使い方を説明する係にはなりません。',
+          body: '**ベイ。** Bravo Golfシミュレーターが4台、クラブセットもご用意しているので、ゲストは手ぶらで来られます。1ベイに5名入れるため、20名規模でも成立します。1画面の後ろに全員が並ぶのではなく、グループがベイに分かれて交代していく形です。\n\n**料理。** Smith & Coのケータリングを、ベイまで直接お運びします。Smallパッケージはバーガー、スライダー、カラマリ、サンド、プルドポークまたはエビのエビコ、クリスピーチキン、フライドポテト、サラダ。Mediumパッケージはこれをおよそ倍にし、ラージピザが加わります。\n\n**ドリンク。** 瓶ビールとカクテルがパッケージに含まれ（Smallは10杯と5杯、Mediumは20杯と10杯）、ソフトドリンクは時間内飲み放題。含まれる分を超えたご注文にも、フルバーが最後まで開いています。\n\n**空間。** Mediumパッケージは全館貸切で、その3時間はほかのお客様が入りません。装飾、音響設備、DJ機材はオプションで追加できます。\n\n**スタッフ。** シミュレーターの設定とゲームの進行はスタッフが担当します。主役の方も、幹事の方も、20名にソフトの使い方を説明する係にはなりません。',
         },
         {
           heading: '誕生日パーティーの料理とドリンク',
@@ -1142,7 +1142,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
         },
         {
           heading: '생일 파티 예약에 포함되는 것',
-          body: '**베이.** Bravo 골프 시뮬레이터 4대에 클럽 세트가 함께 제공돼서 손님이 따로 챙겨 올 게 없어요. 베이 하나에 5명이 들어가는데, 20명 파티가 굴러가는 이유가 여기 있어요. 화면 하나 뒤에 줄을 서는 대신 여러 베이로 나뉘어 돌아가며 치거든요.\n\n**음식.** Smith & Co에서 케이터링한 음식을 베이까지 가져다줘요. 스몰 패키지에는 버거, 슬라이더, 칼라마리, 산도, 크랩 또는 새우 에비코, 크리스피 치킨, 풀드 포크, 감자튀김, 샐러드가 들어가요. 미디엄 패키지는 그 구성을 대략 두 배로 늘리고 라지 피자가 추가돼요.\n\n**음료.** 병맥주와 칵테일이 패키지에 포함되고(스몰은 10병과 5잔, 미디엄은 20병과 10잔), 소프트드링크는 내내 무제한이며, 포함량을 넘어서는 주문은 바에서 계속 받아요.\n\n**공간.** 미디엄 패키지는 단독 대관이라 그 3시간 동안 다른 손님이 들어오지 않아요. 데코레이션과 사운드 시스템, DJ 세팅은 추가로 붙일 수 있어요.\n\n**스태프.** 시뮬레이터 세팅과 게임 진행을 스태프가 맡아요. 생일 주인공이나 자리를 준비한 친구가 스무 명에게 조작법을 설명하고 있을 일은 없어요.',
+          body: '**베이.** Bravo 골프 시뮬레이터 4대에 클럽 세트가 함께 제공돼서 손님이 따로 챙겨 올 게 없어요. 베이 하나에 5명이 들어가는데, 20명 파티가 굴러가는 이유가 여기 있어요. 화면 하나 뒤에 줄을 서는 대신 여러 베이로 나뉘어 돌아가며 치거든요.\n\n**음식.** Smith & Co에서 케이터링한 음식을 베이까지 가져다줘요. 스몰 패키지에는 버거, 슬라이더, 칼라마리, 산도, 풀드 포크 또는 새우 에비코, 크리스피 치킨, 감자튀김, 샐러드가 들어가요. 미디엄 패키지는 그 구성을 대략 두 배로 늘리고 라지 피자가 추가돼요.\n\n**음료.** 병맥주와 칵테일이 패키지에 포함되고(스몰은 10병과 5잔, 미디엄은 20병과 10잔), 소프트드링크는 내내 무제한이며, 포함량을 넘어서는 주문은 바에서 계속 받아요.\n\n**공간.** 미디엄 패키지는 단독 대관이라 그 3시간 동안 다른 손님이 들어오지 않아요. 데코레이션과 사운드 시스템, DJ 세팅은 추가로 붙일 수 있어요.\n\n**스태프.** 시뮬레이터 세팅과 게임 진행을 스태프가 맡아요. 생일 주인공이나 자리를 준비한 친구가 스무 명에게 조작법을 설명하고 있을 일은 없어요.',
         },
         {
           heading: '생일 파티 음식과 음료',
@@ -1251,7 +1251,7 @@ export const activityOccasionPages: ActivityOccasionSeoPage[] = [
         },
         {
           heading: '生日派对预订包含哪些内容',
-          body: '**球位。** 4个Bravo高尔夫模拟器，现场提供球杆套装，客人什么都不用带。一个球位可容纳5人，这也是20人的派对能顺利进行的关键：人群分散到各个球位轮流上场，而不是全部排在同一块屏幕后面。\n\n**餐食。** 由Smith & Co出品的分享式餐点，直接送到球位。小型套餐包含汉堡、迷你汉堡、炸鱿鱼、日式三明治、蟹肉或鲜虾ebiko、香脆炸鸡、手撕猪肉、薯条和一份沙拉。中型套餐的分量大致翻倍，并增加大号披萨。\n\n**酒水。** 套餐含瓶装啤酒与鸡尾酒（小型10瓶加5杯，中型20瓶加10杯），软饮全程无限畅饮，超出配额的部分可以继续在吧台点单，吧台全程开放。\n\n**场地。** 中型套餐是整场包场：这3小时里场内不会有其他客人。装饰、音响系统和DJ设备可以另行加购。\n\n**服务人员。** 由店员负责设置模拟器并主持游戏，所以寿星本人（或者那位负责张罗的朋友）不必再向20个人讲解软件怎么用。',
+          body: '**球位。** 4个Bravo高尔夫模拟器，现场提供球杆套装，客人什么都不用带。一个球位可容纳5人，这也是20人的派对能顺利进行的关键：人群分散到各个球位轮流上场，而不是全部排在同一块屏幕后面。\n\n**餐食。** 由Smith & Co出品的分享式餐点，直接送到球位。小型套餐包含汉堡、迷你汉堡、炸鱿鱼、日式三明治、手撕猪肉或鲜虾ebiko、香脆炸鸡、薯条和一份沙拉。中型套餐的分量大致翻倍，并增加大号披萨。\n\n**酒水。** 套餐含瓶装啤酒与鸡尾酒（小型10瓶加5杯，中型20瓶加10杯），软饮全程无限畅饮，超出配额的部分可以继续在吧台点单，吧台全程开放。\n\n**场地。** 中型套餐是整场包场：这3小时里场内不会有其他客人。装饰、音响系统和DJ设备可以另行加购。\n\n**服务人员。** 由店员负责设置模拟器并主持游戏，所以寿星本人（或者那位负责张罗的朋友）不必再向20个人讲解软件怎么用。',
         },
         {
           heading: '生日派对的餐食与酒水',
