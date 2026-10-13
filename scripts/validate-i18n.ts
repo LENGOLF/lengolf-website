@@ -217,7 +217,7 @@ interface Unit {
 function explainerUnits(locale: Locale, entryId: string, title: string, meta: string | null, c: ExplainerContent): Unit[] {
   const u: Unit[] = []
   const push = (field: string, value: string | null | undefined) => {
-    if (typeof value === 'string' && value.length > 0) u.push({ locale, entryId, field, value })
+    if (typeof value === 'string') u.push({ locale, entryId, field, value })
   }
   push('title', title)
   push('meta_description', meta)
@@ -242,7 +242,7 @@ function explainerUnits(locale: Locale, entryId: string, title: string, meta: st
 function faqUnits(locale: Locale, entryId: string, title: string, meta: string | null, c: FaqContent): Unit[] {
   const u: Unit[] = []
   const push = (field: string, value: string | null | undefined) => {
-    if (typeof value === 'string' && value.length > 0) u.push({ locale, entryId, field, value })
+    if (typeof value === 'string') u.push({ locale, entryId, field, value })
   }
   push('title', title)
   push('meta_description', meta)
@@ -272,12 +272,14 @@ const uiCatalogs = Object.fromEntries(
 // `uiChrome` marks the messages/*.json corpus. Those entries run the ERROR
 // checks (1-6) but NOT the WARN checks (7/8/9) — see the corpus block below for
 // why date-scoping and currency-convention rules don't transfer to microcopy.
-const entries: { entryId: string; locale: Locale; units: Unit[]; uiChrome?: true }[] = []
+type Entry = { entryId: string; locale: Locale; units: Unit[]; uiChrome?: true; corpus?: string }
+const entries: Entry[] = []
 
 for (const page of explainerPages) {
   if (!LOCALES.includes(page.locale as Locale)) continue
   const locale = page.locale as Locale
   entries.push({
+    corpus: 'explainer',
     entryId: page.id,
     locale,
     units: explainerUnits(locale, page.id, page.title, page.meta_description, page.content),
@@ -288,6 +290,7 @@ for (const page of faqPages) {
   if (!LOCALES.includes(page.locale as Locale)) continue
   const locale = page.locale as Locale
   entries.push({
+    corpus: 'faq',
     entryId: page.id,
     locale,
     units: faqUnits(locale, page.id, page.title, page.meta_description, page.content),
@@ -301,6 +304,7 @@ for (const [tier, byLocale] of Object.entries(PRICE_TIER_I18N)) {
     const locale = loc as Locale
     const entryId = `tier:${tier}:${locale}`
     entries.push({
+      corpus: 'tier',
       entryId,
       locale,
       units: [
@@ -317,10 +321,11 @@ for (const [tier, byLocale] of Object.entries(PRICE_TIER_I18N)) {
 // prose (including the LENGOLF-scoped honesty sentences) reach readers; it
 // was outside this corpus and shipped unlinted. Flattened generically so a
 // new FaqHubContent field is covered without touching this loop.
-for (const locale of LOCALES) {
+/** The faq-hub entry for one locale. A function so --self-test can hand it a '' leaf. */
+function faqHubEntry(locale: Locale, content: unknown): Entry | null {
   const entryId = `faqhub:${locale}`
   const leaves: Array<[string, string]> = []
-  flattenMessages(getFaqHubContent(locale), '', leaves)
+  flattenMessages(content, '', leaves, true)
   // browseBuckets[].categories are machine slugs matched against FAQ page
   // data, and faqLinks hrefs are URLs — neither is prose, so linting them
   // would fire the brand-immutable and terminology checks on identifiers.
@@ -331,7 +336,11 @@ for (const locale of LOCALES) {
   const units = leaves
     .filter(([field]) => !/\.categories\[|^faqLinks\./.test(field))
     .map(([field, value]) => ({ locale, entryId, field, value }))
-  if (units.length > 0) entries.push({ entryId, locale, units })
+  return units.length > 0 ? { corpus: 'faq-hub', entryId, locale, units } : null
+}
+for (const locale of LOCALES) {
+  const entry = faqHubEntry(locale, getFaqHubContent(locale))
+  if (entry) entries.push(entry)
 }
 
 // At least one character of the locale's own script: a string with none has
@@ -838,13 +847,33 @@ for (const locale of LOCALES) {
 // `suggested_itinerary[].time` is a clock reading ("2:00 PM") that the /hotels
 // batch deliberately keeps as the same instant in every locale.
 const NON_PROSE_SEO_FIELD_RE =
-  /^occasion_type$|^last_verified$|^curated_reviews\[|^list_items\[\d+\]\.(address|website)$|^google_maps_embed$|^suggested_itinerary\[\d+\]\.time$/
+  /^occasion_type$|^last_verified$|^curated_reviews\[|^list_items\[\d+\]\.(address|website)$|^google_maps_embed$|^suggested_itinerary\[\d+\]\.time$|^(other|nearby)_activities\[\d+\]\.type$/
 // `hotel` was imported for the SSG-namespace check but never added here, so the
 // 48 /hotels translations shipped in PR #90 got ZERO house-style checking — no
 // emoji, exclamation, full-width-digit, terminology or brand-casing gate — on
 // the one section that also shipped without native-language QA. Verified by
 // injection: an emoji + `！` in a ja hotel `area_guide` passed clean before this
 // line and fails after it.
+/** One SEO-section page as an entry. A function so --self-test can hand it a '' leaf. */
+function seoPageEntry(
+  label: string,
+  page: { id: string; locale: string; title: string; meta_description?: string | null; content: unknown }
+): Entry | null {
+  const locale = page.locale as Locale
+  const entryId = `${label}:${page.id}`
+  const leaves: Array<[string, string]> = []
+  flattenMessages(page.content, '', leaves, true)
+  const units = [
+    { locale, entryId, field: 'title', value: page.title },
+    ...(typeof page.meta_description === 'string'
+      ? [{ locale, entryId, field: 'meta_description', value: page.meta_description }]
+      : []),
+    ...leaves
+      .filter(([field]) => !NON_PROSE_SEO_FIELD_RE.test(field))
+      .map(([field, value]) => ({ locale, entryId, field, value })),
+  ]
+  return units.length > 0 ? { corpus: label, entryId, locale, units } : null
+}
 for (const [label, pages] of [
   ['cost', priceGuidePages],
   ['activity', activityOccasionPages],
@@ -853,20 +882,8 @@ for (const [label, pages] of [
 ] as const) {
   for (const page of pages) {
     if (!LOCALES.includes(page.locale as Locale)) continue
-    const locale = page.locale as Locale
-    const entryId = `${label}:${page.id}`
-    const leaves: Array<[string, string]> = []
-    flattenMessages(page.content, '', leaves)
-    const units = [
-      { locale, entryId, field: 'title', value: page.title },
-      ...(page.meta_description
-        ? [{ locale, entryId, field: 'meta_description', value: page.meta_description }]
-        : []),
-      ...leaves
-        .filter(([field]) => !NON_PROSE_SEO_FIELD_RE.test(field))
-        .map(([field, value]) => ({ locale, entryId, field, value })),
-    ]
-    if (units.length > 0) entries.push({ entryId, locale, units })
+    const entry = seoPageEntry(label, page)
+    if (entry) entries.push(entry)
   }
 }
 
@@ -877,6 +894,7 @@ for (const [region, byLocale] of Object.entries(REGION_HUB_I18N)) {
     const locale = loc as Locale
     const entryId = `hub:${region}:${locale}`
     entries.push({
+      corpus: 'hub',
       entryId,
       locale,
       units: [
@@ -1015,34 +1033,43 @@ for (const region of readdirSync(COURSES_ROOT)) {
 // Running them here would have added ~200 standing warnings to every CI run,
 // which is how a linter teaches people to ignore it.
 /** Recursively flatten a namespace object into dotted-path leaf strings. */
-function flattenMessages(node: unknown, prefix: string, out: Array<[string, string]>): void {
+// `keepEmpty` keeps '' leaves. Off by default: the key-parity checks compare key
+// SETS and must not change. On for the corpora the own-script rule (check 13)
+// judges, because a rule that cannot see '' cannot report it.
+function flattenMessages(node: unknown, prefix: string, out: Array<[string, string]>, keepEmpty = false): void {
   if (typeof node === 'string') {
-    if (node.length > 0) out.push([prefix, node])
+    if (keepEmpty || node.length > 0) out.push([prefix, node])
     return
   }
   if (Array.isArray(node)) {
-    node.forEach((v, i) => flattenMessages(v, `${prefix}[${i}]`, out))
+    node.forEach((v, i) => flattenMessages(v, `${prefix}[${i}]`, out, keepEmpty))
     return
   }
   if (node && typeof node === 'object') {
     for (const [k, v] of Object.entries(node as Record<string, unknown>)) {
-      flattenMessages(v, prefix ? `${prefix}.${k}` : k, out)
+      flattenMessages(v, prefix ? `${prefix}.${k}` : k, out, keepEmpty)
     }
   }
 }
 
+/** One messages/<locale>.json namespace as an entry. A function so --self-test can hand it a '' leaf. */
+function messagesEntry(locale: Locale, namespace: string, body: unknown): Entry | null {
+  const leaves: Array<[string, string]> = []
+  flattenMessages(body, '', leaves, true)
+  if (leaves.length === 0) return null
+  const entryId = `messages:${locale}:${namespace}`
+  return {
+    corpus: 'messages',
+    entryId,
+    locale,
+    uiChrome: true,
+    units: leaves.map(([field, value]) => ({ locale, entryId, field, value })),
+  }
+}
 for (const locale of LOCALES) {
   for (const [namespace, body] of Object.entries(uiCatalogs[locale])) {
-    const leaves: Array<[string, string]> = []
-    flattenMessages(body, '', leaves)
-    if (leaves.length === 0) continue
-    const entryId = `messages:${locale}:${namespace}`
-    entries.push({
-      entryId,
-      locale,
-      uiChrome: true,
-      units: leaves.map(([field, value]) => ({ locale, entryId, field, value })),
-    })
+    const entry = messagesEntry(locale, namespace, body)
+    if (entry) entries.push(entry)
   }
 }
 
@@ -1434,6 +1461,264 @@ function checkHonesty(unit: Unit) {
   }
 }
 
+// ── Check 13: own-script + non-blank rule ───────────────────────────────────
+// checkScript (check 6) asks "is this string in ANOTHER script?" and ignores
+// Latin, so an English string, a whitespace-only string or '' in a non-EN slot
+// lints clean (measured 2026-10-13: an English th `ctaSubtitle` in
+// data/faq-hub.ts and a whitespace-only `Nav.juniorAcademy` in messages/th.json
+// each exit 0 from the gate and from --self-test). Check 12(d) and
+// checkJuniorAcademyLeaves close that for two corpora; this closes it for the
+// rest. Every unit of OWN_SCRIPT_CORPORA is judged, in this order:
+//   1. blank or whitespace-only: ERROR unless BLANK_RULES names the path
+//   2. no letters once ICU/{{token}} placeholders and the unit tokens THB/km/m
+//      are removed (numerals, dashes, '#', '9:00-23:00', '{km}km'): pass
+//   3. carries the locale's own script (NATIVE_SCRIPT): pass
+//   4. otherwise ERROR unless an OWN_SCRIPT_RULES entry covers the path
+// plus, for ja alone, a tell for simplified-Chinese characters (below).
+// Scope is the units each corpus already builds, so "prose" has one definition;
+// course:* (validate:course-slots) and junior:* (checkJuniorAcademyLeaves)
+// carry no `corpus` tag and are not judged here.
+const OWN_SCRIPT_CORPORA: ReadonlySet<string> = new Set([
+  'explainer', 'faq', 'faq-hub', 'tier', 'hub', 'cost', 'activity', 'best', 'hotel', 'messages',
+])
+
+/**
+ * `name`  : a proper name or label the page prints in Latin in every locale
+ *           (venue, hotel, restaurant, airline, credential). Guarded: at most
+ *           NAME_MAX_WORDS words and no sentence punctuation, so an English
+ *           SENTENCE pasted into a name slot still fails.
+ * `latin` : other Latin-by-design copy (brand lockups, product names, package
+ *           labels, the language switcher's own-language names).
+ * `dead`  : copy that never renders in that locale (see the Home/HomeFaq/
+ *           SecondHandClubs note in CLAUDE.md). Untranslated ON PURPOSE.
+ * `todo`  : genuinely untranslated copy that renders today. Allowlisted so this
+ *           rule can land without a copy change; each is a native-QA follow-up.
+ *
+ * `path` is the full leaf path (messages: Namespace.key) with indices written
+ * `[]`; a trailing `.*` covers everything under a prefix. `locales` omitted
+ * means all four; `entry` pins one entryId (explainer pages). A rule with no
+ * `*` and no `[]` is EXACT: it is an ERROR if its leaf now carries script in a
+ * covered locale (unused exemption). Any rule that matches no script-less leaf
+ * at all is an ERROR (stale), so the list cannot rot into a free pass.
+ *
+ * KNOWN LIMIT: a rule covers whatever Latin text its path holds. The `name`
+ * guard bounds that to a short phrase; native QA still reads the rest.
+ */
+interface OwnScriptRule {
+  corpus: string
+  path: string
+  kind: 'name' | 'latin' | 'dead' | 'todo'
+  reason: string
+  locales?: readonly Locale[]
+  entry?: string
+}
+/** A leaf that is deliberately '' in a locale. Stale or no-longer-blank is an ERROR. */
+interface BlankRule { corpus: string; path: string; locale: Locale; reason: string }
+
+const NAME_MAX_WORDS = 12
+
+const BLANK_RULES: readonly BlankRule[] = [
+  { corpus: 'messages', locale: 'th', path: 'CourseClubRental.contactLanguageNote', reason: 'the page passes null for en/th; EN is "" too' },
+  { corpus: 'messages', locale: 'ja', path: 'AboutUs.contactTitleSuffix', reason: 'ja carries the whole heading in contactTitle; EN splits it GET IN / TOUCH' },
+]
+
+const OWN_SCRIPT_RULES: readonly OwnScriptRule[] = [
+  // ── data/*-pages.ts: names the pages print in Latin in every locale ──
+  { corpus: 'activity', kind: 'name', path: 'other_activities[].name', reason: 'venue and attraction names' },
+  { corpus: 'best', kind: 'name', path: 'list_items[].name', reason: 'venue names' },
+  { corpus: 'cost', kind: 'name', path: 'venue_comparison.venues[].name', reason: 'competitor venue names' },
+  { corpus: 'cost', kind: 'name', path: 'venue_comparison.venues[].tech', reason: 'simulator brands (Trackman, Bravo)' },
+  { corpus: 'cost', kind: 'name', path: 'venue_comparison.venues[].location', reason: 'street and BTS names' },
+  { corpus: 'cost', kind: 'name', path: 'price_breakdown[].item', locales: ['ja', 'zh'], reason: 'venue name in the item label (the " - " is the code delimiter)' },
+  { corpus: 'hotel', kind: 'name', path: 'hotel_name', reason: 'hotel names' },
+  { corpus: 'hotel', kind: 'name', path: 'nearby_activities[].name', reason: 'attraction names' },
+  { corpus: 'hotel', kind: 'name', path: 'nearby_restaurants[].name', reason: 'restaurant names' },
+  { corpus: 'explainer', kind: 'name', path: 'comparison_table[].feature', locales: ['th'], entry: 'gg-golf-club-baggage-fees-airlines-bangkok-th', reason: 'airline names' },
+  { corpus: 'hotel', kind: 'todo', path: 'hotel_neighbourhood', locales: ['ja', 'ko', 'zh'], reason: 'renders on /hotels/ in English; th is translated. Native-QA follow-up' },
+
+  // ── messages/*.json: Latin by design ──
+  { corpus: 'messages', kind: 'latin', path: 'Common.lineAtLengolf', reason: 'LINE @lengolf handle' },
+  { corpus: 'messages', kind: 'latin', path: 'CourseClubRental.contactLineLabel', reason: 'LINE' },
+  { corpus: 'messages', kind: 'latin', path: 'LanguageSwitcher.en', reason: 'EN' },
+  { corpus: 'messages', kind: 'latin', path: 'LanguageSwitcher.th', reason: 'TH' },
+  { corpus: 'messages', kind: 'latin', path: 'LanguageSwitcher.ja', locales: ['ko'], reason: 'each locale shows the other languages in their own script (the ja entry is Japanese, not Korean)' },
+  { corpus: 'messages', kind: 'latin', path: 'LanguageSwitcher.zh', locales: ['ko'], reason: 'as above (the zh entry is Chinese)' },
+  { corpus: 'messages', kind: 'latin', path: 'LanguageSwitcher.ko', locales: ['ja', 'zh'], reason: 'as above (the ko entry is Korean)' },
+  { corpus: 'messages', kind: 'latin', path: 'ActivityPage.colLengolf', reason: 'brand column header' },
+  { corpus: 'messages', kind: 'latin', path: 'Blog.faqTitleSuffix', locales: ['ja', 'ko', 'zh'], reason: 'FAQ' },
+  { corpus: 'messages', kind: 'latin', path: 'AboutUs.stat1Value', locales: ['ja', 'ko', 'zh'], reason: 'Est. 2024' },
+  { corpus: 'messages', kind: 'latin', path: 'ClubRental.stat3Value', reason: 'Callaway' },
+  { corpus: 'messages', kind: 'latin', path: 'ClubRental.tier2Brand', reason: 'Callaway Warbird and REVA' },
+  { corpus: 'messages', kind: 'latin', path: 'ClubRental.tier3Brand', reason: 'Callaway Paradym Forged Carbon' },
+  { corpus: 'messages', kind: 'latin', path: 'ClubRental.whyChooseTitleSuffix', locales: ['th', 'zh'], reason: 'LENGOLF' },
+  { corpus: 'messages', kind: 'latin', path: 'ClubSpecs.colFlex', locales: ['th'], reason: 'Flex, the shaft term' },
+  { corpus: 'messages', kind: 'latin', path: 'CourseClubRental.premiumName', reason: 'Callaway Paradym Forged Carbon' },
+  { corpus: 'messages', kind: 'latin', path: 'CourseClubRental.sets.premium-mens-warbird.name', reason: 'Callaway Warbird' },
+  { corpus: 'messages', kind: 'latin', path: 'CourseClubRental.sets.premium-womens-reva.name', reason: 'Callaway REVA' },
+  { corpus: 'messages', kind: 'latin', path: 'Events.amenitiesTitleSuffix', locales: ['th'], reason: 'LENGOLF' },
+  { corpus: 'messages', kind: 'latin', path: 'Events.stat3Value', reason: 'BTS' },
+  { corpus: 'messages', kind: 'latin', path: 'ExplainerPage.pathLabels.junior-golf-academy', locales: ['ja', 'ko', 'zh'], reason: 'program name printed in Latin; th is translated' },
+  { corpus: 'messages', kind: 'latin', path: 'Nav.juniorAcademy', locales: ['ja', 'ko', 'zh'], reason: 'program name printed in Latin; th is translated' },
+  { corpus: 'messages', kind: 'latin', path: 'Golf.aiLabTitle', reason: 'LENGOLF AI Lab, the product name' },
+  { corpus: 'messages', kind: 'latin', path: 'GolfCourseDetail.googleMaps', locales: ['th'], reason: 'Google Maps' },
+  { corpus: 'messages', kind: 'latin', path: 'Home.whyLengolfTitleSuffix', locales: ['th', 'ja'], reason: 'LENGOLF' },
+  { corpus: 'messages', kind: 'latin', path: 'HomeKo.servicesTitle', locales: ['ko'], reason: 'LENGOLF' },
+  { corpus: 'messages', kind: 'latin', path: 'HomeZh.servicesTitle', locales: ['zh'], reason: 'LENGOLF' },
+  { corpus: 'messages', kind: 'latin', path: 'Lessons.starterPackageName', reason: 'package name; the * marks the footnote' },
+  { corpus: 'messages', kind: 'latin', path: 'Lessons.simToFairwayName', reason: 'package name; the * marks the footnote' },
+  { corpus: 'messages', kind: 'latin', path: 'Menu.groupFoodTitleSuffix', locales: ['ja', 'ko', 'zh'], reason: 'BY SMITH & CO, the partner brand lockup' },
+  { corpus: 'messages', kind: 'latin', path: 'Menu.groupPizzaTitleSuffix', locales: ['ja', 'ko', 'zh'], reason: 'BY SEXY PIZZA, the partner brand lockup' },
+  { corpus: 'messages', kind: 'name', path: 'Lessons.coaches.boss.education[]', reason: 'US university names' },
+  { corpus: 'messages', kind: 'name', path: 'Lessons.coaches.ratchavin.education[]', reason: 'coaching certifications' },
+  { corpus: 'messages', kind: 'name', path: 'Lessons.coaches.boss.achievements[]', locales: ['zh'], reason: 'tournament names; zh swaps the colon for a full-width one' },
+  { corpus: 'messages', kind: 'name', path: 'Lessons.coaches.ratchavin.achievements[]', reason: 'tournament names' },
+  { corpus: 'messages', kind: 'name', path: 'Lessons.coaches.min.achievements[]', reason: 'tournament names' },
+
+  // ── messages/*.json: untranslated, and it renders today ──
+  { corpus: 'messages', kind: 'todo', path: 'Golf.socialBaysTitle', locales: ['th'], reason: 'th prints "Social Bays"; ja/ko/zh are translated. Native-QA follow-up' },
+  { corpus: 'messages', kind: 'todo', path: 'Golf.aiFeature1', locales: ['th'], reason: 'th keeps "Uneekor EYE Mini Lite launch monitor" in English. Native-QA follow-up' },
+
+  // ── messages/*.json: never renders in that locale ──
+  // app/[locale]/page.tsx returns the bespoke Japan/Korea/China landing page
+  // before it reads Home or HomeFaq, and /second-hand-golf-clubs-bangkok is EN-only.
+  { corpus: 'messages', kind: 'dead', path: 'Home.*', locales: ['ko', 'zh'], reason: 'bespoke landing page returns first' },
+  { corpus: 'messages', kind: 'dead', path: 'HomeFaq.*', locales: ['ko', 'zh'], reason: 'bespoke landing page returns first' },
+  { corpus: 'messages', kind: 'dead', path: 'SecondHandClubs.*', locales: ['ja', 'ko', 'zh'], reason: 'the route is EN-only' },
+  { corpus: 'messages', kind: 'dead', path: 'SecondHandClubsFaq.*', locales: ['ja', 'ko', 'zh'], reason: 'the route is EN-only' },
+]
+
+/**
+ * Characters used in simplified Chinese and NOT in Japanese. NATIVE_SCRIPT.ja
+ * accepts Han alone, so a short zh paste in a ja slot has own script, and the
+ * length rules cannot help (legit kana-free ja leaves run to 10 kanji,
+ * `毎日午前9時〜午後11時営業`). Measured 2026-10-13: this set appears in 0 ja
+ * leaves and in 81% of zh leaves that carry Han (59% of those with 8 or fewer),
+ * so it catches most pastes but NOT all: a zh leaf with none of these passes.
+ * Every member must be absent from Japanese. If a ja leaf trips this, check the
+ * character is not one Japanese uses before touching the copy (与 区 国 程 税
+ * 装 豆 静 践 里 将 are Japanese and are deliberately not listed).
+ */
+const JA_SIMPLIFIED_ONLY = new Set(
+  [...'们这说时个么对发经现过还进动为业间书买卖让请样见觉题种门车长头关无总场费价员优惠预约开设备练课协议确认单达气务产两乐队网团际质级币钱银鸡鱼马鸟龙热爱杂济赛节环块页顺须顾显类组织结给统续继维综绝线细终纪纲纳纯纸绕绘络编缩缺罚罗艺获药营虑补观规视览计订认讨训议讯记讲许论访证评识诉词译试话诚谁调谈谢贝负财责贤败账货购贯贵贸资赔赚赞赠趋转轮软轻载较辅辆输边远违连迟选逻遗邮针钓钟钢钥钻铁铃铜链销锁锅错键锦镇镜闭问闲闷闹闻阅队阳阴阵阶陆陈险难顶项顽预领频颜额风饭饮饰饱饼馆驱驶验骑鲜麦黄齐龄']
+)
+
+const ownScriptState = {
+  judged: 0,
+  rules: new Map<OwnScriptRule | BlankRule, { hits: number; passing: number }>(),
+}
+function resetOwnScriptState(): void {
+  ownScriptState.judged = 0
+  ownScriptState.rules.clear()
+}
+
+const UNIT_TOKEN_RE = /\{+[^{}]*\}+|(?<![A-Za-z])(?:THB|km|m)(?![A-Za-z])/g
+const normalizeLeafPath = (p: string): string => p.replace(/\[\d+\]/g, '[]')
+const isExactRule = (r: OwnScriptRule): boolean => !r.path.includes('*') && !r.path.includes('[]')
+
+/** The path the rules are written against: messages leaves are keyed Namespace.key. */
+function ownScriptPath(entry: { entryId: string; corpus?: string }, field: string): string {
+  if (entry.corpus !== 'messages') return field
+  const ns = entry.entryId.split(':')[2] ?? ''
+  return field ? `${ns}.${field}` : ns
+}
+
+function ruleCovers(r: OwnScriptRule, corpus: string, locale: Locale, entryId: string, path: string): boolean {
+  if (r.corpus !== corpus) return false
+  if (r.locales && !r.locales.includes(locale)) return false
+  if (r.entry && r.entry !== entryId) return false
+  if (r.path.endsWith('.*')) return normalizeLeafPath(path).startsWith(r.path.slice(0, -1))
+  return r.path === normalizeLeafPath(path)
+}
+
+function checkOwnScriptUnit(
+  entry: { entryId: string; corpus?: string },
+  unit: Unit,
+  rules: readonly OwnScriptRule[],
+  blanks: readonly BlankRule[]
+): void {
+  const { locale, value, field } = unit
+  const corpus = entry.corpus as string
+  const path = ownScriptPath(entry, field)
+  const note = (r: OwnScriptRule | BlankRule, passing: boolean) => {
+    const s = ownScriptState.rules.get(r) ?? { hits: 0, passing: 0 }
+    s.hits++
+    if (passing) s.passing++
+    ownScriptState.rules.set(r, s)
+  }
+
+  if (value.trim() === '') {
+    const b = blanks.find((r) => r.corpus === corpus && r.locale === locale && r.path === path)
+    if (b) note(b, false)
+    else add('error', locale, unit.entryId, field, 'own-script', `blank or whitespace-only string: the page ships it empty. If a ${locale} blank is deliberate, name it in BLANK_RULES`)
+  } else {
+    const matches = rules.filter((r) => ruleCovers(r, corpus, locale, entry.entryId, path))
+    const letters = /\p{L}/u.test(value.replace(UNIT_TOKEN_RE, ''))
+    const scriptless = letters && !NATIVE_SCRIPT[locale].test(value)
+    for (const r of matches) note(r, !scriptless)
+    if (scriptless) {
+      const shortName = value.split(/\s+/).length <= NAME_MAX_WORDS && !/[?!。！？]/.test(value)
+      if (matches.length === 0) {
+        const shown = value.length > 60 ? `${value.slice(0, 57)}...` : value
+        add('error', locale, unit.entryId, field, 'own-script',
+          `no ${locale} script at all ("${shown}"): untranslated? A name or Latin-by-design label goes in OWN_SCRIPT_RULES`)
+      } else if (!shortName && !matches.some((r) => r.kind !== 'name')) {
+        add('error', locale, unit.entryId, field, 'own-script',
+          `a name slot holds a sentence ("${value.slice(0, 60)}"): the name exemption covers at most ${NAME_MAX_WORDS} words and no sentence punctuation`)
+      }
+    }
+    if (locale === 'ja') {
+      const hit = [...value].find((c) => JA_SIMPLIFIED_ONLY.has(c))
+      if (hit) {
+        add('error', locale, unit.entryId, field, 'own-script',
+          `simplified-Chinese character "${hit}" in a ja leaf: a zh paste? If Japanese uses this character, remove it from JA_SIMPLIFIED_ONLY`)
+      }
+    }
+  }
+  // After the verdict, never beside the loop head: see the L6 note in CLAUDE.md.
+  ownScriptState.judged++
+}
+
+/**
+ * Whole-corpus half of check 13, run once after the units: the judged count
+ * must equal the units that exist (a skip or a narrowed loop is an ERROR), and
+ * every rule must still match something (stale) and, if exact, still be
+ * script-less (unused exemption).
+ */
+function finishOwnScript(
+  corpus: ReadonlyArray<{ corpus?: string; units: Unit[] }>,
+  rules: readonly OwnScriptRule[],
+  blanks: readonly BlankRule[]
+): { judged: number; expected: number; rulesJudged: number; blanksJudged: number } {
+  let rulesJudged = 0
+  let blanksJudged = 0
+  const expected = corpus
+    .filter((e) => e.corpus !== undefined && OWN_SCRIPT_CORPORA.has(e.corpus))
+    .reduce((n, e) => n + e.units.length, 0)
+  if (ownScriptState.judged !== expected) {
+    add('error', 'th', 'own-script:*', '(coverage)', 'own-script',
+      `${ownScriptState.judged} of ${expected} units judged: a skip, a deleted call or a narrowed loop`)
+  }
+  for (const r of rules) {
+    const s = ownScriptState.rules.get(r)
+    const where = `${r.corpus}${r.entry ? `:${r.entry}` : ''} ${r.path} [${(r.locales ?? LOCALES).join(',')}]`
+    if (!s || s.hits === 0) {
+      add('error', 'th', 'own-script:*', where, 'own-script', 'rule matches no leaf (renamed or removed?): remove the stale entry')
+    } else if (s.passing === s.hits) {
+      add('error', 'th', 'own-script:*', where, 'own-script', 'rule matches only leaves that carry script or no letters: remove the unused exemption')
+    } else if (isExactRule(r) && r.locales && s.passing > 0) {
+      add('error', 'th', 'own-script:*', where, 'own-script', 'exact rule whose leaf now carries script in a covered locale: remove the unused exemption')
+    }
+    rulesJudged++
+  }
+  for (const b of blanks) {
+    if (!ownScriptState.rules.get(b)?.hits) {
+      add('error', b.locale, 'own-script:*', `${b.corpus} ${b.path}`, 'own-script', 'BLANK_RULES entry is not a blank leaf any more (filled, renamed or removed?): remove it')
+    }
+    blanksJudged++
+  }
+  return { judged: ownScriptState.judged, expected, rulesJudged, blanksJudged }
+}
+
 // ── Run per-unit checks + entry-level as-of (check 9) ────────────────────────
 // A function, not a bare top-level loop, so --self-test can drive a synthetic
 // entry through the REAL dispatch below. That matters for one line in
@@ -1443,9 +1728,11 @@ function checkHonesty(unit: Unit) {
 // this call to a constant 'icu' silently drops rule (b) (the `{{token} }`
 // split-closer that ships a raw token to visitors) and was invisible to both
 // `npm run validate:i18n` AND the self-test until this became callable.
-type Entry = (typeof entries)[number]
-
-function runCorpusChecks(corpus: Entry[]) {
+function runCorpusChecks(
+  corpus: Entry[],
+  rules: readonly OwnScriptRule[] = OWN_SCRIPT_RULES,
+  blanks: readonly BlankRule[] = BLANK_RULES
+) {
   for (const entry of corpus) {
     const markers = AS_OF_MARKERS[entry.locale]
     // Only check 9 consumes this, and uiChrome entries skip check 9 — so don't
@@ -1475,6 +1762,9 @@ function runCorpusChecks(corpus: Entry[]) {
       checkTerminology(unit)
       checkBrands(unit)
       checkScript(unit)
+      if (entry.corpus !== undefined && OWN_SCRIPT_CORPORA.has(entry.corpus)) {
+        checkOwnScriptUnit(entry, unit, rules, blanks)
+      }
       // messages/*.json is the ICU dialect; the content data is '{{token}}'.
       checkMarkup(unit, entry.uiChrome ? 'icu' : 'token')
 
@@ -1494,6 +1784,7 @@ function runCorpusChecks(corpus: Entry[]) {
 }
 
 runCorpusChecks(entries)
+const ownScriptRun = finishOwnScript(entries, OWN_SCRIPT_RULES, BLANK_RULES)
 
 // ── Checks 10/11: UI-message namespace parity (messages/<locale>.json) ───────
 // Content-data parity (guides/FAQs/hubs/tiers) is covered by the corpus checks
@@ -1710,7 +2001,7 @@ if (process.argv.includes('--self-test')) {
   // it, so there was no count and no floor at all: deleting assert() lines
   // silently reduced coverage while it still printed ALL SELF-TESTS PASS.
   // Raise MIN_ASSERTIONS in the same commit that adds one; never lower it.
-  const MIN_ASSERTIONS = 127
+  const MIN_ASSERTIONS = 133
   let asserted = 0
   const assert = (label: string, cond: boolean) => {
     asserted++
@@ -1825,6 +2116,171 @@ if (process.argv.includes('--self-test')) {
     'dispatch: content entry still sees a real ICU-shaped break ({{price} → 2)',
     corpusErrs(entryWith('{{price のみ')) === 2
   )
+
+  // ── Check 13: own-script + non-blank ──────────────────────────────────────
+  // Drives runCorpusChecks()/finishOwnScript(), the functions the corpus run
+  // calls, so a deleted call site or a skipped unit shows up here. Only
+  // own-script issues are counted: the other checks fire on some of these
+  // strings and must not mask the rule under test. Every case expects EXACTLY
+  // the stated count.
+  {
+    const ownOnly = (before: number): number =>
+      issues.splice(before).filter((i) => i.level === 'error' && i.check === 'own-script').length
+    const mk = (corpus: string | undefined, locale: Locale, entryId: string, leaves: Array<[string, string]>): Entry => ({
+      ...(corpus ? { corpus } : {}),
+      entryId,
+      locale,
+      units: leaves.map(([field, value]) => ({ locale, entryId, field, value })),
+    })
+    /** Units only, against the real rules (no stale pass: one entry cannot match them all). */
+    const unitErrs = (e: Entry, rules = OWN_SCRIPT_RULES, blanks = BLANK_RULES): number => {
+      const before = issues.length
+      resetOwnScriptState()
+      runCorpusChecks([e], rules, blanks)
+      return ownOnly(before)
+    }
+    /** The whole pipeline with an explicit rule list. */
+    const fullErrs = (e: Entry[], rules: readonly OwnScriptRule[], blanks: readonly BlankRule[] = []): number => {
+      const before = issues.length
+      resetOwnScriptState()
+      runCorpusChecks(e, rules, blanks)
+      finishOwnScript(e, rules, blanks)
+      return ownOnly(before)
+    }
+
+    // The two defects measured on 2026-10-13, against the REAL entries.
+    const hubTh = entries.find((e) => e.entryId === 'faqhub:th')
+    const hubUnit = hubTh?.units.find((u) => u.field === 'ctaSubtitle')
+    const withUnit = (e: Entry, field: string, value: string): Entry => ({
+      ...e,
+      units: e.units.map((u) => (u.field === field ? { ...u, value } : u)),
+    })
+    assert('own-script: the real th faq-hub entry → 0', !!hubTh && unitErrs(hubTh) === 0)
+    // The corpus builders must KEEP '' (flattenMessages drops it by default).
+    {
+      const blankFaqHub = faqHubEntry('th', { ctaSubtitle: '' })
+      const blankSeo = seoPageEntry('hotel', { id: 'x', locale: 'th', title: 'ชื่อ', meta_description: '', content: { intro: '' } })
+      const blankMsg = messagesEntry('th', 'Nav', { juniorAcademy: '' })
+      assert(
+        "own-script: the faq-hub, SEO-page and messages builders keep '' leaves, and the rule reports each",
+        !!blankFaqHub && !!blankSeo && !!blankMsg &&
+          unitErrs(blankFaqHub) === 1 &&
+          unitErrs(blankSeo) === 2 && // meta_description and content.intro
+          unitErrs(blankMsg) === 1
+      )
+    }
+    assert(
+      'own-script: an English th faq-hub ctaSubtitle → 1',
+      !!hubTh && !!hubUnit && unitErrs(withUnit(hubTh, 'ctaSubtitle', 'Message us on LINE and we reply the same day.')) === 1
+    )
+    {
+      const msgTh = entries.find((e) => e.entryId === 'messages:th:Nav')
+      assert(
+        'own-script: a whitespace-only th Nav.juniorAcademy → 1',
+        !!msgTh && unitErrs(withUnit(msgTh, 'juniorAcademy', '   ')) === 1
+      )
+      assert("own-script: an empty th Nav leaf ('') → 1", !!msgTh && unitErrs(withUnit(msgTh, 'juniorAcademy', '')) === 1)
+    }
+
+    // Sweep: every unit of every judged corpus, one at a time, both directions.
+    // `covered` is derived from ruleCovers/BLANK_RULES, not from the verdict.
+    const judged = entries.filter((e) => e.corpus !== undefined && OWN_SCRIPT_CORPORA.has(e.corpus))
+    const ENGLISH = 'Untranslated English copy'
+    let swept = 0
+    const wrongEnglish: string[] = []
+    const wrongBlank: string[] = []
+    for (const e of judged) {
+      for (const u of e.units) {
+        swept++
+        const path = ownScriptPath(e, u.field)
+        // Independent of ruleCovers(): plain string tests, so a bug there cannot
+        // widen the rules and the oracle together.
+        const covered = OWN_SCRIPT_RULES.some(
+          (r) =>
+            r.corpus === e.corpus &&
+            (r.locales === undefined || r.locales.includes(e.locale)) &&
+            (r.entry === undefined || r.entry === e.entryId) &&
+            (r.path.endsWith('.*')
+              ? path.startsWith(r.path.slice(0, -1))
+              : r.path.replace(/\[\]/g, '#') === path.replace(/\[\d+\]/g, '#'))
+        )
+        const asEnglish = unitErrs({ ...e, units: [{ ...u, value: ENGLISH }] })
+        if (asEnglish !== (covered ? 0 : 1)) wrongEnglish.push(`${e.entryId}.${u.field}`)
+        const blankOk = BLANK_RULES.some((b) => b.corpus === e.corpus && b.locale === e.locale && b.path === path)
+        const asBlank = unitErrs({ ...e, units: [{ ...u, value: '  ' }] })
+        if (asBlank !== (blankOk ? 0 : 1)) wrongBlank.push(`${e.entryId}.${u.field}`)
+      }
+    }
+    const sweepWrong = (xs: string[]) => (xs.length ? ` (wrong at ${xs.length}: ${xs.slice(0, 4).join(', ')})` : '')
+    assert(
+      `own-script: English in each of ${swept} judged units → 1, or 0 where an exemption covers it${sweepWrong(wrongEnglish)}`,
+      swept > 5000 && wrongEnglish.length === 0
+    )
+    assert(
+      `own-script: a blank in each of ${swept} judged units → 1, or 0 where BLANK_RULES names it${sweepWrong(wrongBlank)}`,
+      wrongBlank.length === 0
+    )
+    // What the REAL run did, not a synthetic one: deleting the call, a skipped
+    // loop or a skipped rule all leave the issue list empty and a green gate.
+    assert(
+      `own-script: the corpus run judged every unit (${ownScriptRun.judged}), every rule (${ownScriptRun.rulesJudged}) and every blank rule (${ownScriptRun.blanksJudged})`,
+      ownScriptRun.judged === ownScriptRun.expected &&
+        ownScriptRun.expected > 5000 &&
+        ownScriptRun.rulesJudged === OWN_SCRIPT_RULES.length &&
+        ownScriptRun.blanksJudged === BLANK_RULES.length
+    )
+    assert(
+      'own-script: all ten corpora are present in the judged set',
+      [...OWN_SCRIPT_CORPORA].every((c) => judged.some((e) => e.corpus === c))
+    )
+
+    const ownEntry = (corpus: string | undefined, locale: Locale, ...leaves: Array<[string, string]>) =>
+      mk(corpus, locale, `__own__:${locale}`, leaves)
+    // Passing shapes.
+    assert('own-script: numerals, times and unit tokens pass', unitErrs(ownEntry('faq-hub', 'ja', ['a', '100+'], ['b', '9:00-23:00'], ['c', '550THB〜'], ['d', '{km}km'], ['e', '{distance}m'])) === 0)
+    assert('own-script: own-script text passes in each locale', [
+      unitErrs(ownEntry('hub', 'th', ['a', 'กอล์ฟ'])),
+      unitErrs(ownEntry('hub', 'ja', ['a', 'ゴルフ場'])),
+      unitErrs(ownEntry('hub', 'ko', ['a', '골프장'])),
+      unitErrs(ownEntry('hub', 'zh', ['a', '高尔夫球场'])),
+    ].every((n) => n === 0))
+    // Cross-pastes the existing script rule and this one split between them.
+    assert('own-script: a Korean leaf holding only Han (hanja) → 1', unitErrs(ownEntry('hub', 'ko', ['a', '高爾夫球場'])) === 1)
+    assert('own-script: a Thai leaf holding only English → 1', unitErrs(ownEntry('hub', 'th', ['a', 'Golf courses in Bangkok'])) === 1)
+    // ja: Han-only passes NATIVE_SCRIPT, so the simplified-character tell carries it.
+    assert('own-script: a simplified-Chinese paste in a ja leaf → 1', unitErrs(ownEntry('hub', 'ja', ['a', '高尔夫球场费用'])) === 1)
+    assert('own-script: Japanese kanji that Chinese also uses → 0', unitErrs(ownEntry('hub', 'ja', ['a', '国の税と装備'], ['b', '毎日午前9時〜午後11時営業'])) === 0)
+    assert('own-script: no JA_SIMPLIFIED_ONLY character appears in the real ja corpus', judged.filter((e) => e.locale === 'ja').every((e) => e.units.every((u) => ![...u.value].some((c) => JA_SIMPLIFIED_ONLY.has(c)))))
+    // The name exemption is bounded.
+    const hotelRule: OwnScriptRule = { corpus: 'hotel', kind: 'name', path: 'hotel_name', reason: 'test' }
+    assert('own-script: a name in a name slot → 0', fullErrs([ownEntry('hotel', 'th', ['hotel_name', 'Arnoma Grand Bangkok'])], [hotelRule]) === 0)
+    assert('own-script: a sentence in a name slot → 1', fullErrs([ownEntry('hotel', 'th', ['hotel_name', 'This hotel is close to the BTS and has a pool. Book now!'])], [hotelRule]) === 1)
+    assert('own-script: a long unpunctuated English run in a name slot → 1', fullErrs([ownEntry('hotel', 'th', ['hotel_name', 'one two three four five six seven eight nine ten eleven twelve thirteen'])], [hotelRule]) === 1)
+    // Rules cannot rot.
+    const stale: OwnScriptRule = { corpus: 'hotel', kind: 'name', path: 'no_such_field', reason: 'test' }
+    assert('own-script: a rule matching no leaf → 1 (stale)', fullErrs([ownEntry('hotel', 'th', ['hotel_name', 'Arnoma Grand Bangkok'])], [hotelRule, stale]) === 1)
+    assert('own-script: a rule whose leaves all carry script → 1 (unused)', fullErrs([ownEntry('hotel', 'th', ['hotel_name', 'โรงแรมอาโนมา'])], [hotelRule]) === 1)
+    const exactTh: OwnScriptRule = { corpus: 'hotel', kind: 'latin', path: 'hotel_name', locales: ['th'], reason: 'test' }
+    assert('own-script: an exact locale-scoped rule whose leaf gained script → 1', fullErrs([ownEntry('hotel', 'th', ['hotel_name', 'Arnoma Grand Bangkok']), mk('hotel', 'th', '__own__:b', [['hotel_name', 'โรงแรมอาโนมา']])], [exactTh]) === 1)
+    assert('own-script: a rule scoped to another locale does not cover this one → 2 (the leaf, plus the stale rule)', fullErrs([ownEntry('hotel', 'ja', ['hotel_name', 'Arnoma Grand Bangkok'])], [exactTh]) === 2)
+    const pinned: OwnScriptRule = { corpus: 'explainer', kind: 'name', path: 'comparison_table[].feature', entry: '__own__:th', reason: 'test' }
+    assert('own-script: an entry-pinned rule covers its entry only', fullErrs([ownEntry('explainer', 'th', ['comparison_table[0].feature', 'Thai Airways'])], [pinned]) === 0 && fullErrs([mk('explainer', 'th', '__other__', [['comparison_table[0].feature', 'Thai Airways']])], [pinned]) === 2)
+    // Blank allowlist: pass, stale, and still an ERROR if it names another path.
+    const blankRule: BlankRule = { corpus: 'messages', locale: 'ja', path: 'AboutUs.contactTitleSuffix', reason: 'test' }
+    const blankEntry = mk('messages', 'ja', 'messages:ja:AboutUs', [['contactTitleSuffix', '']])
+    assert("own-script: a named deliberate blank ('') → 0", fullErrs([blankEntry], [], [blankRule]) === 0)
+    assert('own-script: an unnamed blank → 1', fullErrs([blankEntry], [], []) === 1)
+    assert('own-script: a BLANK_RULES entry that is no longer blank → 1 (stale)', fullErrs([mk('messages', 'ja', 'messages:ja:AboutUs', [['contactTitleSuffix', 'お問い合わせ']])], [], [blankRule]) === 1)
+    // Scope and coverage.
+    assert('own-script: an untagged entry (course:*, junior:*) is not judged here', unitErrs(ownEntry(undefined, 'th', ['a', 'English only'])) === 0)
+    {
+      const e = ownEntry('hub', 'th', ['a', 'กอล์ฟ'])
+      const before = issues.length
+      resetOwnScriptState()
+      finishOwnScript([e], [], []) // units exist, runCorpusChecks never ran
+      assert('own-script: units that were never judged → 1 (coverage)', ownOnly(before) === 1)
+    }
+  }
 
   // TH as-of marker must not match the tail of ประมาณ ("approximately") or a
   // bare prepositional ณ — only the glossary's dated ข้อมูล ณ form counts.
