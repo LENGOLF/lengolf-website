@@ -1,10 +1,12 @@
 import { storageUrl } from '@/lib/constants'
 
 // ── Food & Drinks menu data ──
-// Transcribed from the printed menus served at LENGOLF (also hosted at
-// menus/food-menu-1.jpg, menus/food-menu-2.jpg, menus/drink-menu.jpg in
-// Supabase Storage and linked from booking.len.golf). Keep this file in
-// sync with the printed menu whenever the kitchen partners update prices.
+// Source of truth is the POS (products.products on the LENGOLF Supabase
+// project: name, price, is_active), not the printed menus. The printed menu
+// images (menus/food-menu-1.jpg, menus/food-menu-2.jpg, menus/drink-menu.jpg in
+// Supabase Storage, also linked from booking.len.golf) can lag behind it, and
+// their alt text below describes what each image shows. Update this file
+// whenever a POS price, name or active flag changes.
 
 export interface MenuItem {
   name: string
@@ -222,7 +224,7 @@ export const menuImages = [
   {
     src: storageUrl('menus/drink-menu.jpg'),
     title: 'Drinks Menu',
-    alt: 'LENGOLF drinks menu: cocktails 250-310 THB, highballs 270-900 THB, bottled beer 160-270 THB, wine by the glass 290 THB, wine bottles 950-1,600 THB, soft drinks from 30 THB, snacks from 120 THB',
+    alt: 'LENGOLF drinks menu: cocktails 250-310 THB, highballs 270-800 THB, bottled beer 160-270 THB, wine by the glass 290 THB, wine bottles 950-1,600 THB, soft drinks from 30 THB, snacks from 120 THB',
     width: 1749,
     height: 2481,
     previewPosition: 'center top',
