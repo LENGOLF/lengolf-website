@@ -235,8 +235,8 @@ export default async function EventsPage({ params }: { params: Promise<{ locale:
           </h2>
           <div className="mx-auto max-w-lg">
             <Image
-              src={storageUrl('events/event-packages.jpg')}
-              alt="LENGOLF Event Packages: Small Package 9,999 THB for 10–15 guests with 2 bays, Medium Package 21,999 THB for 15–25 guests with 4 bays and exclusive full-location rental"
+              src={storageUrl('events/event-packages-2026-10.jpg')}
+              alt="LENGOLF Event Packages: Small Package 9,999 THB for 10–15 guests with 2 bays, Medium Package 21,999 THB for 15–25 guests with 4 bays and exclusive full-location rental, VAT included"
               width={512}
               height={723}
               className="w-full rounded-lg shadow-sm"
