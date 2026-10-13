@@ -1980,6 +1980,9 @@ if (process.argv.includes('--self-test')) {
       '', '  ', '\t\n', ch(0xa0), ch(0x3000), ch(0xfeff), ch(0x200b, 0x2060), ch(0x200d), ch(0xad), ch(0x200e),
       ch(0x0e48), ch(0x0e31, 0x0e48), ch(0x0301), ch(0x202e),
     ]
+    // A floor, because .every() over an emptied list is true: the sweeps
+    // below would pass having checked nothing. Raise it with the list.
+    const MIN_BLANK_SHAPES = 14
 
     assert('junior: the real th block → 0 (the allowlist is exactly its script-less leaves)', juniorErrs(realTh) === 0)
     // The two gaps this rule exists for, as re-measured on main. The English
@@ -2055,7 +2058,7 @@ if (process.argv.includes('--self-test')) {
     const wrongBlank = prosePaths.filter((p) => !BLANK_SHAPES.every((b) => oneFrom(juniorIssues(setLeaf(p, b)), BLANK)))
     assert(
       `junior: each of ${BLANK_SHAPES.length} blank shapes in each of the ${prosePaths.length} th prose leaves → 1 blank${wrongAt(wrongBlank)}`,
-      prosePaths.length > 0 && wrongBlank.length === 0
+      prosePaths.length > 0 && BLANK_SHAPES.length >= MIN_BLANK_SHAPES && wrongBlank.length === 0
     )
     // The allowlist must stay exact in the other direction too.
     assert(
@@ -2078,6 +2081,9 @@ if (process.argv.includes('--self-test')) {
     const RULES = [BLANK, NO_SCRIPT, NOT_EN, STALE, UNUSED, EN_ONLY, TH_ONLY, FORBIDDEN, PRICE]
     const kinds = (got: Issue[]) => got.map((i) => RULES.filter((r) => i.detail.includes(r)).join('+') || '?').sort().join(' | ')
     const exactly = (got: Issue[], ...rules: string[]) => kinds(got) === [...rules].sort().join(' | ')
+    // Every character the rule forbids, one at a time. The sweeps below pin
+    // its length at exactly 10, because .every() over an emptied or shortened
+    // list passes having checked less (measured: emptied, it stayed green).
     const FORBIDDEN_CHARS = [0x202a, 0x202b, 0x202c, 0x202d, 0x202e, 0x2066, 0x2067, 0x2068, 0x2069, 0xfffd].map((c) => ch(c))
     const inMiddle = (v: string, c: string) => v.slice(0, Math.ceil(v.length / 2)) + c + v.slice(Math.ceil(v.length / 2))
     const under = (item: string) => (p: string) => p === item || p.startsWith(`${item}.`) || p.startsWith(`${item}[`)
@@ -2106,7 +2112,7 @@ if (process.argv.includes('--self-test')) {
       )
       assert(
         `junior: each of the ${FORBIDDEN_CHARS.length - 1} bidi controls and U+FFFD inside each of the ${prosePaths.length} th prose leaves → 1 forbidden (plus not-EN where allowlisted)${wrongAt(wrong)}`,
-        prosePaths.length > 0 && wrong.length === 0
+        prosePaths.length > 0 && FORBIDDEN_CHARS.length === 10 && wrong.length === 0
       )
     }
 
@@ -2205,14 +2211,14 @@ if (process.argv.includes('--self-test')) {
       const wrongEnBlank = enProsePaths.filter((p) => !BLANK_SHAPES.every((b) => exactly(enIssues(setEnLeaf(p, b)), ...plus(p, BLANK))))
       assert(
         `junior: each of ${BLANK_SHAPES.length} blank shapes in each of the ${enProsePaths.length} EN prose leaves → 1 blank (plus price at price.amount)${wrongAt(wrongEnBlank)}`,
-        enProsePaths.length >= prosePaths.length && wrongEnBlank.length === 0
+        enProsePaths.length >= prosePaths.length && BLANK_SHAPES.length >= MIN_BLANK_SHAPES && wrongEnBlank.length === 0
       )
       const wrongEnForbidden = enProsePaths.filter(
         (p) => !FORBIDDEN_CHARS.every((c) => exactly(enIssues(setEnLeaf(p, inMiddle(enAt.get(p) ?? '', c))), ...plus(p, FORBIDDEN)))
       )
       assert(
         `junior: each of the ${FORBIDDEN_CHARS.length - 1} bidi controls and U+FFFD inside each of the ${enProsePaths.length} EN prose leaves → 1 forbidden (plus price at price.amount)${wrongAt(wrongEnForbidden)}`,
-        enProsePaths.length >= prosePaths.length && wrongEnForbidden.length === 0
+        enProsePaths.length >= prosePaths.length && FORBIDDEN_CHARS.length === 10 && wrongEnForbidden.length === 0
       )
       // Price: the card's value against the constant, both directions.
       const d = want.search(/\d/)
