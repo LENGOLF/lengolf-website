@@ -58,6 +58,14 @@
  *      agreement date as that locale writes it, or carries a blank string, a
  *      string with none of its own script, or an em dash. EN's date line is
  *      checked against the version too.
+ *  13. Junior Academy (data/junior-academy.ts): a locale registered for the
+ *      route with no block, or a block for an unregistered locale; a prose
+ *      leaf that is blank (whitespace or invisible characters only), or that
+ *      carries none of the locale's own script unless JUNIOR_ACADEMY_SCRIPTLESS
+ *      lists its path AND its value equals EN's there (12(d)'s rule, without
+ *      12(d)'s em-dash check); an entry in that allowlist that no longer names
+ *      a script-less prose leaf; or a block the rule never judged (a skipped
+ *      or deleted call).
  *
  * WARN-level (reported, exit 0) — expected to fire on legacy entries:
  *   7. Currency-convention drift vs conventions.currency.primary.
@@ -318,12 +326,126 @@ for (const locale of LOCALES) {
   if (units.length > 0) entries.push({ entryId, locale, units })
 }
 
+// At least one character of the locale's own script: a string with none has
+// not been translated. Check 12(d) (rental agreement) applies it to every
+// string; the junior-academy leaf rule below applies it outside an allowlist of
+// names and numerals.
+const NATIVE_SCRIPT: Record<Locale, RegExp> = {
+  th: /\p{Script=Thai}/u,
+  ja: /\p{Script=Hiragana}|\p{Script=Katakana}|\p{Script=Han}/u,
+  ko: /\p{Script=Hangul}/u,
+  zh: /\p{Script=Han}/u,
+}
+
 // data/junior-academy.ts — /junior-golf-academy/ (EN + TH). Reads the RAW
 // per-locale map, never getJuniorAcademyContent(): that getter falls back to
 // EN, and checkScript ignores Latin, so an EN fallback in a th slot would lint
 // clean. A registered locale with no block would render EN under /th/, and a
 // block for an unregistered locale is unreachable, so both are ERRORs.
 // URLs (faqLinks, related hrefs) are not prose and are filtered out.
+//
+// Reading the raw map was not enough on its own: checkScript ignores Latin
+// leaf by leaf too, so ONE English string pasted into a th leaf (answer:
+// '1 year.') linted clean, and so did a whitespace-only leaf (PR #158's body
+// records the English case as a follow-up; both were re-measured on main
+// before this rule: exit 0 from the gate and from --self-test).
+// checkJuniorAcademyLeaves() applies check 12(d)'s rule, minus its em-dash
+// check, to every prose leaf: non-blank, and at least one character of the
+// locale's own script, except the leaves allowlisted below. The rental
+// agreement and course-detail locales (validate:course-slots) have an
+// equivalent; faq-hub, messages/*.json and the other corpora that rely on
+// checkScript alone do not, so an English or blank string there still passes.
+const JUNIOR_NON_PROSE_RE = /^faqLinks\.|\.href$|^listSeparator$/
+
+/**
+ * Prose leaves that are legitimately script-less in a locale, keyed by field
+ * path: the program's name and its level badges, which the page prints in
+ * Latin in every locale, and the price numeral. Derived on 2026-10-13 by
+ * flattening the th block and listing every prose leaf with no Thai, and kept
+ * that way by the rule in both directions: a script-less leaf missing from
+ * this list is an ERROR, and so is an entry that no longer names a script-less
+ * prose leaf (renamed, removed, or translated since), because an unused
+ * exemption would let a future English paste into that leaf through.
+ *
+ * An exempt leaf must also EQUAL the EN block's value at the same path (all
+ * five do), so the exemption covers the shared name or numeral and nothing
+ * else. One consequence: changing one of these five in EN (a new price, a
+ * renamed badge) turns the gate red until th is changed to match. For the
+ * price that is the sync data/junior-academy.ts's docblock already asks for;
+ * for the name and the badges it is a coupling this rule adds.
+ */
+const JUNIOR_ACADEMY_SCRIPTLESS: Partial<Record<Locale, readonly string[]>> = {
+  th: [
+    'breadcrumb.self', // Junior Academy
+    'journey.milestones[0].badge', // LEVEL 1
+    'journey.milestones[1].badge', // LEVEL 2
+    'price.amount', // 16,900
+    'course.name', // LENGOLF Junior Academy
+  ],
+}
+
+/**
+ * Counted at the top of checkJuniorAcademyLeaves() and compared after the loop
+ * against the blocks that exist, so a deleted call, a `continue` above it or a
+ * narrowed loop is an ERROR rather than a silently unjudged block.
+ */
+let juniorLeafJudgeCalls = 0
+/**
+ * Check 12(d)'s rule on one JuniorAcademyContent block. Reports through add().
+ * `exempt` and `en` default to the real allowlist and EN block; --self-test
+ * passes its own allowlist to reach the stale-entry branch without editing
+ * the data.
+ */
+function checkJuniorAcademyLeaves(
+  locale: Locale,
+  entryId: string,
+  content: unknown,
+  exempt: readonly string[] = JUNIOR_ACADEMY_SCRIPTLESS[locale] ?? [],
+  en: unknown = JUNIOR_ACADEMY_CONTENT.en
+): void {
+  juniorLeafJudgeCalls++
+  // agreementStrings, not flattenMessages: the latter drops '' leaves, so no
+  // per-leaf rule would see them.
+  const leaves: Array<[string, string]> = []
+  agreementStrings(content, '', leaves)
+  const enLeaves: Array<[string, string]> = []
+  agreementStrings(en, '', enLeaves)
+  const enAt = new Map(enLeaves)
+  const clip = (s: string) => (s.length > 60 ? `${s.slice(0, 57)}...` : s)
+  const prose = new Set<string>()
+  const native = new Set<string>()
+  for (const [field, value] of leaves) {
+    if (JUNIOR_NON_PROSE_RE.test(field)) continue
+    prose.add(field)
+    // Format characters (\p{Cf}) count as blank too: trim() strips a BOM but
+    // keeps a zero-width space or a word joiner.
+    if (value.replace(/[\s\p{Cf}]/gu, '') === '') {
+      add('error', locale, entryId, field, 'junior-academy',
+        'blank string (whitespace or invisible characters only): the page ships it empty')
+    } else if (NATIVE_SCRIPT[locale].test(value)) {
+      native.add(field)
+    } else if (!exempt.includes(field)) {
+      add('error', locale, entryId, field, 'junior-academy',
+        `no ${locale} script at all ("${clip(value)}"): untranslated? A name or numeral the page prints in every locale goes in JUNIOR_ACADEMY_SCRIPTLESS (scripts/validate-i18n.ts)`)
+    } else if (value !== enAt.get(field)) {
+      // The exemption is for a name or numeral shared with EN, so the value
+      // must BE EN's: otherwise any Latin text (an English sentence, "Contact
+      // us" in the price, a braille blank) would pass through the five paths.
+      add('error', locale, entryId, field, 'junior-academy',
+        `exempt from the script rule, so it must equal EN's value at this path ("${clip(enAt.get(field) ?? '(no EN leaf)')}"), not "${clip(value)}": copy EN's value, or translate it and remove the exemption`)
+    }
+  }
+  for (const field of exempt) {
+    if (!prose.has(field)) {
+      add('error', locale, entryId, field, 'junior-academy',
+        `listed in JUNIOR_ACADEMY_SCRIPTLESS but not a prose leaf of the ${locale} block (renamed or removed?): remove the stale entry`)
+    } else if (native.has(field)) {
+      add('error', locale, entryId, field, 'junior-academy',
+        `listed in JUNIOR_ACADEMY_SCRIPTLESS but now carries ${locale} script: remove the unused exemption`)
+    }
+  }
+}
+
 for (const locale of LOCALES) {
   const entryId = `junior:${locale}`
   const content = JUNIOR_ACADEMY_CONTENT[locale]
@@ -337,15 +459,23 @@ for (const locale of LOCALES) {
     add('error', locale, entryId, '(registry)', 'junior-academy',
       `data/junior-academy.ts has a ${locale} block but ${JUNIOR_ACADEMY_PATH} is not registered for ${locale} (unreachable)`)
   }
+  checkJuniorAcademyLeaves(locale, entryId, content)
   const units = juniorAcademyUnits(content).map(([field, value]) => ({ locale, entryId, field, value }))
   if (units.length > 0) entries.push({ entryId, locale, units })
+}
+{
+  const blocks = LOCALES.filter((l) => JUNIOR_ACADEMY_CONTENT[l]).length
+  if (juniorLeafJudgeCalls !== blocks) {
+    add('error', 'th', 'junior:*', '(coverage)', 'junior-academy',
+      `${juniorLeafJudgeCalls} of ${blocks} junior-academy blocks judged by checkJuniorAcademyLeaves(): a skip, a deleted call or a narrowed loop`)
+  }
 }
 
 /** The prose leaves of one JuniorAcademyContent block (URLs and the list separator are not prose). */
 function juniorAcademyUnits(content: unknown): Array<[string, string]> {
   const leaves: Array<[string, string]> = []
   flattenMessages(content, '', leaves)
-  return leaves.filter(([field]) => !/^faqLinks\.|\.href$|^listSeparator$/.test(field))
+  return leaves.filter(([field]) => !JUNIOR_NON_PROSE_RE.test(field))
 }
 
 // data/rental-agreement/ — the Golf Course Club Rental Agreement. Legal text,
@@ -376,12 +506,6 @@ const AGREEMENT_DATE_TAG: Record<'en' | Locale, string> = {
   ja: 'ja-JP',
   ko: 'ko-KR',
   zh: 'zh-CN',
-}
-const AGREEMENT_NATIVE: Record<Locale, RegExp> = {
-  th: /\p{Script=Thai}/u,
-  ja: /\p{Script=Hiragana}|\p{Script=Katakana}|\p{Script=Han}/u,
-  ko: /\p{Script=Hangul}/u,
-  zh: /\p{Script=Han}/u,
 }
 
 /** The agreement date as `locale` writes it, e.g. "7 August 2026", "2026年8月7日". */
@@ -466,7 +590,7 @@ function rentalAgreementProblems(
   for (const [field, value] of leaves) {
     if (field === 'sourceVersion') continue
     if (value.trim() === '') problems.push(`${field}: blank`)
-    else if (!AGREEMENT_NATIVE[locale].test(value)) problems.push(`${field}: no ${locale} script at all (untranslated?)`)
+    else if (!NATIVE_SCRIPT[locale].test(value)) problems.push(`${field}: no ${locale} script at all (untranslated?)`)
     if (value.includes('—')) problems.push(`${field}: em dash (house style forbids them)`)
   }
   if (t.sections.length !== en.sections.length) {
@@ -1431,7 +1555,7 @@ if (process.argv.includes('--self-test')) {
   // it, so there was no count and no floor at all: deleting assert() lines
   // silently reduced coverage while it still printed ALL SELF-TESTS PASS.
   // Raise MIN_ASSERTIONS in the same commit that adds one; never lower it.
-  const MIN_ASSERTIONS = 95
+  const MIN_ASSERTIONS = 108
   let asserted = 0
   const assert = (label: string, cond: boolean) => {
     asserted++
@@ -1667,6 +1791,177 @@ if (process.argv.includes('--self-test')) {
       juniorTh.units.length === proseLeafCount(JUNIOR_ACADEMY_CONTENT.th) &&
       proseLeafCount(JUNIOR_ACADEMY_CONTENT.th) === proseLeafCount(JUNIOR_ACADEMY_CONTENT.en)
   )
+
+  // Junior-academy leaf rule (check 12(d)'s rule): drives
+  // checkJuniorAcademyLeaves(), the function the corpus loop calls, on copies
+  // of the real th block with one leaf changed. Every negative case expects
+  // exactly one error AND checks which rule raised it: a blank leaf has no Thai
+  // either, so with the blank rule deleted the no-script rule would still
+  // raise one error and a count alone would stay green.
+  //
+  // Fixture paths are taken from the block and the allowlist, not written as
+  // literals, so ordinary copy edits (a shorter FAQ, a label translated and
+  // its exemption removed, as the gate asks) do not turn this red on correct
+  // data. A fixture that cannot be built throws, naming the fixture.
+  {
+    const realTh = JUNIOR_ACADEMY_CONTENT.th
+    const juniorIssues = (content: unknown, exemptPaths?: readonly string[]): Issue[] => {
+      const before = issues.length
+      checkJuniorAcademyLeaves('th', '__test__', content, exemptPaths)
+      return issues.splice(before).filter((i) => i.level === 'error')
+    }
+    const juniorErrs = (content: unknown): number => juniorIssues(content).length
+    // Each rule's message, so a case can require the right one.
+    const BLANK = 'blank string'
+    const NO_SCRIPT = 'no th script at all'
+    const NOT_EN = "must equal EN's value"
+    const STALE = 'not a prose leaf'
+    const UNUSED = 'remove the unused exemption'
+    const oneFrom = (got: Issue[], rule: string) => got.length === 1 && got[0].detail.includes(rule)
+    /** A deep copy of `node` with the string leaf at `target` (agreementStrings' path form) set to `value`. */
+    const withLeaf = (node: unknown, target: string, value: string, path = ''): unknown => {
+      if (typeof node === 'string') return path === target ? value : node
+      if (Array.isArray(node)) return node.map((v, i) => withLeaf(v, target, value, `${path}[${i}]`))
+      if (node && typeof node === 'object') {
+        return Object.fromEntries(
+          Object.entries(node as Record<string, unknown>).map(([k, v]) => [k, withLeaf(v, target, value, path ? `${path}.${k}` : k)])
+        )
+      }
+      return node
+    }
+    // The prose paths, enumerated by VALUE (not a URL or a path, not the list
+    // separator) as proseLeafCount does, but keeping '' leaves, and
+    // independently of JUNIOR_NON_PROSE_RE: a widened field filter would
+    // otherwise shrink the sweep in step with the rule it is testing.
+    const strings: Array<[string, string]> = []
+    agreementStrings(realTh, '', strings)
+    const prosePaths = strings
+      .filter(([field, value]) => field !== 'listSeparator' && !/^(https?:\/\/|\/)/.test(value))
+      .map(([field]) => field)
+    /** A copy of the th block with the prose leaf at `target` set to `value`. */
+    const setLeaf = (target: string, value: string): unknown => {
+      if (!prosePaths.includes(target)) {
+        throw new Error(`junior self-test fixture: "${target}" is not a prose leaf of the th block; update the fixture`)
+      }
+      return withLeaf(realTh, target, value)
+    }
+    /** A derived fixture path, or a thrown error that names the missing fixture. */
+    const need = (fixture: string, path: string | undefined): string => {
+      if (!path) throw new Error(`junior self-test fixture "${fixture}" has no path in the th block; update the fixture`)
+      return path
+    }
+    const exemptPaths = JUNIOR_ACADEMY_SCRIPTLESS.th ?? []
+    const exempt = new Set(exemptPaths)
+    // The English example this rule was written for was an FAQ answer
+    // ('1 year.'); any answer will do.
+    const faqAnswer = need('an FAQ answer', prosePaths.find((p) => /^faq\.items\[\d+\]\.answer$/.test(p)))
+    const plainLeaf = need('a prose leaf outside the allowlist', prosePaths.find((p) => !exempt.has(p)))
+    // Throws if th ever needs no exemption at all; then delete the cases
+    // below that use exemptLeaf or exemptPaths rather than invent a path.
+    const exemptLeaf = need('an allowlisted path', exemptPaths[0])
+    const enStrings: Array<[string, string]> = []
+    agreementStrings(JUNIOR_ACADEMY_CONTENT.en, '', enStrings)
+    const enAt = new Map(enStrings)
+    const ch = (...codes: number[]) => String.fromCharCode(...codes)
+    const ENGLISH = 'Untranslated English copy.'
+    // Short, capitalised, symbol-only and handle-bearing strings: a rule
+    // narrowed to "has a space", "has a lowercase letter", "has a letter" or
+    // "is long enough" still fires on a long lowercase sentence, but not on
+    // these.
+    const LATIN_SHAPES = ['FAQ', 'Play', '...', '30 min', 'LINE @lengolf.', '16,900']
+    // Every blank shape the rule must see as blank, not just ASCII spaces:
+    // '', spaces, tab and newline, NBSP, ideographic space, BOM, zero-width
+    // space plus word joiner, zero-width joiner, soft hyphen, left-to-right
+    // mark. The last four are \p{Cf}, so a blank regex that names a few
+    // format characters instead of the class misses one.
+    const BLANK_SHAPES = ['', '  ', '\t\n', ch(0xa0), ch(0x3000), ch(0xfeff), ch(0x200b, 0x2060), ch(0x200d), ch(0xad), ch(0x200e)]
+
+    assert('junior: the real th block → 0 (the allowlist is exactly its script-less leaves)', juniorErrs(realTh) === 0)
+    // The two gaps this rule exists for, as re-measured on main. The English
+    // case pastes EN's own answer for that slot, as '1 year.' was, so it
+    // stands without the EN-paste sweep below.
+    {
+      const enAnswer = enAt.get(faqAnswer) ?? ''
+      assert(
+        `junior: EN's own FAQ answer pasted into th ("${enAnswer.slice(0, 30)}") → 1, no-script`,
+        oneFrom(juniorIssues(setLeaf(faqAnswer, enAnswer)), NO_SCRIPT)
+      )
+    }
+    assert('junior: a whitespace-only th leaf → 1, blank', oneFrom(juniorIssues(setLeaf(faqAnswer, '   ')), BLANK))
+    assert("junior: an empty th leaf ('') → 1, blank", oneFrom(juniorIssues(setLeaf(plainLeaf, '')), BLANK))
+    assert(
+      `junior: short, symbol-only and handle strings in a th leaf → 1 no-script each (${LATIN_SHAPES.join(' | ')})`,
+      LATIN_SHAPES.every((s) => oneFrom(juniorIssues(setLeaf(plainLeaf, s)), NO_SCRIPT))
+    )
+    // An exempt path takes EN's value and nothing else: not an English
+    // sentence, and not a glyph that renders as nothing but is neither
+    // whitespace nor a format character (U+2800, the braille blank).
+    assert(
+      'junior: an allowlisted leaf holding English that is not EN\'s value → 1, not-EN',
+      oneFrom(juniorIssues(setLeaf(exemptLeaf, 'Kids golf lessons in Bangkok')), NOT_EN)
+    )
+    assert('junior: an allowlisted leaf holding a braille blank → 1, not-EN', oneFrom(juniorIssues(setLeaf(exemptLeaf, ch(0x2800))), NOT_EN))
+    // Near misses of EN's value, at EVERY allowlisted path: each defeats one
+    // way of loosening the equality (a prefix, a superset, any EN string,
+    // case-insensitive, punctuation-insensitive, digits exempt). The drift
+    // variant bumps the first digit, which is price drift at price.amount
+    // (16,900 in EN, 26,900 in th) and LEVEL 1 -> LEVEL 2 on a badge.
+    {
+      const nearMisses = (v: string): string[] => {
+        const d = v.search(/\d/)
+        const drift = d >= 0 ? v.slice(0, d) + String((Number(v[d]) + 1) % 10) + v.slice(d + 1) : v.slice(0, -1) + (v.endsWith('9') ? '8' : '9')
+        const otherEn = [...enAt.values()].find((x) => x !== v && x.trim() !== '') ?? ''
+        const recased = v === v.toUpperCase() ? v.toLowerCase() : v.toUpperCase()
+        return [...new Set([v.slice(0, Math.ceil(v.length / 2)), `${v} (extra)`, otherEn, recased, v.replace(/,/g, '.'), drift])].filter(
+          (x) => x !== v && x.trim() !== ''
+        )
+      }
+      const wrong = exemptPaths.filter((p) => {
+        const variants = nearMisses(enAt.get(p) ?? '')
+        return variants.length < 4 || variants.some((x) => !oneFrom(juniorIssues(setLeaf(p, x)), NOT_EN))
+      })
+      assert(
+        `junior: near misses of EN's value at each of the ${exemptPaths.length} allowlisted paths → 1 not-EN each` +
+          (wrong.length ? ` (wrong at ${wrong.join(', ')})` : ''),
+        exemptPaths.length > 0 && wrong.length === 0
+      )
+    }
+    // Every prose leaf, one at a time. The sweeps are what make a narrowed
+    // filter or a widened allowlist go red wherever it lands.
+    const wrongAt = (paths: string[]) =>
+      paths.length ? ` (wrong at ${paths.length}: ${paths.slice(0, 6).join(', ')}${paths.length > 6 ? ', ...' : ''})` : ''
+    const wrongEnglish = prosePaths.filter((p) => !oneFrom(juniorIssues(setLeaf(p, ENGLISH)), exempt.has(p) ? NOT_EN : NO_SCRIPT))
+    assert(
+      `junior: English in each of the ${prosePaths.length} th prose leaves → 1 (no-script, or not-EN where allowlisted)${wrongAt(wrongEnglish)}`,
+      prosePaths.length > 0 && prosePaths.length === proseLeafCount(realTh) && wrongEnglish.length === 0
+    )
+    // The realistic defect: EN's own string for that slot, pasted into th.
+    // Expected 0 only where EN's value carries Thai or the path is exempt.
+    const wrongEnPaste = prosePaths.filter((p) => {
+      const enValue = enAt.get(p)
+      if (enValue === undefined) return true
+      const got = juniorIssues(setLeaf(p, enValue))
+      return exempt.has(p) || NATIVE_SCRIPT.th.test(enValue) ? got.length !== 0 : !oneFrom(got, NO_SCRIPT)
+    })
+    assert(
+      `junior: EN's own value pasted into each of the ${prosePaths.length} th prose leaves → 1 no-script, or 0 where allowlisted${wrongAt(wrongEnPaste)}`,
+      prosePaths.length > 0 && wrongEnPaste.length === 0
+    )
+    const wrongBlank = prosePaths.filter((p) => !BLANK_SHAPES.every((b) => oneFrom(juniorIssues(setLeaf(p, b)), BLANK)))
+    assert(
+      `junior: each of ${BLANK_SHAPES.length} blank shapes in each of the ${prosePaths.length} th prose leaves → 1 blank${wrongAt(wrongBlank)}`,
+      prosePaths.length > 0 && wrongBlank.length === 0
+    )
+    // The allowlist must stay exact in the other direction too.
+    assert(
+      `junior: each of the ${exemptPaths.length} allowlisted leaves, given Thai script → 1, unused exemption`,
+      exemptPaths.length > 0 && exemptPaths.every((p) => oneFrom(juniorIssues(setLeaf(p, 'ภาษาไทย')), UNUSED))
+    )
+    assert(
+      'junior: an allowlisted path that is not a leaf of the block → 1, stale exemption',
+      oneFrom(juniorIssues(realTh, [...exemptPaths, 'no.such.leaf']), STALE)
+    )
+  }
 
   // Checks 10/11 — UI-message namespace parity, on synthetic catalogs
   const parityIssues = (
