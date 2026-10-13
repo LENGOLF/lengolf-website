@@ -3,7 +3,7 @@ import { storageUrl } from '@/lib/constants'
 // ── Food & Drinks menu data ──
 // Source of truth is the POS (products.products on the LENGOLF Supabase
 // project: name, price, is_active), not the printed menus. The printed menu
-// images (menus/food-menu-2026-10.jpg, menus/food-menu-2.jpg, menus/drink-menu-2026-10.jpg in
+// images (menus/food-menu-2026-10.jpg, menus/food-menu-2.jpg, menus/drink-menu-2026-10-v2.jpg in
 // Supabase Storage, built from lengolf-design/posters food-menu and drink-menu;
 // booking.len.golf ships its own copies) can lag behind it, and
 // their alt text below describes what each image shows. Update this file
@@ -165,12 +165,12 @@ export const drinksMenuGroup: MenuGroup = {
       items: [
         item('House Red (glass)', 290),
         item('House White (glass)', 290),
-        item('Arcadian Sauvignon Blanc 2023', 950, undefined, ' / bottle'),
-        item('Wolf Blass Chardonnay 2023', 1100, undefined, ' / bottle'),
-        item('Penfolds Chardonnay 2023', 1600, undefined, ' / bottle'),
-        item('Arcadian Shiraz 2023', 950, undefined, ' / bottle'),
-        item('Wolf Blass Merlot 2021', 1100, undefined, ' / bottle'),
-        item('Penfolds Cabernet Sauvignon 2022', 1600, undefined, ' / bottle'),
+        item('Arcadian Sauvignon Blanc', 950, undefined, ' / bottle'),
+        item('Wolf Blass Chardonnay', 1100, undefined, ' / bottle'),
+        item('Penfolds Chardonnay', 1600, undefined, ' / bottle'),
+        item('Arcadian Shiraz', 950, undefined, ' / bottle'),
+        item('Wolf Blass Merlot', 1100, undefined, ' / bottle'),
+        item('Penfolds Cabernet Sauvignon', 1600, undefined, ' / bottle'),
         item('Bisol Belstar Prosecco Brut', 1400, 'Sparkling', ' / bottle'),
       ],
     },
@@ -182,7 +182,7 @@ export const drinksMenuGroup: MenuGroup = {
         item('Unlimited Soft Drinks', 100, 'Refill as much as you like while you play', ' / hour per person'),
         item('Water', 30),
         item('Soda', 35),
-        item('Coca Cola (Zero)', 70),
+        item('Coke / Coke Zero', 70),
         item('Sprite', 70),
         item('Zuza', 60),
         item('Red Bull', 150),
@@ -195,7 +195,6 @@ export const drinksMenuGroup: MenuGroup = {
       title: 'Snacks',
       items: [
         item('Premium Nuts Mix', 130),
-        item('Spiced Nuts', 120),
         item('Popcorn', 120),
       ],
     },
@@ -223,7 +222,7 @@ export const menuImages = [
     previewPosition: 'center top',
   },
   {
-    src: storageUrl('menus/drink-menu-2026-10.jpg'),
+    src: storageUrl('menus/drink-menu-2026-10-v2.jpg'),
     title: 'Drinks Menu',
     alt: 'LENGOLF drinks menu: cocktails 250-310 THB, highballs 270-900 THB, bottled beer 160-270 THB, wine by the glass 290 THB, wine bottles 950-1,600 THB, soft drinks from 30 THB, snacks from 120 THB. Prices in THB, VAT included, no service charge',
     width: 1749,
