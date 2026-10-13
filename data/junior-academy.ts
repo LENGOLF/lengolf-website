@@ -57,7 +57,8 @@ export const JUNIOR_ACADEMY_PATH = '/junior-golf-academy/'
 /**
  * POS product "Junior Academy (10 Lessons)". The Course node's Offer.price.
  * validate:i18n fails unless EN price.amount is this number as en-US writes it
- * ("16,900"), and th's price.amount must equal EN's.
+ * ("16,900"), and th's price.amount must equal EN's (or, once written with
+ * Thai, carry the same digits).
  */
 export const JUNIOR_ACADEMY_PRICE_THB = 16900
 

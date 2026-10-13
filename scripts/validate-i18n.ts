@@ -69,7 +69,8 @@
  *      of a different length); a bidi control or U+FFFD in any leaf; or a
  *      block the rule never judged (a skipped or deleted call). The EN block
  *      gets the blank and bidi/U+FFFD rules too, and its price.amount must
- *      equal JUNIOR_ACADEMY_PRICE_THB as en-US writes it.
+ *      equal JUNIOR_ACADEMY_PRICE_THB as en-US writes it; a locale's
+ *      price.amount written in its own script must carry the same digits.
  *
  * WARN-level (reported, exit 0) — expected to fire on legacy entries:
  *   7. Currency-convention drift vs conventions.currency.primary.
@@ -357,11 +358,13 @@ const NATIVE_SCRIPT: Record<Locale, RegExp> = {
 // check, to every prose leaf: non-blank, and at least one character of the
 // locale's own script, except the leaves allowlisted below. The rental
 // agreement and course-detail locales (validate:course-slots) have an
-// equivalent; faq-hub, messages/*.json and the other corpora that rely on
-// checkScript alone do not, so an English or blank string there still passes.
-// It also holds each block's prose paths equal to EN's, and rejects bidi
-// controls and U+FFFD. checkJuniorAcademyEnLeaves() gives the EN block the
-// blank and forbidden-character rules and ties its price.amount to
+// equivalent of that rule, but not of the additions below (12(d) still uses
+// trim() and counts a lone Thai mark as Thai); faq-hub, messages/*.json and the
+// other corpora that rely on checkScript alone have neither, so an English or
+// blank string there still passes. It also ignores combining marks, holds each
+// block's prose paths equal to EN's, and rejects bidi controls and U+FFFD in
+// every leaf. checkJuniorAcademyEnLeaves() gives the EN block the blank and
+// forbidden-character rules and ties its price.amount to
 // JUNIOR_ACADEMY_PRICE_THB.
 const JUNIOR_NON_PROSE_RE = /^faqLinks\.|\.href$|^listSeparator$/
 
@@ -379,17 +382,32 @@ function juniorVisible(value: string): string {
 }
 
 /**
- * Characters no junior leaf may carry, even inside real text: the bidi
- * embedding, override and isolate controls (U+202A to U+202E, U+2066 to
- * U+2069), which reorder what is displayed without showing themselves, and the
- * replacement character (U+FFFD), which is encoding damage. Neither blank test
- * can see them once a leaf has visible text. The no-break spaces and word
- * joiner Thai needs are added at render time, so they are not data.
+ * Characters no junior leaf may carry, even inside real text, and the URLs,
+ * faqLinks keys and listSeparator included (the separator is joined into the
+ * Course node's offer description): the bidi embedding, override and isolate
+ * controls (U+202A to U+202E, U+2066 to U+2069), which reorder what is
+ * displayed without showing themselves, and the replacement character
+ * (U+FFFD), which is encoding damage. Neither blank test can see them once a
+ * leaf has visible text. The no-break spaces and word joiner Thai needs are
+ * added at render time, so they are not data.
  */
 const JUNIOR_FORBIDDEN_CHAR_RE = /[\u202A-\u202E\u2066-\u2069\uFFFD]/u
-const JUNIOR_BLANK_MSG = 'blank string (whitespace, invisible characters or combining marks only): the page ships it empty'
-const JUNIOR_FORBIDDEN_MSG =
-  'carries a bidi control (U+202A to U+202E, U+2066 to U+2069) or the replacement character (U+FFFD): it reorders or garbles the text on screen. Retype the line'
+const JUNIOR_BLANK_MSG =
+  'blank string (whitespace, invisible characters or combining marks only): the page ships it empty, or as a stray mark'
+/** Names the first offending character and where it is, so an editor can find an invisible one. */
+function juniorForbiddenMsg(value: string): string {
+  const m = JUNIOR_FORBIDDEN_CHAR_RE.exec(value)
+  const at = m ? ` (U+${m[0].codePointAt(0)!.toString(16).toUpperCase().padStart(4, '0')} at index ${m.index})` : ''
+  return `carries a bidi control (U+202A to U+202E, U+2066 to U+2069) or the replacement character (U+FFFD)${at}: it reorders or garbles the text on screen. Retype the line`
+}
+/**
+ * The price as digits: Thai digits mapped to ASCII, everything else dropped,
+ * so '16,900', '16,900 บาท' and '๑๖,๙๐๐' all read 16900.
+ */
+function juniorPriceDigits(value: string): string {
+  return value.replace(/[๐-๙]/g, (d) => String(d.charCodeAt(0) - 0x0e50)).replace(/[^0-9]/g, '')
+}
+const JUNIOR_PRICE_MSG = 'is not JUNIOR_ACADEMY_PRICE_THB'
 
 /**
  * Prose leaves that are legitimately script-less in a locale, keyed by field
@@ -435,7 +453,8 @@ function checkJuniorAcademyLeaves(
   entryId: string,
   content: unknown,
   exempt: readonly string[] = JUNIOR_ACADEMY_SCRIPTLESS[locale] ?? [],
-  en: unknown = JUNIOR_ACADEMY_CONTENT.en
+  en: unknown = JUNIOR_ACADEMY_CONTENT.en,
+  priceThb: number = JUNIOR_ACADEMY_PRICE_THB
 ): void {
   juniorLeafJudgeCalls++
   // agreementStrings, not flattenMessages: the latter drops '' leaves, so no
@@ -445,26 +464,42 @@ function checkJuniorAcademyLeaves(
   const enLeaves: Array<[string, string]> = []
   agreementStrings(en, '', enLeaves)
   const enAt = new Map(enLeaves)
+  // With no EN block there is nothing to compare paths or values against;
+  // checkJuniorAcademyEnLeaves() reports the missing block once.
+  const hasEn = enLeaves.length > 0
+  const enProse = new Set(enLeaves.map(([field]) => field).filter((field) => !JUNIOR_NON_PROSE_RE.test(field)))
   const clip = (s: string) => (s.length > 60 ? `${s.slice(0, 57)}...` : s)
   const prose = new Set<string>()
   const native = new Set<string>()
   for (const [field, value] of leaves) {
-    if (JUNIOR_NON_PROSE_RE.test(field)) continue
+    if (JUNIOR_NON_PROSE_RE.test(field)) {
+      if (JUNIOR_FORBIDDEN_CHAR_RE.test(value)) add('error', locale, entryId, field, 'junior-academy', juniorForbiddenMsg(value))
+      continue
+    }
     prose.add(field)
     const visible = juniorVisible(value)
     // Independent of the script verdict below; a leaf that is blank apart from
     // a bidi control is reported once, as blank.
     if (visible !== '' && JUNIOR_FORBIDDEN_CHAR_RE.test(value)) {
-      add('error', locale, entryId, field, 'junior-academy', JUNIOR_FORBIDDEN_MSG)
+      add('error', locale, entryId, field, 'junior-academy', juniorForbiddenMsg(value))
     }
     if (visible === '') {
       add('error', locale, entryId, field, 'junior-academy', JUNIOR_BLANK_MSG)
     } else if (NATIVE_SCRIPT[locale].test(visible)) {
       native.add(field)
+      // A price written with the locale's own script ('16,900 บาท', Thai
+      // digits) leaves the allowlist, and with it the EN-equality that held
+      // it to EN's: tie it to the constant directly.
+      if (field === 'price.amount' && juniorPriceDigits(value) !== String(priceThb)) {
+        add('error', locale, entryId, field, 'junior-academy',
+          `"${clip(value)}" ${JUNIOR_PRICE_MSG} (${priceThb}): the ${locale} price card prints price.amount, the Course node's Offer.price prints the constant. Change them together`)
+      }
     } else if (!exempt.includes(field)) {
       add('error', locale, entryId, field, 'junior-academy',
-        `no ${locale} script at all ("${clip(value)}"): untranslated? A name or numeral the page prints in every locale goes in JUNIOR_ACADEMY_SCRIPTLESS (scripts/validate-i18n.ts)`)
-    } else if (value !== enAt.get(field)) {
+        enProse.has(field) || !hasEn
+          ? `no ${locale} script at all ("${clip(value)}"): untranslated? A name or numeral the page prints in every locale goes in JUNIOR_ACADEMY_SCRIPTLESS (scripts/validate-i18n.ts)`
+          : `no ${locale} script at all ("${clip(value)}"), on a line EN does not have (see the path error for this field): fix the list before considering JUNIOR_ACADEMY_SCRIPTLESS`)
+    } else if (hasEn && value !== enAt.get(field)) {
       // The exemption is for a name or numeral shared with EN, so the value
       // must BE EN's: otherwise any Latin text (an English sentence, "Contact
       // us" in the price, a braille blank) would pass through the five paths.
@@ -473,21 +508,29 @@ function checkJuniorAcademyLeaves(
     }
   }
   for (const field of exempt) {
+    // An entry whose line went missing from this block while EN still has it
+    // is the path error below, not a stale entry: removing the entry, as a
+    // stale message would advise, turns the restored line red again.
     if (!prose.has(field)) {
-      add('error', locale, entryId, field, 'junior-academy',
-        `listed in JUNIOR_ACADEMY_SCRIPTLESS but not a prose leaf of the ${locale} block (renamed or removed?): remove the stale entry`)
+      if (!enProse.has(field)) {
+        add('error', locale, entryId, field, 'junior-academy',
+          `listed in JUNIOR_ACADEMY_SCRIPTLESS but not a prose leaf of the ${locale} block (renamed or removed?): remove the stale entry`)
+      }
     } else if (native.has(field)) {
       add('error', locale, entryId, field, 'junior-academy',
-        `listed in JUNIOR_ACADEMY_SCRIPTLESS but now carries ${locale} script: remove the unused exemption`)
+        `listed in JUNIOR_ACADEMY_SCRIPTLESS but now carries ${locale} script: remove the unused exemption` +
+          (field === 'price.amount' ? ' (the price stays tied to JUNIOR_ACADEMY_PRICE_THB)' : ''))
     }
   }
+  if (!hasEn) return
   // Path parity with EN. Both blocks share one interface, so their prose paths
   // can only differ where a list (items, steps, FAQ, transcript, skills) has a
   // different number of entries. A leaf COUNT cannot see that: a th block that
   // dropped the "a parent stays in the bay" safety line and duplicated another
-  // item kept the counts equal and passed the gate (measured). The error lands
-  // on the list's LAST index, which is not necessarily the line that went.
-  const enProse = new Set(enLeaves.map(([field]) => field).filter((field) => !JUNIOR_NON_PROSE_RE.test(field)))
+  // list's item kept the counts equal and passed the gate (measured). The error
+  // lands on the list's LAST index, which is not necessarily the line that went.
+  // A line replaced by a copy of its neighbour in the SAME list, or two items
+  // swapped, keeps every path and passes: that is native QA's to catch.
   for (const field of enProse) {
     if (!prose.has(field)) {
       add('error', locale, entryId, field, 'junior-academy',
@@ -506,36 +549,47 @@ function checkJuniorAcademyLeaves(
 let juniorEnJudgeCalls = 0
 /**
  * The EN block is outside the corpus (the glossaries are target-language), but
- * it renders /junior-golf-academy/ and every th leaf is held to it, so its own
- * prose leaves get the blank and forbidden-character rules here. An EN leaf of
- * '   ' or a lone combining mark passed every gate before this.
+ * it renders /junior-golf-academy/, and each locale block's prose paths and its
+ * allowlisted values are held to it, so its own leaves get the blank and
+ * forbidden-character rules here. Before this, an EN leaf of '   ' or a lone
+ * combining mark passed validate:i18n (the lone mark passed --self-test too;
+ * '   ' failed it only incidentally, through #163's EN-paste sweep).
  *
  * It also ties the visible price to the constant. The price card, llms.txt and
  * llms-full.txt print price.amount; the Course node's Offer.price is
  * JUNIOR_ACADEMY_PRICE_THB. With EN and th price.amount both '17,900' against
- * a 16900 constant, every gate passed while the card and the JSON-LD
- * disagreed (measured). th's price.amount is held to EN's by the allowlist's
- * EN-equality rule, so checking EN covers both. `priceThb` defaults to the
- * constant; --self-test passes another to reach the constant-changed case
- * without editing the data.
+ * a 16900 constant, validate:i18n and its --self-test passed while the card
+ * and the JSON-LD disagreed (measured; smoke has no price assertion). th's
+ * price.amount is held to EN's by the allowlist's EN-equality rule, and to the
+ * constant directly once it carries Thai (checkJuniorAcademyLeaves). `priceThb`
+ * defaults to the constant; --self-test passes another to reach the
+ * constant-changed case without editing the data.
  */
 function checkJuniorAcademyEnLeaves(en: unknown, priceThb: number = JUNIOR_ACADEMY_PRICE_THB): void {
   juniorEnJudgeCalls++
+  if (!en || typeof en !== 'object') {
+    add('error', 'en' as Locale, 'junior:en', '(block)', 'junior-academy',
+      'data/junior-academy.ts has no EN block: /junior-golf-academy/ renders nothing to hold the other locales to')
+    return
+  }
   const leaves: Array<[string, string]> = []
   agreementStrings(en, '', leaves)
   for (const [field, value] of leaves) {
-    if (JUNIOR_NON_PROSE_RE.test(field)) continue
+    if (JUNIOR_NON_PROSE_RE.test(field)) {
+      if (JUNIOR_FORBIDDEN_CHAR_RE.test(value)) add('error', 'en' as Locale, 'junior:en', field, 'junior-academy', juniorForbiddenMsg(value))
+      continue
+    }
     if (juniorVisible(value) === '') {
       add('error', 'en' as Locale, 'junior:en', field, 'junior-academy', JUNIOR_BLANK_MSG)
     } else if (JUNIOR_FORBIDDEN_CHAR_RE.test(value)) {
-      add('error', 'en' as Locale, 'junior:en', field, 'junior-academy', JUNIOR_FORBIDDEN_MSG)
+      add('error', 'en' as Locale, 'junior:en', field, 'junior-academy', juniorForbiddenMsg(value))
     }
   }
   const want = new Intl.NumberFormat('en-US').format(priceThb)
   const amount = new Map(leaves).get('price.amount')
   if (amount !== want) {
     add('error', 'en' as Locale, 'junior:en', 'price.amount', 'junior-academy',
-      `"${amount ?? '(missing)'}" is not JUNIOR_ACADEMY_PRICE_THB (${priceThb}) as en-US writes it ("${want}"): the price card and the llms files print price.amount, the Course node's Offer.price prints the constant. Change them together`)
+      `"${amount ?? '(missing)'}" ${JUNIOR_PRICE_MSG} (${priceThb}) as en-US writes it ("${want}"): the price card and the llms files print price.amount, the Course node's Offer.price prints the constant. Change them together`)
   }
 }
 
@@ -1653,7 +1707,7 @@ if (process.argv.includes('--self-test')) {
   // it, so there was no count and no floor at all: deleting assert() lines
   // silently reduced coverage while it still printed ALL SELF-TESTS PASS.
   // Raise MIN_ASSERTIONS in the same commit that adds one; never lower it.
-  const MIN_ASSERTIONS = 122
+  const MIN_ASSERTIONS = 126
   let asserted = 0
   const assert = (label: string, cond: boolean) => {
     asserted++
@@ -1970,7 +2024,7 @@ if (process.argv.includes('--self-test')) {
     // Every blank shape the rule must see as blank, not just ASCII spaces:
     // '', spaces, tab and newline, NBSP, ideographic space, BOM, zero-width
     // space plus word joiner, zero-width joiner, soft hyphen, left-to-right
-    // mark. The last four are \p{Cf}, so a blank regex that names a few
+    // mark. Of these first ten, the last four are\p{Cf}, so a blank regex that names a few
     // format characters instead of the class misses one. Then combining marks
     // alone: a Thai tone mark, two Thai marks (a vowel sign and a tone mark),
     // and a Latin acute, so a blank test that strips only Thai marks misses
@@ -2063,7 +2117,7 @@ if (process.argv.includes('--self-test')) {
     // The allowlist must stay exact in the other direction too.
     assert(
       `junior: each of the ${exemptPaths.length} allowlisted leaves, given Thai script → 1, unused exemption`,
-      exemptPaths.length > 0 && exemptPaths.every((p) => oneFrom(juniorIssues(setLeaf(p, 'ภาษาไทย')), UNUSED))
+      exemptPaths.length > 0 && exemptPaths.every((p) => oneFrom(juniorIssues(setLeaf(p, `${enAt.get(p) ?? ''} ภาษาไทย`)), UNUSED))
     )
     assert(
       'junior: an allowlisted path that is not a leaf of the block → 1, stale exemption',
@@ -2078,7 +2132,11 @@ if (process.argv.includes('--self-test')) {
     const TH_ONLY = 'EN has no line at this path'
     const FORBIDDEN = 'carries a bidi control'
     const PRICE = 'is not JUNIOR_ACADEMY_PRICE_THB'
-    const RULES = [BLANK, NO_SCRIPT, NOT_EN, STALE, UNUSED, EN_ONLY, TH_ONLY, FORBIDDEN, PRICE]
+    const NO_EN = 'has no EN block'
+    const RULES = [BLANK, NO_SCRIPT, NOT_EN, STALE, UNUSED, EN_ONLY, TH_ONLY, FORBIDDEN, PRICE, NO_EN]
+    // The lists of the th block today (10); a walk narrowed to skip nested
+    // arrays would otherwise shrink both parity sweeps unnoticed.
+    const MIN_LISTS = 10
     const kinds = (got: Issue[]) => got.map((i) => RULES.filter((r) => i.detail.includes(r)).join('+') || '?').sort().join(' | ')
     const exactly = (got: Issue[], ...rules: string[]) => kinds(got) === [...rules].sort().join(' | ')
     // Every character the rule forbids, one at a time. The sweeps below pin
@@ -2149,21 +2207,28 @@ if (process.argv.includes('--self-test')) {
       const wrongDrop = lists.filter(([list, n]) => {
         const item = `${list}[${n - 1}]`
         const dropped = enProsePaths.filter(under(item))
-        const got = juniorIssues(withList(realTh, list, (a) => a.slice(0, -1)), exemptPaths.filter((p) => !under(item)(p)))
+        // The REAL allowlist: a dropped milestone takes an allowlisted badge
+        // with it, which must read as the path error alone, not also as a
+        // stale entry whose removal would turn the restored line red again.
+        const got = juniorIssues(withList(realTh, list, (a) => a.slice(0, -1)))
         return dropped.length === 0 || !exactly(got, ...dropped.map(() => EN_ONLY)) || fieldsOf(got, EN_ONLY) !== [...dropped].sort().join(',')
       })
       assert(
-        `junior: each of the ${lists.length} th lists one item shorter than EN's → 1 EN-only per line of the missing item${wrongAt(wrongDrop.map(([l]) => l))}`,
-        lists.length >= 8 && wrongDrop.length === 0
+        `junior: each of the ${lists.length} th lists one item shorter than EN's → 1 EN-only per line of the missing item, no stale entry${wrongAt(wrongDrop.map(([l]) => l))}`,
+        lists.length >= MIN_LISTS && wrongDrop.length === 0
       )
       const wrongAdd = lists.filter(([list, n]) => {
-        const added = prosePaths.filter(under(`${list}[${n - 1}]`)).map((p) => `${list}[${n}]` + p.slice(`${list}[${n - 1}]`.length))
+        const last = `${list}[${n - 1}]`
+        const added = strings.filter(([p]) => prosePaths.includes(p) && under(last)(p)).map(([p, v]) => [`${list}[${n}]` + p.slice(last.length), v] as const)
         const got = juniorIssues(withList(realTh, list, (a) => [...a, a[a.length - 1]]))
-        return added.length === 0 || fieldsOf(got, TH_ONLY) !== [...added].sort().join(',') || got.some((i) => i.detail.includes(EN_ONLY) || !added.includes(i.field))
+        // A copied script-less line (a LEVEL badge) also has no Thai and no
+        // allowlist entry at its new path.
+        const want = added.flatMap(([, v]) => (NATIVE_SCRIPT.th.test(juniorVisible(v)) ? [TH_ONLY] : [TH_ONLY, NO_SCRIPT]))
+        return added.length === 0 || !exactly(got, ...want) || fieldsOf(got, TH_ONLY) !== added.map(([p]) => p).sort().join(',')
       })
       assert(
         `junior: each of the ${lists.length} th lists one item longer than EN's → 1 th-only per line of the extra item${wrongAt(wrongAdd.map(([l]) => l))}`,
-        lists.length >= 8 && wrongAdd.length === 0
+        lists.length >= MIN_LISTS && wrongAdd.length === 0
       )
     }
     {
@@ -2226,8 +2291,30 @@ if (process.argv.includes('--self-test')) {
       const PRICE_MISSES = [drifted, want.replace(/,/g, ''), want.replace(/,/g, '.'), `${want} `, `฿${want}`, `${want} THB`]
       assert(
         `junior: EN price.amount near misses of the constant (${PRICE_MISSES.join(' | ')}) → 1 price each`,
-        want !== '' && PRICE_MISSES.every((v) => v !== want && exactly(enIssues(setEnLeaf(priceLeaf, v)), PRICE))
+        want !== '' && PRICE_MISSES.length === 6 && PRICE_MISSES.every((v) => v !== want && exactly(enIssues(setEnLeaf(priceLeaf, v)), PRICE))
       )
+      assert('junior: no EN block at all → 1 (named), and th against it raises nothing further', exactly(enIssues(undefined), NO_EN) && exactly(juniorIssues(realTh, undefined, {})))
+      // Non-prose leaves (separator, hrefs, faqLinks) are judged for
+      // forbidden characters too: the separator is joined into the offer
+      // description, and a URL with U+FFFD is a broken link.
+      {
+        const thHref = need('a th href', strings.find(([f]) => /\.href$/.test(f))?.[0])
+        const enHref = need('an EN faqLinks href', enStrings.find(([f]) => /^faqLinks\..*\.href$/.test(f))?.[0])
+        const rlo = ch(0x202e)
+        const cases: Array<[string, Issue[]]> = [
+          ['th listSeparator', juniorIssues(withLeaf(realTh, 'listSeparator', ' ' + rlo))],
+          [`th ${thHref}`, juniorIssues(withLeaf(realTh, thHref, (strings.find(([f]) => f === thHref)?.[1] ?? '') + ch(0xfffd)))],
+          ['EN listSeparator', enIssues(withLeaf(realEn, 'listSeparator', '. ' + ch(0x2066)))],
+          [`EN ${enHref}`, enIssues(withLeaf(realEn, enHref, (enAt.get(enHref) ?? '') + rlo))],
+        ]
+        const wrong = cases.filter(([, got]) => !exactly(got, FORBIDDEN)).map(([l]) => l)
+        // The message names the character and where it is.
+        const named = juniorIssues(setLeaf(faqAnswer, 'ab' + rlo))[0]?.detail.includes('U+202E at index 2') ?? false
+        assert(
+          `junior: a bidi control or U+FFFD in a non-prose leaf (separator, href) → 1 forbidden each, naming the code point${wrong.length ? ` (wrong at ${wrong.join(', ')})` : ''}`,
+          wrong.length === 0 && named
+        )
+      }
       assert(
         `junior: the constant changed (${JUNIOR_ACADEMY_PRICE_THB + 1000}) and the copy not → 1, price`,
         exactly(enIssues(realEn, JUNIOR_ACADEMY_PRICE_THB + 1000), PRICE)
@@ -2239,6 +2326,26 @@ if (process.argv.includes('--self-test')) {
         `junior: EN and th price.amount both "${drifted}" → 1 price from EN, 0 from th`,
         exactly(enIssues(enDrift), PRICE) && exactly(juniorIssues(setLeaf(priceLeaf, drifted), undefined, enDrift))
       )
+      // A th price written with Thai leaves the allowlist (the gate says to
+      // remove the unused entry), so it is tied to the constant directly:
+      // with the entry and without it, by digits, Thai digits included.
+      {
+        const noPrice = exemptPaths.filter((p) => p !== priceLeaf)
+        const thDigits = (s: string) => s.replace(/[0-9]/g, (x) => String.fromCharCode(0x0e50 + Number(x)))
+        const okThai = [`${want} บาท`, thDigits(want)]
+        const badThai = [`${drifted} บาท`, thDigits(drifted)]
+        assert(
+          `junior: th price.amount in Thai (${[...okThai, ...badThai].join(' | ')}) → unused exemption, plus price where the digits drift`,
+          okThai.every((v) => exactly(juniorIssues(setLeaf(priceLeaf, v)), UNUSED)) &&
+            badThai.every((v) => exactly(juniorIssues(setLeaf(priceLeaf, v)), UNUSED, PRICE))
+        )
+        assert(
+          `junior: th price.amount in Thai with its allowlist entry removed → 0 at the right digits, 1 price at drifted ones`,
+          noPrice.length === exemptPaths.length - 1 &&
+            okThai.every((v) => exactly(juniorIssues(setLeaf(priceLeaf, v), noPrice))) &&
+            badThai.every((v) => exactly(juniorIssues(setLeaf(priceLeaf, v), noPrice), PRICE))
+        )
+      }
     }
   }
 
