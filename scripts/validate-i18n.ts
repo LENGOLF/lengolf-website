@@ -44,7 +44,7 @@
  *  10. UI-message namespace parity: a next-intl namespace consumed by
  *      translated SSG routes (SSG_UI_NAMESPACES below) is entirely missing
  *      from a locale's messages/<locale>.json. next-intl does NOT fail the
- *      build on this — it logs MISSING_MESSAGE per render and the page shows
+ *      build on this: it logs MISSING_MESSAGE per render and the page shows
  *      the literal dotted key path (i18n/request.ts loads one catalog with no
  *      EN merge, so use-intl's default fallback applies; precedent:
  *      GolfCourseShared absent from ja/ko/zh, ~480 warnings/build, fixed in
@@ -1375,7 +1375,7 @@ function checkNamespaceParity(
       const entryId = `messages/${locale}.json`
       if (!(ns in catalogs[locale])) {
         add('error', locale, entryId, ns, 'ui-namespace',
-          `namespace "${ns}" missing entirely — ${locale} SSG pages consuming it render raw key paths (${enKeys.length} MISSING_MESSAGE per render)`)
+          `namespace "${ns}" missing entirely: ${locale} SSG pages consuming it render raw key paths (${enKeys.length} MISSING_MESSAGE per render)`)
         continue
       }
       const locKeys = new Set(flattenKeys(catalogs[locale][ns]))
