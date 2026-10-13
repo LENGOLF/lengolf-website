@@ -47,13 +47,19 @@ import { storageUrl } from '@/lib/constants'
  * entry's as-of marker and updated_at); also in lib/jsonld.ts
  * (typicalAgeRange, courseWorkload), in the poster, share card and reel, and
  * in the LIFF coaching card (lengolf-booking-new lib/liff/coaching-data.ts).
- * Change them together. Nothing lints the copies against each other; find
- * them with `grep -rn "16,900" data messages`.
+ * Change them together. Only price.amount is linted (see
+ * JUNIOR_ACADEMY_PRICE_THB); nothing lints the other copies against each
+ * other, so find them with `grep -rn "16,900" data messages`.
  */
 
 export const JUNIOR_ACADEMY_PATH = '/junior-golf-academy/'
 
-/** POS product "Junior Academy (10 Lessons)". */
+/**
+ * POS product "Junior Academy (10 Lessons)". The Course node's Offer.price.
+ * validate:i18n fails unless EN price.amount is this number as en-US writes it
+ * ("16,900"), and th's price.amount must equal EN's (or, once written with
+ * Thai, carry the same digits).
+ */
 export const JUNIOR_ACADEMY_PRICE_THB = 16900
 
 /**
