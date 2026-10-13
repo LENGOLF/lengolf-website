@@ -86,7 +86,7 @@ export const foodMenuGroup: MenuGroup = {
       title: 'Sliders',
       note: '3 mini pieces per serving',
       items: [
-        item('Pulled Pork Sliders', 420),
+        item('Pulled Pork Sliders', 420, 'Pulled pork, coleslaw, dark beer BBQ, super skinny fries, charcoal buns'),
         item('Beef Steak Sliders', 390, 'Sliced beef, honey dijon mustard, rocket salad, garlic butter'),
         item('Crispy Chicken Sliders', 330, 'Fried chicken, thousand island, jalapeno ranch, cheddar cheese, mini charcoal buns, iceberg lettuce'),
       ],
