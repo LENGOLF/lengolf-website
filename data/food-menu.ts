@@ -57,7 +57,6 @@ export const foodMenuGroup: MenuGroup = {
       id: 'butter-rolls',
       title: 'Butter Rolls',
       items: [
-        item('BBQ Brisket', 360, 'Brisket, sriracha mayo, mint yogurt sauce, parmesan cheese, spring onion, garlic butter toast'),
         item('Mentaiko Shrimp', 360, 'Shrimp, mentaiko sauce, mayonnaise, lettuce, parmesan cheese, spring onion, garlic butter toast'),
         item('Pulled Pork', 290, 'Pulled pork, BBQ dark beer sauce, mustard, mint yogurt sauce, parmesan cheese, spring onion, garlic butter toast'),
       ],
@@ -85,7 +84,7 @@ export const foodMenuGroup: MenuGroup = {
       title: 'Sliders',
       note: '3 mini pieces per serving',
       items: [
-        item('BBQ Brisket Sliders', 420, 'Beef brisket, coleslaw, dark beer BBQ, super skinny fries, charcoal buns'),
+        item('Pulled Pork Sliders', 420),
         item('Beef Steak Sliders', 390, 'Sliced beef, honey dijon mustard, rocket salad, garlic butter'),
         item('Crispy Chicken Sliders', 330, 'Fried chicken, thousand island, jalapeno ranch, cheddar cheese, mini charcoal buns, iceberg lettuce'),
       ],
@@ -141,7 +140,7 @@ export const drinksMenuGroup: MenuGroup = {
       id: 'highballs',
       title: 'Highballs',
       items: [
-        item('Luxury (Hibiki)', 800),
+        item('Luxury (Hibiki)', 900),
         item('Premium (Chita)', 390),
         item('Original (Kakubin)', 270),
       ],
@@ -223,7 +222,7 @@ export const menuImages = [
   {
     src: storageUrl('menus/drink-menu.jpg'),
     title: 'Drinks Menu',
-    alt: 'LENGOLF drinks menu: cocktails 250-310 THB, highballs 270-800 THB, bottled beer 160-270 THB, wine by the glass 290 THB, wine bottles 950-1,600 THB, soft drinks from 30 THB, snacks from 120 THB',
+    alt: 'LENGOLF drinks menu: cocktails 250-310 THB, highballs 270-900 THB, bottled beer 160-270 THB, wine by the glass 290 THB, wine bottles 950-1,600 THB, soft drinks from 30 THB, snacks from 120 THB',
     width: 1749,
     height: 2481,
     previewPosition: 'center top',
