@@ -1351,23 +1351,31 @@ export const faqPages: FaqSeoPage[] = [
   },
 
   // ─── JA: can-kids-play-golf-simulators ───
-  // Every figure traces to the EN entry faq-9 (5歳以上, 5歳未満／5〜8歳／9〜12歳,
-  // 30〜60分, コーチ3名, 1時間1,800THBほど, 1時間550THBほど, 5人まで, 4番出口);
-  // the two LENGOLF prices carry （2026年7月現在）.
-  // "PGA-certified" is rendered PGA認定 WITHOUT "Thailand" — the TH sibling says
-  // PGA Thailand, but this slug's EN source does not, and per-source fidelity
-  // wins over cross-page harmonization.
-  // related_slugs: the EN /activities/family-activities-bangkok has no JA
-  // translation and would 301 a JA reader to English, so it is replaced with the
-  // JA-translated /faq/best-way-to-learn-golf-in-bangkok (same substitution the
-  // TH sibling made). No language/coach claim is added — the EN makes none.
+  // Every figure traces to the EN entry faq-9 (4歳以上, 5歳未満／5〜8歳／9〜12歳,
+  // 30〜60分, 1時間550THBほど, 5人まで, 4番出口). The Junior Academy paragraph
+  // mirrors the EN paragraph and adds nothing to it (4〜12歳, 全10回, 60分の
+  // マンツーマン, 運動とゲームが半分・ゴルフが半分, 5回目と10回目の評価, Level 1と
+  // Level 2の認定証, 5時間の練習時間, 身長に合わせたジュニア用クラブ, 16,900THB,
+  // 有効期間1年). The practical-details paragraph keeps its （2026年7月現在）, which
+  // closes the free-clubs sentence; the Academy price carries
+  // （2026年10月現在）, the month it went on sale.
+  // "PGA coaches" is rendered PGAコーチ: since 2026-10-11 the EN entry says "our
+  // PGA coaches", not "PGA-certified", and never says "Thailand".
+  // related_slugs: the EN /activities/family-activities-bangkok was replaced with
+  // the JA-translated /faq/best-way-to-learn-golf-in-bangkok (same substitution
+  // the TH sibling made) on the premise that it had no JA translation. act-10-ja
+  // shipped in the same PR (#90), so that premise never held on main; restoring
+  // the link is a separate decision. /junior-golf-academy is
+  // deliberately NOT added: the page is EN and TH only, so the card would 301 a
+  // JA reader to English (owner decision, 2026-10-11). No language/coach claim
+  // is added: the EN makes none.
   {
     id: 'faq-9-ja',
     page_type: 'faq',
     slug: 'can-kids-play-golf-simulators',
     title: '子どもでもゴルフシミュレーターで遊べる？ — 年齢の目安とジュニアレッスン',
     meta_description:
-      '子どもでもゴルフシミュレーターは楽しめます。5歳以上ならたいていクラブを振って遊べるようになり、画面に映る弾道と即時のスコアがゲーム感覚。LENGOLFはご家族でのご来店を歓迎し、ジュニア向けのレッスンもご用意しています。',
+      '子どもでもゴルフシミュレーターは楽しめます。ジュニア用クラブならほとんどの子が振って遊べ、LENGOLF Junior Academy（ジュニアアカデミー）では4〜12歳のお子さまにゴルフを教えています。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1375,12 +1383,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/faq/do-i-need-experience-to-play-golf-simulator', '/lessons', '/faq/best-way-to-learn-golf-in-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       answer_intro:
-        '子どもでもゴルフシミュレーターで遊べます。しかも、ほとんどの子が夢中になります。5歳以上であれば、たいていは十分にクラブを振れて、この体験を楽しめるでしょう。画面に描かれる弾道、すぐ出るスコア、ゲームのような形式 — 実際のゴルフ場よりも子どもを引きつける要素が揃っているのです。LENGOLFは営業時間中いつでもご家族を歓迎しており、体の小さい方向けの軽いクラブもご用意しています。',
+        '子どもでもゴルフシミュレーターで遊べます。しかも、ほとんどの子が夢中になります。4歳以上であれば、たいていはジュニア用クラブを十分に振れて、この体験を楽しめるでしょう。画面に描かれる弾道、すぐ出るスコア、ゲームのような形式と、実際のゴルフ場よりも子どもを引きつける要素が揃っているのです。LENGOLFは営業時間中いつでもご家族を歓迎しており、体の小さい方向けの軽いクラブもご用意しています。',
       answer_body:
-        'ゴルフシミュレーターは、子どもをゴルフに触れさせる方法として実はとても優れています。保護者の方に知っておいていただきたい点をまとめます。\n\n**子どもがシミュレーターを気に入る理由**\n- **結果がすぐわかる:** 大きな画面にボールの行方がはっきり映ります。本物のクラブで遊ぶビデオゲームのような感覚です\n- **いらいらしない:** 実際のコースと違い、ボールをなくすことも、長く歩くことも、待つこともありません。打って、見て、また打つだけ\n- **競い合えるゲーム:** ピンに近づけるチャレンジやドラコンは、年齢を問わず盛り上がります\n- **空調の効いた快適さ:** 熱中症や日焼けの心配がありません（バンコクでは現実的な問題です）\n\n**年齢別の目安**\n- **5歳未満:** クラブの重さと体の使い方に苦戦する子がほとんどです。もう少し待ったほうがよいでしょう\n- **5〜8歳:** 参加して楽しめますが、集中が続く時間は短めです。30〜60分がちょうどよい長さ\n- **9〜12歳:** ラウンドも対戦も問題なくこなせます。いちばん夢中になる年代です\n- **ティーンエイジャー:** 社交的なアクティビティとして。画面から離れて家族で過ごす時間になります\n\n**LENGOLFのジュニアレッスン**\n当施設のPGA認定コーチ3名（PRO Boss、PRO Ratchavin、PRO Min）は、いずれもジュニアゴルフ育成の経験があります。楽しく前向きな雰囲気のなかで正しい基礎を身につけられるよう、一人ひとりに合わせたプログラムをご用意しています。レッスンは1時間1,800THBほどから、シミュレーターの利用料込みです（2026年7月現在）。\n\n**ご利用にあたっての実務的な情報**\nベイのレンタルは1時間550THBほどで5人までご利用いただけるため、ご家族全員で一緒にプレーできます。標準クラブは無料で付属し、体の小さいお子さま向けのセットもございます（2026年7月現在）。場所はザ・マーキュリービル、BTSチットロム駅（4番出口）。アクセスがよく、周辺のモールにも過ごせる場所がたくさんあります。',
+        'ゴルフシミュレーターは、子どもをゴルフに触れさせる方法として実はとても優れています。保護者の方に知っておいていただきたい点をまとめます。\n\n**子どもがシミュレーターを気に入る理由**\n- **結果がすぐわかる:** 大きな画面にボールの行方がはっきり映ります。本物のクラブで遊ぶビデオゲームのような感覚です\n- **いらいらしない:** 実際のコースと違い、ボールをなくすことも、長く歩くことも、待つこともありません。打って、見て、また打つだけ\n- **競い合えるゲーム:** ピンに近づけるチャレンジやドラコンは、年齢を問わず盛り上がります\n- **空調の効いた快適さ:** 熱中症や日焼けの心配がありません（バンコクでは現実的な問題です）\n\n**年齢別の目安**\n- **5歳未満:** 標準クラブはこの年齢のほとんどの子には重すぎるので、ジュニア用クラブを使い、コーチと一緒に始めましょう。LENGOLF Junior Academy（ジュニアアカデミー）には4歳から参加できます\n- **5〜8歳:** 参加して楽しめますが、集中が続く時間は短めです。30〜60分がちょうどよい長さ\n- **9〜12歳:** ラウンドも対戦も問題なくこなせます。いちばん夢中になる年代です\n- **ティーンエイジャー:** 社交的なアクティビティとして。画面から離れて家族で過ごす時間になります\n\n**LENGOLF Junior Academy**\n体系的に学びたい方のために、LENGOLF Junior Academyをご用意しています。4〜12歳のお子さま向けの全10回のプログラムで、当施設のPGAコーチによる60分のマンツーマンレッスン。毎回の1時間は、半分が運動とゲーム、もう半分がゴルフです。5回目と10回目に評価があり、Level 1とLevel 2の認定証、ご家族で使える5時間の練習時間、身長に合わせたジュニア用クラブも含まれます。料金は16,900THBで、有効期間は1年です（2026年10月現在）。\n\n**ご利用にあたっての実務的な情報**\nベイのレンタルは1時間550THBほどで5人までご利用いただけるため、ご家族全員で一緒にプレーできます。標準クラブは無料で付属し、体の小さいお子さま向けのセットもございます（2026年7月現在）。場所はザ・マーキュリービル、BTSチットロム駅（4番出口）。アクセスがよく、周辺のモールにも過ごせる場所がたくさんあります。',
       related_questions: [
         { slug: 'do-i-need-experience-to-play-golf-simulator', question: 'ゴルフ経験がなくてもシミュレーターで遊べる？ — 必要な準備と当日の流れ' },
         { slug: 'can-beginners-play-golf-simulators', question: 'ゴルフシミュレーターは初心者でも楽しめる？ — 未経験から始める手順' },
@@ -1390,22 +1398,33 @@ export const faqPages: FaqSeoPage[] = [
   },
 
   // ─── KO: can-kids-play-golf-simulators ───
-  // Age bands, the 1,800바트 lesson rate and the 550바트 bay rate all trace to
-  // the EN entry faq-9; both LENGOLF prices are literals with the as-of marker
-  // (2026년 7월 기준). Coaches are rendered "PGA 인증 코치" WITHOUT "Thailand"
-  // because this slug's EN source says only "PGA-certified" — per-source
-  // fidelity over cross-page harmonization. The EN "without screen time" is
-  // rendered as 휴대폰 화면, matching the TH sibling's reading.
-  // related_slugs: the EN /activities/family-activities-bangkok has no KO
-  // route, so it is replaced with /faq/best-way-to-learn-golf-in-bangkok
-  // (the same substitution the TH sibling made).
+  // Age bands (4세 이상, 5세 미만, 5~8세, 9~12세) and the 550바트 bay rate trace
+  // to the EN entry faq-9. The Junior Academy paragraph mirrors the EN paragraph
+  // and adds nothing to it (4~12세, 10회, 60분 1:1, 신체 활동과 게임 절반·골프
+  // 절반, 5회차와 10회차 평가, Level 1·Level 2 수료증, 가족 연습 시간 5시간, 키에
+  // 맞춘 주니어 클럽, 16,900바트, 유효기간 1년). Its price carries (2026년 10월
+  // 기준), the month it went on sale; the bay rate has no marker, as in EN and TH.
+  // The validity comes BEFORE the price so the marker sits beside the price: 기준
+  // right after 유효기간은 1년 reads as the date the year is counted from.
+  // Coaches are rendered "PGA 코치": since 2026-10-11 the EN entry says "our PGA
+  // coaches", not "PGA-certified", and never says "Thailand". The Latin program
+  // name never takes a particle directly: 과정 carries it (과정은, 과정이,
+  // 과정에서). The EN "without screen time" is rendered as 휴대폰 화면, matching
+  // the TH sibling's reading.
+  // related_slugs: the EN /activities/family-activities-bangkok was replaced with
+  // /faq/best-way-to-learn-golf-in-bangkok (the same substitution the TH sibling
+  // made) on the premise that it had no KO route. act-10-ko shipped in the same
+  // PR (#90), so that premise never held on main; restoring the link is a
+  // separate decision. /junior-golf-academy is deliberately NOT added: the
+  // page is EN and TH only, so the card would 301 a KO reader to English (owner
+  // decision, 2026-10-11).
   {
     id: 'faq-9-ko',
     page_type: 'faq',
     slug: 'can-kids-play-golf-simulators',
     title: '아이도 골프 시뮬레이터 칠 수 있나요? — 연령별 안내',
     meta_description:
-      '아이도 골프 시뮬레이터를 칠 수 있어요. 보통 5세 이상이면 클럽을 휘두르며 충분히 즐길 수 있어요. LENGOLF는 가족 손님을 환영하고 주니어 골프 레슨도 준비돼 있어요.',
+      '아이도 골프 시뮬레이터를 칠 수 있어요. 주니어 클럽이라면 대부분 충분히 휘두르며 즐길 수 있고, LENGOLF Junior Academy 과정에서 4~12세 아이에게 골프를 가르쳐요.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1413,12 +1432,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/faq/do-i-need-experience-to-play-golf-simulator', '/lessons', '/faq/best-way-to-learn-golf-in-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       answer_intro:
-        '아이도 골프 시뮬레이터를 칠 수 있고, 대부분 아주 좋아해요. 5세 이상이면 대체로 클럽을 휘둘러 충분히 즐길 수 있어요. 화면에 그려지는 볼 비행, 바로 나오는 스코어, 게임 같은 진행 방식 덕분에 아이에게는 실제 골프장보다 시뮬레이터가 훨씬 재미있어요. LENGOLF는 영업시간 내내 가족 손님을 환영하고, 체구가 작은 플레이어에게 맞는 가벼운 클럽도 갖추고 있어요.',
+        '아이도 골프 시뮬레이터를 칠 수 있고, 대부분 아주 좋아해요. 4세 이상이면 대체로 주니어 클럽을 휘둘러 충분히 즐길 수 있어요. 화면에 그려지는 볼 비행, 바로 나오는 스코어, 게임 같은 진행 방식 덕분에 아이에게는 실제 골프장보다 시뮬레이터가 훨씬 재미있어요. LENGOLF는 영업시간 내내 가족 손님을 환영하고, 체구가 작은 플레이어에게 맞는 가벼운 클럽도 갖추고 있어요.',
       answer_body:
-        '골프 시뮬레이터는 아이에게 골프를 소개하는 가장 좋은 방법 중 하나예요. 부모님이 알아두시면 좋을 내용을 정리했어요.\n\n**아이들이 시뮬레이터를 좋아하는 이유**\n- **바로 나오는 피드백:** 큰 화면으로 공이 어디로 갔는지 정확히 보여요. 진짜 클럽으로 하는 비디오 게임 같아요\n- **답답할 일이 없어요:** 실제 코스와 달리 공을 잃어버리거나, 한참 걷거나, 기다릴 일이 없어요. 치고, 보고, 또 치면 돼요\n- **겨루는 재미:** 니어핀과 롱기스트 드라이브 챌린지는 나이에 상관없이 즐길 수 있어요\n- **시원한 실내:** 더위에 지치거나 햇볕에 탈 일이 없어요 (방콕에서는 꽤 현실적인 걱정이에요)\n\n**연령별 안내**\n- **5세 미만:** 이 나이대는 클럽 무게와 몸의 협응이 아직 어려운 경우가 많아요. 조금 더 기다리시는 편이 좋아요\n- **5~8세:** 함께 치며 즐길 수 있지만 집중 시간이 짧아요. 30~60분이 알맞아요\n- **9~12세:** 라운딩과 시합까지 충분히 소화해요. 가장 열정적인 플레이어인 경우가 많아요\n- **10대:** 어울려 노는 활동으로 접근해 보세요. 휴대폰 화면에서 벗어나 가족이 함께 시간을 보내기에 좋아요\n\n**LENGOLF의 주니어 골프 레슨**\nPGA 인증 코치 세 분(PRO Boss, PRO Ratchavin, PRO Min) 모두 주니어 골프 육성 경험이 있어요. 즐겁고 편안한 분위기에서 올바른 기본기를 쌓도록 아이에게 맞춘 프로그램을 진행해요. 레슨은 시뮬레이터 이용을 포함해 시간당 약 1,800바트부터예요 (2026년 7월 기준).\n\n**알아두면 좋은 정보**\n베이 이용료는 최대 5명까지 시간당 약 550바트라서 온 가족이 함께 칠 수 있어요. 기본 클럽은 무료로 제공되고, 체구가 작은 플레이어에게 맞는 세트도 있어요. 위치는 The Mercury Ville, BTS 칫롬역(4번 출구)이라 찾아오기 쉽고, 같은 건물 쇼핑몰에도 즐길 거리가 많아요.',
+        '골프 시뮬레이터는 아이에게 골프를 소개하는 가장 좋은 방법 중 하나예요. 부모님이 알아두시면 좋을 내용을 정리했어요.\n\n**아이들이 시뮬레이터를 좋아하는 이유**\n- **바로 나오는 피드백:** 큰 화면으로 공이 어디로 갔는지 정확히 보여요. 진짜 클럽으로 하는 비디오 게임 같아요\n- **답답할 일이 없어요:** 실제 코스와 달리 공을 잃어버리거나, 한참 걷거나, 기다릴 일이 없어요. 치고, 보고, 또 치면 돼요\n- **겨루는 재미:** 니어핀과 롱기스트 드라이브 챌린지는 나이에 상관없이 즐길 수 있어요\n- **시원한 실내:** 더위에 지치거나 햇볕에 탈 일이 없어요 (방콕에서는 꽤 현실적인 걱정이에요)\n\n**연령별 안내**\n- **5세 미만:** 기본 클럽은 이 나이대 아이 대부분에게 너무 무거워요. 주니어 클럽을 쓰고 코치와 함께 시작하는 편이 좋아요. LENGOLF Junior Academy 과정은 4세부터 참여할 수 있어요\n- **5~8세:** 함께 치며 즐길 수 있지만 집중 시간이 짧아요. 30~60분이 알맞아요\n- **9~12세:** 라운딩과 시합까지 충분히 소화해요. 가장 열정적인 플레이어인 경우가 많아요\n- **10대:** 어울려 노는 활동으로 접근해 보세요. 휴대폰 화면에서 벗어나 가족이 함께 시간을 보내기에 좋아요\n\n**LENGOLF Junior Academy**\n체계적으로 배우고 싶다면 LENGOLF Junior Academy 과정이 있어요. 4~12세 아이를 위한 10회 프로그램으로, PGA 코치에게 60분씩 1:1 개인 레슨을 받아요. 레슨 한 시간 중 절반은 신체 활동과 게임, 나머지 절반은 골프예요. 5회차와 10회차에 평가가 있고, Level 1·Level 2 수료증, 가족 연습 시간 5시간, 키에 맞춘 주니어 클럽이 포함돼요. 유효기간은 1년이고, 요금은 16,900바트예요 (2026년 10월 기준).\n\n**알아두면 좋은 정보**\n베이 이용료는 최대 5명까지 시간당 약 550바트라서 온 가족이 함께 칠 수 있어요. 기본 클럽은 무료로 제공되고, 체구가 작은 플레이어에게 맞는 세트도 있어요. 위치는 The Mercury Ville, BTS 칫롬역(4번 출구)이라 찾아오기 쉽고, 같은 건물 쇼핑몰에도 즐길 거리가 많아요.',
       related_questions: [
         { slug: 'do-i-need-experience-to-play-golf-simulator', question: '골프 경험이 없어도 시뮬레이터를 즐길 수 있나요? — 준비물과 이용 흐름' },
         { slug: 'can-beginners-play-golf-simulators', question: '스크린골프, 초보자도 즐길 수 있을까? — 처음 시작하는 방법' },
@@ -1428,22 +1447,32 @@ export const faqPages: FaqSeoPage[] = [
   },
 
   // ─── ZH: can-kids-play-golf-simulators ───
-  // Ages, durations and prices all trace to EN faq-9 (5岁以上, 5岁以下建议再等,
-  // 5–8岁30–60分钟, 9–12岁, 青少年; 课程每小时约1,800泰铢起含模拟器; 球位每小时约
-  // 550泰铢最多5人). "PGA-certified" is rendered 获PGA认证 WITHOUT "Thailand" —
-  // this slug's EN source does not say Thailand, and per-source fidelity beats
-  // cross-page harmonization. 认证 (not the 认定 seen in some older ZH FAQ
-  // entries) is the Mainland form used by messages/zh.json and the ZH guides.
-  // No language claim exists in the EN source, so none is added. related_*:
-  // the EN /activities/family-activities-bangkok has no ZH translation and is
-  // replaced with the ZH learning FAQ.
+  // Ages, durations and prices all trace to EN faq-9 (4岁以上, 5岁以下先用儿童
+  // 球杆并跟教练起步, 5–8岁30–60分钟, 9–12岁, 青少年; 球位每小时约550泰铢最多5人).
+  // The Junior Academy paragraph mirrors the EN paragraph and adds nothing to it
+  // (4–12岁, 10节, 一对一每节60分钟, 一半身体活动和游戏、一半高尔夫, 第5节和第10节
+  // 评估, Level 1和Level 2证书, 家人可用的5小时练习时间, 按身高配的儿童球杆,
+  // 16,900泰铢, 有效期1年). Its price carries 截至2026年10月, the month it went on
+  // sale, placed BEFORE the price: after 有效期1年 it would read as the end date of
+  // the validity. "Family practice time" is 家人可用的…练习时间, not 家庭练习时间,
+  // which reads as practice at home. "Junior clubs" is 儿童球杆, not 青少年球杆:
+  // the same entry uses 青少年 for the Teens bullet, and the Academy starts at
+  // age 4. Coaches are rendered PGA教练: since 2026-10-11 the EN entry says "our
+  // PGA coaches", not "PGA-certified", and never says "Thailand". No language
+  // claim exists in the EN source, so none is added. related_*: the EN
+  // /activities/family-activities-bangkok was replaced with the ZH learning FAQ
+  // on the premise that it had no ZH translation. act-10-zh shipped in the same
+  // PR (#90), so that premise never held on main; restoring the link is a
+  // separate decision. /junior-golf-academy is deliberately NOT added: the page
+  // is EN and TH only, so the card would 301 a ZH reader to English (owner
+  // decision, 2026-10-11).
   {
     id: 'faq-9-zh',
     page_type: 'faq',
     slug: 'can-kids-play-golf-simulators',
     title: '小朋友能玩高尔夫模拟器吗？ — 年龄建议与青少年课程',
     meta_description:
-      '小朋友可以玩高尔夫模拟器。5岁以上的孩子一般都挥得动杆，也玩得开心。LENGOLF营业时间内全天欢迎家庭客人，并提供青少年高尔夫课程。',
+      '小朋友可以玩高尔夫模拟器。多数孩子用儿童球杆就挥得动，也玩得开心。LENGOLF Junior Academy教4–12岁的孩子打高尔夫。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1451,12 +1480,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/faq/do-i-need-experience-to-play-golf-simulator', '/faq/best-way-to-learn-golf-in-bangkok', '/lessons'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       answer_intro:
-        '可以，而且多数小朋友都很喜欢。5岁以上的孩子一般已经能把杆挥起来，足够享受这项活动。动画呈现的球飞行轨迹、即时计分和游戏化的形式，让模拟器对孩子的吸引力比真实球场更大。LENGOLF在营业时间内全天欢迎家庭客人，也备有适合小球员的轻量球杆。',
+        '可以，而且多数小朋友都很喜欢。4岁以上的孩子大多已经能把儿童球杆挥起来，足够享受这项活动。动画呈现的球飞行轨迹、即时计分和游戏化的形式，让模拟器对孩子的吸引力比真实球场更大。LENGOLF在营业时间内全天欢迎家庭客人，也备有适合小球员的轻量球杆。',
       answer_body:
-        '高尔夫模拟器其实是带孩子入门高尔夫最好的方式之一。以下是家长需要知道的。\n\n**孩子为什么喜欢模拟器**\n- **即时反馈：** 球去了哪里，大屏幕上一清二楚，像是拿真球杆玩电子游戏\n- **不会有挫败感：** 不像真实球场会丢球、要走很远、还得等前面一组。打完看结果，接着再打一杆。\n- **好玩的比赛：** 最接近旗杆和最远开球的挑战，各个年龄都能玩\n- **空调里的舒适：** 不必担心中暑或晒伤，这在曼谷是很实际的问题\n\n**各年龄段的建议**\n- **5岁以下：** 这个年纪的孩子多半还应付不了球杆的重量和协调性，建议再等等。\n- **5–8岁：** 能参与，也玩得开心，但注意力持续的时间短，30–60分钟最合适。\n- **9–12岁：** 完全可以打完整轮、参加比赛，往往是最投入的一群。\n- **青少年：** 当成社交活动来安排，是不用盯着手机的家庭相处时间。\n\n**LENGOLF的青少年高尔夫课程**\n我们三位获PGA认证的教练（PRO Boss、PRO Ratchavin和PRO Min）都有青少年高尔夫培养的经验。他们会针对孩子设计课程，在轻松、有鼓励的氛围里打好正确的基本功。课程每小时约1,800泰铢起，含模拟器使用，截至2026年7月。\n\n**实用信息**\n球位收费每小时约550泰铢，最多可容纳5人，你们全家可以一起打。标准球杆免费提供，也备有适合小球员的套装。地点在The Mercury Ville，BTS Chidlom站（4号出口），过去很方便，周边商场里也有很多可以逛的。',
+        '高尔夫模拟器其实是带孩子入门高尔夫最好的方式之一。以下是家长需要知道的。\n\n**孩子为什么喜欢模拟器**\n- **即时反馈：** 球去了哪里，大屏幕上一清二楚，像是拿真球杆玩电子游戏\n- **不会有挫败感：** 不像真实球场会丢球、要走很远、还得等前面一组。打完看结果，接着再打一杆。\n- **好玩的比赛：** 最接近旗杆和最远开球的挑战，各个年龄都能玩\n- **空调里的舒适：** 不必担心中暑或晒伤，这在曼谷是很实际的问题\n\n**各年龄段的建议**\n- **5岁以下：** 标准球杆对这个年纪的大多数孩子来说太重，建议先用儿童球杆，在教练指导下起步。LENGOLF Junior Academy从4岁起就可以参加。\n- **5–8岁：** 能参与，也玩得开心，但注意力持续的时间短，30–60分钟最合适。\n- **9–12岁：** 完全可以打完整轮、参加比赛，往往是最投入的一群。\n- **青少年：** 当成社交活动来安排，是不用盯着手机的家庭相处时间。\n\n**LENGOLF Junior Academy**\n如果想让孩子系统地学，可以选择LENGOLF Junior Academy。这是为4–12岁孩子设计的10节课程，由我们的PGA教练一对一授课，每节60分钟，一半时间做身体活动和游戏，一半时间打高尔夫。第5节和第10节课进行评估，颁发Level 1和Level 2证书，另含家人可用的5小时练习时间，以及按身高配好的儿童球杆。截至2026年10月，费用为16,900泰铢，有效期1年。\n\n**实用信息**\n球位收费每小时约550泰铢，最多可容纳5人，你们全家可以一起打。标准球杆免费提供，也备有适合小球员的套装。地点在The Mercury Ville，BTS Chidlom站（4号出口），过去很方便，周边商场里也有很多可以逛的。',
       related_questions: [
         { slug: 'do-i-need-experience-to-play-golf-simulator', question: '没打过高尔夫也能玩模拟器吗？ — 要准备什么、当天怎么进行' },
         { slug: 'can-beginners-play-golf-simulators', question: '零基础也能玩高尔夫模拟器吗？ — 初学者上手指南' },

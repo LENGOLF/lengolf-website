@@ -53,18 +53,18 @@ const eventGallery = [
   { src: storageUrl('events/event-07.jpg'), alt: 'Guests playing golf simulators during a company event', width: 1200, height: 800 },
   { src: storageUrl('events/event-08.jpg'), alt: 'Group photo at a LENGOLF private event', width: 1200, height: 800 },
   { src: storageUrl('events/event-09.jpg'), alt: 'Party guests enjoying drinks and golf at LENGOLF', width: 1200, height: 800 },
-  { src: storageUrl('events/event-10.jpg'), alt: 'Celebration event with cocktails and golf games', width: 1200, height: 800 },
+  { src: storageUrl('events/event-10.jpg'), alt: 'Celebration event with cocktails and golf games', width: 1920, height: 2560 },
   { src: storageUrl('events/event-11.jpg'), alt: 'Guests mingling during an indoor golf party', width: 1200, height: 800 },
-  { src: storageUrl('events/event-12.jpg'), alt: 'Large group event with multiple simulator bays in use', width: 1200, height: 800 },
+  { src: storageUrl('events/event-12.jpg'), alt: 'Large group event with multiple simulator bays in use', width: 1920, height: 2560 },
   { src: storageUrl('events/event-13.jpg'), alt: 'LENGOLF venue interior with bar and simulator bays', width: 1200, height: 800 },
   { src: storageUrl('events/event-14.jpg'), alt: 'Catered food spread at a LENGOLF event including burgers and appetizers', width: 1200, height: 800 },
   { src: storageUrl('events/event-15.jpg'), alt: 'Guests enjoying catered dining during a private event', width: 1200, height: 800 },
-  { src: storageUrl('events/event-16.jpg'), alt: 'Evening event with ambient lighting at LENGOLF', width: 1200, height: 800 },
-  { src: storageUrl('events/event-17.jpg'), alt: 'Aerial view of LENGOLF venue during a full-location rental event', width: 1200, height: 800 },
+  { src: storageUrl('events/event-16.jpg'), alt: 'Evening event with ambient lighting at LENGOLF', width: 1920, height: 1440 },
+  { src: storageUrl('events/event-17.jpg'), alt: 'Aerial view of LENGOLF venue during a full-location rental event', width: 1920, height: 1080 },
   { src: storageUrl('events/event-18.jpg'), alt: 'Lively party atmosphere with guests enjoying golf and drinks', width: 1200, height: 800 },
   { src: storageUrl('events/event-19.jpg'), alt: 'Guests having fun with golf games at a birthday party', width: 1200, height: 800 },
   { src: storageUrl('events/event-20.jpg'), alt: 'Friends playing a simulator golf tournament at a private party', width: 1200, height: 800 },
-  { src: storageUrl('events/event-21.jpg'), alt: 'Catered cocktails and appetizers served at LENGOLF event', width: 1200, height: 800 },
+  { src: storageUrl('events/event-21.jpg'), alt: 'Catered cocktails and appetizers served at LENGOLF event', width: 1920, height: 1440 },
   { src: storageUrl('events/event-22.jpg'), alt: 'Panoramic view of LENGOLF event space with all bays and bar', width: 1200, height: 800 },
 ]
 
@@ -396,7 +396,7 @@ export default async function EventsPage({ params }: { params: Promise<{ locale:
           <span style={{ color: '#007429' }}>{t('galleryTitle')}</span>{' '}
           <span className="text-foreground">{t('galleryTitleSuffix')}</span>
         </h2>
-        <ImageGallery images={eventGallery} rows={[2, 3, 3, 2, 3, 3, 2, 2, 2]} />
+        <ImageGallery images={eventGallery} rows={[2, 3, 3, 3, 3, 3, 2, 3]} />
       </SectionWrapper>
 
       {/* ── Explore More ── */}
