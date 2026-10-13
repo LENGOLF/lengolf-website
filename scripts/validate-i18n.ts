@@ -1707,7 +1707,7 @@ if (process.argv.includes('--self-test')) {
   // it, so there was no count and no floor at all: deleting assert() lines
   // silently reduced coverage while it still printed ALL SELF-TESTS PASS.
   // Raise MIN_ASSERTIONS in the same commit that adds one; never lower it.
-  const MIN_ASSERTIONS = 126
+  const MIN_ASSERTIONS = 127
   let asserted = 0
   const assert = (label: string, cond: boolean) => {
     asserted++
@@ -1957,9 +1957,9 @@ if (process.argv.includes('--self-test')) {
   // data. A fixture that cannot be built throws, naming the fixture.
   {
     const realTh = JUNIOR_ACADEMY_CONTENT.th
-    const juniorIssues = (content: unknown, exemptPaths?: readonly string[], en?: unknown): Issue[] => {
+    const juniorIssues = (content: unknown, exemptPaths?: readonly string[], en?: unknown, priceThb?: number): Issue[] => {
       const before = issues.length
-      checkJuniorAcademyLeaves('th', '__test__', content, exemptPaths, en)
+      checkJuniorAcademyLeaves('th', '__test__', content, exemptPaths, en, priceThb)
       return issues.splice(before).filter((i) => i.level === 'error')
     }
     const juniorErrs = (content: unknown): number => juniorIssues(content).length
@@ -2024,19 +2024,20 @@ if (process.argv.includes('--self-test')) {
     // Every blank shape the rule must see as blank, not just ASCII spaces:
     // '', spaces, tab and newline, NBSP, ideographic space, BOM, zero-width
     // space plus word joiner, zero-width joiner, soft hyphen, left-to-right
-    // mark. Of these first ten, the last four are\p{Cf}, so a blank regex that names a few
-    // format characters instead of the class misses one. Then combining marks
-    // alone: a Thai tone mark, two Thai marks (a vowel sign and a tone mark),
-    // and a Latin acute, so a blank test that strips only Thai marks misses
-    // one. Last, a bidi override alone, which must be reported once, as blank,
-    // not also as a forbidden character.
+    // mark. Of these first ten, the last four are \p{Cf}, so a blank regex
+    // that names a few format characters instead of the class misses one.
+    // Then combining marks alone: a Thai tone mark, two Thai marks (a vowel
+    // sign and a tone mark), a Latin acute and an enclosing circle (Me, not
+    // Mn), so a blank test that strips only Thai marks, or only nonspacing
+    // ones, misses one. Last, a bidi override alone, which must be reported
+    // once, as blank, not also as a forbidden character.
     const BLANK_SHAPES = [
       '', '  ', '\t\n', ch(0xa0), ch(0x3000), ch(0xfeff), ch(0x200b, 0x2060), ch(0x200d), ch(0xad), ch(0x200e),
-      ch(0x0e48), ch(0x0e31, 0x0e48), ch(0x0301), ch(0x202e),
+      ch(0x0e48), ch(0x0e31, 0x0e48), ch(0x0301), ch(0x20dd), ch(0x202e),
     ]
     // A floor, because .every() over an emptied list is true: the sweeps
     // below would pass having checked nothing. Raise it with the list.
-    const MIN_BLANK_SHAPES = 14
+    const MIN_BLANK_SHAPES = 15
 
     assert('junior: the real th block → 0 (the allowlist is exactly its script-less leaves)', juniorErrs(realTh) === 0)
     // The two gaps this rule exists for, as re-measured on main. The English
@@ -2144,6 +2145,9 @@ if (process.argv.includes('--self-test')) {
     // list passes having checked less (measured: emptied, it stayed green).
     const FORBIDDEN_CHARS = [0x202a, 0x202b, 0x202c, 0x202d, 0x202e, 0x2066, 0x2067, 0x2068, 0x2069, 0xfffd].map((c) => ch(c))
     const inMiddle = (v: string, c: string) => v.slice(0, Math.ceil(v.length / 2)) + c + v.slice(Math.ceil(v.length / 2))
+    // Start, middle and end: a test that skipped a position (the first
+    // character, say) would otherwise pass the middle-only sweep.
+    const placements = (v: string, c: string) => [c + v, inMiddle(v, c), v + c]
     const under = (item: string) => (p: string) => p === item || p.startsWith(`${item}.`) || p.startsWith(`${item}[`)
 
     // Characters. A Thai mark makes neither a blank leaf nor an English one
@@ -2164,8 +2168,10 @@ if (process.argv.includes('--self-test')) {
       const wrong = prosePaths.filter(
         (p) => !FORBIDDEN_CHARS.every((c) => {
           const value = strings.find(([f]) => f === p)?.[1] ?? ''
-          const got = juniorIssues(setLeaf(p, inMiddle(value, c)))
-          return exempt.has(p) ? exactly(got, FORBIDDEN, NOT_EN) : exactly(got, FORBIDDEN)
+          return placements(value, c).every((v) => {
+            const got = juniorIssues(setLeaf(p, v))
+            return exempt.has(p) ? exactly(got, FORBIDDEN, NOT_EN) : exactly(got, FORBIDDEN)
+          })
         })
       )
       assert(
@@ -2279,7 +2285,7 @@ if (process.argv.includes('--self-test')) {
         enProsePaths.length >= prosePaths.length && BLANK_SHAPES.length >= MIN_BLANK_SHAPES && wrongEnBlank.length === 0
       )
       const wrongEnForbidden = enProsePaths.filter(
-        (p) => !FORBIDDEN_CHARS.every((c) => exactly(enIssues(setEnLeaf(p, inMiddle(enAt.get(p) ?? '', c))), ...plus(p, FORBIDDEN)))
+        (p) => !FORBIDDEN_CHARS.every((c) => placements(enAt.get(p) ?? '', c).every((v) => exactly(enIssues(setEnLeaf(p, v)), ...plus(p, FORBIDDEN))))
       )
       assert(
         `junior: each of the ${FORBIDDEN_CHARS.length - 1} bidi controls and U+FFFD inside each of the ${enProsePaths.length} EN prose leaves → 1 forbidden (plus price at price.amount)${wrongAt(wrongEnForbidden)}`,
@@ -2344,6 +2350,19 @@ if (process.argv.includes('--self-test')) {
           noPrice.length === exemptPaths.length - 1 &&
             okThai.every((v) => exactly(juniorIssues(setLeaf(priceLeaf, v), noPrice))) &&
             badThai.every((v) => exactly(juniorIssues(setLeaf(priceLeaf, v), noPrice), PRICE))
+        )
+        // The gate relies on each function's DEFAULT price, and every case
+        // above that changes the price passes one explicitly, so a default
+        // hardcoded to today's number (16900 instead of the import) passed
+        // the gate and the self-test with the constant changed and the copy
+        // not (measured). The default must give the explicit constant's
+        // verdict, which differs from today's the day the constant moves.
+        const sameVerdict = (a: Issue[], b: Issue[]) => kinds(a) === kinds(b)
+        const thPrice = setLeaf(priceLeaf, okThai[0])
+        assert(
+          'junior: both functions default to the imported JUNIOR_ACADEMY_PRICE_THB (EN, and a th price written in Thai)',
+          sameVerdict(enIssues(realEn), enIssues(realEn, JUNIOR_ACADEMY_PRICE_THB)) &&
+            sameVerdict(juniorIssues(thPrice, noPrice), juniorIssues(thPrice, noPrice, undefined, JUNIOR_ACADEMY_PRICE_THB))
         )
       }
     }
