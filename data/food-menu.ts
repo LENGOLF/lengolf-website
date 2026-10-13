@@ -1,10 +1,12 @@
 import { storageUrl } from '@/lib/constants'
 
 // ── Food & Drinks menu data ──
-// Transcribed from the printed menus served at LENGOLF (also hosted at
-// menus/food-menu-1.jpg, menus/food-menu-2.jpg, menus/drink-menu.jpg in
-// Supabase Storage and linked from booking.len.golf). Keep this file in
-// sync with the printed menu whenever the kitchen partners update prices.
+// Source of truth is the POS (products.products on the LENGOLF Supabase
+// project: name, price, is_active), not the printed menus. The printed menu
+// images (menus/food-menu-1.jpg, menus/food-menu-2.jpg, menus/drink-menu.jpg in
+// Supabase Storage, also linked from booking.len.golf) can lag behind it, and
+// their alt text below describes what each image shows. Update this file
+// whenever a POS price, name or active flag changes.
 
 export interface MenuItem {
   name: string
@@ -57,7 +59,6 @@ export const foodMenuGroup: MenuGroup = {
       id: 'butter-rolls',
       title: 'Butter Rolls',
       items: [
-        item('BBQ Brisket', 360, 'Brisket, sriracha mayo, mint yogurt sauce, parmesan cheese, spring onion, garlic butter toast'),
         item('Mentaiko Shrimp', 360, 'Shrimp, mentaiko sauce, mayonnaise, lettuce, parmesan cheese, spring onion, garlic butter toast'),
         item('Pulled Pork', 290, 'Pulled pork, BBQ dark beer sauce, mustard, mint yogurt sauce, parmesan cheese, spring onion, garlic butter toast'),
       ],
@@ -85,7 +86,7 @@ export const foodMenuGroup: MenuGroup = {
       title: 'Sliders',
       note: '3 mini pieces per serving',
       items: [
-        item('BBQ Brisket Sliders', 420, 'Beef brisket, coleslaw, dark beer BBQ, super skinny fries, charcoal buns'),
+        item('Pulled Pork Sliders', 420, 'Pulled pork, coleslaw, dark beer BBQ, super skinny fries, charcoal buns'),
         item('Beef Steak Sliders', 390, 'Sliced beef, honey dijon mustard, rocket salad, garlic butter'),
         item('Crispy Chicken Sliders', 330, 'Fried chicken, thousand island, jalapeno ranch, cheddar cheese, mini charcoal buns, iceberg lettuce'),
       ],
@@ -141,7 +142,7 @@ export const drinksMenuGroup: MenuGroup = {
       id: 'highballs',
       title: 'Highballs',
       items: [
-        item('Luxury (Hibiki)', 800),
+        item('Luxury (Hibiki)', 900),
         item('Premium (Chita)', 390),
         item('Original (Kakubin)', 270),
       ],
