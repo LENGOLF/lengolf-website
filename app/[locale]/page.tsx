@@ -59,7 +59,7 @@ const faqLinks: Record<string, { href: string; external?: boolean }> = {
 }
 
 const galleryImages = [
-  { src: storageUrl('venue/venue-simulator-01.jpg'), alt: 'Golf simulator bay with Korean Bravo Golf technology and auto tee system at LENGOLF', width: 1024, height: 683 },
+  { src: storageUrl('venue/venue-simulator-01.jpg'), alt: 'Golf simulator bay with Korean Bravo Golf technology and auto tee system at LENGOLF', width: 800, height: 1000 },
   { src: storageUrl('venue/venue-interior-01.jpg'), alt: 'LENGOLF bar and lounge area with full drinks menu', width: 1024, height: 1024 },
   { src: storageUrl('venue/venue-interior-02.jpg'), alt: 'Interior view of LENGOLF showing multiple simulator bays and seating', width: 1024, height: 1024 },
   { src: storageUrl('venue/venue-interior-03.jpg'), alt: 'LENGOLF welcome area and lobby on the 4th floor of The Mercury Ville', width: 1024, height: 1024 },
