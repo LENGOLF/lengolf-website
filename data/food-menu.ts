@@ -3,7 +3,7 @@ import { storageUrl } from '@/lib/constants'
 // ── Food & Drinks menu data ──
 // Source of truth is the POS (products.products on the LENGOLF Supabase
 // project: name, price, is_active), not the printed menus. The printed menu
-// images (menus/food-menu-2026-10.jpg, menus/food-menu-2.jpg, menus/drink-menu-2026-10-v2.jpg in
+// images (menus/food-menu-2026-10-v3.jpg, menus/food-menu-2.jpg, menus/drink-menu-2026-10-v3.jpg in
 // Supabase Storage, built from lengolf-design/posters food-menu and drink-menu;
 // booking.len.golf ships its own copies) can lag behind it, and
 // their alt text below describes what each image shows. Update this file
@@ -143,9 +143,9 @@ export const drinksMenuGroup: MenuGroup = {
       id: 'highballs',
       title: 'Highballs',
       items: [
-        item('Luxury (Hibiki)', 900),
-        item('Premium (Chita)', 390),
-        item('Original (Kakubin)', 270),
+        item('Hibiki Highball', 900),
+        item('Chita Highball', 390),
+        item('Kakubin Highball', 270),
       ],
     },
     {
@@ -206,7 +206,7 @@ export const menuGroups: MenuGroup[] = [foodMenuGroup, pizzaMenuGroup, drinksMen
 // ── Printed menu images (same content as the tables above) ──
 export const menuImages = [
   {
-    src: storageUrl('menus/food-menu-2026-10.jpg'),
+    src: storageUrl('menus/food-menu-2026-10-v3.jpg'),
     title: 'Food Menu',
     alt: 'LENGOLF food menu by Smith & Co: burgers 320-330 THB, butter rolls 290-360 THB, appetizers 200-290 THB, toast 270-290 THB, sliders 330-420 THB including Pulled Pork, salads 270-340 THB, fries as sides 70-80 THB. Prices in THB, VAT included, no service charge',
     width: 1920,
@@ -222,7 +222,7 @@ export const menuImages = [
     previewPosition: 'center top',
   },
   {
-    src: storageUrl('menus/drink-menu-2026-10-v2.jpg'),
+    src: storageUrl('menus/drink-menu-2026-10-v3.jpg'),
     title: 'Drinks Menu',
     alt: 'LENGOLF drinks menu: cocktails 250-310 THB, highballs 270-900 THB, bottled beer 160-270 THB, wine by the glass 290 THB, wine bottles 950-1,600 THB, soft drinks from 30 THB, snacks from 120 THB. Prices in THB, VAT included, no service charge',
     width: 1749,
