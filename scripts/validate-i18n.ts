@@ -1552,13 +1552,13 @@ const BLANK_RULES: readonly BlankRule[] = [
 const OWN_SCRIPT_RULES: readonly OwnScriptRule[] = [
   // ── data/*-pages.ts: names the pages print in Latin in every locale ──
   { corpus: 'activity', kind: 'name', path: 'other_activities[].name', reason: 'venue and attraction names' },
-  { corpus: 'best', kind: 'name', path: 'list_items[].name', reason: 'venue names. The descriptors are translated in th/ja/ko/zh (Indoor Golf Simulator Bar, Luxury Shopping); what stays Latin is the proper name, so a bare venue name (Rabbit Hole, Nikanti Golf Club) is script-less' },
+  { corpus: 'best', kind: 'name', path: 'list_items[].name', reason: 'venue names. The descriptors are translated in th/ja/ko/zh (Indoor Golf Simulator Bar, Luxury Shopping); what stays Latin is the proper name, so a bare venue name (Rabbit Hole, Nikanti Golf Club) is script-less. Names that embed a descriptor (Archery Plus, Altitude Rooftop, Silom Thai Cooking School) were deliberately left Latin too' },
   { corpus: 'cost', kind: 'name', path: 'venue_comparison.venues[].name', reason: 'competitor venue names' },
   { corpus: 'cost', kind: 'name', path: 'venue_comparison.venues[].tech', reason: 'simulator brands (Trackman, Bravo)' },
   { corpus: 'cost', kind: 'name', path: 'venue_comparison.venues[].location', reason: 'street and BTS names. The "(car access)" connective is translated in all four locales' },
   { corpus: 'cost', kind: 'name', path: 'price_breakdown[].item', locales: ['ja', 'zh'], reason: 'venue name in the item label (the " - " is the code delimiter)' },
   { corpus: 'hotel', kind: 'name', path: 'hotel_name', reason: 'hotel names' },
-  { corpus: 'hotel', kind: 'name', path: 'nearby_activities[].name', reason: 'attraction names. The descriptors are translated (Ploenchit BTS, the embassies, LENGOLF Indoor Golf); what stays Latin is the proper name (Erawan Shrine, CentralWorld)' },
+  { corpus: 'hotel', kind: 'name', path: 'nearby_activities[].name', reason: 'attraction names. The descriptors are translated (Ploenchit BTS, the embassies, LENGOLF Indoor Golf); what stays Latin is the proper name (Erawan Shrine, CentralWorld). Left Latin on purpose: the '(rooftop)' and '(2 Michelin Stars)' parentheticals' },
   { corpus: 'hotel', kind: 'name', path: 'nearby_restaurants[].name', reason: 'restaurant names. The descriptive ones (Soi 11 Food Street, Siam Square Street Food) are translated; what stays Latin is the proper name (Din Tai Fung, Baan Khanitha)' },
   { corpus: 'explainer', kind: 'name', path: 'comparison_table[].feature', locales: ['th'], entry: 'gg-golf-club-baggage-fees-airlines-bangkok-th', reason: 'airline names' },
   { corpus: 'hotel', kind: 'dead', path: 'hotel_neighbourhood', locales: ['ja', 'ko', 'zh'], reason: 'the /hotels/ hub reads the EN page only (getSeoPagesByType defaults to en) and nothing else renders this field, so these never show' },
