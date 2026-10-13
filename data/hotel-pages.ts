@@ -77,7 +77,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'th',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Arnoma Grand Bangkok',
       hotel_neighbourhood: 'ราชประสงค์ / ชิดลม',
@@ -94,7 +94,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'CentralWorld Shopping', type: 'shopping', distance_m: 200 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 700 },
+        { name: 'LENGOLF ห้องซิมกอล์ฟ', type: 'entertainment', distance_m: 700 },
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 500 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 400 },
       ],
@@ -133,7 +133,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Arnoma Grand Bangkok',
       hotel_neighbourhood: 'Ratchaprasong / Chidlom',
@@ -150,7 +150,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'CentralWorld Shopping', type: 'shopping', distance_m: 200 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 700 },
+        { name: 'LENGOLFインドアゴルフ', type: 'entertainment', distance_m: 700 },
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 500 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 400 },
       ],
@@ -188,7 +188,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Arnoma Grand Bangkok',
       hotel_neighbourhood: 'Ratchaprasong / Chidlom',
@@ -205,7 +205,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'CentralWorld Shopping', type: 'shopping', distance_m: 200 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 700 },
+        { name: 'LENGOLF 실내 골프', type: 'entertainment', distance_m: 700 },
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 500 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 400 },
       ],
@@ -243,7 +243,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Arnoma Grand Bangkok',
       hotel_neighbourhood: 'Ratchaprasong / Chidlom',
@@ -260,7 +260,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'CentralWorld Shopping', type: 'shopping', distance_m: 200 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 700 },
+        { name: 'LENGOLF室内高尔夫', type: 'entertainment', distance_m: 700 },
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 500 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 400 },
       ],
@@ -347,7 +347,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'th',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/weekend-activities-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Sindhorn Midtown Hotel',
       hotel_neighbourhood: 'หลังสวน / ชิดลม',
@@ -364,7 +364,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 300 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 350 },
+        { name: 'LENGOLF ห้องซิมกอล์ฟ', type: 'entertainment', distance_m: 350 },
         { name: 'Sindhorn Village', type: 'shopping', distance_m: 150 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 600 },
       ],
@@ -402,7 +402,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/weekend-activities-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Sindhorn Midtown Hotel',
       hotel_neighbourhood: 'Langsuan / Chidlom',
@@ -419,7 +419,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 300 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 350 },
+        { name: 'LENGOLFインドアゴルフ', type: 'entertainment', distance_m: 350 },
         { name: 'Sindhorn Village', type: 'shopping', distance_m: 150 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 600 },
       ],
@@ -457,7 +457,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/weekend-activities-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Sindhorn Midtown Hotel',
       hotel_neighbourhood: 'Langsuan / Chidlom',
@@ -474,7 +474,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 300 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 350 },
+        { name: 'LENGOLF 실내 골프', type: 'entertainment', distance_m: 350 },
         { name: 'Sindhorn Village', type: 'shopping', distance_m: 150 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 600 },
       ],
@@ -512,7 +512,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/weekend-activities-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Sindhorn Midtown Hotel',
       hotel_neighbourhood: 'Langsuan / Chidlom',
@@ -529,7 +529,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 300 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 350 },
+        { name: 'LENGOLF室内高尔夫', type: 'entertainment', distance_m: 350 },
         { name: 'Sindhorn Village', type: 'shopping', distance_m: 150 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 600 },
       ],
@@ -618,7 +618,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'th',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/date-night-ideas-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Grand Hyatt Erawan Bangkok',
       hotel_neighbourhood: 'ราชประสงค์ / ชิดลม',
@@ -636,7 +636,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 50 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 100 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 500 },
+        { name: 'LENGOLF ห้องซิมกอล์ฟ', type: 'entertainment', distance_m: 500 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 300 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 700 },
       ],
@@ -675,7 +675,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/date-night-ideas-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Grand Hyatt Erawan Bangkok',
       hotel_neighbourhood: 'Ratchaprasong / Chidlom',
@@ -693,7 +693,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 50 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 100 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 500 },
+        { name: 'LENGOLFインドアゴルフ', type: 'entertainment', distance_m: 500 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 300 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 700 },
       ],
@@ -731,7 +731,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/date-night-ideas-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Grand Hyatt Erawan Bangkok',
       hotel_neighbourhood: 'Ratchaprasong / Chidlom',
@@ -749,7 +749,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 50 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 100 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 500 },
+        { name: 'LENGOLF 실내 골프', type: 'entertainment', distance_m: 500 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 300 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 700 },
       ],
@@ -788,7 +788,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/date-night-ideas-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Grand Hyatt Erawan Bangkok',
       hotel_neighbourhood: 'Ratchaprasong / Chidlom',
@@ -806,7 +806,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 50 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 100 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 500 },
+        { name: 'LENGOLF室内高尔夫', type: 'entertainment', distance_m: 500 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 300 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 700 },
       ],
@@ -894,7 +894,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'th',
     related_slugs: ['/activities/group-activities-bangkok', '/activities/indoor-activities-bangkok', '/events'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'The Athenee Hotel Bangkok, a Luxury Collection Hotel',
       hotel_neighbourhood: 'ถนนวิทยุ / เพลินจิต',
@@ -911,8 +911,8 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 400 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 700 },
-        { name: 'US Embassy / UK Embassy', type: 'landmark', distance_m: 300 },
+        { name: 'LENGOLF ห้องซิมกอล์ฟ', type: 'entertainment', distance_m: 700 },
+        { name: 'สถานทูตสหรัฐฯ / สถานทูตอังกฤษ', type: 'landmark', distance_m: 300 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 700 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=The+Athenee+Hotel+Bangkok+to+LENGOLF&t=m&z=16&output=embed',
@@ -949,7 +949,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/activities/group-activities-bangkok', '/activities/indoor-activities-bangkok', '/events'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'The Athenee Hotel Bangkok, a Luxury Collection Hotel',
       hotel_neighbourhood: 'Wireless Road / Ploenchit',
@@ -966,8 +966,8 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 400 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 700 },
-        { name: 'US Embassy / UK Embassy', type: 'landmark', distance_m: 300 },
+        { name: 'LENGOLFインドアゴルフ', type: 'entertainment', distance_m: 700 },
+        { name: '米国大使館／英国大使館', type: 'landmark', distance_m: 300 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 700 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=The+Athenee+Hotel+Bangkok+to+LENGOLF&t=m&z=16&output=embed',
@@ -1003,7 +1003,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/activities/group-activities-bangkok', '/activities/indoor-activities-bangkok', '/events'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'The Athenee Hotel Bangkok, a Luxury Collection Hotel',
       hotel_neighbourhood: 'Wireless Road / Ploenchit',
@@ -1020,8 +1020,8 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 400 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 700 },
-        { name: 'US Embassy / UK Embassy', type: 'landmark', distance_m: 300 },
+        { name: 'LENGOLF 실내 골프', type: 'entertainment', distance_m: 700 },
+        { name: '미국 대사관 / 영국 대사관', type: 'landmark', distance_m: 300 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 700 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=The+Athenee+Hotel+Bangkok+to+LENGOLF&t=m&z=16&output=embed',
@@ -1057,7 +1057,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/activities/group-activities-bangkok', '/activities/indoor-activities-bangkok', '/events'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'The Athenee Hotel Bangkok, a Luxury Collection Hotel',
       hotel_neighbourhood: 'Wireless Road / Ploenchit',
@@ -1074,8 +1074,8 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 400 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 700 },
-        { name: 'US Embassy / UK Embassy', type: 'landmark', distance_m: 300 },
+        { name: 'LENGOLF室内高尔夫', type: 'entertainment', distance_m: 700 },
+        { name: '美国使馆／英国使馆', type: 'landmark', distance_m: 300 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 700 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=The+Athenee+Hotel+Bangkok+to+LENGOLF&t=m&z=16&output=embed',
@@ -1162,7 +1162,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'th',
     related_slugs: ['/activities/things-to-do-bangkok-at-night', '/activities/indoor-activities-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'InterContinental Bangkok',
       hotel_neighbourhood: 'ราชประสงค์ / ชิดลม',
@@ -1181,7 +1181,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 100 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 300 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 150 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 450 },
+        { name: 'LENGOLF ห้องซิมกอล์ฟ', type: 'entertainment', distance_m: 450 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 600 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=InterContinental+Bangkok+to+LENGOLF&t=m&z=16&output=embed',
@@ -1218,7 +1218,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/activities/things-to-do-bangkok-at-night', '/activities/indoor-activities-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'InterContinental Bangkok',
       hotel_neighbourhood: 'Ratchaprasong / Chidlom',
@@ -1237,7 +1237,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 100 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 300 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 150 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 450 },
+        { name: 'LENGOLFインドアゴルフ', type: 'entertainment', distance_m: 450 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 600 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=InterContinental+Bangkok+to+LENGOLF&t=m&z=16&output=embed',
@@ -1274,7 +1274,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/activities/things-to-do-bangkok-at-night', '/activities/indoor-activities-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'InterContinental Bangkok',
       hotel_neighbourhood: 'Ratchaprasong / Chidlom',
@@ -1293,7 +1293,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 100 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 300 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 150 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 450 },
+        { name: 'LENGOLF 실내 골프', type: 'entertainment', distance_m: 450 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 600 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=InterContinental+Bangkok+to+LENGOLF&t=m&z=16&output=embed',
@@ -1330,7 +1330,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/activities/things-to-do-bangkok-at-night', '/activities/indoor-activities-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'InterContinental Bangkok',
       hotel_neighbourhood: 'Ratchaprasong / Chidlom',
@@ -1349,7 +1349,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 100 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 300 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 150 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 450 },
+        { name: 'LENGOLF室内高尔夫', type: 'entertainment', distance_m: 450 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 600 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=InterContinental+Bangkok+to+LENGOLF&t=m&z=16&output=embed',
@@ -1435,7 +1435,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'th',
     related_slugs: ['/activities/date-night-ideas-bangkok', '/activities/indoor-activities-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Hotel Indigo Bangkok Wireless Road',
       hotel_neighbourhood: 'ถนนวิทยุ / เพลินจิต',
@@ -1453,8 +1453,8 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 200 },
         { name: 'Sindhorn Village', type: 'shopping', distance_m: 400 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 700 },
-        { name: 'US & UK Embassies', type: 'landmark', distance_m: 200 },
+        { name: 'LENGOLF ห้องซิมกอล์ฟ', type: 'entertainment', distance_m: 700 },
+        { name: 'สถานทูตสหรัฐฯ และอังกฤษ', type: 'landmark', distance_m: 200 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Hotel+Indigo+Bangkok+Wireless+Road+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
@@ -1491,7 +1491,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/activities/date-night-ideas-bangkok', '/activities/indoor-activities-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Hotel Indigo Bangkok Wireless Road',
       hotel_neighbourhood: 'Wireless Road / Ploenchit',
@@ -1509,8 +1509,8 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 200 },
         { name: 'Sindhorn Village', type: 'shopping', distance_m: 400 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 700 },
-        { name: 'US & UK Embassies', type: 'landmark', distance_m: 200 },
+        { name: 'LENGOLFインドアゴルフ', type: 'entertainment', distance_m: 700 },
+        { name: '米英の大使館', type: 'landmark', distance_m: 200 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Hotel+Indigo+Bangkok+Wireless+Road+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
@@ -1546,7 +1546,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/activities/date-night-ideas-bangkok', '/activities/indoor-activities-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Hotel Indigo Bangkok Wireless Road',
       hotel_neighbourhood: 'Wireless Road / Ploenchit',
@@ -1564,8 +1564,8 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 200 },
         { name: 'Sindhorn Village', type: 'shopping', distance_m: 400 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 700 },
-        { name: 'US & UK Embassies', type: 'landmark', distance_m: 200 },
+        { name: 'LENGOLF 실내 골프', type: 'entertainment', distance_m: 700 },
+        { name: '미국·영국 대사관', type: 'landmark', distance_m: 200 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Hotel+Indigo+Bangkok+Wireless+Road+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
@@ -1601,7 +1601,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/activities/date-night-ideas-bangkok', '/activities/indoor-activities-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Hotel Indigo Bangkok Wireless Road',
       hotel_neighbourhood: 'Wireless Road / Ploenchit',
@@ -1619,8 +1619,8 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 200 },
         { name: 'Sindhorn Village', type: 'shopping', distance_m: 400 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 700 },
-        { name: 'US & UK Embassies', type: 'landmark', distance_m: 200 },
+        { name: 'LENGOLF室内高尔夫', type: 'entertainment', distance_m: 700 },
+        { name: '美国和英国使馆', type: 'landmark', distance_m: 200 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Hotel+Indigo+Bangkok+Wireless+Road+to+LENGOLF&t=m&z=16&output=embed',
       area_guide:
@@ -1706,7 +1706,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'th',
     related_slugs: ['/activities/weekend-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Novotel Bangkok Ploenchit Sukhumvit',
       hotel_neighbourhood: 'สุขุมวิท / เพลินจิต',
@@ -1717,13 +1717,13 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_star_rating: 4,
       nearby_restaurants: [
         { name: 'The Square (Novotel)', cuisine: 'บุฟเฟต์นานาชาติ', distance_m: 0 },
-        { name: 'Soi 11 Food Street', cuisine: 'สตรีทฟู้ด', distance_m: 400 },
+        { name: 'ย่านสตรีทฟู้ดซอย 11', cuisine: 'สตรีทฟู้ด', distance_m: 400 },
         { name: 'Nara Thai (Gaysorn)', cuisine: 'อาหารไทย', distance_m: 700 },
         { name: 'Long Table (rooftop)', cuisine: 'อาหารไทยร่วมสมัย', distance_m: 600 },
       ],
       nearby_activities: [
-        { name: 'Ploenchit BTS to explore Bangkok', type: 'transport', distance_m: 150 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 1500 },
+        { name: 'BTS เพลินจิต (จุดเริ่มต้นเที่ยวทั่วกรุงเทพฯ)', type: 'transport', distance_m: 150 },
+        { name: 'LENGOLF ห้องซิมกอล์ฟ', type: 'entertainment', distance_m: 1500 },
         { name: 'Bumrungrad Hospital', type: 'medical', distance_m: 500 },
         { name: 'Nana Entertainment', type: 'nightlife', distance_m: 400 },
       ],
@@ -1761,7 +1761,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/activities/weekend-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Novotel Bangkok Ploenchit Sukhumvit',
       hotel_neighbourhood: 'Sukhumvit / Ploenchit',
@@ -1772,13 +1772,13 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_star_rating: 4,
       nearby_restaurants: [
         { name: 'The Square (Novotel)', cuisine: 'インターナショナルビュッフェ', distance_m: 0 },
-        { name: 'Soi 11 Food Street', cuisine: '屋台料理', distance_m: 400 },
+        { name: 'ソイ11のフードストリート', cuisine: '屋台料理', distance_m: 400 },
         { name: 'Nara Thai (Gaysorn)', cuisine: 'タイ料理', distance_m: 700 },
         { name: 'Long Table (rooftop)', cuisine: '現代タイ料理', distance_m: 600 },
       ],
       nearby_activities: [
-        { name: 'Ploenchit BTS to explore Bangkok', type: 'transport', distance_m: 150 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 1500 },
+        { name: 'BTSプルンチット駅（バンコク各地への起点）', type: 'transport', distance_m: 150 },
+        { name: 'LENGOLFインドアゴルフ', type: 'entertainment', distance_m: 1500 },
         { name: 'Bumrungrad Hospital', type: 'medical', distance_m: 500 },
         { name: 'Nana Entertainment', type: 'nightlife', distance_m: 400 },
       ],
@@ -1816,7 +1816,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/activities/weekend-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Novotel Bangkok Ploenchit Sukhumvit',
       hotel_neighbourhood: 'Sukhumvit / Ploenchit',
@@ -1827,13 +1827,13 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_star_rating: 4,
       nearby_restaurants: [
         { name: 'The Square (Novotel)', cuisine: '인터내셔널 뷔페', distance_m: 0 },
-        { name: 'Soi 11 Food Street', cuisine: '길거리 음식', distance_m: 400 },
+        { name: 'Soi 11 푸드 스트리트', cuisine: '길거리 음식', distance_m: 400 },
         { name: 'Nara Thai (Gaysorn)', cuisine: '태국 요리', distance_m: 700 },
         { name: 'Long Table (rooftop)', cuisine: '컨템퍼러리 태국 요리', distance_m: 600 },
       ],
       nearby_activities: [
-        { name: 'Ploenchit BTS to explore Bangkok', type: 'transport', distance_m: 150 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 1500 },
+        { name: 'BTS 플런칫역 (방콕 곳곳으로 나가는 출발점)', type: 'transport', distance_m: 150 },
+        { name: 'LENGOLF 실내 골프', type: 'entertainment', distance_m: 1500 },
         { name: 'Bumrungrad Hospital', type: 'medical', distance_m: 500 },
         { name: 'Nana Entertainment', type: 'nightlife', distance_m: 400 },
       ],
@@ -1870,7 +1870,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/activities/weekend-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Novotel Bangkok Ploenchit Sukhumvit',
       hotel_neighbourhood: 'Sukhumvit / Ploenchit',
@@ -1881,13 +1881,13 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       hotel_star_rating: 4,
       nearby_restaurants: [
         { name: 'The Square (Novotel)', cuisine: '国际自助餐', distance_m: 0 },
-        { name: 'Soi 11 Food Street', cuisine: '路边小吃', distance_m: 400 },
+        { name: 'Soi 11美食街', cuisine: '路边小吃', distance_m: 400 },
         { name: 'Nara Thai (Gaysorn)', cuisine: '泰餐', distance_m: 700 },
         { name: 'Long Table (rooftop)', cuisine: '当代泰菜', distance_m: 600 },
       ],
       nearby_activities: [
-        { name: 'Ploenchit BTS to explore Bangkok', type: 'transport', distance_m: 150 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 1500 },
+        { name: 'BTS Ploenchit站（游览曼谷的起点）', type: 'transport', distance_m: 150 },
+        { name: 'LENGOLF室内高尔夫', type: 'entertainment', distance_m: 1500 },
         { name: 'Bumrungrad Hospital', type: 'medical', distance_m: 500 },
         { name: 'Nana Entertainment', type: 'nightlife', distance_m: 400 },
       ],
@@ -1976,7 +1976,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'th',
     related_slugs: ['/activities/group-activities-bangkok', '/activities/indoor-activities-bangkok', '/events'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Renaissance Bangkok Ratchaprasong Hotel',
       hotel_neighbourhood: 'ราชประสงค์ / ชิดลม',
@@ -1994,7 +1994,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'CentralWorld', type: 'shopping', distance_m: 100 },
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 200 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 450 },
+        { name: 'LENGOLF ห้องซิมกอล์ฟ', type: 'entertainment', distance_m: 450 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 500 },
         { name: 'BigC Supercenter', type: 'shopping', distance_m: 200 },
       ],
@@ -2033,7 +2033,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/activities/group-activities-bangkok', '/activities/indoor-activities-bangkok', '/events'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Renaissance Bangkok Ratchaprasong Hotel',
       hotel_neighbourhood: 'Ratchaprasong / Chidlom',
@@ -2051,7 +2051,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'CentralWorld', type: 'shopping', distance_m: 100 },
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 200 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 450 },
+        { name: 'LENGOLFインドアゴルフ', type: 'entertainment', distance_m: 450 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 500 },
         { name: 'BigC Supercenter', type: 'shopping', distance_m: 200 },
       ],
@@ -2091,7 +2091,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/activities/group-activities-bangkok', '/activities/indoor-activities-bangkok', '/events'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Renaissance Bangkok Ratchaprasong Hotel',
       hotel_neighbourhood: 'Ratchaprasong / Chidlom',
@@ -2109,7 +2109,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'CentralWorld', type: 'shopping', distance_m: 100 },
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 200 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 450 },
+        { name: 'LENGOLF 실내 골프', type: 'entertainment', distance_m: 450 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 500 },
         { name: 'BigC Supercenter', type: 'shopping', distance_m: 200 },
       ],
@@ -2147,7 +2147,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/activities/group-activities-bangkok', '/activities/indoor-activities-bangkok', '/events'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Renaissance Bangkok Ratchaprasong Hotel',
       hotel_neighbourhood: 'Ratchaprasong / Chidlom',
@@ -2165,7 +2165,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'CentralWorld', type: 'shopping', distance_m: 100 },
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 200 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 450 },
+        { name: 'LENGOLF室内高尔夫', type: 'entertainment', distance_m: 450 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 500 },
         { name: 'BigC Supercenter', type: 'shopping', distance_m: 200 },
       ],
@@ -2254,7 +2254,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'th',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'The Okura Prestige Bangkok',
       hotel_neighbourhood: 'ถนนวิทยุ / เพลินจิต',
@@ -2270,8 +2270,8 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         { name: 'Sushi Masato', cuisine: 'โอมากาเสะญี่ปุ่น', distance_m: 500 },
       ],
       nearby_activities: [
-        { name: 'Ploenchit BTS', type: 'transport', distance_m: 100 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 600 },
+        { name: 'BTS เพลินจิต', type: 'transport', distance_m: 100 },
+        { name: 'LENGOLF ห้องซิมกอล์ฟ', type: 'entertainment', distance_m: 600 },
         { name: 'Central Embassy', type: 'shopping', distance_m: 200 },
         { name: 'Nai Lert Park Heritage Home', type: 'cultural', distance_m: 300 },
       ],
@@ -2310,7 +2310,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'The Okura Prestige Bangkok',
       hotel_neighbourhood: 'Wireless Road / Ploenchit',
@@ -2326,8 +2326,8 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         { name: 'Sushi Masato', cuisine: '日本料理（おまかせ）', distance_m: 500 },
       ],
       nearby_activities: [
-        { name: 'Ploenchit BTS', type: 'transport', distance_m: 100 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 600 },
+        { name: 'BTSプルンチット駅', type: 'transport', distance_m: 100 },
+        { name: 'LENGOLFインドアゴルフ', type: 'entertainment', distance_m: 600 },
         { name: 'Central Embassy', type: 'shopping', distance_m: 200 },
         { name: 'Nai Lert Park Heritage Home', type: 'cultural', distance_m: 300 },
       ],
@@ -2366,7 +2366,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'The Okura Prestige Bangkok',
       hotel_neighbourhood: 'Wireless Road / Ploenchit',
@@ -2382,8 +2382,8 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         { name: 'Sushi Masato', cuisine: '일본 오마카세', distance_m: 500 },
       ],
       nearby_activities: [
-        { name: 'Ploenchit BTS', type: 'transport', distance_m: 100 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 600 },
+        { name: 'BTS 플런칫역', type: 'transport', distance_m: 100 },
+        { name: 'LENGOLF 실내 골프', type: 'entertainment', distance_m: 600 },
         { name: 'Central Embassy', type: 'shopping', distance_m: 200 },
         { name: 'Nai Lert Park Heritage Home', type: 'cultural', distance_m: 300 },
       ],
@@ -2421,7 +2421,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'The Okura Prestige Bangkok',
       hotel_neighbourhood: 'Wireless Road / Ploenchit',
@@ -2437,8 +2437,8 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         { name: 'Sushi Masato', cuisine: '日式无菜单料理', distance_m: 500 },
       ],
       nearby_activities: [
-        { name: 'Ploenchit BTS', type: 'transport', distance_m: 100 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 600 },
+        { name: 'BTS Ploenchit站', type: 'transport', distance_m: 100 },
+        { name: 'LENGOLF室内高尔夫', type: 'entertainment', distance_m: 600 },
         { name: 'Central Embassy', type: 'shopping', distance_m: 200 },
         { name: 'Nai Lert Park Heritage Home', type: 'cultural', distance_m: 300 },
       ],
@@ -2526,7 +2526,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'th',
     related_slugs: ['/activities/date-night-ideas-bangkok', '/activities/weekend-activities-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Anantara Siam Bangkok Hotel',
       hotel_neighbourhood: 'ราชดำริ / ราชประสงค์',
@@ -2544,7 +2544,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 300 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 800 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 800 },
+        { name: 'LENGOLF ห้องซิมกอล์ฟ', type: 'entertainment', distance_m: 800 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 300 },
         { name: 'Bangkok Art and Culture Centre', type: 'cultural', distance_m: 700 },
       ],
@@ -2582,7 +2582,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/activities/date-night-ideas-bangkok', '/activities/weekend-activities-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Anantara Siam Bangkok Hotel',
       hotel_neighbourhood: 'Ratchadamri / Ratchaprasong',
@@ -2600,7 +2600,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 300 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 800 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 800 },
+        { name: 'LENGOLFインドアゴルフ', type: 'entertainment', distance_m: 800 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 300 },
         { name: 'Bangkok Art and Culture Centre', type: 'cultural', distance_m: 700 },
       ],
@@ -2637,7 +2637,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/activities/date-night-ideas-bangkok', '/activities/weekend-activities-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Anantara Siam Bangkok Hotel',
       hotel_neighbourhood: 'Ratchadamri / Ratchaprasong',
@@ -2655,7 +2655,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 300 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 800 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 800 },
+        { name: 'LENGOLF 실내 골프', type: 'entertainment', distance_m: 800 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 300 },
         { name: 'Bangkok Art and Culture Centre', type: 'cultural', distance_m: 700 },
       ],
@@ -2692,7 +2692,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/activities/date-night-ideas-bangkok', '/activities/weekend-activities-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Anantara Siam Bangkok Hotel',
       hotel_neighbourhood: 'Ratchadamri / Ratchaprasong',
@@ -2710,7 +2710,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       nearby_activities: [
         { name: 'Erawan Shrine', type: 'cultural', distance_m: 300 },
         { name: 'Siam Paragon', type: 'shopping', distance_m: 800 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 800 },
+        { name: 'LENGOLF室内高尔夫', type: 'entertainment', distance_m: 800 },
         { name: 'Gaysorn Village', type: 'shopping', distance_m: 300 },
         { name: 'Bangkok Art and Culture Centre', type: 'cultural', distance_m: 700 },
       ],
@@ -2798,7 +2798,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'th',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/family-activities-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Mercure Bangkok Siam',
       hotel_neighbourhood: 'สยาม / CentralWorld',
@@ -2808,7 +2808,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         'ถ้าเดินคือ 2.1 กม. ใช้เวลาราว 30 นาที ซึ่งไม่เหมาะกับอากาศร้อนของกรุงเทพฯ เราแนะนำให้ใช้ BTS หรือแท็กซี่แทน เดินไปสถานี BTS สยาม (3 นาที) นั่ง BTS ไปทางทิศตะวันออก 1 สถานีลงที่ BTS ชิดลม แล้วเดินเข้า The Mercury Ville ได้โดยตรง รวมเวลาจากประตูถึงประตูโดย BTS ราว 10 นาที ส่วนแท็กซี่หรือ Grab ใช้เวลาราว 8 นาที ค่าโดยสารประมาณ 80 บาท LENGOLF อยู่ชั้น 4',
       hotel_star_rating: 3,
       nearby_restaurants: [
-        { name: 'Siam Square Street Food', cuisine: 'สตรีทฟู้ดไทย', distance_m: 100 },
+        { name: 'สตรีทฟู้ดสยามสแควร์', cuisine: 'สตรีทฟู้ดไทย', distance_m: 100 },
         { name: 'MBK Food Island', cuisine: 'อาหารไทย / นานาชาติ', distance_m: 200 },
         { name: 'Som Tam Nua (Siam Square)', cuisine: 'อาหารไทย (อีสาน)', distance_m: 150 },
         { name: 'After You Dessert Café', cuisine: 'ของหวาน', distance_m: 200 },
@@ -2817,7 +2817,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         { name: 'Siam Paragon', type: 'shopping', distance_m: 200 },
         { name: 'SEA LIFE Bangkok Ocean World', type: 'attraction', distance_m: 250 },
         { name: 'MBK Center', type: 'shopping', distance_m: 200 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 2100 },
+        { name: 'LENGOLF ห้องซิมกอล์ฟ', type: 'entertainment', distance_m: 2100 },
         { name: 'Bangkok Art and Culture Centre', type: 'cultural', distance_m: 300 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Mercure+Bangkok+Siam+to+LENGOLF&t=m&z=16&output=embed',
@@ -2856,7 +2856,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/family-activities-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Mercure Bangkok Siam',
       hotel_neighbourhood: 'Siam / CentralWorld',
@@ -2866,7 +2866,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         '徒歩では2.1km、およそ30分かかります。バンコクの暑さを考えると現実的ではないので、BTSかタクシーをおすすめします。徒歩3分のBTSサイアム駅へ向かい、BTSで東方向に1駅、BTSチットロム駅で降りるとザ・マーキュリービルへそのまま入れます。BTS利用ならドアツードアでおよそ10分。タクシーやGrabなら8分ほどで、料金は約80THB（2026年7月現在）です。LENGOLFは4階です。',
       hotel_star_rating: 3,
       nearby_restaurants: [
-        { name: 'Siam Square Street Food', cuisine: 'タイの屋台料理', distance_m: 100 },
+        { name: 'サイアムスクエアのストリートフード', cuisine: 'タイの屋台料理', distance_m: 100 },
         { name: 'MBK Food Island', cuisine: 'タイ料理／インターナショナル', distance_m: 200 },
         { name: 'Som Tam Nua (Siam Square)', cuisine: 'タイ料理（イサーン）', distance_m: 150 },
         { name: 'After You Dessert Café', cuisine: 'デザート', distance_m: 200 },
@@ -2875,7 +2875,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         { name: 'Siam Paragon', type: 'shopping', distance_m: 200 },
         { name: 'SEA LIFE Bangkok Ocean World', type: 'attraction', distance_m: 250 },
         { name: 'MBK Center', type: 'shopping', distance_m: 200 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 2100 },
+        { name: 'LENGOLFインドアゴルフ', type: 'entertainment', distance_m: 2100 },
         { name: 'Bangkok Art and Culture Centre', type: 'cultural', distance_m: 300 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Mercure+Bangkok+Siam+to+LENGOLF&t=m&z=16&output=embed',
@@ -2913,7 +2913,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/family-activities-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Mercure Bangkok Siam',
       hotel_neighbourhood: 'Siam / CentralWorld',
@@ -2923,7 +2923,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         '도보로는 2.1km, 약 30분이라 방콕의 더위에는 권하기 어려워요. BTS나 택시를 추천해요. 3분 걸어 BTS 시암역으로 간 뒤, BTS를 타고 동쪽으로 한 정거장 이동해 BTS 칫롬역에서 내리면 The Mercury Ville 건물로 바로 들어갈 수 있어요. BTS를 이용하면 문 앞에서 문 앞까지 약 10분이 걸려요. 택시나 Grab 앱을 이용하면 약 8분, 요금은 약 80바트예요. LENGOLF는 4층에 있어요.',
       hotel_star_rating: 3,
       nearby_restaurants: [
-        { name: 'Siam Square Street Food', cuisine: '태국 길거리 음식', distance_m: 100 },
+        { name: 'Siam Square 길거리 음식', cuisine: '태국 길거리 음식', distance_m: 100 },
         { name: 'MBK Food Island', cuisine: '태국 요리 / 인터내셔널', distance_m: 200 },
         { name: 'Som Tam Nua (Siam Square)', cuisine: '태국 이싼 요리', distance_m: 150 },
         { name: 'After You Dessert Café', cuisine: '디저트', distance_m: 200 },
@@ -2932,7 +2932,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         { name: 'Siam Paragon', type: 'shopping', distance_m: 200 },
         { name: 'SEA LIFE Bangkok Ocean World', type: 'attraction', distance_m: 250 },
         { name: 'MBK Center', type: 'shopping', distance_m: 200 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 2100 },
+        { name: 'LENGOLF 실내 골프', type: 'entertainment', distance_m: 2100 },
         { name: 'Bangkok Art and Culture Centre', type: 'cultural', distance_m: 300 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Mercure+Bangkok+Siam+to+LENGOLF&t=m&z=16&output=embed',
@@ -2969,7 +2969,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/family-activities-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Mercure Bangkok Siam',
       hotel_neighbourhood: 'Siam / CentralWorld',
@@ -2979,7 +2979,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         '走路是2.1公里、约30分钟——在曼谷的暑气里并不理想，我们更建议搭BTS或打车。先走到BTS Siam站（步行3分钟），搭BTS向东一站到BTS Chidlom站，再直接走进The Mercury Ville。搭BTS门到门总共约10分钟。打车或叫Grab约8分钟，车费约80泰铢。LENGOLF在4楼。',
       hotel_star_rating: 3,
       nearby_restaurants: [
-        { name: 'Siam Square Street Food', cuisine: '泰式路边小吃', distance_m: 100 },
+        { name: 'Siam Square街头小吃', cuisine: '泰式路边小吃', distance_m: 100 },
         { name: 'MBK Food Island', cuisine: '泰餐、国际料理', distance_m: 200 },
         { name: 'Som Tam Nua (Siam Square)', cuisine: '泰国伊善菜', distance_m: 150 },
         { name: 'After You Dessert Café', cuisine: '甜品', distance_m: 200 },
@@ -2988,7 +2988,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
         { name: 'Siam Paragon', type: 'shopping', distance_m: 200 },
         { name: 'SEA LIFE Bangkok Ocean World', type: 'attraction', distance_m: 250 },
         { name: 'MBK Center', type: 'shopping', distance_m: 200 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 2100 },
+        { name: 'LENGOLF室内高尔夫', type: 'entertainment', distance_m: 2100 },
         { name: 'Bangkok Art and Culture Centre', type: 'cultural', distance_m: 300 },
       ],
       google_maps_embed: 'https://maps.google.com/maps?q=Mercure+Bangkok+Siam+to+LENGOLF&t=m&z=16&output=embed',
@@ -3080,7 +3080,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'th',
     related_slugs: ['/activities/date-night-ideas-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Kimpton Maa-Lai Bangkok',
       hotel_neighbourhood: 'หลังสวน / ชิดลม',
@@ -3098,8 +3098,8 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 500 },
-        { name: 'Langsuan Restaurant Row', type: 'dining', distance_m: 100 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 800 },
+        { name: 'ย่านร้านอาหารซอยหลังสวน', type: 'dining', distance_m: 100 },
+        { name: 'LENGOLF ห้องซิมกอล์ฟ', type: 'entertainment', distance_m: 800 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 800 },
         { name: 'Sindhorn Village', type: 'shopping', distance_m: 500 },
       ],
@@ -3140,7 +3140,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/activities/date-night-ideas-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Kimpton Maa-Lai Bangkok',
       hotel_neighbourhood: 'Langsuan / Chidlom',
@@ -3158,8 +3158,8 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 500 },
-        { name: 'Langsuan Restaurant Row', type: 'dining', distance_m: 100 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 800 },
+        { name: 'ランスアン通りのレストラン街', type: 'dining', distance_m: 100 },
+        { name: 'LENGOLFインドアゴルフ', type: 'entertainment', distance_m: 800 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 800 },
         { name: 'Sindhorn Village', type: 'shopping', distance_m: 500 },
       ],
@@ -3200,7 +3200,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/activities/date-night-ideas-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Kimpton Maa-Lai Bangkok',
       hotel_neighbourhood: 'Langsuan / Chidlom',
@@ -3218,8 +3218,8 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 500 },
-        { name: 'Langsuan Restaurant Row', type: 'dining', distance_m: 100 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 800 },
+        { name: 'Langsuan 레스토랑 거리', type: 'dining', distance_m: 100 },
+        { name: 'LENGOLF 실내 골프', type: 'entertainment', distance_m: 800 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 800 },
         { name: 'Sindhorn Village', type: 'shopping', distance_m: 500 },
       ],
@@ -3259,7 +3259,7 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/activities/date-night-ideas-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       hotel_name: 'Kimpton Maa-Lai Bangkok',
       hotel_neighbourhood: 'Langsuan / Chidlom',
@@ -3277,8 +3277,8 @@ export const hotelConciergePages: HotelConciergeSeoPage[] = [
       ],
       nearby_activities: [
         { name: 'Lumpini Park', type: 'outdoor', distance_m: 500 },
-        { name: 'Langsuan Restaurant Row', type: 'dining', distance_m: 100 },
-        { name: 'LENGOLF Indoor Golf', type: 'entertainment', distance_m: 800 },
+        { name: 'Langsuan餐厅街', type: 'dining', distance_m: 100 },
+        { name: 'LENGOLF室内高尔夫', type: 'entertainment', distance_m: 800 },
         { name: 'CentralWorld', type: 'shopping', distance_m: 800 },
         { name: 'Sindhorn Village', type: 'shopping', distance_m: 500 },
       ],

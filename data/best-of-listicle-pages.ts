@@ -175,7 +175,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'th',
     related_slugs: ['/guide/corporate-golf-events-bangkok', '/events', '/cost/corporate-golf-event-cost-bangkok', '/best/best-corporate-event-venues-bangkok', '/activities/group-activities-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -183,7 +183,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
       list_items: [
         {
           rank: 1,
-          name: 'LENGOLF — Indoor Golf Simulator Bar',
+          name: 'LENGOLF (บาร์และห้องซิมกอล์ฟ)',
           description:
             'LENGOLF มีเบย์กอล์ฟซิมูเลเตอร์ส่วนตัวพร้อมบาร์เต็มรูปแบบที่ Mercury Ville ติด BTS ชิดลม รูปแบบการเล่นสร้างการแข่งขันภายในทีมได้เองโดยธรรมชาติ ทั้ง closest to the pin, longest drive และสแครมเบิล และไม่จำเป็นต้องมีประสบการณ์กอล์ฟมาก่อน แต่ละเบย์รองรับผู้เล่นได้สูงสุด 5 คน และมีเมนูเครื่องดื่ม จึงเป็นงานสังสรรค์ไปในตัว แพ็กเกจจัดงานรองรับผู้ร่วมงาน 10-50 คน รวมค่าเบย์ เครื่องดื่ม และอาหารจัดเลี้ยง ดูราคาปัจจุบันได้ที่ len.golf/events',
           pros: [
@@ -223,7 +223,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 3,
-          name: 'Muay Thai Team Training — Fairtex Bangkok',
+          name: 'Fairtex Bangkok (ฝึกมวยไทยเป็นทีม)',
           description:
             'คลาสมวยไทยแบบกลุ่มความยาว 90 นาที ที่มีทั้งการซ้อมกับเป้าและกระสอบ ให้ทีมได้เจอความท้าทายทางร่างกายและได้ปล่อยอะดรีนาลีนไปด้วยกัน Fairtex Bangkok และยิมลักษณะเดียวกันรับจองแบบกลุ่มองค์กร เหมาะที่สุดกับทีมที่แข็งแรงและสบายใจกับกีฬาที่มีการปะทะ ไม่เหมาะกับทีมที่มีระดับความฟิตต่างกันมาก',
           pros: [
@@ -242,7 +242,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 4,
-          name: 'Flow House Bangkok — Wakeboarding',
+          name: 'Flow House Bangkok (เวคบอร์ด)',
           description:
             'Flow House บนสุขุมวิท 26 มีสระเวคบอร์ดแบบเคเบิลที่เหมาะกับมือใหม่ เป็นความท้าทายแบบกลุ่มที่สนุกจริงและเกิดบรรยากาศเชียร์กันเองตามธรรมชาติ ภายในมีบาร์และโซนอาหารสำหรับสังสรรค์ต่อหลังเล่นเสร็จ ข้อจำกัดอยู่ที่จำนวนรอบเล่นและการใช้แรง ซึ่งอาจไม่เหมาะกับคนที่ว่ายน้ำไม่ได้หรือมีปัญหาหัวไหล่',
           pros: [
@@ -261,7 +261,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 5,
-          name: 'Thai Pottery / Art Workshop',
+          name: 'เวิร์กช็อปเครื่องปั้นดินเผาและศิลปะไทย',
           description:
             'เวิร์กช็อปสายสร้างสรรค์ ทั้งปั้นเซรามิก วาดภาพ หรืองานศิลปะ เหมาะกับทีมที่เงียบกว่าและชอบทำงานร่วมกัน สตูดิโอหลายแห่งในกรุงเทพฯ รับจองแบบองค์กรเป็นกลุ่มส่วนตัว พลังงานต่ำกว่ากิจกรรมส่วนใหญ่ในรายการนี้ แต่ได้ของกลับบ้านจริง เพราะผู้ร่วมกิจกรรมเก็บผลงานของตัวเองไว้ได้ และเหมาะกับทีมที่รู้สึกกดดันกับรูปแบบการแข่งขัน',
           pros: [
@@ -323,7 +323,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/events', '/cost/corporate-golf-event-cost-bangkok', '/guide/corporate-golf-events-bangkok', '/activities/group-activities-bangkok', '/activities/private-party-venues-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -331,7 +331,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
       list_items: [
         {
           rank: 1,
-          name: 'LENGOLF — Indoor Golf Simulator Bar',
+          name: 'LENGOLF（インドアゴルフシミュレーターバー）',
           description:
             'LENGOLFは、BTSチットロムのザ・マーキュリービルにある、フルバー併設のプライベートシミュレーターベイです。ニアピン、ドラコン、スクランブルといった形式でチーム対抗が自然に生まれ、ゴルフ経験は必要ありません。1ベイ最大5名まで、ドリンクメニューも揃っているので、そのまま懇親の場も兼ねられます。イベントパッケージは10〜50名に対応し、ベイ、ドリンク、ケータリングの食事が含まれます。最新の料金はlen.golf/eventsをご覧ください。',
           pros: [
@@ -371,7 +371,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 3,
-          name: 'Muay Thai Team Training — Fairtex Bangkok',
+          name: 'Fairtex Bangkok（チームで受けるムエタイトレーニング）',
           description:
             'ミット打ちとサンドバッグを組み合わせた90分のムエタイのグループクラスは、体を使った挑戦とアドレナリンの共有をもたらします。Fairtex Bangkokをはじめとするジムが法人向けのグループ予約を受け付けています。格闘技に抵抗のない、体を動かすことに慣れたチームに向いており、体力差の大きいメンバー構成には不向きです。',
           pros: [
@@ -390,7 +390,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 4,
-          name: 'Flow House Bangkok — Wakeboarding',
+          name: 'Flow House Bangkok（ウェイクボード）',
           description:
             'スクンビット26にあるFlow Houseには、初心者でも楽しめるケーブル式のウェイクボード設備があります。順番を待つあいだに自然と声援が飛び交う、素直に面白いグループ向けの挑戦です。バーとダイニングスペースがあり、体験のあとの歓談にも使えます。制約となるのは、セッションの枠が限られることと、泳ぎが苦手な方や肩に不安のある方には負荷が大きい点です。',
           pros: [
@@ -409,7 +409,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 5,
-          name: 'Thai Pottery / Art Workshop',
+          name: 'タイの陶芸・アートワークショップ',
           description:
             '陶芸、絵画、アートといったクリエイティブ系のワークショップは、落ち着いた雰囲気で協力し合うチームに向いています。バンコクのいくつかのスタジオが法人向けの貸切予約に対応しています。このリストの他の選択肢より盛り上がりは控えめですが、作ったものを持ち帰れるという形に残る成果があり、競う形式に負担を感じるチームにも合います。',
           pros: [
@@ -474,7 +474,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/guide/corporate-golf-events-bangkok', '/events', '/cost/corporate-golf-event-cost-bangkok', '/best/best-corporate-event-venues-bangkok', '/activities/group-activities-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -482,7 +482,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
       list_items: [
         {
           rank: 1,
-          name: 'LENGOLF — Indoor Golf Simulator Bar',
+          name: 'LENGOLF (실내 골프 시뮬레이터 바)',
           description:
             'LENGOLF는 BTS 칫롬역 The Mercury Ville에 있는 실내 골프 시뮬레이터 바로, 프라이빗 베이와 정식 바를 함께 갖추고 있어요. 니어핀, 롱기스트 드라이브, 스크램블 같은 방식이라 팀 대항 구도가 자연스럽게 만들어지고, 골프 경험이 없어도 괜찮아요. 베이 하나에 최대 5명까지 들어가고 음료 메뉴도 있어서 회식 성격의 자리로도 잘 어울려요. 이벤트 패키지는 10~50명 규모를 다루고 베이와 음료, 케이터링 음식이 포함돼요. 현재 가격은 len.golf/events에서 확인할 수 있어요.',
           pros: [
@@ -522,7 +522,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 3,
-          name: 'Muay Thai Team Training — Fairtex Bangkok',
+          name: 'Fairtex Bangkok (팀 무에타이 트레이닝)',
           description:
             '미트 훈련과 샌드백 훈련으로 구성된 90분짜리 단체 무에타이 클래스는 팀이 함께 몸을 쓰고 아드레날린을 끌어올리는 시간이 돼요. Fairtex Bangkok을 비롯한 체육관들이 기업 단체 예약을 받아요. 몸 쓰는 데 익숙하고 격투 종목에 거부감이 없는 팀에 가장 잘 맞고, 체력 편차가 큰 팀에는 적합하지 않아요.',
           pros: [
@@ -541,7 +541,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 4,
-          name: 'Flow House Bangkok — Wakeboarding',
+          name: 'Flow House Bangkok (웨이크보드)',
           description:
             'Sukhumvit 26에 있는 Flow House에는 초보자도 탈 수 있는 케이블 웨이크보드 시설이 있어요. 서로 응원하는 분위기가 자연스럽게 만들어지는, 정말 재미있는 단체 도전이에요. 세션이 끝난 뒤 어울릴 수 있는 바와 식사 공간도 함께 있어요. 세션 슬롯 수가 정해져 있다는 점, 그리고 수영을 못하거나 어깨가 좋지 않은 사람에게는 체력 부담이 크다는 점이 제약이에요.',
           pros: [
@@ -560,7 +560,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 5,
-          name: 'Thai Pottery / Art Workshop',
+          name: '태국 도예·아트 워크숍',
           description:
             '도예와 페인팅 같은 창작 워크숍은 조용하고 협업 성향이 강한 팀에 잘 맞아요. 방콕의 여러 스튜디오가 기업 단체 프라이빗 예약을 받아요. 이 목록의 다른 액티비티보다 에너지는 낮지만, 손에 남는 결과물이 있고(만든 작품은 참가자가 가져가요) 경쟁 형식이 부담스러운 팀에 어울려요.',
           pros: [
@@ -625,7 +625,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/events', '/cost/corporate-golf-event-cost-bangkok', '/faq/how-much-does-corporate-golf-event-cost-bangkok', '/activities/group-activities-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -633,7 +633,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
       list_items: [
         {
           rank: 1,
-          name: 'LENGOLF — Indoor Golf Simulator Bar',
+          name: 'LENGOLF（室内高尔夫模拟器酒吧）',
           description:
             'LENGOLF在Mercury Ville、BTS Chidlom提供独立的高尔夫模拟器球位，配一整套吧台。这种形式天然会带出团队比拼——近洞挑战、最远开球、scramble择优赛——而且完全不需要高尔夫基础。每个球位最多5人，加上一份酒水单，团建同时就是一场社交活动。活动套餐覆盖10–50人，含球位、酒水与餐点，最新价格见len.golf/events。',
           pros: [
@@ -673,7 +673,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 3,
-          name: 'Muay Thai Team Training — Fairtex Bangkok',
+          name: 'Fairtex Bangkok（团队泰拳训练）',
           description:
             '90分钟的泰拳团体课，包含打靶和沙袋训练，能给团队一次实打实的体力挑战和共同的肾上腺素冲击。Fairtex Bangkok和类似的拳馆都接受企业团体预订。最适合本来就爱运动、不排斥格斗类项目的团队——成员体能差距大的话就不太合适。',
           pros: [
@@ -692,7 +692,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 4,
-          name: 'Flow House Bangkok — Wakeboarding',
+          name: 'Flow House Bangkok（缆绳滑水）',
           description:
             'Flow House位于Sukhumvit 26，有一套适合新手的缆绳滑水设施。这是一项真正好玩的团体挑战，旁边的人自然就会跟着喊起来。场地内设吧台和餐区，玩完可以留下来聊天。限制在于场次名额有限，对不会游泳或肩部有伤的人来说体力要求也偏高。',
           pros: [
@@ -711,7 +711,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 5,
-          name: 'Thai Pottery / Art Workshop',
+          name: '泰式陶艺／艺术工作坊',
           description:
             '陶艺、绘画这类创意工作坊，适合偏安静、讲究协作的团队。曼谷有好几家工作室接受企业包场。节奏比这份榜单上大多数活动都慢，但能留下实物（做出来的东西可以带走），也适合那些一比赛就紧张的团队。',
           pros: [
@@ -949,7 +949,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'th',
     related_slugs: ['/golf', '/activities/things-to-do-bangkok-at-night', '/activities/date-night-ideas-bangkok', '/best/best-things-to-do-near-chidlom'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -994,7 +994,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 3,
-          name: 'LENGOLF — Golf Simulator Bar',
+          name: 'LENGOLF (บาร์ซิมกอล์ฟ)',
           description:
             'LENGOLF เป็นบาร์กอล์ฟซิมูเลเตอร์ในร่มที่ Mercury Ville อยู่เหนือสถานี BTS ชิดลม พอดี ที่นี่เป็นบาร์เป็นหลัก ทั้งสิงห์เย็น ๆ คราฟต์ค็อกเทล และของทานเล่นประจำโต๊ะ แต่เพิ่มเบย์ซิมูเลเตอร์ส่วนตัวที่ให้คุณเล่นกอล์ฟเสมือนจริงไปพร้อมกับดื่ม เหมาะกับกลุ่มที่อยากได้อะไรน่าจดจำกว่าการนั่งอยู่ที่โต๊ะ ไม่ต้องมีประสบการณ์กอล์ฟมาก่อน เกมอย่าง closest to the pin สนุกได้ทันทีแม้ไม่เคยเล่นกอล์ฟ',
           pros: [
@@ -1129,7 +1129,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/golf', '/activities/things-to-do-bangkok-at-night', '/activities/date-night-ideas-bangkok', '/faq/where-play-golf-night-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -1174,7 +1174,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 3,
-          name: 'LENGOLF — Golf Simulator Bar',
+          name: 'LENGOLF（ゴルフシミュレーターバー）',
           description:
             'LENGOLFは、BTSチットロム駅の真上にあるザ・マーキュリービル内のインドアゴルフシミュレーターバーです。まずバーであること——よく冷えたSingha、クラフトカクテル、テーブルスナック——が前提にあり、そこに飲みながらバーチャルゴルフを楽しめるプライベートベイが加わります。テーブルに座っているだけでは物足りないグループにおすすめ。ゴルフ経験は不要で、ニアピンのようなゲームはゴルフをしない方でもすぐに楽しめます。',
           pros: [
@@ -1310,7 +1310,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/golf', '/activities/things-to-do-bangkok-at-night', '/activities/date-night-ideas-bangkok', '/best/best-things-to-do-near-chidlom'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -1355,7 +1355,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 3,
-          name: 'LENGOLF — Golf Simulator Bar',
+          name: 'LENGOLF (골프 시뮬레이터 바)',
           description:
             'LENGOLF는 BTS 칫롬역 바로 위 The Mercury Ville에 있는 실내 골프 시뮬레이터 바예요. 기본은 바에 가까워요. 시원한 Singha 맥주와 크래프트 칵테일, 테이블 안주가 있고, 여기에 술을 마시면서 가상 라운딩을 하는 프라이빗 시뮬레이터 베이가 더해진 형태예요. 테이블에 앉아만 있는 것보다 기억에 남는 자리를 원하는 그룹에 잘 맞아요. 골프 경험은 필요 없고, 니어핀 같은 게임은 골프를 안 치는 사람도 바로 즐길 수 있어요.',
           pros: [
@@ -1492,7 +1492,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/golf', '/activities/things-to-do-bangkok-at-night', '/activities/date-night-ideas-bangkok', '/activities/group-activities-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -1537,7 +1537,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 3,
-          name: 'LENGOLF — Golf Simulator Bar',
+          name: 'LENGOLF（高尔夫模拟器酒吧）',
           description:
             'LENGOLF是一家开在Mercury Ville的室内高尔夫模拟器酒吧，就在BTS Chidlom正上方。它首先是一家酒吧——冰镇Singha、手调鸡尾酒、佐酒小食——只是多了独立的模拟器球位，可以一边喝一边打虚拟高尔夫。如果一群人想要比“坐着聊天”更有记忆点的场合，这里很合适。不需要高尔夫基础，近洞挑战这类玩法，没打过球的人也能马上玩起来。',
           pros: [
@@ -1846,7 +1846,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'th',
     related_slugs: ['/guide/corporate-golf-events-bangkok', '/events', '/cost/corporate-golf-event-cost-bangkok', '/best/best-team-building-activities-bangkok', '/faq/how-much-does-corporate-golf-event-cost-bangkok', '/activities/private-party-venues-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -1854,7 +1854,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
       list_items: [
         {
           rank: 1,
-          name: 'LENGOLF — Private Corporate Golf Events',
+          name: 'LENGOLF (อีเวนต์กอล์ฟส่วนตัวสำหรับองค์กร)',
           description:
             'LENGOLF จัดแพ็กเกจงานองค์กรแบบส่วนตัวที่ Mercury Ville ติด BTS ชิดลม พอดี แพ็กเกจรองรับผู้ร่วมงาน 10-50 คน รวมเครื่องดื่มและอาหารจัดเลี้ยง และ Medium Package เป็นการเหมาพื้นที่ทั้งหมดแบบเอ็กซ์คลูซีฟ คือทั้งร้านเป็นของคุณ ดูราคาแพ็กเกจปัจจุบันได้ที่ len.golf/events ไม่จำเป็นต้องมีประสบการณ์กอล์ฟ รูปแบบทัวร์นาเมนต์อย่าง closest to the pin เล่นได้ทั้งมือใหม่หมดและนักกอล์ฟระดับสแครช จึงตัดความเก้อเขินแบบยืนเฉย ๆ ที่มักเกิดในงานบริษัทออกไป และทำให้ทีมมีอะไรทำร่วมกัน',
           pros: [
@@ -1874,7 +1874,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 2,
-          name: 'Grand Hyatt Erawan — Ballrooms & Function Rooms',
+          name: 'Grand Hyatt Erawan (ห้องบอลรูมและห้องจัดงาน)',
           description:
             'Grand Hyatt Erawan เป็นโรงแรมห้าดาวสำหรับงานประชุมที่อยู่ใจกลางเมืองที่สุดในกรุงเทพฯ ตั้งอยู่ที่สี่แยกเอราวัณ เหนือ BTS ชิดลม โดยตรง ห้องจัดงานมีตั้งแต่ห้องบอร์ดรูม (10-20 คน) ไปจนถึง Grand Ballroom (1,000 คนขึ้นไป) พร้อมระบบภาพและเสียงครบ บริการจัดเลี้ยง และทีมบริหารงานอีเวนต์ ราคาระดับพรีเมียม แต่ทำเลและคุณภาพบริการหาที่เทียบได้ยากสำหรับงานองค์กรแบบเป็นทางการ',
           pros: [
@@ -1928,7 +1928,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 5,
-          name: 'Haoma — Private Dining Room',
+          name: 'Haoma (ห้องอาหารส่วนตัว)',
           description:
             'Haoma เป็นร้านอาหารแบบเออร์เบินฟาร์มทูเทเบิลแห่งแรกของกรุงเทพฯ มีห้องอาหารส่วนตัวรองรับ 8-20 คน เป็นตัวเลือกที่ยอดเยี่ยมสำหรับมื้อค่ำผู้บริหารกลุ่มเล็กและงานสานสัมพันธ์ที่ให้ความสำคัญกับคุณภาพอาหารเป็นหลัก ร้านได้ดาวมิชลินและเป็นที่รู้จักจากเรื่องราวการจัดหาวัตถุดิบอย่างยั่งยืน',
           pros: [
@@ -1947,7 +1947,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 6,
-          name: 'Anantara Siam Bangkok — Function Spaces',
+          name: 'Anantara Siam Bangkok (พื้นที่จัดงานเลี้ยงและประชุม)',
           description:
             'Anantara Siam เป็นโรงแรมห้าดาวที่อยู่ห่างจาก LENGOLF 800 เมตร มีห้องจัดงานหลายขนาดและชื่อเสียงด้านงานอีเวนต์ที่แข็งแรง โรงละคร Pattawia รองรับได้ 200 คนขึ้นไปสำหรับงานนำเสนอ เหมาะกับกลุ่มขนาดใหญ่ที่ต้องการสิ่งอำนวยความสะดวกสำหรับงานประชุมอย่างเต็มรูปแบบ พร้อมบริการจัดเลี้ยงระดับสูง',
           pros: [
@@ -1965,7 +1965,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 7,
-          name: 'Kimpton Maa-Lai Bangkok — Event Spaces',
+          name: 'Kimpton Maa-Lai Bangkok (พื้นที่จัดอีเวนต์)',
           description:
             'Kimpton Maa-Lai เป็นโรงแรมห้าดาวสายไลฟ์สไตล์ที่อยู่ห่างจาก LENGOLF 800 เมตร บนถนนหลังสวน พื้นที่จัดงานให้ความรู้สึกเป็นบูทีคโฮเทลมากกว่าสถานที่จัดงานองค์กรแบบดั้งเดิม จึงเหมาะกับบริษัทที่อยากได้ความพรีเมียมแต่ไม่อึดอัด ร้านอาหารภายในโรงแรมอย่าง Rüedi และ Rüedithai ก็ทำได้ดี',
           pros: [
@@ -2026,7 +2026,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/events', '/guide/corporate-golf-events-bangkok', '/cost/corporate-golf-event-cost-bangkok', '/faq/how-much-does-corporate-golf-event-cost-bangkok', '/activities/private-party-venues-bangkok', '/activities/group-activities-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -2034,7 +2034,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
       list_items: [
         {
           rank: 1,
-          name: 'LENGOLF — Private Corporate Golf Events',
+          name: 'LENGOLF（貸切の法人向けゴルフイベント）',
           description:
             'LENGOLFは、BTSチットロム駅のすぐ上にあるザ・マーキュリービルで、法人向けの貸切イベントパッケージを運営しています。パッケージは10〜50名に対応し、ドリンクとケータリングの食事が含まれます。Mediumパッケージは全館貸切で、スペース全体を専有できます。最新のパッケージ料金はlen.golf/eventsをご覧ください。ゴルフ経験は不要で、ニアピンのようなトーナメント形式は完全な初心者にもスクラッチプレーヤーにも同じように成立します。企業イベントにありがちな手持ち無沙汰な空気がなくなり、チームで一緒に取り組むものが生まれます。',
           pros: [
@@ -2054,7 +2054,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 2,
-          name: 'Grand Hyatt Erawan — Ballrooms & Function Rooms',
+          name: 'Grand Hyatt Erawan（ボールルームと宴会場）',
           description:
             'Grand Hyatt Erawanは、BTSチットロム駅の真上、エラワン交差点に建つ、バンコクで最も中心に位置する5つ星のカンファレンスホテルです。会場はボードルーム（10〜20名）からグランドボールルーム（1,000名以上）まで揃います。AV機材のサポート、ケータリング、イベント運営も一括で対応。価格はプレミアムですが、正式な企業イベントにおける立地とサービスの質に容易に並ぶものはありません。',
           pros: [
@@ -2108,7 +2108,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 5,
-          name: 'Haoma — Private Dining Room',
+          name: 'Haoma（個室ダイニング）',
           description:
             'Haomaはバンコク初の都市型ファームトゥテーブルレストランで、8〜20名のプライベートダイニングルームを備えています。料理の質が最優先となる少人数の役員ディナーや関係構築の場として、群を抜いた選択肢です。ミシュランの星を持ち、持続可能な食材調達の取り組みでも知られています。',
           pros: [
@@ -2127,7 +2127,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 6,
-          name: 'Anantara Siam Bangkok — Function Spaces',
+          name: 'Anantara Siam Bangkok（宴会・会議スペース）',
           description:
             'Anantara Siamは、LENGOLFから800mの距離にある5つ星ホテルで、多様な会場を備え、イベント運営でも定評があります。Pattawia Theatreはプレゼンテーション向けに200名以上を着席で収容。本格的なカンファレンス設備とハイエンドなケータリングを必要とする大人数のグループに向いています。',
           pros: [
@@ -2145,7 +2145,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 7,
-          name: 'Kimpton Maa-Lai Bangkok — Event Spaces',
+          name: 'Kimpton Maa-Lai Bangkok（イベントスペース）',
           description:
             'Kimpton Maa-Laiは、ランスワン通り、LENGOLFから800mの距離にあるライフスタイル系の5つ星ホテルです。イベントスペースは従来型の企業向け会場よりブティックホテルらしい趣で、プレミアムでありながら堅苦しくない場を求める企業に向いています。館内のRüediとRüedithaiによるダイニングも充実しています。',
           pros: [
@@ -2207,7 +2207,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/guide/corporate-golf-events-bangkok', '/events', '/cost/corporate-golf-event-cost-bangkok', '/best/best-team-building-activities-bangkok', '/faq/how-much-does-corporate-golf-event-cost-bangkok', '/activities/private-party-venues-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -2215,7 +2215,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
       list_items: [
         {
           rank: 1,
-          name: 'LENGOLF — Private Corporate Golf Events',
+          name: 'LENGOLF (기업 전용 프라이빗 골프 이벤트)',
           description:
             'LENGOLF는 BTS 칫롬역 바로 위 The Mercury Ville에서 기업 전용 이벤트 패키지를 운영해요. 패키지는 10~50명 규모를 다루고 음료와 케이터링 음식이 포함되며, Medium Package는 공간 전체를 통째로 빌리는 단독 대관이에요. 현재 패키지 가격은 len.golf/events에서 확인할 수 있어요. 골프 경험은 필요 없어요. 니어핀 같은 토너먼트 방식은 완전 초보자와 스크래치 골퍼 모두에게 통해서, 기업 행사에서 흔한 어색하게 서 있는 시간을 없애고 팀에 함께할 거리를 만들어 줘요.',
           pros: [
@@ -2235,7 +2235,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 2,
-          name: 'Grand Hyatt Erawan — Ballrooms & Function Rooms',
+          name: 'Grand Hyatt Erawan (볼룸과 연회장)',
           description:
             'Grand Hyatt Erawan은 방콕에서 가장 중심에 있는 5성급 콘퍼런스 호텔로, BTS 칫롬역 바로 위 Erawan 교차로에 자리해요. 행사장은 10~20명 규모 보드룸부터 1,000명 이상을 수용하는 Grand Ballroom까지 갖춰져 있어요. AV 지원과 케이터링, 행사 운영이 모두 포함돼요. 가격은 프리미엄급이지만, 격식 있는 기업 행사라면 위치와 서비스 수준을 넘어서기 어려워요.',
           pros: [
@@ -2289,7 +2289,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 5,
-          name: 'Haoma — Private Dining Room',
+          name: 'Haoma (프라이빗 다이닝룸)',
           description:
             'Haoma는 방콕 최초의 도시형 팜투테이블 레스토랑으로, 8~20명 규모의 프라이빗 다이닝룸을 갖추고 있어요. 음식 수준이 가장 중요한 소규모 임원 만찬이나 관계를 다지는 자리에 특히 좋아요. 미쉐린 스타를 받았고, 지속 가능한 식재료 조달 이야기로도 잘 알려져 있어요.',
           pros: [
@@ -2308,7 +2308,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 6,
-          name: 'Anantara Siam Bangkok — Function Spaces',
+          name: 'Anantara Siam Bangkok (연회·회의 공간)',
           description:
             'Anantara Siam은 LENGOLF에서 800m 거리에 있는 5성급 호텔로, 다양한 규모의 행사장을 갖추고 행사 운영으로 평판이 좋아요. Pattawia Theatre는 프레젠테이션용으로 200명 이상을 앉힐 수 있어요. 제대로 된 콘퍼런스 설비와 고급 케이터링이 필요한 큰 그룹에 잘 맞아요.',
           pros: [
@@ -2326,7 +2326,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 7,
-          name: 'Kimpton Maa-Lai Bangkok — Event Spaces',
+          name: 'Kimpton Maa-Lai Bangkok (이벤트 공간)',
           description:
             'Kimpton Maa-Lai는 Lang Suan에 있는 라이프스타일 5성급 호텔로, LENGOLF에서 800m 거리예요. 행사 공간이 전형적인 기업 행사장보다 부티크 호텔에 가까운 분위기라, 고급스럽되 답답하지 않은 자리를 원하는 회사에 잘 맞아요. 호텔 안 레스토랑인 Rüedi와 Rüedithai도 훌륭해요.',
           pros: [
@@ -2388,7 +2388,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/events', '/cost/corporate-golf-event-cost-bangkok', '/faq/how-much-does-corporate-golf-event-cost-bangkok', '/activities/private-party-venues-bangkok', '/activities/group-activities-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -2396,7 +2396,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
       list_items: [
         {
           rank: 1,
-          name: 'LENGOLF — Private Corporate Golf Events',
+          name: 'LENGOLF（企业专场高尔夫活动）',
           description:
             'LENGOLF在Mercury Ville、紧邻BTS Chidlom的位置提供企业活动包场套餐。套餐覆盖10–50人，含酒水与餐点，其中Medium Package是整场包下的独享方案：整个空间都归你。最新套餐价格见len.golf/events。完全不需要高尔夫基础：近洞挑战这类比赛形式，零基础的人和零差点球手都玩得起来，正好省掉企业活动上常见的“干站着”的尴尬，让团队有件事可以一起做。',
           pros: [
@@ -2416,7 +2416,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 2,
-          name: 'Grand Hyatt Erawan — Ballrooms & Function Rooms',
+          name: 'Grand Hyatt Erawan（宴会厅与会议厅）',
           description:
             'Grand Hyatt Erawan是曼谷位置最中心的五星级会议酒店，就在Erawan路口、BTS Chidlom正上方。功能厅从10–20人的小型会议室到1,000人以上的Grand Ballroom都有，配套含全套视听支持、餐饮和活动执行。价格属于高端档，但要办正式的企业活动，它的位置和服务水准很难被超越。',
           pros: [
@@ -2470,7 +2470,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 5,
-          name: 'Haoma — Private Dining Room',
+          name: 'Haoma（私人包间）',
           description:
             'Haoma是曼谷第一家城市农场到餐桌的餐厅，包厢可容纳8–20人。如果一场活动最看重的是出品，比如小规模的高管晚宴或维系关系的场合，它是非常出色的选择。这是一家米其林星级餐厅，可持续食材的做法也很知名。',
           pros: [
@@ -2489,7 +2489,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 6,
-          name: 'Anantara Siam Bangkok — Function Spaces',
+          name: 'Anantara Siam Bangkok（宴会及会议场地）',
           description:
             'Anantara Siam是一家距离LENGOLF约800米的五星级酒店，功能厅种类齐全，办活动的口碑一向不错。Pattawia Theatre可容纳200人以上的演讲场合。需要正规会议设施加高端餐饮的大团体，选它比较稳。',
           pros: [
@@ -2507,7 +2507,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 7,
-          name: 'Kimpton Maa-Lai Bangkok — Event Spaces',
+          name: 'Kimpton Maa-Lai Bangkok（活动场地）',
           description:
             'Kimpton Maa-Lai是Lang Suan路上一家生活方式取向的五星级酒店，距离LENGOLF约800米。它的活动空间更像精品酒店，而不是传统企业场地——适合想要高端但不那么拘谨的公司。店内Rüedi与Rüedithai的餐饮出品很强。',
           pros: [
@@ -2709,7 +2709,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'th',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf', '/cost/golf-simulator-prices-bangkok'],
     created_at: now,
-    updated_at: '2026-09-07T00:00:00.000Z',
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -2717,7 +2717,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
       list_items: [
         {
           rank: 1,
-          name: 'LENGOLF — Golf Simulator Bar',
+          name: 'LENGOLF (บาร์ซิมกอล์ฟ)',
           description:
             'LENGOLF รวมบาร์เต็มรูปแบบเข้ากับเบย์กอล์ฟซิมูเลเตอร์ส่วนตัวไว้ในที่เดียวที่ Mercury Ville ติด BTS ชิดลม ต่างจากที่เที่ยวในร่มส่วนใหญ่ตรงที่สนุกได้เท่ากันไม่ว่าคุณจะเล่นกอล์ฟเป็นหรือไม่ เกมอย่าง closest to the pin และ longest drive เล่นได้ทันที เบย์ส่วนตัวหมายความว่ากลุ่มของคุณมีพื้นที่ของตัวเอง และค่าเช่าเบย์รวมการใช้ไม้กอล์ฟแล้ว ค่าเช่าเบย์คิดเป็นรายชั่วโมงสำหรับผู้เล่นสูงสุด 5 คน ดูอัตราปัจจุบันได้ที่ len.golf/golf',
           pros: [
@@ -2757,7 +2757,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 3,
-          name: 'Karaoke at Zaa, The Vocal — Thong Lo',
+          name: 'Zaa, The Vocal (คาราโอเกะ, Thong Lo)',
           description:
             'กรุงเทพฯ มีร้านคาราโอเกะนับสิบแห่ง แต่ The Vocal ในทองหล่อโดดเด่นเรื่องคลังเพลงสากล ทั้งห้องให้เลือกหลายขนาด และบริการอาหารเครื่องดื่มตลอดเวลา ห้องส่วนตัวรองรับตั้งแต่ 2 คนไปจนถึง 20 คนขึ้นไป รูปแบบนี้เหมาะกับกลุ่มที่มีคนหลากหลายซึ่งอยากได้ความสังสรรค์โดยไม่ต้องกดดันกับเกมหรือทักษะ',
           pros: [
@@ -2814,7 +2814,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 6,
-          name: 'Dave & Buster\'s-style Venues — Route 66 Gamezone',
+          name: 'Route 66 Gamezone (สถานบันเทิงสไตล์ Dave & Buster\'s)',
           description:
             'Route 66 Gamezone ที่ RCA ในกรุงเทพฯ รวมเกมอาร์เคด ปาเป้า โต๊ะพูล และบริการบาร์ไว้ในที่เดียว ความเนี้ยบสู้ตัวเลือกด้านบนไม่ได้ แต่การมีทั้งเกมและเครื่องดื่มอยู่ในที่เดียวทำให้เป็นตัวเลือกที่ใช้ได้สำหรับกลุ่มที่อยากได้ความหลากหลายโดยไม่ต้องวางแผนมาก',
           pros: [
@@ -2855,7 +2855,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf', '/cost/golf-simulator-prices-bangkok'],
     created_at: now,
-    updated_at: '2026-09-07T00:00:00.000Z',
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -2863,7 +2863,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
       list_items: [
         {
           rank: 1,
-          name: 'LENGOLF — Golf Simulator Bar',
+          name: 'LENGOLF（ゴルフシミュレーターバー）',
           description:
             'LENGOLFは、BTSチットロムのザ・マーキュリービルにある、フル装備のバーとプライベートなゴルフシミュレーターベイをひとつにした施設です。多くの屋内エンタメと違い、ゴルファーかどうかを問わず同じように楽しめます。ニアピンやドラコンといったゲームは、その場ですぐ理解できるものばかり。プライベートベイなのでグループごとに専用の空間が確保され、ベイのレンタル料にはクラブの利用も含まれます。料金は最大5名まで1時間単位。最新のレートはlen.golf/golfをご覧ください。',
           pros: [
@@ -2903,7 +2903,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 3,
-          name: 'Karaoke at Zaa, The Vocal — Thong Lo',
+          name: 'Zaa, The Vocal（カラオケ、Thong Lo）',
           description:
             'バンコクにはカラオケ店が数多くありますが、トンローのThe Vocalは英語を話すグループにとって有力な選択肢のひとつです。部屋の選択肢が多く、洋楽を含む曲目が揃い、飲食のサービスも滞在中ずっと受けられます。個室は2名から20名以上まで対応。ゲームの勝ち負けや技術を求められることなく社交的に過ごしたい、構成の異なるグループにも自然と合う形式です。',
           pros: [
@@ -2960,7 +2960,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 6,
-          name: 'Dave & Buster\'s-style Venues — Route 66 Gamezone',
+          name: 'Route 66 Gamezone（Dave & Buster\'s風のアミューズメント施設）',
           description:
             'RCAにあるバンコクのRoute 66 Gamezoneは、アーケードゲーム、ダーツ、ビリヤード台、そしてバーのサービスをひとつの施設にまとめています。上に挙げた専門店ほど洗練されてはいませんが、ゲームとドリンクが同じ空間に揃うため、細かい計画なしにいろいろ楽しみたいグループには十分に機能します。',
           pros: [
@@ -3001,7 +3001,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf', '/cost/golf-simulator-prices-bangkok'],
     created_at: now,
-    updated_at: '2026-09-07T00:00:00.000Z',
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -3009,7 +3009,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
       list_items: [
         {
           rank: 1,
-          name: 'LENGOLF — Golf Simulator Bar',
+          name: 'LENGOLF (골프 시뮬레이터 바)',
           description:
             'LENGOLF는 BTS 칫롬역 The Mercury Ville 한 곳에 정식 바와 프라이빗 골프 시뮬레이터 베이를 함께 갖춘 공간이에요. 다른 실내 놀거리와 달리 골프를 치든 안 치든 똑같이 잘 통해요. 니어핀이나 롱기스트 드라이브 같은 게임은 바로 시작할 수 있어요. 프라이빗 베이라 우리 일행만의 공간이 생기고, 베이 이용료에 클럽 사용이 포함돼요. 베이는 최대 5명까지 시간 단위로 이용하고, 현재 요금은 len.golf/golf에서 확인할 수 있어요.',
           pros: [
@@ -3049,7 +3049,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 3,
-          name: 'Karaoke at Zaa, The Vocal — Thong Lo',
+          name: 'Zaa, The Vocal (노래방, Thong Lo)',
           description:
             '방콕에는 노래방이 수십 곳 있지만, Thong Lo의 The Vocal은 영어권 그룹에게 가장 좋은 곳 중 하나예요. 룸 선택지가 많고 해외 곡 라이브러리를 갖췄으며, 이용하는 내내 음식과 음료 서비스가 이어져요. 프라이빗 룸은 2명부터 20명 이상까지 있어요. 게임이나 실력 부담 없이 함께 어울리고 싶은, 구성이 다양한 그룹에 자연스럽게 어울리는 형식이에요.',
           pros: [
@@ -3106,7 +3106,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 6,
-          name: 'Dave & Buster\'s-style Venues — Route 66 Gamezone',
+          name: 'Route 66 Gamezone (Dave & Buster\'s 스타일 시설)',
           description:
             'RCA에 있는 방콕의 Route 66 Gamezone은 아케이드 게임과 다트, 당구대, 바 서비스를 한 공간에 모아 놨어요. 위에 소개한 단독 매장들만큼 정돈되어 있지는 않지만, 게임과 술이 한자리에 있어서 따로 계획을 세우지 않고 이것저것 즐기고 싶은 그룹에는 쓸 만한 선택지예요.',
           pros: [
@@ -3149,7 +3149,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/activities/indoor-activities-bangkok', '/activities/things-to-do-bangkok-at-night', '/golf', '/cost/golf-simulator-prices-bangkok'],
     created_at: now,
-    updated_at: '2026-09-07T00:00:00.000Z',
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -3157,7 +3157,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
       list_items: [
         {
           rank: 1,
-          name: 'LENGOLF — Golf Simulator Bar',
+          name: 'LENGOLF（高尔夫模拟器酒吧）',
           description:
             'LENGOLF把一整套吧台和独立的高尔夫模拟器球位放进同一个场地，位置在Mercury Ville、BTS Chidlom。和大多数室内娱乐不一样的是，不管你打不打高尔夫，它都同样成立——近洞挑战、最远开球这类玩法上手即会。独立球位意味着你们这一行人有自己的空间，球位租金已包含球杆使用。球位按小时计费，最多5人同用——最新收费见len.golf/golf。',
           pros: [
@@ -3197,7 +3197,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 3,
-          name: 'Karaoke at Zaa, The Vocal — Thong Lo',
+          name: 'Zaa, The Vocal（KTV，Thong Lo）',
           description:
             '曼谷的KTV有几十家，但Thong Lo的The Vocal是英语客群里最好的之一——包厢种类多、曲库有国际歌曲，全程还有餐饮服务。包厢从2人到20人以上都有。这种形式天然适合成员构成复杂、想要社交但不想面对比赛或技巧门槛的一群人。',
           pros: [
@@ -3254,7 +3254,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 6,
-          name: 'Dave & Buster\'s-style Venues — Route 66 Gamezone',
+          name: 'Route 66 Gamezone（Dave & Buster\'s风格的娱乐场所）',
           description:
             '位于RCA的Route 66 Gamezone把电玩机台、飞镖、台球和吧台服务放在同一个空间里。精致程度不如上面几家专门的场馆，但游戏加酒水一站解决，对于懒得做攻略又想玩点花样的一群人来说够用。',
           pros: [
@@ -3451,7 +3451,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'th',
     related_slugs: ['/golf', '/lessons', '/cost/how-much-does-golf-cost-bangkok', '/cost/golf-simulator-prices-bangkok', '/faq/can-i-rent-golf-clubs-in-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -3459,7 +3459,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
       list_items: [
         {
           rank: 1,
-          name: 'LENGOLF — Indoor Golf Simulator (Chidlom)',
+          name: 'LENGOLF (ห้องซิมกอล์ฟ ชิดลม)',
           description:
             'LENGOLF ให้บริการกอล์ฟซิมูเลเตอร์ Bravo ในเบย์ส่วนตัวที่ Mercury Ville ติด BTS ชิดลม ค่าเช่าเบย์รองรับผู้เล่นสูงสุด 5 คน รวมชุดไม้กอล์ฟมาตรฐาน และเข้าถึงคลังสนามจริงจากทั่วโลกได้ครบ ซิมูเลเตอร์ระดับเดียวกับ Trackman แม่นยำพอสำหรับการวิเคราะห์สวิงอย่างจริงจัง และ LENGOLF ยังมีคอร์สเรียนกับโค้ชที่ได้รับการรับรองจาก PGA ประเทศไทย โดยใช้ข้อมูลจากซิมูเลเตอร์ ดูอัตราค่าเบย์และราคาคอร์สเรียนปัจจุบันได้ที่ len.golf',
           pros: [
@@ -3534,7 +3534,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 5,
-          name: 'Driving Range at Sinthorn Golf Academy',
+          name: 'Sinthorn Golf Academy (สนามไดรฟ์)',
           description:
             'สนามไดรฟ์อิสระที่ดีที่สุดในใจกลางกรุงเทพฯ เป็นสนามไดรฟ์หลายชั้นบนถนนวิทยุ ห่างจาก BTS ชิดลม 1 กิโลเมตร มีตัวเลือกการสอนหลายแบบ เหมาะกับการวอร์มอัป การซ้อม และคนที่ไม่มีเวลาออกรอบเต็มรูปแบบ ราคาต่อถังอยู่ที่ราว 200-400 บาท',
           pros: [
@@ -3571,7 +3571,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 7,
-          name: 'Golf Zone — Indoor Simulator (Multiple Locations)',
+          name: 'Golf Zone (ห้องซิมกอล์ฟ หลายสาขา)',
           description:
             'Golf Zone เป็นเชนซิมูเลเตอร์ในร่มที่ใหญ่ที่สุดในกรุงเทพฯ มีหลายสาขาทั่วเมือง รวมถึงเอ็มโพเรียมและทองหล่อ จุดเด่นคือครอบคลุมทำเลได้กว้าง เดินทางจากย่านต่าง ๆ ของกรุงเทพฯ ได้สะดวก',
           pros: [
@@ -3612,7 +3612,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/golf', '/lessons', '/cost/how-much-does-golf-cost-bangkok', '/cost/golf-simulator-prices-bangkok', '/faq/can-i-rent-golf-clubs-in-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -3620,7 +3620,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
       list_items: [
         {
           rank: 1,
-          name: 'LENGOLF — Indoor Golf Simulator (Chidlom)',
+          name: 'LENGOLF（インドアゴルフシミュレーター、チットロム）',
           description:
             'LENGOLFは、BTSチットロムのザ・マーキュリービルで、プライベートベイにBravo Golfのシミュレーターを設置しています。ベイのレンタルは最大5名まで、標準クラブセット付きで、実在コースのライブラリーを一通り利用できます。Trackman級の精度があり、本格的なスイング解析にも十分応えます。LENGOLFでは、そのシミュレーターのデータを使ったタイPGA認定コーチによるレッスンも提供しています。最新のベイ料金とレッスン料金はlen.golfをご覧ください。',
           pros: [
@@ -3695,7 +3695,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 5,
-          name: 'Driving Range at Sinthorn Golf Academy',
+          name: 'Sinthorn Golf Academy（ドライビングレンジ）',
           description:
             'バンコク中心部で最良の独立系ドライビングレンジ。BTSチットロム駅から1km、Wireless Roadにある多層式のレンジです。コーチングの選択肢も複数あります。ウォーミングアップ、練習、そして1ラウンド回る時間がないときに向いています。料金はボール1カゴあたりおおむね200〜400THB。',
           pros: [
@@ -3732,7 +3732,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 7,
-          name: 'Golf Zone — Indoor Simulator (Multiple Locations)',
+          name: 'Golf Zone（インドアシミュレーター、複数店舗）',
           description:
             'Golf Zoneはバンコク最大のインドアシミュレーターチェーンで、EmporiumやThong Loなど市内各所に店舗があります。強みは立地のカバー範囲の広さで、バンコクの各地区からアクセスしやすい点です。',
           pros: [
@@ -3776,7 +3776,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/golf', '/lessons', '/cost/how-much-does-golf-cost-bangkok', '/cost/golf-simulator-prices-bangkok', '/faq/can-i-rent-golf-clubs-in-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -3784,7 +3784,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
       list_items: [
         {
           rank: 1,
-          name: 'LENGOLF — Indoor Golf Simulator (Chidlom)',
+          name: 'LENGOLF (실내 골프 시뮬레이터, 칫롬)',
           description:
             'LENGOLF는 BTS 칫롬역 The Mercury Ville의 프라이빗 베이에서 Bravo 골프 시뮬레이터를 운영해요. 베이 이용료는 최대 5명까지 커버하고 기본 클럽 세트가 포함되며, 실제 코스 라이브러리를 통째로 쓸 수 있어요. Trackman급 정확도라 제대로 된 스윙 분석이 가능하고, LENGOLF는 이 시뮬레이터 데이터를 활용하는 태국 PGA 인증 코치의 레슨도 함께 운영해요. 현재 베이 요금과 레슨 가격은 len.golf에서 확인할 수 있어요.',
           pros: [
@@ -3859,7 +3859,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 5,
-          name: 'Driving Range at Sinthorn Golf Academy',
+          name: 'Sinthorn Golf Academy (드라이빙 레인지)',
           description:
             '방콕 도심에서 가장 좋은 독립형 드라이빙 레인지예요. Wireless Road에 있는 복층 연습장으로, BTS 칫롬역에서 1km 거리예요. 여러 코칭 프로그램도 운영해요. 몸풀기나 연습, 정규 라운딩을 할 시간이 없을 때 좋아요. 한 바구니에 약 200~400바트예요.',
           pros: [
@@ -3896,7 +3896,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 7,
-          name: 'Golf Zone — Indoor Simulator (Multiple Locations)',
+          name: 'Golf Zone (실내 시뮬레이터, 여러 지점)',
           description:
             'Golf Zone은 방콕에서 가장 큰 실내 시뮬레이터 체인으로, Emporium과 Thong Lo를 비롯해 시내 여러 곳에 지점이 있어요. 강점은 넓은 지점 커버리지로, 방콕 각 지역에서 접근하기 좋아요.',
           pros: [
@@ -3937,7 +3937,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/golf', '/lessons', '/cost/how-much-does-golf-cost-bangkok', '/cost/golf-simulator-prices-bangkok', '/faq/can-i-rent-golf-clubs-in-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -3945,7 +3945,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
       list_items: [
         {
           rank: 1,
-          name: 'LENGOLF — Indoor Golf Simulator (Chidlom)',
+          name: 'LENGOLF（室内高尔夫模拟器，Chidlom）',
           description:
             'LENGOLF在Mercury Ville、BTS Chidlom设有独立球位，配Bravo高尔夫模拟器。球位租用最多可5人同用，含标准球杆套装，并可调用完整的真实球场库。这些达到Trackman级别的模拟器，精度足以做真正的挥杆分析——LENGOLF也提供由泰国PGA认证教练根据模拟器数据授课的课程。最新球位收费与课程价格见len.golf。',
           pros: [
@@ -4020,7 +4020,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 5,
-          name: 'Driving Range at Sinthorn Golf Academy',
+          name: 'Sinthorn Golf Academy（练习场）',
           description:
             '曼谷市中心最好的独立练习场。多层结构，位于Wireless Road，距BTS Chidlom约1公里。教学方案有多种可选。适合热身、单纯练球，以及没时间打完整一轮的人。按一桶球计费，约200–400泰铢。',
           pros: [
@@ -4057,7 +4057,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 7,
-          name: 'Golf Zone — Indoor Simulator (Multiple Locations)',
+          name: 'Golf Zone（室内模拟器，多家门店）',
           description:
             'Golf Zone是曼谷规模最大的室内模拟器连锁，在城中多处设点，包括Emporium和Thong Lo。它的优势是覆盖范围广，在曼谷不同片区都比较好到达。',
           pros: [
@@ -4273,7 +4273,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'th',
     related_slugs: ['/golf', '/best/best-bars-near-bts-chidlom', '/best/best-indoor-entertainment-bangkok', '/activities/things-to-do-bangkok-at-night'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -4281,7 +4281,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
       list_items: [
         {
           rank: 1,
-          name: 'LENGOLF — Indoor Golf Simulator Bar',
+          name: 'LENGOLF (บาร์และห้องซิมกอล์ฟ)',
           description:
             'LENGOLF อยู่ใน Mercury Ville ตรงทางออก 4 ของ BTS ชิดลม พอดี เป็นสถานที่ทำกิจกรรมที่เข้าถึงง่ายที่สุดในย่านชิดลม-เพลินจิตทั้งย่าน เปิดทุกวันตั้งแต่ 9:00 ถึง 23:00 น. จึงเป็นตัวเลือกที่ดีสำหรับกิจกรรมช่วงบ่ายหรือค่ำไม่ว่าอากาศจะเป็นอย่างไร ทั้งเบย์ซิมูเลเตอร์ส่วนตัว บาร์เต็มรูปแบบ และวอล์กอินได้ง่าย ทำให้สะดวกเป็นพิเศษในย่านที่ความบันเทิงส่วนใหญ่คือการกินและการช้อปปิ้ง',
           pros: [
@@ -4300,7 +4300,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 2,
-          name: 'CentralWorld Shopping & Dining',
+          name: 'CentralWorld (ช้อปปิ้งและร้านอาหาร)',
           description:
             'เซ็นทรัลเวิลด์เป็นหนึ่งในห้างที่ใหญ่ที่สุดในเอเชียตะวันออกเฉียงใต้ และเป็นแลนด์มาร์กหลักของย่านราชประสงค์ อยู่ในระยะเดินจาก BTS ชิดลม นอกจากร้านค้าแล้วยังมีห้างสรรพสินค้า Zen ร้านอาหารหลายสิบร้าน โรงภาพยนตร์ โบว์ลิ่ง (Blu-O) และอีเวนต์ที่ลานกลางตลอดทั้งปี เป็นจุดหมายที่ใช้เวลาได้ครึ่งวันเต็มในตัวเอง',
           pros: [
@@ -4336,7 +4336,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 4,
-          name: 'Gaysorn Village — Luxury Shopping',
+          name: 'Gaysorn Village (ช้อปปิ้งสินค้าหรู)',
           description:
             'เกษร วิลเลจ เป็นห้างหรูที่คัดสรรมาดีที่สุดของกรุงเทพฯ เล็กกว่าเซ็นทรัลเวิลด์แต่พรีเมียมกว่า มีทั้ง Hermès, Dior, Prada และแบรนด์ดีไซเนอร์ไทยที่คัดมาอย่างดี เชื่อมต่อกับ BTS ชิดลม โดยตรงผ่านทางเดินลอยฟ้า เหมาะกับการช้อปปิ้งจริงจังมากกว่าความกว้างใหญ่ของเซ็นทรัลเวิลด์',
           pros: [
@@ -4373,7 +4373,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 6,
-          name: 'Hyde & Seek — Gastropub',
+          name: 'Hyde & Seek (แกสโตรพับ)',
           description:
             'หนึ่งในบาร์ลับที่ดีที่สุดของกรุงเทพฯ อยู่ชั้นใต้ดินของ Athenee Residence บนถนนวิทยุ เดินจาก BTS ชิดลม 10 นาทีผ่านทางเชื่อมของโรงแรม เมนูค็อกเทลแข็งแรงและอาหารบาร์ยอดเยี่ยม (เบอร์เกอร์ หมูสามชั้น ชาร์คูเทอรี) เป็นที่นิยมในหมู่ชาวต่างชาติย่านชิดลมและแขกโรงแรมที่มองหาอะไรที่เป็นทางการน้อยกว่าบาร์ในโรงแรม',
           pros: [
@@ -4409,7 +4409,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 8,
-          name: 'Sindhorn Village — Dining & Gallery',
+          name: 'Sindhorn Village (ร้านอาหารและแกลเลอรี)',
           description:
             'โครงการมิกซ์ยูสที่คัดสรรมาอย่างดีบนถนนหลังสวน เชื่อมต่อกับถนนวิทยุ มีร้านอาหารระดับกลางถึงบนให้เลือกดี สวนบนดาดฟ้า และ Wasan Gallery วุ่นวายน้อยกว่าห้างใหญ่ย่านราชประสงค์ เป็นตัวเลือกที่ดีสำหรับมื้อกลางวันหรือมื้อค่ำหากรู้สึกว่าเซ็นทรัลเวิลด์ใหญ่เกินไป',
           pros: [
@@ -4452,7 +4452,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/golf', '/guide/bangkok-bts-guide-golfers', '/activities/weekend-activities-bangkok', '/activities/things-to-do-bangkok-at-night'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -4460,7 +4460,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
       list_items: [
         {
           rank: 1,
-          name: 'LENGOLF — Indoor Golf Simulator Bar',
+          name: 'LENGOLF（インドアゴルフシミュレーターバー）',
           description:
             'LENGOLFは、BTSチットロム駅4番出口のザ・マーキュリービル内にあり、チットロム・プルンチット一帯で最もアクセスしやすいアクティビティ施設です。営業は毎日9時から23時まで。天候を問わず、午後や夜の過ごし方として有力です。プライベートなシミュレーターベイ、フルバー、そして飛び込みでも入りやすい予約体制。娯楽の大半が食事か買い物というエリアにあって、際立って使い勝手のよい存在です。',
           pros: [
@@ -4479,7 +4479,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 2,
-          name: 'CentralWorld Shopping & Dining',
+          name: 'CentralWorld（ショッピング＆ダイニング）',
           description:
             '東南アジア有数の規模を誇るショッピングモールで、ラチャプラソン一帯を象徴する存在。BTSチットロム駅から徒歩圏です。物販だけでなく、Zen百貨店、数十軒のレストラン、映画館、ボウリング場（Blu-O）が入り、中央広場では一年を通してイベントが開かれています。それだけで半日過ごせる目的地です。',
           pros: [
@@ -4515,7 +4515,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 4,
-          name: 'Gaysorn Village — Luxury Shopping',
+          name: 'Gaysorn Village（ラグジュアリーショッピング）',
           description:
             'Gaysorn Villageは、バンコクで最も選び抜かれた高級モールです。セントラルワールドより小ぶりですが、Hermès、Dior、Pradaに加えてタイのデザイナーズブランドも充実し、より上質な品揃えを持ちます。スカイウォークでBTSチットロム駅と直結。広大なセントラルワールドより、目的のある買い物に向いています。',
           pros: [
@@ -4552,7 +4552,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 6,
-          name: 'Hyde & Seek — Gastropub',
+          name: 'Hyde & Seek（ガストロパブ）',
           description:
             'バンコクで指折りの隠れ家バーのひとつ。Wireless RoadのAthenee Residence地下にあり、ホテルのスカイブリッジ経由でBTSチットロム駅から徒歩10分です。カクテルの構成が本格的で、バーフード（バーガー、豚バラ、シャルキュトリー）も秀逸。ホテルバーほど堅苦しくない場を求めるチットロム周辺の在住外国人や宿泊客に支持されています。',
           pros: [
@@ -4588,7 +4588,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 8,
-          name: 'Sindhorn Village — Dining & Gallery',
+          name: 'Sindhorn Village（ダイニング＆ギャラリー）',
           description:
             'ランスワン通りからWireless Roadへ抜ける、丁寧に構成された複合開発。中上級のレストランが揃い、ルーフトップガーデンとWasan Galleryもあります。ラチャプラソンの主要モールほど慌ただしくありません。セントラルワールドが騒がしく感じられるときの昼食や夕食にも向いています。',
           pros: [
@@ -4633,7 +4633,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/golf', '/best/best-bars-near-bts-chidlom', '/best/best-indoor-entertainment-bangkok', '/activities/things-to-do-bangkok-at-night'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -4641,7 +4641,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
       list_items: [
         {
           rank: 1,
-          name: 'LENGOLF — Indoor Golf Simulator Bar',
+          name: 'LENGOLF (실내 골프 시뮬레이터 바)',
           description:
             'LENGOLF는 BTS 칫롬역 4번 출구 The Mercury Ville 안에 바로 있어요. 칫롬과 플런칫 일대를 통틀어 가장 접근성이 좋은 액티비티 공간이에요. 매일 오전 9시부터 밤 11시까지 열어서, 날씨와 상관없이 오후나 저녁 시간을 보내기 좋아요. 프라이빗 시뮬레이터 베이와 정식 바, 그리고 워크인 이용이 쉽다는 점 덕분에, 식사와 쇼핑이 대부분인 이 동네에서 유독 편리한 선택지예요.',
           pros: [
@@ -4660,7 +4660,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 2,
-          name: 'CentralWorld Shopping & Dining',
+          name: 'CentralWorld (쇼핑 & 다이닝)',
           description:
             'CentralWorld는 동남아시아에서 손꼽히게 큰 쇼핑몰이자 Ratchaprasong 일대를 대표하는 랜드마크로, BTS 칫롬역에서 걸어갈 수 있어요. 쇼핑 말고도 Zen 백화점과 수십 개의 식당, 영화관, 볼링장(Blu-O)이 들어 있고, 중앙 광장에서는 1년 내내 행사가 열려요. 그 자체로 반나절을 채울 수 있는 곳이에요.',
           pros: [
@@ -4696,7 +4696,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 4,
-          name: 'Gaysorn Village — Luxury Shopping',
+          name: 'Gaysorn Village (럭셔리 쇼핑)',
           description:
             'Gaysorn Village는 방콕에서 가장 잘 큐레이션된 럭셔리 쇼핑몰이에요. CentralWorld보다 작지만 더 고급스럽고, Hermès와 Dior, Prada를 비롯해 태국 디자이너 브랜드도 잘 갖춰져 있어요. 스카이워크로 BTS 칫롬역과 바로 이어져요. 규모로 밀어붙이는 CentralWorld보다 제대로 쇼핑하기에 좋아요.',
           pros: [
@@ -4733,7 +4733,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 6,
-          name: 'Hyde & Seek — Gastropub',
+          name: 'Hyde & Seek (가스트로펍)',
           description:
             '방콕에서 손꼽히는 히든 바로, Wireless Road의 Athenee Residence 지하에 있어요. BTS 칫롬역에서 호텔 스카이브리지를 거쳐 걸어서 10분 거리예요. 칵테일 구성이 탄탄하고 안주 수준이 뛰어나요 (버거, 포크벨리, 샤퀴테리). 칫롬 일대 거주 외국인들과, 호텔 바보다 덜 딱딱한 곳을 찾는 투숙객들에게 인기가 많아요.',
           pros: [
@@ -4769,7 +4769,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 8,
-          name: 'Sindhorn Village — Dining & Gallery',
+          name: 'Sindhorn Village (다이닝 & 갤러리)',
           description:
             'Lang Suan에서 Wireless Road로 이어지는, 잘 짜인 복합 개발 단지예요. 중상급 레스토랑들이 고루 모여 있고 루프톱 가든과 Wasan Gallery도 있어요. Ratchaprasong의 대형 쇼핑몰들보다 덜 정신없어요. CentralWorld가 부담스럽게 느껴진다면 점심이나 저녁 장소로 좋아요.',
           pros: [
@@ -4814,7 +4814,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/golf', '/activities/things-to-do-bangkok-at-night', '/activities/indoor-activities-bangkok', '/activities/weekend-activities-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       year: 2026,
       intro:
@@ -4822,7 +4822,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
       list_items: [
         {
           rank: 1,
-          name: 'LENGOLF — Indoor Golf Simulator Bar',
+          name: 'LENGOLF（室内高尔夫模拟器酒吧）',
           description:
             'LENGOLF就在Mercury Ville里，紧邻BTS Chidlom 4号出口——是整个Chidlom至Ploenchit一带最好到达的活动场地。每天9:00至23:00营业，不管天气如何，下午或晚上想找点事做都合适。独立模拟器球位、一整套吧台，加上可以直接到店预订，在这个娱乐几乎等于吃饭和购物的片区里，便利程度独一份。',
           pros: [
@@ -4841,7 +4841,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 2,
-          name: 'CentralWorld Shopping & Dining',
+          name: 'CentralWorld（购物与餐饮）',
           description:
             'CentralWorld（尚泰世界）是东南亚最大的购物中心之一，也是Ratchaprasong一带最显眼的地标，从BTS Chidlom步行可达。除了零售，里面还有Zen百货、几十家餐厅、影院、保龄球馆（Blu-O），中央广场也常年有活动。它本身就够逛半天。',
           pros: [
@@ -4877,7 +4877,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 4,
-          name: 'Gaysorn Village — Luxury Shopping',
+          name: 'Gaysorn Village（奢华购物）',
           description:
             'Gaysorn Village是曼谷选品最讲究的奢侈品商场——规模比CentralWorld小，但定位更高，进驻了Hermès、Dior、Prada，泰国设计师品牌也挑得不错。通过空中走廊与BTS Chidlom直接连通。真要认真买东西，它比庞大的CentralWorld更合适。',
           pros: [
@@ -4914,7 +4914,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 6,
-          name: 'Hyde & Seek — Gastropub',
+          name: 'Hyde & Seek（美食酒馆）',
           description:
             '曼谷最好的隐藏酒吧之一，位于Wireless Road上Athenee Residence的地下层——经酒店天桥从BTS Chidlom步行约10分钟。鸡尾酒功力扎实，酒吧餐食也很出色（汉堡、五花肉、熟食冷盘）。常客是Chidlom一带的外籍居民，以及想找个比酒店酒吧随意些的地方的住客。',
           pros: [
@@ -4950,7 +4950,7 @@ export const bestOfListiclePages: BestOfListicleSeoPage[] = [
         },
         {
           rank: 8,
-          name: 'Sindhorn Village — Dining & Gallery',
+          name: 'Sindhorn Village（餐饮与画廊）',
           description:
             'Lang Suan路上一处经过整体规划的综合开发项目，一直连到Wireless Road。中高端餐厅集中，还有一座天台花园和Wasan Gallery。比Ratchaprasong的几个大商场清静。如果觉得CentralWorld太让人应接不暇，来这里吃午饭或晚饭很合适。',
           pros: [
