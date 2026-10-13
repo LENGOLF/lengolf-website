@@ -1470,8 +1470,9 @@ function checkHonesty(unit: Unit) {
 // checkJuniorAcademyLeaves close that for two corpora; this closes it for the
 // rest. Every unit of OWN_SCRIPT_CORPORA is judged, in this order:
 //   1. blank or whitespace-only: ERROR unless BLANK_RULES names the path
-//   2. no letters once ICU/{{token}} placeholders and the unit tokens THB/km/m
-//      are removed (numerals, dashes, '#', '9:00-23:00', '{km}km'): pass
+//   2. no letters once simple placeholders ({price}, {{token}}) and the unit
+//      tokens THB/km/m are removed (numerals, dashes, '#', '9:00-23:00',
+//      '{km}km': pass; braced TEXT is not a placeholder)
 //   3. carries the locale's own script (NATIVE_SCRIPT): pass
 //   4. otherwise ERROR unless an OWN_SCRIPT_RULES entry covers the path
 // plus, for ja alone, a tell for simplified-Chinese characters (below).
@@ -1484,9 +1485,11 @@ const OWN_SCRIPT_CORPORA: ReadonlySet<string> = new Set([
 
 /**
  * `name`  : a proper name or label the page prints in Latin in every locale
- *           (venue, hotel, restaurant, airline, credential). Guarded: at most
- *           NAME_MAX_WORDS words and no sentence punctuation, so an English
- *           SENTENCE pasted into a name slot still fails.
+ *           (venue, hotel, restaurant, airline, credential).
+ *           `name`, `latin` and `todo` exempt a LABEL only (isLabelShaped():
+ *           at most NAME_MAX_WORDS words, no sentence punctuation, no trailing
+ *           full stop, at most LABEL_MAX_LOWERCASE_WORDS lowercase words), so
+ *           an English SENTENCE pasted into such a slot still fails.
  * `latin` : other Latin-by-design copy (brand lockups, product names, package
  *           labels, the language switcher's own-language names).
  * `dead`  : copy that never renders in that locale (see the Home/HomeFaq/
@@ -1497,12 +1500,15 @@ const OWN_SCRIPT_CORPORA: ReadonlySet<string> = new Set([
  * `path` is the full leaf path (messages: Namespace.key) with indices written
  * `[]`; a trailing `.*` covers everything under a prefix. `locales` omitted
  * means all four; `entry` pins one entryId (explainer pages). A rule with no
- * `*` and no `[]` is EXACT: it is an ERROR if its leaf now carries script in a
- * covered locale (unused exemption). Any rule that matches no script-less leaf
- * at all is an ERROR (stale), so the list cannot rot into a free pass.
+ * `*` and no `[]` is EXACT and is held per locale: it is an ERROR if its leaf
+ * carries script in a covered locale (a rule with no `locales` covers all four,
+ * so list the script-less ones) or if a listed locale has no matching leaf.
+ * Any rule that matches no script-less leaf at all is an ERROR (stale), so the
+ * list cannot rot into a free pass.
  *
- * KNOWN LIMIT: a rule covers whatever Latin text its path holds. The `name`
- * guard bounds that to a short phrase; native QA still reads the rest.
+ * KNOWN LIMIT: a rule covers whatever Latin text its path holds. The label
+ * shape bounds that to a short phrase (a short English phrase can still pass);
+ * `dead` is unbounded. Native QA still reads the rest.
  */
 interface OwnScriptRule {
   corpus: string
@@ -1516,6 +1522,19 @@ interface OwnScriptRule {
 interface BlankRule { corpus: string; path: string; locale: Locale; reason: string }
 
 const NAME_MAX_WORDS = 12
+const LABEL_MAX_LOWERCASE_WORDS = 2
+/**
+ * What an exempt Latin leaf may look like: a name or label, not a sentence. The
+ * word cap alone let `This hotel is close to the BTS and has a pool.` through a
+ * name slot (found by a guard-efficacy pass); sentences are lowercase-heavy and
+ * end in a full stop, labels are Capitalised. Commas are allowed (`Texas A&M
+ * International University, Laredo, TX`).
+ */
+function isLabelShaped(value: string): boolean {
+  const words = value.trim().split(/\s+/)
+  const lowercase = words.filter((w) => /^[a-z]{3,}/.test(w)).length
+  return words.length <= NAME_MAX_WORDS && !/[?!。！？]/.test(value) && !/[.。]$/.test(value.trim()) && lowercase <= LABEL_MAX_LOWERCASE_WORDS
+}
 
 const BLANK_RULES: readonly BlankRule[] = [
   { corpus: 'messages', locale: 'th', path: 'CourseClubRental.contactLanguageNote', reason: 'the page passes null for en/th; EN is "" too' },
@@ -1525,16 +1544,16 @@ const BLANK_RULES: readonly BlankRule[] = [
 const OWN_SCRIPT_RULES: readonly OwnScriptRule[] = [
   // ── data/*-pages.ts: names the pages print in Latin in every locale ──
   { corpus: 'activity', kind: 'name', path: 'other_activities[].name', reason: 'venue and attraction names' },
-  { corpus: 'best', kind: 'name', path: 'list_items[].name', reason: 'venue names' },
+  { corpus: 'best', kind: 'name', path: 'list_items[].name', reason: 'venue names. Many carry an English descriptor (Indoor Golf Simulator Bar, Luxury Shopping) that no locale translates: a native-QA follow-up, not a name' },
   { corpus: 'cost', kind: 'name', path: 'venue_comparison.venues[].name', reason: 'competitor venue names' },
   { corpus: 'cost', kind: 'name', path: 'venue_comparison.venues[].tech', reason: 'simulator brands (Trackman, Bravo)' },
-  { corpus: 'cost', kind: 'name', path: 'venue_comparison.venues[].location', reason: 'street and BTS names' },
+  { corpus: 'cost', kind: 'name', path: 'venue_comparison.venues[].location', reason: 'street and BTS names. th also leaves "(car access)" in English on two venues where ja/ko/zh translate it: a follow-up' },
   { corpus: 'cost', kind: 'name', path: 'price_breakdown[].item', locales: ['ja', 'zh'], reason: 'venue name in the item label (the " - " is the code delimiter)' },
   { corpus: 'hotel', kind: 'name', path: 'hotel_name', reason: 'hotel names' },
-  { corpus: 'hotel', kind: 'name', path: 'nearby_activities[].name', reason: 'attraction names' },
-  { corpus: 'hotel', kind: 'name', path: 'nearby_restaurants[].name', reason: 'restaurant names' },
+  { corpus: 'hotel', kind: 'name', path: 'nearby_activities[].name', reason: 'attraction names. A few are English phrases ("Ploenchit BTS to explore Bangkok", "US & UK Embassies"): a follow-up' },
+  { corpus: 'hotel', kind: 'name', path: 'nearby_restaurants[].name', reason: 'restaurant names. A few are descriptive ("Soi 11 Food Street") where the sibling cuisine field is translated: a follow-up' },
   { corpus: 'explainer', kind: 'name', path: 'comparison_table[].feature', locales: ['th'], entry: 'gg-golf-club-baggage-fees-airlines-bangkok-th', reason: 'airline names' },
-  { corpus: 'hotel', kind: 'todo', path: 'hotel_neighbourhood', locales: ['ja', 'ko', 'zh'], reason: 'renders on /hotels/ in English; th is translated. Native-QA follow-up' },
+  { corpus: 'hotel', kind: 'dead', path: 'hotel_neighbourhood', locales: ['ja', 'ko', 'zh'], reason: 'the /hotels/ hub reads the EN page only (getSeoPagesByType defaults to en) and nothing else renders this field, so these never show' },
 
   // ── messages/*.json: Latin by design ──
   { corpus: 'messages', kind: 'latin', path: 'Common.lineAtLengolf', reason: 'LINE @lengolf handle' },
@@ -1546,7 +1565,7 @@ const OWN_SCRIPT_RULES: readonly OwnScriptRule[] = [
   { corpus: 'messages', kind: 'latin', path: 'LanguageSwitcher.ko', locales: ['ja', 'zh'], reason: 'as above (the ko entry is Korean)' },
   { corpus: 'messages', kind: 'latin', path: 'ActivityPage.colLengolf', reason: 'brand column header' },
   { corpus: 'messages', kind: 'latin', path: 'Blog.faqTitleSuffix', locales: ['ja', 'ko', 'zh'], reason: 'FAQ' },
-  { corpus: 'messages', kind: 'latin', path: 'AboutUs.stat1Value', locales: ['ja', 'ko', 'zh'], reason: 'Est. 2024' },
+  { corpus: 'messages', kind: 'latin', path: 'AboutUs.stat1Value', locales: ['ja', 'ko', 'zh'], reason: 'Est. 2024, a badge; th writes it in Thai but the stat styling is kept in Latin in ja/ko/zh' },
   { corpus: 'messages', kind: 'latin', path: 'ClubRental.stat3Value', reason: 'Callaway' },
   { corpus: 'messages', kind: 'latin', path: 'ClubRental.tier2Brand', reason: 'Callaway Warbird and REVA' },
   { corpus: 'messages', kind: 'latin', path: 'ClubRental.tier3Brand', reason: 'Callaway Paradym Forged Carbon' },
@@ -1557,17 +1576,17 @@ const OWN_SCRIPT_RULES: readonly OwnScriptRule[] = [
   { corpus: 'messages', kind: 'latin', path: 'CourseClubRental.sets.premium-womens-reva.name', reason: 'Callaway REVA' },
   { corpus: 'messages', kind: 'latin', path: 'Events.amenitiesTitleSuffix', locales: ['th'], reason: 'LENGOLF' },
   { corpus: 'messages', kind: 'latin', path: 'Events.stat3Value', reason: 'BTS' },
-  { corpus: 'messages', kind: 'latin', path: 'ExplainerPage.pathLabels.junior-golf-academy', locales: ['ja', 'ko', 'zh'], reason: 'program name printed in Latin; th is translated' },
-  { corpus: 'messages', kind: 'latin', path: 'Nav.juniorAcademy', locales: ['ja', 'ko', 'zh'], reason: 'program name printed in Latin; th is translated' },
-  { corpus: 'messages', kind: 'latin', path: 'Golf.aiLabTitle', reason: 'LENGOLF AI Lab, the product name' },
+  { corpus: 'messages', kind: 'latin', path: 'ExplainerPage.pathLabels.junior-golf-academy', locales: ['ja', 'ko', 'zh'], reason: '/junior-golf-academy/ is EN+TH only, so ja/ko/zh readers land on the English page and the label stays in Latin to match it' },
+  { corpus: 'messages', kind: 'latin', path: 'Nav.juniorAcademy', locales: ['ja', 'ko', 'zh'], reason: '/junior-golf-academy/ is EN+TH only, so ja/ko/zh readers land on the English page and the footer label stays in Latin to match it' },
+  { corpus: 'messages', kind: 'latin', path: 'Golf.aiLabTitle', locales: ['ja', 'th', 'zh'], reason: 'LENGOLF AI Lab, the product name' },
   { corpus: 'messages', kind: 'latin', path: 'GolfCourseDetail.googleMaps', locales: ['th'], reason: 'Google Maps' },
   { corpus: 'messages', kind: 'latin', path: 'Home.whyLengolfTitleSuffix', locales: ['th', 'ja'], reason: 'LENGOLF' },
   { corpus: 'messages', kind: 'latin', path: 'HomeKo.servicesTitle', locales: ['ko'], reason: 'LENGOLF' },
   { corpus: 'messages', kind: 'latin', path: 'HomeZh.servicesTitle', locales: ['zh'], reason: 'LENGOLF' },
   { corpus: 'messages', kind: 'latin', path: 'Lessons.starterPackageName', reason: 'package name; the * marks the footnote' },
   { corpus: 'messages', kind: 'latin', path: 'Lessons.simToFairwayName', reason: 'package name; the * marks the footnote' },
-  { corpus: 'messages', kind: 'latin', path: 'Menu.groupFoodTitleSuffix', locales: ['ja', 'ko', 'zh'], reason: 'BY SMITH & CO, the partner brand lockup' },
-  { corpus: 'messages', kind: 'latin', path: 'Menu.groupPizzaTitleSuffix', locales: ['ja', 'ko', 'zh'], reason: 'BY SEXY PIZZA, the partner brand lockup' },
+  { corpus: 'messages', kind: 'latin', path: 'Menu.groupFoodTitleSuffix', locales: ['ja', 'ko', 'zh'], reason: 'BY SMITH & CO, the partner lockup; th translates the BY, ja/ko/zh keep the English lockup' },
+  { corpus: 'messages', kind: 'latin', path: 'Menu.groupPizzaTitleSuffix', locales: ['ja', 'ko', 'zh'], reason: 'BY SEXY PIZZA, the partner lockup; th translates the BY, ja/ko/zh keep the English lockup' },
   { corpus: 'messages', kind: 'name', path: 'Lessons.coaches.boss.education[]', reason: 'US university names' },
   { corpus: 'messages', kind: 'name', path: 'Lessons.coaches.ratchavin.education[]', reason: 'coaching certifications' },
   { corpus: 'messages', kind: 'name', path: 'Lessons.coaches.boss.achievements[]', locales: ['zh'], reason: 'tournament names; zh swaps the colon for a full-width one' },
@@ -1592,26 +1611,30 @@ const OWN_SCRIPT_RULES: readonly OwnScriptRule[] = [
  * accepts Han alone, so a short zh paste in a ja slot has own script, and the
  * length rules cannot help (legit kana-free ja leaves run to 10 kanji,
  * `毎日午前9時〜午後11時営業`). Measured 2026-10-13: this set appears in 0 ja
- * leaves and in 81% of zh leaves that carry Han (59% of those with 8 or fewer),
+ * leaves and in 84% of zh leaves that carry Han (64% of those with 8 or fewer),
  * so it catches most pastes but NOT all: a zh leaf with none of these passes.
  * Every member must be absent from Japanese. If a ja leaf trips this, check the
  * character is not one Japanese uses before touching the copy (与 区 国 程 税
- * 装 豆 静 践 里 将 are Japanese and are deliberately not listed).
+ * 装 豆 静 践 里 将 are Japanese and are deliberately not listed;
+ * 麦 黄 惠 are Japanese too and were wrongly in the first draft, caught in review).
  */
 const JA_SIMPLIFIED_ONLY = new Set(
-  [...'们这说时个么对发经现过还进动为业间书买卖让请样见觉题种门车长头关无总场费价员优惠预约开设备练课协议确认单达气务产两乐队网团际质级币钱银鸡鱼马鸟龙热爱杂济赛节环块页顺须顾显类组织结给统续继维综绝线细终纪纲纳纯纸绕绘络编缩缺罚罗艺获药营虑补观规视览计订认讨训议讯记讲许论访证评识诉词译试话诚谁调谈谢贝负财责贤败账货购贯贵贸资赔赚赞赠趋转轮软轻载较辅辆输边远违连迟选逻遗邮针钓钟钢钥钻铁铃铜链销锁锅错键锦镇镜闭问闲闷闹闻阅队阳阴阵阶陆陈险难顶项顽预领频颜额风饭饮饰饱饼馆驱驶验骑鲜麦黄齐龄']
+  [...'们这说时个么对发经现过还进动为业间书买卖让请样见觉题种门车长头关无总场费价员优预约开设备练课协议确认单达气务产两乐队网团际质级币钱银鸡鱼马鸟龙热爱杂济赛节环块页顺须顾显类组织结给统续继维综绝线细终纪纲纳纯纸绕绘络编缩缺罚罗艺获药营虑补观规视览计订认讨训议讯记讲许论访证评识诉词译试话诚谁调谈谢贝负财责贤败账货购贯贵贸资赔赚赞赠趋转轮软轻载较辅辆输边远违连迟选逻遗邮针钓钟钢钥钻铁铃铜链销锁锅错键锦镇镜闭问闲闷闹闻阅队阳阴阵阶陆陈险难顶项顽预领频颜额风饭饮饰饱饼馆驱驶验骑鲜齐龄尔欢杆挥击']
 )
 
+type RuleStat = { hits: number; passing: number; byLocale: Map<Locale, { hits: number; passing: number }> }
 const ownScriptState = {
   judged: 0,
-  rules: new Map<OwnScriptRule | BlankRule, { hits: number; passing: number }>(),
+  byCorpus: new Map<string, number>(),
+  rules: new Map<OwnScriptRule | BlankRule, RuleStat>(),
 }
 function resetOwnScriptState(): void {
   ownScriptState.judged = 0
+  ownScriptState.byCorpus.clear()
   ownScriptState.rules.clear()
 }
 
-const UNIT_TOKEN_RE = /\{+[^{}]*\}+|(?<![A-Za-z])(?:THB|km|m)(?![A-Za-z])/g
+const UNIT_TOKEN_RE = /\{+\s*\w+\s*\}+|(?<![A-Za-z])(?:THB|km|m)(?![A-Za-z])/g
 const normalizeLeafPath = (p: string): string => p.replace(/\[\d+\]/g, '[]')
 const isExactRule = (r: OwnScriptRule): boolean => !r.path.includes('*') && !r.path.includes('[]')
 
@@ -1640,9 +1663,15 @@ function checkOwnScriptUnit(
   const corpus = entry.corpus as string
   const path = ownScriptPath(entry, field)
   const note = (r: OwnScriptRule | BlankRule, passing: boolean) => {
-    const s = ownScriptState.rules.get(r) ?? { hits: 0, passing: 0 }
+    const s: RuleStat = ownScriptState.rules.get(r) ?? { hits: 0, passing: 0, byLocale: new Map() }
+    const l = s.byLocale.get(locale) ?? { hits: 0, passing: 0 }
     s.hits++
-    if (passing) s.passing++
+    l.hits++
+    if (passing) {
+      s.passing++
+      l.passing++
+    }
+    s.byLocale.set(locale, l)
     ownScriptState.rules.set(r, s)
   }
 
@@ -1656,14 +1685,14 @@ function checkOwnScriptUnit(
     const scriptless = letters && !NATIVE_SCRIPT[locale].test(value)
     for (const r of matches) note(r, !scriptless)
     if (scriptless) {
-      const shortName = value.split(/\s+/).length <= NAME_MAX_WORDS && !/[?!。！？]/.test(value)
+      const shortName = isLabelShaped(value)
       if (matches.length === 0) {
         const shown = value.length > 60 ? `${value.slice(0, 57)}...` : value
         add('error', locale, unit.entryId, field, 'own-script',
           `no ${locale} script at all ("${shown}"): untranslated? A name or Latin-by-design label goes in OWN_SCRIPT_RULES`)
-      } else if (!shortName && !matches.some((r) => r.kind !== 'name')) {
+      } else if (!shortName && !matches.some((r) => r.kind === 'dead')) {
         add('error', locale, unit.entryId, field, 'own-script',
-          `a name slot holds a sentence ("${value.slice(0, 60)}"): the name exemption covers at most ${NAME_MAX_WORDS} words and no sentence punctuation`)
+          `a Latin-by-design slot holds a sentence ("${value.slice(0, 60)}"): name, latin and todo exemptions cover a label (at most ${NAME_MAX_WORDS} words, no sentence punctuation, no trailing full stop, at most ${LABEL_MAX_LOWERCASE_WORDS} lowercase words); only a \`dead\` rule is unbounded`)
       }
     }
     if (locale === 'ja') {
@@ -1676,19 +1705,44 @@ function checkOwnScriptUnit(
   }
   // After the verdict, never beside the loop head: see the L6 note in CLAUDE.md.
   ownScriptState.judged++
+  ownScriptState.byCorpus.set(corpus, (ownScriptState.byCorpus.get(corpus) ?? 0) + 1)
+}
+
+/**
+ * Judged-unit floor per corpus, at today's true values. A LITERAL list: the
+ * expectation above is derived from the same entries and set the loop reads, so
+ * dropping a corpus from OWN_SCRIPT_CORPORA or narrowing a builder (a skipped
+ * namespace, a dropped title unit) moves it in step and stayed green when a
+ * guard-efficacy pass tried it. Raise a floor when content is added; lower one
+ * only for content that was really retired.
+ */
+const OWN_SCRIPT_MIN_UNITS: Record<string, number> = {
+  explainer: 3648,
+  faq: 856,
+  'faq-hub': 232,
+  tier: 60,
+  hub: 168,
+  cost: 1408,
+  activity: 1476,
+  best: 1396,
+  hotel: 1256,
+  messages: 5544,
 }
 
 /**
  * Whole-corpus half of check 13, run once after the units: the judged count
- * must equal the units that exist (a skip or a narrowed loop is an ERROR), and
- * every rule must still match something (stale) and, if exact, still be
- * script-less (unused exemption).
+ * must equal the units that exist (a skip or a narrowed loop is an ERROR), each
+ * corpus must meet its floor, and every rule must still match something (stale)
+ * and not be unused. An EXACT rule (no `*`, no `[]`) is held per locale: each
+ * locale it lists must still be script-less, and a rule with no `locales` may
+ * not cover a locale that now carries script (list the locales it needs).
  */
 function finishOwnScript(
   corpus: ReadonlyArray<{ corpus?: string; units: Unit[] }>,
   rules: readonly OwnScriptRule[],
-  blanks: readonly BlankRule[]
-): { judged: number; expected: number; rulesJudged: number; blanksJudged: number } {
+  blanks: readonly BlankRule[],
+  floors: Record<string, number> = OWN_SCRIPT_MIN_UNITS
+): { judged: number; expected: number; rulesJudged: number; blanksJudged: number; byCorpus: Record<string, number> } {
   let rulesJudged = 0
   let blanksJudged = 0
   const expected = corpus
@@ -1698,15 +1752,33 @@ function finishOwnScript(
     add('error', 'th', 'own-script:*', '(coverage)', 'own-script',
       `${ownScriptState.judged} of ${expected} units judged: a skip, a deleted call or a narrowed loop`)
   }
+  for (const [c, min] of Object.entries(floors)) {
+    const n = ownScriptState.byCorpus.get(c) ?? 0
+    if (n < min) {
+      add('error', 'th', 'own-script:*', `(floor ${c})`, 'own-script',
+        `${n} ${c} units judged, expected at least ${min}: a dropped corpus, a narrowed builder, or retired content (lower the floor only for retired content)`)
+    }
+  }
   for (const r of rules) {
     const s = ownScriptState.rules.get(r)
     const where = `${r.corpus}${r.entry ? `:${r.entry}` : ''} ${r.path} [${(r.locales ?? LOCALES).join(',')}]`
+    const at: Locale = r.locales?.[0] ?? 'th'
     if (!s || s.hits === 0) {
-      add('error', 'th', 'own-script:*', where, 'own-script', 'rule matches no leaf (renamed or removed?): remove the stale entry')
+      add('error', at, 'own-script:*', where, 'own-script', 'rule matches no leaf (renamed or removed?): remove the stale entry')
     } else if (s.passing === s.hits) {
-      add('error', 'th', 'own-script:*', where, 'own-script', 'rule matches only leaves that carry script or no letters: remove the unused exemption')
-    } else if (isExactRule(r) && r.locales && s.passing > 0) {
-      add('error', 'th', 'own-script:*', where, 'own-script', 'exact rule whose leaf now carries script in a covered locale: remove the unused exemption')
+      add('error', at, 'own-script:*', where, 'own-script', 'rule matches only leaves that carry script or no letters: remove the unused exemption')
+    } else if (isExactRule(r)) {
+      for (const l of r.locales ?? LOCALES) {
+        const st = s.byLocale.get(l)
+        if (r.locales && !st?.hits) {
+          add('error', l, 'own-script:*', where, 'own-script', `rule lists ${l} but no ${l} leaf matches it: remove ${l} from locales`)
+        } else if (st && st.passing > 0) {
+          add('error', l, 'own-script:*', where, 'own-script',
+            r.locales
+              ? `the ${l} leaf now carries script: remove ${l} from locales`
+              : `the ${l} leaf carries script, so this rule must not cover it: list \`locales\` explicitly with the locales that are still script-less`)
+        }
+      }
     }
     rulesJudged++
   }
@@ -1716,7 +1788,7 @@ function finishOwnScript(
     }
     blanksJudged++
   }
-  return { judged: ownScriptState.judged, expected, rulesJudged, blanksJudged }
+  return { judged: ownScriptState.judged, expected, rulesJudged, blanksJudged, byCorpus: Object.fromEntries(ownScriptState.byCorpus) }
 }
 
 // ── Run per-unit checks + entry-level as-of (check 9) ────────────────────────
@@ -2001,7 +2073,7 @@ if (process.argv.includes('--self-test')) {
   // it, so there was no count and no floor at all: deleting assert() lines
   // silently reduced coverage while it still printed ALL SELF-TESTS PASS.
   // Raise MIN_ASSERTIONS in the same commit that adds one; never lower it.
-  const MIN_ASSERTIONS = 133
+  const MIN_ASSERTIONS = 155
   let asserted = 0
   const assert = (label: string, cond: boolean) => {
     asserted++
@@ -2144,7 +2216,7 @@ if (process.argv.includes('--self-test')) {
       const before = issues.length
       resetOwnScriptState()
       runCorpusChecks(e, rules, blanks)
-      finishOwnScript(e, rules, blanks)
+      finishOwnScript(e, rules, blanks, {})
       return ownOnly(before)
     }
 
@@ -2183,7 +2255,7 @@ if (process.argv.includes('--self-test')) {
     }
 
     // Sweep: every unit of every judged corpus, one at a time, both directions.
-    // `covered` is derived from ruleCovers/BLANK_RULES, not from the verdict.
+    // `covered` and `blankOk` are derived from the rule tables, not from the verdict.
     const judged = entries.filter((e) => e.corpus !== undefined && OWN_SCRIPT_CORPORA.has(e.corpus))
     const ENGLISH = 'Untranslated English copy'
     let swept = 0
@@ -2225,13 +2297,19 @@ if (process.argv.includes('--self-test')) {
     assert(
       `own-script: the corpus run judged every unit (${ownScriptRun.judged}), every rule (${ownScriptRun.rulesJudged}) and every blank rule (${ownScriptRun.blanksJudged})`,
       ownScriptRun.judged === ownScriptRun.expected &&
-        ownScriptRun.expected > 5000 &&
+        ownScriptRun.expected > 15000 &&
         ownScriptRun.rulesJudged === OWN_SCRIPT_RULES.length &&
         ownScriptRun.blanksJudged === BLANK_RULES.length
     )
+    // A LITERAL list of the ten, and the real run's per-corpus counts against
+    // the floors: iterating OWN_SCRIPT_CORPORA itself made dropping a corpus from
+    // that set (or narrowing a builder) pass its own check.
+    const TEN = ['activity', 'best', 'cost', 'explainer', 'faq', 'faq-hub', 'hotel', 'hub', 'messages', 'tier']
     assert(
-      'own-script: all ten corpora are present in the judged set',
-      [...OWN_SCRIPT_CORPORA].every((c) => judged.some((e) => e.corpus === c))
+      'own-script: the ten corpora are all judged, each at or above its literal floor',
+      JSON.stringify(Object.keys(OWN_SCRIPT_MIN_UNITS).sort()) === JSON.stringify(TEN) &&
+        TEN.every((c) => (ownScriptRun.byCorpus[c] ?? 0) >= OWN_SCRIPT_MIN_UNITS[c] && OWN_SCRIPT_MIN_UNITS[c] > 0) &&
+        TEN.every((c) => judged.some((e) => e.corpus === c))
     )
 
     const ownEntry = (corpus: string | undefined, locale: Locale, ...leaves: Array<[string, string]>) =>
@@ -2271,13 +2349,74 @@ if (process.argv.includes('--self-test')) {
     assert("own-script: a named deliberate blank ('') → 0", fullErrs([blankEntry], [], [blankRule]) === 0)
     assert('own-script: an unnamed blank → 1', fullErrs([blankEntry], [], []) === 1)
     assert('own-script: a BLANK_RULES entry that is no longer blank → 1 (stale)', fullErrs([mk('messages', 'ja', 'messages:ja:AboutUs', [['contactTitleSuffix', 'お問い合わせ']])], [], [blankRule]) === 1)
+    // Label shape: name, latin and todo exemptions cover a label, not a sentence.
+    const latinRule: OwnScriptRule = { corpus: 'hotel', kind: 'latin', path: 'hotel_name', reason: 'test' }
+    const deadRule: OwnScriptRule = { corpus: 'hotel', kind: 'dead', path: 'hotel_name', reason: 'test' }
+    const nameLeaf = (v: string) => [ownEntry('hotel', 'th', ['hotel_name', v])]
+    assert('own-script: an English sentence ending in a full stop in a name slot → 1', fullErrs(nameLeaf('This hotel is close to the BTS and has a pool.'), [hotelRule]) === 1)
+    assert('own-script: an unpunctuated lowercase English clause in a name slot → 1', fullErrs(nameLeaf('Book now, save money, and enjoy the pool at our hotel today'), [hotelRule]) === 1)
+    assert('own-script: a name with commas, an ampersand and digits → 0', fullErrs(nameLeaf('Texas A&M International University, Laredo, TX'), [hotelRule]) === 0)
+    assert('own-script: a sentence in a latin slot → 1', fullErrs(nameLeaf('This hotel is close to the BTS and has a pool.'), [latinRule]) === 1)
+    assert('own-script: a dead rule is unbounded (the leaf never renders) → 0', fullErrs(nameLeaf('This hotel is close to the BTS and has a pool.'), [deadRule]) === 0)
+    // Each half of the label shape in isolation (capitalised, so the lowercase cap cannot be what fires).
+    assert('own-script: a capitalised sentence ending in a full stop → 1', fullErrs(nameLeaf('Book Your Lesson Today.'), [hotelRule]) === 1)
+    assert('own-script: a capitalised phrase ending in an exclamation mark → 1', fullErrs(nameLeaf('Book Your Lesson Today!'), [hotelRule]) === 1)
+    assert('own-script: thirteen capitalised words → 1 (the word cap)', fullErrs(nameLeaf('One Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve Thirteen'), [hotelRule]) === 1)
+    assert('own-script: twelve capitalised words → 0', fullErrs(nameLeaf('One Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve'), [hotelRule]) === 0)
+    // Unit tokens only count as whole tokens.
+    assert('own-script: unit letters glued to other letters are not stripped → 1', unitErrs(ownEntry('hub', 'th', ['a', 'kmTHB'])) === 1)
+    // A non-exact rule whose leaves all carry script is unused (the exact-rule branch is not what fires).
+    {
+      const wild: OwnScriptRule = { corpus: 'hotel', kind: 'name', path: 'items[].name', reason: 'test' }
+      assert('own-script: a [] pattern rule whose leaves all carry script → 1 (unused)', fullErrs([ownEntry('hotel', 'th', ['items[0].name', 'โรงแรม'])], [wild]) === 1)
+    }
+    // The default floors are enforced by the real function, not only by this test's own comparison.
+    {
+      const before = issues.length
+      const without = entries.filter((e) => e.corpus !== 'faq')
+      resetOwnScriptState()
+      runCorpusChecks(without)
+      finishOwnScript(without, OWN_SCRIPT_RULES, BLANK_RULES)
+      const floorHit = issues.splice(before).some((i) => i.level === 'error' && i.check === 'own-script' && i.field === '(floor faq)')
+      assert('own-script: the DEFAULT floors flag a run that judged no faq units', floorHit)
+    }
+    // zh needs Han: kana alone is not zh.
+    assert('own-script: a zh leaf holding only kana → 1', unitErrs(ownEntry('hub', 'zh', ['a', 'こんにちは'])) === 1)
+    // Braced TEXT is not a placeholder.
+    assert('own-script: English wrapped in braces → 1', unitErrs(ownEntry('hub', 'th', ['a', '{Cheap golf courses near Bangkok under 1500}'])) === 1)
+    assert('own-script: simple placeholders and units still pass → 0', unitErrs(ownEntry('hub', 'ja', ['a', '{price}THB〜'], ['b', '{{token}}'], ['c', '{km}km'])) === 0)
+    // ja tell: the common golf terms, a Japanese word the first draft wrongly listed, and the set's size.
+    assert('own-script: 高尔夫 (the commonest zh golf term) in a ja leaf → 1', unitErrs(ownEntry('hub', 'ja', ['a', '高尔夫'])) === 1)
+    assert('own-script: 欢迎光临高尔夫 in a ja leaf → 1', unitErrs(ownEntry('hub', 'ja', ['a', '欢迎光临高尔夫'])) === 1)
+    assert('own-script: Japanese 黄色麦茶 (Han only) → 0', unitErrs(ownEntry('hub', 'ja', ['a', '黄色麦茶'])) === 0)
+    assert('own-script: JA_SIMPLIFIED_ONLY has not been shrunk', JA_SIMPLIFIED_ONLY.size >= 230)
+    // Exact rules are held per locale.
+    const exactAll: OwnScriptRule = { corpus: 'hotel', kind: 'latin', path: 'hotel_name', reason: 'test' }
+    assert(
+      'own-script: an exact rule with no locales whose leaf gained script in one locale → 1',
+      fullErrs([ownEntry('hotel', 'ja', ['hotel_name', 'Arnoma Grand Bangkok']), mk('hotel', 'th', '__own__:b', [['hotel_name', 'โรงแรมอาโนมา']])], [exactAll]) === 1
+    )
+    const exactJaTh: OwnScriptRule = { corpus: 'hotel', kind: 'latin', path: 'hotel_name', locales: ['th', 'ja'], reason: 'test' }
+    assert('own-script: an exact rule listing a locale with no matching leaf → 1', fullErrs([ownEntry('hotel', 'th', ['hotel_name', 'Arnoma Grand Bangkok'])], [exactJaTh]) === 1)
+    // Per-corpus floors.
+    {
+      const e = ownEntry('hub', 'th', ['a', 'กอล์ฟ'])
+      const run = (floors: Record<string, number>): number => {
+        const before = issues.length
+        resetOwnScriptState()
+        runCorpusChecks([e], [], [])
+        finishOwnScript([e], [], [], floors)
+        return ownOnly(before)
+      }
+      assert('own-script: a corpus below its floor → 1, and at it → 0', run({ hub: 5 }) === 1 && run({ hub: 1 }) === 0)
+    }
     // Scope and coverage.
     assert('own-script: an untagged entry (course:*, junior:*) is not judged here', unitErrs(ownEntry(undefined, 'th', ['a', 'English only'])) === 0)
     {
       const e = ownEntry('hub', 'th', ['a', 'กอล์ฟ'])
       const before = issues.length
       resetOwnScriptState()
-      finishOwnScript([e], [], []) // units exist, runCorpusChecks never ran
+      finishOwnScript([e], [], [], {}) // units exist, runCorpusChecks never ran
       assert('own-script: units that were never judged → 1 (coverage)', ownOnly(before) === 1)
     }
   }
