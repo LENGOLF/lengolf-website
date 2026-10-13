@@ -205,9 +205,9 @@ export const menuGroups: MenuGroup[] = [foodMenuGroup, pizzaMenuGroup, drinksMen
 // ── Printed menu images (same content as the tables above) ──
 export const menuImages = [
   {
-    src: storageUrl('menus/food-menu-1.jpg'),
+    src: storageUrl('menus/food-menu-2026-10.jpg'),
     title: 'Food Menu',
-    alt: 'LENGOLF food menu by Smith & Co: burgers 320-330 THB, butter rolls 290-360 THB, appetizers 200-290 THB, toast 270-290 THB, sliders 330-420 THB, salads 270-340 THB',
+    alt: 'LENGOLF food menu by Smith & Co: burgers 320-330 THB, butter rolls 290-360 THB, appetizers 200-290 THB, toast 270-290 THB, sliders 330-420 THB including Pulled Pork, salads 270-340 THB, fries as sides 70-80 THB. Prices in THB, VAT included, no service charge',
     width: 1920,
     height: 1354,
     previewPosition: 'left top',
@@ -221,11 +221,11 @@ export const menuImages = [
     previewPosition: 'center top',
   },
   {
-    src: storageUrl('menus/drink-menu.jpg'),
+    src: storageUrl('menus/drink-menu-2026-10.jpg'),
     title: 'Drinks Menu',
-    alt: 'LENGOLF drinks menu: cocktails 250-310 THB, highballs 270-800 THB, bottled beer 160-270 THB, wine by the glass 290 THB, wine bottles 950-1,600 THB, soft drinks from 30 THB, snacks from 120 THB',
+    alt: 'LENGOLF drinks menu: cocktails 250-310 THB, highballs 270-900 THB, bottled beer 160-270 THB, wine by the glass 290 THB, wine bottles 950-1,600 THB, soft drinks from 30 THB, snacks from 120 THB. Prices in THB, VAT included, no service charge',
     width: 1749,
-    height: 2481,
+    height: 2480,
     previewPosition: 'center top',
   },
 ]
