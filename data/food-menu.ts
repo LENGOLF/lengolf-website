@@ -3,8 +3,9 @@ import { storageUrl } from '@/lib/constants'
 // ── Food & Drinks menu data ──
 // Source of truth is the POS (products.products on the LENGOLF Supabase
 // project: name, price, is_active), not the printed menus. The printed menu
-// images (menus/food-menu-1.jpg, menus/food-menu-2.jpg, menus/drink-menu.jpg in
-// Supabase Storage, also linked from booking.len.golf) can lag behind it, and
+// images (menus/food-menu-2026-10-v3.jpg, menus/food-menu-2.jpg, menus/drink-menu-2026-10-v3.jpg in
+// Supabase Storage, built from lengolf-design/posters food-menu and drink-menu;
+// booking.len.golf ships its own copies) can lag behind it, and
 // their alt text below describes what each image shows. Update this file
 // whenever a POS price, name or active flag changes.
 
@@ -86,7 +87,7 @@ export const foodMenuGroup: MenuGroup = {
       title: 'Sliders',
       note: '3 mini pieces per serving',
       items: [
-        item('Pulled Pork Sliders', 420, 'Pulled pork, coleslaw, dark beer BBQ, super skinny fries, charcoal buns'),
+        item('Pulled Pork Sliders', 420, 'Pulled pork, dark beer BBQ, mustard, mint yogurt sauce'),
         item('Beef Steak Sliders', 390, 'Sliced beef, honey dijon mustard, rocket salad, garlic butter'),
         item('Crispy Chicken Sliders', 330, 'Fried chicken, thousand island, jalapeno ranch, cheddar cheese, mini charcoal buns, iceberg lettuce'),
       ],
@@ -142,9 +143,9 @@ export const drinksMenuGroup: MenuGroup = {
       id: 'highballs',
       title: 'Highballs',
       items: [
-        item('Luxury (Hibiki)', 900),
-        item('Premium (Chita)', 390),
-        item('Original (Kakubin)', 270),
+        item('Hibiki Highball', 900),
+        item('Chita Highball', 390),
+        item('Kakubin Highball', 270),
       ],
     },
     {
@@ -164,12 +165,12 @@ export const drinksMenuGroup: MenuGroup = {
       items: [
         item('House Red (glass)', 290),
         item('House White (glass)', 290),
-        item('Arcadian Sauvignon Blanc 2023', 950, undefined, ' / bottle'),
-        item('Wolf Blass Chardonnay 2023', 1100, undefined, ' / bottle'),
-        item('Penfolds Chardonnay 2023', 1600, undefined, ' / bottle'),
-        item('Arcadian Shiraz 2023', 950, undefined, ' / bottle'),
-        item('Wolf Blass Merlot 2021', 1100, undefined, ' / bottle'),
-        item('Penfolds Cabernet Sauvignon 2022', 1600, undefined, ' / bottle'),
+        item('Arcadian Sauvignon Blanc', 950, undefined, ' / bottle'),
+        item('Wolf Blass Chardonnay', 1100, undefined, ' / bottle'),
+        item('Penfolds Chardonnay', 1600, undefined, ' / bottle'),
+        item('Arcadian Shiraz', 950, undefined, ' / bottle'),
+        item('Wolf Blass Merlot', 1100, undefined, ' / bottle'),
+        item('Penfolds Cabernet Sauvignon', 1600, undefined, ' / bottle'),
         item('Bisol Belstar Prosecco Brut', 1400, 'Sparkling', ' / bottle'),
       ],
     },
@@ -181,7 +182,7 @@ export const drinksMenuGroup: MenuGroup = {
         item('Unlimited Soft Drinks', 100, 'Refill as much as you like while you play', ' / hour per person'),
         item('Water', 30),
         item('Soda', 35),
-        item('Coca Cola (Zero)', 70),
+        item('Coke / Coke Zero', 70),
         item('Sprite', 70),
         item('Zuza', 60),
         item('Red Bull', 150),
@@ -194,7 +195,6 @@ export const drinksMenuGroup: MenuGroup = {
       title: 'Snacks',
       items: [
         item('Premium Nuts Mix', 130),
-        item('Spiced Nuts', 120),
         item('Popcorn', 120),
       ],
     },
@@ -206,9 +206,9 @@ export const menuGroups: MenuGroup[] = [foodMenuGroup, pizzaMenuGroup, drinksMen
 // ── Printed menu images (same content as the tables above) ──
 export const menuImages = [
   {
-    src: storageUrl('menus/food-menu-1.jpg'),
+    src: storageUrl('menus/food-menu-2026-10-v3.jpg'),
     title: 'Food Menu',
-    alt: 'LENGOLF food menu by Smith & Co: burgers 320-330 THB, butter rolls 290-360 THB, appetizers 200-290 THB, toast 270-290 THB, sliders 330-420 THB, salads 270-340 THB',
+    alt: 'LENGOLF food menu by Smith & Co: burgers 320-330 THB, butter rolls 290-360 THB, appetizers 200-290 THB, toast 270-290 THB, sliders 330-420 THB including Pulled Pork, salads 270-340 THB, fries as sides 70-80 THB. Prices in THB, VAT included, no service charge',
     width: 1920,
     height: 1354,
     previewPosition: 'left top',
@@ -222,11 +222,11 @@ export const menuImages = [
     previewPosition: 'center top',
   },
   {
-    src: storageUrl('menus/drink-menu.jpg'),
+    src: storageUrl('menus/drink-menu-2026-10-v3.jpg'),
     title: 'Drinks Menu',
-    alt: 'LENGOLF drinks menu: cocktails 250-310 THB, highballs 270-800 THB, bottled beer 160-270 THB, wine by the glass 290 THB, wine bottles 950-1,600 THB, soft drinks from 30 THB, snacks from 120 THB',
+    alt: 'LENGOLF drinks menu: cocktails 250-310 THB, highballs 270-900 THB, bottled beer 160-270 THB, wine by the glass 290 THB, wine bottles 950-1,600 THB, soft drinks from 30 THB, snacks from 120 THB. Prices in THB, VAT included, no service charge',
     width: 1749,
-    height: 2481,
+    height: 2480,
     previewPosition: 'center top',
   },
 ]
