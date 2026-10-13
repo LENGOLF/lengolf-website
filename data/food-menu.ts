@@ -3,7 +3,7 @@ import { storageUrl } from '@/lib/constants'
 // ── Food & Drinks menu data ──
 // Source of truth is the POS (products.products on the LENGOLF Supabase
 // project: name, price, is_active), not the printed menus. The printed menu
-// images (menus/food-menu-2026-10-v3.jpg, menus/food-menu-2.jpg, menus/drink-menu-2026-10-v3.jpg in
+// images (menus/food-menu-2026-10-v4.jpg, menus/food-menu-2.jpg, menus/drink-menu-2026-10-v4.jpg in
 // Supabase Storage, built from lengolf-design/posters food-menu and drink-menu;
 // booking.len.golf ships its own copies) can lag behind it, and
 // their alt text below describes what each image shows. Update this file
@@ -134,18 +134,19 @@ export const drinksMenuGroup: MenuGroup = {
       id: 'cocktails',
       title: 'Cocktails',
       items: [
-        item('Bunker Blast', 250, 'Rum and coke, the perfect sand sipper'),
-        item('Fairway Fizz', 250, 'Gin and tonic, a timeless classic on the green'),
-        item('Monster Drive', 310, 'Vodka and Red Bull, boost your drive'),
+        item('Bunker Blast', 250, 'Rum and coke'),
+        item('Fairway Fizz', 250, 'Gin and tonic'),
+        item('Monster Drive', 310, 'Vodka and Red Bull'),
       ],
     },
     {
       id: 'highballs',
       title: 'Highballs',
       items: [
-        item('Hibiki Highball', 900),
-        item('Chita Highball', 390),
-        item('Kakubin Highball', 270),
+        item('Hibiki', 900),
+        item('Chita', 390),
+        item('Kakubin', 270),
+        item('Regency', 200),
       ],
     },
     {
@@ -184,7 +185,7 @@ export const drinksMenuGroup: MenuGroup = {
         item('Soda', 35),
         item('Coke / Coke Zero', 70),
         item('Sprite', 70),
-        item('Zuza', 60),
+        item('Zuza Sparkling Water', 60),
         item('Red Bull', 150),
         item('Hot Tea', 80),
         item('Festilia Premium Juice', 110),
@@ -206,7 +207,7 @@ export const menuGroups: MenuGroup[] = [foodMenuGroup, pizzaMenuGroup, drinksMen
 // ── Printed menu images (same content as the tables above) ──
 export const menuImages = [
   {
-    src: storageUrl('menus/food-menu-2026-10-v3.jpg'),
+    src: storageUrl('menus/food-menu-2026-10-v4.jpg'),
     title: 'Food Menu',
     alt: 'LENGOLF food menu by Smith & Co: burgers 320-330 THB, butter rolls 290-360 THB, appetizers 200-290 THB, toast 270-290 THB, sliders 330-420 THB including Pulled Pork, salads 270-340 THB, fries as sides 70-80 THB. Prices in THB, VAT included, no service charge',
     width: 1920,
@@ -222,9 +223,9 @@ export const menuImages = [
     previewPosition: 'center top',
   },
   {
-    src: storageUrl('menus/drink-menu-2026-10-v3.jpg'),
+    src: storageUrl('menus/drink-menu-2026-10-v4.jpg'),
     title: 'Drinks Menu',
-    alt: 'LENGOLF drinks menu: cocktails 250-310 THB, highballs 270-900 THB, bottled beer 160-270 THB, wine by the glass 290 THB, wine bottles 950-1,600 THB, soft drinks from 30 THB, snacks from 120 THB. Prices in THB, VAT included, no service charge',
+    alt: 'LENGOLF drinks menu: cocktails 250-310 THB, highballs 200-900 THB, bottled beer 160-270 THB, wine by the glass 290 THB, wine bottles 950-1,600 THB, soft drinks from 30 THB, snacks from 120 THB. Prices in THB, VAT included, no service charge',
     width: 1749,
     height: 2480,
     previewPosition: 'center top',
