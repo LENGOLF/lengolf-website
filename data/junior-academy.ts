@@ -41,11 +41,14 @@ import { storageUrl } from '@/lib/constants'
  * The price is hand-maintained: it is not read from the POS catalog, which
  * would pull this page into the 30-day pricing cache and the
  * validate:pricing-revalidate route set. The price and the program facts are
- * also written out by hand in LessonsFaq.a7 (messages/en.json, th.json), in
- * the EN and TH can-kids-play-golf-simulators entries of data/faq-pages.ts
- * (faq-9, faq-9-th), in lib/jsonld.ts (typicalAgeRange, courseWorkload), in
- * the poster, share card and reel, and in the LIFF coaching card
- * (lengolf-booking-new lib/liff/coaching-data.ts). Change them together.
+ * also written out by hand, in all five locales: in LessonsFaq.a7 (every
+ * messages/*.json catalog) and in the can-kids-play-golf-simulators FAQ body
+ * (data/faq-pages.ts, faq-9 and its -th/-ja/-ko/-zh entries, plus each
+ * entry's as-of marker and updated_at); also in lib/jsonld.ts
+ * (typicalAgeRange, courseWorkload), in the poster, share card and reel, and
+ * in the LIFF coaching card (lengolf-booking-new lib/liff/coaching-data.ts).
+ * Change them together. Nothing lints the copies against each other; find
+ * them with `grep -rn "16,900" data messages`.
  */
 
 export const JUNIOR_ACADEMY_PATH = '/junior-golf-academy/'
