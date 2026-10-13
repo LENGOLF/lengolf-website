@@ -60,12 +60,16 @@
  *      checked against the version too.
  *  13. Junior Academy (data/junior-academy.ts): a locale registered for the
  *      route with no block, or a block for an unregistered locale; a prose
- *      leaf that is blank (whitespace or invisible characters only), or that
- *      carries none of the locale's own script unless JUNIOR_ACADEMY_SCRIPTLESS
- *      lists its path AND its value equals EN's there (12(d)'s rule, without
- *      12(d)'s em-dash check); an entry in that allowlist that no longer names
- *      a script-less prose leaf; or a block the rule never judged (a skipped
- *      or deleted call).
+ *      leaf that is blank (whitespace, invisible characters or combining
+ *      marks only), or that carries none of the locale's own script (marks
+ *      not counted) unless JUNIOR_ACADEMY_SCRIPTLESS lists its path AND its
+ *      value equals EN's there (12(d)'s rule, without 12(d)'s em-dash check);
+ *      an entry in that allowlist that no longer names a script-less prose
+ *      leaf; a prose path the block has and EN lacks, or the reverse (a list
+ *      of a different length); a bidi control or U+FFFD in any leaf; or a
+ *      block the rule never judged (a skipped or deleted call). The EN block
+ *      gets the blank and bidi/U+FFFD rules too, and its price.amount must
+ *      equal JUNIOR_ACADEMY_PRICE_THB as en-US writes it.
  *
  * WARN-level (reported, exit 0) — expected to fire on legacy entries:
  *   7. Currency-convention drift vs conventions.currency.primary.
@@ -89,7 +93,7 @@ import type { GolfCourse, GolfCourseProse } from '@/types/golf-courses'
 import { faqPages } from '@/data/faq-pages'
 import { PRICE_TIER_I18N } from '@/data/price-tiers'
 import { getFaqHubContent } from '@/data/faq-hub'
-import { JUNIOR_ACADEMY_CONTENT, JUNIOR_ACADEMY_PATH } from '@/data/junior-academy'
+import { JUNIOR_ACADEMY_CONTENT, JUNIOR_ACADEMY_PATH, JUNIOR_ACADEMY_PRICE_THB } from '@/data/junior-academy'
 import { priceGuidePages } from '@/data/price-guide-pages'
 import { activityOccasionPages } from '@/data/activity-occasions'
 import { bestOfListiclePages } from '@/data/best-of-listicle-pages'
@@ -355,7 +359,37 @@ const NATIVE_SCRIPT: Record<Locale, RegExp> = {
 // agreement and course-detail locales (validate:course-slots) have an
 // equivalent; faq-hub, messages/*.json and the other corpora that rely on
 // checkScript alone do not, so an English or blank string there still passes.
+// It also holds each block's prose paths equal to EN's, and rejects bidi
+// controls and U+FFFD. checkJuniorAcademyEnLeaves() gives the EN block the
+// blank and forbidden-character rules and ties its price.amount to
+// JUNIOR_ACADEMY_PRICE_THB.
 const JUNIOR_NON_PROSE_RE = /^faqLinks\.|\.href$|^listSeparator$/
+
+/**
+ * What a leaf shows on screen: the value without whitespace, format characters
+ * (\p{Cf}) or combining marks (\p{M}). Format characters because trim() strips
+ * a BOM but keeps a zero-width space or a word joiner. Combining marks because
+ * a Thai tone mark is Script=Thai: on its own it passed as a translated leaf,
+ * and appended to an English sentence it passed the own-script test (both
+ * measured against the rule before this change). A Thai word always keeps its
+ * consonants, so real Thai is unaffected.
+ */
+function juniorVisible(value: string): string {
+  return value.replace(/[\s\p{Cf}\p{M}]/gu, '')
+}
+
+/**
+ * Characters no junior leaf may carry, even inside real text: the bidi
+ * embedding, override and isolate controls (U+202A to U+202E, U+2066 to
+ * U+2069), which reorder what is displayed without showing themselves, and the
+ * replacement character (U+FFFD), which is encoding damage. Neither blank test
+ * can see them once a leaf has visible text. The no-break spaces and word
+ * joiner Thai needs are added at render time, so they are not data.
+ */
+const JUNIOR_FORBIDDEN_CHAR_RE = /[\u202A-\u202E\u2066-\u2069\uFFFD]/u
+const JUNIOR_BLANK_MSG = 'blank string (whitespace, invisible characters or combining marks only): the page ships it empty'
+const JUNIOR_FORBIDDEN_MSG =
+  'carries a bidi control (U+202A to U+202E, U+2066 to U+2069) or the replacement character (U+FFFD): it reorders or garbles the text on screen. Retype the line'
 
 /**
  * Prose leaves that are legitimately script-less in a locale, keyed by field
@@ -417,12 +451,15 @@ function checkJuniorAcademyLeaves(
   for (const [field, value] of leaves) {
     if (JUNIOR_NON_PROSE_RE.test(field)) continue
     prose.add(field)
-    // Format characters (\p{Cf}) count as blank too: trim() strips a BOM but
-    // keeps a zero-width space or a word joiner.
-    if (value.replace(/[\s\p{Cf}]/gu, '') === '') {
-      add('error', locale, entryId, field, 'junior-academy',
-        'blank string (whitespace or invisible characters only): the page ships it empty')
-    } else if (NATIVE_SCRIPT[locale].test(value)) {
+    const visible = juniorVisible(value)
+    // Independent of the script verdict below; a leaf that is blank apart from
+    // a bidi control is reported once, as blank.
+    if (visible !== '' && JUNIOR_FORBIDDEN_CHAR_RE.test(value)) {
+      add('error', locale, entryId, field, 'junior-academy', JUNIOR_FORBIDDEN_MSG)
+    }
+    if (visible === '') {
+      add('error', locale, entryId, field, 'junior-academy', JUNIOR_BLANK_MSG)
+    } else if (NATIVE_SCRIPT[locale].test(visible)) {
       native.add(field)
     } else if (!exempt.includes(field)) {
       add('error', locale, entryId, field, 'junior-academy',
@@ -444,8 +481,65 @@ function checkJuniorAcademyLeaves(
         `listed in JUNIOR_ACADEMY_SCRIPTLESS but now carries ${locale} script: remove the unused exemption`)
     }
   }
+  // Path parity with EN. Both blocks share one interface, so their prose paths
+  // can only differ where a list (items, steps, FAQ, transcript, skills) has a
+  // different number of entries. A leaf COUNT cannot see that: a th block that
+  // dropped the "a parent stays in the bay" safety line and duplicated another
+  // item kept the counts equal and passed the gate (measured). The error lands
+  // on the list's LAST index, which is not necessarily the line that went.
+  const enProse = new Set(enLeaves.map(([field]) => field).filter((field) => !JUNIOR_NON_PROSE_RE.test(field)))
+  for (const field of enProse) {
+    if (!prose.has(field)) {
+      add('error', locale, entryId, field, 'junior-academy',
+        `EN has a line at this path and the ${locale} block does not: a list here is shorter than EN's, so the ${locale} page drops a line (not necessarily this last one)`)
+    }
+  }
+  for (const field of prose) {
+    if (!enProse.has(field)) {
+      add('error', locale, entryId, field, 'junior-academy',
+        `EN has no line at this path: a list here is longer than EN's (an extra or duplicated line, or a line EN removed)`)
+    }
+  }
 }
 
+/** Counted like juniorLeafJudgeCalls: the EN block must be judged exactly once. */
+let juniorEnJudgeCalls = 0
+/**
+ * The EN block is outside the corpus (the glossaries are target-language), but
+ * it renders /junior-golf-academy/ and every th leaf is held to it, so its own
+ * prose leaves get the blank and forbidden-character rules here. An EN leaf of
+ * '   ' or a lone combining mark passed every gate before this.
+ *
+ * It also ties the visible price to the constant. The price card, llms.txt and
+ * llms-full.txt print price.amount; the Course node's Offer.price is
+ * JUNIOR_ACADEMY_PRICE_THB. With EN and th price.amount both '17,900' against
+ * a 16900 constant, every gate passed while the card and the JSON-LD
+ * disagreed (measured). th's price.amount is held to EN's by the allowlist's
+ * EN-equality rule, so checking EN covers both. `priceThb` defaults to the
+ * constant; --self-test passes another to reach the constant-changed case
+ * without editing the data.
+ */
+function checkJuniorAcademyEnLeaves(en: unknown, priceThb: number = JUNIOR_ACADEMY_PRICE_THB): void {
+  juniorEnJudgeCalls++
+  const leaves: Array<[string, string]> = []
+  agreementStrings(en, '', leaves)
+  for (const [field, value] of leaves) {
+    if (JUNIOR_NON_PROSE_RE.test(field)) continue
+    if (juniorVisible(value) === '') {
+      add('error', 'en' as Locale, 'junior:en', field, 'junior-academy', JUNIOR_BLANK_MSG)
+    } else if (JUNIOR_FORBIDDEN_CHAR_RE.test(value)) {
+      add('error', 'en' as Locale, 'junior:en', field, 'junior-academy', JUNIOR_FORBIDDEN_MSG)
+    }
+  }
+  const want = new Intl.NumberFormat('en-US').format(priceThb)
+  const amount = new Map(leaves).get('price.amount')
+  if (amount !== want) {
+    add('error', 'en' as Locale, 'junior:en', 'price.amount', 'junior-academy',
+      `"${amount ?? '(missing)'}" is not JUNIOR_ACADEMY_PRICE_THB (${priceThb}) as en-US writes it ("${want}"): the price card and the llms files print price.amount, the Course node's Offer.price prints the constant. Change them together`)
+  }
+}
+
+checkJuniorAcademyEnLeaves(JUNIOR_ACADEMY_CONTENT.en)
 for (const locale of LOCALES) {
   const entryId = `junior:${locale}`
   const content = JUNIOR_ACADEMY_CONTENT[locale]
@@ -468,6 +562,10 @@ for (const locale of LOCALES) {
   if (juniorLeafJudgeCalls !== blocks) {
     add('error', 'th', 'junior:*', '(coverage)', 'junior-academy',
       `${juniorLeafJudgeCalls} of ${blocks} junior-academy blocks judged by checkJuniorAcademyLeaves(): a skip, a deleted call or a narrowed loop`)
+  }
+  if (juniorEnJudgeCalls !== 1) {
+    add('error', 'en' as Locale, 'junior:en', '(coverage)', 'junior-academy',
+      `the EN junior-academy block was judged ${juniorEnJudgeCalls} time(s) by checkJuniorAcademyEnLeaves(), not once: a deleted or repeated call`)
   }
 }
 
@@ -1555,7 +1653,7 @@ if (process.argv.includes('--self-test')) {
   // it, so there was no count and no floor at all: deleting assert() lines
   // silently reduced coverage while it still printed ALL SELF-TESTS PASS.
   // Raise MIN_ASSERTIONS in the same commit that adds one; never lower it.
-  const MIN_ASSERTIONS = 108
+  const MIN_ASSERTIONS = 122
   let asserted = 0
   const assert = (label: string, cond: boolean) => {
     asserted++
@@ -1805,9 +1903,9 @@ if (process.argv.includes('--self-test')) {
   // data. A fixture that cannot be built throws, naming the fixture.
   {
     const realTh = JUNIOR_ACADEMY_CONTENT.th
-    const juniorIssues = (content: unknown, exemptPaths?: readonly string[]): Issue[] => {
+    const juniorIssues = (content: unknown, exemptPaths?: readonly string[], en?: unknown): Issue[] => {
       const before = issues.length
-      checkJuniorAcademyLeaves('th', '__test__', content, exemptPaths)
+      checkJuniorAcademyLeaves('th', '__test__', content, exemptPaths, en)
       return issues.splice(before).filter((i) => i.level === 'error')
     }
     const juniorErrs = (content: unknown): number => juniorIssues(content).length
@@ -1873,8 +1971,15 @@ if (process.argv.includes('--self-test')) {
     // '', spaces, tab and newline, NBSP, ideographic space, BOM, zero-width
     // space plus word joiner, zero-width joiner, soft hyphen, left-to-right
     // mark. The last four are \p{Cf}, so a blank regex that names a few
-    // format characters instead of the class misses one.
-    const BLANK_SHAPES = ['', '  ', '\t\n', ch(0xa0), ch(0x3000), ch(0xfeff), ch(0x200b, 0x2060), ch(0x200d), ch(0xad), ch(0x200e)]
+    // format characters instead of the class misses one. Then combining marks
+    // alone: a Thai tone mark, two Thai marks (a vowel sign and a tone mark),
+    // and a Latin acute, so a blank test that strips only Thai marks misses
+    // one. Last, a bidi override alone, which must be reported once, as blank,
+    // not also as a forbidden character.
+    const BLANK_SHAPES = [
+      '', '  ', '\t\n', ch(0xa0), ch(0x3000), ch(0xfeff), ch(0x200b, 0x2060), ch(0x200d), ch(0xad), ch(0x200e),
+      ch(0x0e48), ch(0x0e31, 0x0e48), ch(0x0301), ch(0x202e),
+    ]
 
     assert('junior: the real th block → 0 (the allowlist is exactly its script-less leaves)', juniorErrs(realTh) === 0)
     // The two gaps this rule exists for, as re-measured on main. The English
@@ -1961,6 +2066,174 @@ if (process.argv.includes('--self-test')) {
       'junior: an allowlisted path that is not a leaf of the block → 1, stale exemption',
       oneFrom(juniorIssues(realTh, [...exemptPaths, 'no.such.leaf']), STALE)
     )
+
+    // ── Path parity, characters, EN leaves and the price ──
+    // Every case pins the exact multiset of rules that fired, by message, so a
+    // rule disarmed while another happens to fire on the same leaf still goes
+    // red. A message matching two rules reads as both, which fails too.
+    const EN_ONLY = 'EN has a line at this path'
+    const TH_ONLY = 'EN has no line at this path'
+    const FORBIDDEN = 'carries a bidi control'
+    const PRICE = 'is not JUNIOR_ACADEMY_PRICE_THB'
+    const RULES = [BLANK, NO_SCRIPT, NOT_EN, STALE, UNUSED, EN_ONLY, TH_ONLY, FORBIDDEN, PRICE]
+    const kinds = (got: Issue[]) => got.map((i) => RULES.filter((r) => i.detail.includes(r)).join('+') || '?').sort().join(' | ')
+    const exactly = (got: Issue[], ...rules: string[]) => kinds(got) === [...rules].sort().join(' | ')
+    const FORBIDDEN_CHARS = [0x202a, 0x202b, 0x202c, 0x202d, 0x202e, 0x2066, 0x2067, 0x2068, 0x2069, 0xfffd].map((c) => ch(c))
+    const inMiddle = (v: string, c: string) => v.slice(0, Math.ceil(v.length / 2)) + c + v.slice(Math.ceil(v.length / 2))
+    const under = (item: string) => (p: string) => p === item || p.startsWith(`${item}.`) || p.startsWith(`${item}[`)
+
+    // Characters. A Thai mark makes neither a blank leaf nor an English one
+    // Thai, and a bidi control or U+FFFD fails inside real Thai.
+    assert(
+      'junior: a lone Thai tone mark in a th leaf → 1, blank (it passed as Thai script)',
+      exactly(juniorIssues(setLeaf(faqAnswer, ch(0x0e48))), BLANK)
+    )
+    assert(
+      `junior: short and handle strings plus a Thai tone mark in a th leaf → 1 no-script each ('1 year.' and ${LATIN_SHAPES.length} more)`,
+      ['1 year.', ...LATIN_SHAPES].every((s) => exactly(juniorIssues(setLeaf(plainLeaf, s + ch(0x0e48))), NO_SCRIPT))
+    )
+    assert(
+      'junior: an allowlisted leaf holding EN\'s value plus a Thai tone mark → 1, not-EN (not an unused exemption)',
+      exactly(juniorIssues(setLeaf(exemptLeaf, (enAt.get(exemptLeaf) ?? '') + ch(0x0e48))), NOT_EN)
+    )
+    {
+      const wrong = prosePaths.filter(
+        (p) => !FORBIDDEN_CHARS.every((c) => {
+          const value = strings.find(([f]) => f === p)?.[1] ?? ''
+          const got = juniorIssues(setLeaf(p, inMiddle(value, c)))
+          return exempt.has(p) ? exactly(got, FORBIDDEN, NOT_EN) : exactly(got, FORBIDDEN)
+        })
+      )
+      assert(
+        `junior: each of the ${FORBIDDEN_CHARS.length - 1} bidi controls and U+FFFD inside each of the ${prosePaths.length} th prose leaves → 1 forbidden (plus not-EN where allowlisted)${wrongAt(wrong)}`,
+        prosePaths.length > 0 && wrong.length === 0
+      )
+    }
+
+    // Path parity: every list of the th block, one at a time, made one item
+    // shorter and one item longer than EN's.
+    const lists: Array<[string, number]> = []
+    const walkLists = (node: unknown, path: string): void => {
+      if (Array.isArray(node)) {
+        lists.push([path, node.length])
+        node.forEach((v, i) => walkLists(v, `${path}[${i}]`))
+      } else if (node && typeof node === 'object') {
+        for (const [k, v] of Object.entries(node as Record<string, unknown>)) walkLists(v, path ? `${path}.${k}` : k)
+      }
+    }
+    walkLists(realTh, '')
+    /** A deep copy of `node` with the array at `target` passed through `edit`. */
+    const withList = (node: unknown, target: string, edit: (a: unknown[]) => unknown[], path = ''): unknown => {
+      if (Array.isArray(node)) {
+        const copy = node.map((v, i) => withList(v, target, edit, `${path}[${i}]`))
+        return path === target ? edit(copy) : copy
+      }
+      if (node && typeof node === 'object') {
+        return Object.fromEntries(
+          Object.entries(node as Record<string, unknown>).map(([k, v]) => [k, withList(v, target, edit, path ? `${path}.${k}` : k)])
+        )
+      }
+      return node
+    }
+    const enProsePaths = enStrings
+      .filter(([field, value]) => field !== 'listSeparator' && !/^(https?:\/\/|\/)/.test(value))
+      .map(([field]) => field)
+    const fieldsOf = (got: Issue[], rule: string) => got.filter((i) => i.detail.includes(rule)).map((i) => i.field).sort().join(',')
+    {
+      const wrongDrop = lists.filter(([list, n]) => {
+        const item = `${list}[${n - 1}]`
+        const dropped = enProsePaths.filter(under(item))
+        const got = juniorIssues(withList(realTh, list, (a) => a.slice(0, -1)), exemptPaths.filter((p) => !under(item)(p)))
+        return dropped.length === 0 || !exactly(got, ...dropped.map(() => EN_ONLY)) || fieldsOf(got, EN_ONLY) !== [...dropped].sort().join(',')
+      })
+      assert(
+        `junior: each of the ${lists.length} th lists one item shorter than EN's → 1 EN-only per line of the missing item${wrongAt(wrongDrop.map(([l]) => l))}`,
+        lists.length >= 8 && wrongDrop.length === 0
+      )
+      const wrongAdd = lists.filter(([list, n]) => {
+        const added = prosePaths.filter(under(`${list}[${n - 1}]`)).map((p) => `${list}[${n}]` + p.slice(`${list}[${n - 1}]`.length))
+        const got = juniorIssues(withList(realTh, list, (a) => [...a, a[a.length - 1]]))
+        return added.length === 0 || fieldsOf(got, TH_ONLY) !== [...added].sort().join(',') || got.some((i) => i.detail.includes(EN_ONLY) || !added.includes(i.field))
+      })
+      assert(
+        `junior: each of the ${lists.length} th lists one item longer than EN's → 1 th-only per line of the extra item${wrongAt(wrongAdd.map(([l]) => l))}`,
+        lists.length >= 8 && wrongAdd.length === 0
+      )
+    }
+    {
+      // The measured case: th drops the "a parent stays in the bay" line and
+      // duplicates another list's last item, so the leaf COUNTS stay equal.
+      const stringList = (p: string, n: number) => n >= 3 && prosePaths.includes(`${p}[0]`)
+      const a = need('a string list of 3+ items', (lists.find(([p, n]) => p === 'trust.items' && stringList(p, n)) ?? lists.find(([p, n]) => stringList(p, n)))?.[0])
+      const [, aLen] = lists.find(([p]) => p === a)!
+      const lastIsPlain = (p: string, n: number) => p !== a && n >= 1 && prosePaths.includes(`${p}[${n - 1}]`) && !exempt.has(`${p}[${n - 1}]`)
+      const b = need('a second string list', (lists.find(([p, n]) => p === 'price.items' && lastIsPlain(p, n)) ?? lists.find(([p, n]) => lastIsPlain(p, n)))?.[0])
+      const [, bLen] = lists.find(([p]) => p === b)!
+      const shifted = withList(withList(realTh, a, (x) => x.filter((_, i) => i !== 2)), b, (x) => [...x, x[x.length - 1]])
+      const got = juniorIssues(shifted)
+      assert(
+        `junior: th drops ${a}[2] and duplicates ${b}[${bLen - 1}] (equal leaf counts) → 2: EN-only at ${a}[${aLen - 1}], th-only at ${b}[${bLen}]`,
+        exactly(got, EN_ONLY, TH_ONLY) && fieldsOf(got, EN_ONLY) === `${a}[${aLen - 1}]` && fieldsOf(got, TH_ONLY) === `${b}[${bLen}]`
+      )
+      const enShort = withList(JUNIOR_ACADEMY_CONTENT.en, a, (x) => x.filter((_, i) => i !== 2))
+      const fromEn = juniorIssues(realTh, undefined, enShort)
+      assert(
+        `junior: EN drops ${a}[2] (th unchanged) → 1, th-only at ${a}[${aLen - 1}]`,
+        exactly(fromEn, TH_ONLY) && fieldsOf(fromEn, TH_ONLY) === `${a}[${aLen - 1}]`
+      )
+    }
+
+    // The EN block: blanks, forbidden characters and the price.
+    {
+      const realEn = JUNIOR_ACADEMY_CONTENT.en
+      const enIssues = (content: unknown, priceThb?: number): Issue[] => {
+        const before = issues.length
+        checkJuniorAcademyEnLeaves(content, priceThb)
+        return issues.splice(before).filter((i) => i.level === 'error')
+      }
+      const setEnLeaf = (target: string, value: string): unknown => {
+        if (!enProsePaths.includes(target)) {
+          throw new Error(`junior self-test fixture: "${target}" is not a prose leaf of the EN block; update the fixture`)
+        }
+        return withLeaf(realEn, target, value)
+      }
+      const priceLeaf = need('EN price.amount', enProsePaths.find((p) => p === 'price.amount'))
+      const want = enAt.get(priceLeaf) ?? ''
+      // A defect at price.amount is a price mismatch too.
+      const plus = (p: string, rule: string) => (p === priceLeaf ? [rule, PRICE] : [rule])
+      assert('junior: the real EN block → 0', exactly(enIssues(realEn)))
+      const wrongEnBlank = enProsePaths.filter((p) => !BLANK_SHAPES.every((b) => exactly(enIssues(setEnLeaf(p, b)), ...plus(p, BLANK))))
+      assert(
+        `junior: each of ${BLANK_SHAPES.length} blank shapes in each of the ${enProsePaths.length} EN prose leaves → 1 blank (plus price at price.amount)${wrongAt(wrongEnBlank)}`,
+        enProsePaths.length >= prosePaths.length && wrongEnBlank.length === 0
+      )
+      const wrongEnForbidden = enProsePaths.filter(
+        (p) => !FORBIDDEN_CHARS.every((c) => exactly(enIssues(setEnLeaf(p, inMiddle(enAt.get(p) ?? '', c))), ...plus(p, FORBIDDEN)))
+      )
+      assert(
+        `junior: each of the ${FORBIDDEN_CHARS.length - 1} bidi controls and U+FFFD inside each of the ${enProsePaths.length} EN prose leaves → 1 forbidden (plus price at price.amount)${wrongAt(wrongEnForbidden)}`,
+        enProsePaths.length >= prosePaths.length && wrongEnForbidden.length === 0
+      )
+      // Price: the card's value against the constant, both directions.
+      const d = want.search(/\d/)
+      const drifted = d >= 0 ? want.slice(0, d) + String((Number(want[d]) + 1) % 10) + want.slice(d + 1) : `${want}0`
+      const PRICE_MISSES = [drifted, want.replace(/,/g, ''), want.replace(/,/g, '.'), `${want} `, `฿${want}`, `${want} THB`]
+      assert(
+        `junior: EN price.amount near misses of the constant (${PRICE_MISSES.join(' | ')}) → 1 price each`,
+        want !== '' && PRICE_MISSES.every((v) => v !== want && exactly(enIssues(setEnLeaf(priceLeaf, v)), PRICE))
+      )
+      assert(
+        `junior: the constant changed (${JUNIOR_ACADEMY_PRICE_THB + 1000}) and the copy not → 1, price`,
+        exactly(enIssues(realEn, JUNIOR_ACADEMY_PRICE_THB + 1000), PRICE)
+      )
+      // Both blocks drifted together: th still equals EN, so only the EN
+      // rule can see it.
+      const enDrift = setEnLeaf(priceLeaf, drifted)
+      assert(
+        `junior: EN and th price.amount both "${drifted}" → 1 price from EN, 0 from th`,
+        exactly(enIssues(enDrift), PRICE) && exactly(juniorIssues(setLeaf(priceLeaf, drifted), undefined, enDrift))
+      )
+    }
   }
 
   // Checks 10/11 — UI-message namespace parity, on synthetic catalogs
