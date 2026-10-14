@@ -1552,14 +1552,14 @@ const BLANK_RULES: readonly BlankRule[] = [
 const OWN_SCRIPT_RULES: readonly OwnScriptRule[] = [
   // ── data/*-pages.ts: names the pages print in Latin in every locale ──
   { corpus: 'activity', kind: 'name', path: 'other_activities[].name', reason: 'venue and attraction names' },
-  { corpus: 'best', kind: 'name', path: 'list_items[].name', reason: 'venue names. Many carry an English descriptor (Indoor Golf Simulator Bar, Luxury Shopping) that no locale translates: a native-QA follow-up, not a name' },
+  { corpus: 'best', kind: 'name', path: 'list_items[].name', reason: 'venue names. The descriptors are translated in th/ja/ko/zh (Indoor Golf Simulator Bar, Luxury Shopping); what stays Latin is the proper name, so a bare venue name (Rabbit Hole, Nikanti Golf Club) is script-less. Names that embed a descriptor (Archery Plus, Altitude Rooftop, Silom Thai Cooking School) were deliberately left Latin too' },
   { corpus: 'cost', kind: 'name', path: 'venue_comparison.venues[].name', reason: 'competitor venue names' },
   { corpus: 'cost', kind: 'name', path: 'venue_comparison.venues[].tech', reason: 'simulator brands (Trackman, Bravo)' },
-  { corpus: 'cost', kind: 'name', path: 'venue_comparison.venues[].location', reason: 'street and BTS names. th also leaves "(car access)" in English on two venues where ja/ko/zh translate it: a follow-up' },
+  { corpus: 'cost', kind: 'name', path: 'venue_comparison.venues[].location', reason: 'street and BTS names. The "(car access)" connective is translated in all four locales' },
   { corpus: 'cost', kind: 'name', path: 'price_breakdown[].item', locales: ['ja', 'zh'], reason: 'venue name in the item label (the " - " is the code delimiter)' },
   { corpus: 'hotel', kind: 'name', path: 'hotel_name', reason: 'hotel names' },
-  { corpus: 'hotel', kind: 'name', path: 'nearby_activities[].name', reason: 'attraction names. A few are English phrases ("Ploenchit BTS to explore Bangkok", "US & UK Embassies"): a follow-up' },
-  { corpus: 'hotel', kind: 'name', path: 'nearby_restaurants[].name', reason: 'restaurant names. A few are descriptive ("Soi 11 Food Street") where the sibling cuisine field is translated: a follow-up' },
+  { corpus: 'hotel', kind: 'name', path: 'nearby_activities[].name', reason: 'attraction names. The descriptors are translated (Ploenchit BTS, the embassies, LENGOLF Indoor Golf); what stays Latin is the proper name (Erawan Shrine, CentralWorld)' },
+  { corpus: 'hotel', kind: 'name', path: 'nearby_restaurants[].name', reason: 'restaurant names. The descriptive ones (Soi 11 Food Street, Siam Square Street Food) are translated; what stays Latin is the proper name (Din Tai Fung, Baan Khanitha). Left Latin on purpose: the (rooftop) and (2 Michelin Stars) parentheticals' },
   { corpus: 'explainer', kind: 'name', path: 'comparison_table[].feature', locales: ['th'], entry: 'gg-golf-club-baggage-fees-airlines-bangkok-th', reason: 'airline names' },
   { corpus: 'hotel', kind: 'dead', path: 'hotel_neighbourhood', locales: ['ja', 'ko', 'zh'], reason: 'the /hotels/ hub reads the EN page only (getSeoPagesByType defaults to en) and nothing else renders this field, so these never show' },
 
@@ -1600,10 +1600,6 @@ const OWN_SCRIPT_RULES: readonly OwnScriptRule[] = [
   { corpus: 'messages', kind: 'name', path: 'Lessons.coaches.boss.achievements[]', locales: ['zh'], reason: 'tournament names; zh swaps the colon for a full-width one' },
   { corpus: 'messages', kind: 'name', path: 'Lessons.coaches.ratchavin.achievements[]', reason: 'tournament names' },
   { corpus: 'messages', kind: 'name', path: 'Lessons.coaches.min.achievements[]', reason: 'tournament names' },
-
-  // ── messages/*.json: untranslated, and it renders today ──
-  { corpus: 'messages', kind: 'todo', path: 'Golf.socialBaysTitle', locales: ['th'], reason: 'th prints "Social Bays"; ja/ko/zh are translated. Native-QA follow-up' },
-  { corpus: 'messages', kind: 'todo', path: 'Golf.aiFeature1', locales: ['th'], reason: 'th keeps "Uneekor EYE Mini Lite launch monitor" in English. Native-QA follow-up' },
 
   // ── messages/*.json: never renders in that locale ──
   // app/[locale]/page.tsx returns the bespoke Japan/Korea/China landing page

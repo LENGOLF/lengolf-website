@@ -805,7 +805,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'th',
     related_slugs: ['/cost/how-much-does-golf-cost-bangkok', '/cost/lengolf-pricing-guide', '/faq/how-much-does-indoor-golf-cost-in-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       intro:
         'ราคากอล์ฟซิมูเลเตอร์ในกรุงเทพฯ อยู่ที่ราว 400 ถึง 1,400 บาทต่อชั่วโมงต่อเบย์ ขึ้นอยู่กับสถานที่ ช่วงเวลาของวัน และวันในสัปดาห์ ใจกลางกรุงเทพฯ ราคาส่วนใหญ่อยู่ที่ 550-1,200 บาทต่อเบย์ต่อชั่วโมง ส่วน LENGOLF เริ่มต้นที่ 550 บาทต่อชั่วโมงสำหรับผู้เล่นสูงสุด 5 คน ด้านล่างนี้คือการเทียบราคาอย่างตรงไปตรงมาของสถานที่กอล์ฟซิมูเลเตอร์รายใหญ่ทุกแห่งในกรุงเทพฯ ทุกอัตราได้รับการตรวจสอบซ้ำกับราคาที่แต่ละแห่งประกาศไว้เอง (ข้อมูล ณ กรกฎาคม 2026)',
@@ -876,7 +876,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
           },
           {
             name: 'Golfzon Bangna',
-            location: 'Bangna-Trad Soi 23 (car access)',
+            location: 'Bangna-Trad Soi 23 (เดินทางโดยรถยนต์)',
             tech: 'Golfzon TwoVision',
             players_per_bay: 4,
             cheapest_rate: '400 บาท/ชม.',
@@ -886,7 +886,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
           },
           {
             name: 'Phothalai Golf Park',
-            location: 'Pradit Manutham Rd (car access)',
+            location: 'Pradit Manutham Rd (เดินทางโดยรถยนต์)',
             tech: 'Trackman 4',
             players_per_bay: null,
             cheapest_rate: '1,000 บาท/ชม.',
