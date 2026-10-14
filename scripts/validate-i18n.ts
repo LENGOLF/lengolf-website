@@ -1619,7 +1619,7 @@ const OWN_SCRIPT_RULES: readonly OwnScriptRule[] = [
  * accepts Han alone, so a short zh paste in a ja slot has own script, and the
  * length rules cannot help (legit kana-free ja leaves run to 10 kanji,
  * `毎日午前9時〜午後11時営業`). Measured 2026-10-13: this set appears in 0 ja
- * leaves and in 84% of zh leaves that carry Han (64% of those with 8 or fewer),
+ * leaves and in 84% of zh leaves that carry Han (64% of those with 8 or fewer Han characters),
  * so it catches most pastes but NOT all: a zh leaf with none of these passes.
  * Every member must be absent from Japanese. If a ja leaf trips this, check the
  * character is not one Japanese uses before touching the copy (与 区 国 程 税
@@ -1697,7 +1697,7 @@ function checkOwnScriptUnit(
       if (matches.length === 0) {
         const shown = value.length > 60 ? `${value.slice(0, 57)}...` : value
         add('error', locale, unit.entryId, field, 'own-script',
-          `no ${locale} script at all ("${shown}"): untranslated? A name or Latin-by-design label goes in OWN_SCRIPT_RULES`)
+          `no ${locale} script at all ("${shown}"): translate it, or, for a name or Latin-by-design label, add an OWN_SCRIPT_RULES entry (table above checkOwnScriptUnit in scripts/validate-i18n.ts) with path "${path}"; kind "todo" is the temporary hatch for a known untranslated leaf`)
       } else if (!shortName && !matches.some((r) => r.kind === 'dead')) {
         add('error', locale, unit.entryId, field, 'own-script',
           `a Latin-by-design slot holds a sentence ("${value.slice(0, 60)}"): name, latin and todo exemptions cover a label (at most ${NAME_MAX_WORDS} words, no sentence punctuation, no trailing full stop, at most ${LABEL_MAX_LOWERCASE_WORDS} lowercase words); only a \`dead\` rule is unbounded`)
