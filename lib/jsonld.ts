@@ -171,24 +171,25 @@ export function getWebSiteJsonLd() {
     // reuse the shared NAP helpers so they cannot drift from the
     // EntertainmentBusiness node above.
     //
-    // Known gap, named rather than fixed: the layout's EntertainmentBusiness
-    // is the only LENGOLF business/Organization node with an '@id'
-    // (BUSINESS_ENTITY_ID, referenced so far only by the /lessons/ coach and
-    // lesson nodes). Before the /location/* DB nodes below get this '@id',
-    // fix their data: measured 2026-10-07, all 85 say openingHours 10:00-23:00
-    // (the venue opens 09:00), carry a different geo point, and 84 of 85 have
-    // a `url` missing the /location/ prefix that 404s. Sharing the id would
-    // merge those values into the canonical business entity. This publisher
-    // node does not, and the thinner publisher Organizations elsewhere in the repo
-    // (/guide/, /blog/, /blog/[slug]) describe the same business with less
-    // detail and nothing ties them together. The in-repo nodes are NOT the
-    // whole set: each of the 85 /location/* pages also renders a DB-sourced
-    // LocalBusiness from location_pages.schema_markup — queried 2026-08-23,
-    // all 85 carry an address and none carries a contactPoint or an '@id' —
-    // so those pages ship THREE unlinked LENGOLF nodes each. An '@id' of
-    // `${SITE_URL}/#organization` referenced from the thin nodes is the fix
-    // that scales, and it has to reach the DB blobs too; adding NAP to each
-    // in-repo node is round one of a four-round pattern.
+    // '@id' BUSINESS_ENTITY_ID makes this the SAME entity as the layout's
+    // EntertainmentBusiness, so a consumer that resolves '@id' merges the two
+    // instead of reading two unlinked LENGOLF nodes. Safe because each value
+    // the two nodes share (name, legalName, url, address, telephone, email,
+    // sameAs) comes from the same constant or helper on both, and the rest
+    // (logo, contactPoint here; image, geo, hours there) only adds. The
+    // /location/* pages no longer add a third node (getLocationWebPageJsonLd
+    // below replaced the DB blob).
+    //
+    // Known gap, named rather than fixed: other id-less LENGOLF nodes still
+    // ship. The thin publisher Organizations on /guide/, /blog/ and
+    // /blog/[slug] (plus the blog post's author Organization); the
+    // aggregate-rating EntertainmentBusiness on / and /about-us/
+    // (getAggregateRatingJsonLd); the LENGOLF item on the /best/ listicle; and
+    // getHotelConciergePageJsonLd's LocalBusiness on every /hotels/<slug>/,
+    // which carries a per-page url, the exact pattern removed from /location/.
+    // Pointing them at BUSINESS_ENTITY_ID is the fix that scales; check each
+    // one's values agree with this node first, because sharing the id merges
+    // them, and a per-page url or description must move off the business.
     //
     // Deliberately NO `description`: SITE_DESCRIPTION is English-only and
     // this node renders on every ja/ko/zh/th page, so adding it would put an
@@ -197,7 +198,11 @@ export function getWebSiteJsonLd() {
     // native QA, i.e. a translation batch, not a line here.
     publisher: {
       '@type': 'Organization',
-      name: SITE_NAME,
+      '@id': BUSINESS_ENTITY_ID,
+      // BUSINESS_INFO.name, not SITE_NAME: this node now merges into the
+      // business entity, whose name comes from BUSINESS_INFO.name. Both are
+      // 'LENGOLF' today, but two literals can drift and the merge must not.
+      name: BUSINESS_INFO.name,
       legalName: BUSINESS_INFO.legalName,
       url: SITE_URL,
       logo: {
@@ -226,6 +231,40 @@ export function getWebSiteJsonLd() {
       contactPoint: getContactPointJsonLd(),
       sameAs: [SOCIAL_LINKS.facebook, SOCIAL_LINKS.instagram, SOCIAL_LINKS.lineProfile],
     },
+  }
+}
+
+/**
+ * The JSON-LD for a /location/<slug>/ page: a WebPage ABOUT the business, not
+ * a second copy of it. The business itself is described once, by the
+ * layout's EntertainmentBusiness (BUSINESS_ENTITY_ID), on every page.
+ *
+ * Replaces location_pages.schema_markup, which these pages used to print
+ * verbatim. Measured 2026-10-07, all 85 blobs said openingHours
+ * "Mo-Su 10:00-23:00" (the venue opens 09:00), carried geo 13.7437,100.5436
+ * (canonical: BUSINESS_INFO.coordinates), used a second address spelling,
+ * and 84 of 85 had a `url` without the /location/ prefix (about 70 of those
+ * 404; 14 hit rootLocationRedirects in next.config.js and redirect). Those
+ * values were copied once at import and nothing kept them in step with
+ * BUSINESS_INFO. Building the node here means there is no copy to drift.
+ *
+ * Why not a LocalBusiness with the shared '@id': a consumer merges every node
+ * that shares an '@id', so per-page values (this page's description and URL)
+ * would land on the one business entity, 85 times over. They belong to the
+ * page, which `about` links to the business.
+ */
+export function getLocationWebPageJsonLd(page: { slug: string; title: string; description: string | null }) {
+  const url = `${SITE_URL}/location/${page.slug}/`
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': url,
+    url,
+    name: page.title,
+    ...(page.description ? { description: page.description } : {}),
+    // The route is EN-only (generateStaticParams emits locale 'en').
+    inLanguage: 'en',
+    about: getBusinessRef(),
   }
 }
 

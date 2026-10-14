@@ -73,14 +73,15 @@ export const BUSINESS_INFO = {
  * reading that file hits.
  *
  * WHY E.164 is the canonical machine format here, restored because the move
- * from lib/jsonld.ts deleted this fact from both of its homes and the smoke
- * cross-check now rests on it: all 85 rows of location_pages.schema_markup
- * already carry "telephone": "+66966682335" (queried 2026-08-23), which is
- * byte-identical to what this derives. Before PR #109 the layout's own
- * EntertainmentBusiness node emitted the LOCAL format alongside them, so each
- * of those 85 indexed pages shipped two spellings of one number. Verified on
- * production 2026-08-24 after #109 finally deployed: both nodes on
- * /location/golf-near-sathorn/ now read +66966682335.
+ * from lib/jsonld.ts deleted this fact from both of its homes: all 85 rows of
+ * location_pages.schema_markup carried "telephone": "+66966682335" (queried
+ * 2026-08-23), byte-identical to what this derives. Before PR #109 the
+ * layout's own EntertainmentBusiness node emitted the LOCAL format alongside
+ * them, so each of those 85 indexed pages shipped two spellings of one
+ * number; #109 (deployed 2026-08-24) made both E.164. Since 2026-10-07 the
+ * /location/* pages no longer render that DB blob at all (see
+ * getLocationWebPageJsonLd in lib/jsonld.ts), so this constant is the only
+ * source of the machine-readable number on them.
  *
  * NOTE the derivation is only correct while phoneRaw stays a 0-prefixed
  * national number. A future '+66...' or '66...' or space-separated value
