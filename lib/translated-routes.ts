@@ -391,7 +391,7 @@ const TRANSLATED_ROUTES: Record<
       // and origin/main's ko block simply had no "/golf-courses" entry. The
       // GolfCourseHub namespace was added to messages/ko.json in the same
       // batch, but a missing namespace never redirects — next-intl logs
-      // MISSING_MESSAGE per render and silently serves the English strings
+      // MISSING_MESSAGE per render and shows the raw dotted key path as visible text
       // under a /ko/ URL, which is the worse failure this pairing avoids.
       "/golf-courses",
       // Translated guide pages (data/explainer-pages.ts entries with
@@ -750,7 +750,7 @@ const TRANSLATED_ROUTES: Record<
       // and origin/main's zh block simply had no "/golf-courses" entry. The
       // GolfCourseHub namespace was added to messages/zh.json in the same
       // batch, but a missing namespace never redirects — next-intl logs
-      // MISSING_MESSAGE per render and silently serves the English strings
+      // MISSING_MESSAGE per render and shows the raw dotted key path as visible text
       // under a /zh/ URL, which is the worse failure this pairing avoids.
       "/golf-courses",
       // Translated guide pages (data/explainer-pages.ts entries with
