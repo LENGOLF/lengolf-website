@@ -52,21 +52,25 @@ const promoImages = [
   { src: storageUrl('lessons/promo-lesson.jpg'), alt: 'Golf lesson promotion with PGA-certified coach on simulator bay' },
 ]
 
+// width/height are each file's real pixel size (measured 2026-10-13). ImageGallery
+// sizes the desktop tiles from them, so a guessed value crops the photo. The
+// gallery's `rows` must add up to this list's length: a leftover photo gets a
+// full-width row of its own.
 const studentImages = [
-  { src: storageUrl('lessons/student-01.jpg'), alt: 'Student practicing iron shots with PRO Boss on golf simulator', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-02.jpg'), alt: 'Adult student working on swing technique during a coaching session', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-03.jpg'), alt: 'Coach analyzing student swing data on simulator screen', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-04.jpg'), alt: 'Student and coach reviewing shot trajectory after a drive', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-05.jpg'), alt: 'Beginner golfer learning proper grip and stance fundamentals', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-06.jpg'), alt: 'Junior golfer learning swing fundamentals with coach guidance', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-07.jpg'), alt: 'Young golfer practicing on simulator during junior development program', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-08.jpg'), alt: 'Student improving driving distance with simulator feedback', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-09.jpg'), alt: 'Student working on short game technique with coach', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-10.jpg'), alt: 'Advanced player refining shot shaping skills on simulator', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-11.jpg'), alt: 'Student receiving real-time swing feedback during lesson', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-kids-01.jpg'), alt: 'Kids group lesson with age-appropriate golf instruction', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-kids-02.jpg'), alt: 'Child learning to swing with junior-sized clubs on simulator', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-kids-03.jpg'), alt: 'Junior coaching session focused on building proper swing mechanics', width: 1200, height: 800 },
+  { src: storageUrl('lessons/student-01.jpg'), alt: 'Student practicing iron shots with PRO Boss on golf simulator', width: 2560, height: 1440 },
+  { src: storageUrl('lessons/student-02.jpg'), alt: 'Adult student working on swing technique during a coaching session', width: 2560, height: 1440 },
+  { src: storageUrl('lessons/student-03.jpg'), alt: 'Coach analyzing student swing data on simulator screen', width: 1440, height: 2560 },
+  { src: storageUrl('lessons/student-04.jpg'), alt: 'Student and coach reviewing shot trajectory after a drive', width: 1920, height: 3413 },
+  { src: storageUrl('lessons/student-05.jpg'), alt: 'Beginner golfer learning proper grip and stance fundamentals', width: 1920, height: 3413 },
+  { src: storageUrl('lessons/student-06.jpg'), alt: 'Junior golfer learning swing fundamentals with coach guidance', width: 1920, height: 2560 },
+  { src: storageUrl('lessons/student-07.jpg'), alt: 'Young golfer practicing on simulator during junior development program', width: 1920, height: 2560 },
+  { src: storageUrl('lessons/student-08.jpg'), alt: 'Student improving driving distance with simulator feedback', width: 1920, height: 2560 },
+  { src: storageUrl('lessons/student-09.jpg'), alt: 'Student working on short game technique with coach', width: 1920, height: 2009 },
+  { src: storageUrl('lessons/student-10.jpg'), alt: 'Advanced player refining shot shaping skills on simulator', width: 1920, height: 2560 },
+  { src: storageUrl('lessons/student-11.jpg'), alt: 'Student receiving real-time swing feedback during lesson', width: 1920, height: 2560 },
+  { src: storageUrl('lessons/student-kids-01.jpg'), alt: 'Coach showing a young boy how to hold the club in front of the simulator screen', width: 1440, height: 2560 },
+  { src: storageUrl('lessons/student-kids-02.jpg'), alt: 'Coach crouching beside a boy, guiding his putter on the indoor putting green', width: 1440, height: 2560 },
+  { src: storageUrl('lessons/student-kids-03.jpg'), alt: 'Boy swinging in a simulator bay while the coach watches from behind', width: 1440, height: 2560 },
 ]
 
 const FAQ_COUNT = 15
@@ -288,8 +292,8 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
                 <Image
                   src={storageUrl('lessons/student-kids-02.jpg')}
                   alt={juniorCallout.imageAlt}
-                  width={1200}
-                  height={800}
+                  width={1440}
+                  height={2560}
                   className="h-52 w-full object-cover md:h-full"
                   sizes="(max-width: 768px) 100vw, 40vw"
                 />
@@ -519,7 +523,7 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
           <span style={{ color: '#007429' }}>{t('studentsTitle')}</span>{' '}
           <span className="text-foreground">{t('studentsTitleSuffix')}</span>
         </h2>
-        <ImageGallery images={studentImages} rows={[3, 2, 2, 2, 2, 3]} />
+        <ImageGallery images={studentImages} rows={[2, 4, 4, 4]} />
       </SectionWrapper>
 
       {/* ── Explore More ── */}
