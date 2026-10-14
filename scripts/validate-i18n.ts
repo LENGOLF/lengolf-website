@@ -73,6 +73,14 @@
  *      gets the blank and bidi/U+FFFD rules too, and its price.amount must
  *      equal JUNIOR_ACADEMY_PRICE_THB as en-US writes it; a locale's
  *      price.amount written in its own script must carry the same digits.
+ *  14. Own script and non-blank, for the ten prose corpora the checks above do
+ *      not cover (explainer, faq, faq-hub, tier, hub, the four SEO sections and
+ *      every messages/*.json leaf): a unit that is blank or whitespace-only, or
+ *      carries letters but none of its locale's own script, unless
+ *      OWN_SCRIPT_RULES or BLANK_RULES names its path; ja leaves holding
+ *      simplified-only Han (JA_SIMPLIFIED_ONLY); a rule that matches no leaf; a
+ *      corpus below its OWN_SCRIPT_MIN_UNITS floor; or a run that judged
+ *      nothing (checkOwnScriptUnit, finishOwnScript).
  *
  * WARN-level (reported, exit 0) — expected to fire on legacy entries:
  *   7. Currency-convention drift vs conventions.currency.primary.
@@ -1034,7 +1042,7 @@ for (const region of readdirSync(COURSES_ROOT)) {
 // which is how a linter teaches people to ignore it.
 /** Recursively flatten a namespace object into dotted-path leaf strings. */
 // `keepEmpty` keeps '' leaves. Off by default: the key-parity checks compare key
-// SETS and must not change. On for the corpora the own-script rule (check 13)
+// SETS and must not change. On for the corpora the own-script rule (check 14)
 // judges, because a rule that cannot see '' cannot report it.
 function flattenMessages(node: unknown, prefix: string, out: Array<[string, string]>, keepEmpty = false): void {
   if (typeof node === 'string') {
@@ -1461,7 +1469,7 @@ function checkHonesty(unit: Unit) {
   }
 }
 
-// ── Check 13: own-script + non-blank rule ───────────────────────────────────
+// ── Check 14: own-script + non-blank rule ───────────────────────────────────
 // checkScript (check 6) asks "is this string in ANOTHER script?" and ignores
 // Latin, so an English string, a whitespace-only string or '' in a non-EN slot
 // lints clean (measured 2026-10-13: an English th `ctaSubtitle` in
@@ -1730,7 +1738,7 @@ const OWN_SCRIPT_MIN_UNITS: Record<string, number> = {
 }
 
 /**
- * Whole-corpus half of check 13, run once after the units: the judged count
+ * Whole-corpus half of check 14, run once after the units: the judged count
  * must equal the units that exist (a skip or a narrowed loop is an ERROR), each
  * corpus must meet its floor, and every rule must still match something (stale)
  * and not be unused. An EXACT rule (no `*`, no `[]`) is held per locale: each
@@ -2073,7 +2081,7 @@ if (process.argv.includes('--self-test')) {
   // it, so there was no count and no floor at all: deleting assert() lines
   // silently reduced coverage while it still printed ALL SELF-TESTS PASS.
   // Raise MIN_ASSERTIONS in the same commit that adds one; never lower it.
-  const MIN_ASSERTIONS = 155
+  const MIN_ASSERTIONS = 178
   let asserted = 0
   const assert = (label: string, cond: boolean) => {
     asserted++
@@ -2189,7 +2197,7 @@ if (process.argv.includes('--self-test')) {
     corpusErrs(entryWith('{{price のみ')) === 2
   )
 
-  // ── Check 13: own-script + non-blank ──────────────────────────────────────
+  // ── Check 14: own-script + non-blank ──────────────────────────────────────
   // Drives runCorpusChecks()/finishOwnScript(), the functions the corpus run
   // calls, so a deleted call site or a skipped unit shows up here. Only
   // own-script issues are counted: the other checks fire on some of these
