@@ -189,7 +189,7 @@ export const lessonsFaqItems = [
   },
   {
     question: 'Who are the golf coaches at LENGOLF?',
-    answer: 'We have three Thailand PGA-certified professional coaches: PRO Boss (Parin Phokan), specializing in drive training and course management; PRO Ratchavin (Ratchavin Tanakasempipat), specializing in beginner programs and short game; and PRO Min (Varuth Kjonkittiskul), specializing in course management and putting.',
+    answer: 'We have three Thailand PGA-certified professional coaches: PRO Boss (Prin Phokan), specializing in drive training and course management; PRO Ratchavin (Ratchavin Tanakasempipat), specializing in beginner programs and short game; and PRO Min (Varuth Kjonkittiskul), specializing in course management and putting.',
   },
   {
     question: 'How do I book a golf lesson?',

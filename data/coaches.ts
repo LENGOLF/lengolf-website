@@ -38,7 +38,7 @@ export interface Coach {
 export const coaches: Coach[] = [
   {
     name: 'PRO Boss',
-    fullName: 'Parin Phokan',
+    fullName: 'Prin Phokan',
     nickname: 'Boss',
     i18nKey: 'boss',
     photo: storageUrl('lessons/coach-boss.png'),
