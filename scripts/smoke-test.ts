@@ -5520,7 +5520,7 @@ async function runUnknownSlugCacheTests() {
 // a list derived from the same array the page renders would agree with any
 // deletion. Update it deliberately when a coach joins or leaves.
 const EXPECTED_COACH_NAMES = [
-  "Parin Phokan",
+  "Prin Phokan",
   "Ratchavin Tanakasempipat",
   "Varuth Kjonkittiskul",
 ];
@@ -5539,7 +5539,7 @@ const ALLOWED_TEACHING_LANGUAGES = new Set(["th", "en"]);
 // makes t.raw return the key path as a string, so education[i] yields single
 // characters ("L", "e", ...) that are non-empty and would pass a name check.
 const EXPECTED_CREDENTIAL_COUNTS: Record<string, number> = {
-  "Parin Phokan": 1,
+  "Prin Phokan": 1,
   "Ratchavin Tanakasempipat": 5,
   "Varuth Kjonkittiskul": 2,
 };
