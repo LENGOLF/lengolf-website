@@ -27,7 +27,7 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
     <SectionWrapper>
       <div className="mx-auto max-w-3xl prose prose-headings:text-foreground prose-p:text-muted-foreground prose-li:text-muted-foreground prose-strong:text-foreground">
         <h1>Privacy Policy</h1>
-        <p>Last updated: 7 August 2026</p>
+        <p>Last updated: 18 October 2026</p>
         <p>
           This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.
         </p>
@@ -91,6 +91,16 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
           When You pay online, Your card details are entered into and processed by our payment provider. LENGOLF does
           not receive or store Your full card number. We retain only the record of the payment, such as the amount,
           the date, the result, and the reference issued by our payment provider.
+        </p>
+        <h4>TikTok</h4>
+        <p>
+          LENGOLF connects its own TikTok business account (@lengolf.bkk) to an internal publishing tool through
+          TikTok&apos;s official API. With the account owner&apos;s permission, the tool reads the account&apos;s public profile
+          (name, username, bio, follower and like counts) and the view, like, comment and share counts of the
+          account&apos;s own videos, and sends videos that our team has approved to the account&apos;s TikTok drafts. It does
+          not access other TikTok users&apos; data, and does not post or message on anyone&apos;s behalf. Access tokens are
+          stored securely on our servers and can be revoked at any time from the app permissions in TikTok&apos;s
+          settings.
         </p>
 
         <h3>Use of Your Personal Data</h3>
