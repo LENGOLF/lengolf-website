@@ -94,13 +94,16 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
         </p>
         <h4>TikTok</h4>
         <p>
-          LENGOLF connects its own TikTok business account (@lengolf.bkk) to an internal publishing tool through
-          TikTok&apos;s official API. With the account owner&apos;s permission, the tool reads the account&apos;s public profile
-          (name, username, bio, follower and like counts) and the view, like, comment and share counts of the
-          account&apos;s own videos, and sends videos that our team has approved to the account&apos;s TikTok drafts. It does
-          not access other TikTok users&apos; data, and does not post or message on anyone&apos;s behalf. Access tokens are
-          stored securely on our servers and can be revoked at any time from the app permissions in TikTok&apos;s
-          settings.
+          LENGOLF connects its own TikTok business account (@lengolf.bkk) to an internal publishing and reporting
+          tool through TikTok&apos;s official API. With the account owner&apos;s permission, the tool reads the
+          account&apos;s own profile information (display name, username, bio, profile picture and link, verification
+          status, and follower, following, like and video counts) and, for each of the account&apos;s own videos, its
+          title, description, duration, link, and view, like, comment and share counts. We store this information,
+          including a daily snapshot of the counts, to track how the account performs. The tool also sends videos that
+          our team has approved to the account&apos;s TikTok drafts, where our team reviews and posts them from the
+          TikTok app. It does not access other TikTok users&apos; data, and does not post or message on anyone&apos;s
+          behalf. Access tokens are stored securely on our servers and can be revoked at any time from the app
+          permissions in TikTok&apos;s settings.
         </p>
 
         <h3>Use of Your Personal Data</h3>
@@ -136,6 +139,10 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
           <li>
             <strong>Website analytics</strong> - retained according to the settings of the tools listed above,
             generally no more than 14 months.
+          </li>
+          <li>
+            <strong>TikTok account performance data</strong> - retained for as long as We use it to measure the
+            performance of Our own TikTok account.
           </li>
         </ul>
         <p>When Personal Data is no longer needed, We delete it or irreversibly anonymise it.</p>
