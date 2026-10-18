@@ -41,7 +41,8 @@
  *      <main id="main-content"> (L2's guard, one level up the hub tree)
  *  L4) FAQ translated registry liveness: every registered '/faq/<slug>'
  *      translation must serve 200 with <main id="main-content"> and no
- *      unresolved {{token}} (the FAQ route never interpolates facts)
+ *      unresolved {{token}} (the FAQ route resolves tokens, but a malformed
+ *      one such as {{name} } matches no pattern and ships raw)
  *   M) Wayfinding copy: BTS Chidlom is Exit 4, across both the DB-driven
  *      /location/* pages and the repo's JA/KO/ZH + EN wayfinding strings
  *   N) Region-hub course-count agreement: both ICU plural branches of
@@ -334,6 +335,96 @@ const routeTests: RouteTest[] = [
     path: "/zh/cost/golf-lesson-prices-bangkok/",
     expectedStatus: [200],
     contentMarker: "1小时免费体验",
+    contentAbsent: "{{",
+  },
+  // The other pages that answer "how much do lessons cost" carry the same
+  // {{lesson…}} tokens: the pricing guide and the golf-cost guide (resolved in
+  // app/[locale]/cost/[slug]/page.tsx), the beginner and best-way FAQ pages
+  // (app/[locale]/faq/[slug]/page.tsx; their th/ja/ko/zh versions are below
+  // and in L4) and the non-golfers guide. The marker is each page's trial
+  // wording.
+  {
+    path: "/cost/lengolf-pricing-guide/",
+    expectedStatus: [200],
+    contentMarker: "Free 1-hour trial (golf coaching)",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/th/cost/lengolf-pricing-guide/",
+    expectedStatus: [200],
+    contentMarker: "ทดลองเรียนฟรี 1 ชั่วโมง",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/ja/cost/lengolf-pricing-guide/",
+    expectedStatus: [200],
+    contentMarker: "ゴルフレッスンの無料体験",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/ko/cost/lengolf-pricing-guide/",
+    expectedStatus: [200],
+    contentMarker: "1시간 무료 체험",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/zh/cost/lengolf-pricing-guide/",
+    expectedStatus: [200],
+    contentMarker: "1小时免费体验",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/cost/how-much-does-golf-cost-bangkok/",
+    expectedStatus: [200],
+    contentMarker: "free 1-hour trial",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/th/cost/how-much-does-golf-cost-bangkok/",
+    expectedStatus: [200],
+    contentMarker: "ทดลองเรียนฟรี 1 ชั่วโมง",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/ja/cost/how-much-does-golf-cost-bangkok/",
+    expectedStatus: [200],
+    contentMarker: "1時間の無料体験",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/ko/cost/how-much-does-golf-cost-bangkok/",
+    expectedStatus: [200],
+    contentMarker: "1시간 무료 체험",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/zh/cost/how-much-does-golf-cost-bangkok/",
+    expectedStatus: [200],
+    contentMarker: "1小时免费体验",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/faq/can-beginners-play-golf-simulators/",
+    expectedStatus: [200],
+    contentMarker: "free 1-hour trial",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/faq/best-way-to-learn-golf-in-bangkok/",
+    expectedStatus: [200],
+    contentMarker: "Free 1-hour trial for new students",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/guide/golf-simulator-for-non-golfers-guide/",
+    expectedStatus: [200],
+    contentMarker: "free 1-hour trial for new students",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/th/guide/golf-lessons-bangkok-coaches/",
+    expectedStatus: [200],
+    contentMarker: "ทดลองเรียนฟรี 1 ชั่วโมง",
     contentAbsent: "{{",
   },
   // Blog post detail (catches Supabase query errors on dynamic routes)
@@ -1666,9 +1757,9 @@ const routeTests: RouteTest[] = [
     contentMarker: '<main id="main-content">',
   },
   // Translated TH FAQ pages (data/faq-pages.ts locale:'th' entries + th allowlist
-  // entries in lib/translated-routes.ts). No contentAbsent '{{' guard — FAQ
-  // rendering (app/[locale]/faq/[slug]/page.tsx) never runs interpolateFacts,
-  // so these pages never carry fact tokens to begin with.
+  // entries in lib/translated-routes.ts). The entries that carry {{lesson…}}
+  // tokens (resolved in app/[locale]/faq/[slug]/page.tsx) assert contentAbsent
+  // '{{'; L4 asserts it on every registered translation.
   {
     path: "/th/faq/can-i-rent-golf-clubs-in-bangkok/",
     expectedStatus: [200],
@@ -1693,6 +1784,7 @@ const routeTests: RouteTest[] = [
     path: "/th/faq/can-beginners-play-golf-simulators/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
   },
   {
     path: "/th/faq/how-long-does-simulator-golf-take/",
@@ -1703,6 +1795,7 @@ const routeTests: RouteTest[] = [
     path: "/th/faq/best-way-to-learn-golf-in-bangkok/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
   },
   {
     path: "/th/faq/can-kids-play-golf-simulators/",
@@ -2148,6 +2241,7 @@ const routeTests: RouteTest[] = [
     path: "/ja/faq/best-way-to-learn-golf-in-bangkok/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
   },
   {
     path: "/ja/faq/how-accurate-are-golf-simulators/",
@@ -2158,6 +2252,7 @@ const routeTests: RouteTest[] = [
     path: "/ja/faq/can-beginners-play-golf-simulators/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
   },
   {
     path: "/ko/faq/how-much-does-indoor-golf-cost-in-bangkok/",
@@ -2178,6 +2273,7 @@ const routeTests: RouteTest[] = [
     path: "/ko/faq/best-way-to-learn-golf-in-bangkok/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
   },
   {
     path: "/ko/faq/how-accurate-are-golf-simulators/",
@@ -2188,6 +2284,7 @@ const routeTests: RouteTest[] = [
     path: "/ko/faq/can-beginners-play-golf-simulators/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
   },
   {
     path: "/zh/faq/how-much-does-indoor-golf-cost-in-bangkok/",
@@ -2208,6 +2305,7 @@ const routeTests: RouteTest[] = [
     path: "/zh/faq/best-way-to-learn-golf-in-bangkok/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
   },
   {
     path: "/zh/faq/how-accurate-are-golf-simulators/",
@@ -2218,6 +2316,7 @@ const routeTests: RouteTest[] = [
     path: "/zh/faq/can-beginners-play-golf-simulators/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
   },
   // Batch 2: the rental/lessons FAQ cluster (JA/KO/ZH). The three rental-
   // category entries also render the course-rental CTA banner.
@@ -5955,12 +6054,22 @@ async function runLlmDiscoverabilityTests() {
       issues.push("anti-vacuity: 0 published EN FAQ entries in data/faq-pages.ts");
     else if (printed !== enFaqs.length)
       issues.push(`printed ${printed} FAQ pages, data has ${enFaqs.length} published EN entries`);
+    // Entries carrying {{lesson…}} fact tokens print the resolved figure, which
+    // follows the POS catalog, so each token is matched as a number and every
+    // other character must still match exactly. A token left unresolved fails
+    // here too: "{{" is not a digit.
+    const tokenSlot = /\\\{\\\{\w+\\\}\\\}/g;
     const missing = enFaqs
       .filter((p) => {
-        const block =
+        const block = (
           `Source: https://www.len.golf/faq/${p.slug}/\n\n` +
-          `${p.content.answer_intro}\n\n${p.content.answer_body}`;
-        return !body.includes(block.replace(/\r\n/g, "\n"));
+          `${p.content.answer_intro}\n\n${p.content.answer_body}`
+        ).replace(/\r\n/g, "\n");
+        if (!block.includes("{{")) return !body.includes(block);
+        const pattern = block
+          .replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+          .replace(tokenSlot, "\\d[\\d,]*");
+        return !new RegExp(pattern).test(body);
       })
       .map((p) => p.slug);
     if (missing.length > 0)
@@ -7139,14 +7248,14 @@ async function runFaqRegistryLivenessTests() {
           );
           continue;
         }
-        // FAQ answers are rendered verbatim — the route never calls
-        // interpolateFacts (only /guide/ and llms.txt do). A {{token}}
-        // copied in from a guide entry would therefore ship raw to the
-        // reader with nothing throwing, so assert its absence here.
+        // The FAQ route resolves {{token}}s (interpolateFactsDeep), and an
+        // unknown name throws at build, but a malformed token such as
+        // {{name} } matches no pattern and ships raw with nothing throwing,
+        // so assert its absence here.
         if (body.includes("{{")) {
           fail(
             `Unresolved fact token rendered on ${target}`,
-            "body contains '{{' — FAQ entries must use price LITERALS; the FAQ route never interpolates.",
+            "body contains '{{': a malformed or unresolved {{token}} in the entry (tokens must be {{name}} with a name from getFactTokens).",
           );
           continue;
         }
@@ -7269,13 +7378,13 @@ async function runSeoSectionRegistryTests() {
             );
             continue;
           }
-          // Same inverse-of-/guide/ rule as L4: none of these four routes
-          // calls interpolateFacts, so a {{token}} copied in from a guide
-          // entry ships raw to the reader with nothing throwing.
+          // /cost/ resolves {{token}}s (interpolateFactsDeep); /activities/,
+          // /best/ and /hotels/ do not, so a token copied in there ships raw.
+          // A malformed token ships raw on /cost/ too. Assert absence on all.
           if (body.includes("{{")) {
             fail(
               `Unresolved fact token rendered on ${target}`,
-              `body contains '{{' — /${prefix}/ entries must use price LITERALS; the route never interpolates.`,
+              `body contains '{{': an unresolved {{token}} (/${prefix}/ resolves tokens only on /cost/, and only well-formed ones).`,
             );
             continue;
           }
@@ -9068,7 +9177,10 @@ const MIN_RAW_HOSTILE_PATHS = 10;
 // +2 on 2026-10-11 for /junior-golf-academy/ and /th/junior-golf-academy/.
 // +2 on 2026-10-18 for /line/ and /th/line/.
 // +5 on 2026-10-18 for /{,th,ja,ko,zh}/cost/golf-lesson-prices-bangkok/.
-const MIN_IMAGE_PAGES = 491;
+// +14 on 2026-10-18 for the pricing guide and golf-cost guide in five locales,
+// the EN beginner and best-way FAQ pages, the EN non-golfers guide and the
+// th lessons-coaches guide.
+const MIN_IMAGE_PAGES = 505;
 /** Used-club detail pages reached from the listing. DB rows (43 on
  *  2026-09-24), so a floor of one rather than an exact count. Today they add
  *  no pair the listing lacks (the listing shows every club's photo); the crawl

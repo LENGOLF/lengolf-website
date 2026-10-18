@@ -257,7 +257,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/cost/lengolf-pricing-guide",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-10-18T00:00:00.000Z",
     content: {
       intro:
         "Absolutely. Golf simulators are one of the few golf formats specifically designed to be fun for people with zero experience. You don't need your own clubs, special clothing, or any knowledge of golf rules. At LENGOLF, roughly half of our guests have never played golf before — they come for the social experience, the games, and the food and drinks.",
@@ -285,7 +285,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "From Simulator to Real Golf: Is It a Good Starting Point?",
-          body: "Golf simulators are an excellent way to discover whether you enjoy golf before investing in equipment, lessons, and course fees.\n\nIf you find yourself wanting to improve after a simulator session, LENGOLF offers lessons with PGA-certified coaches starting at ~1,800 THB per hour. The coach uses the simulator's data to teach you proper grip, stance, and swing mechanics in a comfortable, private environment — far less intimidating than a driving range full of experienced players.\n\nMany people who start on simulators progress to outdoor golf within a few months. The swing mechanics you develop indoors transfer directly to the course. The main adjustment is adapting to outdoor conditions: wind, uneven lies, and real putting greens.\n\nBut there's no obligation to ever play outdoor golf. Plenty of regular LENGOLF customers exclusively play indoors because they enjoy the social format, the convenience, and the air conditioning.",
+          body: "Golf simulators are an excellent way to discover whether you enjoy golf before investing in equipment, lessons, and course fees.\n\nIf you find yourself wanting to improve after a simulator session, LENGOLF's PGA-certified coaches offer a free 1-hour trial for new students, then lessons at {{lessonHourlyNum}} THB per hour, or from {{lesson50hRateNum}} THB per hour on packages. The coach uses the simulator's data to teach you proper grip, stance, and swing mechanics in a comfortable, private environment — far less intimidating than a driving range full of experienced players.\n\nMany people who start on simulators progress to outdoor golf within a few months. The swing mechanics you develop indoors transfer directly to the course. The main adjustment is adapting to outdoor conditions: wind, uneven lies, and real putting greens.\n\nBut there's no obligation to ever play outdoor golf. Plenty of regular LENGOLF customers exclusively play indoors because they enjoy the social format, the convenience, and the air conditioning.",
         },
       ],
 
@@ -1867,7 +1867,7 @@ export const explainerPages: ExplainerSeoPage[] = [
   // LENGOLF has NO Japanese-speaking coaches / Japanese-language lessons — but
   // booking & consultation work in Japanese via LINE @lengolf, and the on-screen
   // simulator 数値 lowers the language barrier during the lesson itself. The
-  // LENGOLF fact set (free 1h trial, {{lessonHourly}}-token lesson packages, BTS
+  // LENGOLF fact set (free 1h trial, then {{lessonHourly}} an hour and {{lesson50hRateNum}} on packages, BTS
   // Chidlom, Thai-PGA coaches Boss/Ratchavin/Min). Price is token-resolved from
   // lib/site-facts.ts (POS-backed); other facts come from shipped JA copy.
   {
@@ -1876,7 +1876,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     slug: "golf-lessons-bangkok-coaches",
     title: "バンコクのゴルフレッスン — 費用とコーチの選び方",
     meta_description:
-      "バンコクでゴルフレッスンをお探しの方へ。シミュレーターを使ったデータ重視のレッスン、ドライビングレンジ指導との違い、コーチの選び方を解説。LENGOLFはタイPGA認定コーチによる1時間無料体験、パッケージ{{lessonHourly}}〜、ご予約はLINEで日本語対応です（2026年7月現在）。",
+      "バンコクでゴルフレッスンをお探しの方へ。シミュレーターを使ったデータ重視のレッスン、ドライビングレンジ指導との違い、コーチの選び方を解説。LENGOLFはタイPGA認定コーチによる1時間の無料体験から始められ、その後は1時間{{lessonHourly}}、パッケージなら1時間あたり{{lesson50hRateNum}}THBから。ご予約はLINEで日本語対応です（2026年10月現在）。",
     featured_image: null,
     schema_markup: null,
     status: "published",
@@ -1889,7 +1889,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/guide/round-of-golf-cost-bangkok",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-10-18T00:00:00.000Z",
     content: {
       intro:
         "バンコクには、旅行で訪れるゴルファー向けのコーチング環境が充実しています。一年中ゴルフができる気候、大きな在住外国人コミュニティ、そして本格的なローカルのゴルフ文化——この組み合わせにより、特定の課題を直す1回のレッスンから、数日にわたる体系的なプログラムまで、質の高い指導を受けられます。バンコクが特に面白いのは、シミュレーターを使ったコーチングを受けられる点です。これは、レンジでのレッスンでは得にくい数値フィードバックを提供してくれます。",
@@ -1904,7 +1904,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "LENGOLFのレッスン — シミュレーターの強み",
-          body: "LENGOLFは、バンコク中心部のインドアシミュレーター施設でコーチングを行っています。旅行で訪れるゴルファーにとっての最大の利点はこれです: データが自動で取得され、すぐに表示されるため、スイングを変えた効果を同じショットで確認できます。修正が効いたかどうかが曖昧にならないので、1回のレッスンが従来のレンジ練習よりもずっと生産的になります。\n\nBTSでアクセスできる中心部の立地なので、早朝の出発や市内横断の移動も不要。レッスンはどんなスケジュールにも組み込めます。\n\nLENGOLFのレッスンの要点（2026年7月現在）:\n\n- タイPGA認定コーチ（PRO Boss、PRO Ratchavin、PRO Min）による個別指導\n- 1時間の無料体験レッスンから始められます\n- レッスンパッケージは1時間{{lessonHourly}}から\n- BTSチットロム駅直結（ザ・マーキュリービル4階）\n- ご予約や事前のご相談はLINE @lengolfにて日本語で承ります",
+          body: "LENGOLFは、バンコク中心部のインドアシミュレーター施設でコーチングを行っています。旅行で訪れるゴルファーにとっての最大の利点はこれです: データが自動で取得され、すぐに表示されるため、スイングを変えた効果を同じショットで確認できます。修正が効いたかどうかが曖昧にならないので、1回のレッスンが従来のレンジ練習よりもずっと生産的になります。\n\nBTSでアクセスできる中心部の立地なので、早朝の出発や市内横断の移動も不要。レッスンはどんなスケジュールにも組み込めます。\n\nLENGOLFのレッスンの要点（2026年10月現在）:\n\n- タイPGA認定コーチ（PRO Boss、PRO Ratchavin、PRO Min）による個別指導\n- 1時間の無料体験から始められます（LENGOLFで初めてレッスンを受ける方が対象、クラブとシミュレーターの利用込み）\n- その後のレッスンは1時間{{lessonHourly}}、パッケージなら1時間あたり{{lesson50hRateNum}}THBから\n- BTSチットロム駅直結（ザ・マーキュリービル4階）\n- ご予約や事前のご相談はLINE @lengolfにて日本語で承ります",
         },
         {
           heading: "旅行中に現実的なレッスン回数は？",
@@ -1919,7 +1919,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         "シミュレーターを使ったコーチングは、ショットごとに客観的な弾道計測データが得られる — 従来のレンジレッスンにない大きな利点です",
         "PGA認定コーチを選び、最低2アングルの動画撮影を必須に。バンコクでは英語での指導が一般的です",
         "5〜7日間のゴルフ旅行なら集中レッスン1〜2回が現実的な目安 — 途中でスイングに情報を詰め込みすぎないこと",
-        "LENGOLFはタイPGA認定コーチによる1時間無料体験、パッケージ{{lessonHourly}}〜、BTSチットロム直結。ご予約・ご相談はLINEで日本語対応（2026年7月現在）",
+        "LENGOLFはタイPGA認定コーチによる1時間の無料体験から。その後は1時間{{lessonHourly}}、パッケージなら1時間あたり{{lesson50hRateNum}}THBから。BTSチットロム直結。ご予約・ご相談はLINEで日本語対応（2026年10月現在）",
       ],
       comparison_table: [],
     },
@@ -1942,7 +1942,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     slug: "golf-lessons-bangkok-coaches",
     title: "방콕 골프레슨 — 요금·코치 선택 가이드",
     meta_description:
-      "방콕에서 골프레슨을 찾으세요? 시뮬레이터 데이터 기반 레슨과 드라이빙 레인지 레슨의 차이, 코치 선택 요령을 정리했습니다. LENGOLF는 태국 PGA 공인 코치의 1시간 무료 체험, 패키지 {{lessonHourly}}부터, 예약·상담은 LINE @lengolf 한국어 대응입니다(2026년 7월 기준).",
+      "방콕에서 골프레슨을 찾으세요? 시뮬레이터 데이터 기반 레슨과 드라이빙 레인지 레슨의 차이, 코치 선택 요령을 정리했습니다. LENGOLF는 태국 PGA 공인 코치와 1시간 무료 체험으로 시작하고, 이후 시간당 {{lessonHourly}}, 패키지는 시간당 {{lesson50hRateNum}}바트부터이며, 예약·상담은 LINE @lengolf 한국어 대응입니다(2026년 10월 기준).",
     featured_image: null,
     schema_markup: null,
     status: "published",
@@ -1955,7 +1955,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/golf-course-club-rental",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-10-18T00:00:00.000Z",
     content: {
       intro:
         "방콕에는 여행으로 찾는 골퍼를 위한 코칭 환경이 잘 갖춰져 있어요. 일 년 내내 골프를 칠 수 있는 기후, 큰 해외 거주자 커뮤니티, 그리고 탄탄한 현지 골프 문화가 어우러져, 특정 문제를 잡는 1회 레슨부터 며칠에 걸친 체계적인 프로그램까지 질 높은 지도를 받을 수 있어요. 방콕이 특히 흥미로운 점은 시뮬레이터를 활용한 코칭을 받을 수 있다는 것이에요. 이는 연습장 레슨에서는 얻기 어려운 데이터 피드백을 제공해 줍니다.",
@@ -1970,7 +1970,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "LENGOLF 레슨 — 시뮬레이터의 강점",
-          body: "LENGOLF는 방콕 중심가의 실내 시뮬레이터 시설에서 코칭을 진행해요. 여행으로 찾는 골퍼에게 가장 큰 이점은 이거예요: 데이터가 자동으로 측정되어 곧바로 표시되기 때문에, 스윙을 바꾼 효과를 같은 샷에서 확인할 수 있어요. 교정이 통했는지 애매하지 않으니, 1회 레슨이 기존 연습장 레슨보다 훨씬 알차집니다.\n\nBTS로 접근할 수 있는 중심가 위치라 이른 아침 출발이나 도심 횡단 이동이 필요 없어요. 레슨을 어떤 일정에도 끼워 넣을 수 있습니다.\n\nLENGOLF 레슨 요점(2026년 7월 기준):\n\n- 태국 PGA 공인 코치(PRO Boss, PRO Ratchavin, PRO Min)의 1:1 지도\n- 1시간 무료 체험 레슨부터 시작할 수 있어요\n- 레슨 패키지는 1시간 {{lessonHourly}}부터\n- BTS 칫롬역 직결(The Mercury Ville 4층)\n- 연중무휴 오전 9시~오후 11시 운영\n- 스크린골프 시뮬레이터 데이터(스윙당 20개 이상)를 활용한 맞춤 코칭\n- 예약·사전 상담은 booking.len.golf 또는 LINE @lengolf 한국어 대응",
+          body: "LENGOLF는 방콕 중심가의 실내 시뮬레이터 시설에서 코칭을 진행해요. 여행으로 찾는 골퍼에게 가장 큰 이점은 이거예요: 데이터가 자동으로 측정되어 곧바로 표시되기 때문에, 스윙을 바꾼 효과를 같은 샷에서 확인할 수 있어요. 교정이 통했는지 애매하지 않으니, 1회 레슨이 기존 연습장 레슨보다 훨씬 알차집니다.\n\nBTS로 접근할 수 있는 중심가 위치라 이른 아침 출발이나 도심 횡단 이동이 필요 없어요. 레슨을 어떤 일정에도 끼워 넣을 수 있습니다.\n\nLENGOLF 레슨 요점(2026년 10월 기준):\n\n- 태국 PGA 공인 코치(PRO Boss, PRO Ratchavin, PRO Min)의 1:1 지도\n- 1시간 무료 체험부터 시작할 수 있어요(LENGOLF 레슨이 처음인 분 대상, 클럽과 시뮬레이터 이용 포함)\n- 이후 레슨은 시간당 {{lessonHourly}}, 패키지는 시간당 {{lesson50hRateNum}}바트부터\n- BTS 칫롬역 직결(The Mercury Ville 4층)\n- 연중무휴 오전 9시~오후 11시 운영\n- 스크린골프 시뮬레이터 데이터(스윙당 20개 이상)를 활용한 맞춤 코칭\n- 레슨 예약·사전 상담은 LINE @lengolf 한국어 대응",
         },
         {
           heading: "여행 중 현실적인 레슨 횟수는?",
@@ -1985,7 +1985,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         "시뮬레이터 기반 코칭은 샷마다 객관적인 론치 모니터 데이터를 제공해요 — 기존 연습장 레슨에 없는 큰 이점이에요",
         "PGA 공인 코치를 고르고, 최소 2개 각도의 영상 촬영을 챙기세요. 방콕에서는 영어 지도가 일반적이에요",
         "5~7일 골프 여행이라면 집중 레슨 1~2회가 현실적인 목표예요 — 도중에 스윙에 정보를 너무 많이 넣지 마세요",
-        "LENGOLF는 태국 PGA 공인 코치의 1시간 무료 체험, 패키지 {{lessonHourly}}부터, BTS 칫롬 직결. 예약·상담은 LINE @lengolf 한국어 대응(2026년 7월 기준)",
+        "LENGOLF는 태국 PGA 공인 코치와 1시간 무료 체험으로 시작, 이후 시간당 {{lessonHourly}}, 패키지는 시간당 {{lesson50hRateNum}}바트부터, BTS 칫롬 직결. 예약·상담은 LINE @lengolf 한국어 대응(2026년 10월 기준)",
       ],
       comparison_table: [],
     },
@@ -2008,7 +2008,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     slug: "golf-lessons-bangkok-coaches",
     title: "曼谷高尔夫课程 — 费用、教练选择与预约指南",
     meta_description:
-      "在曼谷找高尔夫课程？对比模拟器数据教学与练习场教学的差别，看看该如何挑选教练。LENGOLF由泰国PGA认定教练提供1小时免费体验，套餐{{lessonHourly}}起，预订与咨询可用LINE中文办理（截至2026年7月）。",
+      "在曼谷找高尔夫课程？对比模拟器数据教学与练习场教学的差别，看看该如何挑选教练。LENGOLF可先预约泰国PGA认定教练的1小时免费体验，之后每小时{{lessonHourly}}，套餐低至每小时{{lesson50hRateNum}}泰铢，预订与咨询可用LINE中文办理（截至2026年10月）。",
     featured_image: null,
     schema_markup: null,
     status: "published",
@@ -2021,7 +2021,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/guide/round-of-golf-cost-bangkok",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-10-18T00:00:00.000Z",
     content: {
       intro:
         "曼谷为到访的球友准备了相当完善的教学环境。全年可打的气候、庞大的外籍居民社群，加上认真的本地高尔夫文化，意味着无论你只想上一堂课解决某个具体问题，还是想在几天里接受系统化的训练，都能找到高质量的指导。曼谷特别有意思的一点，是可以接受基于模拟器的教学——它提供的数据反馈，是多数练习场课程难以做到的。",
@@ -2036,7 +2036,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "LENGOLF的课程 — 模拟器的优势",
-          body: "LENGOLF在曼谷市中心的室内模拟器场馆提供教学。对到访的球友来说，最大的好处在于：数据自动采集并即时显示，你能在同一次击球上看到挥杆改动的效果。修正是否见效不再含糊——这让一堂课比传统练习场课程高效得多。\n\n场馆位于BTS可直达的市中心，无需清晨出发或横穿城市。课程能轻松安排进任何行程。\n\nLENGOLF课程要点（截至2026年7月）：\n\n- 由泰国PGA认定教练（PRO Boss、PRO Ratchavin、PRO Min）一对一指导\n- 可从1小时免费体验课开始\n- 课程套餐每小时{{lessonHourly}}起\n- BTS Chidlom直连（The Mercury Ville 4层）\n- 每天9:00–23:00营业\n- 预订与事前咨询可通过LINE @lengolf用中文办理",
+          body: "LENGOLF在曼谷市中心的室内模拟器场馆提供教学。对到访的球友来说，最大的好处在于：数据自动采集并即时显示，你能在同一次击球上看到挥杆改动的效果。修正是否见效不再含糊——这让一堂课比传统练习场课程高效得多。\n\n场馆位于BTS可直达的市中心，无需清晨出发或横穿城市。课程能轻松安排进任何行程。\n\nLENGOLF课程要点（截至2026年10月）：\n\n- 由泰国PGA认定教练（PRO Boss、PRO Ratchavin、PRO Min）一对一指导\n- 可从1小时免费体验开始（适用于首次在LENGOLF上课的学员，含球杆和模拟器使用）\n- 之后的课程每小时{{lessonHourly}}，套餐低至每小时{{lesson50hRateNum}}泰铢\n- BTS Chidlom直连（The Mercury Ville 4层）\n- 每天9:00–23:00营业\n- 预订与事前咨询可通过LINE @lengolf用中文办理",
         },
         {
           heading: "一次旅行安排几堂课比较现实？",
@@ -2051,7 +2051,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         "基于模拟器的教学能在每一次击球上提供客观的弹道监测数据——这是传统练习场课程没有的一大优势",
         "认准PGA认证教练，坚持至少两个角度的视频记录。在曼谷，用英语授课很普遍",
         "5–7天的高尔夫之旅，安排1到2堂有针对性的课比较现实——别在途中给挥杆塞入太多信息",
-        "LENGOLF由泰国PGA认定教练提供1小时免费体验，套餐{{lessonHourly}}起，BTS Chidlom直连；预订与咨询可用LINE中文办理（截至2026年7月）",
+        "LENGOLF可先预约泰国PGA认定教练的1小时免费体验，之后每小时{{lessonHourly}}，套餐低至每小时{{lesson50hRateNum}}泰铢，BTS Chidlom直连；预订与咨询可用LINE中文办理（截至2026年10月）",
       ],
       comparison_table: [],
     },
@@ -2082,7 +2082,7 @@ export const explainerPages: ExplainerSeoPage[] = [
     slug: "golf-lessons-bangkok-coaches",
     title: "เรียนกอล์ฟกรุงเทพฯ: คอร์สเรียนกับครูสอนกอล์ฟ PGA และราคา",
     meta_description:
-      "เรียนกอล์ฟในกรุงเทพฯ ที่ LENGOLF คอร์สเรียนกับโค้ช PGA Thailand เหมาะกับมือใหม่ ทดลองฟรี 1 ชั่วโมง แพ็กเกจเริ่ม {{lessonHourlyNum}} บาท (ข้อมูล ณ กรกฎาคม 2026)",
+      "เรียนกอล์ฟในกรุงเทพฯ ที่ LENGOLF คอร์สเรียนกับโค้ช PGA Thailand เหมาะกับมือใหม่ เริ่มจากทดลองเรียนฟรี 1 ชั่วโมง จากนั้นชั่วโมงละ {{lessonHourlyNum}} บาท ถ้าซื้อแพ็กเกจ ต่ำสุดเหลือชั่วโมงละ {{lesson50hRateNum}} บาท (ข้อมูล ณ ตุลาคม 2026)",
     featured_image: null,
     schema_markup: null,
     status: "published",
@@ -2095,7 +2095,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/guide/best-golf-simulators-bangkok",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-10-18T00:00:00.000Z",
     content: {
       intro:
         "กรุงเทพฯ เป็นเมืองที่เริ่มต้นเรียนกอล์ฟได้ง่ายกว่าที่หลายคนคิด ไม่ว่าคุณจะเป็นมือใหม่ที่ไม่เคยจับไม้กอล์ฟมาก่อน หรือเล่นอยู่แล้วแต่อยากปรับวงสวิงให้นิ่งขึ้น ก็มีตัวเลือกการสอนกอล์ฟหลากหลายให้เลือก สิ่งที่ทำให้การเรียนกอล์ฟในกรุงเทพฯ น่าสนใจเป็นพิเศษคือ การเรียนบนกอล์ฟซิมูเลเตอร์ในร่ม ซึ่งวัดข้อมูลการตีทุกลูกแบบที่การเรียนในสนามไดรฟ์ทั่วไปทำได้ยาก ทำให้เห็นจุดที่ต้องแก้ชัดเจนและพัฒนาได้เร็วขึ้น",
@@ -2114,7 +2114,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "เรียนกอล์ฟที่ LENGOLF: จุดเด่นของการเรียนด้วยซิมูเลเตอร์",
-          body: "LENGOLF เปิดสอนกอล์ฟที่สถานที่ซิมูเลเตอร์ในร่มใจกลางกรุงเทพฯ ข้อได้เปรียบหลักคือ ข้อมูลการตีถูกบันทึกอัตโนมัติและแสดงผลทันที คุณจึงเห็นผลของการปรับวงสวิงได้จากช็อตเดียวกัน ไม่ต้องเดาว่าที่แก้ไปได้ผลไหม ทำให้การเรียนแต่ละครั้งคุ้มค่ากว่าการตีลูกที่สนามไดรฟ์แบบเดิม อีกทั้งอยู่ติดสถานี BTS จึงแวะเรียนก่อนหรือหลังเลิกงานได้ง่าย\n\nสรุปจุดเด่นของคอร์สเรียนกอล์ฟที่ LENGOLF (ข้อมูล ณ กรกฎาคม 2026):\n\n- สอนโดยโค้ชที่ได้รับการรับรองจาก PGA Thailand (PRO Boss, PRO Ratchavin และ PRO Min)\n- เริ่มต้นด้วยคลาสทดลองฟรี 1 ชั่วโมง ก่อนตัดสินใจลงแพ็กเกจ\n- แพ็กเกจเรียนเริ่มต้นที่ชั่วโมงละ {{lessonHourlyNum}} บาท และรวมค่าใช้ห้องซิมูเลเตอร์แล้ว\n- สอนได้ทุกระดับ ตั้งแต่มือใหม่ที่เพิ่งเริ่มจนถึงนักกอล์ฟที่อยากปรับเทคนิค\n- มีไม้กอล์ฟให้ใช้ระหว่างเรียน ไม่ต้องเตรียมอุปกรณ์เอง\n- ใช้ข้อมูลจากซิมูเลเตอร์และการวิเคราะห์วิดีโอเพื่อชี้จุดที่ต้องแก้\n- อยู่ที่ Mercury Ville ชั้น 4 ติด BTS Chidlom เปิดทุกวัน {{openingHours}} น.\n- จองและปรึกษาล่วงหน้าได้ทาง booking.len.golf หรือ LINE @lengolf",
+          body: "LENGOLF เปิดสอนกอล์ฟที่สถานที่ซิมูเลเตอร์ในร่มใจกลางกรุงเทพฯ ข้อได้เปรียบหลักคือ ข้อมูลการตีถูกบันทึกอัตโนมัติและแสดงผลทันที คุณจึงเห็นผลของการปรับวงสวิงได้จากช็อตเดียวกัน ไม่ต้องเดาว่าที่แก้ไปได้ผลไหม ทำให้การเรียนแต่ละครั้งคุ้มค่ากว่าการตีลูกที่สนามไดรฟ์แบบเดิม อีกทั้งอยู่ติดสถานี BTS จึงแวะเรียนก่อนหรือหลังเลิกงานได้ง่าย\n\nสรุปจุดเด่นของคอร์สเรียนกอล์ฟที่ LENGOLF (ข้อมูล ณ ตุลาคม 2026):\n\n- สอนโดยโค้ชที่ได้รับการรับรองจาก PGA Thailand (PRO Boss, PRO Ratchavin และ PRO Min)\n- เริ่มจากทดลองเรียนฟรี 1 ชั่วโมง (สำหรับคนที่ยังไม่เคยเรียนกับ LENGOLF มีไม้กอล์ฟและห้องซิมให้) ก่อนตัดสินใจลงแพ็กเกจ\n- หลังจากนั้นเรียนชั่วโมงละ {{lessonHourlyNum}} บาท ถ้าซื้อแพ็กเกจ ต่ำสุดเหลือชั่วโมงละ {{lesson50hRateNum}} บาท ทุกแพ็กเกจรวมค่าใช้ห้องซิมูเลเตอร์แล้ว\n- สอนได้ทุกระดับ ตั้งแต่มือใหม่ที่เพิ่งเริ่มจนถึงนักกอล์ฟที่อยากปรับเทคนิค\n- มีไม้กอล์ฟให้ใช้ระหว่างเรียน ไม่ต้องเตรียมอุปกรณ์เอง\n- ใช้ข้อมูลจากซิมูเลเตอร์และการวิเคราะห์วิดีโอเพื่อชี้จุดที่ต้องแก้\n- อยู่ที่ Mercury Ville ชั้น 4 ติด BTS Chidlom เปิดทุกวัน {{openingHours}} น.\n- จองและสอบถามได้ทาง LINE @lengolf",
         },
         {
           heading: "เริ่มต้นเรียนกอล์ฟอย่างไรดี",
@@ -2125,7 +2125,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         "การเรียนกอล์ฟบนซิมูเลเตอร์ให้ข้อมูลการตีเป็นตัวเลขในทุกช็อต ช่วยให้เห็นจุดที่ต้องแก้ชัดเจนกว่าการเรียนที่สนามไดรฟ์แบบเดิม",
         "มือใหม่ไม่ต้องมีอุปกรณ์หรือพื้นฐานมาก่อน เริ่มจากคลาสทดลองในห้องส่วนตัวที่ไม่กดดันได้เลย",
         "เลือกครูสอนกอล์ฟจากการรับรอง PGA สไตล์การสอน และความถนัดกับระดับของคุณ",
-        "ที่ LENGOLF เรียนกับโค้ช PGA Thailand คลาสทดลองฟรี 1 ชั่วโมง แพ็กเกจเริ่ม {{lessonHourlyNum}} บาท ติด BTS Chidlom (ข้อมูล ณ กรกฎาคม 2026)",
+        "ที่ LENGOLF เริ่มจากทดลองเรียนฟรี 1 ชั่วโมงกับโค้ช PGA Thailand จากนั้นชั่วโมงละ {{lessonHourlyNum}} บาท ถ้าซื้อแพ็กเกจ ต่ำสุดเหลือชั่วโมงละ {{lesson50hRateNum}} บาท ติด BTS Chidlom (ข้อมูล ณ ตุลาคม 2026)",
       ],
       comparison_table: [],
     },
@@ -5948,7 +5948,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/guide/is-indoor-golf-realistic",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-10-18T00:00:00.000Z",
     content: {
       intro:
         "もちろんです。ゴルフシミュレーターは、経験ゼロの方でも楽しめるように特別に設計された、数少ないゴルフの形式のひとつです。自分のクラブも、特別な服装も、ゴルフのルールの知識も必要ありません。LENGOLFでは、ご来店のお客様のおよそ半数がゴルフ未経験の方です。みなさん、仲間と過ごす時間やゲーム、そして食事やドリンクを目当てに来店されます。",
@@ -5975,7 +5975,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "シミュレーターから本物のゴルフへ：始めの一歩として最適か？",
-          body: "ゴルフシミュレーターは、道具やレッスン、コース代にお金をかける前に、自分がゴルフを楽しめるかどうかを見極める絶好の方法です。\n\nシミュレーターでプレーしてみて上達したくなったら、LENGOLFではPGA認定コーチによるレッスンを1時間約1,800THBから受けられます。コーチはシミュレーターのデータを使い、正しいグリップ、スタンス、スイングの仕組みを、快適でプライベートな環境で指導します — 経験者だらけのドライビングレンジよりずっと気楽です。なお、LENGOLFには日本人コーチや日本語でのレッスンはありませんが、ご予約や事前のご相談はLINE @lengolfにて日本語で承ります。レッスン中はヘッドスピードや打ち出し角といったシミュレーターの数値が画面に表示されるため、言葉の壁があっても改善点を目で見て理解しやすいのも利点です。\n\nシミュレーターから始めた人の多くは、数か月のうちに屋外のゴルフへと進みます。室内で身につけたスイングの動きは、そのままコースでも通用します。主に慣れが必要なのは、風、平らでないライ、本物のパッティンググリーンといった屋外ならではの条件です。\n\nとはいえ、屋外のゴルフを必ずしなければならないわけではありません。LENGOLFの常連のお客様には、ソーシャルな雰囲気や利便性、そして空調の心地よさを気に入って、室内でのプレーだけを楽しむ方も大勢います。",
+          body: "ゴルフシミュレーターは、道具やレッスン、コース代にお金をかける前に、自分がゴルフを楽しめるかどうかを見極める絶好の方法です。\n\nシミュレーターでプレーしてみて上達したくなったら、LENGOLFではPGA認定コーチによる1時間の無料体験（LENGOLFのレッスンが初めての方向け）から始められ、その後は1時間{{lessonHourly}}、パッケージなら1時間あたり{{lesson50hRateNum}}THBからレッスンを受けられます。コーチはシミュレーターのデータを使い、正しいグリップ、スタンス、スイングの仕組みを、快適でプライベートな環境で指導します — 経験者だらけのドライビングレンジよりずっと気楽です。なお、LENGOLFには日本人コーチや日本語でのレッスンはありませんが、ご予約や事前のご相談はLINE @lengolfにて日本語で承ります。レッスン中はヘッドスピードや打ち出し角といったシミュレーターの数値が画面に表示されるため、言葉の壁があっても改善点を目で見て理解しやすいのも利点です。\n\nシミュレーターから始めた人の多くは、数か月のうちに屋外のゴルフへと進みます。室内で身につけたスイングの動きは、そのままコースでも通用します。主に慣れが必要なのは、風、平らでないライ、本物のパッティンググリーンといった屋外ならではの条件です。\n\nとはいえ、屋外のゴルフを必ずしなければならないわけではありません。LENGOLFの常連のお客様には、ソーシャルな雰囲気や利便性、そして空調の心地よさを気に入って、室内でのプレーだけを楽しむ方も大勢います。",
         },
       ],
       key_takeaways: [
@@ -6047,7 +6047,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/guide/is-indoor-golf-realistic",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-10-18T00:00:00.000Z",
     content: {
       intro:
         "물론이에요. 골프 시뮬레이터는 경험이 전혀 없는 사람도 재밌게 즐기도록 특별히 설계된, 몇 안 되는 골프 형태 중 하나예요. 내 클럽도, 특별한 복장도, 골프 규칙 지식도 필요 없어요. LENGOLF에서는 손님의 약 절반이 골프를 한 번도 쳐본 적이 없어요 — 함께 어울리는 분위기와 게임, 음식과 음료를 즐기러 오시죠.",
@@ -6074,7 +6074,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "시뮬레이터에서 실제 골프로: 좋은 출발점일까?",
-          body: "골프 시뮬레이터는 장비와 레슨, 코스 비용에 돈을 들이기 전에 내가 골프를 즐기는지 알아보기에 아주 좋은 방법이에요.\n\n시뮬레이터 세션 뒤에 실력을 더 키우고 싶어졌다면, LENGOLF는 PGA 공인 코치의 레슨을 시간당 약 1,800바트부터 제공해요. 코치는 시뮬레이터 데이터를 활용해 편안하고 프라이빗한 환경에서 올바른 그립과 스탠스, 스윙 메커닉을 가르쳐 줘요 — 경험 많은 사람들로 붐비는 드라이빙 레인지보다 훨씬 덜 부담스럽죠.\n\n시뮬레이터로 시작한 많은 사람이 몇 달 안에 야외 골프로 넘어가요. 실내에서 익힌 스윙 메커닉은 코스에서도 그대로 통해요. 주로 적응해야 할 부분은 야외 조건이에요: 바람, 고르지 않은 라이, 그리고 진짜 퍼팅 그린이죠.\n\n하지만 꼭 야외 골프를 쳐야 하는 건 아니에요. LENGOLF 단골손님 중에는 함께 어울리는 형식과 편리함, 그리고 시원한 냉방이 좋아서 실내에서만 치는 분도 많아요.",
+          body: "골프 시뮬레이터는 장비와 레슨, 코스 비용에 돈을 들이기 전에 내가 골프를 즐기는지 알아보기에 아주 좋은 방법이에요.\n\n시뮬레이터 세션 뒤에 실력을 더 키우고 싶어졌다면, LENGOLF에서는 PGA 공인 코치와 1시간 무료 체험(LENGOLF 레슨이 처음인 분 대상)으로 시작하실 수 있고, 이후 레슨은 시간당 {{lessonHourly}}, 패키지는 시간당 {{lesson50hRateNum}}바트부터예요. 코치는 시뮬레이터 데이터를 활용해 편안하고 프라이빗한 환경에서 올바른 그립과 스탠스, 스윙 메커닉을 가르쳐 줘요 — 경험 많은 사람들로 붐비는 드라이빙 레인지보다 훨씬 덜 부담스럽죠.\n\n시뮬레이터로 시작한 많은 사람이 몇 달 안에 야외 골프로 넘어가요. 실내에서 익힌 스윙 메커닉은 코스에서도 그대로 통해요. 주로 적응해야 할 부분은 야외 조건이에요: 바람, 고르지 않은 라이, 그리고 진짜 퍼팅 그린이죠.\n\n하지만 꼭 야외 골프를 쳐야 하는 건 아니에요. LENGOLF 단골손님 중에는 함께 어울리는 형식과 편리함, 그리고 시원한 냉방이 좋아서 실내에서만 치는 분도 많아요.",
         },
       ],
       key_takeaways: [
@@ -6146,7 +6146,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/guide/is-indoor-golf-realistic",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-10-18T00:00:00.000Z",
     content: {
       intro:
         "当然可以。高尔夫模拟器是少数几种专门为零经验人群设计、让他们也能玩得开心的高尔夫形式之一。你不需要自备球杆、特殊着装，也不需要懂任何高尔夫规则。在LENGOLF，大约一半的客人此前从未打过高尔夫——他们来这里，是为了社交体验、各种游戏，以及美食和饮品。",
@@ -6173,7 +6173,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         },
         {
           heading: "从模拟器到真实高尔夫：这是好的起点吗？",
-          body: "在投入装备、课程和果岭费用之前，高尔夫模拟器是发现自己到底喜不喜欢高尔夫的绝佳方式。\n\n如果在一次模拟器体验之后，你发现自己想要精进球技，LENGOLF提供由PGA认证教练指导的课程，每小时约1,800泰铢起。教练会利用模拟器的数据，在舒适、私密的环境里教你正确的握杆、站姿和挥杆动作——远不像挤满老手的练习场那样让人紧张。\n\n很多从模拟器起步的人，几个月内就过渡到了户外高尔夫。你在室内练就的挥杆动作可以直接搬到球场上。主要需要适应的，是户外的各种条件：风、高低不平的地面，以及真正的果岭。\n\n但你并没有非打户外高尔夫不可的义务。不少LENGOLF的常客只在室内打球，因为他们喜欢这种社交形式、这份便利，还有空调。",
+          body: "在投入装备、课程和果岭费用之前，高尔夫模拟器是发现自己到底喜不喜欢高尔夫的绝佳方式。\n\n如果在一次模拟器体验之后，你发现自己想要精进球技，LENGOLF的PGA认证教练可先为新学员提供1小时免费体验，之后的课程每小时{{lessonHourly}}，套餐低至每小时{{lesson50hRateNum}}泰铢。教练会利用模拟器的数据，在舒适、私密的环境里教你正确的握杆、站姿和挥杆动作——远不像挤满老手的练习场那样让人紧张。\n\n很多从模拟器起步的人，几个月内就过渡到了户外高尔夫。你在室内练就的挥杆动作可以直接搬到球场上。主要需要适应的，是户外的各种条件：风、高低不平的地面，以及真正的果岭。\n\n但你并没有非打户外高尔夫不可的义务。不少LENGOLF的常客只在室内打球，因为他们喜欢这种社交形式、这份便利，还有空调。",
         },
       ],
       key_takeaways: [
@@ -6246,7 +6246,7 @@ export const explainerPages: ExplainerSeoPage[] = [
       "/guide/is-indoor-golf-realistic",
     ],
     created_at: now,
-    updated_at: now,
+    updated_at: "2026-10-18T00:00:00.000Z",
     content: {
       intro:
         "ได้แน่นอน กอล์ฟซิมูเลเตอร์เป็นหนึ่งในไม่กี่รูปแบบของกอล์ฟที่ออกแบบมาให้สนุกสำหรับคนที่ไม่มีประสบการณ์เลยโดยเฉพาะ คุณไม่จำเป็นต้องมีไม้กอล์ฟของตัวเอง เสื้อผ้าพิเศษ หรือความรู้เกี่ยวกับกติกากอล์ฟใดๆ ที่ LENGOLF ลูกค้าของเราราวครึ่งหนึ่งไม่เคยเล่นกอล์ฟมาก่อน — พวกเขามาเพื่อบรรยากาศการสังสรรค์ เกมต่างๆ และอาหารกับเครื่องดื่ม",
@@ -6274,7 +6274,7 @@ export const explainerPages: ExplainerSeoPage[] = [
         {
           heading:
             "จากซิมูเลเตอร์สู่กอล์ฟสนามจริง: เป็นจุดเริ่มต้นที่ดีหรือไม่?",
-          body: "กอล์ฟซิมูเลเตอร์เป็นวิธีที่ยอดเยี่ยมในการค้นหาว่าคุณชอบกอล์ฟหรือไม่ ก่อนจะลงทุนกับอุปกรณ์ คอร์สเรียน และค่าใช้จ่ายในการออกรอบ\n\nหากหลังจากเล่นซิมูเลเตอร์แล้วคุณรู้สึกอยากพัฒนาฝีมือ LENGOLF มีคอร์สเรียนกับโค้ชที่ได้รับการรับรองจาก PGA เริ่มต้นที่ประมาณ 1,800 บาทต่อชั่วโมง โค้ชจะใช้ข้อมูลจากซิมูเลเตอร์มาสอนการจับไม้ ท่ายืน และกลไกการสวิงที่ถูกต้อง ในบรรยากาศที่เป็นส่วนตัวและผ่อนคลาย — ซึ่งน่ากดดันน้อยกว่าการไปสนามไดรฟ์ที่เต็มไปด้วยผู้เล่นมากประสบการณ์อยู่มาก\n\nหลายคนที่เริ่มต้นจากซิมูเลเตอร์ก้าวไปสู่การเล่นกอล์ฟกลางแจ้งภายในเวลาไม่กี่เดือน กลไกการสวิงที่คุณฝึกฝนในร่มสามารถนำไปใช้ในสนามจริงได้โดยตรง สิ่งที่ต้องปรับตัวหลักๆ คือการรับมือกับสภาพกลางแจ้ง ทั้งลม พื้นสนามที่ไม่ราบเรียบ และกรีนสำหรับพัตต์จริง\n\nแต่คุณไม่จำเป็นต้องออกไปเล่นกอล์ฟกลางแจ้งเลยก็ได้ ลูกค้าประจำของ LENGOLF จำนวนมากเลือกเล่นแต่ในร่มเท่านั้น เพราะชอบรูปแบบการสังสรรค์ ความสะดวกสบาย และความเย็นสบายจากเครื่องปรับอากาศ",
+          body: "กอล์ฟซิมูเลเตอร์เป็นวิธีที่ยอดเยี่ยมในการค้นหาว่าคุณชอบกอล์ฟหรือไม่ ก่อนจะลงทุนกับอุปกรณ์ คอร์สเรียน และค่าใช้จ่ายในการออกรอบ\n\nหากหลังจากเล่นซิมูเลเตอร์แล้วคุณรู้สึกอยากพัฒนาฝีมือ LENGOLF มีคอร์สเรียนกับโค้ชที่ได้รับการรับรองจาก PGA เริ่มจากทดลองเรียนฟรี 1 ชั่วโมงสำหรับคนที่ยังไม่เคยเรียนกับเรา จากนั้นชั่วโมงละ {{lessonHourlyNum}} บาท ถ้าซื้อแพ็กเกจ ต่ำสุดเหลือชั่วโมงละ {{lesson50hRateNum}} บาท โค้ชจะใช้ข้อมูลจากซิมูเลเตอร์มาสอนการจับไม้ ท่ายืน และกลไกการสวิงที่ถูกต้อง ในบรรยากาศที่เป็นส่วนตัวและผ่อนคลาย — ซึ่งน่ากดดันน้อยกว่าการไปสนามไดรฟ์ที่เต็มไปด้วยผู้เล่นมากประสบการณ์อยู่มาก\n\nหลายคนที่เริ่มต้นจากซิมูเลเตอร์ก้าวไปสู่การเล่นกอล์ฟกลางแจ้งภายในเวลาไม่กี่เดือน กลไกการสวิงที่คุณฝึกฝนในร่มสามารถนำไปใช้ในสนามจริงได้โดยตรง สิ่งที่ต้องปรับตัวหลักๆ คือการรับมือกับสภาพกลางแจ้ง ทั้งลม พื้นสนามที่ไม่ราบเรียบ และกรีนสำหรับพัตต์จริง\n\nแต่คุณไม่จำเป็นต้องออกไปเล่นกอล์ฟกลางแจ้งเลยก็ได้ ลูกค้าประจำของ LENGOLF จำนวนมากเลือกเล่นแต่ในร่มเท่านั้น เพราะชอบรูปแบบการสังสรรค์ ความสะดวกสบาย และความเย็นสบายจากเครื่องปรับอากาศ",
         },
       ],
       key_takeaways: [

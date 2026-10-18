@@ -7,6 +7,7 @@ import { getSeoFaqPageJsonLd } from '@/lib/jsonld'
 import FaqPageComponent from '@/components/faq/FaqPage'
 import type { FaqSeoPage } from '@/types/seo-pages'
 import { siteOpenGraph } from '@/lib/open-graph'
+import { getFactTokens, interpolateFactsDeep } from '@/lib/site-facts'
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>
@@ -47,11 +48,13 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params
-  const page = await getSeoPageBySlug(slug, 'faq', locale)
+  const raw = await getSeoPageBySlug(slug, 'faq', locale)
 
-  if (!page) {
+  if (!raw) {
     return { title: 'Page Not Found' }
   }
+  // Lesson prices in the meta description are {{token}}s (lib/site-facts.ts).
+  const page = interpolateFactsDeep(raw, await getFactTokens(locale))
 
   // Only emit hreflang when a translation actually exists — a lone
   // self-referential hreflang="en" cluster is audit noise and would
@@ -76,11 +79,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function FaqPage({ params }: Props) {
   const { locale, slug } = await params
   setRequestLocale(locale)
-  const page = await getSeoPageBySlug(slug, 'faq', locale) as FaqSeoPage | null
+  const raw = await getSeoPageBySlug(slug, 'faq', locale) as FaqSeoPage | null
 
-  if (!page) {
+  if (!raw) {
     notFound()
   }
+  // Resolve {{token}} prices once, before both the JSON-LD and the body read
+  // the page, so the FAQPage answer and the visible answer carry one figure.
+  const page = interpolateFactsDeep(raw, await getFactTokens(locale))
 
   const tFaq = await getTranslations('FaqPage')
   const jsonLd = getSeoFaqPageJsonLd(page, locale, (url) =>

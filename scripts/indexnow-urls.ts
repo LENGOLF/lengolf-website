@@ -455,6 +455,24 @@ function seoRule(section: SeoSection): Rule {
   }
 }
 
+/**
+ * Pages whose lesson prices are {{lesson…}} fact tokens (lib/site-facts.ts,
+ * built from the data/pricing.ts lesson rows), so a lesson-row edit changes
+ * them. Each is pinged in every locale that serves it.
+ */
+const LESSON_TOKEN_PAGES = [
+  '/cost/golf-lesson-prices-bangkok/',
+  '/cost/lengolf-pricing-guide/',
+  '/cost/how-much-does-golf-cost-bangkok/',
+  '/faq/',
+  '/faq/can-beginners-play-golf-simulators/',
+  '/faq/best-way-to-learn-golf-in-bangkok/',
+  '/guide/golf-simulator-for-non-golfers-guide/',
+  '/guide/golf-lessons-bangkok-coaches/',
+  // Prints the EN FAQ meta descriptions; best-way's carries lesson tokens.
+  '/llms.txt',
+]
+
 /** A small module feeding a fixed set of pages: any change pings all of them. */
 function fixedRule(file: string, pages: string[]): Rule {
   const urls = (ctx: Ctx) => pages.flatMap((p) => served(ctx.reg, p))
@@ -741,7 +759,7 @@ export const RULES: Rule[] = [
   fixedRule('data/coaches.ts', ['/lessons/', '/llms.txt']),
   fixedRule('data/event-clients.ts', ['/events/']),
   fixedRule('data/food-menu.ts', ['/menu/']),
-  fixedRule('data/pricing.ts', ['/', '/golf/', '/lessons/', '/events/', '/corporate-golf-packages/', '/llms-full.txt', '/cost/golf-lesson-prices-bangkok/', '/faq/']),
+  fixedRule('data/pricing.ts', ['/', '/golf/', '/lessons/', '/events/', '/corporate-golf-packages/', '/llms-full.txt', ...LESSON_TOKEN_PAGES]),
   {
     // The course club rental agreement, one file per locale
     // (app/[locale]/golf-course-club-rental-agreement/page.tsx). A locale's
@@ -1309,11 +1327,11 @@ const CASES: Case[] = [
     want: ['/llms-full.txt'],
   },
   {
-    name: 'pricing.ts pings its six direct consumers and the two pages its lesson fact tokens reach',
+    name: 'pricing.ts pings its six direct consumers and the nine pages its lesson fact tokens reach',
     changes: [{ status: 'M', file: 'data/pricing.ts' }],
     base: { 'data/pricing.ts': { bayRates: [1] } },
     head: { 'data/pricing.ts': { bayRates: [2] } },
-    want: ['/', '/golf/', '/lessons/', '/events/', '/corporate-golf-packages/', '/llms-full.txt', '/cost/golf-lesson-prices-bangkok/', '/faq/'],
+    want: ['/', '/golf/', '/lessons/', '/events/', '/corporate-golf-packages/', '/llms-full.txt', '/cost/golf-lesson-prices-bangkok/', '/cost/lengolf-pricing-guide/', '/cost/how-much-does-golf-cost-bangkok/', '/faq/', '/faq/can-beginners-play-golf-simulators/', '/faq/best-way-to-learn-golf-in-bangkok/', '/guide/golf-simulator-for-non-golfers-guide/', '/guide/golf-lessons-bangkok-coaches/', '/llms.txt'],
   },
   // One case per rule and per listing row, each with a LITERAL expectation.
   // A per-rule mutant (wrong path, wrong page, a listing row deleted, EN-only
@@ -1590,7 +1608,10 @@ const CONSUMERS: Record<string, Record<string, string>> = {
     'app/[locale]/events/page.tsx': 'pinged',
     'app/[locale]/corporate-golf-packages/page.tsx': 'pinged',
     'app/llms-full.txt/route.ts': 'pinged',
-    'lib/site-facts.ts': 'pinged: the {{lesson…}} fact tokens, on /cost/golf-lesson-prices-bangkok/ and /faq/ (the rule lists both)',
+    'lib/site-facts.ts': 'pinged: the {{lesson…}} fact tokens, on every page in LESSON_TOKEN_PAGES (the rule lists them)',
+    'components/home/JapanLandingPage.tsx': 'pinged: the lessons card, on / (ja)',
+    'components/home/KoreaLandingPage.tsx': 'pinged: the lessons card, on / (ko)',
+    'components/home/ChinaLandingPage.tsx': 'pinged: the lessons card, on / (zh)',
   },
   'data/coaches.ts': { 'app/[locale]/lessons/page.tsx': 'pinged', 'app/llms.txt/route.ts': 'pinged' },
   'data/event-clients.ts': { 'app/[locale]/events/page.tsx': 'pinged' },
