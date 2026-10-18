@@ -15,12 +15,14 @@
  * Nothing enforced that premise. This does.
  *
  * WHAT IT CHECKS: a route entry file under app/ that transitively references a
- * pricing symbol must declare `export const revalidate`. FOURTEEN route files
- * genuinely read pricing today and all 14 declare it, so this gate fires on
+ * pricing symbol must declare `export const revalidate`. FIFTEEN route files
+ * genuinely read pricing today and all 15 declare it, so this gate fires on
  * ZERO lines in healthy code — which is exactly why it needs the anti-vacuity
  * pins below and the contract suite beside it. A green run is not evidence.
  * (Thirteen until 2026-09-23, when app/llms-full.txt/route.ts joined as the
- * ninth direct caller; the paragraph below describes the 13 as they stood.)
+ * ninth direct caller, and fourteen until 2026-10-18, when the /faq/ hub
+ * started resolving {{lesson…}} fact tokens through getFactTokens; the
+ * paragraph below describes the 13 as they stood.)
  *
  * THIRTEEN, NOT EIGHT, and the gap is the whole reason taint has to cross
  * components/. Eight routes call a pricing getter THEMSELVES (menu, golf,
@@ -203,10 +205,13 @@ const EXPECTED_TAINTED_LITERAL: string[] = [
   'app/[locale]/corporate-golf-packages/page.tsx#generateMetadata',
   'app/[locale]/cost/[slug]/page.tsx#PriceGuidePage',
   'app/[locale]/cost/[slug]/page.tsx#default',
+  'app/[locale]/cost/[slug]/page.tsx#generateMetadata',
   'app/[locale]/events/page.tsx#EventsPage',
   'app/[locale]/events/page.tsx#default',
   'app/[locale]/faq/[slug]/page.tsx#FaqPage',
   'app/[locale]/faq/[slug]/page.tsx#default',
+  'app/[locale]/faq/page.tsx#FaqHubPage',
+  'app/[locale]/faq/page.tsx#default',
   'app/[locale]/golf/page.tsx#GolfPage',
   'app/[locale]/golf/page.tsx#default',
   'app/[locale]/guide/[slug]/page.tsx#ExplainerPage',
@@ -255,6 +260,7 @@ const EXPECTED_PRICING_ROUTES_LITERAL: string[] = [
   'app/[locale]/cost/[slug]/page.tsx',
   'app/[locale]/events/page.tsx',
   'app/[locale]/faq/[slug]/page.tsx',
+  'app/[locale]/faq/page.tsx',
   'app/[locale]/golf/page.tsx',
   'app/[locale]/guide/[slug]/page.tsx',
   'app/[locale]/hotels/[slug]/page.tsx',

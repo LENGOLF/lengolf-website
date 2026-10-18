@@ -8,7 +8,7 @@ import AqiWidget from '@/components/shared/AqiWidget'
 import { storageUrl, SITE_URL, BUSINESS_INFO } from '@/lib/constants'
 import { getAlternates, getCanonical, OG_LOCALES, type Locale } from '@/lib/translated-routes'
 import { getWebsitePromotions } from '@/lib/promotions'
-import { getBayRatesData, getMonthlyPackagesData, type BayRateRow, type MonthlyPackageRow } from '@/data/pricing'
+import { getBayRatesData, getMonthlyPackagesData, getLessonPricingData, getLessonPriceFacts, lessonRowThb, type BayRateRow, type MonthlyPackageRow } from '@/data/pricing'
 import { getPricingCatalog } from '@/lib/pricing'
 import { getGolfPricingJsonLd, getFaqPageJsonLd, getBreadcrumbJsonLd } from '@/lib/jsonld'
 import FaqSection from '@/components/shared/FaqSection'
@@ -81,18 +81,26 @@ export default async function GolfPage({ params }: { params: Promise<{ locale: s
   const tCommon = await getTranslations('Common')
   const tFaq = await getTranslations('GolfFaq')
 
-  // Build FAQ items from translations
-  const faqItems = Array.from({ length: 10 }, (_, i) => ({
-    question: tFaq(`q${i + 1}`),
-    answer: tFaq(`a${i + 1}`),
-  }))
-
   const catalog = await getPricingCatalog()
-  const [{ gridPromotions }, { bayRates, bayRateNotes: _ignoredBayRateNotes }, { monthlyPackages, monthlyPackageNotes: _ignoredPackageNotes }] = await Promise.all([
+  const [{ gridPromotions }, { bayRates, bayRateNotes: _ignoredBayRateNotes }, { monthlyPackages, monthlyPackageNotes: _ignoredPackageNotes }, { lessonPricing }] = await Promise.all([
     getWebsitePromotions(),
     getBayRatesData(catalog),
     getMonthlyPackagesData(catalog),
+    getLessonPricingData(catalog),
   ])
+
+  // GolfFaq.a10 answers "how much do lessons cost" with the same figures as
+  // /lessons/ (getLessonPriceFacts), plus the Starter Package total.
+  const lessonValues = {
+    ...getLessonPriceFacts(lessonPricing),
+    starterTotal: lessonRowThb(lessonPricing, 'Starter Package*', 'oneGolfer').toLocaleString('en-US'),
+  }
+
+  // Build FAQ items from translations
+  const faqItems = Array.from({ length: 10 }, (_, i) => ({
+    question: tFaq(`q${i + 1}`),
+    answer: i + 1 === 10 ? tFaq('a10', lessonValues) : tFaq(`a${i + 1}`),
+  }))
 
   // ── Row-level i18n helpers (English data → translated display) ──
   const translateTimeSlot = (s: string): string => {

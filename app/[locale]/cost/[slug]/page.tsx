@@ -7,6 +7,7 @@ import { getPriceGuidePageJsonLd } from '@/lib/jsonld'
 import PriceGuidePageComponent from '@/components/prices/PriceGuidePage'
 import type { PriceGuideSeoPage } from '@/types/seo-pages'
 import { siteOpenGraph } from '@/lib/open-graph'
+import { getFactTokens, interpolateFactsDeep } from '@/lib/site-facts'
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>
@@ -46,11 +47,13 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params
-  const page = await getSeoPageBySlug(slug, 'price_guide', locale)
+  const raw = await getSeoPageBySlug(slug, 'price_guide', locale)
 
-  if (!page) {
+  if (!raw) {
     return { title: 'Page Not Found' }
   }
+  // Lesson prices in the meta description are {{token}}s (lib/site-facts.ts).
+  const page = interpolateFactsDeep(raw, await getFactTokens(locale))
 
   const languages = getAlternates(`/cost/${slug}/`)
   return {
@@ -75,11 +78,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function PriceGuidePage({ params }: Props) {
   const { locale, slug } = await params
   setRequestLocale(locale)
-  const page = await getSeoPageBySlug(slug, 'price_guide', locale) as PriceGuideSeoPage | null
+  const raw = await getSeoPageBySlug(slug, 'price_guide', locale) as PriceGuideSeoPage | null
 
-  if (!page) {
+  if (!raw) {
     notFound()
   }
+  // Resolve {{token}} prices once, before both the JSON-LD and the body read
+  // the page, so the Offer figures and the visible table agree.
+  const page = interpolateFactsDeep(raw, await getFactTokens(locale))
 
   const jsonLd = getPriceGuidePageJsonLd(page, locale)
 

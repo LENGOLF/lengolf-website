@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { SITE_URL, BUSINESS_INFO, SOCIAL_LINKS, BOOKING_URL, PHONE_E164 } from '@/lib/constants'
 import { getSeoPagesByType } from '@/lib/seo-pages'
-import { getSiteFacts } from '@/lib/site-facts'
+import { getSiteFacts, getFactTokens, interpolateFactsDeep } from '@/lib/site-facts'
 import { getPricingCatalog } from '@/lib/pricing'
 import { isFaqPage } from '@/types/seo-pages'
 import { getFaqHubContent } from '@/data/faq-hub'
@@ -69,7 +69,8 @@ export async function GET() {
     getEventPackagesData(catalog),
     getSeoPagesByType('faq'),
   ])
-  const hub = getFaqHubContent('en')
+  // The hub's lesson-price answer carries {{token}}s, as on /faq/ itself.
+  const hub = interpolateFactsDeep(getFaqHubContent('en'), await getFactTokens('en', catalog))
   const lessonFacts = getLessonPriceFacts(lessons.lessonPricing)
 
   const sections: string[] = []

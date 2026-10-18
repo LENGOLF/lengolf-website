@@ -25,6 +25,7 @@ import {
   findPrice,
   type PricingCatalog,
 } from '@/lib/pricing'
+import { getLessonPricingData, getLessonPriceFacts, lessonRowThb } from '@/data/pricing'
 
 // ── Dynamic (POS-backed) facts, as raw numbers in THB ──
 export interface SiteFacts {
@@ -203,16 +204,35 @@ export async function getFactTokens(
   locale: string,
   catalog?: PricingCatalog | null
 ): Promise<Record<string, string>> {
-  const f = await getSiteFacts(catalog)
+  catalog = catalog ?? (await getPricingCatalog())
+  const [f, { lessonPricing: lessonRows }] = await Promise.all([
+    getSiteFacts(catalog),
+    getLessonPricingData(catalog),
+  ])
+  const lesson = getLessonPriceFacts(lessonRows)
+  // Package total and its per-hour rate, for the 1-golfer hour packages.
+  const lessonPackage = (hours: number) => {
+    const total = lessonRowThb(lessonRows, `${hours} Hour`, 'oneGolfer')
+    return { total: num(total), rate: num(Math.round(total / hours)) }
+  }
+  const p5 = lessonPackage(5)
+  const p10 = lessonPackage(10)
+  const p20 = lessonPackage(20)
+  const p30 = lessonPackage(30)
+  const p50 = lessonPackage(50)
+  const lessonHourlyThb = lessonRowThb(lessonRows, '1 Hour', 'oneGolfer')
+  const lessonTwoHourly = lessonRowThb(lessonRows, '1 Hour', 'twoGolfers')
   return {
     // Currency-carrying (locale-aware) single-value tokens
-    lessonHourly: money(locale, f.lessonHourly),
+    // From the lesson rows (lessonRowThb), like /lessons/, so a 0 or
+    // unparseable POS price falls back to the static row instead of printing 0.
+    lessonHourly: money(locale, lessonHourlyThb),
     bayHourlyFrom: money(locale, f.bayHourlyMin),
     courseRentalDay: money(locale, f.courseRentalDay),
     clubDelivery: money(locale, f.clubDelivery),
 
     // Number-only tokens (currency + range separator stay literal in content)
-    lessonHourlyNum: num(f.lessonHourly),
+    lessonHourlyNum: num(lessonHourlyThb),
     bayHourlyMinNum: num(f.bayHourlyMin),
     bayHourlyMaxNum: num(f.bayHourlyMax),
     courseRentalDayNum: num(f.courseRentalDay),
@@ -225,6 +245,29 @@ export async function getFactTokens(
     // literal currency word). Rounded — the copy always frames them as "~/약/程度".
     bayPerPersonMinNum: num(Math.round(f.bayHourlyMin / f.maxPlayersPerBay)),
     bayPerPersonMaxNum: num(Math.round(f.bayHourlyMax / f.maxPlayersPerBay)),
+
+    // Lesson packages (1 golfer): total and per-hour rate, from the same rows
+    // /lessons/ renders (getLessonPricingData + getLessonPriceFacts), so the
+    // /cost/ and /faq/ answers to "how much do lessons cost" cannot drift
+    // from it. Number-only, like the bay figures above.
+    lesson5hNum: p5.total,
+    lesson5hRateNum: p5.rate,
+    lesson10hNum: p10.total,
+    lesson10hRateNum: p10.rate,
+    lesson20hNum: p20.total,
+    lesson20hRateNum: p20.rate,
+    lesson30hNum: p30.total,
+    lesson30hRateNum: p30.rate,
+    lesson50hNum: p50.total,
+    lesson50hRateNum: p50.rate,
+    lessonStarterNum: num(lessonRowThb(lessonRows, 'Starter Package*', 'oneGolfer')),
+    lessonSimToFairwayNum: num(lessonRowThb(lessonRows, 'Sim to Fairway*', 'oneGolfer')),
+    // Shared 1-hour lessons: 2 golfers, and a group of 3-5 golfers.
+    lessonTwoHourlyNum: num(lessonTwoHourly),
+    lessonTwoPerPersonNum: num(Math.round(lessonTwoHourly / 2)),
+    lessonGroupHourlyNum: lesson.groupHourly,
+    lessonGroupLowNum: lesson.groupLow,
+    lessonGroupHighNum: lesson.groupHigh,
 
     // Static facts (available to content; not currently referenced)
     openingHours: f.openingHours,
@@ -249,4 +292,21 @@ export function interpolateFacts(
     }
     return tokens[name]
   })
+}
+
+/**
+ * `interpolateFacts` applied to every string inside `value` (objects and
+ * arrays are copied, other values pass through). For data whose prose and
+ * table cells both carry tokens, such as a /cost/ page or the /faq/ hub, so
+ * no field can be forgotten. Unknown tokens throw, as in interpolateFacts.
+ */
+export function interpolateFactsDeep<T>(value: T, tokens: Record<string, string>): T {
+  if (typeof value === 'string') return interpolateFacts(value, tokens) as T
+  if (Array.isArray(value)) return value.map((v) => interpolateFactsDeep(v, tokens)) as T
+  if (value !== null && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value).map(([k, v]) => [k, interpolateFactsDeep(v, tokens)])
+    ) as T
+  }
+  return value
 }

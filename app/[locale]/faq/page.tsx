@@ -12,10 +12,17 @@ import { getSeoPagesByType } from '@/lib/seo-pages'
 import { getFaqHubContent, type FaqHubQa } from '@/data/faq-hub'
 import type { FaqSeoPage } from '@/types/seo-pages'
 import { siteOpenGraph } from '@/lib/open-graph'
+import { getFactTokens, interpolateFactsDeep } from '@/lib/site-facts'
 
 interface Props {
   params: Promise<{ locale: string }>
 }
+
+// Daily. The lesson-price answer carries {{token}}s resolved from the pricing
+// catalog (lib/site-facts.ts), whose fetch revalidates every 30 days; without
+// an interval of its own this page would inherit that (see
+// scripts/validate-pricing-revalidate.ts).
+export const revalidate = 86400
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params
@@ -55,7 +62,9 @@ export default async function FaqHubPage({ params }: Props) {
   const { locale } = await params
   setRequestLocale(locale)
 
-  const c = getFaqHubContent(locale)
+  // Resolve {{token}} prices before anything reads the content, so the visible
+  // answers and the FAQPage JSON-LD carry the same figures.
+  const c = interpolateFactsDeep(getFaqHubContent(locale), await getFactTokens(locale))
   const faqItems = buildFaqItems(c)
 
   // Browse index: every published per-question FAQ page in this locale,

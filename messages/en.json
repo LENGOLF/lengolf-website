@@ -271,7 +271,7 @@
     "q9": "Do you offer golf lessons?",
     "a9": "Yes, we have three Thailand PGA-certified professional coaches on staff — PRO Boss, PRO Ratchavin, and PRO Min. They offer personalized instruction for all skill levels, from beginners to advanced players, including junior golf development. Lessons use our simulators for swing analysis and data-driven improvement. Visit our lessons page for details.",
     "q10": "How much do golf lessons cost?",
-    "a10": "Lesson packages start at 1,800 THB for a 1-hour session (1 golfer). Multi-hour packages offer better value: 10 hours for 16,000 THB (valid 12 months) or 30 hours for 45,000 THB (valid 24 months). We also have a Starter Package at 11,000 THB which includes 5 hours of coaching plus 5 hours of practice. Golf simulator usage is included in all lesson packages."
+    "a10": "Start with a free 1-hour trial with one of our PGA coaches. It is for new students, and clubs and the simulator are included. After that, a 1-hour lesson is {hourly} THB for 1 golfer, and packages bring the hourly rate down: the 10-hour package ({tenHourTotal} THB, valid 12 months) works out to {tenHourRate} THB per hour and the 50-hour package ({fiftyHourTotal} THB, valid 24 months) to {fiftyHourRate} THB per hour. We also have a Starter Package at {starterTotal} THB with 5 hours of coaching plus 5 hours of practice. Golf simulator usage is included in all lesson packages. Book the trial on LINE @lengolf."
   },
   "Events": {
     "metaTitle": "Events & Parties",
