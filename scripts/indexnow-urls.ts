@@ -741,7 +741,7 @@ export const RULES: Rule[] = [
   fixedRule('data/coaches.ts', ['/lessons/', '/llms.txt']),
   fixedRule('data/event-clients.ts', ['/events/']),
   fixedRule('data/food-menu.ts', ['/menu/']),
-  fixedRule('data/pricing.ts', ['/', '/golf/', '/lessons/', '/events/', '/corporate-golf-packages/', '/llms-full.txt']),
+  fixedRule('data/pricing.ts', ['/', '/golf/', '/lessons/', '/events/', '/corporate-golf-packages/', '/llms-full.txt', '/cost/golf-lesson-prices-bangkok/', '/faq/']),
   {
     // The course club rental agreement, one file per locale
     // (app/[locale]/golf-course-club-rental-agreement/page.tsx). A locale's
@@ -1309,11 +1309,11 @@ const CASES: Case[] = [
     want: ['/llms-full.txt'],
   },
   {
-    name: 'pricing.ts pings its six direct consumers',
+    name: 'pricing.ts pings its six direct consumers and the two pages its lesson fact tokens reach',
     changes: [{ status: 'M', file: 'data/pricing.ts' }],
     base: { 'data/pricing.ts': { bayRates: [1] } },
     head: { 'data/pricing.ts': { bayRates: [2] } },
-    want: ['/', '/golf/', '/lessons/', '/events/', '/corporate-golf-packages/', '/llms-full.txt'],
+    want: ['/', '/golf/', '/lessons/', '/events/', '/corporate-golf-packages/', '/llms-full.txt', '/cost/golf-lesson-prices-bangkok/', '/faq/'],
   },
   // One case per rule and per listing row, each with a LITERAL expectation.
   // A per-rule mutant (wrong path, wrong page, a listing row deleted, EN-only
@@ -1590,6 +1590,7 @@ const CONSUMERS: Record<string, Record<string, string>> = {
     'app/[locale]/events/page.tsx': 'pinged',
     'app/[locale]/corporate-golf-packages/page.tsx': 'pinged',
     'app/llms-full.txt/route.ts': 'pinged',
+    'lib/site-facts.ts': 'pinged: the {{lesson…}} fact tokens, on /cost/golf-lesson-prices-bangkok/ and /faq/ (the rule lists both)',
   },
   'data/coaches.ts': { 'app/[locale]/lessons/page.tsx': 'pinged', 'app/llms.txt/route.ts': 'pinged' },
   'data/event-clients.ts': { 'app/[locale]/events/page.tsx': 'pinged' },

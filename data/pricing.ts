@@ -612,12 +612,24 @@ export type LessonPriceFacts = {
 
 const thbNumber = (s: string): number => Number(s.replace(/[^\d.]/g, ''))
 
+/**
+ * One lesson price in THB from the (possibly live) package rows. A row whose
+ * price does not parse to a positive number falls back to the static row of
+ * the same name. Shared with the `{{lesson…}}` fact tokens in lib/site-facts.ts.
+ */
+export function lessonRowThb(
+  rows: LessonPackage[],
+  name: string,
+  field: 'oneGolfer' | 'twoGolfers' | 'threeToFiveGolfers'
+): number {
+  const live = thbNumber(rows.find((r) => r.name === name)?.[field] ?? '')
+  if (Number.isFinite(live) && live > 0) return live
+  return thbNumber(lessonPricing.find((r) => r.name === name)![field])
+}
+
 export function getLessonPriceFacts(rows: LessonPackage[]): LessonPriceFacts {
-  const pick = (name: string, field: 'oneGolfer' | 'threeToFiveGolfers'): number => {
-    const live = thbNumber(rows.find((r) => r.name === name)?.[field] ?? '')
-    if (Number.isFinite(live) && live > 0) return live
-    return thbNumber(lessonPricing.find((r) => r.name === name)![field])
-  }
+  const pick = (name: string, field: 'oneGolfer' | 'threeToFiveGolfers'): number =>
+    lessonRowThb(rows, name, field)
   const fmt = (n: number) => n.toLocaleString('en-US')
   const hourly = pick('1 Hour', 'oneGolfer')
   const ten = pick('10 Hour', 'oneGolfer')

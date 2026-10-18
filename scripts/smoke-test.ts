@@ -287,11 +287,48 @@ const routeTests: RouteTest[] = [
     path: "/faq/",
     expectedStatus: [200],
     contentMarker: "Unit 407",
+    // The lesson-price answer carries {{lesson…}} fact tokens (data/faq-hub.ts).
+    contentAbsent: "{{",
   },
   {
     path: "/th/faq/",
     expectedStatus: [200],
     contentMarker: "ยูนิต 407",
+    contentAbsent: "{{",
+  },
+  // /cost/golf-lesson-prices-bangkok/ prices every LENGOLF lesson row with a
+  // {{lesson…}} fact token, resolved in app/[locale]/cost/[slug]/page.tsx. The
+  // marker is the trial row, which leads the table; no figure is pinned because
+  // the tokens follow the POS catalog.
+  {
+    path: "/cost/golf-lesson-prices-bangkok/",
+    expectedStatus: [200],
+    contentMarker: "Free 1-hour trial",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/th/cost/golf-lesson-prices-bangkok/",
+    expectedStatus: [200],
+    contentMarker: "ทดลองเรียนฟรี 1 ชั่วโมง",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/ja/cost/golf-lesson-prices-bangkok/",
+    expectedStatus: [200],
+    contentMarker: "1時間の無料体験",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/ko/cost/golf-lesson-prices-bangkok/",
+    expectedStatus: [200],
+    contentMarker: "1시간 무료 체험",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/zh/cost/golf-lesson-prices-bangkok/",
+    expectedStatus: [200],
+    contentMarker: "1小时免费体验",
+    contentAbsent: "{{",
   },
   // Blog post detail (catches Supabase query errors on dynamic routes)
   {
@@ -1867,16 +1904,19 @@ const routeTests: RouteTest[] = [
     path: "/ja/faq/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
   },
   {
     path: "/ko/faq/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
   },
   {
     path: "/zh/faq/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
   },
   // Translated TH region hubs (data/golf-courses-i18n.ts + th allowlist entries)
   {
@@ -9018,7 +9058,8 @@ const MIN_RAW_HOSTILE_PATHS = 10;
  *  this is raised with it; lower it only when an entry is removed. */
 // +2 on 2026-10-11 for /junior-golf-academy/ and /th/junior-golf-academy/.
 // +2 on 2026-10-18 for /line/ and /th/line/.
-const MIN_IMAGE_PAGES = 486;
+// +5 on 2026-10-18 for /{,th,ja,ko,zh}/cost/golf-lesson-prices-bangkok/.
+const MIN_IMAGE_PAGES = 491;
 /** Used-club detail pages reached from the listing. DB rows (43 on
  *  2026-09-24), so a floor of one rather than an exact count. Today they add
  *  no pair the listing lacks (the listing shows every club's photo); the crawl
