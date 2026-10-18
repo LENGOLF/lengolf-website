@@ -14,7 +14,7 @@ import {
   OG_LOCALES,
   type Locale,
 } from '@/lib/translated-routes'
-import { getLinePageContent, LINE_ID, LINE_PAGE_PATH, LINE_PAGE_URL } from '@/data/line-page'
+import { getLinePageContent, LINE_ADD_FRIEND_URL, LINE_ID, LINE_PAGE_PATH } from '@/data/line-page'
 
 /**
  * EN plus every locale registering '/line' (TH today), so generateStaticParams
@@ -46,20 +46,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: c.metaDescription,
       url,
       locale: OG_LOCALES[locale as Locale] ?? OG_LOCALES.en,
-      images: [{ url: storageUrl('venue/venue-interior-01.jpg'), width: 1200, height: 630, alt: 'LENGOLF' }],
+      images: [{ url: storageUrl('venue/venue-interior-01.jpg'), width: 1500, height: 1500, alt: 'LENGOLF indoor golf simulator and bar in Bangkok' }],
     }),
   }
 }
 
 /**
- * The QR code for LINE_PAGE_URL, drawn as one SVG path at build time (the page
+ * The QR code for LINE_ADD_FRIEND_URL, drawn as one SVG path at build time (the page
  * is static). No external QR service and no client JavaScript. Level M error
  * correction, and a 4-module quiet zone, which the QR spec requires for a
  * reliable scan.
  */
 function LineQrCode({ label }: { label: string }) {
   const qr = qrcode(0, 'M')
-  qr.addData(LINE_PAGE_URL)
+  qr.addData(LINE_ADD_FRIEND_URL)
   qr.make()
   const size = qr.getModuleCount()
   let d = ''
@@ -143,10 +143,10 @@ export default async function LinePage({ params }: Props) {
             </h1>
             <p className="mb-8 max-w-xl text-lg leading-relaxed text-muted-foreground">{tx(c.hero.intro)}</p>
             <a
-              href={LINE_PAGE_URL}
+              href={LINE_ADD_FRIEND_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-14 items-center gap-3 rounded-md bg-[#06C755] px-10 text-lg font-bold uppercase text-white shadow-sm transition-colors hover:bg-[#05b34c]"
+              className="inline-flex h-14 items-center gap-3 rounded-md bg-primary px-10 text-lg font-bold uppercase text-white shadow-sm transition-colors hover:bg-primary-dark"
             >
               <FaLine className="h-7 w-7" aria-hidden="true" />
               {c.hero.cta}
@@ -187,10 +187,10 @@ export default async function LinePage({ params }: Props) {
           </div>
           <div className="mt-10 text-center">
             <a
-              href={LINE_PAGE_URL}
+              href={LINE_ADD_FRIEND_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-12 items-center gap-2 rounded-md bg-[#06C755] px-8 text-sm font-bold uppercase text-white transition-colors hover:bg-[#05b34c]"
+              className="inline-flex h-12 items-center gap-2 rounded-md bg-primary px-8 text-sm font-bold uppercase text-white transition-colors hover:bg-primary-dark"
             >
               <FaLine className="h-5 w-5" aria-hidden="true" />
               {c.hero.cta}

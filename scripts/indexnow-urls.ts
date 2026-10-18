@@ -1413,6 +1413,14 @@ const CASES: Case[] = [
     want: ['/th/line/'],
   },
   {
+    name: 'line-page.ts: an en copy edit pings the en page alone',
+    changes: [{ status: 'M', file: 'data/line-page.ts' }],
+    base: { 'data/line-page.ts': { LINE_PAGE_CONTENT: { en: 'e-old', th: 't' }, LINE_ID: '@lengolf' } },
+    head: { 'data/line-page.ts': { LINE_PAGE_CONTENT: { en: 'e-new', th: 't' }, LINE_ID: '@lengolf' } },
+    registered: ['th:/line'],
+    want: ['/line/'],
+  },
+  {
     name: 'line-page.ts: a shared export (the LINE ID) pings every locale publishing the page',
     changes: [{ status: 'M', file: 'data/line-page.ts' }],
     base: { 'data/line-page.ts': { LINE_PAGE_CONTENT: { en: 'e', th: 't' }, LINE_ID: '@lengolf' } },
@@ -1589,6 +1597,10 @@ const CONSUMERS: Record<string, Record<string, string>> = {
   'data/faq-hub.ts': {
     'app/[locale]/faq/page.tsx': 'pinged',
     'app/llms-full.txt/route.ts': 'pinged: EN only',
+  },
+  'data/line-page.ts': {
+    'app/[locale]/line/page.tsx': 'pinged',
+    'app/sitemap.ts': 'ignored: the sitemap is not a pinged URL',
   },
   'data/junior-academy.ts': {
     'app/[locale]/junior-golf-academy/page.tsx': 'pinged',
@@ -2114,8 +2126,8 @@ async function selfTest(): Promise<void> {
   // trigger-path coverage, workflow trigger, locales, two loader checks); one
   // consumer verdict per CONSUMERS key; four CLI verdicts.
   const expected = CASES.length + 1 + 3 + SEO_SECTIONS.length + 8 + Object.keys(CONSUMERS).length + 4
-  if (CASES.length !== 59 || examined !== expected) {
-    console.log(`FAIL: examined ${examined} verdict(s), expected ${expected} (CASES=${CASES.length}, want 59)`)
+  if (CASES.length !== 60 || examined !== expected) {
+    console.log(`FAIL: examined ${examined} verdict(s), expected ${expected} (CASES=${CASES.length}, want 60)`)
     process.exit(1)
   }
   if (failures > 0) {

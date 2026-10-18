@@ -1,4 +1,4 @@
-import { SOCIAL_LINKS } from '@/lib/constants'
+import { BUSINESS_INFO, SOCIAL_LINKS } from '@/lib/constants'
 
 /**
  * /line/: LENGOLF's own page for the LINE Official Account (@lengolf).
@@ -10,8 +10,7 @@ import { SOCIAL_LINKS } from '@/lib/constants'
  * LINE's own page. So this is a real page, and it must stay one. Do NOT add a
  * redirect, a meta refresh or a script that jumps to LINE: Google treats any
  * of them as a redirect, and the sitelinks go back to disapproved. Posters,
- * QR codes and LINE messages also point at /line/, so the URL must keep
- * serving 200.
+ * the URL may also be printed or shared, so it must keep serving 200.
  *
  * Published in EN and TH only, so the copy lives here rather than in
  * messages/*.json (same reasoning as data/junior-academy.ts): ja/ko/zh are
@@ -30,8 +29,12 @@ import { SOCIAL_LINKS } from '@/lib/constants'
 
 export const LINE_PAGE_PATH = '/line/'
 
-/** The add-friend link every button and the QR code on the page point at. */
-export const LINE_PAGE_URL = SOCIAL_LINKS.line
+/**
+ * The LINE add-friend shortlink every button and the QR code on the page
+ * point at. NOT this page's own URL (that is LINE_PAGE_PATH): pointing the
+ * buttons or the QR code at /line/ would loop back to this page.
+ */
+export const LINE_ADD_FRIEND_URL = SOCIAL_LINKS.line
 
 /** Shown on the page. The OA's ID, as the rest of the site writes it. */
 export const LINE_ID = '@lengolf'
@@ -73,7 +76,7 @@ export const LINE_PAGE_CONTENT: Record<'en' | 'th', LinePageContent> = {
   en: {
     metaTitle: 'LINE @lengolf: Book a Bay, Ask Us, Plan a Party',
     metaDescription:
-      'Add LENGOLF on LINE (@lengolf) to book a golf simulator bay, ask about prices and lessons, plan a party or rent golf clubs. Scan the QR code or tap Open LINE. At BTS Chidlom, open 9am to 11pm daily.',
+      'Add LENGOLF on LINE (@lengolf) to book a golf simulator bay, ask about prices or lessons, plan a party or rent clubs. At BTS Chidlom, open 9am to 11pm daily.',
     breadcrumb: { home: 'Home', self: 'LINE @lengolf' },
     hero: {
       eyebrow: 'LINE Official Account',
@@ -91,31 +94,31 @@ export const LINE_PAGE_CONTENT: Record<'en' | 'th', LinePageContent> = {
         {
           key: 'book',
           title: 'Book a bay',
-          body: 'Send us the day, the time and how many players, and we reserve a golf simulator bay for you.',
+          body: "Send us the day, the time and how many players, and we'll check availability and book your bay.",
         },
         {
           key: 'ask',
           title: 'Ask a question',
-          body: 'Prices, opening hours, parking, lessons or how to get here: send a message and our team answers.',
+          body: 'Prices, opening hours, parking, lessons or how to get here: send a message and our team will answer.',
         },
         {
           key: 'events',
           title: 'Events and parties',
-          body: 'Birthdays, team building or a company party. Tell us the date and your group size and we put a package together.',
+          body: "Birthdays, team building or a company party. Tell us the date and your group size and we'll put a package together.",
         },
         {
           key: 'clubs',
           title: 'Golf club rental',
-          body: 'Ask about premium club sets, to use in your bay or to take to a golf course.',
+          body: 'Standard clubs are free in every bay. Ask us about premium sets to use in your bay or to take to a golf course.',
         },
       ],
     },
     visit: {
       title: { primary: 'Visit', suffix: 'LENGOLF' },
       addressLabel: 'Address',
-      address: 'The Mercury Ville @ BTS Chidlom, Floor 4, 540 Ploenchit Road, Lumpini, Pathumwan, Bangkok 10330',
+      address: BUSINESS_INFO.address,
       transitLabel: 'Getting here',
-      transit: 'BTS Chidlom, Exit 4. The skywalk takes you straight into The Mercury Ville, then up to Floor 4.',
+      transit: 'BTS Chidlom, Exit 4. Take the skywalk straight into The Mercury Ville, then go up to Floor 4.',
       hoursLabel: 'Opening hours',
       hours: 'Open every day, 9am to 11pm',
     },
@@ -128,16 +131,16 @@ export const LINE_PAGE_CONTENT: Record<'en' | 'th', LinePageContent> = {
   th: {
     metaTitle: 'แอดไลน์ @lengolf จองห้องซิมกอล์ฟ สอบถาม จัดปาร์ตี้',
     metaDescription:
-      'แอดไลน์ LENGOLF (@lengolf) จองห้องซิมกอล์ฟ ถามราคาและเรื่องเรียนกอล์ฟ จัดปาร์ตี้หรืองานบริษัท และเช่าไม้กอล์ฟ สแกน QR หรือกดเปิด LINE ได้เลย อยู่ที่ The Mercury Ville ติด BTS ชิดลม เปิดทุกวัน 9.00-23.00 น.',
+      'แอดไลน์ LENGOLF (@lengolf) ไว้จองห้องซิมกอล์ฟ ถามราคาและคอร์สเรียน จัดปาร์ตี้หรืองานบริษัท หรือเช่าไม้กอล์ฟ อยู่ที่ The Mercury Ville ติด BTS ชิดลม เปิดทุกวัน 9.00-23.00 น.',
     breadcrumb: { home: 'หน้าแรก', self: 'LINE @lengolf' },
     hero: {
       eyebrow: 'LINE Official Account',
       title: 'ทัก LINE หา LENGOLF ได้เลย',
       intro:
-        'จองห้องซิม ถามเรื่องราคา หรือวางแผนจัดปาร์ตี้ ทักมาที่ LINE @lengolf ช่องทางนี้ติดต่อเราได้ง่ายที่สุด',
+        'จองห้องซิม ถามราคา หรือปรึกษาเรื่องจัดปาร์ตี้ ทักมาที่ LINE @lengolf ติดต่อทางนี้สะดวกที่สุด',
       cta: 'เปิด LINE',
       lineIdLabel: 'LINE ID',
-      qrCaption: 'สแกนด้วยกล้องมือถือหรือแอป LINE เพื่อเพิ่มเพื่อน',
+      qrCaption: 'สแกนด้วยกล้องมือถือหรือแอป LINE แล้วกดเพิ่มเพื่อน',
       qrLabel: 'QR โค้ดเพิ่มเพื่อน LENGOLF ใน LINE (@lengolf)',
     },
     help: {
@@ -146,36 +149,36 @@ export const LINE_PAGE_CONTENT: Record<'en' | 'th', LinePageContent> = {
         {
           key: 'book',
           title: 'จองห้องซิม',
-          body: 'บอกวัน เวลา และจำนวนคน แล้วเราจองห้องซิมกอล์ฟให้',
+          body: 'บอกวัน เวลา และจำนวนคน เราเช็กห้องว่างแล้วจองให้',
         },
         {
           key: 'ask',
           title: 'สอบถามทั่วไป',
-          body: 'ราคา เวลาเปิด ที่จอดรถ เรียนกอล์ฟ หรือวิธีเดินทาง ทักมาถามได้เลย',
+          body: 'ราคา เวลาเปิด-ปิด ที่จอดรถ คอร์สเรียน หรือวิธีเดินทาง ทักมาถามได้เลย',
         },
         {
           key: 'events',
           title: 'ปาร์ตี้และงานบริษัท',
-          body: 'จัดวันเกิด ทีมบิลดิ้ง หรืองานเลี้ยงบริษัท แจ้งวันและจำนวนคน แล้วทีมงานช่วยจัดแพ็กเกจให้',
+          body: 'ปาร์ตี้วันเกิด ทีมบิลดิ้ง หรืองานเลี้ยงบริษัท แจ้งวันและจำนวนคน แล้วทีมงานช่วยจัดแพ็กเกจให้',
         },
         {
           key: 'clubs',
           title: 'เช่าไม้กอล์ฟ',
-          body: 'ถามเรื่องไม้กอล์ฟชุดพรีเมียม จะใช้ในห้องซิมหรือเช่าไปออกรอบที่สนามก็ได้',
+          body: 'ห้องซิมมีไม้กอล์ฟมาตรฐานให้ใช้ฟรี ถ้าอยากได้ชุดไม้พรีเมียม จะใช้ในห้องซิมหรือเช่าไปออกรอบที่สนามก็ทักมาได้',
         },
       ],
     },
     visit: {
-      title: { primary: 'ที่ตั้งและเวลาเปิด', suffix: '' },
+      title: { primary: 'ที่ตั้งและเวลาเปิด-ปิด', suffix: '' },
       addressLabel: 'ที่อยู่',
       address: 'The Mercury Ville @ BTS ชิดลม ชั้น 4 ถนนเพลินจิต 540 แขวงลุมพินี เขตปทุมวัน กรุงเทพฯ 10330',
-      transitLabel: 'การเดินทาง',
-      transit: 'BTS ชิดลม ทางออก 4 เดินสกายวอล์กเข้า The Mercury Ville ได้เลย ไม่ต้องข้ามถนน แล้วขึ้นมาที่ชั้น 4',
-      hoursLabel: 'เวลาเปิด',
+      transitLabel: 'วิธีเดินทาง',
+      transit: 'ลง BTS ชิดลม ออกทางออก 4 แล้วเดินสกายวอล์กเข้า The Mercury Ville โดยตรง ไม่ต้องข้ามถนน จากนั้นขึ้นลิฟต์หรือบันไดเลื่อนมาที่ชั้น 4',
+      hoursLabel: 'เวลาเปิด-ปิด',
       hours: 'เปิดทุกวัน 9.00-23.00 น.',
     },
     book: {
-      title: 'อยากจองออนไลน์',
+      title: 'หรือจะจองออนไลน์ก็ได้',
       body: 'เลือกวัน ห้อง และเวลาเองได้ที่ booking.len.golf',
       cta: 'จองเลย',
     },
