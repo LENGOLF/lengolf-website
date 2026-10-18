@@ -6054,12 +6054,22 @@ async function runLlmDiscoverabilityTests() {
       issues.push("anti-vacuity: 0 published EN FAQ entries in data/faq-pages.ts");
     else if (printed !== enFaqs.length)
       issues.push(`printed ${printed} FAQ pages, data has ${enFaqs.length} published EN entries`);
+    // Entries carrying {{lesson…}} fact tokens print the resolved figure, which
+    // follows the POS catalog, so each token is matched as a number and every
+    // other character must still match exactly. A token left unresolved fails
+    // here too: "{{" is not a digit.
+    const tokenSlot = /\\\{\\\{\w+\\\}\\\}/g;
     const missing = enFaqs
       .filter((p) => {
-        const block =
+        const block = (
           `Source: https://www.len.golf/faq/${p.slug}/\n\n` +
-          `${p.content.answer_intro}\n\n${p.content.answer_body}`;
-        return !body.includes(block.replace(/\r\n/g, "\n"));
+          `${p.content.answer_intro}\n\n${p.content.answer_body}`
+        ).replace(/\r\n/g, "\n");
+        if (!block.includes("{{")) return !body.includes(block);
+        const pattern = block
+          .replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+          .replace(tokenSlot, "\\d[\\d,]*");
+        return !new RegExp(pattern).test(body);
       })
       .map((p) => p.slug);
     if (missing.length > 0)
