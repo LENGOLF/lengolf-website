@@ -5678,7 +5678,7 @@ async function runLessonsCoachTests() {
         );
       }
       for (const o of [...catalogOffers, ...((serviceOffers?.offers as Record<string, unknown>[]) ?? [])]) {
-        if (/free[^.]{0,20}lesson|complimentary lesson|first lesson (is )?free/i.test(`${o.name} ${o.description}`)) {
+        if (/free\b[^.]{0,20}\blesson|complimentary lesson|first lesson (is )?free/i.test(`${o.name} ${o.description}`)) {
           issues.push(`Offer ${JSON.stringify(o.name)} calls the trial a "free lesson"`);
         }
       }
@@ -5693,7 +5693,7 @@ async function runLessonsCoachTests() {
         issues.push("a FAQPage answer carries an unresolved {placeholder} or LessonsFaq key");
       }
       // The meta description and the stat chips take the same arguments.
-      const unresolved = /\{(hourly|tenHourTotal|tenHourRate|fiftyHourTotal|fiftyHourRate|groupHourly|groupLow|groupHigh)\}|Lessons(Faq)?\.[a-z][A-Za-z0-9]*/;
+      const unresolved = /\{(hourly|tenHourTotal|tenHourRate|fiftyHourTotal|fiftyHourRate|groupHourly|groupLow|groupHigh)\}|\bLessons(Faq)?\.[a-z][A-Za-z0-9]*/;
       const metaDescription = (body.match(/<meta name="description" content="([^"]*)"/) ?? [])[1] ?? "";
       if (!metaDescription || unresolved.test(metaDescription)) {
         issues.push(`meta description is missing or unresolved: ${JSON.stringify(metaDescription.slice(0, 80))}`);
