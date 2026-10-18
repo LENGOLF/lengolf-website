@@ -510,10 +510,10 @@ const nextConfig = {
       { source: '/golf-courses/compare/kanchanaburi/blue-sapphire-golf-resort-vs-dragon-hills-golf-country-club', destination: '/golf-courses/kanchanaburi/', permanent: true },
       { source: '/golf-courses/compare/kanchanaburi/blue-sapphire-golf-resort-vs-dragon-hills-golf-country-club/', destination: '/golf-courses/kanchanaburi/', permanent: true },
 
-      // LINE shortlink — used as sitelink URL in Google Ads (lin.ee domain causes
-      // "Destination mismatch" disapproval, so we redirect via our own domain)
-      { source: '/line', destination: 'https://lin.ee/uxQpIXn', permanent: false },
-      { source: '/line/', destination: 'https://lin.ee/uxQpIXn', permanent: false },
+      // /line/ used to 307 to the lin.ee shortlink here, for Google Ads sitelinks.
+      // Google disapproved those sitelinks because its crawler followed the
+      // redirect to LINE's page, so /line/ is now a real page
+      // (app/[locale]/line/page.tsx). Do not put a redirect back.
 
       // WordPress search -> homepage (no search in Next.js app)
       { source: '/search/:path*', destination: '/', permanent: false },

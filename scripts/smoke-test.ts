@@ -151,6 +151,20 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  // /line/ was a 307 to lin.ee until 2026-10-18, and Google Ads disapproved the
+  // LINE sitelinks that point at it ("Insufficient original content",
+  // "Destination mismatch"). It must stay a real page: a redirect fails here
+  // (route tests must resolve directly), the marker is the build-time QR code,
+  // and a meta refresh, which Google also reads as a redirect, is forbidden.
+  // contentAbsent is the bare attribute name: React always renders it as
+  // lowercase http-equiv, the site emits none today, and matching the name
+  // rather than the value also catches "Refresh" written in any case.
+  {
+    path: "/line/",
+    expectedStatus: [200],
+    contentMarker: "data-line-qr",
+    contentAbsent: "http-equiv",
+  },
   {
     path: "/events/",
     expectedStatus: [200],
@@ -241,6 +255,12 @@ const routeTests: RouteTest[] = [
     path: "/th/junior-golf-academy/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/line/",
+    expectedStatus: [200],
+    contentMarker: "data-line-qr",
+    contentAbsent: "http-equiv",
   },
   {
     path: "/th/events/",
@@ -2940,6 +2960,10 @@ const routeTests: RouteTest[] = [
 
 // B) Redirect tests (representative sample of 60+ WordPress redirects)
 const redirectTests: RedirectTest[] = [
+  // The slash-less /line (on posters, typed by hand) must only gain its
+  // trailing slash, never go back to lin.ee: until 2026-10-18 next.config.js
+  // sent both spellings to LINE, and Google Ads disapproved the sitelinks.
+  { path: "/line", expectedStatus: 308, expectedLocation: "/line/" },
   // Trust-anchor aliases (trustAnchorRedirects in next.config.js). These
   // assert the STATUS, which redirectChainTests structurally cannot: that
   // runner follows the chain and checks only the landing path, so flipping
@@ -3329,6 +3353,18 @@ const seoTests: SeoTest[] = [
   { path: "/golf-course-club-rental/", locale: "en" },
   { path: "/golf-club-specs/", locale: "en" },
   { path: "/junior-golf-academy/", locale: "en" },
+  { path: "/line/", locale: "en" },
+  {
+    path: "/th/line/",
+    locale: "th",
+    titleContains: {
+      needle: "แอดไลน์",
+      why:
+        "The Thai LINE page reads its copy from data/line-page.ts, whose getter falls back to " +
+        "ENGLISH for any locale but th. If the th block went missing or the page read the wrong " +
+        "locale, /th/line/ would still 200 with lang=th, a canonical and the QR marker.",
+    },
+  },
   {
     path: "/th/junior-golf-academy/",
     locale: "th",
@@ -3506,7 +3542,7 @@ const seoTests: SeoTest[] = [
  * pinned entry and adding any other URL holds this count. Nor does it cover
  * the share-card assertions; see REQUIRED_OWN_OG_CARDS.
  */
-const MIN_SEO_URLS = 45;
+const MIN_SEO_URLS = 47;
 
 /**
  * Anti-vacuity for the `titleContains` assertions in `seoTests`. Two-sided by
@@ -3542,6 +3578,7 @@ const REQUIRED_TITLE_ASSERTIONS: { path: string; needle: string }[] = [
     needle: "formerly Suvarnabhumi Golf & Country Club",
   },
   { path: "/th/junior-golf-academy/", needle: "เรียนกอล์ฟเด็ก" },
+  { path: "/th/line/", needle: "แอดไลน์" },
 ];
 
 /**
@@ -3550,7 +3587,7 @@ const REQUIRED_TITLE_ASSERTIONS: { path: string; needle: string }[] = [
  * empty-input vacuity path CLAUDE.md names explicitly, and the one shape the
  * two-sided pin above cannot catch on its own.
  */
-const MIN_TITLE_ASSERTIONS = 2;
+const MIN_TITLE_ASSERTIONS = 3;
 
 /**
  * Pages whose share card must be the opengraph-image.tsx in their OWN segment.
@@ -3604,6 +3641,10 @@ const thaiRedirectTests: ThaiRedirectTest[] = [
   { path: "/ja/junior-golf-academy/", expectedLocation: "/junior-golf-academy/", label: "Junior Academy, ja (EN + TH only)" },
   { path: "/ko/junior-golf-academy/", expectedLocation: "/junior-golf-academy/", label: "Junior Academy, ko (EN + TH only)" },
   { path: "/zh/junior-golf-academy/", expectedLocation: "/junior-golf-academy/", label: "Junior Academy, zh (EN + TH only)" },
+  // /line/ is EN + TH only (data/line-page.ts).
+  { path: "/ja/line/", expectedLocation: "/line/", label: "LINE page, ja (EN + TH only)" },
+  { path: "/ko/line/", expectedLocation: "/line/", label: "LINE page, ko (EN + TH only)" },
+  { path: "/zh/line/", expectedLocation: "/line/", label: "LINE page, zh (EN + TH only)" },
   // NOTE: the former "untranslated KO golf-courses hub must 301" test is gone
   // on purpose — the structural-parity batch added the GolfCourseHub namespace
   // to messages/{ko,zh}.json, so all four locales now serve the hub and no
@@ -8922,7 +8963,8 @@ const MIN_RAW_HOSTILE_PATHS = 10;
  *  red. It is a floor, so a NEW routeTests/seoTests entry adds slack until
  *  this is raised with it; lower it only when an entry is removed. */
 // +2 on 2026-10-11 for /junior-golf-academy/ and /th/junior-golf-academy/.
-const MIN_IMAGE_PAGES = 484;
+// +2 on 2026-10-18 for /line/ and /th/line/.
+const MIN_IMAGE_PAGES = 486;
 /** Used-club detail pages reached from the listing. DB rows (43 on
  *  2026-09-24), so a floor of one rather than an exact count. Today they add
  *  no pair the listing lacks (the listing shows every club's photo); the crawl
