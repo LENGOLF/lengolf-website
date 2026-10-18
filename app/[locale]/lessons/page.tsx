@@ -507,7 +507,7 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
           <ul>
             <li>Free 1-Hour Trial Lesson: Try a complimentary lesson with a PGA-certified coach — simple techniques, solid fundamentals, get course-ready fast</li>
             <li>Starter Package: 5 hours coaching plus 5 hours practice with a free golf glove for 11,000 THB — valid for 6 months</li>
-            <li>Coaching Packages: Hourly and multi-hour lesson bundles from 1,800 THB/hr, with volume discounts up to 50 hours</li>
+            <li>Coaching Packages: {priceFacts.hourly} THB for a single hour, or from {priceFacts.fiftyHourRate} THB/hr on multi-hour packages, with volume discounts up to 50 hours</li>
             <li>Lesson Promotion: Book multiple sessions with PGA-certified coaches on simulator bays with real-time swing data</li>
           </ul>
         </div>

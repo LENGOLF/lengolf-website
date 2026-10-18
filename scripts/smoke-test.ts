@@ -5668,8 +5668,17 @@ async function runLessonsCoachTests() {
           `Service offers is not an AggregateOffer with lowPrice "0" (got ${JSON.stringify(serviceOffers?.["@type"])}, lowPrice ${JSON.stringify(serviceOffers?.lowPrice)})`,
         );
       }
+      const aggOffers = Array.isArray(serviceOffers?.offers) ? (serviceOffers!.offers as Record<string, unknown>[]) : [];
+      if (!aggOffers.some((o) => o.price === "0" && /trial/i.test(String(o.name)))) {
+        issues.push("Service AggregateOffer does not contain the 0 THB trial Offer");
+      }
+      if (!(Number(serviceOffers?.highPrice) > 0) || serviceOffers?.offerCount !== aggOffers.length) {
+        issues.push(
+          `Service AggregateOffer highPrice ${JSON.stringify(serviceOffers?.highPrice)} / offerCount ${JSON.stringify(serviceOffers?.offerCount)} disagree with its ${aggOffers.length} offers`,
+        );
+      }
       for (const o of [...catalogOffers, ...((serviceOffers?.offers as Record<string, unknown>[]) ?? [])]) {
-        if (/free (first )?lesson/i.test(`${o.name} ${o.description}`)) {
+        if (/free[^.]{0,20}lesson|complimentary lesson|first lesson (is )?free/i.test(`${o.name} ${o.description}`)) {
           issues.push(`Offer ${JSON.stringify(o.name)} calls the trial a "free lesson"`);
         }
       }
@@ -5682,6 +5691,15 @@ async function runLessonsCoachTests() {
       if (answers.length === 0) issues.push("no FAQPage answers");
       if (answers.some((a) => /\{[a-zA-Z]+\}|LessonsFaq\./.test(a))) {
         issues.push("a FAQPage answer carries an unresolved {placeholder} or LessonsFaq key");
+      }
+      // The meta description and the stat chips take the same arguments.
+      const unresolved = /\{(hourly|tenHourTotal|tenHourRate|fiftyHourTotal|fiftyHourRate|groupHourly|groupLow|groupHigh)\}|Lessons(Faq)?\.[a-z][A-Za-z0-9]*/;
+      const metaDescription = (body.match(/<meta name="description" content="([^"]*)"/) ?? [])[1] ?? "";
+      if (!metaDescription || unresolved.test(metaDescription)) {
+        issues.push(`meta description is missing or unresolved: ${JSON.stringify(metaDescription.slice(0, 80))}`);
+      }
+      if (unresolved.test(body.replace(/<script[\s\S]*?<\/script>/g, ""))) {
+        issues.push("visible markup carries an unresolved price {placeholder} or Lessons key path");
       }
 
       // Visible: the coaches section and the trial callout, with the trial

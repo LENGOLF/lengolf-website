@@ -468,7 +468,6 @@ const LESSON_TRIAL_OFFER = {
   description: 'A free 1-hour trial with a Thailand PGA-certified coach for new students, golf clubs and simulator included. Book on LINE @lengolf.',
   price: '0',
   priceCurrency: 'THB',
-  unitCode: 'HUR',
   eligibleDuration: { '@type': 'QuantitativeValue', value: 1, unitCode: 'HUR' },
 }
 
@@ -752,7 +751,7 @@ export function getLessonsServiceJsonLd(facts: LessonPriceFacts) {
           name: '1 Hour Golf Lesson',
           price: String(facts.hourlyThb),
           priceCurrency: 'THB',
-          unitCode: 'HUR',
+          eligibleDuration: { '@type': 'QuantitativeValue', value: 1, unitCode: 'HUR' },
           description: '1-hour lesson with a PGA-certified coach, simulator usage included',
         },
       ],
