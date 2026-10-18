@@ -139,7 +139,7 @@ const en: FaqHubContent = {
     {
       question: 'Do I need golf experience to play?',
       answer:
-        'Not at all. Around half of our guests are complete beginners. The simulator tracks every shot automatically and our staff will have you hitting balls within a couple of minutes. If you would like structured help, book a free trial lesson with one of our coaches.',
+        'Not at all. Around half of our guests are complete beginners. The simulator tracks every shot automatically and our staff will have you hitting balls within a couple of minutes. If you would like structured help, new students can book a free 1-hour trial with one of our coaches on LINE @lengolf.',
     },
   ],
   faqLinks: {
@@ -269,7 +269,7 @@ const th: FaqHubContent = {
     {
       question: 'ไม่เคยเล่นกอล์ฟมาก่อน เล่นได้ไหม',
       answer:
-        'เล่นได้แน่นอน ลูกค้าประมาณครึ่งหนึ่งของเราเป็นมือใหม่ที่ไม่เคยจับไม้กอล์ฟมาก่อน ระบบซิมมูเลเตอร์บันทึกทุกช็อตให้อัตโนมัติ และทีมงานจะช่วยให้เริ่มตีได้ภายในไม่กี่นาที หากอยากเรียนแบบจริงจัง จองทดลองเรียนฟรีกับโค้ชของเราได้',
+        'เล่นได้แน่นอน ลูกค้าประมาณครึ่งหนึ่งของเราเป็นมือใหม่ที่ไม่เคยจับไม้กอล์ฟมาก่อน ระบบซิมมูเลเตอร์บันทึกทุกช็อตให้อัตโนมัติ และทีมงานจะช่วยให้เริ่มตีได้ภายในไม่กี่นาที หากอยากเรียนแบบจริงจัง คนที่ยังไม่เคยเรียนกับเราจองทดลองเรียนฟรี 1 ชั่วโมงกับโค้ชได้ทาง LINE @lengolf',
     },
   ],
   faqLinks: {
@@ -402,7 +402,7 @@ const ja: FaqHubContent = {
     {
       question: 'ゴルフの経験がなくてもプレーできますか？',
       answer:
-        'まったく問題ありません。ご来店のお客様のおよそ半数は、ゴルフがまったくの初めてという方です。シミュレーターが1球ごとに自動で計測しますので、スタッフのご案内で数分後にはボールを打ち始められます。しっかり教わりたい方は、コーチによる無料体験レッスンをご予約ください。',
+        'まったく問題ありません。ご来店のお客様のおよそ半数は、ゴルフがまったくの初めてという方です。シミュレーターが1球ごとに自動で計測しますので、スタッフのご案内で数分後にはボールを打ち始められます。しっかり教わりたい方は、コーチによる1時間の無料体験（LENGOLFで初めてレッスンを受ける方が対象）をLINE @lengolfからご予約ください。',
     },
   ],
   faqLinks: {
@@ -534,7 +534,7 @@ const ko: FaqHubContent = {
     {
       question: '골프를 쳐 본 적이 없어도 괜찮나요?',
       answer:
-        '전혀 문제없어요. 저희를 찾아 주시는 분의 절반 정도는 골프가 처음이세요. 시뮬레이터가 모든 샷을 자동으로 기록하고, 스태프가 몇 분 안에 공을 칠 수 있도록 도와드려요. 좀 더 체계적으로 배우고 싶으시다면 코치와 함께하는 무료 체험 레슨을 예약해 보세요.',
+        '전혀 문제없어요. 저희를 찾아 주시는 분의 절반 정도는 골프가 처음이세요. 시뮬레이터가 모든 샷을 자동으로 기록하고, 스태프가 몇 분 안에 공을 칠 수 있도록 도와드려요. 좀 더 체계적으로 배우고 싶으시다면 코치와 함께하는 1시간 무료 체험(LENGOLF 레슨이 처음인 분 대상)을 LINE @lengolf로 예약해 보세요.',
     },
   ],
   faqLinks: {
@@ -665,7 +665,7 @@ const zh: FaqHubContent = {
     {
       question: '完全没打过高尔夫也能来吗？',
       answer:
-        '完全可以。我们大约一半的客人都是零基础的新手。模拟器会自动记录每一杆，工作人员几分钟内就能让你开始击球。如果想要更系统的指导，可以预约与教练的一次免费试课。',
+        '完全可以。我们大约一半的客人都是零基础的新手。模拟器会自动记录每一杆，工作人员几分钟内就能让你开始击球。如果想要更系统的指导，首次在LENGOLF上课的学员可以通过LINE @lengolf预约教练的1小时免费体验。',
     },
   ],
   faqLinks: {

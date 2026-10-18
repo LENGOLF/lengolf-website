@@ -14,8 +14,9 @@ const now = "2026-08-12T00:00:00.000Z"
 // Thai local format (096-668-2335) in that file. Decide then between E.164 in
 // the prose and normalising it in app/llms-full.txt/route.ts (the smoke
 // check's verbatim-block assertion would need the same normalisation).
-// (2) Never use {{fact}} tokens: this route, like the FAQ page itself,
-// prints the text without interpolateFacts.
+// (2) {{fact}} tokens are resolved (interpolateFactsDeep) both here and on
+// the FAQ page itself, app/[locale]/faq/[slug]/page.tsx. An unknown name
+// throws at build; a malformed one ships raw, which smoke catches.
 
 export const faqPages: FaqSeoPage[] = [
   {
@@ -1085,9 +1086,8 @@ export const faqPages: FaqSeoPage[] = [
   // Every duration traces to EN faq-7 (45–60分钟 / 1.5–2 / 2–2.5 / 2.5–3小时,
   // 9洞45分钟–1小时, 练习模式30–60分钟, 室外4–5小时, 最常见2小时, 社交2–3小时,
   // 认真练球1小时, 最少1小时起租). The LENGOLF bay range 550–950泰铢 and 最多5人
-  // carry the as-of marker 截至2026年7月; prices are LITERALS, never {{tokens}} —
-  // the FAQ route renders answer_intro/answer_body verbatim and never calls
-  // interpolateFacts. Wayfinding follows the shipped ZH form
+  // carry the as-of marker 截至2026年7月; prices are literals (the FAQ route has
+  // resolved {{tokens}} since 2026-10-18; these bay figures were not converted). Wayfinding follows the shipped ZH form
   // (The Mercury Ville，BTS Chidlom站（4号出口）). related_* mirror the EN entry;
   // all three targets are ZH-translated.
   {
@@ -1151,11 +1151,9 @@ export const faqPages: FaqSeoPage[] = [
   // indoor-venue query set (ตีกอล์ฟในร่ม / บาร์กอล์ฟในร่ม) that currently lands
   // on the EN homepage. Every figure traces to the EN entry faq-8: premium club
   // rental ~150 บาท/ชั่วโมง and the on-site glove at ~600 บาท — both carry the
-  // as-of marker. No LENGOLF price is tokenized here: the FAQ route
-  // (app/[locale]/faq/[slug]/page.tsx → components/faq/FaqPage.tsx) renders
-  // answer_intro/answer_body verbatim and never calls interpolateFacts, so a
-  // {{token}} would ship literally to the reader (only /guide/ and llms.txt
-  // interpolate). Matches all 14 shipped TH FAQ entries, which carry literals.
+  // as-of marker. No LENGOLF price is tokenized here. (Written when the FAQ
+  // route rendered answer text verbatim; since 2026-10-18 it resolves
+  // {{tokens}} with interpolateFactsDeep, so a token would now work.)
   // related_* point only at th.staticRoutes targets (lib/translated-routes.ts):
   // the two FAQ siblings, the TH dress-code guide, and /golf.
   {
@@ -1508,12 +1506,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'en',
     related_slugs: ['/faq/do-i-need-experience-to-play-golf-simulator', '/faq/best-way-to-learn-golf-in-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-18T00:00:00.000Z',
     content: {
       answer_intro:
         'Absolutely — golf simulators are one of the best places for beginners to try golf. You don\'t need experience, equipment, or any knowledge of rules. The simulator handles scoring, shows you where each shot goes, and gives real-time data on your swing. At LENGOLF, staff show beginners how to get started in about 2 minutes, and free clubs are included.',
       answer_body:
-        'Golf simulators remove almost every barrier that makes real golf intimidating for beginners.\n\n**Why Simulators Are Great for Beginners**\n- **No equipment needed:** Free standard clubs provided at LENGOLF. Just walk in.\n- **No rules to learn:** The simulator applies rules automatically. You just hit the ball.\n- **No embarrassment:** Your bay is semi-private — no one on an adjacent fairway watching your swing.\n- **Instant improvement:** Real-time data shows what changed between swings. Beginners often see noticeable improvement in a single session.\n- **No time pressure:** Unlike a course with groups waiting behind you, simulators let you take as long as you want.\n\n**What a Beginner Session Looks Like**\n1. Staff hand you a club and show you the basic grip and stance (2 minutes)\n2. You take a few swings — the screen shows ball flight and distance\n3. You start a game mode (closest-to-the-pin is popular for beginners)\n4. Order drinks, compete with friends, and enjoy the atmosphere\n5. After 30 minutes, most beginners are making consistent contact\n\n**If You Want to Actually Learn Golf**\nLENGOLF has three PGA-certified coaches who specialize in teaching beginners. Lessons start at ~1,800 THB/hour and include simulator usage with swing analysis data. We also offer a free 1-hour trial lesson — contact us on LINE @lengolf to book.\n\n**Beginner Tip**\nStart with a 7-iron (medium-length club). It\'s the easiest to hit and gives satisfying results quickly. Staff will set you up with the right club.\n\nBay rental at LENGOLF is ~550 THB/hour for up to 5 people at Mercury Ville, BTS Chidlom (Exit 4).',
+        'Golf simulators remove almost every barrier that makes real golf intimidating for beginners.\n\n**Why Simulators Are Great for Beginners**\n- **No equipment needed:** Free standard clubs provided at LENGOLF. Just walk in.\n- **No rules to learn:** The simulator applies rules automatically. You just hit the ball.\n- **No embarrassment:** Your bay is semi-private — no one on an adjacent fairway watching your swing.\n- **Instant improvement:** Real-time data shows what changed between swings. Beginners often see noticeable improvement in a single session.\n- **No time pressure:** Unlike a course with groups waiting behind you, simulators let you take as long as you want.\n\n**What a Beginner Session Looks Like**\n1. Staff hand you a club and show you the basic grip and stance (2 minutes)\n2. You take a few swings — the screen shows ball flight and distance\n3. You start a game mode (closest-to-the-pin is popular for beginners)\n4. Order drinks, compete with friends, and enjoy the atmosphere\n5. After 30 minutes, most beginners are making consistent contact\n\n**If You Want to Actually Learn Golf**\nLENGOLF has three PGA-certified coaches who specialize in teaching beginners. New students start with a free 1-hour trial, with clubs and the simulator included: contact us on LINE @lengolf to book. After that, lessons are {{lessonHourlyNum}} THB per hour, or from {{lesson50hRateNum}} THB per hour on packages, and include simulator usage with swing analysis data.\n\n**Beginner Tip**\nStart with a 7-iron (medium-length club). It\'s the easiest to hit and gives satisfying results quickly. Staff will set you up with the right club.\n\nBay rental at LENGOLF is ~550 THB/hour for up to 5 people at Mercury Ville, BTS Chidlom (Exit 4).',
       related_questions: [
         { slug: 'do-i-need-experience-to-play-golf-simulator', question: 'Do I Need Golf Experience to Play a Golf Simulator?' },
         { slug: 'best-way-to-learn-golf-in-bangkok', question: 'What Is the Best Way to Learn Golf in Bangkok?' },
@@ -1537,12 +1535,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'th',
     related_slugs: ['/faq/do-i-need-experience-to-play-golf-simulator', '/faq/best-way-to-learn-golf-in-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-18T00:00:00.000Z',
     content: {
       answer_intro:
         'ได้แน่นอน กอล์ฟซิมมูเลเตอร์เป็นหนึ่งในสถานที่ที่ดีที่สุดสำหรับมือใหม่ที่อยากลองเล่นกอล์ฟ ไม่ต้องมีประสบการณ์ ไม่ต้องมีอุปกรณ์ และไม่ต้องรู้กติกามาก่อน ซิมมูเลเตอร์คำนวณคะแนนให้ แสดงให้เห็นว่าแต่ละช็อตไปทางไหน และให้ข้อมูลการสวิงแบบเรียลไทม์ ที่ LENGOLF ทีมงานจะสอนมือใหม่ให้เริ่มเล่นได้ในประมาณ 2 นาที และมีไม้ให้ใช้ฟรี',
       answer_body:
-        'กอล์ฟซิมมูเลเตอร์ตัดอุปสรรคเกือบทั้งหมดที่ทำให้กอล์ฟจริงดูน่ากลัวสำหรับมือใหม่ออกไป\n\n**ทำไมซิมมูเลเตอร์ถึงเหมาะกับมือใหม่**\n- **ไม่ต้องมีอุปกรณ์:** LENGOLF มีไม้มาตรฐานให้ใช้ฟรี แค่เดินเข้ามาก็เล่นได้\n- **ไม่ต้องเรียนกติกา:** ซิมมูเลเตอร์จัดการกติกาให้อัตโนมัติ คุณแค่ตีลูกเท่านั้น\n- **ไม่ต้องเขินอาย:** เบย์เป็นพื้นที่กึ่งส่วนตัว ไม่มีใครในแฟร์เวย์ข้างๆ มองสวิงของคุณ\n- **เห็นพัฒนาการทันที:** ข้อมูลแบบเรียลไทม์แสดงให้เห็นว่าอะไรเปลี่ยนไปในแต่ละสวิง มือใหม่มักเห็นพัฒนาการชัดเจนตั้งแต่ครั้งแรกที่เล่น\n- **ไม่มีแรงกดดันเรื่องเวลา:** ต่างจากสนามจริงที่มีกลุ่มอื่นรออยู่ข้างหลัง ซิมมูเลเตอร์ให้คุณใช้เวลาได้นานเท่าที่ต้องการ\n\n**เซสชันสำหรับมือใหม่เป็นอย่างไร**\n1. ทีมงานส่งไม้ให้และสอนวิธีจับไม้กับท่ายืนพื้นฐาน (2 นาที)\n2. ลองสวิงสองสามครั้ง หน้าจอจะแสดงวิถีลูกและระยะทาง\n3. เริ่มโหมดเกม (ตีเข้าใกล้ธงเป็นที่นิยมสำหรับมือใหม่)\n4. สั่งเครื่องดื่ม แข่งกับเพื่อน และเพลิดเพลินกับบรรยากาศ\n5. หลังจากผ่านไป 30 นาที มือใหม่ส่วนใหญ่จะตีโดนลูกได้สม่ำเสมอขึ้น\n\n**หากอยากเรียนกอล์ฟจริงจัง**\nLENGOLF มีโค้ชที่ได้รับการรับรองจาก PGA Thailand 3 ท่านที่เชี่ยวชาญการสอนมือใหม่ คอร์สเรียนเริ่มต้นที่ประมาณ 1,800 บาท/ชั่วโมง (ข้อมูล ณ กรกฎาคม 2026) รวมการใช้ซิมมูเลเตอร์พร้อมข้อมูลวิเคราะห์วงสวิง นอกจากนี้ยังมีเรียนทดลองฟรี 1 ชั่วโมง ติดต่อจองผ่าน LINE @lengolf\n\n**เคล็ดลับสำหรับมือใหม่**\nเริ่มจากเหล็ก 7 (ไม้ความยาวปานกลาง) เพราะตีง่ายที่สุดและให้ผลลัพธ์ที่น่าพอใจได้เร็ว ทีมงานจะช่วยจัดไม้ที่เหมาะกับคุณให้\n\nค่าเช่าเบย์ที่ LENGOLF อยู่ที่ประมาณ 550 บาท/ชั่วโมง สำหรับผู้เล่นสูงสุด 5 คน ที่ Mercury Ville, BTS ชิดลม (ทางออก 4)',
+        'กอล์ฟซิมมูเลเตอร์ตัดอุปสรรคเกือบทั้งหมดที่ทำให้กอล์ฟจริงดูน่ากลัวสำหรับมือใหม่ออกไป\n\n**ทำไมซิมมูเลเตอร์ถึงเหมาะกับมือใหม่**\n- **ไม่ต้องมีอุปกรณ์:** LENGOLF มีไม้มาตรฐานให้ใช้ฟรี แค่เดินเข้ามาก็เล่นได้\n- **ไม่ต้องเรียนกติกา:** ซิมมูเลเตอร์จัดการกติกาให้อัตโนมัติ คุณแค่ตีลูกเท่านั้น\n- **ไม่ต้องเขินอาย:** เบย์เป็นพื้นที่กึ่งส่วนตัว ไม่มีใครในแฟร์เวย์ข้างๆ มองสวิงของคุณ\n- **เห็นพัฒนาการทันที:** ข้อมูลแบบเรียลไทม์แสดงให้เห็นว่าอะไรเปลี่ยนไปในแต่ละสวิง มือใหม่มักเห็นพัฒนาการชัดเจนตั้งแต่ครั้งแรกที่เล่น\n- **ไม่มีแรงกดดันเรื่องเวลา:** ต่างจากสนามจริงที่มีกลุ่มอื่นรออยู่ข้างหลัง ซิมมูเลเตอร์ให้คุณใช้เวลาได้นานเท่าที่ต้องการ\n\n**เซสชันสำหรับมือใหม่เป็นอย่างไร**\n1. ทีมงานส่งไม้ให้และสอนวิธีจับไม้กับท่ายืนพื้นฐาน (2 นาที)\n2. ลองสวิงสองสามครั้ง หน้าจอจะแสดงวิถีลูกและระยะทาง\n3. เริ่มโหมดเกม (ตีเข้าใกล้ธงเป็นที่นิยมสำหรับมือใหม่)\n4. สั่งเครื่องดื่ม แข่งกับเพื่อน และเพลิดเพลินกับบรรยากาศ\n5. หลังจากผ่านไป 30 นาที มือใหม่ส่วนใหญ่จะตีโดนลูกได้สม่ำเสมอขึ้น\n\n**หากอยากเรียนกอล์ฟจริงจัง**\nLENGOLF มีโค้ชที่ได้รับการรับรองจาก PGA Thailand 3 ท่านที่เชี่ยวชาญการสอนมือใหม่ คนที่ยังไม่เคยเรียนกับเราเริ่มจากทดลองเรียนฟรี 1 ชั่วโมงได้ มีไม้กอล์ฟและห้องซิมให้พร้อม ติดต่อจองผ่าน LINE @lengolf หลังจากนั้นเรียนชั่วโมงละ {{lessonHourlyNum}} บาท ถ้าซื้อแพ็กเกจ ต่ำสุดเหลือชั่วโมงละ {{lesson50hRateNum}} บาท ทุกแพ็กเกจรวมค่าห้องซิมและข้อมูลวิเคราะห์วงสวิงแล้ว (ข้อมูล ณ ตุลาคม 2026)\n\n**เคล็ดลับสำหรับมือใหม่**\nเริ่มจากเหล็ก 7 (ไม้ความยาวปานกลาง) เพราะตีง่ายที่สุดและให้ผลลัพธ์ที่น่าพอใจได้เร็ว ทีมงานจะช่วยจัดไม้ที่เหมาะกับคุณให้\n\nค่าเช่าเบย์ที่ LENGOLF อยู่ที่ประมาณ 550 บาท/ชั่วโมง สำหรับผู้เล่นสูงสุด 5 คน ที่ Mercury Ville, BTS ชิดลม (ทางออก 4)',
       related_questions: [
         { slug: 'do-i-need-experience-to-play-golf-simulator', question: 'ต้องมีประสบการณ์กอล์ฟมาก่อนไหมถึงจะเล่นกอล์ฟซิมมูเลเตอร์ได้' },
         { slug: 'best-way-to-learn-golf-in-bangkok', question: 'วิธีที่ดีที่สุดในการเรียนกอล์ฟในกรุงเทพฯ คืออะไร' },
@@ -1556,7 +1554,7 @@ export const faqPages: FaqSeoPage[] = [
   // the required LENGOLF-scoped construction — 日本人コーチ／日本語でのレッスン
   // negated for LENGOLF only, paired with the LINE @lengolf Japanese booking
   // allowance. No city-wide negative about Bangkok, no claim of JA lessons.
-  // Coach count (3), 1,800THB/hour, free 1-hour trial, 550THB bay rate, 5
+  // Coach count (3), the free 1-hour trial, 550THB bay rate, 5
   // players and the Chidlom address all trace to the EN entry; place names use
   // the settled JA transliterations (ザ・マーキュリービル / BTSチットロム駅).
   {
@@ -1573,12 +1571,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/faq/best-way-to-learn-golf-in-bangkok', '/guide/golf-thailand-beginners', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-18T00:00:00.000Z',
     content: {
       answer_intro:
         'もちろん楽しめます——ゴルフシミュレーターは、初心者がゴルフを試す場所として最適です。経験も道具も、ルールの知識も必要ありません。スコアはシミュレーターが管理し、打った球がどこへ飛んだかを表示し、スイングのデータをリアルタイムで教えてくれます。LENGOLFではスタッフが2分ほどで始め方をご案内し、クラブは無料でお使いいただけます。',
       answer_body:
-        'ゴルフシミュレーターは、初心者が実際のゴルフに感じるハードルを、ほとんど取り払ってくれます。\n\n**初心者にシミュレーターが向いている理由**\n- **道具が不要:** LENGOLFでは標準クラブを無料でご用意。手ぶらでお越しいただけます。\n- **ルールを覚えなくてよい:** ルールはシミュレーターが自動で適用します。あなたは球を打つだけ。\n- **恥ずかしくない:** ベイは半個室のような空間なので、隣のフェアウェイから誰かにスイングを見られることもありません。\n- **すぐに上達を実感:** リアルタイムのデータが、スイングごとに何が変わったかを示します。初心者でも1回のセッションではっきり違いを感じられることがよくあります。\n- **時間に追われない:** 後ろの組を待たせるコースと違い、シミュレーターなら好きなだけ時間をかけられます。\n\n**初心者のセッションの流れ**\n1. スタッフがクラブを渡し、基本のグリップとスタンスをご案内（2分）\n2. 何球か打ってみると、画面に弾道と飛距離が表示されます\n3. ゲームモードを開始（初心者にはニアピンが人気）\n4. ドリンクを注文し、友人と競い、雰囲気を楽しむ\n5. 30分もすれば、多くの初心者が安定して芯に当たるようになります\n\n**本格的にゴルフを習いたい場合**\nLENGOLFには、初心者の指導を得意とするPGA認定コーチが3名在籍しています。レッスンは1時間1,800THB程度から、スイング分析データ付きのシミュレーター利用込みです。1時間の無料体験レッスンもご用意しています。なお、LENGOLFには日本人コーチや日本語でのレッスンはありませんが、ご予約や事前のご相談はLINE @lengolfにて日本語で承っています。\n\n**初心者へのひとこと**\n最初は7番アイアン（中間の長さのクラブ）から始めてみてください。最も打ちやすく、手応えのある結果がすぐ出ます。適したクラブはスタッフがご用意します。\n\nLENGOLFのベイ料金は、最大5名まで1時間550THB程度（2026年7月現在）。ザ・マーキュリービル、BTSチットロム駅（4番出口）にあります。',
+        'ゴルフシミュレーターは、初心者が実際のゴルフに感じるハードルを、ほとんど取り払ってくれます。\n\n**初心者にシミュレーターが向いている理由**\n- **道具が不要:** LENGOLFでは標準クラブを無料でご用意。手ぶらでお越しいただけます。\n- **ルールを覚えなくてよい:** ルールはシミュレーターが自動で適用します。あなたは球を打つだけ。\n- **恥ずかしくない:** ベイは半個室のような空間なので、隣のフェアウェイから誰かにスイングを見られることもありません。\n- **すぐに上達を実感:** リアルタイムのデータが、スイングごとに何が変わったかを示します。初心者でも1回のセッションではっきり違いを感じられることがよくあります。\n- **時間に追われない:** 後ろの組を待たせるコースと違い、シミュレーターなら好きなだけ時間をかけられます。\n\n**初心者のセッションの流れ**\n1. スタッフがクラブを渡し、基本のグリップとスタンスをご案内（2分）\n2. 何球か打ってみると、画面に弾道と飛距離が表示されます\n3. ゲームモードを開始（初心者にはニアピンが人気）\n4. ドリンクを注文し、友人と競い、雰囲気を楽しむ\n5. 30分もすれば、多くの初心者が安定して芯に当たるようになります\n\n**本格的にゴルフを習いたい場合**\nLENGOLFには、初心者の指導を得意とするPGA認定コーチが3名在籍しています。まずは1時間の無料体験から始められます（LENGOLFで初めてレッスンを受ける方が対象、クラブとシミュレーターの利用込み）。その後のレッスンは1時間{{lessonHourlyNum}}THB、パッケージなら1時間あたり{{lesson50hRateNum}}THBからで、スイング分析データ付きのシミュレーター利用込みです（2026年10月現在）。なお、LENGOLFには日本人コーチや日本語でのレッスンはありませんが、ご予約や事前のご相談はLINE @lengolfにて日本語で承っています。\n\n**初心者へのひとこと**\n最初は7番アイアン（中間の長さのクラブ）から始めてみてください。最も打ちやすく、手応えのある結果がすぐ出ます。適したクラブはスタッフがご用意します。\n\nLENGOLFのベイ料金は、最大5名まで1時間550THB程度（2026年7月現在）。ザ・マーキュリービル、BTSチットロム駅（4番出口）にあります。',
       related_questions: [
         { slug: 'best-way-to-learn-golf-in-bangkok', question: 'バンコクのゴルフレッスン、効率よく上達するには？ — 料金と選び方' },
         { slug: 'how-accurate-are-golf-simulators', question: 'ゴルフシミュレーターの精度は？ — 実際のゴルフとの違いを正直に解説' },
@@ -1592,7 +1590,7 @@ export const faqPages: FaqSeoPage[] = [
   // the required LENGOLF-scoped construction — 한국인 코치／한국어 레슨 negated
   // for LENGOLF only, paired with the LINE @lengolf Korean booking allowance.
   // No city-wide negative about Bangkok, no claim of KO-language lessons.
-  // Coach count (3), 1,800바트/hour, free 1-hour trial, 550바트 bay rate, 5
+  // Coach count (3), the free 1-hour trial, 550바트 bay rate, 5
   // players and the Chidlom address all trace to the EN entry; the EN source
   // does not name a floor, so none is added (KO transliterates the station as
   // BTS 칫롬역 but keeps The Mercury Ville in Latin). Title front-loads the KO
@@ -1611,12 +1609,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/faq/best-way-to-learn-golf-in-bangkok', '/guide/golf-thailand-beginners', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-18T00:00:00.000Z',
     content: {
       answer_intro:
         '물론 즐길 수 있어요 — 골프 시뮬레이터(스크린골프)는 초보자가 골프를 처음 시도해 보기에 가장 좋은 곳 중 하나예요. 경험도, 장비도, 규칙 지식도 필요 없어요. 점수는 시뮬레이터가 계산하고, 친 공이 어디로 갔는지 보여주며, 스윙 데이터를 실시간으로 알려줘요. LENGOLF에서는 스태프가 2분 정도면 시작하는 법을 안내해 드리고, 클럽은 무료로 쓰실 수 있어요.',
       answer_body:
-        '골프 시뮬레이터는 초보자가 실제 골프에서 느끼는 문턱을 거의 다 없애 줘요.\n\n**초보자에게 시뮬레이터가 잘 맞는 이유**\n- **장비가 필요 없어요:** LENGOLF에서는 기본 클럽을 무료로 준비해 둬요. 빈손으로 오셔도 돼요.\n- **규칙을 외울 필요가 없어요:** 규칙은 시뮬레이터가 자동으로 적용해요. 여러분은 공만 치시면 돼요.\n- **부끄러울 일이 없어요:** 베이는 반쯤 독립된 공간이라, 옆 페어웨이에서 누가 스윙을 지켜보는 일도 없어요.\n- **바로 느껴지는 향상:** 실시간 데이터가 스윙마다 무엇이 달라졌는지 보여줘요. 초보자도 한 세션 만에 확실한 차이를 느끼는 경우가 많아요.\n- **시간에 쫓기지 않아요:** 뒤 팀을 기다리게 하는 코스와 달리, 시뮬레이터에서는 원하는 만큼 시간을 들일 수 있어요.\n\n**초보자 세션은 이렇게 진행돼요**\n1. 스태프가 클럽을 건네고 기본 그립과 스탠스를 알려드려요 (2분)\n2. 몇 번 쳐 보시면 화면에 탄도와 비거리가 표시돼요\n3. 게임 모드를 시작해요 (초보자에게는 니어핀이 인기예요)\n4. 음료를 주문하고, 친구들과 겨루고, 분위기를 즐겨요\n5. 30분쯤 지나면 대부분의 초보자가 안정적으로 공을 맞히게 돼요\n\n**본격적으로 골프를 배우고 싶다면**\nLENGOLF에는 초보자 지도를 전문으로 하는 PGA 인증 코치 3명이 있어요. 레슨은 시간당 1,800바트 정도부터고, 스윙 분석 데이터가 포함된 시뮬레이터 이용도 함께예요 (2026년 7월 기준). 1시간 무료 체험 레슨도 준비돼 있어요. 참고로 LENGOLF에 한국인 코치나 한국어 레슨은 없지만, 예약과 사전 상담은 LINE @lengolf에서 한국어로 도와드려요.\n\n**초보자를 위한 한마디**\n처음에는 7번 아이언(중간 길이 클럽)부터 시작해 보세요. 가장 치기 쉽고, 만족스러운 결과가 금방 나와요. 알맞은 클럽은 스태프가 챙겨드려요.\n\nLENGOLF의 베이 요금은 최대 5명까지 시간당 550바트 정도예요. The Mercury Ville, BTS 칫롬역(4번 출구)에 있어요.',
+        '골프 시뮬레이터는 초보자가 실제 골프에서 느끼는 문턱을 거의 다 없애 줘요.\n\n**초보자에게 시뮬레이터가 잘 맞는 이유**\n- **장비가 필요 없어요:** LENGOLF에서는 기본 클럽을 무료로 준비해 둬요. 빈손으로 오셔도 돼요.\n- **규칙을 외울 필요가 없어요:** 규칙은 시뮬레이터가 자동으로 적용해요. 여러분은 공만 치시면 돼요.\n- **부끄러울 일이 없어요:** 베이는 반쯤 독립된 공간이라, 옆 페어웨이에서 누가 스윙을 지켜보는 일도 없어요.\n- **바로 느껴지는 향상:** 실시간 데이터가 스윙마다 무엇이 달라졌는지 보여줘요. 초보자도 한 세션 만에 확실한 차이를 느끼는 경우가 많아요.\n- **시간에 쫓기지 않아요:** 뒤 팀을 기다리게 하는 코스와 달리, 시뮬레이터에서는 원하는 만큼 시간을 들일 수 있어요.\n\n**초보자 세션은 이렇게 진행돼요**\n1. 스태프가 클럽을 건네고 기본 그립과 스탠스를 알려드려요 (2분)\n2. 몇 번 쳐 보시면 화면에 탄도와 비거리가 표시돼요\n3. 게임 모드를 시작해요 (초보자에게는 니어핀이 인기예요)\n4. 음료를 주문하고, 친구들과 겨루고, 분위기를 즐겨요\n5. 30분쯤 지나면 대부분의 초보자가 안정적으로 공을 맞히게 돼요\n\n**본격적으로 골프를 배우고 싶다면**\nLENGOLF에는 초보자 지도를 전문으로 하는 PGA 인증 코치 3명이 있어요. 먼저 1시간 무료 체험으로 시작하실 수 있어요(LENGOLF 레슨이 처음인 분 대상, 클럽과 시뮬레이터 이용 포함). 이후 레슨은 시간당 {{lessonHourlyNum}}바트, 패키지는 시간당 {{lesson50hRateNum}}바트부터고, 스윙 분석 데이터가 포함된 시뮬레이터 이용도 함께예요 (2026년 10월 기준). 참고로 LENGOLF에 한국인 코치나 한국어 레슨은 없지만, 예약과 사전 상담은 LINE @lengolf에서 한국어로 도와드려요.\n\n**초보자를 위한 한마디**\n처음에는 7번 아이언(중간 길이 클럽)부터 시작해 보세요. 가장 치기 쉽고, 만족스러운 결과가 금방 나와요. 알맞은 클럽은 스태프가 챙겨드려요.\n\nLENGOLF의 베이 요금은 최대 5명까지 시간당 550바트 정도예요. The Mercury Ville, BTS 칫롬역(4번 출구)에 있어요.',
       related_questions: [
         { slug: 'best-way-to-learn-golf-in-bangkok', question: '방콕에서 골프 배우는 가장 좋은 방법 — 레슨 요금과 선택 기준' },
         { slug: 'how-accurate-are-golf-simulators', question: '골프 시뮬레이터 정확도는? — 실제 골프와 무엇이 다를까' },
@@ -1631,7 +1629,7 @@ export const faqPages: FaqSeoPage[] = [
   // LENGOLF only, paired with the LINE @lengolf Chinese booking allowance
   // (same wording as the shipped exp-32-zh guide). No city-wide negative about
   // Bangkok, no claim of Chinese-language lessons.
-  // Coach count (3), 1,800泰铢/hour, free 1-hour trial, 550泰铢 bay rate, 5
+  // Coach count (3), the free 1-hour trial, 550泰铢 bay rate, 5
   // players and the Chidlom address all trace to the EN entry; the EN source
   // does not name a floor, so none is added. ZH keeps The Mercury Ville and
   // BTS Chidlom in Latin per the transliteration note. Price-bearing lines
@@ -1650,12 +1648,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/faq/best-way-to-learn-golf-in-bangkok', '/guide/golf-thailand-beginners', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-18T00:00:00.000Z',
     content: {
       answer_intro:
         '当然可以——高尔夫模拟器是初学者接触高尔夫最好的地方之一。你不需要经验、不需要装备，也不用懂规则。模拟器会自动记分，显示每一球飞到哪里，还会实时给出挥杆数据。在LENGOLF，工作人员大约2分钟就能教你上手，球杆免费提供。',
       answer_body:
-        '高尔夫模拟器几乎把真实高尔夫让初学者望而生畏的门槛都拿掉了。\n\n**模拟器为什么适合初学者**\n- **不需要装备：** LENGOLF免费提供标准球杆，空手来就行。\n- **不用先学规则：** 规则由模拟器自动处理，你只管把球打出去。\n- **不会尴尬：** 球位是半独立的空间，不会有人在隔壁球道盯着你的挥杆。\n- **进步看得见：** 实时数据会告诉你这一杆和上一杆之间改变了什么。初学者常常在一次体验里就能感到明显变化。\n- **不赶时间：** 不像球场后面还有组在等，模拟器可以让你慢慢来。\n\n**初学者的一次体验大致是这样**\n1. 工作人员递上球杆，讲解基本握杆和站姿（2分钟）\n2. 你先试打几球，屏幕上会显示弹道和距离\n3. 开始一个游戏模式（近洞比赛在初学者中很受欢迎）\n4. 点上饮料，和朋友较量一番，享受气氛\n5. 30分钟左右，多数初学者就能比较稳定地击中球了\n\n**如果你想认真学高尔夫**\nLENGOLF有三位专精初学者教学的PGA认定教练。课程每小时1,800泰铢起，含带挥杆分析数据的模拟器使用，截至2026年7月。另外还有1小时的免费体验课。需要说明的是，LENGOLF没有中国人教练，也没有中文课程，但预订和事前咨询可以通过LINE @lengolf用中文办理。\n\n**给初学者的一句建议**\n先从7号铁（中等长度的球杆）开始。它最好打，也最快能打出让人满意的结果。合适的球杆工作人员会帮你准备。\n\nLENGOLF的球位收费约为每小时550泰铢，最多可5人同时使用；地点在The Mercury Ville，BTS Chidlom站（4号出口）。',
+        '高尔夫模拟器几乎把真实高尔夫让初学者望而生畏的门槛都拿掉了。\n\n**模拟器为什么适合初学者**\n- **不需要装备：** LENGOLF免费提供标准球杆，空手来就行。\n- **不用先学规则：** 规则由模拟器自动处理，你只管把球打出去。\n- **不会尴尬：** 球位是半独立的空间，不会有人在隔壁球道盯着你的挥杆。\n- **进步看得见：** 实时数据会告诉你这一杆和上一杆之间改变了什么。初学者常常在一次体验里就能感到明显变化。\n- **不赶时间：** 不像球场后面还有组在等，模拟器可以让你慢慢来。\n\n**初学者的一次体验大致是这样**\n1. 工作人员递上球杆，讲解基本握杆和站姿（2分钟）\n2. 你先试打几球，屏幕上会显示弹道和距离\n3. 开始一个游戏模式（近洞比赛在初学者中很受欢迎）\n4. 点上饮料，和朋友较量一番，享受气氛\n5. 30分钟左右，多数初学者就能比较稳定地击中球了\n\n**如果你想认真学高尔夫**\nLENGOLF有三位专精初学者教学的PGA认定教练。可以先预约1小时免费体验（适用于首次在LENGOLF上课的学员，含球杆和模拟器使用）。之后的课程每小时{{lessonHourlyNum}}泰铢，套餐低至每小时{{lesson50hRateNum}}泰铢，含带挥杆分析数据的模拟器使用，截至2026年10月。需要说明的是，LENGOLF没有中国人教练，也没有中文课程，但预订和事前咨询可以通过LINE @lengolf用中文办理。\n\n**给初学者的一句建议**\n先从7号铁（中等长度的球杆）开始。它最好打，也最快能打出让人满意的结果。合适的球杆工作人员会帮你准备。\n\nLENGOLF的球位收费约为每小时550泰铢，最多可5人同时使用；地点在The Mercury Ville，BTS Chidlom站（4号出口）。',
       related_questions: [
         { slug: 'best-way-to-learn-golf-in-bangkok', question: '在曼谷学高尔夫的最佳方式 — 课程收费与选择标准' },
         { slug: 'how-accurate-are-golf-simulators', question: '高尔夫模拟器的精度如何？ — 和真实球场差在哪里' },
@@ -1670,7 +1668,7 @@ export const faqPages: FaqSeoPage[] = [
     slug: 'best-way-to-learn-golf-in-bangkok',
     title: 'What Is the Best Way to Learn Golf in Bangkok?',
     meta_description:
-      'The best way to learn golf in Bangkok is with a PGA-certified coach on a simulator. Lessons from 1,800 THB/hour include swing analysis and real-time feedback.',
+      'The best way to learn golf in Bangkok is with a PGA-certified coach on a simulator. At LENGOLF, start with a free 1-hour trial, then {{lessonHourlyNum}} THB per hour, or from {{lesson50hRateNum}} THB per hour on packages.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1678,12 +1676,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'en',
     related_slugs: ['/faq/can-beginners-play-golf-simulators', '/faq/how-much-does-indoor-golf-cost-in-bangkok', '/lessons'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-18T00:00:00.000Z',
     content: {
       answer_intro:
-        'The best way to learn golf in Bangkok is with a PGA-certified coach using a golf simulator. Simulator lessons give you real-time swing data (ball speed, launch angle, spin rate) that\'s impossible to get on a driving range, plus video analysis and instant feedback. At LENGOLF, lessons with PGA-certified coaches start at 1,800 THB per hour with simulator usage included.',
+        'The best way to learn golf in Bangkok is with a PGA-certified coach using a golf simulator. Simulator lessons give you real-time swing data (ball speed, launch angle, spin rate) that\'s impossible to get on a driving range, plus video analysis and instant feedback. At LENGOLF, new students start with a free 1-hour trial with a Thailand PGA coach, then pay {{lessonHourlyNum}} THB per hour, or from {{lesson50hRateNum}} THB per hour on packages, with simulator usage included.',
       answer_body:
-        'Bangkok has several options for learning golf, each with trade-offs.\n\n**1. Simulator Lessons with a Coach (Recommended)**\nGolf simulators provide data-driven instruction that accelerates learning. At LENGOLF, three Thailand PGA-certified coaches (PRO Boss, PRO Ratchavin, and PRO Min) teach all levels using Bravo simulator technology. You see exactly what your club is doing at impact — club path, face angle, ball speed, spin — which means faster improvement than guesswork on a range.\n\nLESSON PRICING:\n- 1 hour: 1,800 THB (1 golfer)\n- 5 hours: 8,500 THB (valid 6 months)\n- 10 hours: 16,000 THB (valid 12 months)\n- Starter Package: 11,000 THB (5 hours coaching + 5 hours practice + free golf glove)\n- Free 1-hour trial lesson available — contact LINE @lengolf\n\n**2. Driving Range with a Pro**\nBangkok has several driving ranges with coaches available. These are good for hitting lots of balls but lack the data feedback of simulators. Ranges are also hot, noisy, and you can\'t see exactly where your ball lands.\n\n**3. On-Course Lessons**\nSome courses offer on-course instruction. Better for advanced players learning course management than for beginners learning swing mechanics.\n\n**4. Self-Teaching on YouTube**\nFree but risky. Without feedback, beginners often build bad habits that are harder to fix later.\n\n**Our Recommendation for Beginners**\nStart with the Starter Package at LENGOLF (5 hours coaching + 5 hours practice for 11,000 THB). Build fundamentals on the simulator with data-driven feedback, then move to the Sim to Fairway package (13,499 THB) when you\'re ready for a real course.',
+        'Bangkok has several options for learning golf, each with trade-offs.\n\n**1. Simulator Lessons with a Coach (Recommended)**\nGolf simulators provide data-driven instruction that accelerates learning. At LENGOLF, three Thailand PGA-certified coaches (PRO Boss, PRO Ratchavin, and PRO Min) teach all levels using Bravo simulator technology. You see exactly what your club is doing at impact — club path, face angle, ball speed, spin — which means faster improvement than guesswork on a range.\n\nLESSON PRICING:\n- Free 1-hour trial for new students (clubs and simulator included): book on LINE @lengolf\n- 1 hour: {{lessonHourlyNum}} THB (1 golfer)\n- 5 hours: {{lesson5hNum}} THB ({{lesson5hRateNum}} THB per hour, valid 6 months)\n- 10 hours: {{lesson10hNum}} THB ({{lesson10hRateNum}} THB per hour, valid 12 months)\n- 50 hours: {{lesson50hNum}} THB ({{lesson50hRateNum}} THB per hour, valid 24 months)\n- Starter Package: {{lessonStarterNum}} THB (5 hours coaching + 5 hours practice + free golf glove)\n\n**2. Driving Range with a Pro**\nBangkok has several driving ranges with coaches available. These are good for hitting lots of balls but lack the data feedback of simulators. Ranges are also hot, noisy, and you can\'t see exactly where your ball lands.\n\n**3. On-Course Lessons**\nSome courses offer on-course instruction. Better for advanced players learning course management than for beginners learning swing mechanics.\n\n**4. Self-Teaching on YouTube**\nFree but risky. Without feedback, beginners often build bad habits that are harder to fix later.\n\n**Our Recommendation for Beginners**\nStart with the Starter Package at LENGOLF (5 hours coaching + 5 hours practice for {{lessonStarterNum}} THB). Build fundamentals on the simulator with data-driven feedback, then move to the Sim to Fairway package ({{lessonSimToFairwayNum}} THB) when you\'re ready for a real course.',
       related_questions: [
         { slug: 'can-beginners-play-golf-simulators', question: 'Can Beginners Play Golf Simulators?' },
         { slug: 'how-much-does-indoor-golf-cost-in-bangkok', question: 'How Much Does Indoor Golf Cost in Bangkok?' },
@@ -1693,23 +1691,17 @@ export const faqPages: FaqSeoPage[] = [
   },
 
   // ─── TH: best-way-to-learn-golf-in-bangkok ───
-  // Static content mirroring the EN entry's literal prices — this is what the
-  // FAQ renderer actually serves. NOTE: the EN sibling once carried an
-  // unwired dynamic-pricing getter for this entry. It was deleted along with
-  // its two siblings and getPriceGuideTokens: nothing called any of them, and
-  // their imports were the only edges tying this file to lib/pricing. These
-  // static entries are now the single source of truth. If a live-price
-  // version is ever wired up, the consuming route must declare its own
-  // `export const revalidate` — `npm run validate:pricing-revalidate` enforces
-  // that, because the pricing fetch caches for 30 days and would otherwise
-  // set the page's interval.
+  // Lesson prices are {{lesson…}} fact tokens (lib/site-facts.ts), resolved
+  // with interpolateFactsDeep() in app/[locale]/faq/[slug]/page.tsx and
+  // llms-full.txt, so they move with /lessons/. The answer leads with the free
+  // 1-hour trial, as /lessons/ does.
   {
     id: 'faq-11-th',
     page_type: 'faq',
     slug: 'best-way-to-learn-golf-in-bangkok',
     title: 'วิธีที่ดีที่สุดในการเรียนกอล์ฟในกรุงเทพฯ คืออะไร',
     meta_description:
-      'วิธีที่ดีที่สุดในการเรียนกอล์ฟในกรุงเทพฯ คือเรียนกับโค้ชที่ได้รับการรับรองจาก PGA บนซิมมูเลเตอร์ คอร์สเรียนเริ่มต้นที่ 1,800 บาท/ชั่วโมง รวมการวิเคราะห์วงสวิงและข้อมูลป้อนกลับแบบเรียลไทม์',
+      'วิธีที่ดีที่สุดในการเรียนกอล์ฟในกรุงเทพฯ คือเรียนกับโค้ชที่ได้รับการรับรองจาก PGA บนซิมมูเลเตอร์ ที่ LENGOLF เริ่มจากทดลองเรียนฟรี 1 ชั่วโมง จากนั้นชั่วโมงละ {{lessonHourlyNum}} บาท ถ้าซื้อแพ็กเกจ ต่ำสุดเหลือชั่วโมงละ {{lesson50hRateNum}} บาท รวมการวิเคราะห์วงสวิงและข้อมูลป้อนกลับแบบเรียลไทม์',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1717,12 +1709,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'th',
     related_slugs: ['/faq/can-beginners-play-golf-simulators', '/lessons', '/guide/golf-thailand-beginners'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-18T00:00:00.000Z',
     content: {
       answer_intro:
-        'วิธีที่ดีที่สุดในการเรียนกอล์ฟในกรุงเทพฯ คือเรียนกับโค้ชที่ได้รับการรับรองจาก PGA Thailand โดยใช้กอล์ฟซิมมูเลเตอร์ คอร์สเรียนบนซิมมูเลเตอร์ให้ข้อมูลการสวิงแบบเรียลไทม์ (ความเร็วลูก มุมปล่อยลูก อัตราการหมุน) ซึ่งหาไม่ได้จากสนามไดรฟ์ทั่วไป พร้อมทั้งวิเคราะห์วิดีโอและข้อมูลป้อนกลับทันที ที่ LENGOLF คอร์สเรียนกับโค้ชที่ได้รับการรับรองจาก PGA Thailand เริ่มต้นที่ 1,800 บาทต่อชั่วโมง รวมการใช้ซิมมูเลเตอร์',
+        'วิธีที่ดีที่สุดในการเรียนกอล์ฟในกรุงเทพฯ คือเรียนกับโค้ชที่ได้รับการรับรองจาก PGA Thailand โดยใช้กอล์ฟซิมมูเลเตอร์ คอร์สเรียนบนซิมมูเลเตอร์ให้ข้อมูลการสวิงแบบเรียลไทม์ (ความเร็วลูก มุมปล่อยลูก อัตราการหมุน) ซึ่งหาไม่ได้จากสนามไดรฟ์ทั่วไป พร้อมทั้งวิเคราะห์วิดีโอและข้อมูลป้อนกลับทันที ที่ LENGOLF คนที่ยังไม่เคยเรียนกับเราเริ่มจากทดลองเรียนฟรี 1 ชั่วโมงกับโค้ชที่ได้รับการรับรองจาก PGA Thailand จากนั้นเรียนชั่วโมงละ {{lessonHourlyNum}} บาท ถ้าซื้อแพ็กเกจ ต่ำสุดเหลือชั่วโมงละ {{lesson50hRateNum}} บาท ทุกแพ็กเกจรวมค่าห้องซิมแล้ว',
       answer_body:
-        'กรุงเทพฯ มีตัวเลือกหลายแบบสำหรับการเรียนกอล์ฟ แต่ละแบบก็มีข้อดีข้อเสียต่างกันไป\n\n**1. คอร์สเรียนบนซิมมูเลเตอร์กับโค้ช (แนะนำ)**\nกอล์ฟซิมมูเลเตอร์ให้การสอนที่อ้างอิงข้อมูลจริง ช่วยให้พัฒนาได้เร็วขึ้น ที่ LENGOLF มีโค้ชที่ได้รับการรับรองจาก PGA Thailand 3 ท่าน (โปร Boss, โปร Ratchavin และโปร Min) สอนทุกระดับโดยใช้เทคโนโลยีซิมมูเลเตอร์ Bravo คุณจะเห็นชัดเจนว่าไม้ของคุณทำอะไรบ้าง ณ จังหวะปะทะลูก ทั้งวิถีการเหวี่ยงไม้ มุมหน้าไม้ ความเร็วลูก และการหมุน ซึ่งหมายถึงการพัฒนาที่เร็วกว่าการลองผิดลองถูกที่สนามไดรฟ์ทั่วไป\n\nราคาคอร์สเรียน (ข้อมูล ณ กรกฎาคม 2026):\n- 1 ชั่วโมง: 1,800 บาท (นักกอล์ฟ 1 คน)\n- 5 ชั่วโมง: 8,500 บาท (ใช้ได้ 6 เดือน)\n- 10 ชั่วโมง: 16,000 บาท (ใช้ได้ 12 เดือน)\n- แพ็กเกจเริ่มต้น: 11,000 บาท (คอร์สเรียน 5 ชั่วโมง + ฝึกซ้อม 5 ชั่วโมง + ถุงมือกอล์ฟฟรี)\n- มีเรียนทดลองฟรี 1 ชั่วโมง ติดต่อผ่าน LINE @lengolf\n\n**2. สนามไดรฟ์พร้อมโปร**\nกรุงเทพฯ มีสนามไดรฟ์หลายแห่งที่มีโค้ชให้บริการ เหมาะสำหรับการตีลูกจำนวนมาก แต่ขาดข้อมูลป้อนกลับแบบซิมมูเลเตอร์ สนามไดรฟ์ยังร้อนและมีเสียงดัง อีกทั้งมองไม่เห็นชัดว่าลูกตกตรงไหน\n\n**3. คอร์สเรียนในสนามจริง**\nบางสนามมีการสอนในสนามจริง เหมาะกับผู้เล่นระดับสูงที่ต้องการเรียนรู้การบริหารจัดการสนาม มากกว่ามือใหม่ที่ต้องการเรียนกลไกการสวิง\n\n**4. เรียนรู้ด้วยตัวเองผ่าน YouTube**\nฟรีแต่มีความเสี่ยง เพราะไม่มีข้อมูลป้อนกลับ มือใหม่มักสร้างนิสัยที่ผิดซึ่งแก้ไขได้ยากขึ้นในภายหลัง\n\n**คำแนะนำของเราสำหรับมือใหม่**\nเริ่มต้นด้วยแพ็กเกจเริ่มต้นที่ LENGOLF (คอร์สเรียน 5 ชั่วโมง + ฝึกซ้อม 5 ชั่วโมง ราคา 11,000 บาท) สร้างพื้นฐานบนซิมมูเลเตอร์ด้วยข้อมูลป้อนกลับที่แม่นยำ จากนั้นค่อยต่อยอดด้วยแพ็กเกจ Sim to Fairway (13,499 บาท) เมื่อพร้อมออกไปเล่นสนามจริง',
+        'กรุงเทพฯ มีตัวเลือกหลายแบบสำหรับการเรียนกอล์ฟ แต่ละแบบก็มีข้อดีข้อเสียต่างกันไป\n\n**1. คอร์สเรียนบนซิมมูเลเตอร์กับโค้ช (แนะนำ)**\nกอล์ฟซิมมูเลเตอร์ให้การสอนที่อ้างอิงข้อมูลจริง ช่วยให้พัฒนาได้เร็วขึ้น ที่ LENGOLF มีโค้ชที่ได้รับการรับรองจาก PGA Thailand 3 ท่าน (โปร Boss, โปร Ratchavin และโปร Min) สอนทุกระดับโดยใช้เทคโนโลยีซิมมูเลเตอร์ Bravo คุณจะเห็นชัดเจนว่าไม้ของคุณทำอะไรบ้าง ณ จังหวะปะทะลูก ทั้งวิถีการเหวี่ยงไม้ มุมหน้าไม้ ความเร็วลูก และการหมุน ซึ่งหมายถึงการพัฒนาที่เร็วกว่าการลองผิดลองถูกที่สนามไดรฟ์ทั่วไป\n\nราคาคอร์สเรียน (ข้อมูล ณ ตุลาคม 2026):\n- ทดลองเรียนฟรี 1 ชั่วโมง สำหรับคนที่ยังไม่เคยเรียนกับ LENGOLF (มีไม้กอล์ฟและห้องซิมให้) จองทาง LINE @lengolf\n- 1 ชั่วโมง: {{lessonHourlyNum}} บาท (นักกอล์ฟ 1 คน)\n- 5 ชั่วโมง: {{lesson5hNum}} บาท (ตกชั่วโมงละ {{lesson5hRateNum}} บาท ใช้ได้ 6 เดือน)\n- 10 ชั่วโมง: {{lesson10hNum}} บาท (ตกชั่วโมงละ {{lesson10hRateNum}} บาท ใช้ได้ 12 เดือน)\n- 50 ชั่วโมง: {{lesson50hNum}} บาท (ตกชั่วโมงละ {{lesson50hRateNum}} บาท ใช้ได้ 24 เดือน)\n- แพ็กเกจ Starter: {{lessonStarterNum}} บาท (คอร์สเรียน 5 ชั่วโมง + ฝึกซ้อม 5 ชั่วโมง + ถุงมือกอล์ฟฟรี)\n\n**2. สนามไดรฟ์พร้อมโปร**\nกรุงเทพฯ มีสนามไดรฟ์หลายแห่งที่มีโค้ชให้บริการ เหมาะสำหรับการตีลูกจำนวนมาก แต่ขาดข้อมูลป้อนกลับแบบซิมมูเลเตอร์ สนามไดรฟ์ยังร้อนและมีเสียงดัง อีกทั้งมองไม่เห็นชัดว่าลูกตกตรงไหน\n\n**3. คอร์สเรียนในสนามจริง**\nบางสนามมีการสอนในสนามจริง เหมาะกับผู้เล่นระดับสูงที่ต้องการเรียนรู้การบริหารจัดการสนาม มากกว่ามือใหม่ที่ต้องการเรียนกลไกการสวิง\n\n**4. เรียนรู้ด้วยตัวเองผ่าน YouTube**\nฟรีแต่มีความเสี่ยง เพราะไม่มีข้อมูลป้อนกลับ มือใหม่มักสร้างนิสัยที่ผิดซึ่งแก้ไขได้ยากขึ้นในภายหลัง\n\n**คำแนะนำของเราสำหรับมือใหม่**\nเริ่มด้วยแพ็กเกจ Starter ของ LENGOLF (คอร์สเรียน 5 ชั่วโมง + ฝึกซ้อม 5 ชั่วโมง ราคา {{lessonStarterNum}} บาท) สร้างพื้นฐานบนซิมมูเลเตอร์ด้วยข้อมูลป้อนกลับที่แม่นยำ จากนั้นค่อยต่อยอดด้วยแพ็กเกจ Sim to Fairway ({{lessonSimToFairwayNum}} บาท) เมื่อพร้อมออกไปเล่นสนามจริง',
       related_questions: [
         { slug: 'can-beginners-play-golf-simulators', question: 'มือใหม่เล่นกอล์ฟซิมมูเลเตอร์ได้ไหม' },
         { slug: '/guide/golf-thailand-beginners', question: 'กอล์ฟในไทยสำหรับมือใหม่ — ทุกสิ่งที่คุณต้องรู้' },
@@ -1732,16 +1724,10 @@ export const faqPages: FaqSeoPage[] = [
   },
 
   // ─── JA: best-way-to-learn-golf-in-bangkok ───
-  // Static content mirroring the EN entry's literal prices — this is what the
-  // FAQ renderer actually serves. NOTE: the EN sibling once carried an
-  // unwired dynamic-pricing getter for this entry. It was deleted along with
-  // its two siblings and getPriceGuideTokens: nothing called any of them, and
-  // their imports were the only edges tying this file to lib/pricing. These
-  // static entries are now the single source of truth. If a live-price
-  // version is ever wired up, the consuming route must declare its own
-  // `export const revalidate` — `npm run validate:pricing-revalidate` enforces
-  // that, because the pricing fetch caches for 30 days and would otherwise
-  // set the page's interval.
+  // Lesson prices are {{lesson…}} fact tokens (lib/site-facts.ts), resolved
+  // with interpolateFactsDeep() in app/[locale]/faq/[slug]/page.tsx and
+  // llms-full.txt, so they move with /lessons/. The answer leads with the free
+  // 1-hour trial, as /lessons/ does.
   // HONESTY: language support uses the required LENGOLF-scoped construction —
   // 日本人コーチ／日本語でのレッスン negated for LENGOLF only, paired with the
   // LINE @lengolf Japanese booking allowance and the on-screen-numbers point.
@@ -1753,7 +1739,7 @@ export const faqPages: FaqSeoPage[] = [
     slug: 'best-way-to-learn-golf-in-bangkok',
     title: 'バンコクのゴルフレッスン、効率よく上達するには？ — 料金と選び方',
     meta_description:
-      'バンコクでゴルフを学ぶなら、PGA認定コーチによるシミュレーターレッスンが最短ルートです。LENGOLFは1時間1,800THBから、スイングデータとリアルタイムのフィードバック付き。1時間の無料体験もご用意しています（2026年7月現在）。',
+      'バンコクでゴルフを学ぶなら、PGA認定コーチによるシミュレーターレッスンが最短ルートです。LENGOLFは1時間の無料体験から始められ、その後は1時間{{lessonHourlyNum}}THB、パッケージなら1時間あたり{{lesson50hRateNum}}THBから。スイングデータとリアルタイムのフィードバック付きです（2026年10月現在）。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1761,12 +1747,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/faq/can-beginners-play-golf-simulators', '/lessons', '/guide/golf-lessons-bangkok-coaches'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-18T00:00:00.000Z',
     content: {
       answer_intro:
-        'バンコクでゴルフを学ぶ最も効率的な方法は、PGA認定コーチのもとでゴルフシミュレーターを使うことです。シミュレーターレッスンなら、ドライビングレンジでは得られないリアルタイムのスイングデータ（ボールスピード、打ち出し角、スピン量）に加え、動画分析と即時のフィードバックが得られます。LENGOLFでは、PGA認定コーチによるレッスンを1時間1,800THBから、シミュレーター利用込みでご提供しています（2026年7月現在）。',
+        'バンコクでゴルフを学ぶ最も効率的な方法は、PGA認定コーチのもとでゴルフシミュレーターを使うことです。シミュレーターレッスンなら、ドライビングレンジでは得られないリアルタイムのスイングデータ（ボールスピード、打ち出し角、スピン量）に加え、動画分析と即時のフィードバックが得られます。LENGOLFでは、PGA認定コーチによる1時間の無料体験から始められ、その後のレッスンは1時間{{lessonHourlyNum}}THB、パッケージなら1時間あたり{{lesson50hRateNum}}THBからで、いずれもシミュレーター利用込みです（2026年10月現在）。',
       answer_body:
-        'バンコクでゴルフを学ぶ方法はいくつかあり、それぞれに一長一短があります。\n\n**1. コーチによるシミュレーターレッスン（おすすめ）**\nゴルフシミュレーターは数値にもとづいた指導を可能にし、上達のスピードを引き上げてくれます。LENGOLFでは、タイPGA認定コーチ3名（PRO Boss、PRO Ratchavin、PRO Min）がBravoのシミュレーター技術を使い、あらゆるレベルの方を指導しています。インパクトの瞬間にクラブがどう動いているか——クラブパス、フェース角、ボールスピード、スピン量——が正確に見えるため、レンジで感覚を頼りに試行錯誤するより早く上達できます。\n\nなお、LENGOLFには日本人コーチや日本語でのレッスンはありませんが、ご予約や事前のご相談はLINE @lengolfにて日本語で承っています。レッスン中は画面にヘッドスピードや打ち出し角といった数値が表示されるため、言葉の壁があっても改善点を目で確認しやすいのが特長です。\n\nレッスン料金:\n- 1時間: 1,800THB（1名）\n- 5時間: 8,500THB（有効期限6か月）\n- 10時間: 16,000THB（有効期限12か月）\n- スターターパッケージ: 11,000THB（レッスン5時間 + 練習5時間 + ゴルフグローブ付き）\n- 1時間の無料体験レッスンあり——ご連絡はLINE @lengolfまで\n\n**2. ドライビングレンジでのプロレッスン**\nバンコクには、コーチが常駐するドライビングレンジがいくつもあります。球数を打ちたい方には向きますが、シミュレーターのようなデータフィードバックはありません。暑さや騒音もあり、球がどこに落ちたか正確には見えにくいという難点もあります。\n\n**3. オンコースレッスン**\n実際のコースで指導を受けられる施設もあります。スイングの基礎を固めたい初心者より、コースマネジメントを学びたい上級者に向いた形式です。\n\n**4. YouTubeでの独学**\n無料ですが、リスクもあります。フィードバックがないため、初心者は後から直しにくい悪い癖を身につけてしまいがちです。\n\n**初心者の方へのおすすめ**\nまずはLENGOLFのスターターパッケージ（レッスン5時間 + 練習5時間で11,000THB）から。シミュレーターのデータフィードバックで基礎を固め、実際のコースに出る準備が整ったらSim to Fairwayパッケージ（13,499THB）へ進む、という流れがおすすめです。',
+        'バンコクでゴルフを学ぶ方法はいくつかあり、それぞれに一長一短があります。\n\n**1. コーチによるシミュレーターレッスン（おすすめ）**\nゴルフシミュレーターは数値にもとづいた指導を可能にし、上達のスピードを引き上げてくれます。LENGOLFでは、タイPGA認定コーチ3名（PRO Boss、PRO Ratchavin、PRO Min）がBravoのシミュレーター技術を使い、あらゆるレベルの方を指導しています。インパクトの瞬間にクラブがどう動いているか——クラブパス、フェース角、ボールスピード、スピン量——が正確に見えるため、レンジで感覚を頼りに試行錯誤するより早く上達できます。\n\nなお、LENGOLFには日本人コーチや日本語でのレッスンはありませんが、ご予約や事前のご相談はLINE @lengolfにて日本語で承っています。レッスン中は画面にヘッドスピードや打ち出し角といった数値が表示されるため、言葉の壁があっても改善点を目で確認しやすいのが特長です。\n\nレッスン料金:\n- 1時間の無料体験: LENGOLFで初めてレッスンを受ける方が対象（クラブとシミュレーターの利用込み）。ご予約はLINE @lengolfまで\n- 1時間: {{lessonHourlyNum}}THB（1名）\n- 5時間: {{lesson5hNum}}THB（1時間あたり{{lesson5hRateNum}}THB、有効期限6か月）\n- 10時間: {{lesson10hNum}}THB（1時間あたり{{lesson10hRateNum}}THB、有効期限12か月）\n- 50時間: {{lesson50hNum}}THB（1時間あたり{{lesson50hRateNum}}THB、有効期限24か月）\n- スターターパッケージ: {{lessonStarterNum}}THB（レッスン5時間 + 練習5時間 + ゴルフグローブ付き）\n\n**2. ドライビングレンジでのプロレッスン**\nバンコクには、コーチが常駐するドライビングレンジがいくつもあります。球数を打ちたい方には向きますが、シミュレーターのようなデータフィードバックはありません。暑さや騒音もあり、球がどこに落ちたか正確には見えにくいという難点もあります。\n\n**3. オンコースレッスン**\n実際のコースで指導を受けられる施設もあります。スイングの基礎を固めたい初心者より、コースマネジメントを学びたい上級者に向いた形式です。\n\n**4. YouTubeでの独学**\n無料ですが、リスクもあります。フィードバックがないため、初心者は後から直しにくい悪い癖を身につけてしまいがちです。\n\n**初心者の方へのおすすめ**\nまずはLENGOLFのスターターパッケージ（レッスン5時間 + 練習5時間で{{lessonStarterNum}}THB）から。シミュレーターのデータフィードバックで基礎を固め、実際のコースに出る準備が整ったらSim to Fairwayパッケージ（{{lessonSimToFairwayNum}}THB）へ進む、という流れがおすすめです。',
       related_questions: [
         { slug: 'can-beginners-play-golf-simulators', question: 'ゴルフシミュレーターは初心者でも楽しめる？ — 未経験から始める手順' },
         { slug: '/guide/golf-lessons-bangkok-coaches', question: 'バンコクのゴルフレッスン — 費用とコーチの選び方' },
@@ -1776,16 +1762,10 @@ export const faqPages: FaqSeoPage[] = [
   },
 
   // ─── KO: best-way-to-learn-golf-in-bangkok ───
-  // Static content mirroring the EN entry's literal prices — this is what the
-  // FAQ renderer actually serves. NOTE: the EN sibling once carried an
-  // unwired dynamic-pricing getter for this entry. It was deleted along with
-  // its two siblings and getPriceGuideTokens: nothing called any of them, and
-  // their imports were the only edges tying this file to lib/pricing. These
-  // static entries are now the single source of truth. If a live-price
-  // version is ever wired up, the consuming route must declare its own
-  // `export const revalidate` — `npm run validate:pricing-revalidate` enforces
-  // that, because the pricing fetch caches for 30 days and would otherwise
-  // set the page's interval.
+  // Lesson prices are {{lesson…}} fact tokens (lib/site-facts.ts), resolved
+  // with interpolateFactsDeep() in app/[locale]/faq/[slug]/page.tsx and
+  // llms-full.txt, so they move with /lessons/. The answer leads with the free
+  // 1-hour trial, as /lessons/ does.
   // HONESTY: language support uses the required LENGOLF-scoped construction —
   // 한국인 코치／한국어 레슨 negated for LENGOLF only, paired with the LINE
   // @lengolf Korean booking allowance and the on-screen-numbers point. No
@@ -1798,7 +1778,7 @@ export const faqPages: FaqSeoPage[] = [
     slug: 'best-way-to-learn-golf-in-bangkok',
     title: '방콕에서 골프 배우는 가장 좋은 방법 — 레슨 요금과 선택 기준',
     meta_description:
-      '방콕에서 골프를 배운다면 PGA 인증 코치의 시뮬레이터 레슨이 가장 빠른 길이에요. LENGOLF는 시간당 1,800바트부터, 스윙 데이터와 실시간 피드백이 포함돼요. 1시간 무료 체험 레슨도 준비돼 있어요 (2026년 7월 기준).',
+      '방콕에서 골프를 배운다면 PGA 인증 코치의 시뮬레이터 레슨이 가장 빠른 길이에요. LENGOLF는 1시간 무료 체험으로 시작하고, 이후 시간당 {{lessonHourlyNum}}바트, 패키지는 시간당 {{lesson50hRateNum}}바트부터예요. 스윙 데이터와 실시간 피드백이 포함돼요 (2026년 10월 기준).',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1806,12 +1786,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/faq/can-beginners-play-golf-simulators', '/lessons', '/guide/golf-lessons-bangkok-coaches'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-18T00:00:00.000Z',
     content: {
       answer_intro:
-        '방콕에서 골프를 배우는 가장 좋은 방법은 PGA 인증 코치와 함께 골프 시뮬레이터를 쓰는 거예요. 시뮬레이터 레슨은 드라이빙 레인지에서는 얻을 수 없는 실시간 스윙 데이터(볼 스피드, 발사각, 스핀량)에 더해 영상 분석과 즉각적인 피드백까지 제공해요. LENGOLF에서는 PGA 인증 코치의 레슨을 시간당 1,800바트부터, 시뮬레이터 이용 포함으로 받으실 수 있어요 (2026년 7월 기준).',
+        '방콕에서 골프를 배우는 가장 좋은 방법은 PGA 인증 코치와 함께 골프 시뮬레이터를 쓰는 거예요. 시뮬레이터 레슨은 드라이빙 레인지에서는 얻을 수 없는 실시간 스윙 데이터(볼 스피드, 발사각, 스핀량)에 더해 영상 분석과 즉각적인 피드백까지 제공해요. LENGOLF에서는 PGA 인증 코치와 1시간 무료 체험으로 시작하실 수 있고, 이후 레슨은 시간당 {{lessonHourlyNum}}바트, 패키지는 시간당 {{lesson50hRateNum}}바트부터, 시뮬레이터 이용 포함이에요 (2026년 10월 기준).',
       answer_body:
-        '방콕에서 골프를 배우는 방법은 여러 가지고, 각각 장단점이 있어요.\n\n**1. 코치와 함께하는 시뮬레이터 레슨 (추천)**\n골프 시뮬레이터는 숫자에 근거한 지도를 가능하게 해서 상승 속도를 끌어올려 줘요. LENGOLF에는 태국 PGA 인증 코치 3명(PRO Boss, PRO Ratchavin, PRO Min)이 Bravo 시뮬레이터 기술을 활용해 모든 레벨을 지도하고 있어요. 임팩트 순간에 클럽이 어떻게 움직이는지 — 클럽 패스, 페이스 앵글, 볼 스피드, 스핀량 — 가 그대로 보이기 때문에, 레인지에서 감으로 시행착오를 겪는 것보다 빠르게 늘어요.\n\n참고로 LENGOLF에 한국인 코치나 한국어 레슨은 없지만, 예약과 사전 상담은 LINE @lengolf에서 한국어로 도와드려요. 레슨 중에는 헤드 스피드나 발사각 같은 수치가 화면에 표시돼서, 언어의 장벽이 있어도 고쳐야 할 부분을 눈으로 확인하기 쉬워요.\n\n레슨 요금:\n- 1시간: 1,800바트 (골퍼 1명)\n- 5시간: 8,500바트 (6개월 유효)\n- 10시간: 16,000바트 (12개월 유효)\n- 스타터 패키지: 11,000바트 (레슨 5시간 + 연습 5시간 + 골프 장갑 증정)\n- 1시간 무료 체험 레슨 가능 — 문의는 LINE @lengolf로\n\n**2. 드라이빙 레인지에서 프로에게 배우기**\n방콕에는 코치가 상주하는 드라이빙 레인지가 여러 곳 있어요. 공을 많이 치고 싶은 분에게는 맞지만, 시뮬레이터 같은 데이터 피드백은 없어요. 덥고 시끄러운 데다, 공이 정확히 어디에 떨어졌는지 보기 어렵다는 점도 아쉬워요.\n\n**3. 온코스 레슨**\n실제 코스에서 지도를 받을 수 있는 곳도 있어요. 스윙 기초를 다지려는 초보자보다는, 코스 매니지먼트를 배우려는 상급자에게 맞는 형식이에요.\n\n**4. YouTube로 독학**\n무료지만 위험도 있어요. 피드백이 없다 보니 초보자는 나중에 고치기 어려운 나쁜 습관을 들이기 쉬워요.\n\n**초보자에게 드리는 추천**\n먼저 LENGOLF의 스타터 패키지(레슨 5시간 + 연습 5시간 11,000바트)로 시작해 보세요. 시뮬레이터의 데이터 피드백으로 기초를 다지고, 실제 코스에 나갈 준비가 되면 Sim to Fairway 패키지(13,499바트)로 넘어가는 흐름을 추천해요.',
+        '방콕에서 골프를 배우는 방법은 여러 가지고, 각각 장단점이 있어요.\n\n**1. 코치와 함께하는 시뮬레이터 레슨 (추천)**\n골프 시뮬레이터는 숫자에 근거한 지도를 가능하게 해서 상승 속도를 끌어올려 줘요. LENGOLF에는 태국 PGA 인증 코치 3명(PRO Boss, PRO Ratchavin, PRO Min)이 Bravo 시뮬레이터 기술을 활용해 모든 레벨을 지도하고 있어요. 임팩트 순간에 클럽이 어떻게 움직이는지 — 클럽 패스, 페이스 앵글, 볼 스피드, 스핀량 — 가 그대로 보이기 때문에, 레인지에서 감으로 시행착오를 겪는 것보다 빠르게 늘어요.\n\n참고로 LENGOLF에 한국인 코치나 한국어 레슨은 없지만, 예약과 사전 상담은 LINE @lengolf에서 한국어로 도와드려요. 레슨 중에는 헤드 스피드나 발사각 같은 수치가 화면에 표시돼서, 언어의 장벽이 있어도 고쳐야 할 부분을 눈으로 확인하기 쉬워요.\n\n레슨 요금:\n- 1시간 무료 체험: LENGOLF 레슨이 처음인 분 대상 (클럽과 시뮬레이터 이용 포함), 예약은 LINE @lengolf로\n- 1시간: {{lessonHourlyNum}}바트 (골퍼 1명)\n- 5시간: {{lesson5hNum}}바트 (시간당 {{lesson5hRateNum}}바트, 6개월 유효)\n- 10시간: {{lesson10hNum}}바트 (시간당 {{lesson10hRateNum}}바트, 12개월 유효)\n- 50시간: {{lesson50hNum}}바트 (시간당 {{lesson50hRateNum}}바트, 24개월 유효)\n- 스타터 패키지: {{lessonStarterNum}}바트 (레슨 5시간 + 연습 5시간 + 골프 장갑 증정)\n\n**2. 드라이빙 레인지에서 프로에게 배우기**\n방콕에는 코치가 상주하는 드라이빙 레인지가 여러 곳 있어요. 공을 많이 치고 싶은 분에게는 맞지만, 시뮬레이터 같은 데이터 피드백은 없어요. 덥고 시끄러운 데다, 공이 정확히 어디에 떨어졌는지 보기 어렵다는 점도 아쉬워요.\n\n**3. 온코스 레슨**\n실제 코스에서 지도를 받을 수 있는 곳도 있어요. 스윙 기초를 다지려는 초보자보다는, 코스 매니지먼트를 배우려는 상급자에게 맞는 형식이에요.\n\n**4. YouTube로 독학**\n무료지만 위험도 있어요. 피드백이 없다 보니 초보자는 나중에 고치기 어려운 나쁜 습관을 들이기 쉬워요.\n\n**초보자에게 드리는 추천**\n먼저 LENGOLF의 스타터 패키지(레슨 5시간 + 연습 5시간 {{lessonStarterNum}}바트)로 시작해 보세요. 시뮬레이터의 데이터 피드백으로 기초를 다지고, 실제 코스에 나갈 준비가 되면 Sim to Fairway 패키지({{lessonSimToFairwayNum}}바트)로 넘어가는 흐름을 추천해요.',
       related_questions: [
         { slug: 'can-beginners-play-golf-simulators', question: '스크린골프, 초보자도 즐길 수 있을까? — 처음 시작하는 방법' },
         { slug: '/guide/golf-lessons-bangkok-coaches', question: '방콕 골프레슨 — 요금·코치 선택 가이드' },
@@ -1821,16 +1801,10 @@ export const faqPages: FaqSeoPage[] = [
   },
 
   // ─── ZH: best-way-to-learn-golf-in-bangkok ───
-  // Static content mirroring the EN entry's literal prices — this is what the
-  // FAQ renderer actually serves. NOTE: the EN sibling once carried an
-  // unwired dynamic-pricing getter for this entry. It was deleted along with
-  // its two siblings and getPriceGuideTokens: nothing called any of them, and
-  // their imports were the only edges tying this file to lib/pricing. These
-  // static entries are now the single source of truth. If a live-price
-  // version is ever wired up, the consuming route must declare its own
-  // `export const revalidate` — `npm run validate:pricing-revalidate` enforces
-  // that, because the pricing fetch caches for 30 days and would otherwise
-  // set the page's interval.
+  // Lesson prices are {{lesson…}} fact tokens (lib/site-facts.ts), resolved
+  // with interpolateFactsDeep() in app/[locale]/faq/[slug]/page.tsx and
+  // llms-full.txt, so they move with /lessons/. The answer leads with the free
+  // 1-hour trial, as /lessons/ does.
   // HONESTY: language support uses the required LENGOLF-scoped construction —
   // 中国人教练／中文课程 negated for LENGOLF only, paired with the LINE @lengolf
   // Chinese booking allowance and the on-screen-numbers point (the same wording
@@ -1844,7 +1818,7 @@ export const faqPages: FaqSeoPage[] = [
     slug: 'best-way-to-learn-golf-in-bangkok',
     title: '在曼谷学高尔夫的最佳方式 — 课程收费与选择标准',
     meta_description:
-      '在曼谷学高尔夫，最快的路径是跟PGA认定教练上模拟器课程。LENGOLF每小时1,800泰铢起，含挥杆数据与即时反馈，还有1小时免费体验课，截至2026年7月。',
+      '在曼谷学高尔夫，最快的路径是跟PGA认定教练上模拟器课程。LENGOLF可先预约1小时免费体验，之后每小时{{lessonHourlyNum}}泰铢，套餐低至每小时{{lesson50hRateNum}}泰铢，含挥杆数据与即时反馈，截至2026年10月。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1852,12 +1826,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/faq/can-beginners-play-golf-simulators', '/lessons', '/guide/golf-lessons-bangkok-coaches'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-18T00:00:00.000Z',
     content: {
       answer_intro:
-        '在曼谷学高尔夫，最好的方式是跟着PGA认定教练用高尔夫模拟器上课。模拟器课程能给你练习场拿不到的实时挥杆数据（球速、发射角、旋转速率），还有视频分析和即时反馈。在LENGOLF，由PGA认定教练授课的课程每小时1,800泰铢起，含模拟器使用，截至2026年7月。',
+        '在曼谷学高尔夫，最好的方式是跟着PGA认定教练用高尔夫模拟器上课。模拟器课程能给你练习场拿不到的实时挥杆数据（球速、发射角、旋转速率），还有视频分析和即时反馈。在LENGOLF，可以先预约PGA认定教练的1小时免费体验，之后的课程每小时{{lessonHourlyNum}}泰铢，套餐低至每小时{{lesson50hRateNum}}泰铢，含模拟器使用，截至2026年10月。',
       answer_body:
-        '在曼谷学高尔夫有好几条路，各有取舍。\n\n**1. 跟教练上模拟器课程（推荐）**\n高尔夫模拟器让教学建立在数据之上，能明显加快进步速度。在LENGOLF，三位泰国PGA认定教练（PRO Boss、PRO Ratchavin、PRO Min）使用Bravo模拟器技术，指导各种水平的球友。击球瞬间球杆到底在做什么——杆头轨迹、杆面角度、球速、旋转——都看得一清二楚，比在练习场靠感觉摸索快得多。\n\n需要说明的是，LENGOLF没有中国人教练，也没有中文课程，但预订和事前咨询可以通过LINE @lengolf用中文办理；而且上课时，杆头速度、发射角这些模拟器数据会显示在屏幕上，即使有语言隔阂，你也能用眼睛看懂该改哪里。\n\n课程收费：\n- 1小时：1,800泰铢（1位球友）\n- 5小时：8,500泰铢（有效期6个月）\n- 10小时：16,000泰铢（有效期12个月）\n- 入门套餐：11,000泰铢（5小时授课 + 5小时练习 + 赠高尔夫手套）\n- 提供1小时免费体验课——请通过LINE @lengolf联系\n\n**2. 练习场的驻场教练**\n曼谷有不少配有教练的练习场，适合想多打球数的人，但没有模拟器那样的数据反馈。练习场还热、噪音大，而且看不清球到底落在哪里。\n\n**3. 球场实地课程**\n有些球场提供下场教学。比起要打基础的初学者，这种形式更适合想学球场策略的进阶球友。\n\n**4. 在YouTube上自学**\n免费，但有风险。缺少反馈，初学者往往会养成日后更难纠正的坏习惯。\n\n**给初学者的建议**\n先从LENGOLF的入门套餐开始（5小时授课 + 5小时练习，11,000泰铢），用模拟器的数据反馈把基本功打扎实；等到准备好下真实球场，再接上Sim to Fairway套餐（13,499泰铢）。',
+        '在曼谷学高尔夫有好几条路，各有取舍。\n\n**1. 跟教练上模拟器课程（推荐）**\n高尔夫模拟器让教学建立在数据之上，能明显加快进步速度。在LENGOLF，三位泰国PGA认定教练（PRO Boss、PRO Ratchavin、PRO Min）使用Bravo模拟器技术，指导各种水平的球友。击球瞬间球杆到底在做什么——杆头轨迹、杆面角度、球速、旋转——都看得一清二楚，比在练习场靠感觉摸索快得多。\n\n需要说明的是，LENGOLF没有中国人教练，也没有中文课程，但预订和事前咨询可以通过LINE @lengolf用中文办理；而且上课时，杆头速度、发射角这些模拟器数据会显示在屏幕上，即使有语言隔阂，你也能用眼睛看懂该改哪里。\n\n课程收费：\n- 1小时免费体验：适用于首次在LENGOLF上课的学员（含球杆和模拟器使用），请通过LINE @lengolf预约\n- 1小时：{{lessonHourlyNum}}泰铢（1位球友）\n- 5小时：{{lesson5hNum}}泰铢（合每小时{{lesson5hRateNum}}泰铢，有效期6个月）\n- 10小时：{{lesson10hNum}}泰铢（合每小时{{lesson10hRateNum}}泰铢，有效期12个月）\n- 50小时：{{lesson50hNum}}泰铢（合每小时{{lesson50hRateNum}}泰铢，有效期24个月）\n- 入门套餐：{{lessonStarterNum}}泰铢（5小时授课 + 5小时练习 + 赠高尔夫手套）\n\n**2. 练习场的驻场教练**\n曼谷有不少配有教练的练习场，适合想多打球数的人，但没有模拟器那样的数据反馈。练习场还热、噪音大，而且看不清球到底落在哪里。\n\n**3. 球场实地课程**\n有些球场提供下场教学。比起要打基础的初学者，这种形式更适合想学球场策略的进阶球友。\n\n**4. 在YouTube上自学**\n免费，但有风险。缺少反馈，初学者往往会养成日后更难纠正的坏习惯。\n\n**给初学者的建议**\n先从LENGOLF的入门套餐开始（5小时授课 + 5小时练习，{{lessonStarterNum}}泰铢），用模拟器的数据反馈把基本功打扎实；等到准备好下真实球场，再接上Sim to Fairway套餐（{{lessonSimToFairwayNum}}泰铢）。',
       related_questions: [
         { slug: 'can-beginners-play-golf-simulators', question: '零基础也能玩高尔夫模拟器吗？ — 初学者上手指南' },
         { slug: '/guide/golf-lessons-bangkok-coaches', question: '曼谷高尔夫课程 — 费用、教练选择与预约指南' },
@@ -2276,9 +2250,8 @@ export const faqPages: FaqSeoPage[] = [
   // entries say PGA Thailand, but this slug's EN source does not, and per-source
   // fidelity wins over cross-page harmonization. The EN "Ramindra/Ratchaphruek"
   // and "no ranges in the Lumphini area" notes are third-party geography and
-  // stay static. LENGOLF prices are literals, not {{tokens}}: the FAQ route
-  // never calls interpolateFacts (only /guide/ and llms.txt do), so a token
-  // would ship as literal "{{…}}" — matches all shipped TH FAQ entries.
+  // stay static. LENGOLF prices are literals (written before the FAQ route
+  // resolved {{tokens}}, which it does since 2026-10-18).
   // related_* are all in th.staticRoutes (lib/translated-routes.ts).
   {
     id: 'faq-14-th',

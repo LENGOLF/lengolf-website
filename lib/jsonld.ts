@@ -646,7 +646,13 @@ export function getClubRentalPricingJsonLd() {
   }
 }
 
-export function getHomePricingJsonLd() {
+/**
+ * The home page's OfferCatalog. The lesson Offer takes its price from the
+ * same rows /lessons/ renders (getLessonPriceFacts) and sits after the free
+ * trial, so the structured data answers "how much are lessons" the way the
+ * visible page does.
+ */
+export function getHomePricingJsonLd(lessonFacts: LessonPriceFacts) {
   return {
     '@context': 'https://schema.org',
     '@type': 'OfferCatalog',
@@ -674,11 +680,12 @@ export function getHomePricingJsonLd() {
         price: '3000',
         priceCurrency: 'THB',
       },
+      LESSON_TRIAL_OFFER,
       {
         '@type': 'Offer',
         name: 'Golf Lessons',
-        description: 'One-on-one coaching with PGA-certified professionals, simulator usage included',
-        price: '1800',
+        description: `One-on-one coaching with PGA-certified professionals, simulator usage included. Packages from ${lessonFacts.fiftyHourRate} THB per hour.`,
+        price: String(lessonFacts.hourlyThb),
         priceCurrency: 'THB',
         unitCode: 'HUR',
         eligibleDuration: { '@type': 'QuantitativeValue', value: 1, unitCode: 'HUR' },

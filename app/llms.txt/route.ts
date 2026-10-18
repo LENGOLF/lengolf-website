@@ -52,7 +52,7 @@ const LOCALE_PAGE_TYPES: { type: SeoPageType; label: string; urlPrefix: string }
 
 const KEY_PAGES: { title: string; path: string; desc: string }[] = [
   { title: 'Bay Rates & Simulators', path: '/golf/', desc: 'Indoor golf simulator bay rates, monthly packages, and how booking works.' },
-  { title: 'Golf Lessons', path: '/lessons/', desc: `One-on-one and group coaching on the simulators with ${coaches.length} Thailand PGA-certified coaches (${coaches.map((c) => `${c.name}, ${c.fullName}`).join('; ')}), taught in Thai and English. Free 1-hour trial lesson for new students, booked on LINE @lengolf.` },
+  { title: 'Golf Lessons', path: '/lessons/', desc: `One-on-one and group coaching on the simulators with ${coaches.length} Thailand PGA-certified coaches (${coaches.map((c) => `${c.name}, ${c.fullName}`).join('; ')}), taught in Thai and English. Free 1-hour trial for new students, booked on LINE @lengolf.` },
   { title: 'Junior Golf Academy (kids aged 4 to 12)', path: JUNIOR_ACADEMY_PATH, desc: `${juniorAcademy.course.description} ${juniorAcademy.price.amount} ${juniorAcademy.price.unit}, ${juniorAcademy.price.validity.toLowerCase()}. Enquiries on LINE @lengolf.` },
   { title: 'Private Events & Parties', path: '/events/', desc: 'Corporate team-building, birthdays, and private parties with bays, bar, and catering.' },
   { title: 'Food & Drinks Menu', path: '/menu/', desc: 'Full menu with THB prices: Smith & Co burgers, Sexy Pizza, cocktails, beer, wine, and unlimited soft drinks.' },
@@ -114,9 +114,8 @@ export async function GET() {
   )
 
   if (faqs.length) {
-    // interpolateFacts is a no-op while FAQ entries carry no {{tokens}}, but
-    // wrapping now keeps EN symmetric with the locale sections below — if a
-    // token ever lands in FAQ copy, it resolves here instead of leaking.
+    // FAQ meta descriptions carry {{lesson…}} tokens (best-way-to-learn-golf),
+    // resolved here as on the FAQ page itself.
     sections.push(
       `## FAQ\n${faqs.map((p) => link(interpolateFacts(p.title, tokens), `${SITE_URL}/faq/${p.slug}/`, p.meta_description ? interpolateFacts(p.meta_description, tokens) : undefined)).join('\n')}`
     )

@@ -4,6 +4,8 @@ import { getTranslations } from 'next-intl/server'
 import { CalendarDays, MessageCircle, MapPin, Clock, Sparkles, ExternalLink, ArrowRight } from 'lucide-react'
 import FaqSection from '@/components/shared/FaqSection'
 import { getFaqPageJsonLd } from '@/lib/jsonld'
+import { getLessonPricingData, getLessonPriceFacts } from '@/data/pricing'
+import { getApproxCurrency } from '@/lib/currency-rates'
 import { getSeoPageBySlug } from '@/lib/seo-pages'
 import { getFactTokens, interpolateFacts } from '@/lib/site-facts'
 import {
@@ -23,6 +25,14 @@ const faqLinks: Record<string, { href: string; external?: boolean }> = {
 
 export default async function KoreaLandingPage() {
   const t = await getTranslations('HomeKo')
+  // The lessons card leads with the free trial and quotes the same per-hour
+  // figures as /lessons/ (getLessonPriceFacts), never a typed price.
+  const { lessonPricing } = await getLessonPricingData()
+  const lesson = getLessonPriceFacts(lessonPricing)
+  // Digits only (e.g. "7,920"): the card's message adds its own currency
+  // word, as the sibling cards write theirs.
+  const hourlyLocal = (getApproxCurrency(lesson.hourlyThb, 'ko') ?? '').replace(/[^\d,]/g, '')
+  const lessonValues = { ...lesson, hourlyLocal }
 
   const trustChips = [
     {
@@ -57,8 +67,8 @@ export default async function KoreaLandingPage() {
     {
       title: t('service2Title'),
       price: t('service2Price'),
-      priceApprox: t('service2PriceApprox'),
-      desc: t('service2Desc'),
+      priceApprox: t('service2PriceApprox', lessonValues),
+      desc: t('service2Desc', lessonValues),
       href: '/lessons',
       image: storageUrl('lessons/lessons-cover.jpg'),
     },

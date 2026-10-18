@@ -69,8 +69,10 @@ export async function GET() {
     getEventPackagesData(catalog),
     getSeoPagesByType('faq'),
   ])
-  // The hub's lesson-price answer carries {{token}}s, as on /faq/ itself.
-  const hub = interpolateFactsDeep(getFaqHubContent('en'), await getFactTokens('en', catalog))
+  // The hub's lesson-price answer and the FAQ pages' lesson prices carry
+  // {{token}}s, resolved here as on /faq/ and /faq/<slug>/ themselves.
+  const tokens = await getFactTokens('en', catalog)
+  const hub = interpolateFactsDeep(getFaqHubContent('en'), tokens)
   const lessonFacts = getLessonPriceFacts(lessons.lessonPricing)
 
   const sections: string[] = []
@@ -179,7 +181,7 @@ export async function GET() {
   // One block per English FAQ page. The `Source:` line is the per-entry
   // marker smoke section H counts against the published EN FAQ corpus, so
   // keep it exactly one per entry and nowhere else in this file.
-  const faqs = faqPages.filter(isFaqPage)
+  const faqs = interpolateFactsDeep(faqPages.filter(isFaqPage), tokens)
   if (faqs.length) {
     sections.push(
       '## FAQ pages\n' +
