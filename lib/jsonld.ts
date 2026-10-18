@@ -1,7 +1,7 @@
 import { SITE_URL, SITE_NAME, BUSINESS_INFO, SOCIAL_LINKS, PHONE_E164, storageUrl } from '@/lib/constants'
 import { relatedQuestionPath } from '@/lib/seo-links'
 import type { UsedClub } from '@/lib/clubs'
-import type { BayRateRow, MonthlyPackageRow, LessonPackage, EventPackage } from '@/data/pricing'
+import type { BayRateRow, MonthlyPackageRow, LessonPackage, LessonPriceFacts, EventPackage } from '@/data/pricing'
 import type { MenuGroup } from '@/data/food-menu'
 
 /**
@@ -461,6 +461,17 @@ export function getEventsServiceJsonLd() {
   }
 }
 
+/** The free 1-hour trial: a "trial", never a "free lesson" (owner wording rule). */
+const LESSON_TRIAL_OFFER = {
+  '@type': 'Offer',
+  name: 'Free 1-Hour Trial',
+  description: 'A free 1-hour trial with a Thailand PGA-certified coach for new students, golf clubs and simulator included. Book on LINE @lengolf.',
+  price: '0',
+  priceCurrency: 'THB',
+  unitCode: 'HUR',
+  eligibleDuration: { '@type': 'QuantitativeValue', value: 1, unitCode: 'HUR' },
+}
+
 export function getLessonsPricingJsonLd(dynamicLessonPricing?: LessonPackage[]) {
   const lessonDescriptions: Record<string, { description: string; unitCode?: string; duration?: number }> = {
     '1 Hour': { description: 'One-on-one coaching with a PGA-certified professional, golf simulator usage included', unitCode: 'HUR', duration: 1 },
@@ -477,10 +488,17 @@ export function getLessonsPricingJsonLd(dynamicLessonPricing?: LessonPackage[]) 
     ? dynamicLessonPricing.map((pkg) => {
         const meta = lessonDescriptions[pkg.name]
         const offerName = pkg.name.replace(/\*$/, '').trim()
+        // Multi-hour packages state their per-hour value, which is the figure
+        // a price comparison needs and the one the total hides.
+        const total = Number(parseThbToString(pkg.oneGolfer))
+        const perHour =
+          pkg.nameKind === 'hour' && (pkg.nameHours ?? 0) > 1 && total > 0
+            ? `, ${Math.round(total / pkg.nameHours!).toLocaleString('en-US')} THB per hour`
+            : ''
         const offer: Record<string, unknown> = {
           '@type': 'Offer',
           name: offerName.includes('Package') ? offerName : `${offerName} Golf Lesson Package`,
-          description: meta?.description || `${pkg.name} golf coaching package`,
+          description: (meta?.description || `${pkg.name} golf coaching package`) + perHour,
           price: parseThbToString(pkg.oneGolfer),
           priceCurrency: 'THB',
         }
@@ -507,7 +525,7 @@ export function getLessonsPricingJsonLd(dynamicLessonPricing?: LessonPackage[]) 
     name: 'LENGOLF Golf Lesson Packages',
     description: 'Golf coaching packages with Thailand PGA-certified professionals at LENGOLF Bangkok. Simulator usage included.',
     provider: getBusinessRef(),
-    itemListElement: offers,
+    itemListElement: [LESSON_TRIAL_OFFER, ...offers],
   }
 }
 
@@ -708,7 +726,7 @@ export function getFaqPageJsonLd(faqItems: { question: string; answer: string }[
   }
 }
 
-export function getLessonsServiceJsonLd(startingPrice?: string) {
+export function getLessonsServiceJsonLd(facts: LessonPriceFacts) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
@@ -721,10 +739,23 @@ export function getLessonsServiceJsonLd(startingPrice?: string) {
       name: 'Bangkok',
     },
     offers: {
-      '@type': 'Offer',
-      price: startingPrice ? parseThbToString(startingPrice) : '1800',
+      '@type': 'AggregateOffer',
       priceCurrency: 'THB',
-      description: '1-hour lesson with a PGA-certified coach, simulator usage included',
+      lowPrice: '0',
+      highPrice: String(facts.hourlyThb),
+      offerCount: 2,
+      description: `Free 1-hour trial for new students, then ${facts.hourly} THB for a 1-hour lesson, or from ${facts.fiftyHourRate} THB per hour on lesson packages. Simulator usage included.`,
+      offers: [
+        LESSON_TRIAL_OFFER,
+        {
+          '@type': 'Offer',
+          name: '1 Hour Golf Lesson',
+          price: String(facts.hourlyThb),
+          priceCurrency: 'THB',
+          unitCode: 'HUR',
+          description: '1-hour lesson with a PGA-certified coach, simulator usage included',
+        },
+      ],
     },
   }
 }

@@ -8,7 +8,7 @@ import { storageUrl, SITE_URL, BUSINESS_INFO } from '@/lib/constants'
 import { getAlternates, getCanonical, hasTranslationForLocale } from '@/lib/translated-routes'
 import { getJuniorAcademyContent, JUNIOR_ACADEMY_PATH } from '@/data/junior-academy'
 import { coaches } from '@/data/coaches'
-import { getLessonPricingData, type LessonPackage } from '@/data/pricing'
+import { getLessonPricingData, getLessonPriceFacts, type LessonPackage } from '@/data/pricing'
 import { getLessonsPricingJsonLd, getLessonsServiceJsonLd, getFaqPageJsonLd, getBreadcrumbJsonLd, getCoachesJsonLd } from '@/lib/jsonld'
 import FaqSection from '@/components/shared/FaqSection'
 import ClickableImage from '@/components/shared/ClickableImage'
@@ -34,9 +34,11 @@ const faqLinks: Record<string, { href: string; external?: boolean }> = {
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'Lessons' })
+  const { lessonPricing } = await getLessonPricingData()
+  const priceFacts = getLessonPriceFacts(lessonPricing)
   return {
     title: t('metaTitle'),
-    description: t('metaDescription'),
+    description: t('metaDescription', priceFacts),
     alternates: {
       canonical: getCanonical(locale, '/lessons/'),
       languages: getAlternates('/lessons/'),
@@ -82,12 +84,15 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
   const tFaq = await getTranslations('LessonsFaq')
   const tCommon = await getTranslations('Common')
 
+  const { lessonPricing, lessonNotes: _ignoredLessonNotes } = await getLessonPricingData()
+  // Per-hour figures quoted in copy (LessonsFaq.a2, the stat chips), derived
+  // from the same live rows the pricing table renders.
+  const priceFacts = getLessonPriceFacts(lessonPricing)
+
   const faqItems = Array.from({ length: FAQ_COUNT }, (_, i) => ({
     question: tFaq(`q${i + 1}`),
-    answer: tFaq(`a${i + 1}`),
+    answer: tFaq(`a${i + 1}`, priceFacts),
   }))
-
-  const { lessonPricing, lessonNotes: _ignoredLessonNotes } = await getLessonPricingData()
 
   // ── Row-level i18n helpers (structured → translated display) ──
   // Names and remarks are translated via their `nameKind` / `remarkKind`
@@ -121,7 +126,7 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
     row.featured === 'bestValue' ? { label: tCommon('badgeBestValue'), tone: 'gold' as const } : null
 
   const pricingJsonLd = getLessonsPricingJsonLd(lessonPricing)
-  const serviceJsonLd = getLessonsServiceJsonLd(lessonPricing[0]?.oneGolfer)
+  const serviceJsonLd = getLessonsServiceJsonLd(priceFacts)
   const faqJsonLd = getFaqPageJsonLd(faqItems)
   const coachesJsonLd = getCoachesJsonLd(
     coaches.map((coach) => {
@@ -142,7 +147,7 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
   )
   const breadcrumbJsonLd = getBreadcrumbJsonLd([
     { name: 'Home', url: `${SITE_URL}/` },
-    { name: t('metaTitle'), url: `${SITE_URL}/lessons/` },
+    { name: t('heroTitle'), url: `${SITE_URL}/lessons/` },
   ])
 
   // The Junior Academy page is EN + TH only, so the callout renders only where
@@ -254,7 +259,7 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
           <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="rounded-lg border border-primary/15 bg-primary/5 px-4 py-4">
-                <div className="text-2xl font-bold" style={{ color: '#007429' }}>{t(`stat${i}Value`)}</div>
+                <div className="text-2xl font-bold" style={{ color: '#007429' }}>{t(`stat${i}Value`, priceFacts)}</div>
                 <div className="mt-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">{t(`stat${i}Label`)}</div>
               </div>
             ))}

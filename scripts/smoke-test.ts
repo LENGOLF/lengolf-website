@@ -5648,6 +5648,42 @@ async function runLessonsCoachTests() {
         }
       }
 
+      // Price structured data: the free 1-hour trial is a 0 THB Offer in the
+      // OfferCatalog AND the low end of the Service's AggregateOffer. AI
+      // answer surfaces banded LENGOLF at 1,500-2,500 THB/hr while both
+      // carried only 1,800 (2026-10-13 AI Mode check). The trial is a
+      // "trial", never a "free lesson" (owner wording rule).
+      const catalog = nodes.find((n) => typeIs(n, "OfferCatalog"));
+      const catalogOffers = Array.isArray(catalog?.itemListElement)
+        ? (catalog!.itemListElement as Record<string, unknown>[])
+        : [];
+      const trialOffers = catalogOffers.filter((o) => o.price === "0" && /trial/i.test(String(o.name)));
+      if (trialOffers.length !== 1) {
+        issues.push(`OfferCatalog has ${trialOffers.length} 0 THB trial Offer(s), expected 1`);
+      }
+      const service = nodes.find((n) => typeIs(n, "Service"));
+      const serviceOffers = service?.offers as Record<string, unknown> | undefined;
+      if (serviceOffers?.["@type"] !== "AggregateOffer" || serviceOffers.lowPrice !== "0") {
+        issues.push(
+          `Service offers is not an AggregateOffer with lowPrice "0" (got ${JSON.stringify(serviceOffers?.["@type"])}, lowPrice ${JSON.stringify(serviceOffers?.lowPrice)})`,
+        );
+      }
+      for (const o of [...catalogOffers, ...((serviceOffers?.offers as Record<string, unknown>[]) ?? [])]) {
+        if (/free (first )?lesson/i.test(`${o.name} ${o.description}`)) {
+          issues.push(`Offer ${JSON.stringify(o.name)} calls the trial a "free lesson"`);
+        }
+      }
+      // LessonsFaq.a2 takes ICU price arguments; a missing argument renders
+      // the raw placeholder or the key path into visible text and FAQPage.
+      const faq = nodes.find((n) => typeIs(n, "FAQPage"));
+      const answers = (Array.isArray(faq?.mainEntity) ? (faq!.mainEntity as Record<string, unknown>[]) : []).map(
+        (q) => String((q.acceptedAnswer as Record<string, unknown> | undefined)?.text ?? ""),
+      );
+      if (answers.length === 0) issues.push("no FAQPage answers");
+      if (answers.some((a) => /\{[a-zA-Z]+\}|LessonsFaq\./.test(a))) {
+        issues.push("a FAQPage answer carries an unresolved {placeholder} or LessonsFaq key");
+      }
+
       // Visible: the coaches section and the trial callout, with the trial
       // booking route on LINE. Coaching cannot be booked on booking.len.golf.
       if (!body.includes('id="coaches"')) issues.push('no id="coaches" section');
