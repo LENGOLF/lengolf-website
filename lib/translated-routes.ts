@@ -27,6 +27,8 @@ const TRANSLATED_ROUTES: Record<
       // TH only (alongside EN): copy in data/junior-academy.ts. ja/ko/zh are
       // deliberately absent and 301 to the EN page.
       "/junior-golf-academy",
+      // TH only (alongside EN): copy in data/line-page.ts. ja/ko/zh 301 to EN.
+      "/line",
       "/about-us",
       "/blog",
       "/menu",

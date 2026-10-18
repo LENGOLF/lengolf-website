@@ -16,6 +16,7 @@ import { USE_CASES, USE_CASES_UPDATED_AT } from '@/data/golf-courses-use-cases'
 import { PRICE_TIERS_UPDATED_AT } from '@/data/price-tiers'
 import { RENTAL_AGREEMENT_VERSION } from '@/data/rental-agreement/types'
 import { JUNIOR_ACADEMY_UPDATED_AT } from '@/data/junior-academy'
+import { LINE_PAGE_UPDATED_AT } from '@/data/line-page'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Stable "last reviewed" date for content without a real per-item edit date.
@@ -89,6 +90,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/lessons/`, lastModified: reviewed, changeFrequency: 'weekly', priority: 0.9, alternates: { languages: getAlternates('/lessons/') } },
     // EN + TH. Dated by its own data file, since it postdates CONTENT_LAST_UPDATED.
     { url: `${SITE_URL}/junior-golf-academy/`, lastModified: laterOf(JUNIOR_ACADEMY_UPDATED_AT, reviewed), changeFrequency: 'monthly', priority: 0.8, alternates: { languages: getAlternates('/junior-golf-academy/') } },
+    // EN + TH. The LINE @lengolf contact page (data/line-page.ts).
+    { url: `${SITE_URL}/line/`, lastModified: laterOf(LINE_PAGE_UPDATED_AT, reviewed), changeFrequency: 'monthly', priority: 0.5, alternates: { languages: getAlternates('/line/') } },
     { url: `${SITE_URL}/about-us/`, lastModified: reviewed, changeFrequency: 'monthly', priority: 0.7, alternates: { languages: getAlternates('/about-us/') } },
     { url: `${SITE_URL}/blog/`, lastModified: reviewed, changeFrequency: 'weekly', priority: 0.8, alternates: { languages: getAlternates('/blog/') } },
     { url: `${SITE_URL}/menu/`, lastModified: reviewed, changeFrequency: 'monthly', priority: 0.7, alternates: { languages: getAlternates('/menu/') } },

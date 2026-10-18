@@ -151,6 +151,17 @@ const routeTests: RouteTest[] = [
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
   },
+  // /line/ was a 307 to lin.ee until 2026-10-18, and Google Ads disapproved the
+  // LINE sitelinks that point at it ("Insufficient original content",
+  // "Destination mismatch"). It must stay a real page: a redirect fails here
+  // (route tests must resolve directly), the marker is the build-time QR code,
+  // and a meta refresh, which Google also reads as a redirect, is forbidden.
+  {
+    path: "/line/",
+    expectedStatus: [200],
+    contentMarker: "data-line-qr",
+    contentAbsent: 'http-equiv="refresh"',
+  },
   {
     path: "/events/",
     expectedStatus: [200],
@@ -241,6 +252,12 @@ const routeTests: RouteTest[] = [
     path: "/th/junior-golf-academy/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/line/",
+    expectedStatus: [200],
+    contentMarker: "data-line-qr",
+    contentAbsent: 'http-equiv="refresh"',
   },
   {
     path: "/th/events/",
@@ -3329,6 +3346,8 @@ const seoTests: SeoTest[] = [
   { path: "/golf-course-club-rental/", locale: "en" },
   { path: "/golf-club-specs/", locale: "en" },
   { path: "/junior-golf-academy/", locale: "en" },
+  { path: "/line/", locale: "en" },
+  { path: "/th/line/", locale: "th" },
   {
     path: "/th/junior-golf-academy/",
     locale: "th",
@@ -3506,7 +3525,7 @@ const seoTests: SeoTest[] = [
  * pinned entry and adding any other URL holds this count. Nor does it cover
  * the share-card assertions; see REQUIRED_OWN_OG_CARDS.
  */
-const MIN_SEO_URLS = 45;
+const MIN_SEO_URLS = 47;
 
 /**
  * Anti-vacuity for the `titleContains` assertions in `seoTests`. Two-sided by
@@ -3604,6 +3623,8 @@ const thaiRedirectTests: ThaiRedirectTest[] = [
   { path: "/ja/junior-golf-academy/", expectedLocation: "/junior-golf-academy/", label: "Junior Academy, ja (EN + TH only)" },
   { path: "/ko/junior-golf-academy/", expectedLocation: "/junior-golf-academy/", label: "Junior Academy, ko (EN + TH only)" },
   { path: "/zh/junior-golf-academy/", expectedLocation: "/junior-golf-academy/", label: "Junior Academy, zh (EN + TH only)" },
+  // /line/ is EN + TH only (data/line-page.ts).
+  { path: "/ja/line/", expectedLocation: "/line/", label: "LINE page, ja (EN + TH only)" },
   // NOTE: the former "untranslated KO golf-courses hub must 301" test is gone
   // on purpose — the structural-parity batch added the GolfCourseHub namespace
   // to messages/{ko,zh}.json, so all four locales now serve the hub and no
@@ -8922,7 +8943,8 @@ const MIN_RAW_HOSTILE_PATHS = 10;
  *  red. It is a floor, so a NEW routeTests/seoTests entry adds slack until
  *  this is raised with it; lower it only when an entry is removed. */
 // +2 on 2026-10-11 for /junior-golf-academy/ and /th/junior-golf-academy/.
-const MIN_IMAGE_PAGES = 484;
+// +2 on 2026-10-18 for /line/ and /th/line/.
+const MIN_IMAGE_PAGES = 486;
 /** Used-club detail pages reached from the listing. DB rows (43 on
  *  2026-09-24), so a floor of one rather than an exact count. Today they add
  *  no pair the listing lacks (the listing shows every club's photo); the crawl

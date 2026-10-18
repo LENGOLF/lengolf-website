@@ -686,6 +686,26 @@ export const RULES: Rule[] = [
     coarse: (ctx) => LOCALES.flatMap((l) => juniorAcademyUrls(ctx.reg, l)),
   },
   {
+    // /line/, one content block per locale (LINE_PAGE_CONTENT). Any other
+    // export (the LINE link, the ID, the path) reaches every locale that
+    // serves the page. LINE_PAGE_UPDATED_AT feeds the sitemap only, as in the
+    // junior-academy rule above.
+    id: 'line-page',
+    match: (f) => (f === 'data/line-page.ts' ? [f] : null),
+    derive(ctx, base, head) {
+      const content = (mod: Loaded) =>
+        new Map(Object.entries((mod?.LINE_PAGE_CONTENT as Record<string, unknown> | undefined) ?? {}))
+      const omit = ['LINE_PAGE_CONTENT', 'getLinePageContent', 'LINE_PAGE_UPDATED_AT']
+      if (moduleSig(base, omit) !== moduleSig(head, omit)) {
+        return { kind: 'records', urls: served(ctx.reg, '/line/'), note: 'a shared export changed: every locale' }
+      }
+      const locales = touched(diffKeyed(content(base), content(head)))
+      if (locales.length === 0) return { kind: 'none' }
+      return { kind: 'records', urls: locales.flatMap((l) => inLocale(ctx.reg, l, '/line/')), note: `content changed for ${locales.join(', ')}` }
+    },
+    coarse: (ctx) => served(ctx.reg, '/line/'),
+  },
+  {
     // Mirror of the DB's translated blog slugs: a slug entering or leaving a
     // locale changes the hreflang on EVERY version of that post, and that
     // locale's blog index. The mirror itself says which locales a post has, so
@@ -1384,6 +1404,23 @@ const CASES: Case[] = [
     want: ['/junior-golf-academy/', '/lessons/', '/llms.txt', '/llms-full.txt', '/th/junior-golf-academy/', '/th/lessons/'],
   },
   {
+    // ...including the LINE_PAGE_UPDATED_AT bump every copy edit carries.
+    name: 'line-page.ts: a th copy edit pings the th page alone',
+    changes: [{ status: 'M', file: 'data/line-page.ts' }],
+    base: { 'data/line-page.ts': { LINE_PAGE_CONTENT: { en: 'e', th: 't-old' }, LINE_ID: '@lengolf', LINE_PAGE_UPDATED_AT: '2026-10-18' } },
+    head: { 'data/line-page.ts': { LINE_PAGE_CONTENT: { en: 'e', th: 't-new' }, LINE_ID: '@lengolf', LINE_PAGE_UPDATED_AT: '2026-11-02' } },
+    registered: ['th:/line'],
+    want: ['/th/line/'],
+  },
+  {
+    name: 'line-page.ts: a shared export (the LINE ID) pings every locale publishing the page',
+    changes: [{ status: 'M', file: 'data/line-page.ts' }],
+    base: { 'data/line-page.ts': { LINE_PAGE_CONTENT: { en: 'e', th: 't' }, LINE_ID: '@lengolf' } },
+    head: { 'data/line-page.ts': { LINE_PAGE_CONTENT: { en: 'e', th: 't' }, LINE_ID: '@lengolf2' } },
+    registered: ['th:/line'],
+    want: ['/line/', '/th/line/'],
+  },
+  {
     name: 'a ja rental-agreement edit pings the ja agreement page alone',
     changes: [{ status: 'M', file: 'data/rental-agreement/ja.ts' }],
     base: { 'data/rental-agreement/ja.ts': { ja: { title: 'a' } } },
@@ -2077,8 +2114,8 @@ async function selfTest(): Promise<void> {
   // trigger-path coverage, workflow trigger, locales, two loader checks); one
   // consumer verdict per CONSUMERS key; four CLI verdicts.
   const expected = CASES.length + 1 + 3 + SEO_SECTIONS.length + 8 + Object.keys(CONSUMERS).length + 4
-  if (CASES.length !== 57 || examined !== expected) {
-    console.log(`FAIL: examined ${examined} verdict(s), expected ${expected} (CASES=${CASES.length}, want 57)`)
+  if (CASES.length !== 59 || examined !== expected) {
+    console.log(`FAIL: examined ${examined} verdict(s), expected ${expected} (CASES=${CASES.length}, want 59)`)
     process.exit(1)
   }
   if (failures > 0) {
