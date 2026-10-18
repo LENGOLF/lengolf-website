@@ -2651,7 +2651,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     slug: 'golf-lesson-prices-bangkok',
     title: 'ราคาคอร์สเรียนกอล์ฟในกรุงเทพฯ ปี 2026 เทียบในร่มกับกลางแจ้ง',
     meta_description:
-      'ราคาเรียนกอล์ฟในกรุงเทพฯ ที่ LENGOLF เริ่มจากทดลองเรียนฟรี 1 ชั่วโมง หลังจากนั้นชั่วโมงละ {{lessonHourlyNum}} บาท ถ้าซื้อแพ็กเกจ ถูกสุดตกชั่วโมงละ {{lesson50hRateNum}} บาท ส่วนโปรสอนกลางแจ้งอยู่ที่ 2,000-5,000 บาท/ชั่วโมง เทียบการเรียนบนซิมูเลเตอร์กับที่สนามไดรฟ์',
+      'ราคาเรียนกอล์ฟในกรุงเทพฯ ที่ LENGOLF เริ่มจากทดลองเรียนฟรี 1 ชั่วโมง หลังจากนั้นชั่วโมงละ {{lessonHourlyNum}} บาท ถ้าซื้อแพ็กเกจ ต่ำสุดเหลือชั่วโมงละ {{lesson50hRateNum}} บาท ส่วนโปรสอนกลางแจ้งอยู่ที่ 2,000-5,000 บาท/ชั่วโมง เทียบการเรียนบนซิมูเลเตอร์กับที่สนามไดรฟ์',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2662,17 +2662,17 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     updated_at: '2026-10-18T00:00:00.000Z',
     content: {
       intro:
-        'ที่ LENGOLF เริ่มได้จากทดลองเรียนฟรี 1 ชั่วโมงกับโปรสอนกอล์ฟ PGA สำหรับคนที่ยังไม่เคยเรียนกับเรา มีไม้กอล์ฟและห้องซิมให้พร้อม หลังจากนั้นเรียนตัวต่อตัวชั่วโมงละ {{lessonHourlyNum}} บาท ถ้าซื้อแพ็กเกจจะถูกลง แพ็กเกจ 10 ชั่วโมงตกชั่วโมงละ {{lesson10hRateNum}} บาท แพ็กเกจ 50 ชั่วโมงตกชั่วโมงละ {{lesson50hRateNum}} บาท ถ้าเรียนเป็นกลุ่ม 3-5 คน ชั่วโมงละ {{lessonGroupHourlyNum}} บาท เฉลี่ยคนละประมาณ {{lessonGroupLowNum}}-{{lessonGroupHighNum}} บาท ส่วนเรียนกับโปรที่สนามไดรฟ์กลางแจ้งในกรุงเทพฯ ส่วนใหญ่อยู่ที่ชั่วโมงละ 2,000-5,000 บาท (ข้อมูล ณ ตุลาคม 2026)',
+        'ที่ LENGOLF เริ่มได้จากทดลองเรียนฟรี 1 ชั่วโมงกับโปรสอนกอล์ฟที่ได้รับการรับรองจาก PGA Thailand สำหรับคนที่ยังไม่เคยเรียนกับเรา มีไม้กอล์ฟและห้องซิมให้พร้อม หลังจากนั้นเรียนตัวต่อตัวชั่วโมงละ {{lessonHourlyNum}} บาท ถ้าซื้อแพ็กเกจจะถูกลง แพ็กเกจ 10 ชั่วโมงตกชั่วโมงละ {{lesson10hRateNum}} บาท ส่วนแพ็กเกจ 50 ชั่วโมงตกชั่วโมงละ {{lesson50hRateNum}} บาท ถ้าเรียนเป็นกลุ่ม 3-5 คน ชั่วโมงละ {{lessonGroupHourlyNum}} บาท เฉลี่ยคนละประมาณ {{lessonGroupLowNum}}-{{lessonGroupHighNum}} บาท/ชม. ส่วนการเรียนกับโปรที่สนามไดรฟ์กลางแจ้งในกรุงเทพฯ ปกติอยู่ที่ชั่วโมงละ 2,000-5,000 บาท (ข้อมูล ณ ตุลาคม 2026)',
       price_breakdown: [
         { item: 'LENGOLF — ทดลองเรียนฟรี 1 ชั่วโมง', price: '0 บาท', notes: 'สำหรับคนที่ยังไม่เคยเรียนกับ LENGOLF เรียนกับโปร 1 ชั่วโมง มีไม้กอล์ฟและห้องซิมให้ จองทาง LINE @lengolf' },
-        { item: 'LENGOLF — เรียนตัวต่อตัว 1 ชั่วโมง (1 คน)', price: '{{lessonHourlyNum}} บาท/ชม.', notes: 'จ่ายเป็นรายชั่วโมง ซิมูเลเตอร์โชว์ข้อมูลวงสวิงทุกลูกที่ตี' },
+        { item: 'LENGOLF — เรียนตัวต่อตัว 1 ชั่วโมง (1 คน)', price: '{{lessonHourlyNum}} บาท/ชม.', notes: 'จ่ายเป็นรายชั่วโมง ซิมูเลเตอร์แสดงข้อมูลวงสวิงทุกลูกที่ตี' },
         { item: 'LENGOLF — แพ็กเกจ 5 ชั่วโมง (1 คน)', price: '{{lesson5hNum}} บาท', notes: 'ตกชั่วโมงละ {{lesson5hRateNum}} บาท ใช้ได้ภายใน 6 เดือน' },
         { item: 'LENGOLF — แพ็กเกจ 10 ชั่วโมง (1 คน)', price: '{{lesson10hNum}} บาท', notes: 'ตกชั่วโมงละ {{lesson10hRateNum}} บาท ใช้ได้ภายใน 12 เดือน' },
         { item: 'LENGOLF — แพ็กเกจ 20 ชั่วโมง (1 คน)', price: '{{lesson20hNum}} บาท', notes: 'ตกชั่วโมงละ {{lesson20hRateNum}} บาท ใช้ได้ภายใน 24 เดือน' },
         { item: 'LENGOLF — แพ็กเกจ 30 ชั่วโมง (1 คน)', price: '{{lesson30hNum}} บาท', notes: 'ตกชั่วโมงละ {{lesson30hRateNum}} บาท ใช้ได้ภายใน 24 เดือน' },
         { item: 'LENGOLF — แพ็กเกจ 50 ชั่วโมง (1 คน)', price: '{{lesson50hNum}} บาท', notes: 'ตกชั่วโมงละ {{lesson50hRateNum}} บาท ถูกที่สุดต่อชั่วโมง ใช้ได้ภายใน 24 เดือน' },
-        { item: 'LENGOLF — เรียน 2 คน', price: '{{lessonTwoHourlyNum}} บาท/ชม.', notes: 'เท่ากับคนละ {{lessonTwoPerPersonNum}} บาท โปรคนเดียวกัน เรียนไปพร้อมกัน' },
-        { item: 'LENGOLF — เรียนแบบกลุ่ม (3-5 คน)', price: '{{lessonGroupHourlyNum}} บาท/ชม.', notes: 'เฉลี่ยคนละประมาณ {{lessonGroupLowNum}}-{{lessonGroupHighNum}} บาท เหมาะสำหรับกลุ่มเพื่อนที่อยากเรียนไปด้วยกัน' },
+        { item: 'LENGOLF — เรียน 2 คน', price: '{{lessonTwoHourlyNum}} บาท/ชม.', notes: 'เท่ากับคนละ {{lessonTwoPerPersonNum}} บาท/ชม. เรียนกับโปรคนเดียวกันในคาบเดียว' },
+        { item: 'LENGOLF — เรียนแบบกลุ่ม (3-5 คน)', price: '{{lessonGroupHourlyNum}} บาท/ชม.', notes: 'เฉลี่ยคนละประมาณ {{lessonGroupLowNum}}-{{lessonGroupHighNum}} บาท/ชม. เหมาะสำหรับกลุ่มเพื่อนที่อยากเรียนไปด้วยกัน' },
         { item: 'LENGOLF — แพ็กเกจ Starter', price: '{{lessonStarterNum}} บาท', notes: 'เรียน 5 ชั่วโมง บวกซ้อม 5 ชั่วโมง แถมถุงมือกอล์ฟฟรี เหมาะที่สุดสำหรับผู้เริ่มต้นจากศูนย์ ใช้ได้ภายใน 6 เดือน' },
         { item: 'LENGOLF — แพ็กเกจ Sim to Fairway', price: '{{lessonSimToFairwayNum}} บาท', notes: 'เรียนในร่ม 5 ชั่วโมง บวกเรียนในสนามจริง 1 ครั้ง ค่าใช้จ่ายที่สนามคิดแยกต่างหาก' },
         { item: 'เรียนที่สนามไดรฟ์กลางแจ้ง', price: '2,000-3,500 บาท/ชม.', notes: 'แตกต่างกันตามผู้สอนและสนาม ค่าลูกกอล์ฟมักคิดแยก' },
@@ -2682,7 +2682,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
       comparison_with_alternatives:
         'การเรียนบนกอล์ฟซิมูเลเตอร์ในร่มได้เปรียบการเรียนที่สนามไดรฟ์กลางแจ้งอย่างชัดเจนในเรื่องหนึ่ง นั่นคือข้อมูลวงสวิงแบบเรียลไทม์ ซิมูเลเตอร์ Bravo ของ LENGOLF วัดความเร็วลูก มุมออกตัว อัตราสปิน ระยะแคร์รี และแนวการเหวี่ยงไม้ในทุกลูกที่ตี ฟีดแบ็กที่อิงข้อมูลแบบนี้ช่วยเร่งการเรียนรู้ในแบบที่การเรียนที่สนามไดรฟ์กลางแจ้ง ซึ่งคุณได้แค่มองลูกลอยไปแล้วเดาเอา ทำไม่ได้ นอกจากนี้ห้องปรับอากาศยังทำให้ซ้อมได้อย่างสบายและมีสมาธิ ไม่ว่ากรุงเทพฯ จะร้อน ฝนตก หรือฝุ่นเยอะแค่ไหน',
       value_proposition:
-        'ทดลองเรียนฟรี 1 ชั่วโมงที่ LENGOLF ไม่มีอะไรต้องเสี่ยง ลองเรียน ดูข้อมูลวงสวิงของตัวเอง แล้วค่อยตัดสินใจว่าเหมาะกับคุณไหม โดยไม่เสียค่าใช้จ่ายเลย ถ้าจะเรียนต่อ ยิ่งซื้อแพ็กเกจหลายชั่วโมง ค่าเรียนต่อชั่วโมงก็ยิ่งถูก จาก {{lessonHourlyNum}} บาทเหลือ {{lesson50hRateNum}} บาท และแพ็กเกจ Starter ของเรา ({{lessonStarterNum}} บาท สำหรับเรียน 5 ชั่วโมง บวกเวลาซ้อมอีก 5 ชั่วโมง พร้อมถุงมือกอล์ฟฟรี) เป็นแพ็กเกจสำหรับผู้เริ่มต้นที่คุ้มค่าที่สุดในกรุงเทพฯ',
+        'ลองเรียนฟรี 1 ชั่วโมงที่ LENGOLF ก่อนได้ ไม่มีอะไรต้องเสีย ลองเรียน ดูข้อมูลวงสวิงของตัวเอง แล้วค่อยตัดสินใจว่าเหมาะกับคุณไหม โดยไม่เสียค่าใช้จ่ายเลย ถ้าจะเรียนต่อ ยิ่งซื้อแพ็กเกจหลายชั่วโมง ค่าเรียนต่อชั่วโมงก็ยิ่งถูก จาก {{lessonHourlyNum}} บาทเหลือ {{lesson50hRateNum}} บาท และแพ็กเกจ Starter ของเรา ({{lessonStarterNum}} บาท สำหรับเรียน 5 ชั่วโมง บวกเวลาซ้อมอีก 5 ชั่วโมง พร้อมถุงมือกอล์ฟฟรี) เป็นแพ็กเกจสำหรับผู้เริ่มต้นที่คุ้มค่าที่สุดในกรุงเทพฯ',
       last_verified: '2026-10-18',
       sections: [
         {
@@ -2740,15 +2740,15 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     updated_at: '2026-10-18T00:00:00.000Z',
     content: {
       intro:
-        'LENGOLFでは、タイPGA認定コーチによる1時間の無料体験から始められます（LENGOLFで初めてレッスンを受ける方が対象、クラブとシミュレーターの利用込み）。その後のプライベートレッスンは1時間{{lessonHourlyNum}}THBです。パッケージなら1時間あたりの料金が下がり、10時間パッケージで{{lesson10hRateNum}}THB、50時間パッケージで{{lesson50hRateNum}}THBになります。3〜5名様のグループは1時間{{lessonGroupHourlyNum}}THB（1人あたり約{{lessonGroupLowNum}}〜{{lessonGroupHighNum}}THB）です。バンコクの屋外ドライビングレンジでプロに習う場合は、1時間2,000〜5,000THBが目安です（2026年10月現在）。',
+        'LENGOLFでは、タイPGA認定コーチによる1時間の無料体験から始められます（LENGOLFで初めてレッスンを受ける方が対象、クラブとシミュレーターの利用込み）。その後のプライベートレッスンは1時間{{lessonHourlyNum}}THBです。パッケージなら1時間あたりの料金が下がり、10時間パッケージなら1時間あたり{{lesson10hRateNum}}THB、50時間パッケージなら1時間あたり{{lesson50hRateNum}}THBになります。3〜5名様のグループは1時間{{lessonGroupHourlyNum}}THB（1人あたり約{{lessonGroupLowNum}}〜{{lessonGroupHighNum}}THB）です。バンコクの屋外ドライビングレンジでプロに習う場合は、1時間2,000〜5,000THBが目安です（2026年10月現在）。',
       price_breakdown: [
-        { item: 'LENGOLF — 1時間の無料体験', price: '0THB', notes: '初めての方が対象。プロと1時間、クラブとシミュレーターの利用込みです。ご予約はLINE @lengolfから（日本語で承ります）。' },
-        { item: 'LENGOLF — プライベートレッスン1時間（1名）', price: '1時間{{lessonHourlyNum}}THB', notes: '1時間ごとのお支払い。シミュレーターが1球ごとにスイングデータを表示します。' },
+        { item: 'LENGOLF — 1時間の無料体験', price: '0THB', notes: 'LENGOLFのレッスンが初めての方向け。タイPGA認定コーチと1時間、クラブとシミュレーターの利用込みです。ご予約はLINE @lengolfから（日本語で承ります）。' },
+        { item: 'LENGOLF — プライベートレッスン1時間（1名）', price: '1時間{{lessonHourlyNum}}THB', notes: '1時間単位の都度払い。シミュレーターが1球ごとにスイングデータを表示します。' },
         { item: 'LENGOLF — 5時間パッケージ（1名）', price: '{{lesson5hNum}}THB', notes: '実質1時間{{lesson5hRateNum}}THB。有効期限6か月。' },
         { item: 'LENGOLF — 10時間パッケージ（1名）', price: '{{lesson10hNum}}THB', notes: '実質1時間{{lesson10hRateNum}}THB。有効期限12か月。' },
         { item: 'LENGOLF — 20時間パッケージ（1名）', price: '{{lesson20hNum}}THB', notes: '実質1時間{{lesson20hRateNum}}THB。有効期限24か月。' },
         { item: 'LENGOLF — 30時間パッケージ（1名）', price: '{{lesson30hNum}}THB', notes: '実質1時間{{lesson30hRateNum}}THB。有効期限24か月。' },
-        { item: 'LENGOLF — 50時間パッケージ（1名）', price: '{{lesson50hNum}}THB', notes: '実質1時間{{lesson50hRateNum}}THBで、1時間あたりの料金が最も安くなります。有効期限24か月。' },
+        { item: 'LENGOLF — 50時間パッケージ（1名）', price: '{{lesson50hNum}}THB', notes: '実質1時間{{lesson50hRateNum}}THBで、最もお得な時間単価です。有効期限24か月。' },
         { item: 'LENGOLF — セミプライベート（2名）', price: '1時間{{lessonTwoHourlyNum}}THB', notes: '1人あたり{{lessonTwoPerPersonNum}}THB。同じプロによる合同セッションです。' },
         { item: 'LENGOLF — グループレッスン（3〜5名）', price: '1時間{{lessonGroupHourlyNum}}THB', notes: '1人あたり約{{lessonGroupLowNum}}〜{{lessonGroupHighNum}}THB。友人同士で学ぶのに向いています。' },
         { item: 'LENGOLF — Starterパッケージ', price: '{{lessonStarterNum}}THB', notes: 'コーチング5時間と練習5時間。ゴルフグローブが無料。まったくの初心者に最適です。有効期限6か月。' },
@@ -2760,7 +2760,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
       comparison_with_alternatives:
         'インドアのシミュレーターレッスンには、屋外ドライビングレンジでの指導に対して大きな利点があります——リアルタイムのスイングデータです。LENGOLFのBravoシミュレーターは、1球ごとにボールスピード、打ち出し角、スピン量、キャリー、クラブパスを計測します。数字にもとづくこのフィードバックは、ボールの行方を見て推測するしかない屋外レンジのレッスンでは得られない速さで、上達を後押しします。空調の効いた屋内という環境も、バンコクの暑さや雨、大気の状態に左右されずに集中して練習できることを意味します。',
       value_proposition:
-        'LENGOLFの1時間の無料体験なら、リスクはありません。レッスンを受け、スイングデータを見て、ご自身に合うかどうかを判断していただけます。費用はかかりません。続けて習う場合は、パッケージで1時間あたりの料金が{{lessonHourlyNum}}THBから{{lesson50hRateNum}}THBまで下がります。Starterパッケージ（{{lessonStarterNum}}THBでコーチング5時間、練習5時間、ゴルフグローブ付き）は、バンコクで最も割のよい初心者向けパッケージです。',
+        'LENGOLFの無料体験（1時間）なら、リスクはありません。レッスンを受け、スイングデータを見て、ご自身に合うかどうかを判断していただけます。費用はかかりません。続けて習う場合は、パッケージで1時間あたりの料金が{{lessonHourlyNum}}THBから{{lesson50hRateNum}}THBまで下がります。Starterパッケージ（{{lessonStarterNum}}THBでコーチング5時間、練習5時間、ゴルフグローブ付き）は、バンコクで最も割のよい初心者向けパッケージです。',
       last_verified: '2026-10-18',
       sections: [
         {
@@ -2818,15 +2818,15 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     updated_at: '2026-10-18T00:00:00.000Z',
     content: {
       intro:
-        'LENGOLF에서는 태국 PGA 프로 코치와 1시간 무료 체험으로 시작하실 수 있어요(LENGOLF 레슨이 처음인 분 대상, 클럽과 시뮬레이터 이용 포함). 이후 개인 레슨은 시간당 {{lessonHourlyNum}}바트이고, 패키지를 이용하면 시간당 요금이 낮아져서 10시간 패키지는 시간당 {{lesson10hRateNum}}바트, 50시간 패키지는 시간당 {{lesson50hRateNum}}바트예요. 3~5명 그룹은 시간당 {{lessonGroupHourlyNum}}바트로 1인당 약 {{lessonGroupLowNum}}~{{lessonGroupHighNum}}바트예요. 방콕의 실외 드라이빙 레인지에서 프로에게 배우면 보통 시간당 2,000~5,000바트예요 (2026년 10월 기준).',
+        'LENGOLF에서는 태국 PGA 공인 코치와 1시간 무료 체험으로 시작하실 수 있어요(LENGOLF 레슨이 처음인 분 대상, 클럽과 시뮬레이터 이용 포함). 이후 개인 레슨은 시간당 {{lessonHourlyNum}}바트예요. 패키지를 이용하면 시간당 요금이 낮아져요. 10시간 패키지는 시간당 {{lesson10hRateNum}}바트, 50시간 패키지는 시간당 {{lesson50hRateNum}}바트예요. 3~5명 그룹은 시간당 {{lessonGroupHourlyNum}}바트로 1인당 약 {{lessonGroupLowNum}}~{{lessonGroupHighNum}}바트예요. 방콕의 실외 드라이빙 레인지에서 프로에게 배우면 보통 시간당 2,000~5,000바트예요 (2026년 10월 기준).',
       price_breakdown: [
-        { item: 'LENGOLF — 1시간 무료 체험', price: '0바트', notes: '처음 오시는 분 대상이에요. 프로와 1시간, 클럽과 시뮬레이터 이용 포함. LINE @lengolf로 예약하시면 돼요.' },
+        { item: 'LENGOLF — 1시간 무료 체험', price: '0바트', notes: 'LENGOLF 레슨이 처음인 분 대상이에요. 프로와 1시간, 클럽과 시뮬레이터 이용 포함. LINE @lengolf로 예약하시면 돼요.' },
         { item: 'LENGOLF — 개인 레슨 1시간 (1명)', price: '{{lessonHourlyNum}}바트/시간', notes: '시간 단위로 결제해요. 시뮬레이터가 샷마다 스윙 데이터를 보여줘요.' },
         { item: 'LENGOLF — 5시간 패키지 (1명)', price: '{{lesson5hNum}}바트', notes: '실질 시간당 {{lesson5hRateNum}}바트. 유효 기간 6개월.' },
         { item: 'LENGOLF — 10시간 패키지 (1명)', price: '{{lesson10hNum}}바트', notes: '실질 시간당 {{lesson10hRateNum}}바트. 유효 기간 12개월.' },
         { item: 'LENGOLF — 20시간 패키지 (1명)', price: '{{lesson20hNum}}바트', notes: '실질 시간당 {{lesson20hRateNum}}바트. 유효 기간 24개월.' },
         { item: 'LENGOLF — 30시간 패키지 (1명)', price: '{{lesson30hNum}}바트', notes: '실질 시간당 {{lesson30hRateNum}}바트. 유효 기간 24개월.' },
-        { item: 'LENGOLF — 50시간 패키지 (1명)', price: '{{lesson50hNum}}바트', notes: '실질 시간당 {{lesson50hRateNum}}바트로 시간당 요금이 가장 낮아요. 유효 기간 24개월.' },
+        { item: 'LENGOLF — 50시간 패키지 (1명)', price: '{{lesson50hNum}}바트', notes: '실질 시간당 {{lesson50hRateNum}}바트로 가장 낮은 요금이에요. 유효 기간 24개월.' },
         { item: 'LENGOLF — 세미프라이빗 (2명)', price: '{{lessonTwoHourlyNum}}바트/시간', notes: '1인당 {{lessonTwoPerPersonNum}}바트. 같은 프로에게 함께 배워요.' },
         { item: 'LENGOLF — 그룹 레슨 (3~5명)', price: '{{lessonGroupHourlyNum}}바트/시간', notes: '1인당 약 {{lessonGroupLowNum}}~{{lessonGroupHighNum}}바트. 친구들과 함께 배우기 좋아요.' },
         { item: 'LENGOLF — Starter 패키지', price: '{{lessonStarterNum}}바트', notes: '코칭 5시간에 연습 5시간. 골프 장갑을 함께 드려요. 완전 초보자에게 가장 좋아요. 유효 기간 6개월.' },
@@ -2887,7 +2887,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     slug: 'golf-lesson-prices-bangkok',
     title: '曼谷高尔夫课程价格（2026） — 室内与室外收费对比',
     meta_description:
-      '曼谷高尔夫课程价格：LENGOLF可先预约1小时免费体验，之后每小时{{lessonHourlyNum}}泰铢，套餐低至每小时{{lesson50hRateNum}}泰铢；室外教练每小时2,000–5,000泰铢。室内模拟器教学与练习场课程全对比，截至2026年10月。',
+      '曼谷高尔夫课程价格：LENGOLF先约1小时免费体验，之后每小时{{lessonHourlyNum}}泰铢，套餐低至每小时{{lesson50hRateNum}}泰铢；室外教练每小时2,000–5,000泰铢，截至2026年10月。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2900,8 +2900,8 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
       intro:
         '在LENGOLF，可以先预约泰国PGA职业教练的1小时免费体验（适用于首次在LENGOLF上课的学员，含球杆和模拟器使用）。之后的一对一课程每小时{{lessonHourlyNum}}泰铢；购买套餐每小时更划算，10小时套餐合每小时{{lesson10hRateNum}}泰铢，50小时套餐合每小时{{lesson50hRateNum}}泰铢。3–5人小组每小时{{lessonGroupHourlyNum}}泰铢，折合每人约{{lessonGroupLowNum}}–{{lessonGroupHighNum}}泰铢。在曼谷的室外练习场跟教练上课，一般每小时2,000–5,000泰铢，截至2026年10月。',
       price_breakdown: [
-        { item: 'LENGOLF — 1小时免费体验', price: '0泰铢', notes: '适用于新学员。与教练上1小时，含球杆和模拟器使用。通过LINE @lengolf预约。' },
-        { item: 'LENGOLF — 一对一课程1小时（1人）', price: '{{lessonHourlyNum}}泰铢/小时', notes: '按小时付费。模拟器每一杆都显示挥杆数据。' },
+        { item: 'LENGOLF — 1小时免费体验', price: '0泰铢', notes: '适用于新学员。与泰国PGA教练体验1小时，含球杆和模拟器使用。通过LINE @lengolf预约。' },
+        { item: 'LENGOLF — 一对一课程1小时（1人）', price: '{{lessonHourlyNum}}泰铢/小时', notes: '按小时付费。每一杆模拟器都会显示挥杆数据。' },
         { item: 'LENGOLF — 5小时套餐（1人）', price: '{{lesson5hNum}}泰铢', notes: '折合{{lesson5hRateNum}}泰铢/小时。有效期6个月。' },
         { item: 'LENGOLF — 10小时套餐（1人）', price: '{{lesson10hNum}}泰铢', notes: '折合{{lesson10hRateNum}}泰铢/小时。有效期12个月。' },
         { item: 'LENGOLF — 20小时套餐（1人）', price: '{{lesson20hNum}}泰铢', notes: '折合{{lesson20hRateNum}}泰铢/小时。有效期24个月。' },
@@ -2918,7 +2918,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
       comparison_with_alternatives:
         '室内模拟器课程相比室外练习场教学有一个明显优势：实时的挥杆数据。LENGOLF的Bravo模拟器会记录每一杆的球速、发射角、旋转速率、飞行距离和挥杆路径。这种以数据为依据的反馈能加快进步，而室外练习场那种看着球飞出去再靠猜的方式做不到这一点。室内空调环境也意味着，不管曼谷是热、是下雨还是空气不好，你都能安安稳稳地专心练。',
       value_proposition:
-        'LENGOLF的1小时免费体验，把风险降到了零。先上一次，看看挥杆数据，再决定这条路适不适合你，一分钱都不用花。想继续系统学下去的话，套餐能把每小时费用从{{lessonHourlyNum}}泰铢降到{{lesson50hRateNum}}泰铢；我们的Starter入门套餐（{{lessonStarterNum}}泰铢，含5小时教学、5小时练习时间和一副高尔夫手套）是曼谷最超值的新手套餐。',
+        'LENGOLF的1小时免费体验，把风险降到了零。先上一次，看看挥杆数据，再决定这条路适不适合你，整个过程一分钱都不用花。想继续系统学下去的话，套餐能把每小时费用从{{lessonHourlyNum}}泰铢降到{{lesson50hRateNum}}泰铢；我们的Starter入门套餐（{{lessonStarterNum}}泰铢，含5小时教学、5小时练习时间和一副高尔夫手套）是曼谷最超值的新手套餐。',
       last_verified: '2026-10-18',
       sections: [
         {

@@ -140,6 +140,10 @@ const routeTests: RouteTest[] = [
     path: "/golf/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    // GolfFaq.a10 takes ICU values (app/[locale]/golf/page.tsx). A missing or
+    // renamed value makes next-intl render the key path, e.g. "GolfFaq.a10",
+    // in the accordion and the FAQPage JSON-LD without failing the build.
+    contentAbsent: "GolfFaq.",
   },
   {
     path: "/lessons/",
@@ -245,6 +249,7 @@ const routeTests: RouteTest[] = [
     path: "/th/golf/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "GolfFaq.",
   },
   {
     path: "/th/lessons/",
@@ -298,8 +303,9 @@ const routeTests: RouteTest[] = [
   },
   // /cost/golf-lesson-prices-bangkok/ prices every LENGOLF lesson row with a
   // {{lesson…}} fact token, resolved in app/[locale]/cost/[slug]/page.tsx. The
-  // marker is the trial row, which leads the table; no figure is pinned because
-  // the tokens follow the POS catalog.
+  // marker is the trial-row label (EN; in th/ja/ko/zh the same phrase also
+  // appears in the intro), and no figure is pinned because the tokens follow
+  // the POS catalog.
   {
     path: "/cost/golf-lesson-prices-bangkok/",
     expectedStatus: [200],
@@ -424,6 +430,7 @@ const routeTests: RouteTest[] = [
     path: "/ja/golf/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "GolfFaq.",
   },
   {
     path: "/ja/lessons/",
@@ -465,6 +472,7 @@ const routeTests: RouteTest[] = [
     path: "/ko/golf/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "GolfFaq.",
   },
   {
     path: "/ko/lessons/",
@@ -506,6 +514,7 @@ const routeTests: RouteTest[] = [
     path: "/zh/golf/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "GolfFaq.",
   },
   {
     path: "/zh/lessons/",

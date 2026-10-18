@@ -220,16 +220,19 @@ export async function getFactTokens(
   const p20 = lessonPackage(20)
   const p30 = lessonPackage(30)
   const p50 = lessonPackage(50)
+  const lessonHourlyThb = lessonRowThb(lessonRows, '1 Hour', 'oneGolfer')
   const lessonTwoHourly = lessonRowThb(lessonRows, '1 Hour', 'twoGolfers')
   return {
     // Currency-carrying (locale-aware) single-value tokens
-    lessonHourly: money(locale, f.lessonHourly),
+    // From the lesson rows (lessonRowThb), like /lessons/, so a 0 or
+    // unparseable POS price falls back to the static row instead of printing 0.
+    lessonHourly: money(locale, lessonHourlyThb),
     bayHourlyFrom: money(locale, f.bayHourlyMin),
     courseRentalDay: money(locale, f.courseRentalDay),
     clubDelivery: money(locale, f.clubDelivery),
 
     // Number-only tokens (currency + range separator stay literal in content)
-    lessonHourlyNum: num(f.lessonHourly),
+    lessonHourlyNum: num(lessonHourlyThb),
     bayHourlyMinNum: num(f.bayHourlyMin),
     bayHourlyMaxNum: num(f.bayHourlyMax),
     courseRentalDayNum: num(f.courseRentalDay),
