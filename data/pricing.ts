@@ -583,6 +583,61 @@ export async function getLessonPricingData(catalog?: PricingCatalog | null): Pro
   }
 }
 
+/**
+ * Per-hour lesson figures, derived from the package rows so the copy that
+ * quotes them (LessonsFaq.a2, Lessons.metaDescription, the hero stat chip,
+ * the JSON-LD and llms-full.txt) moves with the POS prices instead of being
+ * typed into five catalogs by hand. A row whose price does not parse falls
+ * back to the static row of the same name.
+ *
+ * Group per-person figures use the 1-hour 3-5 golfer price split 5 ways
+ * (low) and 3 ways (high), rounded to the nearest 10 because the copy says
+ * "about".
+ */
+// A type alias, not an interface: next-intl's `values` parameter is an
+// index-signature record, which an interface is not assignable to.
+export type LessonPriceFacts = {
+  hourly: string
+  tenHourTotal: string
+  tenHourRate: string
+  fiftyHourTotal: string
+  fiftyHourRate: string
+  groupHourly: string
+  groupLow: string
+  groupHigh: string
+  /** Raw numbers for JSON-LD. */
+  hourlyThb: number
+  fiftyHourRateThb: number
+}
+
+const thbNumber = (s: string): number => Number(s.replace(/[^\d.]/g, ''))
+
+export function getLessonPriceFacts(rows: LessonPackage[]): LessonPriceFacts {
+  const pick = (name: string, field: 'oneGolfer' | 'threeToFiveGolfers'): number => {
+    const live = thbNumber(rows.find((r) => r.name === name)?.[field] ?? '')
+    if (Number.isFinite(live) && live > 0) return live
+    return thbNumber(lessonPricing.find((r) => r.name === name)![field])
+  }
+  const fmt = (n: number) => n.toLocaleString('en-US')
+  const hourly = pick('1 Hour', 'oneGolfer')
+  const ten = pick('10 Hour', 'oneGolfer')
+  const fifty = pick('50 Hour', 'oneGolfer')
+  const group = pick('1 Hour', 'threeToFiveGolfers')
+  const fiftyRate = Math.round(fifty / 50)
+  return {
+    hourly: fmt(hourly),
+    tenHourTotal: fmt(ten),
+    tenHourRate: fmt(Math.round(ten / 10)),
+    fiftyHourTotal: fmt(fifty),
+    fiftyHourRate: fmt(fiftyRate),
+    groupHourly: fmt(group),
+    groupLow: fmt(Math.round(group / 5 / 10) * 10),
+    groupHigh: fmt(Math.round(group / 3 / 10) * 10),
+    hourlyThb: hourly,
+    fiftyHourRateThb: fiftyRate,
+  }
+}
+
 export async function getEventPackagesData(catalog?: PricingCatalog | null): Promise<{
   eventPackages: EventPackage[]
   eventPackageNotes: string[]

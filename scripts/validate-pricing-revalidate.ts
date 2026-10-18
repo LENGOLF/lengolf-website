@@ -214,6 +214,7 @@ const EXPECTED_TAINTED_LITERAL: string[] = [
   'app/[locale]/guide/[slug]/page.tsx#generateMetadata',
   'app/[locale]/hotels/[slug]/page.tsx#HotelConciergeSeoPage',
   'app/[locale]/hotels/[slug]/page.tsx#default',
+  'app/[locale]/lessons/page.tsx#generateMetadata',
   'app/[locale]/lessons/page.tsx#LessonsPage',
   'app/[locale]/lessons/page.tsx#default',
   'app/[locale]/menu/page.tsx#MenuPage',

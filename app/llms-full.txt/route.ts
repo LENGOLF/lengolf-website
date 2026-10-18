@@ -10,6 +10,7 @@ import {
   getBayRatesData,
   getEventPackagesData,
   getLessonPricingData,
+  getLessonPriceFacts,
   getMonthlyPackagesData,
 } from '@/data/pricing'
 
@@ -69,6 +70,7 @@ export async function GET() {
     getSeoPagesByType('faq'),
   ])
   const hub = getFaqHubContent('en')
+  const lessonFacts = getLessonPriceFacts(lessons.lessonPricing)
 
   const sections: string[] = []
 
@@ -122,7 +124,12 @@ export async function GET() {
         ])
       ) +
       '\n\n' +
-      lessons.lessonNotes.map((n) => `- ${n}`).join('\n')
+      [
+        ...lessons.lessonNotes,
+        'Free 1-hour trial with a PGA-certified coach for new students (0 THB), booked on LINE @lengolf',
+        `Per hour, 1 golfer: ${lessonFacts.hourly} THB for a single hour, ${lessonFacts.tenHourRate} THB on the 10-hour package, ${lessonFacts.fiftyHourRate} THB on the 50-hour package`,
+        `3 to 5 golfers: ${lessonFacts.groupHourly} THB per hour for the group, about ${lessonFacts.groupLow} to ${lessonFacts.groupHigh} THB per person`,
+      ].map((n) => `- ${n}`).join('\n')
   )
 
   // The Junior Academy's facts and Q&A, from the same data file its page
