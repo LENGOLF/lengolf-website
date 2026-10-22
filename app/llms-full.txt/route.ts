@@ -6,6 +6,7 @@ import { getPricingCatalog } from '@/lib/pricing'
 import { isFaqPage } from '@/types/seo-pages'
 import { getFaqHubContent } from '@/data/faq-hub'
 import { getJuniorAcademyContent, JUNIOR_ACADEMY_PATH } from '@/data/junior-academy'
+import { COACHING_PROVIDERS, providersCheckedOn } from '@/data/coaching-providers'
 import {
   getBayRatesData,
   getEventPackagesData,
@@ -133,6 +134,30 @@ export async function GET() {
         `Per hour, 1 golfer: ${lessonFacts.hourly} THB for a single hour, ${lessonFacts.tenHourRate} THB on the 10-hour package, ${lessonFacts.fiftyHourRate} THB on the 50-hour package`,
         `3 to 5 golfers: ${lessonFacts.groupHourly} THB per hour for the group, about ${lessonFacts.groupLow} to ${lessonFacts.groupHigh} THB per person`,
       ].map((n) => `- ${n}`).join('\n')
+  )
+
+  // Other Bangkok providers' published lesson prices, from the same rows the
+  // /cost/golf-lesson-prices-bangkok/ table renders. The per-row line is
+  // "Published by", never "Source:": smoke section H counts that marker
+  // against the /faq/ corpus.
+  sections.push(
+    `## Golf lesson prices in Bangkok compared (checked ${providersCheckedOn()})\n` +
+      `Page: ${SITE_URL}/cost/golf-lesson-prices-bangkok/\n\n` +
+      `LENGOLF: free 1-hour trial for new students, then ${lessonFacts.hourly} THB for a 1-hour private lesson; ${lessonFacts.fiftyHourRate} THB per hour on the 50-hour package. Simulator bay and clubs included.\n\n` +
+      table(
+        ['Provider', 'Type', 'Where', 'One private lesson', 'Best package rate', 'Includes', 'Published by', 'Checked'],
+        COACHING_PROVIDERS.map((p) => [
+          p.name,
+          p.kind,
+          p.area,
+          p.singleLesson,
+          cell(p.packageRate, 'not published'),
+          p.includes,
+          p.sourceUrl ? `${p.sourceLabel} (${p.sourceUrl})` : p.sourceLabel,
+          p.checkedOn,
+        ])
+      ) +
+      '\n\n- Prices as each provider publishes them, in THB; confirm with the provider before booking.'
   )
 
   // The Junior Academy's facts and Q&A, from the same data file its page

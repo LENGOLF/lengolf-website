@@ -3,6 +3,7 @@ import { relatedQuestionPath } from '@/lib/seo-links'
 import type { UsedClub } from '@/lib/clubs'
 import type { BayRateRow, MonthlyPackageRow, LessonPackage, LessonPriceFacts, EventPackage } from '@/data/pricing'
 import type { MenuGroup } from '@/data/food-menu'
+import type { CoachingComparison } from '@/types/seo-pages'
 
 /**
  * Single source of truth for the schema.org PostalAddress, reused across every
@@ -1189,6 +1190,80 @@ export function getPriceGuidePageJsonLd(page: {
       offerCount: brandOffers.length,
       offers: brandOffers,
     },
+  }
+}
+
+/**
+ * The /cost/ lesson-price comparison as an ItemList of golf-lesson Services,
+ * one per provider, in table order. LENGOLF's node points at the layout's
+ * business by `@id` (never restated); a competitor's provider is a plain
+ * Organization carrying its own name. A provider that publishes no price gets
+ * a Service with no Offer, so the entity is still listed without a made-up
+ * figure. `singleLessonThb` arrives already resolved from its fact token.
+ */
+export function getCoachingComparisonJsonLd(
+  page: {
+    title: string
+    slug: string
+    updated_at: string
+    content: { coaching_comparison?: CoachingComparison }
+  },
+  locale: string = 'en'
+) {
+  const comparison = page.content.coaching_comparison
+  if (!comparison) return null
+  const localePrefix = locale === 'en' ? '' : `/${locale}`
+  const pageUrl = `${SITE_URL}${localePrefix}/cost/${page.slug}/`
+  // Locale-independent @id base: one provider is one entity across locales.
+  const idBase = `${SITE_URL}/cost/${page.slug}/`
+
+  const toPrice = (value: number | string | null): number | null => {
+    if (value === null) return null
+    const n = typeof value === 'number' ? value : Number(String(value).replace(/,/g, ''))
+    return Number.isFinite(n) && n > 0 ? n : null
+  }
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: comparison.heading,
+    url: pageUrl,
+    dateModified: page.updated_at,
+    numberOfItems: comparison.rows.length,
+    itemListElement: comparison.rows.map((row, i) => {
+      const price = toPrice(row.singleLessonThb)
+      const isLengolf = row.id === 'lengolf'
+      return {
+        '@type': 'ListItem',
+        position: i + 1,
+        item: {
+          '@type': 'Service',
+          '@id': `${idBase}#provider-${row.id}`,
+          name: `Golf lessons at ${row.name}`,
+          serviceType: 'Golf lesson',
+          description: `${row.kind}. ${row.area}.`,
+          areaServed: { '@type': 'City', name: 'Bangkok' },
+          provider: isLengolf
+            ? getBusinessRef()
+            : {
+                '@type': 'Organization',
+                name: row.name,
+                ...(row.sourceUrl ? { url: row.sourceUrl } : {}),
+              },
+          ...(price !== null
+            ? {
+                offers: {
+                  '@type': 'Offer',
+                  name: 'One private lesson',
+                  price: String(price),
+                  priceCurrency: 'THB',
+                  description: row.singleLesson,
+                },
+              }
+            : {}),
+        },
+      }
+    }),
   }
 }
 
