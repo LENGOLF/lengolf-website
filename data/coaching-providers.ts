@@ -124,15 +124,20 @@ export const COACHING_PROVIDERS: CoachingProvider[] = [
     checkedOn: '2026-10-22',
   },
   {
+    // A launch promotion for one teaching pro (Pro Poon, Parathakorn Suyasri),
+    // posted by the academy about March 2026 and supplied by LENGOLF on
+    // 2026-10-22. Not a standard rate card: the academy publishes no prices
+    // for its other coaches, so the copy says "from" and names the pro.
     id: 'tom-dingwall',
     name: 'Tom Dingwall Golf Academy',
     kind: 'Indoor simulator academy and outdoor range',
     area: 'Marriott Executive Apartments Sukhumvit Park (Sukhumvit 24), and The Bangna Driving Range',
-    singleLessonThb: null,
-    singleLesson: 'Not published online; packages quoted on request',
-    packageRate: '—',
-    includes: 'Not published',
-    sourceLabel: 'Tom Dingwall Golf Academy website',
+    singleLessonThb: 2000,
+    singleLesson:
+      'From 2,000 THB for 1 hour (a 2026 promotion for teaching pro Pro Poon); prices for its other coaches are not published',
+    packageRate: '11,400 THB for 6 hours (1,900 THB/hr); 21,600 THB for 12 hours (1,800 THB/hr), same promotion',
+    includes: 'Not stated',
+    sourceLabel: 'Tom Dingwall Golf Academy lesson promotion (posted about March 2026)',
     sourceUrl: 'https://www.tomdingwallgolf.com/golf-lessons/',
     checkedOn: '2026-10-22',
   },

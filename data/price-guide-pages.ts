@@ -2645,7 +2645,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
           ...COACHING_PROVIDERS,
         ],
         footnote:
-          'Prices are shown as each provider publishes them and can change, so confirm with the provider before booking. A dash means no package price is published. Tom Dingwall Golf Academy and Bangkok Golf Centre quote prices on request. LENGOLF rows are read from our live price list.',
+          'Prices are shown as each provider publishes them and can change, so confirm with the provider before booking. A dash means no package price is published. Tom Dingwall Golf Academy\'s figures are a promotion for one teaching pro, and Bangkok Golf Centre quotes prices on request. LENGOLF rows are read from our live price list.',
       },
       price_breakdown: [
         { item: 'LENGOLF — Free 1-hour trial', price: '0 THB', notes: 'For new students: 1 hour with a Thailand PGA coach, clubs and simulator included. Book on LINE @lengolf.' },
@@ -2682,7 +2682,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
           },
           {
             question: 'How much does Tom Dingwall Golf Academy charge for lessons?',
-            answer: 'Tom Dingwall Golf Academy does not publish lesson prices online (checked October 2026). Its website describes short- and long-term packages and asks you to contact the academy for a quote. It teaches at an indoor studio at Marriott Executive Apartments Sukhumvit Park on Sukhumvit 24 and at The Bangna Driving Range.',
+            answer: 'Tom Dingwall Golf Academy does not publish a full price list. Its 2026 lesson promotion for teaching pro Pro Poon (Parathakorn Suyasri) was 2,000 THB for 1 hour, 11,400 THB for 6 hours (1,900 THB per hour) and 21,600 THB for 12 hours (1,800 THB per hour). Prices for its other coaches are quoted on request. Lessons run at its indoor studio at Marriott Executive Apartments Sukhumvit Park on Sukhumvit 24 and at The Bangna Driving Range.',
           },
           {
             question: 'How much are lessons at Bangkok Golf Centre?',
@@ -2694,7 +2694,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
           },
           {
             question: 'Are simulator golf lessons more expensive than driving range lessons in Bangkok?',
-            answer: 'Not consistently. Published single-lesson prices are 1,900–2,000 THB at the driving-range academies we checked (Topgolf Megacity, One Degree Center), 2,700–3,200 THB at Front9\'s simulator academy and {{lessonHourlyNum}} THB at LENGOLF\'s simulators. Independent range coaches charge 2,495–3,000 THB. Coach seniority and package size move the price more than the venue type.',
+            answer: 'Not consistently. Published single-lesson prices are 1,900–2,000 THB at the driving-range academies we checked (Topgolf Megacity, One Degree Center), 2,700–3,200 THB at Front9\'s simulator academy, from 2,000 THB at Tom Dingwall Golf Academy (a promotional rate) and {{lessonHourlyNum}} THB at LENGOLF\'s simulators. Independent range coaches charge 2,495–3,000 THB. Coach seniority and package size move the price more than the venue type.',
           },
         ],
       },
