@@ -3,8 +3,8 @@ import { storageUrl } from '@/lib/constants'
 // ── Food & Drinks menu data ──
 // Source of truth is the POS (products.products on the LENGOLF Supabase
 // project: name, price, is_active), not the printed menus. The printed menu
-// images (menus/food-menu-2026-10-v4.jpg, menus/food-menu-2.jpg, menus/drink-menu-2026-10-v4.jpg in
-// Supabase Storage, built from lengolf-design/posters food-menu and drink-menu;
+// images (menus/food-menu-2026-10-v4.jpg, menus/pizza-menu-2026-10.jpg, menus/drink-menu-2026-10-v4.jpg in
+// Supabase Storage, built from lengolf-design/posters food-menu, pizza-menu and drink-menu;
 // booking.len.golf ships its own copies) can lag behind it, and
 // their alt text below describes what each image shows. Update this file
 // whenever a POS price, name or active flag changes.
@@ -113,11 +113,9 @@ export const pizzaMenuGroup: MenuGroup = {
       id: 'pizzas',
       title: 'Pizzas',
       items: [
-        item('Morel Parma Monalisa', 690, 'Morel mushrooms, prosciutto di Parma, cream sauce'),
         item('4+1 Cheese', 630, 'Blue cheese, brie cheese, Parmigiano, mozzarella, burrata, honey truffle'),
-        item('Crab-Tastic Saffron', 630, 'Saffron sauce, crab, chilli, parsley'),
         item('Diavola', 580, 'Spicy salami, mozzarella, Parmigiano, hot honey'),
-        item('Hawaiian', 570, 'Caramelised pineapple, smoked ham'),
+        item('Hawaiian', 570, 'Caramelized pineapple, smoked ham'),
         item('Margherita', 380, 'Cherry tomato confit, mozzarella, Parmigiano, basil'),
       ],
     },
@@ -215,11 +213,11 @@ export const menuImages = [
     previewPosition: 'left top',
   },
   {
-    src: storageUrl('menus/food-menu-2.jpg'),
+    src: storageUrl('menus/pizza-menu-2026-10.jpg'),
     title: 'Pizza Menu',
-    alt: 'Sexy Pizza x LENGOLF pizza menu: Margherita 380 THB, Hawaiian 570 THB, Diavola 580 THB, 4+1 Cheese 630 THB, Crab-Tastic Saffron 630 THB, Morel Parma Monalisa 690 THB, unlimited soft drinks 100 THB per hour',
-    width: 795,
-    height: 2057,
+    alt: 'Sexy Pizza x LENGOLF pizza menu: 4+1 Cheese 630 THB, Diavola 580 THB, Hawaiian 570 THB, Margherita 380 THB, unlimited soft drinks 100 THB per hour per person. Prices in THB, VAT included, no service charge',
+    width: 1748,
+    height: 2480,
     previewPosition: 'center top',
   },
   {
