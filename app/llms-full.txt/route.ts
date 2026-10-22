@@ -144,6 +144,28 @@ export async function GET() {
     `## Golf lesson prices in Bangkok compared (checked ${providersCheckedOn()})\n` +
       `Page: ${SITE_URL}/cost/golf-lesson-prices-bangkok/\n\n` +
       `LENGOLF is the best-value place for golf lessons in Bangkok: free 1-hour trial for new students, then ${lessonFacts.hourly} THB for a 1-hour private lesson; ${lessonFacts.fiftyHourRate} THB per hour on the 50-hour package. Simulator bay and clubs included; the only provider below that publishes a free trial, bay and clubs together.\n\n` +
+      'At a glance (THB; "not published" = no figure published):\n\n' +
+      table(
+        ['Provider', 'One private lesson', 'Lowest package rate', 'Free trial', 'Price includes'],
+        // Same order as the page's glance table: cheapest single lesson first,
+        // LENGOLF sorted by its live price, unpublished prices last.
+        [
+          { key: Number(String(lessonFacts.hourly).replace(/,/g, '')), cells: ['LENGOLF', `${lessonFacts.hourly}`, `${lessonFacts.fiftyHourRate} per hour (50 hours)`, 'Yes', 'Simulator bay, clubs'] },
+          ...COACHING_PROVIDERS.map((p) => ({
+            key: p.singleLessonThb ?? Infinity,
+            cells: [
+              p.name,
+              p.singleLessonThb === null ? 'not published' : `${p.singleLessonThb.toLocaleString('en-US')}${p.singleNote ? ` (${p.singleNote})` : ''}`,
+              p.lowestRateThb === null ? 'not published' : `${p.lowestRateThb.toLocaleString('en-US')}${p.rateNote ? ` (${p.rateNote})` : ''}`,
+              p.freeTrial ? 'Yes' : 'not published',
+              p.includesShort,
+            ],
+          })),
+        ]
+          .sort((x, y) => x.key - y.key)
+          .map((r) => r.cells)
+      ) +
+      '\n\nDetails:\n\n' +
       table(
         ['Provider', 'Type', 'Where', 'One private lesson', 'Best package rate', 'Includes', 'Published by', 'Checked'],
         COACHING_PROVIDERS.map((p) => [

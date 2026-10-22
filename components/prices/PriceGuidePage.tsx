@@ -106,6 +106,66 @@ export default async function PriceGuidePageComponent({ data }: Props) {
       {content.coaching_comparison && (
         <section className="py-12 md:py-16 bg-[#f8f9fa]" id="compare">
           <div className="mx-auto max-w-[1100px] px-4 md:px-5">
+            {/* At a glance: numbers only, sorted by the resolved single-lesson
+                price so the order stays true when LENGOLF's POS price moves. */}
+            {(() => {
+              const cmp = content.coaching_comparison!
+              const g = cmp.glance
+              const thb = (v: number | string | null) => {
+                if (v === null) return null
+                const n = typeof v === 'number' ? v : Number(String(v).replace(/,/g, ''))
+                return Number.isFinite(n) && n > 0 ? n : null
+              }
+              const rows = [...cmp.rows].sort(
+                (a, b) => (thb(a.singleLessonThb) ?? Infinity) - (thb(b.singleLessonThb) ?? Infinity)
+              )
+              const figure = (v: number | string | null, note?: string) => {
+                const n = thb(v)
+                if (n === null) return <span className="text-muted-foreground">{g.notPublished}</span>
+                return (
+                  <>
+                    <span className="font-semibold tabular-nums">{n.toLocaleString('en-US')}</span>
+                    {note && <span className="block text-[11px] leading-tight text-muted-foreground">{note}</span>}
+                  </>
+                )
+              }
+              return (
+                <div className="mb-14" id="prices-at-a-glance">
+                  <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-3">{g.heading}</h2>
+                  <p className="mb-5 text-base leading-relaxed text-muted-foreground">{g.intro}</p>
+                  <div className="overflow-x-auto rounded-lg border border-border bg-white">
+                    <table className="w-full border-collapse text-sm">
+                      <caption className="sr-only">{g.heading}</caption>
+                      <thead>
+                        <tr className="border-b-2 border-[#2d6a4f] text-left">
+                          <th scope="col" className="py-3 pl-3 pr-2 font-semibold text-[#1a472a] sm:pl-4 sm:pr-3">{g.columns.provider}</th>
+                          <th scope="col" className="py-3 px-2 text-right font-semibold text-[#1a472a] sm:px-3">{g.columns.single}</th>
+                          <th scope="col" className="py-3 px-2 text-right font-semibold text-[#1a472a] sm:px-3">{g.columns.rate}</th>
+                          <th scope="col" className="py-3 pl-2 pr-3 text-center font-semibold text-[#1a472a] sm:px-3">{g.columns.trial}</th>
+                          <th scope="col" className="hidden py-3 pl-3 pr-4 font-semibold text-[#1a472a] sm:table-cell">{g.columns.includes}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {rows.map((row) => {
+                          const isLengolf = row.id === 'lengolf'
+                          return (
+                            <tr key={row.id} className={`border-b border-border last:border-0 ${isLengolf ? 'bg-[#f0f7f2]' : ''}`}>
+                              <th scope="row" className={`py-2.5 pl-3 pr-2 text-left font-semibold sm:pl-4 sm:pr-3 ${isLengolf ? 'text-[#2d6a4f]' : 'text-[#1a472a]'}`}>
+                                <a href={`#provider-${row.id}`} className="hover:underline">{row.name}</a>
+                              </th>
+                              <td className={`py-2.5 px-2 text-right align-top sm:px-3 ${isLengolf ? 'text-[#2d6a4f]' : ''}`}>{figure(row.singleLessonThb, row.singleNote)}</td>
+                              <td className="py-2.5 px-2 text-right align-top sm:px-3">{figure(row.lowestRateThb, row.rateNote)}</td>
+                              <td className="py-2.5 pl-2 pr-3 text-center align-top sm:px-3">{row.freeTrial ? <span className="font-semibold text-[#2d6a4f]">{g.yes}</span> : <span className="text-muted-foreground">{g.no}</span>}</td>
+                              <td className="hidden py-2.5 pl-3 pr-4 align-top text-muted-foreground sm:table-cell">{row.includesShort}</td>
+                            </tr>
+                          )
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )
+            })()}
             <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-3">
               {content.coaching_comparison.heading}
             </h2>

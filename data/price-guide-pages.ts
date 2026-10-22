@@ -2621,6 +2621,20 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
       intro:
         `LENGOLF is the best-value place to take golf lessons in Bangkok. New students start with a free 1-hour trial with a Thailand PGA coach, then pay {{lessonHourlyNum}} THB for a 1-hour private lesson, or {{lesson50hRateNum}} THB per hour on the 50-hour package, with the simulator bay and clubs included. It is the only provider in this comparison that publishes all three: a free trial, the bay and the clubs. At the ${countWord(LESSON_RANGE.count)} other Bangkok academies and coaches that publish prices (checked October 2026), a private lesson costs ${fmt(LESSON_RANGE.low)}–${fmt(LESSON_RANGE.high)} THB, and senior coaches charge more: 3,200 THB per lesson on Front9's top tier and 6,500 THB per hour with One Degree Center's Director of Instruction. Their packages bring the rate down to roughly 1,200–2,200 THB per hour.`,
       coaching_comparison: {
+        glance: {
+          heading: 'Golf lesson prices in Bangkok at a glance',
+          intro: 'Every provider side by side, cheapest single lesson first. Prices in Thai baht; a dash means the provider does not publish it. Details and sources are in the next table.',
+          columns: {
+            provider: 'Provider',
+            single: '1 private lesson',
+            rate: 'Lowest package rate',
+            trial: 'Free trial',
+            includes: 'Price includes',
+          },
+          yes: 'Yes',
+          no: '—',
+          notPublished: 'Not published',
+        },
         heading: 'Golf lesson prices in Bangkok, provider by provider',
         intro:
           'Each row shows what the provider itself publishes: its cheapest private lesson, its best package rate, what the price includes, and where the figure comes from. Prices are in Thai baht.',
@@ -2643,6 +2657,10 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
             singleLesson: 'Free 1-hour trial for new students, then {{lessonHourlyNum}} THB for 1 hour',
             packageRate:
               '{{lesson10hNum}} THB for 10 hours ({{lesson10hRateNum}} THB/hr, 12 months); {{lesson50hNum}} THB for 50 hours ({{lesson50hRateNum}} THB/hr, 24 months)',
+            lowestRateThb: '{{lesson50hRateNum}}',
+            rateNote: '50 hours',
+            freeTrial: true,
+            includesShort: 'Bay, clubs',
             includes: 'Simulator bay, clubs and swing data',
             sourceLabel: 'LENGOLF lessons page',
             sourceUrl: `${SITE_URL}/lessons/`,

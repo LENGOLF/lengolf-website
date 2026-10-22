@@ -143,6 +143,13 @@ export interface CoachingComparisonRow {
   singleLessonThb: number | string | null
   singleLesson: string
   packageRate: string
+  /** Glance table: lowest rate per hour or lesson; a string only for LENGOLF's
+   *  {{lesson50hRateNum}} token. */
+  lowestRateThb: number | string | null
+  singleNote?: string
+  rateNote?: string
+  freeTrial: boolean
+  includesShort: string
   includes: string
   sourceLabel: string
   sourceUrl: string | null
@@ -151,6 +158,16 @@ export interface CoachingComparisonRow {
 }
 
 export interface CoachingComparison {
+  /** Compact numbers-only table rendered above the detailed one, sorted by
+   *  single-lesson price (cheapest first, unpublished last). */
+  glance: {
+    heading: string
+    intro: string
+    columns: { provider: string; single: string; rate: string; trial: string; includes: string }
+    yes: string
+    no: string
+    notPublished: string
+  }
   heading: string
   intro: string
   columns: {
