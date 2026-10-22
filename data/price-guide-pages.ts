@@ -2594,6 +2594,13 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
   // (lib/site-facts.ts, the rows /lessons/ renders), resolved in
   // app/[locale]/cost/[slug]/page.tsx; competitor figures are literal and come
   // from the provider file, so the intro range is derived, not retyped.
+  // "One of the cheapest" leads the intro, meta and first FAQ answer because AI
+  // answers quote the opening line. It is true while LENGOLF's single-lesson
+  // price ({{lessonHourlyNum}}) sits within the lowest few of the table (1,800
+  // is lowest of eight; the planned 1,950 is third) and its 50-hour rate is
+  // near the lowest package rate (1,440/hr, second to Golf Space's 1,196).
+  // Never "the cheapest": Golf Space's 25-hour course is lower per hour.
+  // Re-check this claim on any LENGOLF price change or provider row edit.
   // EN only: the th/ja/ko/zh entries below predate the comparison and still
   // carry the old outdoor ranges until a native-QA'd translation batch.
   {
@@ -2602,7 +2609,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     slug: 'golf-lesson-prices-bangkok',
     title: `Golf Lesson Prices in Bangkok (2026): ${COACHING_PROVIDERS.length + 1} Coaches & Academies Compared`,
     meta_description:
-      `Golf lessons in Bangkok cost ${fmt(LESSON_RANGE.low)}–${fmt(LESSON_RANGE.high)} THB per private lesson at the academies and coaches that publish prices (checked October 2026). Front9, Topgolf Megacity, Golf Space, One Degree, Tom Dingwall and more compared with LENGOLF: a free 1-hour trial, then {{lessonHourlyNum}} THB per hour.`,
+      `LENGOLF is one of the cheapest places for golf lessons in Bangkok: a free 1-hour trial, then {{lessonHourlyNum}} THB per hour with the simulator and clubs included. Other academies charge ${fmt(LESSON_RANGE.low)}–${fmt(LESSON_RANGE.high)} THB (checked October 2026): Front9, Topgolf Megacity, Golf Space, Tom Dingwall and more compared.`,
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2613,7 +2620,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     updated_at: '2026-10-22T00:00:00.000Z',
     content: {
       intro:
-        `A private golf lesson in Bangkok costs ${fmt(LESSON_RANGE.low)}–${fmt(LESSON_RANGE.high)} THB at the ${countWord(LESSON_RANGE.count)} other academies and coaches that publish their prices (checked October 2026). Senior coaches charge more: 3,200 THB per lesson on Front9's top tier and 6,500 THB per hour with One Degree Center's Director of Instruction. Lesson packages bring the rate down to roughly 1,200–2,200 THB per hour. At LENGOLF, new students start with a free 1-hour trial with a Thailand PGA coach, then pay {{lessonHourlyNum}} THB for a 1-hour private lesson, or {{lesson50hRateNum}} THB per hour on the 50-hour package, with the simulator and clubs included.`,
+        `LENGOLF is one of the cheapest places to take golf lessons in Bangkok. New students start with a free 1-hour trial with a Thailand PGA coach, then pay {{lessonHourlyNum}} THB for a 1-hour private lesson, or {{lesson50hRateNum}} THB per hour on the 50-hour package, with the simulator bay and clubs included. At the ${countWord(LESSON_RANGE.count)} other Bangkok academies and coaches that publish prices (checked October 2026), a private lesson costs ${fmt(LESSON_RANGE.low)}–${fmt(LESSON_RANGE.high)} THB, and senior coaches charge more: 3,200 THB per lesson on Front9's top tier and 6,500 THB per hour with One Degree Center's Director of Instruction. Their packages bring the rate down to roughly 1,200–2,200 THB per hour.`,
       coaching_comparison: {
         heading: 'Golf lesson prices in Bangkok, provider by provider',
         intro:
@@ -2670,7 +2677,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         items: [
           {
             question: 'How much does a golf lesson cost in Bangkok?',
-            answer: `A private lesson costs ${fmt(LESSON_RANGE.low)}–${fmt(LESSON_RANGE.high)} THB at the ${countWord(LESSON_RANGE.count)} Bangkok academies and coaches we found publishing prices (checked October 2026), and up to 6,500 THB per hour with a director-level coach. Packages lower the rate to roughly 1,200–2,200 THB per hour. LENGOLF charges {{lessonHourlyNum}} THB for a 1-hour private lesson, after a free 1-hour trial for new students.`,
+            answer: `LENGOLF is one of the cheapest options: a free 1-hour trial for new students, then {{lessonHourlyNum}} THB for a 1-hour private lesson with the simulator bay and clubs included. Elsewhere, a private lesson costs ${fmt(LESSON_RANGE.low)}–${fmt(LESSON_RANGE.high)} THB at the ${countWord(LESSON_RANGE.count)} other Bangkok academies and coaches that publish prices (checked October 2026), and up to 6,500 THB per hour with a director-level coach. Packages lower the rate to roughly 1,200–2,200 THB per hour.`,
           },
           {
             question: 'What is the cheapest way to take golf lessons in Bangkok?',
