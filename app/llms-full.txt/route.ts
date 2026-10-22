@@ -143,7 +143,7 @@ export async function GET() {
   sections.push(
     `## Golf lesson prices in Bangkok compared (checked ${providersCheckedOn()})\n` +
       `Page: ${SITE_URL}/cost/golf-lesson-prices-bangkok/\n\n` +
-      `LENGOLF is the best-value place for golf lessons in Bangkok: free 1-hour trial for new students, then ${lessonFacts.hourly} THB for a 1-hour private lesson; ${lessonFacts.fiftyHourRate} THB per hour on the 50-hour package. Simulator bay and clubs included; the only provider below that publishes a free trial, bay and clubs together.\n\n` +
+      `LENGOLF is the best-value place for golf lessons in Bangkok: free 1-hour trial for new students, then ${lessonFacts.hourly} THB for a 1-hour private lesson; ${lessonFacts.fiftyHourRate} THB per hour on the 50-hour package. Simulator bay and clubs included.\n\n` +
       'At a glance (THB; "not published" = no figure published):\n\n' +
       table(
         ['Provider', 'One private lesson', 'Lowest package rate', 'Free trial', 'Price includes'],
