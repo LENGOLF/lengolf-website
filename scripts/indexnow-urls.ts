@@ -474,6 +474,14 @@ const LESSON_TOKEN_PAGES = [
 ]
 
 /** A small module feeding a fixed set of pages: any change pings all of them. */
+// The provider count is in the EN page title, which /golf-in-thailand-guide/
+// prints on its price-guide hub card, so a row added or removed changes it too.
+const COACHING_PROVIDER_URLS = () => [
+  pageUrl('en', '/cost/golf-lesson-prices-bangkok/'),
+  pageUrl('en', '/llms-full.txt'),
+  pageUrl('en', '/golf-in-thailand-guide/'),
+]
+
 function fixedRule(file: string, pages: string[]): Rule {
   const urls = (ctx: Ctx) => pages.flatMap((p) => served(ctx.reg, p))
   return {
@@ -757,6 +765,20 @@ export const RULES: Rule[] = [
   recordRule('data/bts-stations.ts', 'BTS_STATIONS', (s) => `/golf-courses/near/${s}/`, (reg) => inLocale(reg, 'en', '/golf-courses/')),
   recordRule('data/golf-courses-use-cases.ts', 'USE_CASE_RULES', (s) => `/golf-courses/best-for/${s}/`, (reg) => inLocale(reg, 'en', '/golf-courses/')),
   fixedRule('data/coaches.ts', ['/lessons/', '/llms.txt']),
+  {
+    // Other providers' lesson prices: rendered only by the EN entry of
+    // /cost/golf-lesson-prices-bangkok/ (data/price-guide-pages.ts reads it at
+    // module load, so a provider edit changes that page without touching the
+    // SEO data file) and printed into llms-full.txt. The th/ja/ko/zh entries do
+    // not render the table, so they are not pinged.
+    id: 'coaching-providers',
+    match: (f) => (f === 'data/coaching-providers.ts' ? [f] : null),
+    derive: (_ctx, base, head) =>
+      moduleSig(base) === moduleSig(head)
+        ? { kind: 'none' }
+        : { kind: 'records', urls: COACHING_PROVIDER_URLS(), note: 'provider rows changed -> EN lesson-price page, llms-full.txt, guide hub' },
+    coarse: () => COACHING_PROVIDER_URLS(),
+  },
   fixedRule('data/event-clients.ts', ['/events/']),
   fixedRule('data/food-menu.ts', ['/menu/']),
   fixedRule('data/pricing.ts', ['/', '/golf/', '/lessons/', '/events/', '/corporate-golf-packages/', '/llms-full.txt', ...LESSON_TOKEN_PAGES]),
@@ -1403,6 +1425,16 @@ const CASES: Case[] = [
     want: ['/menu/'],
   },
   {
+    // The th/ja/ko/zh lesson-price pages are registered but do not render
+    // the provider table, so a provider edit must not ping them.
+    name: 'coaching-providers.ts: a provider edit pings the EN lesson-price page, llms-full.txt and the EN guide hub alone',
+    changes: [{ status: 'M', file: 'data/coaching-providers.ts' }],
+    base: { 'data/coaching-providers.ts': { COACHING_PROVIDERS: [{ id: 'front9', singleLessonThb: 2700 }] } },
+    head: { 'data/coaching-providers.ts': { COACHING_PROVIDERS: [{ id: 'front9', singleLessonThb: 2800 }] } },
+    registered: ['th:/cost/golf-lesson-prices-bangkok'],
+    want: ['/cost/golf-lesson-prices-bangkok/', '/llms-full.txt', '/golf-in-thailand-guide/'],
+  },
+  {
     // ja serves /lessons/ but not the Academy page, so ja /lessons/ (no
     // callout there) must not ping.
     // ...including the JUNIOR_ACADEMY_UPDATED_AT bump every copy edit carries.
@@ -1614,6 +1646,11 @@ const CONSUMERS: Record<string, Record<string, string>> = {
     'components/home/ChinaLandingPage.tsx': 'pinged: the lessons card, on / (zh)',
   },
   'data/coaches.ts': { 'app/[locale]/lessons/page.tsx': 'pinged', 'app/llms.txt/route.ts': 'pinged' },
+  'data/coaching-providers.ts': {
+    'app/llms-full.txt/route.ts': 'pinged: EN only',
+    'components/prices/PriceGuidePage.tsx': 'ignored: imports the comparisonThb parser only; the rows reach it through the page entry, pinged by the rule',
+    'lib/jsonld.ts': 'ignored: imports the comparisonThb parser only; the rows reach it through the page entry, pinged by the rule',
+  },
   'data/event-clients.ts': { 'app/[locale]/events/page.tsx': 'pinged' },
   'data/food-menu.ts': { 'app/[locale]/menu/page.tsx': 'pinged' },
   'data/faq-hub.ts': {
@@ -2148,8 +2185,8 @@ async function selfTest(): Promise<void> {
   // trigger-path coverage, workflow trigger, locales, two loader checks); one
   // consumer verdict per CONSUMERS key; four CLI verdicts.
   const expected = CASES.length + 1 + 3 + SEO_SECTIONS.length + 8 + Object.keys(CONSUMERS).length + 4
-  if (CASES.length !== 60 || examined !== expected) {
-    console.log(`FAIL: examined ${examined} verdict(s), expected ${expected} (CASES=${CASES.length}, want 60)`)
+  if (CASES.length !== 61 || examined !== expected) {
+    console.log(`FAIL: examined ${examined} verdict(s), expected ${expected} (CASES=${CASES.length}, want 61)`)
     process.exit(1)
   }
   if (failures > 0) {

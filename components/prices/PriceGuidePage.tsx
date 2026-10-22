@@ -13,6 +13,7 @@ import { BOOKING_URL, BUSINESS_INFO, SOCIAL_LINKS } from '@/lib/constants'
 import { StarIcon } from '@/components/shared/StarRating'
 import { truncateReviewText } from '@/lib/google-reviews'
 import type { PriceGuideSeoPage } from '@/types/seo-pages'
+import { comparisonThb } from '@/data/coaching-providers'
 
 interface Props {
   data: PriceGuideSeoPage
@@ -98,8 +99,158 @@ export default async function PriceGuidePageComponent({ data }: Props) {
         </div>
       </section>
 
+      {/* Provider comparison (lesson prices). Placed straight after the
+          answer-first intro so the comparison is the first table a reader or
+          crawler meets. One <table> at every width: below md each row stacks
+          into a card and each cell carries its column name inline, so the
+          figures read in context instead of duplicating the table as cards. */}
+      {content.coaching_comparison && (
+        <section className="py-12 md:py-16 bg-[#f8f9fa]" id="compare">
+          <div className="mx-auto max-w-[1100px] px-4 md:px-5">
+            {/* At a glance: numbers only, sorted by the resolved single-lesson
+                price so the order stays true when LENGOLF's POS price moves. */}
+            {(() => {
+              const cmp = content.coaching_comparison!
+              const g = cmp.glance
+              const thb = comparisonThb
+              const rows = [...cmp.rows].sort(
+                (a, b) => (thb(a.singleLessonThb) ?? Infinity) - (thb(b.singleLessonThb) ?? Infinity)
+              )
+              const figure = (v: number | string | null, note?: string) => {
+                const n = thb(v)
+                if (n === null) return <span className="text-muted-foreground">{g.notPublished}</span>
+                return (
+                  <>
+                    <span className="font-semibold tabular-nums">{n.toLocaleString('en-US')}</span>
+                    {note && <span className="block text-[11px] leading-tight text-muted-foreground">{note}</span>}
+                  </>
+                )
+              }
+              return (
+                <div className="mb-14" id="prices-at-a-glance">
+                  <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-3">{g.heading}</h2>
+                  <p className="mb-5 text-base leading-relaxed text-muted-foreground">{g.intro}</p>
+                  <div className="overflow-x-auto rounded-lg border border-border bg-white">
+                    <table className="w-full border-collapse text-sm">
+                      <caption className="sr-only">{g.heading}</caption>
+                      <thead>
+                        <tr className="border-b-2 border-[#2d6a4f] text-left">
+                          <th scope="col" className="py-3 pl-3 pr-2 font-semibold text-[#1a472a] sm:pl-4 sm:pr-3">{g.columns.provider}</th>
+                          <th scope="col" className="py-3 px-2 text-right font-semibold text-[#1a472a] sm:px-3">{g.columns.single}</th>
+                          <th scope="col" className="py-3 px-2 text-right font-semibold text-[#1a472a] sm:px-3">{g.columns.rate}</th>
+                          <th scope="col" className="py-3 pl-2 pr-3 text-center font-semibold text-[#1a472a] sm:px-3">{g.columns.trial}</th>
+                          <th scope="col" className="hidden py-3 pl-3 pr-4 font-semibold text-[#1a472a] sm:table-cell">{g.columns.includes}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {rows.map((row) => {
+                          const isLengolf = row.id === 'lengolf'
+                          return (
+                            <tr key={row.id} className={`border-b border-border last:border-0 ${isLengolf ? 'bg-[#f0f7f2]' : ''}`}>
+                              <th scope="row" className={`py-2.5 pl-3 pr-2 text-left font-semibold sm:pl-4 sm:pr-3 ${isLengolf ? 'text-[#2d6a4f]' : 'text-[#1a472a]'}`}>
+                                <a href={`#provider-${row.id}`} className="hover:underline">{row.name}</a>
+                              </th>
+                              <td className={`py-2.5 px-2 text-right align-top sm:px-3 ${isLengolf ? 'text-[#2d6a4f]' : ''}`}>{figure(row.singleLessonThb, row.singleNote)}</td>
+                              <td className="py-2.5 px-2 text-right align-top sm:px-3">{figure(row.lowestRateThb, row.rateNote)}</td>
+                              <td className="py-2.5 pl-2 pr-3 text-center align-top sm:px-3">{row.freeTrial ? <span className="font-semibold text-[#2d6a4f]">{g.yes}</span> : <span className="text-muted-foreground">{g.no}</span>}</td>
+                              <td className="hidden py-2.5 pl-3 pr-4 align-top text-muted-foreground sm:table-cell">{row.includesShort}</td>
+                            </tr>
+                          )
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )
+            })()}
+            <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-3">
+              {content.coaching_comparison.heading}
+            </h2>
+            <p className="mb-6 text-base leading-relaxed text-muted-foreground">
+              {content.coaching_comparison.intro}
+            </p>
+            <table className="w-full border-collapse text-sm">
+              <caption className="sr-only">{content.coaching_comparison.heading}</caption>
+              <thead className="hidden md:table-header-group">
+                <tr className="border-b-2 border-[#2d6a4f]">
+                  <th scope="col" className="py-3 pr-3 text-left font-semibold text-[#1a472a]">{content.coaching_comparison.columns.provider}</th>
+                  <th scope="col" className="py-3 px-3 text-left font-semibold text-[#1a472a]">{content.coaching_comparison.columns.single}</th>
+                  <th scope="col" className="py-3 px-3 text-left font-semibold text-[#1a472a]">{content.coaching_comparison.columns.packages}</th>
+                  <th scope="col" className="py-3 px-3 text-left font-semibold text-[#1a472a]">{content.coaching_comparison.columns.includes}</th>
+                  <th scope="col" className="py-3 pl-3 text-left font-semibold text-[#1a472a]">{content.coaching_comparison.columns.source}</th>
+                </tr>
+              </thead>
+              <tbody className="block md:table-row-group">
+                {content.coaching_comparison.rows.map((row) => {
+                  const isLengolf = row.id === 'lengolf'
+                  const cols = content.coaching_comparison!.columns
+                  const cellLabel = (text: string) => (
+                    <span className="block text-xs font-semibold uppercase tracking-wide text-muted-foreground md:hidden">
+                      {text}
+                    </span>
+                  )
+                  return (
+                    <tr
+                      key={row.id}
+                      id={`provider-${row.id}`}
+                      className={`mb-4 block rounded-lg border border-border bg-white p-4 md:mb-0 md:table-row md:rounded-none md:border-0 md:border-b md:p-0 ${isLengolf ? 'md:bg-[#f0f7f2] border-[#2d6a4f]/40' : 'md:bg-transparent'}`}
+                    >
+                      <th scope="row" className="block pb-2 text-left align-top md:table-cell md:py-3 md:pr-3">
+                        <span className={`block font-bold ${isLengolf ? 'text-[#2d6a4f]' : 'text-[#1a472a]'}`}>{row.name}</span>
+                        <span className="mt-1 block text-xs font-normal text-muted-foreground">{row.kind}</span>
+                        <span className="mt-1 block text-xs font-normal text-muted-foreground">{row.area}</span>
+                      </th>
+                      <td className="block py-1.5 align-top md:table-cell md:px-3 md:py-3">
+                        {cellLabel(cols.single)}
+                        <span className={row.singleLessonThb === null ? 'text-muted-foreground' : 'font-semibold text-[#2d6a4f]'}>{row.singleLesson}</span>
+                      </td>
+                      <td className="block py-1.5 align-top md:table-cell md:px-3 md:py-3">
+                        {cellLabel(cols.packages)}
+                        {row.packageRate}
+                      </td>
+                      <td className="block py-1.5 align-top text-muted-foreground md:table-cell md:px-3 md:py-3">
+                        {cellLabel(cols.includes)}
+                        {row.includes}
+                      </td>
+                      <td className="block pt-1.5 align-top text-xs text-muted-foreground md:table-cell md:py-3 md:pl-3">
+                        {cellLabel(cols.source)}
+                        {row.sourceUrl ? (
+                          <a
+                            href={row.sourceUrl}
+                            target="_blank"
+                            rel={isLengolf ? undefined : 'nofollow noopener noreferrer'}
+                            className="underline decoration-dotted underline-offset-2 hover:text-[#2d6a4f]"
+                          >
+                            {row.sourceLabel}
+                          </a>
+                        ) : (
+                          row.sourceLabel
+                        )}
+                        <span className="block">
+                          {row.checkedOn ? (
+                            <>
+                              {content.coaching_comparison!.checkedLabel}{' '}
+                              <time dateTime={row.checkedOn}>{row.checkedOn}</time>
+                            </>
+                          ) : (
+                            content.coaching_comparison!.liveLabel
+                          )}
+                        </span>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+              {content.coaching_comparison.footnote}
+            </p>
+          </div>
+        </section>
+      )}
+
       {/* Price Breakdown Table */}
-      <section className="py-12 md:py-16 bg-[#f8f9fa]">
+      <section className={`py-12 md:py-16 ${content.coaching_comparison ? '' : 'bg-[#f8f9fa]'}`}>
         <div className="mx-auto max-w-[900px] px-5">
           <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-6">
             {t('priceBreakdownHeading')}
@@ -277,6 +428,30 @@ export default async function PriceGuidePageComponent({ data }: Props) {
                 {t('readAllReviews')}
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               </a>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Q&A. Native <details> rather than the Radix accordion: a closed
+          Radix item unmounts its answer, and these answers exist to be read by
+          crawlers (see the /faq/ hub). The same items ship as FAQPage JSON-LD
+          from app/[locale]/cost/[slug]/page.tsx. */}
+      {content.faq && content.faq.items.length > 0 && (
+        <section className="py-12 md:py-16">
+          <div className="mx-auto max-w-[900px] px-5">
+            <h2 className="text-2xl font-bold text-[#1a472a] md:text-3xl mb-6">
+              {content.faq.heading}
+            </h2>
+            <div className="divide-y divide-border/60 rounded-lg border border-border/60 bg-white">
+              {content.faq.items.map((item, i) => (
+                <details key={item.question} className="group px-5" open={i === 0}>
+                  <summary className="cursor-pointer list-none py-4 font-semibold text-[#1a472a] marker:hidden">
+                    {item.question}
+                  </summary>
+                  <p className="pb-5 text-base leading-relaxed text-muted-foreground">{item.answer}</p>
+                </details>
+              ))}
             </div>
           </div>
         </section>

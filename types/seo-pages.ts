@@ -125,8 +125,66 @@ export interface PriceGuideContent {
     }[]
     summary: string
   }
+  /** Lesson-price comparison across providers (rows from data/coaching-providers.ts). */
+  coaching_comparison?: CoachingComparison
+  /** Visible Q&A, also emitted as FAQPage JSON-LD by the /cost/ route. */
+  faq?: { heading: string; items: { question: string; answer: string }[] }
   sections?: { heading: string; body: string }[]
   curated_reviews?: { reviewer_name: string; text: string }[]
+}
+
+/** One provider row. `singleLessonThb` is a string only for LENGOLF's own row,
+ *  which carries a {{lessonHourlyNum}} fact token resolved before render. */
+export interface CoachingComparisonRow {
+  id: string
+  name: string
+  kind: string
+  area: string
+  singleLessonThb: number | string | null
+  singleLesson: string
+  packageRate: string
+  /** Glance table: lowest rate per hour or lesson; a string only for LENGOLF's
+   *  {{lesson50hRateNum}} token. */
+  lowestRateThb: number | string | null
+  singleNote?: string
+  rateNote?: string
+  freeTrial: boolean
+  includesShort: string
+  includes: string
+  sourceLabel: string
+  sourceUrl: string | null
+  /** Provider homepage for the JSON-LD Organization `url`. */
+  websiteUrl?: string
+  /** ISO date, or '' for a row that is live (LENGOLF). */
+  checkedOn: string
+}
+
+export interface CoachingComparison {
+  /** Compact numbers-only table rendered above the detailed one, sorted by
+   *  single-lesson price (cheapest first, unpublished last). */
+  glance: {
+    heading: string
+    intro: string
+    columns: { provider: string; single: string; rate: string; trial: string; includes: string }
+    yes: string
+    no: string
+    notPublished: string
+  }
+  heading: string
+  intro: string
+  columns: {
+    provider: string
+    single: string
+    packages: string
+    includes: string
+    source: string
+  }
+  /** Shown in the source cell of a row with no checked date. */
+  liveLabel: string
+  /** Prefix for the checked date, e.g. "Checked". */
+  checkedLabel: string
+  rows: CoachingComparisonRow[]
+  footnote: string
 }
 
 export interface ExplainerContent {

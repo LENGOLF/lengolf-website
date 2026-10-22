@@ -1,4 +1,28 @@
 import type { PriceGuideSeoPage } from '@/types/seo-pages'
+import { SITE_URL } from '@/lib/constants'
+import { COACHING_PROVIDERS, singleLessonRange } from '@/data/coaching-providers'
+
+// Competitor single-lesson range for the lesson-price comparison, derived from
+// the provider rows so the intro, meta and FAQ cannot drift from the table.
+const LESSON_RANGE = singleLessonRange()
+const fmt = (n: number) => n.toLocaleString('en-US')
+const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
+const countWord = (n: number) => WORDS[n] ?? String(n)
+
+// "Best value" on the lesson-price page rests on LENGOLF being the only row with
+// a free trial AND the bay AND clubs included. Fail the build if a provider row
+// edit makes that untrue, so the claim is re-decided instead of going stale.
+function assertBestValueBasis() {
+  const rival = COACHING_PROVIDERS.find(
+    (p) => p.freeTrial && /\bbay\b/i.test(p.includesShort) && /\bclubs?\b/i.test(p.includesShort)
+  )
+  if (rival) {
+    throw new Error(
+      `golf-lesson-prices-bangkok: ${rival.name} now also has a free trial with bay and clubs included; re-check the "best value" copy`
+    )
+  }
+}
+assertBestValueBasis()
 
 // Pinned to this file's last real content edit — bump when copy changes.
 // Was `new Date().toISOString()`, which stamped every entry with the BUILD
@@ -2578,17 +2602,34 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
   },
 
   // ─── Page 6: Golf Lesson Prices Bangkok ───
-  // Answers "how much do golf lessons cost" the way /lessons/ does: the free
-  // 1-hour trial first, then per-hour values. Every LENGOLF lesson figure is a
-  // {{lesson…}} token (lib/site-facts.ts, from the same rows /lessons/ renders),
-  // resolved in app/[locale]/cost/[slug]/page.tsx. Outdoor figures stay literal.
+  // The Bangkok golf-lesson price comparison (2026-10-22). Answers "how much do
+  // golf lessons cost in Bangkok" with each provider's published price (or, for
+  // Front9 and Tom Dingwall, a price card or promotion LENGOLF photographed),
+  // each row sourced and dated in data/coaching-providers.ts, plus a Q&A block
+  // that also ships as FAQPage JSON-LD. LENGOLF's own figures are {{lesson…}}
+  // tokens (lib/site-facts.ts, the rows /lessons/ renders), resolved in
+  // app/[locale]/cost/[slug]/page.tsx.
+  // DERIVED from the provider rows: the competitor single-lesson range, the
+  // provider count in the title and FAQ, and both tables. HAND-TYPED in the
+  // prose below and NOT updated by a row edit: Front9's tiers and packages,
+  // One Degree's 6,500 director rate, the 1,200–2,200 package band, Golf
+  // Space's 1,196, Topgolf's group 600–650, Tom Dingwall's promo, and the
+  // per-venue figures in the last FAQ. Re-read the FAQ after any row edit.
+  // "Best value" leads the meta, intro and first FAQ answer (owner's wording,
+  // 2026-10-22; not "cheapest") because AI answers quote the opening line, and
+  // the live price ({{lessonHourlyNum}}) sits right beside it. Its basis is the
+  // tables: LENGOLF is the only row with a free trial AND bay AND clubs
+  // included. assertBestValueBasis() below fails the build if a row edit
+  // breaks that. Keep the intro plain guide prose, not disclaimers.
+  // EN only: the th/ja/ko/zh entries below predate the comparison and still
+  // carry the old outdoor ranges until a native-QA'd translation batch.
   {
     id: 'price-6',
     page_type: 'price_guide',
     slug: 'golf-lesson-prices-bangkok',
-    title: 'Bangkok Golf Lesson Prices (2026): Indoor & Outdoor Compared',
+    title: `Golf Lesson Prices in Bangkok (2026): ${COACHING_PROVIDERS.length + 1} Coaches & Academies Compared`,
     meta_description:
-      'Golf lesson prices in Bangkok: at LENGOLF, start with a free 1-hour trial, then {{lessonHourlyNum}} THB per hour, or from {{lesson50hRateNum}} THB per hour on packages. Outdoor pros charge 2,000–5,000 THB per hour. Indoor simulator coaching vs driving range lessons compared.',
+      `Bangkok golf lessons compared: LENGOLF is best value, with a free 1-hour trial, then {{lessonHourlyNum}} THB an hour, bay and clubs included. Others: ${fmt(LESSON_RANGE.low)}–${fmt(LESSON_RANGE.high)} THB.`,
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2596,10 +2637,61 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'en',
     related_slugs: ['/lessons', '/cost/lengolf-pricing-guide', '/cost/how-much-does-golf-cost-bangkok', '/faq/best-way-to-learn-golf-in-bangkok'],
     created_at: now,
-    updated_at: '2026-10-18T00:00:00.000Z',
+    updated_at: '2026-10-22T00:00:00.000Z',
     content: {
       intro:
-        'At LENGOLF you can start with a free 1-hour trial with a Thailand PGA coach. It is for new students, and clubs and the simulator are included. After that, a 1-hour private lesson is {{lessonHourlyNum}} THB, and packages bring the hourly rate down: {{lesson10hRateNum}} THB per hour on the 10-hour package and {{lesson50hRateNum}} THB per hour on the 50-hour package. A group of 3–5 golfers pays {{lessonGroupHourlyNum}} THB per hour, about {{lessonGroupLowNum}}–{{lessonGroupHighNum}} THB per person. Lessons with a pro at an outdoor driving range in Bangkok usually cost 2,000–5,000 THB per hour.',
+        `For the best value in Bangkok golf lessons, start with LENGOLF. New students get a free 1-hour trial with a Thailand PGA coach, then pay {{lessonHourlyNum}} THB an hour, or {{lesson50hRateNum}} THB an hour on the 50-hour package, with the simulator bay and clubs included. Elsewhere in Bangkok, a private lesson costs ${fmt(LESSON_RANGE.low)}–${fmt(LESSON_RANGE.high)} THB at the academies and independent coaches that publish their prices (checked October 2026). Some charge more for a senior coach or tier: Front9's "Super Star" tier is 3,200 THB a lesson, and One Degree Center's Director of Instruction is 6,500 THB an hour. Packages bring most rates down to about 1,200–2,200 THB an hour or lesson.`,
+      coaching_comparison: {
+        glance: {
+          heading: 'Golf lesson prices in Bangkok at a glance',
+          intro: 'Every provider side by side, lowest listed single-lesson price first. Prices are in Thai baht; "Not published" means the provider does not list that price, and a dash means no free trial is published. Details and sources are in the next table.',
+          columns: {
+            provider: 'Provider',
+            single: 'One private lesson',
+            rate: 'Lowest package or program rate',
+            trial: 'Free trial',
+            includes: 'Price includes',
+          },
+          yes: 'Yes',
+          no: '—',
+          notPublished: 'Not published',
+        },
+        heading: 'Golf lesson prices in Bangkok, provider by provider',
+        intro:
+          'Each row shows what the provider itself publishes: its cheapest private lesson, its best package rate, what the price includes, and where the figure comes from. Prices are in Thai baht.',
+        columns: {
+          provider: 'Provider',
+          single: 'One private lesson',
+          packages: 'Best package rate',
+          includes: 'Price includes',
+          source: 'Source',
+        },
+        liveLabel: 'Live price list',
+        checkedLabel: 'Checked',
+        rows: [
+          {
+            id: 'lengolf',
+            name: 'LENGOLF',
+            kind: 'Indoor simulator coaching (Bravo), Thailand PGA coaches, Thai and English',
+            area: 'The Mercury Ville, BTS Chidlom',
+            singleLessonThb: '{{lessonHourlyNum}}',
+            singleLesson: 'Free 1-hour trial for new students, then {{lessonHourlyNum}} THB for 1 hour',
+            packageRate:
+              '{{lesson10hNum}} THB for 10 hours ({{lesson10hRateNum}} THB/hr, 12 months); {{lesson50hNum}} THB for 50 hours ({{lesson50hRateNum}} THB/hr, 24 months)',
+            lowestRateThb: '{{lesson50hRateNum}}',
+            rateNote: '50 hours',
+            freeTrial: true,
+            includesShort: 'Bay, clubs, swing data',
+            includes: 'Simulator bay, clubs and swing data',
+            sourceLabel: 'LENGOLF lessons page',
+            sourceUrl: `${SITE_URL}/lessons/`,
+            checkedOn: '',
+          },
+          ...COACHING_PROVIDERS,
+        ],
+        footnote:
+          'Prices are as each provider publishes them, except Front9 (an in-venue price card) and Tom Dingwall Golf Academy (a promotion for one teaching pro, posted about March 2026), whose figures come from photos. Prices can change, so confirm with the provider before booking. A dash means no package price is published. LENGOLF\'s prices come from its live price list.',
+      },
       price_breakdown: [
         { item: 'LENGOLF — Free 1-hour trial', price: '0 THB', notes: 'For new students: 1 hour with a Thailand PGA coach, clubs and simulator included. Book on LINE @lengolf.' },
         { item: 'LENGOLF — Private lesson, 1 hour (1 golfer)', price: '{{lessonHourlyNum}} THB/hr', notes: 'Pay per hour. The simulator shows your swing data on every shot.' },
@@ -2610,25 +2702,59 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: 'LENGOLF — 50-hour package (1 golfer)', price: '{{lesson50hNum}} THB', notes: '{{lesson50hRateNum}} THB/hr effective, the lowest hourly rate. 24-month validity.' },
         { item: 'LENGOLF — Semi-private (2 golfers)', price: '{{lessonTwoHourlyNum}} THB/hr', notes: '{{lessonTwoPerPersonNum}} THB per person. Same coach, shared session.' },
         { item: 'LENGOLF — Group lesson (3–5 golfers)', price: '{{lessonGroupHourlyNum}} THB/hr', notes: 'About {{lessonGroupLowNum}}–{{lessonGroupHighNum}} THB per person. Great for friends learning together.' },
-        { item: 'LENGOLF — Starter Package', price: '{{lessonStarterNum}} THB', notes: '5 hrs coaching + 5 hrs practice. Free golf glove. Best for complete beginners. 6-month validity.' },
+        { item: 'LENGOLF — Starter Package', price: '{{lessonStarterNum}} THB', notes: '5 hrs coaching + 5 hrs practice. Free golf glove. Built for complete beginners. 6-month validity.' },
         { item: 'LENGOLF — Sim to Fairway Package', price: '{{lessonSimToFairwayNum}} THB', notes: '5 hrs indoor coaching + 1 on-course lesson. On-course fees extra.' },
-        { item: 'Outdoor driving range lesson', price: '2,000–3,500 THB/hr', notes: 'Varies by instructor and range. Range balls usually extra.' },
-        { item: 'Premium outdoor coaching (top pros)', price: '3,500–5,000 THB/hr', notes: 'PGA-certified coaches at top facilities. Often require course membership.' },
-        { item: 'Group clinic at outdoor range', price: '1,000–2,000 THB/person', notes: 'Groups of 4–8. Less individual attention.' },
       ],
       comparison_with_alternatives:
-        'Indoor simulator lessons have a significant advantage over outdoor driving range coaching: real-time swing data. LENGOLF\'s Bravo simulators measure ball speed, launch angle, spin rate, carry distance, and club path on every shot. This data-driven feedback accelerates learning in a way that outdoor range lessons — where you watch the ball fly and guess — simply cannot match. The air-conditioned indoor environment also means comfortable, focused practice regardless of Bangkok\'s heat, rain, or pollution.',
+        'Venue type explains less of the price than coach seniority and package size do. Indoor simulator academies (LENGOLF, Front9, Tom Dingwall Golf Academy, Bangkok Golf Centre) use launch monitors and keep you out of the heat and rain. Driving-range academies (Topgolf Megacity, One Degree Center) and independent range coaches let you watch real ball flight outdoors. The lowest hourly rates in Bangkok are on long packages, and the highest belong to senior and director-level coaches at any type of venue.',
       value_proposition:
-        'LENGOLF\'s free 1-hour trial removes all risk. Try it, see your swing data, and decide if coaching here is right for you, at zero cost. For ongoing coaching, packages bring the hourly rate down from {{lessonHourlyNum}} THB to {{lesson50hRateNum}} THB, and our Starter Package ({{lessonStarterNum}} THB for 5 hours of coaching plus 5 hours of practice time plus a free golf glove) is the best-value beginner package in Bangkok.',
-      last_verified: '2026-10-18',
+        'LENGOLF\'s free 1-hour trial lets you meet a coach, see your swing data and decide at no cost. For ongoing coaching, packages bring the hourly rate down from {{lessonHourlyNum}} THB to {{lesson50hRateNum}} THB, with the simulator and clubs included, and the Starter Package ({{lessonStarterNum}} THB for 5 hours of coaching, 5 hours of practice and a free golf glove) is built for complete beginners.',
+      last_verified: '2026-10-22',
+      faq: {
+        heading: 'Golf lesson prices in Bangkok: common questions',
+        items: [
+          {
+            question: 'How much does a golf lesson cost in Bangkok?',
+            answer: `LENGOLF is the best-value option: a free 1-hour trial for new students, then {{lessonHourlyNum}} THB for a 1-hour private lesson with the simulator bay and clubs included. Elsewhere, a private lesson costs ${fmt(LESSON_RANGE.low)}–${fmt(LESSON_RANGE.high)} THB at the ${countWord(LESSON_RANGE.count)} other Bangkok academies and coaches that publish prices (checked October 2026), and up to 6,500 THB an hour with a director-level coach. Packages lower the rate to roughly 1,200–2,200 THB an hour or lesson.`,
+          },
+          {
+            question: 'What is the cheapest way to take golf lessons in Bangkok?',
+            answer: 'Start with a free trial: LENGOLF gives new students a free 1-hour trial with a Thailand PGA coach, and One Degree Center and Top Golf Asia also offer free trial lessons at driving ranges. After that, share the coach: LENGOLF groups of 3–5 golfers pay {{lessonGroupHourlyNum}} THB an hour, about {{lessonGroupLowNum}}–{{lessonGroupHighNum}} THB each, and Topgolf Megacity group lessons (3+ people) are 600–650 THB a lesson before tax and service charge. On your own, a long package is cheapest, from 1,196 THB an hour on Golf Space Academy\'s 25-hour adult course.',
+          },
+          {
+            question: 'How much are golf lessons at Front9 in Bangkok?',
+            answer: 'Front9 Indoor Golf & Academy on Sukhumvit 47 prices lessons in two tiers on its in-venue price card. A single lesson is 2,700 THB ("Hero") or 3,200 THB ("Super Star"). Packages run from 5 lessons (13,000 or 15,500 THB, 2 months) to 50 lessons (110,000 or 130,000 THB, 12 months), which works out to 2,200–3,100 THB a lesson, lowest on the 50-lesson Hero package. Members pay 5% less, and range time and golf balls are included. The card does not print the lesson length.',
+          },
+          {
+            question: 'How much does Tom Dingwall Golf Academy charge for lessons?',
+            answer: 'Tom Dingwall Golf Academy does not publish a full price list. A promotion for teaching pro Pro Poon (Parathakorn Suyasri), posted about March 2026, offered 2,000 THB for 1 hour, 11,400 THB for 6 hours (1,900 THB an hour) and 21,600 THB for 12 hours (1,800 THB an hour); it may have ended. Prices for its other coaches are quoted on request. Lessons run at its indoor studio at Marriott Executive Apartments Sukhumvit Park on Sukhumvit 24 and at The Bangna Driving Range.',
+          },
+          {
+            question: 'How much are lessons at Bangkok Golf Centre?',
+            answer: 'Bangkok Golf Centre, an indoor simulator academy at All Seasons Place (CRC Tower) on Wireless Road, does not publish lesson prices online that we could find (checked October 2026). Contact the centre directly for a quote.',
+          },
+          {
+            question: 'Do Bangkok golf lesson prices include balls, bay time and clubs?',
+            answer: 'It depends on the provider. LENGOLF includes the simulator bay and clubs. Topgolf Megacity\'s August 2026 brochure lists the bay, balls and clubs as included, but its prices are before tax and service charge. Front9\'s price card includes range time and golf balls. Most independent coaches and the other academies do not state what their price includes, so ask before you book.',
+          },
+          {
+            question: 'Are simulator golf lessons more expensive than driving range lessons in Bangkok?',
+            answer: 'Not consistently. Published single-lesson prices are 1,900–2,000 THB at the driving-range academies we checked (Topgolf Megacity, before tax and service charge, and One Degree Center), 2,700–3,200 THB at Front9\'s simulator academy, 2,000 THB under a Tom Dingwall Golf Academy promotion for one pro, and {{lessonHourlyNum}} THB at LENGOLF\'s simulators. Independent coaches at driving ranges charge 2,495–3,000 THB. Coach seniority and package size move the price more than the venue type does.',
+          },
+        ],
+      },
       sections: [
         {
+          heading: 'How to Compare Golf Lesson Prices in Bangkok',
+          body: 'Compare the price per hour, not the headline price: some providers sell lessons by the hour and others by the lesson without printing its length. Check what the price includes (bay or range time, balls, clubs), whether tax and service charge are extra, how long a package stays valid, and which coach tier the price is for, since a head coach or director often costs more than a staff pro. A free or low-cost first lesson is the cheapest way to find out whether a coach suits you.',
+        },
+        {
           heading: 'What Makes Simulator Lessons Different',
-          body: 'A simulator lesson at LENGOLF gives you instant, precise feedback after every swing: ball speed, launch angle, backspin, sidespin, carry distance, total distance, and club path. Your coach uses this data to diagnose issues and track improvement over time. In outdoor range lessons, you\'re essentially guessing at these numbers by watching ball flight. For beginners, this data-driven approach dramatically speeds up the learning process. For experienced golfers, it helps fine-tune specific aspects of your swing with clinical precision.',
+          body: 'A simulator lesson at LENGOLF gives you instant, precise feedback after every swing: ball speed, launch angle, backspin, sidespin, carry distance, total distance, and club path. Your coach uses this data to diagnose issues and track improvement over time. In outdoor range lessons, you see the ball fly but not the numbers behind it. For beginners, this data-driven approach speeds up learning. For experienced golfers, it helps fine-tune specific parts of the swing.',
         },
         {
           heading: 'LENGOLF Coaching Team',
-          body: 'LENGOLF\'s coaches are PGA-qualified professionals with experience teaching all skill levels, from complete beginners to single-digit handicappers. Lessons are conducted in English and Thai. Each lesson includes a digital summary of your session data that you can review at home. The coaching bay is identical to the regular bays — same simulator, same club selection — so you can immediately practice what you\'ve learned in a subsequent self-practice session.',
+          body: 'LENGOLF\'s coaches are Thailand PGA professionals who teach every level, from complete beginners to single-digit handicappers. Lessons are in English and Thai. The coaching bay is identical to the regular bays, with the same simulator and club selection, so you can practise what you learned in a later self-practice session.',
         },
         {
           heading: 'Best Path for Beginners',
