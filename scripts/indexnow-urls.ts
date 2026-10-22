@@ -474,7 +474,13 @@ const LESSON_TOKEN_PAGES = [
 ]
 
 /** A small module feeding a fixed set of pages: any change pings all of them. */
-const COACHING_PROVIDER_URLS = () => [pageUrl('en', '/cost/golf-lesson-prices-bangkok/'), pageUrl('en', '/llms-full.txt')]
+// The provider count is in the EN page title, which /golf-in-thailand-guide/
+// prints on its price-guide hub card, so a row added or removed changes it too.
+const COACHING_PROVIDER_URLS = () => [
+  pageUrl('en', '/cost/golf-lesson-prices-bangkok/'),
+  pageUrl('en', '/llms-full.txt'),
+  pageUrl('en', '/golf-in-thailand-guide/'),
+]
 
 function fixedRule(file: string, pages: string[]): Rule {
   const urls = (ctx: Ctx) => pages.flatMap((p) => served(ctx.reg, p))
@@ -770,7 +776,7 @@ export const RULES: Rule[] = [
     derive: (_ctx, base, head) =>
       moduleSig(base) === moduleSig(head)
         ? { kind: 'none' }
-        : { kind: 'records', urls: COACHING_PROVIDER_URLS(), note: 'provider prices changed -> EN lesson-price page, llms-full.txt' },
+        : { kind: 'records', urls: COACHING_PROVIDER_URLS(), note: 'provider rows changed -> EN lesson-price page, llms-full.txt, guide hub' },
     coarse: () => COACHING_PROVIDER_URLS(),
   },
   fixedRule('data/event-clients.ts', ['/events/']),
@@ -1421,12 +1427,12 @@ const CASES: Case[] = [
   {
     // The th/ja/ko/zh lesson-price pages are registered but do not render
     // the provider table, so a provider edit must not ping them.
-    name: 'coaching-providers.ts: a provider price edit pings the EN lesson-price page and llms-full.txt alone',
+    name: 'coaching-providers.ts: a provider edit pings the EN lesson-price page, llms-full.txt and the EN guide hub alone',
     changes: [{ status: 'M', file: 'data/coaching-providers.ts' }],
     base: { 'data/coaching-providers.ts': { COACHING_PROVIDERS: [{ id: 'front9', singleLessonThb: 2700 }] } },
     head: { 'data/coaching-providers.ts': { COACHING_PROVIDERS: [{ id: 'front9', singleLessonThb: 2800 }] } },
     registered: ['th:/cost/golf-lesson-prices-bangkok'],
-    want: ['/cost/golf-lesson-prices-bangkok/', '/llms-full.txt'],
+    want: ['/cost/golf-lesson-prices-bangkok/', '/llms-full.txt', '/golf-in-thailand-guide/'],
   },
   {
     // ja serves /lessons/ but not the Academy page, so ja /lessons/ (no
@@ -1640,7 +1646,11 @@ const CONSUMERS: Record<string, Record<string, string>> = {
     'components/home/ChinaLandingPage.tsx': 'pinged: the lessons card, on / (zh)',
   },
   'data/coaches.ts': { 'app/[locale]/lessons/page.tsx': 'pinged', 'app/llms.txt/route.ts': 'pinged' },
-  'data/coaching-providers.ts': { 'app/llms-full.txt/route.ts': 'pinged: EN only' },
+  'data/coaching-providers.ts': {
+    'app/llms-full.txt/route.ts': 'pinged: EN only',
+    'components/prices/PriceGuidePage.tsx': 'ignored: imports the comparisonThb parser only; the rows reach it through the page entry, pinged by the rule',
+    'lib/jsonld.ts': 'ignored: imports the comparisonThb parser only; the rows reach it through the page entry, pinged by the rule',
+  },
   'data/event-clients.ts': { 'app/[locale]/events/page.tsx': 'pinged' },
   'data/food-menu.ts': { 'app/[locale]/menu/page.tsx': 'pinged' },
   'data/faq-hub.ts': {

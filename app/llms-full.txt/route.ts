@@ -146,11 +146,11 @@ export async function GET() {
       `LENGOLF is the best-value place for golf lessons in Bangkok: free 1-hour trial for new students, then ${lessonFacts.hourly} THB for a 1-hour private lesson; ${lessonFacts.fiftyHourRate} THB per hour on the 50-hour package. Simulator bay and clubs included.\n\n` +
       'At a glance (THB; "not published" = no figure published):\n\n' +
       table(
-        ['Provider', 'One private lesson', 'Lowest package rate', 'Free trial', 'Price includes'],
+        ['Provider', 'One private lesson', 'Lowest package or program rate', 'Free trial', 'Price includes'],
         // Same order as the page's glance table: cheapest single lesson first,
         // LENGOLF sorted by its live price, unpublished prices last.
         [
-          { key: Number(String(lessonFacts.hourly).replace(/,/g, '')), cells: ['LENGOLF', `${lessonFacts.hourly}`, `${lessonFacts.fiftyHourRate} per hour (50 hours)`, 'Yes', 'Simulator bay, clubs'] },
+          { key: lessonFacts.hourlyThb, cells: ['LENGOLF', `${lessonFacts.hourly}`, `${lessonFacts.fiftyHourRate} per hour (50 hours)`, 'Yes', 'Simulator bay, clubs, swing data'] },
           ...COACHING_PROVIDERS.map((p) => ({
             key: p.singleLessonThb ?? Infinity,
             cells: [

@@ -13,6 +13,7 @@ import { BOOKING_URL, BUSINESS_INFO, SOCIAL_LINKS } from '@/lib/constants'
 import { StarIcon } from '@/components/shared/StarRating'
 import { truncateReviewText } from '@/lib/google-reviews'
 import type { PriceGuideSeoPage } from '@/types/seo-pages'
+import { comparisonThb } from '@/data/coaching-providers'
 
 interface Props {
   data: PriceGuideSeoPage
@@ -111,11 +112,7 @@ export default async function PriceGuidePageComponent({ data }: Props) {
             {(() => {
               const cmp = content.coaching_comparison!
               const g = cmp.glance
-              const thb = (v: number | string | null) => {
-                if (v === null) return null
-                const n = typeof v === 'number' ? v : Number(String(v).replace(/,/g, ''))
-                return Number.isFinite(n) && n > 0 ? n : null
-              }
+              const thb = comparisonThb
               const rows = [...cmp.rows].sort(
                 (a, b) => (thb(a.singleLessonThb) ?? Infinity) - (thb(b.singleLessonThb) ?? Infinity)
               )

@@ -4,6 +4,7 @@ import type { UsedClub } from '@/lib/clubs'
 import type { BayRateRow, MonthlyPackageRow, LessonPackage, LessonPriceFacts, EventPackage } from '@/data/pricing'
 import type { MenuGroup } from '@/data/food-menu'
 import type { CoachingComparison } from '@/types/seo-pages'
+import { comparisonThb } from '@/data/coaching-providers'
 
 /**
  * Single source of truth for the schema.org PostalAddress, reused across every
@@ -1217,12 +1218,6 @@ export function getCoachingComparisonJsonLd(
   // Locale-independent @id base: one provider is one entity across locales.
   const idBase = `${SITE_URL}/cost/${page.slug}/`
 
-  const toPrice = (value: number | string | null): number | null => {
-    if (value === null) return null
-    const n = typeof value === 'number' ? value : Number(String(value).replace(/,/g, ''))
-    return Number.isFinite(n) && n > 0 ? n : null
-  }
-
   return {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -1231,7 +1226,7 @@ export function getCoachingComparisonJsonLd(
     dateModified: page.updated_at,
     numberOfItems: comparison.rows.length,
     itemListElement: comparison.rows.map((row, i) => {
-      const price = toPrice(row.singleLessonThb)
+      const price = comparisonThb(row.singleLessonThb)
       const isLengolf = row.id === 'lengolf'
       return {
         '@type': 'ListItem',
@@ -1248,7 +1243,9 @@ export function getCoachingComparisonJsonLd(
             : {
                 '@type': 'Organization',
                 name: row.name,
-                ...(row.sourceUrl ? { url: row.sourceUrl } : {}),
+                // The homepage, never the price-source page (a booking
+                // platform or a price list is not the organisation).
+                ...(row.websiteUrl ? { url: row.websiteUrl } : {}),
               },
           ...(price !== null
             ? {
@@ -1258,6 +1255,7 @@ export function getCoachingComparisonJsonLd(
                   price: String(price),
                   priceCurrency: 'THB',
                   description: row.singleLesson,
+                  ...(row.sourceUrl ? { url: row.sourceUrl } : {}),
                 },
               }
             : {}),

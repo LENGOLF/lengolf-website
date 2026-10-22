@@ -313,6 +313,16 @@ const routeTests: RouteTest[] = [
     contentMarker: "Free 1-hour trial",
     contentAbsent: "{{",
   },
+  // The EN page also carries the provider comparison (data/coaching-providers.ts):
+  // the at-a-glance table must render, or the comparison could vanish while the
+  // trial-label marker above still passes on the LENGOLF price rows. A second
+  // entry for the same path is fine: the image scan dedupes paths with a Set.
+  {
+    path: "/cost/golf-lesson-prices-bangkok/",
+    expectedStatus: [200],
+    contentMarker: 'id="prices-at-a-glance"',
+    contentAbsent: "{{",
+  },
   {
     path: "/th/cost/golf-lesson-prices-bangkok/",
     expectedStatus: [200],

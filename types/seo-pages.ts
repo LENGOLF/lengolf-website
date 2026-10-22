@@ -153,6 +153,8 @@ export interface CoachingComparisonRow {
   includes: string
   sourceLabel: string
   sourceUrl: string | null
+  /** Provider homepage for the JSON-LD Organization `url`. */
+  websiteUrl?: string
   /** ISO date, or '' for a row that is live (LENGOLF). */
   checkedOn: string
 }
