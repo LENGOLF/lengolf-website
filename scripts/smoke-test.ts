@@ -5891,8 +5891,9 @@ async function runLessonsCoachTests() {
       if (answers.some((a) => /\{[a-zA-Z]+\}|LessonsFaq\./.test(a))) {
         issues.push("a FAQPage answer carries an unresolved {placeholder} or LessonsFaq key");
       }
-      // The meta description and the stat chips take the same arguments.
-      const unresolved = /\{(hourly|tenHourTotal|tenHourRate|fiftyHourTotal|fiftyHourRate|groupHourly|groupLow|groupHigh)\}|\bLessons(Faq)?\.[a-z][A-Za-z0-9]*/;
+      // The meta description and the stat chips take the same arguments;
+      // LessonsFaq.a9 adds the Starter and Sim to Fairway totals.
+      const unresolved = /\{(hourly|tenHourTotal|tenHourRate|fiftyHourTotal|fiftyHourRate|groupHourly|groupLow|groupHigh|starterTotal|starterTwoTotal|simToFairwayTotal|simToFairwayTwoTotal)\}|\bLessons(Faq)?\.[a-z][A-Za-z0-9]*/;
       const metaDescription = (body.match(/<meta name="description" content="([^"]*)"/) ?? [])[1] ?? "";
       if (!metaDescription || unresolved.test(metaDescription)) {
         issues.push(`meta description is missing or unresolved: ${JSON.stringify(metaDescription.slice(0, 80))}`);

@@ -673,7 +673,7 @@
     "q8": "LENGOLF位于哪里？",
     "a8": "The Mercury Ville @ BTS Chidlom 4楼，540 Ploenchit Road, Lumpini, Pathumwan, Bangkok 10330。BTS Chidlom站直达。请查看Google Maps。",
     "q9": "Starter Package和Sim to Fairway套餐是什么？",
-    "a9": "Starter Package（1人{starterTotal}泰铢，2人{starterTwoTotal}泰铢）含5小时教学 + 5小时练习，每人另送1只高尔夫手套，适合打基础的新手。Sim to Fairway套餐（13,499泰铢）含5小时教学 + 1次实地教学，让您把模拟器学到的技术带到真实球场。学员和教练的下场费用均由客户承担。",
+    "a9": "Starter Package（1人{starterTotal}泰铢，2人{starterTwoTotal}泰铢）含5小时教学 + 5小时练习，每人另送1只高尔夫手套，适合打基础的新手。Sim to Fairway套餐（1人{simToFairwayTotal}泰铢，2人{simToFairwayTwoTotal}泰铢）含5小时教学 + 1次实地教学，让您把模拟器学到的技术带到真实球场。学员和教练的下场费用均由客户承担。",
     "q10": "我年纪太大，还能开始学高尔夫吗？",
     "a10": "不会。我们的教练接待各个年龄的完全新手，而且模拟器比在练习场起步更容易：每一次挥杆，屏幕上都会显示杆头速度、起飞角和飞行距离，从第一堂课就能看到进步。1小时免费体验课是最简单的尝试方式，无需承诺。",
     "q11": "要上多少堂课才能去真实球场打球？",
