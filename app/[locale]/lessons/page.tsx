@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 const promoImages = [
   { src: storageUrl('lessons/promo-free-trial.jpg'), alt: 'Free 1-hour trial lesson with a PGA Pro — simple techniques, solid fundamentals, get course-ready fast' },
-  { src: storageUrl('lessons/starter-package-2026-10.jpg'), alt: 'LENGOLF Starter Package: 5 coaching lesson hours, 5 hours of practice and a golf glove per golfer. 11,000 THB for 1 golfer, 13,500 THB for 2 golfers, valid for 6 months, VAT included' },
+  { src: storageUrl('lessons/starter-package-2026-10.jpg'), alt: 'LENGOLF Starter Package: 5 coaching lesson hours and 5 hours of practice, plus 1 golf glove per golfer. 11,000 THB for 1 golfer, 13,500 THB for 2 golfers, valid for 6 months, VAT included' },
   { src: storageUrl('lessons/promo-coaching-package.jpg'), alt: 'Coaching package options with hourly and multi-hour lesson bundles at LENGOLF' },
   { src: storageUrl('lessons/promo-lesson.jpg'), alt: 'Golf lesson promotion with PGA-certified coach on simulator bay' },
 ]
@@ -506,7 +506,7 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
           <h3>Current Lesson Promotions at LENGOLF</h3>
           <ul>
             <li>Free 1-Hour Trial Lesson: Try a complimentary lesson with a PGA-certified coach — simple techniques, solid fundamentals, get course-ready fast</li>
-            <li>Starter Package: 5 hours coaching plus 5 hours practice with a free golf glove for 11,000 THB — valid for 6 months</li>
+            <li>Starter Package: 5 hours coaching plus 5 hours practice, with a free golf glove per golfer, for 11,000 THB (1 golfer) or 13,500 THB (2 golfers), valid for 6 months</li>
             <li>Coaching Packages: {priceFacts.hourly} THB for a single hour, or from {priceFacts.fiftyHourRate} THB/hr on multi-hour packages, with volume discounts up to 50 hours</li>
             <li>Lesson Promotion: Book multiple sessions with PGA-certified coaches on simulator bays with real-time swing data</li>
           </ul>
