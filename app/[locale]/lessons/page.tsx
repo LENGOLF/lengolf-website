@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 const promoImages = [
   { src: storageUrl('lessons/promo-free-trial.jpg'), alt: 'Free 1-hour trial lesson with a PGA Pro — simple techniques, solid fundamentals, get course-ready fast' },
-  { src: storageUrl('lessons/promo-starter-package.jpg'), alt: 'Starter Package — 5 hours coaching plus 5 hours practice with free golf glove for 11,000 THB' },
+  { src: storageUrl('lessons/starter-package-2026-10.jpg'), alt: 'LENGOLF Starter Package: 5 coaching lesson hours, 5 hours of practice and a golf glove per golfer. 11,000 THB for 1 golfer, 13,500 THB for 2 golfers, valid for 6 months, VAT included' },
   { src: storageUrl('lessons/promo-coaching-package.jpg'), alt: 'Coaching package options with hourly and multi-hour lesson bundles at LENGOLF' },
   { src: storageUrl('lessons/promo-lesson.jpg'), alt: 'Golf lesson promotion with PGA-certified coach on simulator bay' },
 ]
