@@ -365,8 +365,8 @@ export default async function GolfPage({ params }: { params: Promise<{ locale: s
           oblique, which pull its vowel and tone marks apart. */}
       <section className="py-16 lg:py-24" style={{ backgroundColor: '#f6efdf' }}>
         <div className="section-max-width section-padding">
-          <h2 className="mb-12 text-center text-4xl font-black uppercase italic tracking-tight lg:text-5xl [&:lang(th)]:normal-case [&:lang(th)]:not-italic [&:lang(th)]:tracking-normal" style={{ color: '#265020' }}>
-            {t('chooseYourBayTitle')} {t('chooseYourBayTitleSuffix')}
+          <h2 className="mb-12 text-center text-4xl font-black uppercase italic tracking-tight lg:text-5xl [&:lang(th)]:normal-case [&:lang(th)]:tracking-normal [&:lang(th)]:not-italic [&:lang(ja)]:not-italic [&:lang(ko)]:not-italic [&:lang(zh)]:not-italic" style={{ color: '#265020' }}>
+            {t('chooseYourBayTitle')}{locale === 'ja' || locale === 'zh' || locale === 'th' ? '' : ' '}{t('chooseYourBayTitleSuffix')}
           </h2>
           <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 lg:grid-cols-2">
             {[
@@ -397,13 +397,13 @@ export default async function GolfPage({ params }: { params: Promise<{ locale: s
                 <div className="relative">
                   <Image src={card.photo} alt={card.alt} width={600} height={400} className="aspect-[3/2] w-full object-cover" sizes="(max-width: 1024px) 100vw, 50vw" />
                   <span
-                    className="absolute right-3 top-3 px-3 py-0.5 text-sm font-extrabold uppercase italic [&:lang(th)]:not-italic"
+                    className="absolute right-3 top-3 px-3 py-0.5 text-sm font-extrabold uppercase italic [&:lang(th)]:not-italic [&:lang(ja)]:not-italic [&:lang(ko)]:not-italic [&:lang(zh)]:not-italic"
                     style={card.ai ? { backgroundColor: '#1a3308', color: '#8dc743', boxShadow: 'inset 0 0 0 2px #8dc743' } : { backgroundColor: '#8dc743', color: '#265020' }}
                   >
                     {card.count}
                   </span>
                   <h3
-                    className="absolute -bottom-5 left-0 whitespace-nowrap px-5 py-1 text-2xl font-extrabold uppercase italic sm:text-3xl [&:lang(th)]:not-italic"
+                    className="absolute -bottom-5 left-0 whitespace-nowrap px-5 py-1 text-2xl font-extrabold uppercase italic sm:text-3xl [&:lang(th)]:not-italic [&:lang(ja)]:not-italic [&:lang(ko)]:not-italic [&:lang(zh)]:not-italic"
                     style={card.ai ? { backgroundColor: '#8dc743', color: '#1a3308' } : { backgroundColor: '#265020', color: '#fbf6e8' }}
                   >
                     {card.title}
@@ -411,7 +411,7 @@ export default async function GolfPage({ params }: { params: Promise<{ locale: s
                 </div>
 
                 <div className="flex flex-1 flex-col px-6 pb-6 pt-10">
-                  <p className="text-xs font-bold uppercase tracking-[0.14em] [&:lang(th)]:tracking-normal" style={{ color: card.ai ? '#a9c48a' : '#6b6a55' }}>
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] [&:lang(th)]:tracking-normal [&:lang(ja)]:tracking-normal [&:lang(ko)]:tracking-normal [&:lang(zh)]:tracking-normal" style={{ color: card.ai ? '#a9c48a' : '#6b6a55' }}>
                     {t('bayBestFor')}
                   </p>
                   <p className="mt-0.5 text-lg font-extrabold leading-snug" style={{ color: card.ai ? '#8dc743' : '#265020' }}>
@@ -454,7 +454,7 @@ export default async function GolfPage({ params }: { params: Promise<{ locale: s
             ))}
           </div>
           <p className="mt-8 text-center text-base font-bold" style={{ color: '#265020' }}>
-            <span className="px-2 py-0.5 font-extrabold italic [&:lang(th)]:not-italic" style={{ backgroundColor: '#8dc743' }}>{t('baySameRate')}</span>
+            <span className="px-2 py-0.5 font-extrabold italic [&:lang(th)]:not-italic [&:lang(ja)]:not-italic [&:lang(ko)]:not-italic [&:lang(zh)]:not-italic" style={{ backgroundColor: '#8dc743' }}>{t('baySameRate')}</span>
             <span className="mx-2" aria-hidden="true">·</span>
             {t('bayFoodAtEveryBay')}
           </p>
