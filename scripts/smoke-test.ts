@@ -9221,8 +9221,10 @@ const CODE_ONLY_FOLDERS = new Set([
  *  redesign dropped the poster from the page, leaving one junior-academy/
  *  pair, the hero image (the reel's first frame, reel-hero-frame0.jpg).
  *  Its three photos are lessons/student-kids-0{1,2,3}.jpg at the default
- *  q=75, pairs the /lessons/ gallery already renders. */
-const MIN_CODE_FOLDER_PAIRS = 99;
+ *  q=75, pairs the /lessons/ gallery already renders.
+ *  98 since 2026-10-25: the /golf bay card dropped the Uneekor logo
+ *  (branding/uneekor-logo.png), which no other page rendered. */
+const MIN_CODE_FOLDER_PAIRS = 98;
 
 /** `/_next/image/?url=…&amp;w=…&amp;q=…`, in any src, srcSet or imageSrcSet. */
 const OPTIMIZER_REF_RE =

@@ -358,118 +358,106 @@ export default async function GolfPage({ params }: { params: Promise<{ locale: s
         </div>
       </SectionWrapper>
 
-      {/* ── Choose Your Bay ── */}
-      <section className="py-16 lg:py-24" style={{ backgroundColor: '#F6FFFA' }}>
+      {/* ── Choose Your Bay ──
+          Same look as the "Pick your bay" card (lengolf-design/posters/bay-comparison) and the
+          booking app's bay info modal: Social Bays light, AI Lab inverted to near-black with a
+          lime outline. No purple, no NEW badge. Thai gets neither letter-spacing nor a synthetic
+          oblique, which pull its vowel and tone marks apart. */}
+      <section className="py-16 lg:py-24" style={{ backgroundColor: '#f6efdf' }}>
         <div className="section-max-width section-padding">
-          <h2 className="mb-4 text-center text-3xl font-bold italic lg:text-4xl">
-            <span style={{ color: '#007429' }}>{t('chooseYourBayTitle')}</span>{' '}
-            <span className="text-foreground">{t('chooseYourBayTitleSuffix')}</span>
+          <h2 className="mb-12 text-center text-4xl font-black uppercase italic tracking-tight lg:text-5xl [&:lang(th)]:normal-case [&:lang(th)]:tracking-normal [&:lang(th)]:not-italic [&:lang(ja)]:not-italic [&:lang(ko)]:not-italic [&:lang(zh)]:not-italic" style={{ color: '#265020' }}>
+            {t('chooseYourBayTitle')}{locale === 'ja' || locale === 'zh' || locale === 'th' ? '' : ' '}{t('chooseYourBayTitleSuffix')}
           </h2>
-          <p className="mx-auto mb-12 max-w-2xl text-center text-sm text-muted-foreground">
-            {t('chooseYourBaySubtitle')}
-          </p>
           <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 lg:grid-cols-2">
-            {/* Social Bays */}
-            <div className="flex flex-col overflow-hidden rounded-xl border border-primary/15 bg-white shadow-sm">
-              <div className="relative">
-                <Image src={storageUrl('golf/bay-social.jpg')} alt="Social Bays at LENGOLF" width={600} height={400} className="aspect-[3/2] w-full object-cover" sizes="(max-width: 1024px) 100vw, 50vw" />
-              </div>
-              <div className="flex flex-1 flex-col p-6">
-                <div className="mb-3 flex items-center gap-2">
-                  <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold" style={{ color: '#007429' }}>{t('socialBaysCount')}</span>
-                </div>
-                <h3 className="mb-1 text-xl font-bold text-foreground">{t('socialBaysTitle')}</h3>
-                <p className="mb-5 text-sm text-muted-foreground">{t('socialBaysDescription')}</p>
-
-                <div className="mb-5">
-                  <h4 className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground/70">{t('idealFor')}</h4>
-                  <ul className="space-y-1.5">
-                    {[t('socialIdeal1'), t('socialIdeal2'), t('socialIdeal3'), t('socialIdeal4')].map((item) => (
-                      <li key={item} className="flex items-start gap-2 text-sm text-muted-foreground">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#007429" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0"><path d="M20 6 9 17l-5-5"/></svg>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="mb-6">
-                  <h4 className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground/70">{t('features')}</h4>
-                  <ul className="space-y-1.5">
-                    {[t('socialFeature1'), t('socialFeature2'), t('socialFeature3'), t('socialFeature4')].map((item) => (
-                      <li key={item} className="flex items-start gap-2 text-sm text-muted-foreground">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#007429" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0"><path d="M20 6 9 17l-5-5"/></svg>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="mt-auto">
-                  <BookingCTA className="w-full justify-center" />
-                </div>
-              </div>
-            </div>
-
-            {/* LENGOLF AI Lab */}
-            <div className="flex flex-col overflow-hidden rounded-xl border shadow-sm" style={{ borderColor: 'rgba(124, 58, 237, 0.15)' }}>
-              <div className="relative">
-                <Image src={storageUrl('golf/bay-ai-lab.jpg')} alt="LENGOLF AI Lab" width={600} height={400} className="aspect-[3/2] w-full object-cover" sizes="(max-width: 1024px) 100vw, 50vw" />
-              </div>
-
-              <div className="flex items-center gap-3 border-b px-5 py-3" style={{ borderColor: 'rgba(124, 58, 237, 0.1)', backgroundColor: 'rgba(124, 58, 237, 0.03)' }}>
-                <Image src={storageUrl('branding/uneekor-logo.png')} alt="Uneekor logo" width={90} height={24} className="h-6 w-auto shrink-0" />
-                <div className="h-5 w-px bg-border/60 shrink-0" />
-                <p className="text-[11px] leading-snug text-muted-foreground">{t('aiLabPoweredBy')}</p>
-              </div>
-
-              <div className="flex flex-1 flex-col p-6" style={{ backgroundColor: 'white' }}>
-                <div className="mb-3 flex items-center gap-2">
-                  <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: 'rgba(124, 58, 237, 0.1)', color: '#7C3AED' }}>{t('aiLabCount')}</span>
-                  <span className="rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white" style={{ backgroundColor: '#7C3AED' }}>{t('aiLabNew')}</span>
-                </div>
-                <h3 className="mb-1 text-xl font-bold text-foreground">{t('aiLabTitle')}</h3>
-                <p className="mb-5 text-sm text-muted-foreground">{t('aiLabDescription')}</p>
-
-                <div className="mb-5">
-                  <h4 className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground/70">{t('idealFor')}</h4>
-                  <ul className="space-y-1.5">
-                    {[t('aiIdeal1'), t('aiIdeal2'), t('aiIdeal3'), t('aiIdeal4')].map((item) => (
-                      <li key={item} className="flex items-start gap-2 text-sm text-muted-foreground">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0"><path d="M20 6 9 17l-5-5"/></svg>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="mb-6">
-                  <h4 className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground/70">{t('features')}</h4>
-                  <ul className="space-y-1.5">
-                    {[t('aiFeature1'), t('aiFeature2'), t('aiFeature3'), t('aiFeature4')].map((item) => (
-                      <li key={item} className="flex items-start gap-2 text-sm text-muted-foreground">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0"><path d="M20 6 9 17l-5-5"/></svg>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="mt-auto">
-                  <a
-                    href="https://booking.len.golf/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-md px-8 text-sm font-semibold text-white transition-colors hover:opacity-90"
-                    style={{ backgroundColor: '#7C3AED' }}
+            {[
+              {
+                ai: false,
+                title: t('socialBaysTitle'),
+                count: t('socialBaysCount'),
+                photo: storageUrl('golf/bay-social.jpg'),
+                alt: 'Social Bays at LENGOLF',
+                bestFor: t('baySocialBestFor'),
+                points: [t('baySocialPoint1'), t('baySocialPoint2'), t('baySocialPoint3'), t('baySocialPoint4')],
+              },
+              {
+                ai: true,
+                title: t('bayAiLabTitle'),
+                count: t('aiLabCount'),
+                photo: storageUrl('golf/bay-ai-lab.jpg'),
+                alt: 'LENGOLF AI Lab',
+                bestFor: t('bayAiBestFor'),
+                points: [t('bayAiPoint1'), t('bayAiPoint2'), t('bayAiPoint3'), t('bayAiPoint4')],
+              },
+            ].map((card) => (
+              <div
+                key={card.title}
+                className="flex flex-col overflow-hidden rounded-xl shadow-md"
+                style={card.ai ? { backgroundColor: '#11240a', boxShadow: '0 0 0 3px #8dc743' } : { backgroundColor: '#fdf9ef' }}
+              >
+                <div className="relative">
+                  <Image src={card.photo} alt={card.alt} width={600} height={400} className="aspect-[3/2] w-full object-cover" sizes="(max-width: 1024px) 100vw, 50vw" />
+                  <span
+                    className="absolute right-3 top-3 px-3 py-0.5 text-sm font-extrabold uppercase italic [&:lang(th)]:not-italic [&:lang(ja)]:not-italic [&:lang(ko)]:not-italic [&:lang(zh)]:not-italic"
+                    style={card.ai ? { backgroundColor: '#1a3308', color: '#8dc743', boxShadow: 'inset 0 0 0 2px #8dc743' } : { backgroundColor: '#8dc743', color: '#265020' }}
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
-                    {t('bookAiLab')}
-                  </a>
+                    {card.count}
+                  </span>
+                  <h3
+                    className="absolute -bottom-5 left-0 whitespace-nowrap px-5 py-1 text-2xl font-extrabold uppercase italic sm:text-3xl [&:lang(th)]:not-italic [&:lang(ja)]:not-italic [&:lang(ko)]:not-italic [&:lang(zh)]:not-italic"
+                    style={card.ai ? { backgroundColor: '#8dc743', color: '#1a3308' } : { backgroundColor: '#265020', color: '#fbf6e8' }}
+                  >
+                    {card.title}
+                  </h3>
+                </div>
+
+                <div className="flex flex-1 flex-col px-6 pb-6 pt-10">
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] [&:lang(th)]:tracking-normal [&:lang(ja)]:tracking-normal [&:lang(ko)]:tracking-normal [&:lang(zh)]:tracking-normal" style={{ color: card.ai ? '#a9c48a' : '#6b6a55' }}>
+                    {t('bayBestFor')}
+                  </p>
+                  <p className="mt-0.5 text-lg font-extrabold leading-snug" style={{ color: card.ai ? '#8dc743' : '#265020' }}>
+                    {card.bestFor}
+                  </p>
+                  <ul className="mb-6 mt-3">
+                    {card.points.map((point) => (
+                      <li
+                        key={point}
+                        className="flex items-start gap-3 border-t-2 border-dashed py-2 text-[15px] font-semibold leading-snug"
+                        style={{ borderColor: card.ai ? 'rgba(141, 199, 67, 0.35)' : '#cfe5ae', color: card.ai ? '#fbf6e8' : '#1a1a1a' }}
+                      >
+                        <svg viewBox="0 0 24 24" className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true">
+                          <circle cx="12" cy="12" r="11" fill="#8dc743" />
+                          <path d="m7 12.5 3.2 3.2L17 9" fill="none" stroke={card.ai ? '#11240a' : '#265020'} strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-auto">
+                    {card.ai ? (
+                      <a
+                        href="https://booking.len.golf/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-md px-8 text-sm font-bold uppercase transition-opacity hover:opacity-90"
+                        style={{ backgroundColor: '#8dc743', color: '#1a3308' }}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                        {t('bookAiLab')}
+                      </a>
+                    ) : (
+                      <BookingCTA className="w-full justify-center" />
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
+          <p className="mt-8 text-center text-base font-bold" style={{ color: '#265020' }}>
+            <span className="px-2 py-0.5 font-extrabold italic [&:lang(th)]:not-italic [&:lang(ja)]:not-italic [&:lang(ko)]:not-italic [&:lang(zh)]:not-italic" style={{ backgroundColor: '#8dc743' }}>{t('baySameRate')}</span>
+            <span className="mx-2" aria-hidden="true">·</span>
+            {t('bayFoodAtEveryBay')}
+          </p>
         </div>
       </section>
 
