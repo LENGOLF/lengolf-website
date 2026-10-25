@@ -1859,7 +1859,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/golf', '/lessons', '/events', '/golf-club-rental', '/cost/golf-simulator-prices-bangkok'],
     created_at: now,
-    updated_at: '2026-10-18T00:00:00.000Z',
+    updated_at: '2026-10-25T00:00:00.000Z',
     content: {
       intro:
         'LENGOLF的球位租用每小时550泰铢起，最多可5人同用——平摊下来每人110泰铢。我们同时提供月卡套餐、高尔夫课程、活动套餐和高级球杆租借。以下是2026年的完整价格，截至2026年2月。',
@@ -1878,7 +1878,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: '1小时免费体验（高尔夫课程）', price: '0泰铢', notes: '适用于首次在LENGOLF上课的学员。与泰国PGA教练体验1小时，含球杆和模拟器使用，无任何附带条件。通过LINE @lengolf预约。' },
         { item: '一对一课程（1人，1小时）', price: '{{lessonHourlyNum}}泰铢', notes: '由具PGA资格的教练授课。' },
         { item: '课程套餐（1人，5–50小时）', price: '每小时{{lesson50hRateNum}}–{{lesson5hRateNum}}泰铢', notes: '5小时套餐{{lesson5hNum}}泰铢、10小时{{lesson10hNum}}泰铢、20小时{{lesson20hNum}}泰铢、30小时{{lesson30hNum}}泰铢、50小时{{lesson50hNum}}泰铢。小时数越多，每小时越便宜。' },
-        { item: 'Starter入门套餐（5小时教学＋5小时练习）', price: '{{lessonStarterNum}}泰铢', notes: '最适合新手。赠高尔夫手套一副。有效期6个月。' },
+        { item: 'Starter入门套餐（5小时教学＋5小时练习）', price: '{{lessonStarterNum}}泰铢', notes: '最适合新手。赠一只高尔夫手套。有效期6个月。' },
         { item: '小型活动套餐（10–15人）', price: '9,999泰铢', notes: '2个球位，3小时。含啤酒10瓶、鸡尾酒5杯、软饮无限畅饮及餐点。' },
         { item: '中型活动套餐（15–25人）', price: '21,999泰铢', notes: '4个球位（包场），3小时。含啤酒20瓶、鸡尾酒10杯、软饮无限畅饮及餐点。' },
         { item: '标准球杆租借', price: '免费', notes: '每次球位预订都包含。男士与女士套装皆有。' },
@@ -3026,7 +3026,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/lessons', '/cost/lengolf-pricing-guide', '/cost/how-much-does-golf-cost-bangkok', '/faq/best-way-to-learn-golf-in-bangkok'],
     created_at: now,
-    updated_at: '2026-10-18T00:00:00.000Z',
+    updated_at: '2026-10-25T00:00:00.000Z',
     content: {
       intro:
         '在LENGOLF，可以先预约泰国PGA职业教练的1小时免费体验（适用于首次在LENGOLF上课的学员，含球杆和模拟器使用）。之后的一对一课程每小时{{lessonHourlyNum}}泰铢；购买套餐每小时更划算，10小时套餐合每小时{{lesson10hRateNum}}泰铢，50小时套餐合每小时{{lesson50hRateNum}}泰铢。3–5人小组每小时{{lessonGroupHourlyNum}}泰铢，折合每人约{{lessonGroupLowNum}}–{{lessonGroupHighNum}}泰铢。在曼谷的室外练习场跟教练上课，一般每小时2,000–5,000泰铢，截至2026年10月。',
@@ -3040,7 +3040,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: 'LENGOLF — 50小时套餐（1人）', price: '{{lesson50hNum}}泰铢', notes: '折合{{lesson50hRateNum}}泰铢/小时，每小时单价最低。有效期24个月。' },
         { item: 'LENGOLF — 半私教（2人）', price: '{{lessonTwoHourlyNum}}泰铢/小时', notes: '每人{{lessonTwoPerPersonNum}}泰铢。同一位教练，两人共上。' },
         { item: 'LENGOLF — 团体课（3–5人）', price: '{{lessonGroupHourlyNum}}泰铢/小时', notes: '每人约{{lessonGroupLowNum}}–{{lessonGroupHighNum}}泰铢。适合一群朋友一起学。' },
-        { item: 'LENGOLF — Starter入门套餐', price: '{{lessonStarterNum}}泰铢', notes: '5小时教学加5小时练习。赠高尔夫手套一副。最适合零基础。有效期6个月。' },
+        { item: 'LENGOLF — Starter入门套餐', price: '{{lessonStarterNum}}泰铢', notes: '5小时教学加5小时练习。赠一只高尔夫手套。最适合零基础。有效期6个月。' },
         { item: 'LENGOLF — Sim to Fairway套餐', price: '{{lessonSimToFairwayNum}}泰铢', notes: '5小时室内教学加1次实地下场课。下场费用另计。' },
         { item: '室外练习场课程', price: '2,000–3,500泰铢/小时', notes: '因教练与练习场而异。练习球通常另计。' },
         { item: '高端室外教学（顶尖教练）', price: '3,500–5,000泰铢/小时', notes: '顶级设施内的PGA认证教练。往往需要球场会籍。' },
@@ -3049,7 +3049,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
       comparison_with_alternatives:
         '室内模拟器课程相比室外练习场教学有一个明显优势：实时的挥杆数据。LENGOLF的Bravo模拟器会记录每一杆的球速、发射角、旋转速率、飞行距离和挥杆路径。这种以数据为依据的反馈能加快进步，而室外练习场那种看着球飞出去再靠猜的方式做不到这一点。室内空调环境也意味着，不管曼谷是热、是下雨还是空气不好，你都能安安稳稳地专心练。',
       value_proposition:
-        'LENGOLF的1小时免费体验，把风险降到了零。先上一次，看看挥杆数据，再决定这条路适不适合你，整个过程一分钱都不用花。想继续系统学下去的话，套餐能把每小时费用从{{lessonHourlyNum}}泰铢降到{{lesson50hRateNum}}泰铢；我们的Starter入门套餐（{{lessonStarterNum}}泰铢，含5小时教学、5小时练习时间和一副高尔夫手套）是曼谷最超值的新手套餐。',
+        'LENGOLF的1小时免费体验，把风险降到了零。先上一次，看看挥杆数据，再决定这条路适不适合你，整个过程一分钱都不用花。想继续系统学下去的话，套餐能把每小时费用从{{lessonHourlyNum}}泰铢降到{{lesson50hRateNum}}泰铢；我们的Starter入门套餐（{{lessonStarterNum}}泰铢，含5小时教学、5小时练习时间和一只高尔夫手套）是曼谷最超值的新手套餐。',
       last_verified: '2026-10-18',
       sections: [
         {
@@ -3062,7 +3062,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         },
         {
           heading: '零基础的最佳路径',
-          body: '如果你从来没打过高尔夫：先从1小时免费体验开始。要是觉得喜欢，那么Starter入门套餐（{{lessonStarterNum}}泰铢）是最有体系的一条路：5小时教学打基础，再加5小时练习把它巩固下来，还送一副高尔夫手套让你上手。6个月的有效期意味着不用赶。上完Starter入门套餐之后，多数学员会转到5小时或10小时的教学套餐继续提升。',
+          body: '如果你从来没打过高尔夫：先从1小时免费体验开始。要是觉得喜欢，那么Starter入门套餐（{{lessonStarterNum}}泰铢）是最有体系的一条路：5小时教学打基础，再加5小时练习把它巩固下来，还送一只高尔夫手套让你上手。6个月的有效期意味着不用赶。上完Starter入门套餐之后，多数学员会转到5小时或10小时的教学套餐继续提升。',
         },
       ],
       curated_reviews: [
