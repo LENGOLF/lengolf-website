@@ -1587,6 +1587,8 @@ const OWN_SCRIPT_RULES: readonly OwnScriptRule[] = [
   { corpus: 'messages', kind: 'latin', path: 'ExplainerPage.pathLabels.junior-golf-academy', locales: ['ja', 'ko', 'zh'], reason: '/junior-golf-academy/ is EN+TH only, so ja/ko/zh readers land on the English page and the label stays in Latin to match it' },
   { corpus: 'messages', kind: 'latin', path: 'Nav.juniorAcademy', locales: ['ja', 'ko', 'zh'], reason: '/junior-golf-academy/ is EN+TH only, so ja/ko/zh readers land on the English page and the footer label stays in Latin to match it' },
   { corpus: 'messages', kind: 'latin', path: 'Golf.aiLabTitle', locales: ['ja', 'th', 'zh'], reason: 'LENGOLF AI Lab, the product name' },
+  { corpus: 'messages', kind: 'latin', path: 'Golf.bayAiLabTitle', reason: 'AI Lab, the bay name on the Pick your bay card; the poster and the booking app keep it in Latin in every locale' },
+  { corpus: 'messages', kind: 'latin', path: 'Golf.bayAiPoint2', locales: ['th'], reason: 'Uneekor EYE Mini Lite launch monitor, the product name; ja/ko/zh carry a translated noun after it, th keeps the English term as the booking app does' },
   { corpus: 'messages', kind: 'latin', path: 'GolfCourseDetail.googleMaps', locales: ['th'], reason: 'Google Maps' },
   { corpus: 'messages', kind: 'latin', path: 'Home.whyLengolfTitleSuffix', locales: ['th', 'ja'], reason: 'LENGOLF' },
   { corpus: 'messages', kind: 'latin', path: 'HomeKo.servicesTitle', locales: ['ko'], reason: 'LENGOLF' },
