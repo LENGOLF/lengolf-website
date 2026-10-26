@@ -1153,7 +1153,7 @@
   },
   "GolfCourseRegion": {
     "metaTitle": "{label} Golf Courses — Green Fees, Map & Full Directory",
-    "metaDescription": "{count, plural, =1 {Our guide to # golf course in {label} — green fees, course details, how to get there, plus club rental delivered to your hotel.} other {The full directory of all # golf courses in {label} — compare green fees, distances and details on one map, plus club rental delivered to your hotel.}}",
+    "metaDescription": "{count, plural, =1 {Our guide to # golf course in {label} — green fees, course details, how to get there, plus club rental delivered to your Bangkok hotel.} other {The full directory of all # golf courses in {label} — compare green fees, distances and details on one map, plus club rental delivered to your Bangkok hotel.}}",
     "heroHeading": "Golf Courses<br></br><muted>in {label}</muted>",
     "breadcrumbGolfCourses": "Golf Courses",
     "rentalEyebrow": "No clubs? No problem.",

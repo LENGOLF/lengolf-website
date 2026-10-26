@@ -87,7 +87,7 @@ When the course data confirms club rental is available at the course, the prose 
 
 | Scenario | Target page | Anchor text |
 |---|---|---|
-| Course has on-site rentals | `/golf-course-club-rental` | "premium club delivery" or "rent clubs delivered to the course" |
+| Course has on-site rentals | `/golf-course-club-rental` | "premium club delivery" or "rent clubs delivered to your Bangkok hotel" (online delivery stops 50 km from LENGOLF, so never promise delivery to the course) |
 | Course has no on-site rental | `/golf-course-club-rental` | "arrange club delivery before you arrive" |
 | Visitor from Bangkok | `/faq/can-i-rent-golf-clubs-in-bangkok` | "renting golf clubs in Bangkok" |
 
