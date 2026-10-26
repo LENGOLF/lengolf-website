@@ -26,17 +26,20 @@ export function getPostalAddressJsonLd() {
  * The course club-rental delivery Offer, shared by both rental catalogs.
  * Checkout (booking-new `delivery-distance.ts`) prices delivery by
  * straight-line km from the venue: ฿500 to 15 km, ฿650 to 35 km, ฿1,200 to
- * 50 km, refused online beyond 50 km. Change these with the bands.
+ * 50 km, refused online beyond 50 km, plus a flat ฿250 for 4 to 5 sets
+ * (so the most an online order pays is ฿1,450). `price` is the starting
+ * price. Change these with the bands.
  */
 function getClubDeliveryOfferJsonLd() {
   return {
     '@type': 'Offer' as const,
     name: 'Club Delivery (Bangkok and nearby courses)',
-    description: 'Round-trip delivery of premium club sets to your hotel or golf course, priced by distance from LENGOLF: 500 THB up to 15 km, 650 THB up to 35 km, 1,200 THB up to 50 km',
+    description: 'Round-trip delivery of premium club sets to your hotel or golf course, priced by distance from LENGOLF: 500 THB up to 15 km, 650 THB up to 35 km, 1,200 THB up to 50 km, plus 250 THB per order for 4 to 5 sets',
     priceSpecification: {
       '@type': 'PriceSpecification',
+      price: 500,
       minPrice: 500,
-      maxPrice: 1200,
+      maxPrice: 1450,
       priceCurrency: 'THB',
     },
     areaServed: {
