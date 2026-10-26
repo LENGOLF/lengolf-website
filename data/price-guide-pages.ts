@@ -1948,7 +1948,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
       comparison_with_alternatives:
         'For tourists visiting Bangkok, the math is clear: flying with golf clubs costs 4,000–12,000 THB round-trip in airline fees alone, plus the hassle and risk of damage. LENGOLF\'s free standard club rental eliminates this entirely for simulator golf. If you want to play outdoor courses too, our premium rental at 1,200 THB/day for Callaway sets is competitive with standalone rental services and significantly cheaper than most course pro shop rentals.',
       value_proposition:
-        'LENGOLF is the only simulator venue in Bangkok that includes free standard club rental with every bay booking. Walk in empty-handed, play immediately. For outdoor courses, our premium club delivery service (1,200 THB/day + 500 THB delivery within Bangkok) is the most convenient option — we bring the clubs to your hotel or the course.',
+        'LENGOLF is the only simulator venue in Bangkok that includes free standard club rental with every bay booking. Walk in empty-handed, play immediately. For outdoor courses, our premium club delivery service (1,200 THB/day + delivery from 500 THB) is the most convenient option — we bring the clubs to your hotel or the course.',
       last_verified: '2026-02-19',
       sections: [
         {
@@ -1957,7 +1957,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         },
         {
           heading: 'LENGOLF Club Delivery Service',
-          body: 'Our premium club sets (Callaway Warbird for men, Callaway REVA for women) can be rented for the full day at 1,200 THB and delivered anywhere in Bangkok for a flat 500 THB fee. Same-day delivery is available if booked before noon. This means you can rent from LENGOLF, have clubs delivered to your hotel, play an outdoor course, and return them — no need to visit a separate rental shop.',
+          body: 'Our premium club sets (Callaway Warbird for men, Callaway REVA for women) can be rented for the full day at 1,200 THB and delivered to your hotel or course from 500 THB round trip (up to 15 km from LENGOLF; 650 THB up to 35 km and 1,200 THB up to 50 km). Same-day delivery is available if booked before noon. This means you can rent from LENGOLF, have clubs delivered to your hotel, play an outdoor course, and return them — no need to visit a separate rental shop.',
         },
       ],
       curated_reviews: [
@@ -2005,7 +2005,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
       comparison_with_alternatives:
         'สำหรับนักท่องเที่ยวที่มากรุงเทพฯ การคำนวณค่อนข้างชัดเจน การขนไม้กอล์ฟขึ้นเครื่องมีค่าธรรมเนียมสายการบินไป-กลับ 4,000-12,000 บาท ยังไม่นับความยุ่งยากและความเสี่ยงที่ไม้จะเสียหาย บริการเช่าไม้กอล์ฟชุดมาตรฐานฟรีของ LENGOLF ตัดค่าใช้จ่ายส่วนนี้ออกไปทั้งหมดสำหรับการเล่นกอล์ฟซิมูเลเตอร์ และหากคุณอยากออกรอบสนามกลางแจ้งด้วย ชุดพรีเมียมของเราที่ 1,200 บาทต่อวันสำหรับ Callaway ก็สู้ราคาบริการเช่าเฉพาะทางได้ และถูกกว่าการเช่าที่โปรช็อปของสนามส่วนใหญ่อย่างมาก',
       value_proposition:
-        'LENGOLF เป็นสถานที่กอล์ฟซิมูเลเตอร์แห่งเดียวในกรุงเทพฯ ที่รวมบริการเช่าไม้กอล์ฟชุดมาตรฐานฟรีไว้ในทุกการจองเบย์ เดินตัวเปล่าเข้ามาแล้วเล่นได้ทันที ส่วนการออกรอบสนามกลางแจ้ง บริการส่งไม้กอล์ฟชุดพรีเมียมของเรา (1,200 บาทต่อวัน บวกค่าจัดส่ง 500 บาทภายในกรุงเทพฯ) เป็นตัวเลือกที่สะดวกที่สุด เพราะเรานำไม้ไปส่งถึงที่พักหรือถึงสนามให้เลย',
+        'LENGOLF เป็นสถานที่กอล์ฟซิมูเลเตอร์แห่งเดียวในกรุงเทพฯ ที่รวมบริการเช่าไม้กอล์ฟชุดมาตรฐานฟรีไว้ในทุกการจองเบย์ เดินตัวเปล่าเข้ามาแล้วเล่นได้ทันที ส่วนการออกรอบสนามกลางแจ้ง บริการส่งไม้กอล์ฟชุดพรีเมียมของเรา (1,200 บาทต่อวัน บวกค่าจัดส่งเริ่มต้น 500 บาท) เป็นตัวเลือกที่สะดวกที่สุด เพราะเรานำไม้ไปส่งถึงที่พักหรือถึงสนามให้เลย',
       last_verified: '2026-02-19',
       sections: [
         {
@@ -2014,7 +2014,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         },
         {
           heading: 'บริการส่งไม้กอล์ฟของ LENGOLF',
-          body: 'ชุดไม้กอล์ฟระดับพรีเมียมของเรา (Callaway Warbird สำหรับผู้ชาย และ Callaway REVA สำหรับผู้หญิง) เช่าแบบเต็มวันได้ในราคา 1,200 บาท และจัดส่งได้ทุกที่ในกรุงเทพฯ ในอัตราคงที่ 500 บาท มีบริการจัดส่งภายในวันเดียวกันหากจองก่อนเที่ยง นั่นหมายความว่าคุณเช่าจาก LENGOLF ให้ส่งไม้ไปที่ที่พัก ออกรอบสนามกลางแจ้ง แล้วส่งคืนได้เลย โดยไม่ต้องแวะร้านเช่าไม้กอล์ฟที่อื่น',
+          body: 'ชุดไม้กอล์ฟระดับพรีเมียมของเรา (Callaway Warbird สำหรับผู้ชาย และ Callaway REVA สำหรับผู้หญิง) เช่าแบบเต็มวันได้ในราคา 1,200 บาท และส่งถึงที่พักหรือสนามได้ ค่าส่งไป-กลับเริ่มต้น 500 บาทในระยะ 15 กม. จาก LENGOLF (ไม่เกิน 35 กม. 650 บาท ไม่เกิน 50 กม. 1,200 บาท) มีบริการจัดส่งภายในวันเดียวกันหากจองก่อนเที่ยง นั่นหมายความว่าคุณเช่าจาก LENGOLF ให้ส่งไม้ไปที่ที่พัก ออกรอบสนามกลางแจ้ง แล้วส่งคืนได้เลย โดยไม่ต้องแวะร้านเช่าไม้กอล์ฟที่อื่น',
         },
       ],
       curated_reviews: [
@@ -2073,7 +2073,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
       comparison_with_alternatives:
         'バンコクを訪れる旅行者にとって、計算ははっきりしています。ゴルフクラブを空輸すると航空会社の手数料だけで往復4,000〜12,000THB、これに手間と破損のリスクが加わります。LENGOLFの標準クラブレンタルは無料なので、シミュレーターゴルフに関してはこの費用がまるごと不要です。屋外コースにも出たい場合は、Callawayのセットを1日1,200THBで借りられるプレミアムレンタルが、レンタル専門サービスと比べても競争力があり、コースのプロショップでのレンタルより大幅に安く済みます。',
       value_proposition:
-        'バンコクのシミュレーター施設のなかで、ベイのご予約すべてに標準クラブレンタルが無料で付くのはLENGOLFだけです。手ぶらでお越しいただき、そのままプレーできます。屋外コースに出る日には、プレミアムクラブの配送サービス（1日1,200THBと、バンコク市内への配送500THB）が最も便利です——ホテルでもゴルフ場でも、クラブをお届けします。',
+        'バンコクのシミュレーター施設のなかで、ベイのご予約すべてに標準クラブレンタルが無料で付くのはLENGOLFだけです。手ぶらでお越しいただき、そのままプレーできます。屋外コースに出る日には、プレミアムクラブの配送サービス（1日1,200THBと、配送料500THB〜）が最も便利です——ホテルでもゴルフ場でも、クラブをお届けします。',
       last_verified: '2026-02-19',
       sections: [
         {
@@ -2082,7 +2082,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         },
         {
           heading: 'LENGOLFのクラブ配送サービス',
-          body: 'プレミアムセット（メンズはCallaway Warbird、レディースはCallaway REVA）は1日1,200THBで終日レンタルでき、バンコク市内であれば一律500THBでどこへでもお届けします。正午までにご予約いただければ当日配送も可能です。つまりLENGOLFで借りて、ホテルにクラブを届けてもらい、屋外コースを回って返却する——別のレンタルショップに立ち寄る必要はありません。',
+          body: 'プレミアムセット（メンズはCallaway Warbird、レディースはCallaway REVA）は1日1,200THBで終日レンタルでき、ホテルやゴルフ場へ往復500THB〜でお届けします（LENGOLFから15 kmまで500THB、35 kmまで650THB、50 kmまで1,200THB）。正午までにご予約いただければ当日配送も可能です。つまりLENGOLFで借りて、ホテルにクラブを届けてもらい、屋外コースを回って返却する——別のレンタルショップに立ち寄る必要はありません。',
         },
       ],
       curated_reviews: [
@@ -2141,7 +2141,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
       comparison_with_alternatives:
         '방콕에 오시는 여행자라면 계산은 분명해요. 클럽을 비행기로 가져오면 항공사 요금만 왕복 4,000~12,000바트가 들고, 번거로움과 파손 위험도 감수해야 해요. 시뮬레이터 골프라면 LENGOLF의 무료 기본 클럽 대여로 이 비용이 전부 사라져요. 실외 코스도 함께 도실 계획이라면 Callaway 세트를 하루 1,200바트에 빌리는 프리미엄 대여가 전문 대여 서비스와 견줄 만하고, 대부분의 골프장 프로샵 대여보다는 훨씬 저렴해요.',
       value_proposition:
-        '방콕에서 베이 예약마다 기본 클럽 대여를 무료로 포함하는 시뮬레이터 매장은 LENGOLF뿐이에요. 빈손으로 오셔서 바로 치시면 돼요. 실외 코스에 나가신다면 프리미엄 클럽 배송 서비스(하루 1,200바트에 방콕 시내 배송 500바트)가 가장 편해요. 호텔이든 골프장이든 저희가 클럽을 가져다 드려요.',
+        '방콕에서 베이 예약마다 기본 클럽 대여를 무료로 포함하는 시뮬레이터 매장은 LENGOLF뿐이에요. 빈손으로 오셔서 바로 치시면 돼요. 실외 코스에 나가신다면 프리미엄 클럽 배송 서비스(하루 1,200바트에 배송 500바트부터)가 가장 편해요. 호텔이든 골프장이든 저희가 클럽을 가져다 드려요.',
       last_verified: '2026-02-19',
       sections: [
         {
@@ -2150,7 +2150,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         },
         {
           heading: 'LENGOLF 클럽 배송 서비스',
-          body: '프리미엄 세트(남성용 Callaway Warbird, 여성용 Callaway REVA)는 하루 1,200바트에 빌리실 수 있고, 방콕 시내 어디든 균일 500바트로 배송해 드려요. 정오 이전에 예약하시면 당일 배송도 가능해요. LENGOLF에서 빌려 호텔로 받고, 실외 코스에서 치고, 그대로 반납하시면 되니까 대여점을 따로 찾아갈 필요가 없어요.',
+          body: '프리미엄 세트(남성용 Callaway Warbird, 여성용 Callaway REVA)는 하루 1,200바트에 빌리실 수 있고, 호텔이나 골프장까지 왕복 500바트부터 배송해 드려요(LENGOLF에서 15km까지 500바트, 35km까지 650바트, 50km까지 1,200바트). 정오 이전에 예약하시면 당일 배송도 가능해요. LENGOLF에서 빌려 호텔로 받고, 실외 코스에서 치고, 그대로 반납하시면 되니까 대여점을 따로 찾아갈 필요가 없어요.',
         },
       ],
       curated_reviews: [
@@ -2210,7 +2210,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
       comparison_with_alternatives:
         '对来曼谷旅行的球友来说，这笔账很清楚：把球杆托运过来，光航空公司的费用来回就是4,000–12,000泰铢，还要加上麻烦和被磕碰的风险。打模拟器的话，LENGOLF免费的标准球杆租借直接把这一项归零。如果你也想去室外球场打，我们的高级套装每日1,200泰铢，租一整套Callaway，和专门的租借服务比价格相当，也比多数球场专卖店的租借便宜不少。',
       value_proposition:
-        'LENGOLF是曼谷唯一一家每次球位预订都免费附带标准球杆的模拟器场馆。两手空空走进来，立刻就能打。要去室外球场的话，我们的高级球杆配送服务（每日1,200泰铢，曼谷市内配送统一500泰铢）是最省事的选择——球杆直接送到你的酒店或球场。',
+        'LENGOLF是曼谷唯一一家每次球位预订都免费附带标准球杆的模拟器场馆。两手空空走进来，立刻就能打。要去室外球场的话，我们的高级球杆配送服务（每日1,200泰铢，配送500泰铢起）是最省事的选择——球杆直接送到你的酒店或球场。',
       last_verified: '2026-02-19',
       sections: [
         {
@@ -2219,7 +2219,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         },
         {
           heading: 'LENGOLF球杆配送服务',
-          body: '我们的高级球杆套装（男士Callaway Warbird、女士Callaway REVA）可以按全日1,200泰铢租用，并以统一500泰铢的费用送到曼谷任何地方。中午前下单可当日送达。也就是说，你可以在LENGOLF租，让球杆送到酒店，去室外球场打完一轮再还回来——不必再专门跑一趟租借店。',
+          body: '我们的高级球杆套装（男士Callaway Warbird、女士Callaway REVA）可以按全日1,200泰铢租用，并可送到酒店或球场，往返配送500泰铢起（距LENGOLF 15公里以内500泰铢，35公里以内650泰铢，50公里以内1,200泰铢）。中午前下单可当日送达。也就是说，你可以在LENGOLF租，让球杆送到酒店，去室外球场打完一轮再还回来——不必再专门跑一趟租借店。',
         },
       ],
       curated_reviews: [

@@ -344,7 +344,7 @@ export const clubRentalFaqItems = [
   },
   {
     question: 'Can I use rented clubs outside of LENGOLF?',
-    answer: 'Yes! Premium club rentals can be used at LENGOLF or taken to any golf course in Bangkok. We also offer same-day club delivery for 500 THB anywhere in Bangkok — contact us on LINE @lengolf to arrange.',
+    answer: 'Yes! Premium club rentals can be used at LENGOLF or taken to any golf course in Bangkok. We also offer same-day club delivery to your hotel or course from 500 THB round trip, priced by distance — contact us on LINE @lengolf to arrange.',
   },
   {
     question: 'How much does premium club rental cost per hour?',
@@ -352,7 +352,7 @@ export const clubRentalFaqItems = [
   },
   {
     question: 'Do you deliver golf clubs in Bangkok?',
-    answer: 'Yes, we offer same-day delivery of premium club sets anywhere in Bangkok for 500 THB. Contact us on LINE @lengolf to book delivery. You can also find us on Google Maps at The Mercury Ville, BTS Chidlom.',
+    answer: 'Yes, we offer same-day delivery of premium club sets to hotels and golf courses in and around Bangkok, from 500 THB round trip (up to 15 km from LENGOLF; 650 THB up to 35 km, 1,200 THB up to 50 km). Contact us on LINE @lengolf to book delivery. You can also find us on Google Maps at The Mercury Ville, BTS Chidlom.',
   },
   {
     question: 'Can I try clubs before buying second-hand?',

@@ -37,7 +37,11 @@ export interface SiteFacts {
   bayHourlyMax: number
   /** Premium course-rental, 1 day (catalog.clubRental.course). */
   courseRentalDay: number
-  /** Club delivery round-trip fee (catalog.clubRental.addons). */
+  /**
+   * Club delivery round-trip fee (catalog.clubRental.addons). This is only the
+   * STARTING price (up to 15 km): checkout prices delivery by distance, so
+   * copy that uses this token must say "from" next to it.
+   */
   clubDelivery: number
 
   // ── Static facts (NOT in the POS) — held here as the single source of truth

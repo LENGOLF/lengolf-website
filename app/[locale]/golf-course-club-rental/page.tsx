@@ -54,7 +54,10 @@ const FAQ_COUNT = 16
 // are STATIC marketing copy, not DB-driven like the live pricing table above
 // (getRentalClubPricing). They reflect: Premium 1-day ฿1,200, "3 days = pay 2"
 // → ฿2,400 + ฿500 delivery = ฿2,900 vs ~฿4,500 at the course (~36% saved).
-// Re-check all 5 locales if course_price_3d or the delivery fee changes.
+// ฿500 is the first delivery band (up to 15 km), so the delivery row says
+// "from". The bands (deliveryBand1-3, deliveryBandNote, FAQ a1/a8) mirror
+// booking-new lib/club-rental/delivery-distance.ts.
+// Re-check all 5 locales if course_price_3d or the delivery bands change.
 const WHY_RENT_ROWS = ['trip', 'discount', 'set', 'quality', 'pick', 'delivery'] as const
 
 // Standard (Premium-tier) set cards are DB-driven: rows, galleries and colour
@@ -416,6 +419,12 @@ export default async function GolfCourseClubRentalPage({ params }: { params: Pro
                   <div>
                     <p className="font-semibold text-foreground">{t('deliveryTitle')} — <span style={{ color: '#007429' }}>{t('deliveryPrice')}</span></p>
                     <p className="mt-1 text-sm text-muted-foreground">{t('deliveryDesc')}</p>
+                    <ul className="mt-2 space-y-0.5 text-sm text-foreground">
+                      <li>{t('deliveryBand1')}</li>
+                      <li>{t('deliveryBand2')}</li>
+                      <li>{t('deliveryBand3')}</li>
+                    </ul>
+                    <p className="mt-2 text-xs text-muted-foreground">{t('deliveryBandNote')}</p>
                   </div>
                 </div>
               </div>
