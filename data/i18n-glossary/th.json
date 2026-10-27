@@ -12,20 +12,28 @@
     "Bravo Golf"
   ],
   "preferred": {
-    "indoor golf simulator": "กอล์ฟซิมูเลเตอร์ในร่ม",
+    "indoor golf simulator": "ห้องซิมกอล์ฟ",
     "lesson": "คอร์สเรียน",
     "lessons": "คอร์สเรียน",
     "green fee": "ค่ากรีนฟี",
     "club rental": "บริการเช่าไม้กอล์ฟ",
     "rent clubs": "เช่าไม้กอล์ฟ",
-    "bay": "เบย์",
+    "bay": "ห้องซิม",
     "Bangkok": "กรุงเทพฯ",
     "coach": "โค้ช",
     "coaches": "โค้ช",
     "package": "แพ็กเกจ",
     "package deal": "แพ็กเกจ",
     "Book Now": "จองเลย",
-    "Learn More": "ดูเพิ่มเติม"
+    "Learn More": "ดูเพิ่มเติม",
+    "junior clubs": "ไม้กอล์ฟเด็ก",
+    "certificate": "ประกาศนียบัตร",
+    "assessment": "วัดผล",
+    "skills check": "วัดผล",
+    "video": "คลิป",
+    "full swing": "สวิงเต็มวง",
+    "putting": "พัตต์",
+    "chipping": "ชิพ"
   },
   "tone": "friendly-professional, second-person, conversational. No exclamation marks. No emoji. Avoid marketing-speak inflation.",
   "formality": "Polite (สุภาพ). Use formal vocabulary but keep sentence length natural and readable. Avoid the spoken particles ครับ/ค่ะ except where directly addressing the reader as a CTA. Do not over-translate Anglicisms that Thai golfers use natively (กรีน, แฟร์เวย์, สวิง are familiar Thai golf terms — keep them rather than forcing pure Thai equivalents).",
@@ -90,6 +98,7 @@
     "linter_hint": "flag_mode 'review'; forbidden_claims is empty for TH — no language honesty split exists in the Thai market. The scoping rule still applies to any negative venue comparison."
   },
   "style_notes": [
+    "Write Thai from the facts with the natural-thai skill (the owner's Claude skill, natural-thai), not by translating the EN line: a heading is a plain label or the reader's own question (no slogan pairs such as แพ็กเกจเดียว ราคาเดียว, no two-part split headings), verbs rather than การ/ความ nouns, ของ LENGOLF rather than จาก LENGOLF in written copy (a VOICEOVER says จาก or ที่ LENGOLF, because spoken ของ LENGOLF sounds like ของเล่นกอล์ฟ, per lengolf-design), and children's ages as 4-12 ขวบ. Since 2026-10-13 the preferred terms above follow the skill: ห้องซิม (bay), ห้องซิมกอล์ฟ (indoor golf simulator), ไม้กอล์ฟเด็ก (junior clubs), ประกาศนียบัตร (certificate), วัดผล (assessment, skills check), คลิป (video), สวิงเต็มวง (full swing), พัตต์ and ชิพ (putting, chipping). They are not only advice: lib/translations/agents.ts puts this map into the npm run translate:run prompt, and its lexicon check fails a row that misses more than 2 preferred terms, so they shape the next Thai batch. Shipped pages that still say เบย์ or กอล์ฟซิมูเลเตอร์ were not rewritten, and no avoid list enforces the new words. Years stay Gregorian (2026), as on every TH page and in the ข้อมูล ณ as-of marker: the skill defaults to the Buddhist era but defers to the brand's convention.",
     "Polite (สุภาพ) register; avoid spoken particles ครับ/ค่ะ except in direct CTA address.",
     "Keep familiar English-derived golf terms (กรีน, แฟร์เวย์, สวิง, พาร์, เบอร์ดี้) rather than pure-Thai coinages.",
     "Arabic digits with a space before spelled units (1,800 บาท); no exclamation marks, no emoji.",

@@ -168,6 +168,18 @@ function inLocale(reg: Registry, locale: string, p: string): string[] {
   return locale === 'en' || reg.hasTranslationForLocale(locale, p) ? [pageUrl(locale, p)] : []
 }
 
+/**
+ * /junior-golf-academy/ in `locale` plus that locale's /lessons/ (which renders
+ * the Academy callout only where the page is published), and for EN the two
+ * llms files. Nothing for a locale that does not publish the page.
+ */
+function juniorAcademyUrls(reg: Registry, locale: string): string[] {
+  const page = inLocale(reg, locale, '/junior-golf-academy/')
+  if (page.length === 0) return []
+  const llms = locale === 'en' ? [pageUrl('en', '/llms.txt'), pageUrl('en', '/llms-full.txt')] : []
+  return [...page, ...inLocale(reg, locale, '/lessons/'), ...llms]
+}
+
 /** Every URL `p` has at head OR had at base: for records added or removed. */
 function servedEither(ctx: Ctx, p: string): string[] {
   return [...served(ctx.reg, p), ...served(ctx.baseReg, p)]
@@ -443,7 +455,33 @@ function seoRule(section: SeoSection): Rule {
   }
 }
 
+/**
+ * Pages whose lesson prices are {{lesson…}} fact tokens (lib/site-facts.ts,
+ * built from the data/pricing.ts lesson rows), so a lesson-row edit changes
+ * them. Each is pinged in every locale that serves it.
+ */
+const LESSON_TOKEN_PAGES = [
+  '/cost/golf-lesson-prices-bangkok/',
+  '/cost/lengolf-pricing-guide/',
+  '/cost/how-much-does-golf-cost-bangkok/',
+  '/faq/',
+  '/faq/can-beginners-play-golf-simulators/',
+  '/faq/best-way-to-learn-golf-in-bangkok/',
+  '/guide/golf-simulator-for-non-golfers-guide/',
+  '/guide/golf-lessons-bangkok-coaches/',
+  // Prints the EN FAQ meta descriptions; best-way's carries lesson tokens.
+  '/llms.txt',
+]
+
 /** A small module feeding a fixed set of pages: any change pings all of them. */
+// The provider count is in the EN page title, which /golf-in-thailand-guide/
+// prints on its price-guide hub card, so a row added or removed changes it too.
+const COACHING_PROVIDER_URLS = () => [
+  pageUrl('en', '/cost/golf-lesson-prices-bangkok/'),
+  pageUrl('en', '/llms-full.txt'),
+  pageUrl('en', '/golf-in-thailand-guide/'),
+]
+
 function fixedRule(file: string, pages: string[]): Rule {
   const urls = (ctx: Ctx) => pages.flatMap((p) => served(ctx.reg, p))
   return {
@@ -650,6 +688,50 @@ export const RULES: Rule[] = [
     coarse: (ctx) => [...served(ctx.reg, '/faq/'), pageUrl('en', '/llms-full.txt')],
   },
   {
+    // /junior-golf-academy/, one content block per locale (JUNIOR_ACADEMY_CONTENT).
+    // A locale's block also renders the callout on that locale's /lessons/,
+    // which exists only where the Academy page is published, and EN's block is
+    // printed into llms.txt and llms-full.txt. Any other export (price, video,
+    // images, the date) reaches every locale that serves the page.
+    id: 'junior-academy',
+    match: (f) => (f === 'data/junior-academy.ts' ? [f] : null),
+    derive(ctx, base, head) {
+      const content = (mod: Loaded) =>
+        new Map(Object.entries((mod?.JUNIOR_ACADEMY_CONTENT as Record<string, unknown> | undefined) ?? {}))
+      // JUNIOR_ACADEMY_UPDATED_AT feeds the sitemap only (not a pinged URL), and
+      // every copy edit bumps it: counting it as shared would turn a th-only
+      // edit into an every-locale ping.
+      const omit = ['JUNIOR_ACADEMY_CONTENT', 'getJuniorAcademyContent', 'JUNIOR_ACADEMY_UPDATED_AT']
+      if (moduleSig(base, omit) !== moduleSig(head, omit)) {
+        return { kind: 'records', urls: LOCALES.flatMap((l) => juniorAcademyUrls(ctx.reg, l)), note: 'a shared export changed: every locale' }
+      }
+      const locales = touched(diffKeyed(content(base), content(head)))
+      if (locales.length === 0) return { kind: 'none' }
+      return { kind: 'records', urls: locales.flatMap((l) => juniorAcademyUrls(ctx.reg, l)), note: `content changed for ${locales.join(', ')}` }
+    },
+    coarse: (ctx) => LOCALES.flatMap((l) => juniorAcademyUrls(ctx.reg, l)),
+  },
+  {
+    // /line/, one content block per locale (LINE_PAGE_CONTENT). Any other
+    // export (the LINE link, the ID, the path) reaches every locale that
+    // serves the page. LINE_PAGE_UPDATED_AT feeds the sitemap only, as in the
+    // junior-academy rule above.
+    id: 'line-page',
+    match: (f) => (f === 'data/line-page.ts' ? [f] : null),
+    derive(ctx, base, head) {
+      const content = (mod: Loaded) =>
+        new Map(Object.entries((mod?.LINE_PAGE_CONTENT as Record<string, unknown> | undefined) ?? {}))
+      const omit = ['LINE_PAGE_CONTENT', 'getLinePageContent', 'LINE_PAGE_UPDATED_AT']
+      if (moduleSig(base, omit) !== moduleSig(head, omit)) {
+        return { kind: 'records', urls: served(ctx.reg, '/line/'), note: 'a shared export changed: every locale' }
+      }
+      const locales = touched(diffKeyed(content(base), content(head)))
+      if (locales.length === 0) return { kind: 'none' }
+      return { kind: 'records', urls: locales.flatMap((l) => inLocale(ctx.reg, l, '/line/')), note: `content changed for ${locales.join(', ')}` }
+    },
+    coarse: (ctx) => served(ctx.reg, '/line/'),
+  },
+  {
     // Mirror of the DB's translated blog slugs: a slug entering or leaving a
     // locale changes the hreflang on EVERY version of that post, and that
     // locale's blog index. The mirror itself says which locales a post has, so
@@ -683,9 +765,23 @@ export const RULES: Rule[] = [
   recordRule('data/bts-stations.ts', 'BTS_STATIONS', (s) => `/golf-courses/near/${s}/`, (reg) => inLocale(reg, 'en', '/golf-courses/')),
   recordRule('data/golf-courses-use-cases.ts', 'USE_CASE_RULES', (s) => `/golf-courses/best-for/${s}/`, (reg) => inLocale(reg, 'en', '/golf-courses/')),
   fixedRule('data/coaches.ts', ['/lessons/', '/llms.txt']),
+  {
+    // Other providers' lesson prices: rendered only by the EN entry of
+    // /cost/golf-lesson-prices-bangkok/ (data/price-guide-pages.ts reads it at
+    // module load, so a provider edit changes that page without touching the
+    // SEO data file) and printed into llms-full.txt. The th/ja/ko/zh entries do
+    // not render the table, so they are not pinged.
+    id: 'coaching-providers',
+    match: (f) => (f === 'data/coaching-providers.ts' ? [f] : null),
+    derive: (_ctx, base, head) =>
+      moduleSig(base) === moduleSig(head)
+        ? { kind: 'none' }
+        : { kind: 'records', urls: COACHING_PROVIDER_URLS(), note: 'provider rows changed -> EN lesson-price page, llms-full.txt, guide hub' },
+    coarse: () => COACHING_PROVIDER_URLS(),
+  },
   fixedRule('data/event-clients.ts', ['/events/']),
   fixedRule('data/food-menu.ts', ['/menu/']),
-  fixedRule('data/pricing.ts', ['/', '/golf/', '/lessons/', '/events/', '/corporate-golf-packages/', '/llms-full.txt']),
+  fixedRule('data/pricing.ts', ['/', '/golf/', '/lessons/', '/events/', '/corporate-golf-packages/', '/llms-full.txt', ...LESSON_TOKEN_PAGES]),
   {
     // The course club rental agreement, one file per locale
     // (app/[locale]/golf-course-club-rental-agreement/page.tsx). A locale's
@@ -1253,11 +1349,11 @@ const CASES: Case[] = [
     want: ['/llms-full.txt'],
   },
   {
-    name: 'pricing.ts pings its six direct consumers',
+    name: 'pricing.ts pings its six direct consumers and the nine pages its lesson fact tokens reach',
     changes: [{ status: 'M', file: 'data/pricing.ts' }],
     base: { 'data/pricing.ts': { bayRates: [1] } },
     head: { 'data/pricing.ts': { bayRates: [2] } },
-    want: ['/', '/golf/', '/lessons/', '/events/', '/corporate-golf-packages/', '/llms-full.txt'],
+    want: ['/', '/golf/', '/lessons/', '/events/', '/corporate-golf-packages/', '/llms-full.txt', '/cost/golf-lesson-prices-bangkok/', '/cost/lengolf-pricing-guide/', '/cost/how-much-does-golf-cost-bangkok/', '/faq/', '/faq/can-beginners-play-golf-simulators/', '/faq/best-way-to-learn-golf-in-bangkok/', '/guide/golf-simulator-for-non-golfers-guide/', '/guide/golf-lessons-bangkok-coaches/', '/llms.txt'],
   },
   // One case per rule and per listing row, each with a LITERAL expectation.
   // A per-rule mutant (wrong path, wrong page, a listing row deleted, EN-only
@@ -1327,6 +1423,60 @@ const CASES: Case[] = [
     base: { 'data/food-menu.ts': { menuGroups: [1] } },
     head: { 'data/food-menu.ts': { menuGroups: [2] } },
     want: ['/menu/'],
+  },
+  {
+    // The th/ja/ko/zh lesson-price pages are registered but do not render
+    // the provider table, so a provider edit must not ping them.
+    name: 'coaching-providers.ts: a provider edit pings the EN lesson-price page, llms-full.txt and the EN guide hub alone',
+    changes: [{ status: 'M', file: 'data/coaching-providers.ts' }],
+    base: { 'data/coaching-providers.ts': { COACHING_PROVIDERS: [{ id: 'front9', singleLessonThb: 2700 }] } },
+    head: { 'data/coaching-providers.ts': { COACHING_PROVIDERS: [{ id: 'front9', singleLessonThb: 2800 }] } },
+    registered: ['th:/cost/golf-lesson-prices-bangkok'],
+    want: ['/cost/golf-lesson-prices-bangkok/', '/llms-full.txt', '/golf-in-thailand-guide/'],
+  },
+  {
+    // ja serves /lessons/ but not the Academy page, so ja /lessons/ (no
+    // callout there) must not ping.
+    // ...including the JUNIOR_ACADEMY_UPDATED_AT bump every copy edit carries.
+    name: 'junior-academy.ts: a th copy edit pings the th page and th /lessons/ alone',
+    changes: [{ status: 'M', file: 'data/junior-academy.ts' }],
+    base: { 'data/junior-academy.ts': { JUNIOR_ACADEMY_CONTENT: { en: 'e', th: 't-old' }, JUNIOR_ACADEMY_PRICE_THB: 16900, JUNIOR_ACADEMY_UPDATED_AT: '2026-10-11' } },
+    head: { 'data/junior-academy.ts': { JUNIOR_ACADEMY_CONTENT: { en: 'e', th: 't-new' }, JUNIOR_ACADEMY_PRICE_THB: 16900, JUNIOR_ACADEMY_UPDATED_AT: '2026-11-02' } },
+    registered: ['th:/junior-golf-academy', 'th:/lessons', 'ja:/lessons'],
+    want: ['/th/junior-golf-academy/', '/th/lessons/'],
+  },
+  {
+    name: 'junior-academy.ts: a shared export (the price) pings every locale publishing the page, its /lessons/, and both llms files',
+    changes: [{ status: 'M', file: 'data/junior-academy.ts' }],
+    base: { 'data/junior-academy.ts': { JUNIOR_ACADEMY_CONTENT: { en: 'e', th: 't' }, JUNIOR_ACADEMY_PRICE_THB: 16900 } },
+    head: { 'data/junior-academy.ts': { JUNIOR_ACADEMY_CONTENT: { en: 'e', th: 't' }, JUNIOR_ACADEMY_PRICE_THB: 17900 } },
+    registered: ['th:/junior-golf-academy', 'th:/lessons', 'ja:/lessons'],
+    want: ['/junior-golf-academy/', '/lessons/', '/llms.txt', '/llms-full.txt', '/th/junior-golf-academy/', '/th/lessons/'],
+  },
+  {
+    // ...including the LINE_PAGE_UPDATED_AT bump every copy edit carries.
+    name: 'line-page.ts: a th copy edit pings the th page alone',
+    changes: [{ status: 'M', file: 'data/line-page.ts' }],
+    base: { 'data/line-page.ts': { LINE_PAGE_CONTENT: { en: 'e', th: 't-old' }, LINE_ID: '@lengolf', LINE_PAGE_UPDATED_AT: '2026-10-18' } },
+    head: { 'data/line-page.ts': { LINE_PAGE_CONTENT: { en: 'e', th: 't-new' }, LINE_ID: '@lengolf', LINE_PAGE_UPDATED_AT: '2026-11-02' } },
+    registered: ['th:/line'],
+    want: ['/th/line/'],
+  },
+  {
+    name: 'line-page.ts: an en copy edit pings the en page alone',
+    changes: [{ status: 'M', file: 'data/line-page.ts' }],
+    base: { 'data/line-page.ts': { LINE_PAGE_CONTENT: { en: 'e-old', th: 't' }, LINE_ID: '@lengolf' } },
+    head: { 'data/line-page.ts': { LINE_PAGE_CONTENT: { en: 'e-new', th: 't' }, LINE_ID: '@lengolf' } },
+    registered: ['th:/line'],
+    want: ['/line/'],
+  },
+  {
+    name: 'line-page.ts: a shared export (the LINE ID) pings every locale publishing the page',
+    changes: [{ status: 'M', file: 'data/line-page.ts' }],
+    base: { 'data/line-page.ts': { LINE_PAGE_CONTENT: { en: 'e', th: 't' }, LINE_ID: '@lengolf' } },
+    head: { 'data/line-page.ts': { LINE_PAGE_CONTENT: { en: 'e', th: 't' }, LINE_ID: '@lengolf2' } },
+    registered: ['th:/line'],
+    want: ['/line/', '/th/line/'],
   },
   {
     name: 'a ja rental-agreement edit pings the ja agreement page alone',
@@ -1490,13 +1640,33 @@ const CONSUMERS: Record<string, Record<string, string>> = {
     'app/[locale]/events/page.tsx': 'pinged',
     'app/[locale]/corporate-golf-packages/page.tsx': 'pinged',
     'app/llms-full.txt/route.ts': 'pinged',
+    'lib/site-facts.ts': 'pinged: the {{lesson…}} fact tokens, on every page in LESSON_TOKEN_PAGES (the rule lists them)',
+    'components/home/JapanLandingPage.tsx': 'pinged: the lessons card, on / (ja)',
+    'components/home/KoreaLandingPage.tsx': 'pinged: the lessons card, on / (ko)',
+    'components/home/ChinaLandingPage.tsx': 'pinged: the lessons card, on / (zh)',
   },
   'data/coaches.ts': { 'app/[locale]/lessons/page.tsx': 'pinged', 'app/llms.txt/route.ts': 'pinged' },
+  'data/coaching-providers.ts': {
+    'app/llms-full.txt/route.ts': 'pinged: EN only',
+    'components/prices/PriceGuidePage.tsx': 'ignored: imports the comparisonThb parser only; the rows reach it through the page entry, pinged by the rule',
+    'lib/jsonld.ts': 'ignored: imports the comparisonThb parser only; the rows reach it through the page entry, pinged by the rule',
+  },
   'data/event-clients.ts': { 'app/[locale]/events/page.tsx': 'pinged' },
   'data/food-menu.ts': { 'app/[locale]/menu/page.tsx': 'pinged' },
   'data/faq-hub.ts': {
     'app/[locale]/faq/page.tsx': 'pinged',
     'app/llms-full.txt/route.ts': 'pinged: EN only',
+  },
+  'data/line-page.ts': {
+    'app/[locale]/line/page.tsx': 'pinged',
+    'app/sitemap.ts': 'ignored: the sitemap is not a pinged URL',
+  },
+  'data/junior-academy.ts': {
+    'app/[locale]/junior-golf-academy/page.tsx': 'pinged',
+    'app/[locale]/lessons/page.tsx': 'pinged: the callout, in locales publishing the Academy page',
+    'app/llms.txt/route.ts': 'pinged: EN only',
+    'app/llms-full.txt/route.ts': 'pinged: EN only',
+    'app/sitemap.ts': 'ignored: the sitemap is not a pinged URL',
   },
   'data/golf-courses-i18n.ts': {
     'app/[locale]/golf-courses/[region]/page.tsx': 'pinged: the hub',
@@ -2015,8 +2185,8 @@ async function selfTest(): Promise<void> {
   // trigger-path coverage, workflow trigger, locales, two loader checks); one
   // consumer verdict per CONSUMERS key; four CLI verdicts.
   const expected = CASES.length + 1 + 3 + SEO_SECTIONS.length + 8 + Object.keys(CONSUMERS).length + 4
-  if (CASES.length !== 55 || examined !== expected) {
-    console.log(`FAIL: examined ${examined} verdict(s), expected ${expected} (CASES=${CASES.length}, want 55)`)
+  if (CASES.length !== 61 || examined !== expected) {
+    console.log(`FAIL: examined ${examined} verdict(s), expected ${expected} (CASES=${CASES.length}, want 61)`)
     process.exit(1)
   }
   if (failures > 0) {

@@ -41,7 +41,8 @@
  *      <main id="main-content"> (L2's guard, one level up the hub tree)
  *  L4) FAQ translated registry liveness: every registered '/faq/<slug>'
  *      translation must serve 200 with <main id="main-content"> and no
- *      unresolved {{token}} (the FAQ route never interpolates facts)
+ *      unresolved {{token}} (the FAQ route resolves tokens, but a malformed
+ *      one such as {{name} } matches no pattern and ships raw)
  *   M) Wayfinding copy: BTS Chidlom is Exit 4, across both the DB-driven
  *      /location/* pages and the repo's JA/KO/ZH + EN wayfinding strings
  *   N) Region-hub course-count agreement: both ICU plural branches of
@@ -140,11 +141,34 @@ const routeTests: RouteTest[] = [
     path: "/golf/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    // GolfFaq.a10 takes ICU values (app/[locale]/golf/page.tsx). A missing or
+    // renamed value makes next-intl render the key path, e.g. "GolfFaq.a10",
+    // in the accordion and the FAQPage JSON-LD without failing the build.
+    contentAbsent: "GolfFaq.",
   },
   {
     path: "/lessons/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/junior-golf-academy/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  // /line/ was a 307 to lin.ee until 2026-10-18, and Google Ads disapproved the
+  // LINE sitelinks that point at it ("Insufficient original content",
+  // "Destination mismatch"). It must stay a real page: a redirect fails here
+  // (route tests must resolve directly), the marker is the build-time QR code,
+  // and a meta refresh, which Google also reads as a redirect, is forbidden.
+  // contentAbsent is the bare attribute name: React always renders it as
+  // lowercase http-equiv, the site emits none today, and matching the name
+  // rather than the value also catches "Refresh" written in any case.
+  {
+    path: "/line/",
+    expectedStatus: [200],
+    contentMarker: "data-line-qr",
+    contentAbsent: "http-equiv",
   },
   {
     path: "/events/",
@@ -226,11 +250,23 @@ const routeTests: RouteTest[] = [
     path: "/th/golf/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "GolfFaq.",
   },
   {
     path: "/th/lessons/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/junior-golf-academy/",
+    expectedStatus: [200],
+    contentMarker: '<main id="main-content">',
+  },
+  {
+    path: "/th/line/",
+    expectedStatus: [200],
+    contentMarker: "data-line-qr",
+    contentAbsent: "http-equiv",
   },
   {
     path: "/th/events/",
@@ -257,11 +293,149 @@ const routeTests: RouteTest[] = [
     path: "/faq/",
     expectedStatus: [200],
     contentMarker: "Unit 407",
+    // The lesson-price answer carries {{lesson…}} fact tokens (data/faq-hub.ts).
+    contentAbsent: "{{",
   },
   {
     path: "/th/faq/",
     expectedStatus: [200],
     contentMarker: "ยูนิต 407",
+    contentAbsent: "{{",
+  },
+  // /cost/golf-lesson-prices-bangkok/ prices every LENGOLF lesson row with a
+  // {{lesson…}} fact token, resolved in app/[locale]/cost/[slug]/page.tsx. The
+  // marker is the trial-row label (EN; in th/ja/ko/zh the same phrase also
+  // appears in the intro), and no figure is pinned because the tokens follow
+  // the POS catalog.
+  {
+    path: "/cost/golf-lesson-prices-bangkok/",
+    expectedStatus: [200],
+    contentMarker: "Free 1-hour trial",
+    contentAbsent: "{{",
+  },
+  // The EN page also carries the provider comparison (data/coaching-providers.ts):
+  // the at-a-glance table must render, or the comparison could vanish while the
+  // trial-label marker above still passes on the LENGOLF price rows. A second
+  // entry for the same path is fine: the image scan dedupes paths with a Set.
+  {
+    path: "/cost/golf-lesson-prices-bangkok/",
+    expectedStatus: [200],
+    contentMarker: 'id="prices-at-a-glance"',
+    contentAbsent: "{{",
+  },
+  {
+    path: "/th/cost/golf-lesson-prices-bangkok/",
+    expectedStatus: [200],
+    contentMarker: "ทดลองเรียนฟรี 1 ชั่วโมง",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/ja/cost/golf-lesson-prices-bangkok/",
+    expectedStatus: [200],
+    contentMarker: "1時間の無料体験",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/ko/cost/golf-lesson-prices-bangkok/",
+    expectedStatus: [200],
+    contentMarker: "1시간 무료 체험",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/zh/cost/golf-lesson-prices-bangkok/",
+    expectedStatus: [200],
+    contentMarker: "1小时免费体验",
+    contentAbsent: "{{",
+  },
+  // The other pages that answer "how much do lessons cost" carry the same
+  // {{lesson…}} tokens: the pricing guide and the golf-cost guide (resolved in
+  // app/[locale]/cost/[slug]/page.tsx), the beginner and best-way FAQ pages
+  // (app/[locale]/faq/[slug]/page.tsx; their th/ja/ko/zh versions are below
+  // and in L4) and the non-golfers guide. The marker is each page's trial
+  // wording.
+  {
+    path: "/cost/lengolf-pricing-guide/",
+    expectedStatus: [200],
+    contentMarker: "Free 1-hour trial (golf coaching)",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/th/cost/lengolf-pricing-guide/",
+    expectedStatus: [200],
+    contentMarker: "ทดลองเรียนฟรี 1 ชั่วโมง",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/ja/cost/lengolf-pricing-guide/",
+    expectedStatus: [200],
+    contentMarker: "ゴルフレッスンの無料体験",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/ko/cost/lengolf-pricing-guide/",
+    expectedStatus: [200],
+    contentMarker: "1시간 무료 체험",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/zh/cost/lengolf-pricing-guide/",
+    expectedStatus: [200],
+    contentMarker: "1小时免费体验",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/cost/how-much-does-golf-cost-bangkok/",
+    expectedStatus: [200],
+    contentMarker: "free 1-hour trial",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/th/cost/how-much-does-golf-cost-bangkok/",
+    expectedStatus: [200],
+    contentMarker: "ทดลองเรียนฟรี 1 ชั่วโมง",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/ja/cost/how-much-does-golf-cost-bangkok/",
+    expectedStatus: [200],
+    contentMarker: "1時間の無料体験",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/ko/cost/how-much-does-golf-cost-bangkok/",
+    expectedStatus: [200],
+    contentMarker: "1시간 무료 체험",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/zh/cost/how-much-does-golf-cost-bangkok/",
+    expectedStatus: [200],
+    contentMarker: "1小时免费体验",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/faq/can-beginners-play-golf-simulators/",
+    expectedStatus: [200],
+    contentMarker: "free 1-hour trial",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/faq/best-way-to-learn-golf-in-bangkok/",
+    expectedStatus: [200],
+    contentMarker: "Free 1-hour trial for new students",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/guide/golf-simulator-for-non-golfers-guide/",
+    expectedStatus: [200],
+    contentMarker: "free 1-hour trial for new students",
+    contentAbsent: "{{",
+  },
+  {
+    path: "/th/guide/golf-lessons-bangkok-coaches/",
+    expectedStatus: [200],
+    contentMarker: "ทดลองเรียนฟรี 1 ชั่วโมง",
+    contentAbsent: "{{",
   },
   // Blog post detail (catches Supabase query errors on dynamic routes)
   {
@@ -357,6 +531,7 @@ const routeTests: RouteTest[] = [
     path: "/ja/golf/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "GolfFaq.",
   },
   {
     path: "/ja/lessons/",
@@ -398,6 +573,7 @@ const routeTests: RouteTest[] = [
     path: "/ko/golf/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "GolfFaq.",
   },
   {
     path: "/ko/lessons/",
@@ -439,6 +615,7 @@ const routeTests: RouteTest[] = [
     path: "/zh/golf/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "GolfFaq.",
   },
   {
     path: "/zh/lessons/",
@@ -1590,9 +1767,9 @@ const routeTests: RouteTest[] = [
     contentMarker: '<main id="main-content">',
   },
   // Translated TH FAQ pages (data/faq-pages.ts locale:'th' entries + th allowlist
-  // entries in lib/translated-routes.ts). No contentAbsent '{{' guard — FAQ
-  // rendering (app/[locale]/faq/[slug]/page.tsx) never runs interpolateFacts,
-  // so these pages never carry fact tokens to begin with.
+  // entries in lib/translated-routes.ts). The entries that carry {{lesson…}}
+  // tokens (resolved in app/[locale]/faq/[slug]/page.tsx) assert contentAbsent
+  // '{{'; L4 asserts it on every registered translation.
   {
     path: "/th/faq/can-i-rent-golf-clubs-in-bangkok/",
     expectedStatus: [200],
@@ -1617,6 +1794,7 @@ const routeTests: RouteTest[] = [
     path: "/th/faq/can-beginners-play-golf-simulators/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
   },
   {
     path: "/th/faq/how-long-does-simulator-golf-take/",
@@ -1627,6 +1805,7 @@ const routeTests: RouteTest[] = [
     path: "/th/faq/best-way-to-learn-golf-in-bangkok/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
   },
   {
     path: "/th/faq/can-kids-play-golf-simulators/",
@@ -1837,16 +2016,19 @@ const routeTests: RouteTest[] = [
     path: "/ja/faq/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
   },
   {
     path: "/ko/faq/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
   },
   {
     path: "/zh/faq/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
   },
   // Translated TH region hubs (data/golf-courses-i18n.ts + th allowlist entries)
   {
@@ -2069,6 +2251,7 @@ const routeTests: RouteTest[] = [
     path: "/ja/faq/best-way-to-learn-golf-in-bangkok/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
   },
   {
     path: "/ja/faq/how-accurate-are-golf-simulators/",
@@ -2079,6 +2262,7 @@ const routeTests: RouteTest[] = [
     path: "/ja/faq/can-beginners-play-golf-simulators/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
   },
   {
     path: "/ko/faq/how-much-does-indoor-golf-cost-in-bangkok/",
@@ -2099,6 +2283,7 @@ const routeTests: RouteTest[] = [
     path: "/ko/faq/best-way-to-learn-golf-in-bangkok/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
   },
   {
     path: "/ko/faq/how-accurate-are-golf-simulators/",
@@ -2109,6 +2294,7 @@ const routeTests: RouteTest[] = [
     path: "/ko/faq/can-beginners-play-golf-simulators/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
   },
   {
     path: "/zh/faq/how-much-does-indoor-golf-cost-in-bangkok/",
@@ -2129,6 +2315,7 @@ const routeTests: RouteTest[] = [
     path: "/zh/faq/best-way-to-learn-golf-in-bangkok/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
   },
   {
     path: "/zh/faq/how-accurate-are-golf-simulators/",
@@ -2139,6 +2326,7 @@ const routeTests: RouteTest[] = [
     path: "/zh/faq/can-beginners-play-golf-simulators/",
     expectedStatus: [200],
     contentMarker: '<main id="main-content">',
+    contentAbsent: "{{",
   },
   // Batch 2: the rental/lessons FAQ cluster (JA/KO/ZH). The three rental-
   // category entries also render the course-rental CTA banner.
@@ -2930,6 +3118,10 @@ const routeTests: RouteTest[] = [
 
 // B) Redirect tests (representative sample of 60+ WordPress redirects)
 const redirectTests: RedirectTest[] = [
+  // The slash-less /line (on posters, typed by hand) must only gain its
+  // trailing slash, never go back to lin.ee: until 2026-10-18 next.config.js
+  // sent both spellings to LINE, and Google Ads disapproved the sitelinks.
+  { path: "/line", expectedStatus: 308, expectedLocation: "/line/" },
   // Trust-anchor aliases (trustAnchorRedirects in next.config.js). These
   // assert the STATUS, which redirectChainTests structurally cannot: that
   // runner follows the chain and checks only the landing path, so flipping
@@ -3318,26 +3510,46 @@ const seoTests: SeoTest[] = [
   { path: "/golf-club-rental/", locale: "en" },
   { path: "/golf-course-club-rental/", locale: "en" },
   { path: "/golf-club-specs/", locale: "en" },
+  { path: "/junior-golf-academy/", locale: "en" },
+  { path: "/line/", locale: "en" },
+  {
+    path: "/th/line/",
+    locale: "th",
+    titleContains: {
+      needle: "แอดไลน์",
+      why:
+        "The Thai LINE page reads its copy from data/line-page.ts, whose getter falls back to " +
+        "ENGLISH for any locale but th. If the th block went missing or the page read the wrong " +
+        "locale, /th/line/ would still 200 with lang=th, a canonical and the QR marker.",
+    },
+  },
+  {
+    path: "/th/junior-golf-academy/",
+    locale: "th",
+    titleContains: {
+      needle: "เรียนกอล์ฟเด็ก",
+      why:
+        "The Thai Junior Academy page reads its copy from data/junior-academy.ts, whose getter " +
+        "falls back to ENGLISH for a locale with no block. If the th block went missing or the " +
+        "page read the wrong locale, /th/ would still 200 with lang=th and a canonical, and " +
+        "every other check here would pass; only the Thai <title> shows it. The needle is the " +
+        "query term in the TH metaTitle.",
+    },
+  },
   { path: "/second-hand-golf-clubs-bangkok/", locale: "en" },
   // A blog POST, not the hub: /blog/[slug] and /guide/[slug] are the only
   // routes that emit og:type="article", so without one of them the
   // allowlist's article arm is never exercised by any real page.
   { path: "/blog/golf-simulator-in-bangkok/", locale: "en" },
-  // A /location/ page, and it is load-bearing rather than decorative: it is
-  // the ONLY route that renders a third business node (the DB-sourced
-  // LocalBusiness from location_pages.schema_markup) alongside the layout's
-  // two. Without it, the telephone cross-check below iterates a set that has
-  // exactly one telephone-bearing node on every URL in this list, so widening
-  // it from .find() to a loop asserts nothing new.
-  //
-  // HISTORY, in the past tense on purpose: when this entry was added, all 85
-  // /location/ pages served the local format on the layout node and E.164 on
-  // the DB-sourced one -- two spellings of one number per indexed page. PR
-  // #109 deployed on 2026-08-24 and that is no longer true: re-measured across
-  // all 85, it is now 0/85 carrying both and 85/85 E.164 on every node. Do NOT
-  // restate this in the present tense; the check's VALUE is unchanged (this is
-  // still the only multi-node route) but its original evidence no longer
-  // reproduces.
+  // A /location/ page. Until 2026-10-07 it was the ONLY route rendering a
+  // third business node (the DB-sourced LocalBusiness from
+  // location_pages.schema_markup), which is why the telephone cross-check
+  // below loops over every node rather than taking the first. That node is
+  // gone: the page now renders a WebPage (getLocationWebPageJsonLd) that
+  // points at the layout's business by '@id', so today only the layout's
+  // node carries a telephone here. The entry stays because section H pins
+  // that WebPage shape on this URL, and the loop is kept for the next
+  // multi-node route.
   //
   // And do not read the check as guarding display format: it parses
   // application/ld+json only. The 6 visible "096-668-2335" occurrences on this
@@ -3488,7 +3700,7 @@ const seoTests: SeoTest[] = [
  * pinned entry and adding any other URL holds this count. Nor does it cover
  * the share-card assertions; see REQUIRED_OWN_OG_CARDS.
  */
-const MIN_SEO_URLS = 43;
+const MIN_SEO_URLS = 47;
 
 /**
  * Anti-vacuity for the `titleContains` assertions in `seoTests`. Two-sided by
@@ -3523,6 +3735,8 @@ const REQUIRED_TITLE_ASSERTIONS: { path: string; needle: string }[] = [
     path: "/golf-courses/bangkok/phoenix-gold-golf-country-club/",
     needle: "formerly Suvarnabhumi Golf & Country Club",
   },
+  { path: "/th/junior-golf-academy/", needle: "เรียนกอล์ฟเด็ก" },
+  { path: "/th/line/", needle: "แอดไลน์" },
 ];
 
 /**
@@ -3531,7 +3745,7 @@ const REQUIRED_TITLE_ASSERTIONS: { path: string; needle: string }[] = [
  * empty-input vacuity path CLAUDE.md names explicitly, and the one shape the
  * two-sided pin above cannot catch on its own.
  */
-const MIN_TITLE_ASSERTIONS = 1;
+const MIN_TITLE_ASSERTIONS = 3;
 
 /**
  * Pages whose share card must be the opengraph-image.tsx in their OWN segment.
@@ -3581,6 +3795,14 @@ const thaiRedirectTests: ThaiRedirectTest[] = [
     expectedLocation: "/terms-of-service/",
     label: "Untranslated terms of service",
   },
+  // /junior-golf-academy/ is EN + TH only (data/junior-academy.ts).
+  { path: "/ja/junior-golf-academy/", expectedLocation: "/junior-golf-academy/", label: "Junior Academy, ja (EN + TH only)" },
+  { path: "/ko/junior-golf-academy/", expectedLocation: "/junior-golf-academy/", label: "Junior Academy, ko (EN + TH only)" },
+  { path: "/zh/junior-golf-academy/", expectedLocation: "/junior-golf-academy/", label: "Junior Academy, zh (EN + TH only)" },
+  // /line/ is EN + TH only (data/line-page.ts).
+  { path: "/ja/line/", expectedLocation: "/line/", label: "LINE page, ja (EN + TH only)" },
+  { path: "/ko/line/", expectedLocation: "/line/", label: "LINE page, ko (EN + TH only)" },
+  { path: "/zh/line/", expectedLocation: "/line/", label: "LINE page, zh (EN + TH only)" },
   // NOTE: the former "untranslated KO golf-courses hub must 301" test is gone
   // on purpose — the structural-parity batch added the GolfCourseHub namespace
   // to messages/{ko,zh}.json, so all four locales now serve the hub and no
@@ -4584,10 +4806,10 @@ async function runSeoTests() {
           // is document-order dependent, and the order is not stable in a way
           // worth relying on: the layout emits its EntertainmentBusiness at
           // the top of <body>, but getAggregateRatingJsonLd() emits a SECOND,
-          // telephone-less EntertainmentBusiness on / and /about-us/, and a
-          // /location/<slug>/ page renders a THIRD node — the DB-sourced
-          // LocalBusiness from location_pages.schema_markup — which a
-          // first-match check would never compare. Nodes with no telephone
+          // telephone-less EntertainmentBusiness on / and /about-us/, and
+          // /location/<slug>/ pages rendered a THIRD node (the DB-sourced
+          // LocalBusiness, replaced 2026-10-07 by a WebPage) which a
+          // first-match check would never have compared. Nodes with no telephone
           // are skipped rather than failed, because the rating node legitimately
           // omits it. `@type` may be an array (lib/jsonld.ts:1192 writes one,
           // though nested under `provider` and so not reached from here).
@@ -5497,7 +5719,7 @@ async function runUnknownSlugCacheTests() {
 // a list derived from the same array the page renders would agree with any
 // deletion. Update it deliberately when a coach joins or leaves.
 const EXPECTED_COACH_NAMES = [
-  "Parin Phokan",
+  "Prin Phokan",
   "Ratchavin Tanakasempipat",
   "Varuth Kjonkittiskul",
 ];
@@ -5516,7 +5738,7 @@ const ALLOWED_TEACHING_LANGUAGES = new Set(["th", "en"]);
 // makes t.raw return the key path as a string, so education[i] yields single
 // characters ("L", "e", ...) that are non-empty and would pass a name check.
 const EXPECTED_CREDENTIAL_COUNTS: Record<string, number> = {
-  "Parin Phokan": 1,
+  "Prin Phokan": 1,
   "Ratchavin Tanakasempipat": 5,
   "Varuth Kjonkittiskul": 2,
 };
@@ -5623,6 +5845,60 @@ async function runLessonsCoachTests() {
         if (!/^https:\/\/www\.len\.golf\/lessons\/#coach-[a-z]+$/.test(String(p["@id"]))) {
           issues.push(`${who}: '@id' ${JSON.stringify(p["@id"])} is not the locale-independent coach id`);
         }
+      }
+
+      // Price structured data: the free 1-hour trial is a 0 THB Offer in the
+      // OfferCatalog AND the low end of the Service's AggregateOffer. AI
+      // answer surfaces banded LENGOLF at 1,500-2,500 THB/hr while both
+      // carried only 1,800 (2026-10-13 AI Mode check). The trial is a
+      // "trial", never a "free lesson" (owner wording rule).
+      const catalog = nodes.find((n) => typeIs(n, "OfferCatalog"));
+      const catalogOffers = Array.isArray(catalog?.itemListElement)
+        ? (catalog!.itemListElement as Record<string, unknown>[])
+        : [];
+      const trialOffers = catalogOffers.filter((o) => o.price === "0" && /trial/i.test(String(o.name)));
+      if (trialOffers.length !== 1) {
+        issues.push(`OfferCatalog has ${trialOffers.length} 0 THB trial Offer(s), expected 1`);
+      }
+      const service = nodes.find((n) => typeIs(n, "Service"));
+      const serviceOffers = service?.offers as Record<string, unknown> | undefined;
+      if (serviceOffers?.["@type"] !== "AggregateOffer" || serviceOffers.lowPrice !== "0") {
+        issues.push(
+          `Service offers is not an AggregateOffer with lowPrice "0" (got ${JSON.stringify(serviceOffers?.["@type"])}, lowPrice ${JSON.stringify(serviceOffers?.lowPrice)})`,
+        );
+      }
+      const aggOffers = Array.isArray(serviceOffers?.offers) ? (serviceOffers!.offers as Record<string, unknown>[]) : [];
+      if (!aggOffers.some((o) => o.price === "0" && /trial/i.test(String(o.name)))) {
+        issues.push("Service AggregateOffer does not contain the 0 THB trial Offer");
+      }
+      if (!(Number(serviceOffers?.highPrice) > 0) || serviceOffers?.offerCount !== aggOffers.length) {
+        issues.push(
+          `Service AggregateOffer highPrice ${JSON.stringify(serviceOffers?.highPrice)} / offerCount ${JSON.stringify(serviceOffers?.offerCount)} disagree with its ${aggOffers.length} offers`,
+        );
+      }
+      for (const o of [...catalogOffers, ...((serviceOffers?.offers as Record<string, unknown>[]) ?? [])]) {
+        if (/free\b[^.]{0,20}\blesson|complimentary lesson|first lesson (is )?free/i.test(`${o.name} ${o.description}`)) {
+          issues.push(`Offer ${JSON.stringify(o.name)} calls the trial a "free lesson"`);
+        }
+      }
+      // LessonsFaq.a2 takes ICU price arguments; a missing argument renders
+      // the raw placeholder or the key path into visible text and FAQPage.
+      const faq = nodes.find((n) => typeIs(n, "FAQPage"));
+      const answers = (Array.isArray(faq?.mainEntity) ? (faq!.mainEntity as Record<string, unknown>[]) : []).map(
+        (q) => String((q.acceptedAnswer as Record<string, unknown> | undefined)?.text ?? ""),
+      );
+      if (answers.length === 0) issues.push("no FAQPage answers");
+      if (answers.some((a) => /\{[a-zA-Z]+\}|LessonsFaq\./.test(a))) {
+        issues.push("a FAQPage answer carries an unresolved {placeholder} or LessonsFaq key");
+      }
+      // The meta description and the stat chips take the same arguments.
+      const unresolved = /\{(hourly|tenHourTotal|tenHourRate|fiftyHourTotal|fiftyHourRate|groupHourly|groupLow|groupHigh)\}|\bLessons(Faq)?\.[a-z][A-Za-z0-9]*/;
+      const metaDescription = (body.match(/<meta name="description" content="([^"]*)"/) ?? [])[1] ?? "";
+      if (!metaDescription || unresolved.test(metaDescription)) {
+        issues.push(`meta description is missing or unresolved: ${JSON.stringify(metaDescription.slice(0, 80))}`);
+      }
+      if (unresolved.test(body.replace(/<script[\s\S]*?<\/script>/g, ""))) {
+        issues.push("visible markup carries an unresolved price {placeholder} or Lessons key path");
       }
 
       // Visible: the coaches section and the trial callout, with the trial
@@ -5788,12 +6064,22 @@ async function runLlmDiscoverabilityTests() {
       issues.push("anti-vacuity: 0 published EN FAQ entries in data/faq-pages.ts");
     else if (printed !== enFaqs.length)
       issues.push(`printed ${printed} FAQ pages, data has ${enFaqs.length} published EN entries`);
+    // Entries carrying {{lesson…}} fact tokens print the resolved figure, which
+    // follows the POS catalog, so each token is matched as a number and every
+    // other character must still match exactly. A token left unresolved fails
+    // here too: "{{" is not a digit.
+    const tokenSlot = /\\\{\\\{\w+\\\}\\\}/g;
     const missing = enFaqs
       .filter((p) => {
-        const block =
+        const block = (
           `Source: https://www.len.golf/faq/${p.slug}/\n\n` +
-          `${p.content.answer_intro}\n\n${p.content.answer_body}`;
-        return !body.includes(block.replace(/\r\n/g, "\n"));
+          `${p.content.answer_intro}\n\n${p.content.answer_body}`
+        ).replace(/\r\n/g, "\n");
+        if (!block.includes("{{")) return !body.includes(block);
+        const pattern = block
+          .replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+          .replace(tokenSlot, "\\d[\\d,]*");
+        return !new RegExp(pattern).test(body);
       })
       .map((p) => p.slug);
     if (missing.length > 0)
@@ -5825,23 +6111,165 @@ async function runLlmDiscoverabilityTests() {
     fail("GET /robots.txt", `fetch error: ${(err as Error).message}`);
   }
 
-  // 3) LocalBusiness schema opening hours are consistent (regression guard: 09:00, not stale 10:00)
-  try {
-    const res = await fetch(`${BASE}/`, { redirect: "follow" });
-    const body = await res.text();
-    const issues: string[] = [];
-    if (!body.includes('"opens":"09:00"'))
-      issues.push('LocalBusiness schema missing "opens":"09:00"');
-    if (body.includes('"opens":"10:00"'))
-      issues.push('stale "opens":"10:00" still present');
-    if (issues.length > 0)
-      fail("LocalBusiness opening hours", issues.join("; "));
-    else pass("LocalBusiness opening hours (09:00, consistent with site copy)");
-  } catch (err) {
-    fail(
-      "LocalBusiness opening hours",
-      `fetch error: ${(err as Error).message}`,
-    );
+  // 3) Business hours, geo and identity agree with BUSINESS_INFO in EVERY
+  // JSON-LD node, in BOTH hours spellings. This used to be a substring check
+  // for '"opens":"10:00"', which only matches the openingHoursSpecification
+  // form. All 85 /location/* pages shipped the TEXT form ("openingHours":
+  // "Mo-Su 10:00-23:00", from location_pages.schema_markup) and stayed green
+  // (measured 2026-10-07); the check also fetched only `/`, which renders no
+  // DB node. Now: every node on both pages is walked, nested ones too, and
+  // each hours statement in either form must say 09:00-23:00.
+  //
+  // The /location/ page is load-bearing: it is the only route that ever
+  // rendered a DB-sourced business node. It now renders a WebPage built by
+  // getLocationWebPageJsonLd, and the checks below pin that shape, so moving
+  // the page back to printing the DB blob goes red on the missing WebPage
+  // and on the extra id-less business node, whatever the blob says.
+  {
+    const { BUSINESS_INFO, SITE_URL } = await import("../lib/constants");
+    const ENTITY_ID = `${SITE_URL}/#organization`;
+    const OPENS = "09:00";
+    const CLOSES = "23:00";
+    const LOCATION_PAGE = "/location/golf-near-sathorn/";
+    const HOURS_PAGES = ["/", LOCATION_PAGE];
+    // Pinned by identity, not length: a counter compared to the list's own
+    // length passed with the list cut to ["/"] while the /location/ page
+    // rendered the DB blob (measured). The location branch is keyed on the
+    // same constant and counted, so renaming its condition cannot skip it.
+    for (const required of ["/", "/location/golf-near-sathorn/"]) {
+      if (!HOURS_PAGES.includes(required))
+        fail("Business hours/geo/identity JSON-LD", `required page ${required} is not in HOURS_PAGES`);
+    }
+    let pagesJudged = 0;
+    let locationBranchJudged = 0;
+    for (const path of HOURS_PAGES) {
+      const label = `Business hours/geo/identity JSON-LD on ${path}`;
+      try {
+        const res = await fetch(`${BASE}${path}`, { redirect: "manual" });
+        const body = await res.text();
+        const issues: string[] = [];
+        if (res.status !== 200) issues.push(`expected 200, got ${res.status}`);
+        // Raw-string guards first: they still fire if a block fails to parse.
+        if (body.includes('"opens":"10:00"')) issues.push('stale "opens":"10:00" present');
+        if (/"openingHours":\s*(?:\[[^\]]*)?"[^"]*10:00/.test(body))
+          issues.push('stale "openingHours" text form with 10:00 present');
+
+        // Match on the opening TAG only. Next's inline RSC payload scripts
+        // also contain the text "application/ld+json" (they serialize the
+        // tree), and they are not JSON, so a body-wide match would report
+        // them as unparseable blocks.
+        const chunks = body
+          .split("<script")
+          .filter((c) => c.slice(0, c.indexOf(">")).includes("application/ld+json"));
+        const blocks: unknown[] = [];
+        for (const chunk of chunks) {
+          const start = chunk.indexOf(">") + 1;
+          const end = chunk.indexOf("</script>");
+          try {
+            blocks.push(JSON.parse(chunk.slice(start, end)));
+          } catch {
+            issues.push("an application/ld+json block does not parse");
+          }
+        }
+        // Every object at any depth, so a nested node (a @graph member, a
+        // publisher, an `about`) cannot hide a stale value.
+        const objects: Record<string, unknown>[] = [];
+        const walk = (v: unknown) => {
+          if (Array.isArray(v)) v.forEach(walk);
+          else if (v && typeof v === "object") {
+            objects.push(v as Record<string, unknown>);
+            Object.values(v as Record<string, unknown>).forEach(walk);
+          }
+        };
+        blocks.forEach(walk);
+        const typeIs = (n: Record<string, unknown>, t: string) =>
+          Array.isArray(n["@type"]) ? (n["@type"] as unknown[]).includes(t) : n["@type"] === t;
+
+        let hoursStatements = 0;
+        for (const o of objects) {
+          const text = o.openingHours;
+          for (const h of Array.isArray(text) ? text : text === undefined ? [] : [text]) {
+            hoursStatements++;
+            // EVERY range in the string: "Mo-Fr 09:00-23:00, Sa-Su 09:00-22:00"
+            // passed a first-match read (measured).
+            const ranges = [...String(h).matchAll(/(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})/g)];
+            if (ranges.length === 0 || ranges.some((m) => m[1] !== OPENS || m[2] !== CLOSES))
+              issues.push(`openingHours "${String(h)}" is not ${OPENS}-${CLOSES}`);
+          }
+          const spec = o.openingHoursSpecification;
+          for (const sp of Array.isArray(spec) ? spec : spec === undefined ? [] : [spec]) {
+            hoursStatements++;
+            const r = sp as Record<string, unknown>;
+            if (r.opens !== OPENS || r.closes !== CLOSES)
+              issues.push(`openingHoursSpecification ${String(r.opens)}-${String(r.closes)} is not ${OPENS}-${CLOSES}`);
+          }
+          // Every coordinate pair on these two pages must be the canonical
+          // point: neither page describes any other place. Read from ANY
+          // object holding latitude/longitude (a GeoCoordinates, or a node
+          // stating them directly), not only nodes named LENGOLF, which let a
+          // nested Place with another name carry the old point (measured).
+          // The DB blobs carried 13.7437,100.5436, ~59 m off.
+          if (o.latitude !== undefined || o.longitude !== undefined) {
+            if (Number(o.latitude) !== BUSINESS_INFO.coordinates.lat || Number(o.longitude) !== BUSINESS_INFO.coordinates.lng)
+              issues.push(`coordinates ${String(o.latitude)},${String(o.longitude)} are not BUSINESS_INFO.coordinates`);
+          }
+          // Anything carrying the business '@id' is merged into one entity by
+          // consumers, so its url must be the business URL, not a page URL.
+          if (o["@id"] === ENTITY_ID && o.url !== undefined && o.url !== SITE_URL)
+            issues.push(`node with '@id' ${ENTITY_ID} has url ${String(o.url)}, expected ${SITE_URL}`);
+        }
+        // Anti-vacuity: the layout's EntertainmentBusiness states hours on
+        // every page, so zero statements means the walk saw nothing.
+        if (hoursStatements === 0) issues.push("no opening-hours statement found in any JSON-LD node");
+        // ...and the walk must have gone below the top level: the publisher
+        // is nested under WebSite, and a top-level-only walk kept the hours
+        // count at 1 while never reading it (measured).
+        if (!objects.some((o) => typeIs(o, "Organization") && o["@id"] === ENTITY_ID))
+          issues.push(`walk never reached the nested publisher Organization with '@id' ${ENTITY_ID}`);
+
+        const top = blocks.filter((b): b is Record<string, unknown> => !!b && typeof b === "object" && !Array.isArray(b));
+        if (!top.some((b) => typeIs(b, "EntertainmentBusiness") && b["@id"] === ENTITY_ID))
+          issues.push(`no EntertainmentBusiness with '@id' ${ENTITY_ID}`);
+        if (path === LOCATION_PAGE) {
+          locationBranchJudged++;
+          const pageUrl = `${SITE_URL}${path}`;
+          const wp = top.find((b) => typeIs(b, "WebPage"));
+          if (!wp) issues.push("no WebPage node (getLocationWebPageJsonLd)");
+          else {
+            if (wp.url !== pageUrl || wp["@id"] !== pageUrl)
+              issues.push(`WebPage url/@id ${String(wp.url)} / ${String(wp["@id"])}, expected ${pageUrl}`);
+            const about = wp.about as Record<string, unknown> | undefined;
+            if (about?.["@id"] !== ENTITY_ID) issues.push(`WebPage.about '@id' is ${String(about?.["@id"])}, expected ${ENTITY_ID}`);
+          }
+          // The DB blob was an id-less LocalBusiness. Any node, at any depth,
+          // NAMED as the business, other than the WebSite and this WebPage, is
+          // a statement about the business and must carry the shared '@id';
+          // without it it is a second, unlinked LENGOLF entity. Keyed on the
+          // name, not a type list: a list of LocalBusiness/EntertainmentBusiness
+          // let an id-less SportsActivityLocation through, and a top-level-only
+          // read let one nested under `mentions` through (both measured).
+          const stray = objects.filter(
+            (b) =>
+              b.name === BUSINESS_INFO.name &&
+              !typeIs(b, "WebSite") &&
+              !typeIs(b, "WebPage") &&
+              b["@id"] !== ENTITY_ID,
+          );
+          if (stray.length > 0) issues.push(`${stray.length} business node(s) without '@id' ${ENTITY_ID}`);
+        } else if (!body.includes(`"opens":"${OPENS}"`)) {
+          issues.push(`LocalBusiness schema missing "opens":"${OPENS}"`);
+        }
+        if (issues.length > 0) fail(label, issues.join("; "));
+        else pass(`${label} (${hoursStatements} hours statement(s), all ${OPENS}-${CLOSES})`);
+      } catch (err) {
+        fail(label, `fetch error: ${(err as Error).message}`);
+      }
+      pagesJudged++;
+    }
+    if (pagesJudged !== HOURS_PAGES.length)
+      fail("Business hours/geo/identity JSON-LD", `judged ${pagesJudged} of ${HOURS_PAGES.length} pages`);
+    if (locationBranchJudged !== 1)
+      fail("Business hours/geo/identity JSON-LD", `the /location/ checks ran ${locationBranchJudged} time(s), expected 1`);
   }
 
   // 4) Visible FAQ copy must match the corrected hours (no stale "10 AM" opening on the blog FAQ)
@@ -6155,7 +6583,15 @@ async function runLlmDiscoverabilityTests() {
   } catch (err) {
     fail("FAQ dateModified", `fetch error: ${(err as Error).message}`);
   }
+  llmTestsCompleted = true;
 }
+
+/**
+ * Set on the LAST line of runLlmDiscoverabilityTests and checked by main(),
+ * the seoTestsCompleted pattern. Measured: `if (issues.length > 0) return;`
+ * inside the hours block skipped every later H check and exited green.
+ */
+let llmTestsCompleted = false;
 
 // ── I) Translated-guide/FAQ registry consistency ─────────────────────
 // The middleware allowlist (lib/translated-routes.ts) cannot import the
@@ -6903,14 +7339,14 @@ async function runFaqRegistryLivenessTests() {
           );
           continue;
         }
-        // FAQ answers are rendered verbatim — the route never calls
-        // interpolateFacts (only /guide/ and llms.txt do). A {{token}}
-        // copied in from a guide entry would therefore ship raw to the
-        // reader with nothing throwing, so assert its absence here.
+        // The FAQ route resolves {{token}}s (interpolateFactsDeep), and an
+        // unknown name throws at build, but a malformed token such as
+        // {{name} } matches no pattern and ships raw with nothing throwing,
+        // so assert its absence here.
         if (body.includes("{{")) {
           fail(
             `Unresolved fact token rendered on ${target}`,
-            "body contains '{{' — FAQ entries must use price LITERALS; the FAQ route never interpolates.",
+            "body contains '{{': a malformed or unresolved {{token}} in the entry (tokens must be {{name}} with a name from getFactTokens).",
           );
           continue;
         }
@@ -7033,13 +7469,13 @@ async function runSeoSectionRegistryTests() {
             );
             continue;
           }
-          // Same inverse-of-/guide/ rule as L4: none of these four routes
-          // calls interpolateFacts, so a {{token}} copied in from a guide
-          // entry ships raw to the reader with nothing throwing.
+          // /cost/ resolves {{token}}s (interpolateFactsDeep); /activities/,
+          // /best/ and /hotels/ do not, so a token copied in there ships raw.
+          // A malformed token ships raw on /cost/ too. Assert absence on all.
           if (body.includes("{{")) {
             fail(
               `Unresolved fact token rendered on ${target}`,
-              `body contains '{{' — /${prefix}/ entries must use price LITERALS; the route never interpolates.`,
+              `body contains '{{': an unresolved {{token}} (/${prefix}/ resolves tokens only on /cost/, and only well-formed ones).`,
             );
             continue;
           }
@@ -8829,7 +9265,13 @@ const MIN_RAW_HOSTILE_PATHS = 10;
  *  2026-09-24. At the true value, so a filter that silently drops pages goes
  *  red. It is a floor, so a NEW routeTests/seoTests entry adds slack until
  *  this is raised with it; lower it only when an entry is removed. */
-const MIN_IMAGE_PAGES = 482;
+// +2 on 2026-10-11 for /junior-golf-academy/ and /th/junior-golf-academy/.
+// +2 on 2026-10-18 for /line/ and /th/line/.
+// +5 on 2026-10-18 for /{,th,ja,ko,zh}/cost/golf-lesson-prices-bangkok/.
+// +14 on 2026-10-18 for the pricing guide and golf-cost guide in five locales,
+// the EN beginner and best-way FAQ pages, the EN non-golfers guide and the
+// th lessons-coaches guide.
+const MIN_IMAGE_PAGES = 505;
 /** Used-club detail pages reached from the listing. DB rows (43 on
  *  2026-09-24), so a floor of one rather than an exact count. Today they add
  *  no pair the listing lacks (the listing shows every club's photo); the crawl
@@ -8847,12 +9289,22 @@ const CODE_ONLY_FOLDERS = new Set([
   "events",
   "golf",
   "icons",
+  "junior-academy",
 ]);
 /** Distinct (src, q) pairs under CODE_ONLY_FOLDERS. Measured 98 on 2026-09-24
  *  (branding 6, venue 10, menus 4, lessons 36, events 25, golf 11, icons 6)
  *  out of 173 in total. Floored on the code-only subset because a floor on the
  *  total let up to 75 DB-driven pairs stand in for lost code-owned ones: an
- *  extractor that dropped lessons/ and events/ passed at 112 (measured). */
+ *  extractor that dropped lessons/ and events/ passed at 112 (measured).
+ *  100 since 2026-10-11: junior-academy/ added the hero poster and the video
+ *  poster frame, both at q=75 (its /lessons/ callout reuses
+ *  lessons/student-kids-02.jpg, an existing pair). 99 since 2026-10-13: the
+ *  redesign dropped the poster from the page, leaving one junior-academy/
+ *  pair, the hero image (the reel's first frame, reel-hero-frame0.jpg).
+ *  Its three photos are lessons/student-kids-0{1,2,3}.jpg at the default
+ *  q=75, pairs the /lessons/ gallery already renders.
+ *  98 since 2026-10-25: the /golf bay card dropped the Uneekor logo
+ *  (branding/uneekor-logo.png), which no other page rendered. */
 const MIN_CODE_FOLDER_PAIRS = 98;
 
 /** `/_next/image/?url=…&amp;w=…&amp;q=…`, in any src, srcSet or imageSrcSet. */
@@ -9191,6 +9643,9 @@ async function main() {
   await runNotFoundTests();
   await runUnknownSlugCacheTests();
   await runLlmDiscoverabilityTests();
+  if (!llmTestsCompleted) {
+    fail("H) section completion", "runLlmDiscoverabilityTests returned before its last check ran");
+  }
   await runLessonsCoachTests();
   await runRegistryConsistencyTests();
   await runRegionHubRegistryConsistencyTests();

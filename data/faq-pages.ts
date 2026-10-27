@@ -14,8 +14,9 @@ const now = "2026-08-12T00:00:00.000Z"
 // Thai local format (096-668-2335) in that file. Decide then between E.164 in
 // the prose and normalising it in app/llms-full.txt/route.ts (the smoke
 // check's verbatim-block assertion would need the same normalisation).
-// (2) Never use {{fact}} tokens: this route, like the FAQ page itself,
-// prints the text without interpolateFacts.
+// (2) {{fact}} tokens are resolved (interpolateFactsDeep) both here and on
+// the FAQ page itself, app/[locale]/faq/[slug]/page.tsx. An unknown name
+// throws at build; a malformed one ships raw, which smoke catches.
 
 export const faqPages: FaqSeoPage[] = [
   {
@@ -37,7 +38,7 @@ export const faqPages: FaqSeoPage[] = [
       answer_intro:
         'Yes, you can rent golf clubs in Bangkok — both at indoor golf venues and for use on outdoor courses. At LENGOLF, free standard club sets are included with every simulator bay booking. For premium equipment, indoor rentals start from 150 THB/hour and course rentals from 1,200 THB/day — with same-day delivery to any golf course or hotel in Bangkok.',
       answer_body:
-        'Bangkok has several options for renting golf clubs, depending on whether you\'re playing indoors or heading to an outdoor course.\n\n**At LENGOLF (Indoor Golf Simulator)**\nEvery bay booking includes free standard club sets (men\'s and ladies\') with driver, irons (5–PW), and putter. For better equipment, three upgrade tiers are available:\n- **Standard (Free):** House set included with every booking — simulator use only\n- **Premium (from 150 THB/hr):** Callaway Warbird (men\'s) or Callaway REVA (women\'s) full sets\n- **Premium+ (from 250 THB/hr):** Callaway Paradym Forged Carbon tour-grade set with Ventus TR shafts and Jaws Raw wedges (men\'s only)\n\nPremium and Premium+ sets can be used in-house or taken to any Bangkok golf course. Course rental starts at 1,200 THB/day (Premium) or 1,800 THB/day (Premium+), with multi-day packages up to 50% off. Same-day delivery anywhere in Bangkok for 500 THB.\n\n**At Outdoor Golf Courses**\nMost Bangkok-area courses offer club rental, typically 1,000–2,500 THB per round, with around 1,500 THB being common. Quality varies significantly — some courses only offer older or heavily used sets.\n\n**Standalone Rental Services**\nA few companies in Bangkok specialize in golf club rental and delivery. Prices typically start around 800–1,500 THB per day for a decent set.\n\n**What We Recommend**\nFor tourists, renting at LENGOLF is the most cost-effective option — especially if you want to test clubs on a simulator before heading to a course:\n- Free standard clubs with every booking\n- Premium sets from just 150 THB/hour\n- Delivery to your hotel or golf course (500 THB)\n- Try before you buy — test any club on our simulators',
+        'Bangkok has several options for renting golf clubs, depending on whether you\'re playing indoors or heading to an outdoor course.\n\n**At LENGOLF (Indoor Golf Simulator)**\nEvery bay booking includes free standard club sets (men\'s and ladies\') with driver, irons (5–PW), and putter. For better equipment, three upgrade tiers are available:\n- **Standard (Free):** House set included with every booking — simulator use only\n- **Premium (from 150 THB/hr):** Callaway Warbird (men\'s) or Callaway REVA (women\'s) full sets\n- **Premium+ (from 250 THB/hr):** Callaway Paradym Forged Carbon tour-grade set with Ventus TR shafts and Jaws Raw wedges (men\'s only)\n\nPremium and Premium+ sets can be used in-house or taken to any Bangkok golf course. Course rental starts at 1,200 THB/day (Premium) or 1,800 THB/day (Premium+), with multi-day packages up to 50% off. Same-day delivery to your hotel or course from 500 THB.\n\n**At Outdoor Golf Courses**\nMost Bangkok-area courses offer club rental, typically 1,000–2,500 THB per round, with around 1,500 THB being common. Quality varies significantly — some courses only offer older or heavily used sets.\n\n**Standalone Rental Services**\nA few companies in Bangkok specialize in golf club rental and delivery. Prices typically start around 800–1,500 THB per day for a decent set.\n\n**What We Recommend**\nFor tourists, renting at LENGOLF is the most cost-effective option — especially if you want to test clubs on a simulator before heading to a course:\n- Free standard clubs with every booking\n- Premium sets from just 150 THB/hour\n- Delivery to your hotel or golf course (from 500 THB)\n- Try before you buy — test any club on our simulators',
       related_questions: [
         { slug: 'should-i-bring-golf-clubs-to-thailand-or-rent', question: 'Should I Bring My Golf Clubs to Thailand or Rent?' },
         { slug: 'cost-to-fly-with-golf-clubs-to-thailand', question: 'How Much Does It Cost to Fly with Golf Clubs to Thailand?' },
@@ -66,7 +67,7 @@ export const faqPages: FaqSeoPage[] = [
       answer_intro:
         'เช่าไม้กอล์ฟในกรุงเทพฯ ได้แน่นอน ทั้งที่สถานที่กอล์ฟในร่มและสำหรับใช้เล่นในสนามกลางแจ้ง ที่ LENGOLF มีชุดไม้มาตรฐานให้ฟรีในทุกการจองเบย์ซิมมูเลเตอร์ ส่วนอุปกรณ์ระดับพรีเมียม การเช่าในร่มเริ่มต้นที่ 150 บาท/ชั่วโมง และการเช่าไปใช้ในสนามเริ่มต้นที่ 1,200 บาท/วัน พร้อมบริการจัดส่งถึงสนามกอล์ฟหรือสถานที่ที่คุณสะดวกภายในวันเดียวกันทั่วกรุงเทพฯ',
       answer_body:
-        'กรุงเทพฯ มีตัวเลือกการเช่าไม้กอล์ฟหลายแบบ ขึ้นอยู่กับว่าคุณจะเล่นในร่มหรือจะออกไปเล่นสนามกลางแจ้ง\n\n**ที่ LENGOLF (กอล์ฟซิมมูเลเตอร์ในร่ม)**\nทุกการจองเบย์รวมชุดไม้มาตรฐานให้ฟรี (ทั้งชุดผู้ชายและผู้หญิง) ประกอบด้วยไดรเวอร์ เหล็ก (5-PW) และพัตเตอร์ หากต้องการอุปกรณ์ที่ดีกว่านี้ มีให้เลือกอัปเกรด 3 ระดับ\n- **มาตรฐาน (ฟรี):** ชุดไม้ของทางร้านรวมอยู่ในทุกการจอง ใช้ได้เฉพาะในเบย์ซิมมูเลเตอร์\n- **พรีเมียม (เริ่มต้น 150 บาท/ชม.):** ชุดไม้เต็มชุด Callaway Warbird (ผู้ชาย) หรือ Callaway REVA (ผู้หญิง)\n- **พรีเมียมพลัส (เริ่มต้น 250 บาท/ชม.):** ชุดไม้ระดับทัวร์ Callaway Paradym Forged Carbon พร้อมก้าน Ventus TR และเวดจ์ Jaws Raw (สำหรับผู้ชายเท่านั้น)\n\nชุดพรีเมียมและพรีเมียมพลัสสามารถใช้ในร้านหรือนำไปใช้ที่สนามกอล์ฟใดก็ได้ในกรุงเทพฯ การเช่าไปใช้ในสนามเริ่มต้นที่ 1,200 บาท/วัน (พรีเมียม) หรือ 1,800 บาท/วัน (พรีเมียมพลัส) พร้อมแพ็กเกจหลายวันที่ลดสูงสุด 50 เปอร์เซ็นต์ บริการจัดส่งภายในวันเดียวกันทั่วกรุงเทพฯ ราคา 500 บาท (ข้อมูล ณ กรกฎาคม 2026)\n\n**ที่สนามกอล์ฟกลางแจ้ง**\nสนามส่วนใหญ่ในย่านกรุงเทพฯ มีบริการเช่าไม้กอล์ฟ โดยทั่วไปราคา 1,000-2,500 บาทต่อรอบ ส่วนใหญ่อยู่ที่ราว 1,500 บาท คุณภาพแตกต่างกันมาก บางสนามมีเฉพาะไม้เก่าหรือผ่านการใช้งานหนักเท่านั้น\n\n**บริการเช่าไม้กอล์ฟแบบเฉพาะทาง**\nมีบริษัทไม่กี่แห่งในกรุงเทพฯ ที่เชี่ยวชาญด้านการเช่าไม้กอล์ฟและจัดส่ง ราคาโดยทั่วไปเริ่มต้นประมาณ 800-1,500 บาทต่อวันสำหรับชุดคุณภาพดี\n\n**คำแนะนำจากเรา**\nหากคุณไม่มีไม้กอล์ฟเป็นของตัวเอง การเช่าที่ LENGOLF เป็นตัวเลือกที่คุ้มค่าที่สุด โดยเฉพาะหากอยากลองไม้บนซิมมูเลเตอร์ก่อนออกไปเล่นสนามจริง\n- ไม้มาตรฐานฟรีในทุกการจอง\n- ชุดพรีเมียมเริ่มต้นเพียง 150 บาท/ชั่วโมง\n- จัดส่งถึงสนามกอล์ฟหรือสถานที่ที่สะดวก (500 บาท)\n- ลองก่อนซื้อ ทดลองไม้ทุกแบบได้บนซิมมูเลเตอร์ของเรา',
+        'กรุงเทพฯ มีตัวเลือกการเช่าไม้กอล์ฟหลายแบบ ขึ้นอยู่กับว่าคุณจะเล่นในร่มหรือจะออกไปเล่นสนามกลางแจ้ง\n\n**ที่ LENGOLF (กอล์ฟซิมมูเลเตอร์ในร่ม)**\nทุกการจองเบย์รวมชุดไม้มาตรฐานให้ฟรี (ทั้งชุดผู้ชายและผู้หญิง) ประกอบด้วยไดรเวอร์ เหล็ก (5-PW) และพัตเตอร์ หากต้องการอุปกรณ์ที่ดีกว่านี้ มีให้เลือกอัปเกรด 3 ระดับ\n- **มาตรฐาน (ฟรี):** ชุดไม้ของทางร้านรวมอยู่ในทุกการจอง ใช้ได้เฉพาะในเบย์ซิมมูเลเตอร์\n- **พรีเมียม (เริ่มต้น 150 บาท/ชม.):** ชุดไม้เต็มชุด Callaway Warbird (ผู้ชาย) หรือ Callaway REVA (ผู้หญิง)\n- **พรีเมียมพลัส (เริ่มต้น 250 บาท/ชม.):** ชุดไม้ระดับทัวร์ Callaway Paradym Forged Carbon พร้อมก้าน Ventus TR และเวดจ์ Jaws Raw (สำหรับผู้ชายเท่านั้น)\n\nชุดพรีเมียมและพรีเมียมพลัสสามารถใช้ในร้านหรือนำไปใช้ที่สนามกอล์ฟใดก็ได้ในกรุงเทพฯ การเช่าไปใช้ในสนามเริ่มต้นที่ 1,200 บาท/วัน (พรีเมียม) หรือ 1,800 บาท/วัน (พรีเมียมพลัส) พร้อมแพ็กเกจหลายวันที่ลดสูงสุด 50 เปอร์เซ็นต์ บริการจัดส่งภายในวันเดียวกันทั่วกรุงเทพฯ เริ่มต้น 500 บาท (ข้อมูล ณ กรกฎาคม 2026)\n\n**ที่สนามกอล์ฟกลางแจ้ง**\nสนามส่วนใหญ่ในย่านกรุงเทพฯ มีบริการเช่าไม้กอล์ฟ โดยทั่วไปราคา 1,000-2,500 บาทต่อรอบ ส่วนใหญ่อยู่ที่ราว 1,500 บาท คุณภาพแตกต่างกันมาก บางสนามมีเฉพาะไม้เก่าหรือผ่านการใช้งานหนักเท่านั้น\n\n**บริการเช่าไม้กอล์ฟแบบเฉพาะทาง**\nมีบริษัทไม่กี่แห่งในกรุงเทพฯ ที่เชี่ยวชาญด้านการเช่าไม้กอล์ฟและจัดส่ง ราคาโดยทั่วไปเริ่มต้นประมาณ 800-1,500 บาทต่อวันสำหรับชุดคุณภาพดี\n\n**คำแนะนำจากเรา**\nหากคุณไม่มีไม้กอล์ฟเป็นของตัวเอง การเช่าที่ LENGOLF เป็นตัวเลือกที่คุ้มค่าที่สุด โดยเฉพาะหากอยากลองไม้บนซิมมูเลเตอร์ก่อนออกไปเล่นสนามจริง\n- ไม้มาตรฐานฟรีในทุกการจอง\n- ชุดพรีเมียมเริ่มต้นเพียง 150 บาท/ชั่วโมง\n- จัดส่งถึงโรงแรมหรือสนามกอล์ฟ (เริ่มต้น 500 บาท คิดตามระยะทาง)\n- ลองก่อนซื้อ ทดลองไม้ทุกแบบได้บนซิมมูเลเตอร์ของเรา',
       related_questions: [
         { slug: 'are-rental-golf-clubs-good-enough', question: 'ไม้กอล์ฟให้เช่าคุณภาพดีพอสำหรับนักกอล์ฟจริงจังไหม' },
         { slug: '/guide/golf-club-rental-bangkok-guide', question: 'บริการเช่าไม้กอล์ฟในกรุงเทพฯ — เช่าได้ที่ไหนและราคาเท่าไหร่' },
@@ -102,7 +103,7 @@ export const faqPages: FaqSeoPage[] = [
       answer_intro:
         'バンコクではゴルフクラブをレンタルできます。インドアゴルフ施設で使う場合も、屋外コースに持ち出す場合も対応可能です。LENGOLFでは、シミュレーターベイのご予約すべてに標準クラブセットが無料で付いています。プレミアム機種をご希望なら、館内利用は1時間150THBから、コースへの持ち出しは1日1,200THBから。バンコク市内であれば、ゴルフ場でもホテルでも当日配送に対応しています（2026年7月現在）。',
       answer_body:
-        'バンコクのクラブレンタルは、インドアでプレーするか屋外コースに出るかで、選択肢が変わります。\n\n**LENGOLF（インドアゴルフシミュレーター）の場合**\nベイのご予約にはすべて、標準クラブセット（メンズ・レディース）が無料で付属します。内容はドライバー、アイアン（5〜PW）、パター。より良い道具をお使いになりたい方には、3段階のアップグレードをご用意しています。\n- **スタンダード（無料）:** すべてのご予約に含まれるハウスセット。シミュレーターでの利用のみ\n- **プレミアム（1時間150THB〜）:** Callaway Warbird（メンズ）またはCallaway REVA（レディース）のフルセット\n- **プレミアム+（1時間250THB〜）:** Ventus TRシャフトとJaws Rawウェッジを組んだツアーグレードのCallaway Paradym Forged Carbonセット（メンズのみ）\n\nプレミアムとプレミアム+は、館内でもバンコク市内のどのゴルフ場へでも持ち出してご利用いただけます。コースへの持ち出しは1日1,200THB（プレミアム）または1日1,800THB（プレミアム+）から。複数日パッケージなら最大50%オフになります。バンコク市内の当日配送は500THBです。\n\n**屋外ゴルフ場の場合**\nバンコク近郊のコースの多くはクラブレンタルを扱っており、1ラウンドあたり1,000〜2,500THB（1,500THB前後が一般的）が目安。ただし品質の差は大きく、年式の古いセットや使い込まれたセットしか置いていないコースもあります。\n\n**レンタル専門サービス**\nバンコクには、ゴルフクラブのレンタルと配送を専門に扱う会社も数社あります。しっかりしたセットで1日800〜1,500THB程度からが相場です。\n\n**おすすめの選び方**\n旅行で訪れる方には、LENGOLFでのレンタルが最も費用対効果に優れます。コースに出る前にシミュレーターでクラブを試したい方には、特に向いています。\n- ご予約ごとに標準クラブが無料\n- プレミアムセットは1時間150THBから\n- ホテルやゴルフ場への配送に対応（500THB）\n- 試してから買える——気になるクラブはシミュレーターで試打できます',
+        'バンコクのクラブレンタルは、インドアでプレーするか屋外コースに出るかで、選択肢が変わります。\n\n**LENGOLF（インドアゴルフシミュレーター）の場合**\nベイのご予約にはすべて、標準クラブセット（メンズ・レディース）が無料で付属します。内容はドライバー、アイアン（5〜PW）、パター。より良い道具をお使いになりたい方には、3段階のアップグレードをご用意しています。\n- **スタンダード（無料）:** すべてのご予約に含まれるハウスセット。シミュレーターでの利用のみ\n- **プレミアム（1時間150THB〜）:** Callaway Warbird（メンズ）またはCallaway REVA（レディース）のフルセット\n- **プレミアム+（1時間250THB〜）:** Ventus TRシャフトとJaws Rawウェッジを組んだツアーグレードのCallaway Paradym Forged Carbonセット（メンズのみ）\n\nプレミアムとプレミアム+は、館内でもバンコク市内のどのゴルフ場へでも持ち出してご利用いただけます。コースへの持ち出しは1日1,200THB（プレミアム）または1日1,800THB（プレミアム+）から。複数日パッケージなら最大50%オフになります。バンコク市内の当日配送は500THB〜です。\n\n**屋外ゴルフ場の場合**\nバンコク近郊のコースの多くはクラブレンタルを扱っており、1ラウンドあたり1,000〜2,500THB（1,500THB前後が一般的）が目安。ただし品質の差は大きく、年式の古いセットや使い込まれたセットしか置いていないコースもあります。\n\n**レンタル専門サービス**\nバンコクには、ゴルフクラブのレンタルと配送を専門に扱う会社も数社あります。しっかりしたセットで1日800〜1,500THB程度からが相場です。\n\n**おすすめの選び方**\n旅行で訪れる方には、LENGOLFでのレンタルが最も費用対効果に優れます。コースに出る前にシミュレーターでクラブを試したい方には、特に向いています。\n- ご予約ごとに標準クラブが無料\n- プレミアムセットは1時間150THBから\n- ホテルやゴルフ場への配送に対応（500THB〜）\n- 試してから買える——気になるクラブはシミュレーターで試打できます',
       related_questions: [
         { slug: 'are-rental-golf-clubs-good-enough', question: 'レンタルクラブでも十分？ — 本格派ゴルファーのための品質の見極め方' },
         { slug: '/guide/golf-club-rental-bangkok-guide', question: 'バンコクのゴルフクラブレンタル — 借りられる場所と費用の目安' },
@@ -138,7 +139,7 @@ export const faqPages: FaqSeoPage[] = [
       answer_intro:
         '방콕에서 골프 클럽은 대여할 수 있어요. 실내 골프 시설에서 쓰는 경우도, 실외 코스로 가져가는 경우도 모두 가능해요. LENGOLF에서는 시뮬레이터 베이를 예약하면 기본 클럽 세트가 무료로 포함돼요. 프리미엄 장비를 원하신다면 실내 이용은 시간당 150바트부터, 코스 반출은 하루 1,200바트부터고, 방콕 시내라면 골프장이든 호텔이든 당일 배송도 가능해요 (2026년 7월 기준).',
       answer_body:
-        '방콕의 클럽 대여는 실내에서 칠지, 실외 코스로 나갈지에 따라 선택지가 달라져요.\n\n**LENGOLF(실내 골프 시뮬레이터)에서**\n베이 예약에는 모두 기본 클럽 세트(남성용·여성용)가 무료로 포함돼요. 드라이버, 아이언(5~PW), 퍼터로 구성돼 있어요. 더 좋은 장비를 원하신다면 세 가지 업그레이드가 준비돼 있어요.\n- **스탠더드(무료):** 모든 예약에 포함되는 하우스 세트. 시뮬레이터 이용 전용\n- **프리미엄(시간당 150바트~):** Callaway Warbird(남성용) 또는 Callaway REVA(여성용) 풀세트\n- **프리미엄+(시간당 250바트~):** Ventus TR 샤프트와 Jaws Raw 웨지를 조합한 투어 등급 Callaway Paradym Forged Carbon 세트(남성용만)\n\n프리미엄과 프리미엄+ 세트는 매장 안에서 쓰거나 방콕의 어느 골프장으로든 가져갈 수 있어요. 코스 반출은 하루 1,200바트(프리미엄) 또는 1,800바트(프리미엄+)부터고, 여러 날 패키지는 최대 50% 할인돼요. 방콕 시내 당일 배송은 500바트예요.\n\n**실외 골프장에서**\n방콕 근교 코스 대부분이 클럽 대여를 운영하고, 1라운드에 1,000~2,500바트 정도(보통 1,500바트 안팎)예요. 다만 품질 편차가 커서, 연식이 오래됐거나 많이 사용된 세트만 갖춘 코스도 있어요.\n\n**전문 대여 서비스**\n방콕에는 골프 클럽 대여와 배송을 전문으로 하는 업체도 몇 곳 있어요. 쓸 만한 세트 기준으로 하루 800~1,500바트 정도부터가 일반적이에요.\n\n**추천하는 선택**\n여행으로 오신 분에게는 LENGOLF에서 빌리는 편이 가장 경제적이에요. 코스에 나가기 전에 시뮬레이터로 클럽을 시타해 보고 싶은 분께 특히 잘 맞아요.\n- 예약마다 기본 클럽 무료\n- 프리미엄 세트는 시간당 150바트부터\n- 호텔이나 골프장으로 배송 (500바트)\n- 사기 전에 먼저 시타 — 관심 있는 클럽은 시뮬레이터에서 쳐 볼 수 있어요',
+        '방콕의 클럽 대여는 실내에서 칠지, 실외 코스로 나갈지에 따라 선택지가 달라져요.\n\n**LENGOLF(실내 골프 시뮬레이터)에서**\n베이 예약에는 모두 기본 클럽 세트(남성용·여성용)가 무료로 포함돼요. 드라이버, 아이언(5~PW), 퍼터로 구성돼 있어요. 더 좋은 장비를 원하신다면 세 가지 업그레이드가 준비돼 있어요.\n- **스탠더드(무료):** 모든 예약에 포함되는 하우스 세트. 시뮬레이터 이용 전용\n- **프리미엄(시간당 150바트~):** Callaway Warbird(남성용) 또는 Callaway REVA(여성용) 풀세트\n- **프리미엄+(시간당 250바트~):** Ventus TR 샤프트와 Jaws Raw 웨지를 조합한 투어 등급 Callaway Paradym Forged Carbon 세트(남성용만)\n\n프리미엄과 프리미엄+ 세트는 매장 안에서 쓰거나 방콕의 어느 골프장으로든 가져갈 수 있어요. 코스 반출은 하루 1,200바트(프리미엄) 또는 1,800바트(프리미엄+)부터고, 여러 날 패키지는 최대 50% 할인돼요. 방콕 시내 당일 배송은 500바트부터예요.\n\n**실외 골프장에서**\n방콕 근교 코스 대부분이 클럽 대여를 운영하고, 1라운드에 1,000~2,500바트 정도(보통 1,500바트 안팎)예요. 다만 품질 편차가 커서, 연식이 오래됐거나 많이 사용된 세트만 갖춘 코스도 있어요.\n\n**전문 대여 서비스**\n방콕에는 골프 클럽 대여와 배송을 전문으로 하는 업체도 몇 곳 있어요. 쓸 만한 세트 기준으로 하루 800~1,500바트 정도부터가 일반적이에요.\n\n**추천하는 선택**\n여행으로 오신 분에게는 LENGOLF에서 빌리는 편이 가장 경제적이에요. 코스에 나가기 전에 시뮬레이터로 클럽을 시타해 보고 싶은 분께 특히 잘 맞아요.\n- 예약마다 기본 클럽 무료\n- 프리미엄 세트는 시간당 150바트부터\n- 호텔이나 골프장으로 배송 (500바트부터)\n- 사기 전에 먼저 시타 — 관심 있는 클럽은 시뮬레이터에서 쳐 볼 수 있어요',
       related_questions: [
         { slug: 'are-rental-golf-clubs-good-enough', question: '골프 클럽 대여, 그걸로 충분할까? — 품질 판단 기준' },
         { slug: '/guide/golf-club-rental-bangkok-guide', question: '방콕 골프 클럽 대여 — 어디서 빌리고 비용은 얼마일까' },
@@ -177,7 +178,7 @@ export const faqPages: FaqSeoPage[] = [
       answer_intro:
         '在曼谷可以租到高尔夫球杆——无论是在室内高尔夫场馆里用，还是带到室外球场去打。在LENGOLF，每一次模拟器球位预订都免费包含标准球杆套装。想用更好的装备，室内租借每小时150泰铢起，带去球场每日1,200泰铢起；只要在曼谷市内，无论球场还是酒店都能当日送达，截至2026年7月。',
       answer_body:
-        '曼谷租球杆有几种选择，取决于你是在室内打，还是要出去下真实球场。\n\n**在LENGOLF（室内高尔夫模拟器）**\n每一次球位预订都免费附带标准球杆套装（男士与女士），内含一号木、铁杆（5–PW）和推杆。想用更好的装备，还有三档升级可选：\n- **标准（免费）：** 每次预订都包含的店内套装，仅限在模拟器球位使用\n- **高级（每小时150泰铢起）：** Callaway Warbird（男士）或Callaway REVA（女士）全套\n- **高级+（每小时250泰铢起）：** 搭配Ventus TR杆身与Jaws Raw挖起杆的巡回赛级Callaway Paradym Forged Carbon套装（仅男士）\n\n高级与高级+套装既可在店内使用，也能带到曼谷任何一座球场。带去球场每日1,200泰铢（高级）或1,800泰铢（高级+）起，多日套餐最高可省50%。曼谷市内当日配送500泰铢。\n\n**在室外高尔夫球场**\n曼谷周边多数球场都提供球杆租借，一轮通常1,000–2,500泰铢（多在1,500泰铢上下）。品质差异很大，有些球场只有年代较久或使用磨损严重的套装。\n\n**专门的租借服务**\n曼谷也有几家公司专做高尔夫球杆租借与配送，像样的套装一般每日800–1,500泰铢起。\n\n**我们的建议**\n对旅行中的球友来说，在LENGOLF租借最划算——尤其是想在下场前先用模拟器试打的人：\n- 每次预订都免费提供标准球杆\n- 高级套装每小时仅150泰铢起\n- 可配送到你的酒店或球场（500泰铢）\n- 先试后买——任何一支球杆都能在我们的模拟器上试打',
+        '曼谷租球杆有几种选择，取决于你是在室内打，还是要出去下真实球场。\n\n**在LENGOLF（室内高尔夫模拟器）**\n每一次球位预订都免费附带标准球杆套装（男士与女士），内含一号木、铁杆（5–PW）和推杆。想用更好的装备，还有三档升级可选：\n- **标准（免费）：** 每次预订都包含的店内套装，仅限在模拟器球位使用\n- **高级（每小时150泰铢起）：** Callaway Warbird（男士）或Callaway REVA（女士）全套\n- **高级+（每小时250泰铢起）：** 搭配Ventus TR杆身与Jaws Raw挖起杆的巡回赛级Callaway Paradym Forged Carbon套装（仅男士）\n\n高级与高级+套装既可在店内使用，也能带到曼谷任何一座球场。带去球场每日1,200泰铢（高级）或1,800泰铢（高级+）起，多日套餐最高可省50%。曼谷市内当日配送500泰铢起。\n\n**在室外高尔夫球场**\n曼谷周边多数球场都提供球杆租借，一轮通常1,000–2,500泰铢（多在1,500泰铢上下）。品质差异很大，有些球场只有年代较久或使用磨损严重的套装。\n\n**专门的租借服务**\n曼谷也有几家公司专做高尔夫球杆租借与配送，像样的套装一般每日800–1,500泰铢起。\n\n**我们的建议**\n对旅行中的球友来说，在LENGOLF租借最划算——尤其是想在下场前先用模拟器试打的人：\n- 每次预订都免费提供标准球杆\n- 高级套装每小时仅150泰铢起\n- 可配送到你的酒店或球场（500泰铢起）\n- 先试后买——任何一支球杆都能在我们的模拟器上试打',
       related_questions: [
         { slug: 'are-rental-golf-clubs-good-enough', question: '租借的高尔夫球杆够用吗？ — 认真球友的品质判断标准' },
         { slug: '/guide/golf-club-rental-bangkok-guide', question: '曼谷高尔夫球杆租借 — 去哪里租、费用多少、如何挑选' },
@@ -1085,9 +1086,8 @@ export const faqPages: FaqSeoPage[] = [
   // Every duration traces to EN faq-7 (45–60分钟 / 1.5–2 / 2–2.5 / 2.5–3小时,
   // 9洞45分钟–1小时, 练习模式30–60分钟, 室外4–5小时, 最常见2小时, 社交2–3小时,
   // 认真练球1小时, 最少1小时起租). The LENGOLF bay range 550–950泰铢 and 最多5人
-  // carry the as-of marker 截至2026年7月; prices are LITERALS, never {{tokens}} —
-  // the FAQ route renders answer_intro/answer_body verbatim and never calls
-  // interpolateFacts. Wayfinding follows the shipped ZH form
+  // carry the as-of marker 截至2026年7月; prices are literals (the FAQ route has
+  // resolved {{tokens}} since 2026-10-18; these bay figures were not converted). Wayfinding follows the shipped ZH form
   // (The Mercury Ville，BTS Chidlom站（4号出口）). related_* mirror the EN entry;
   // all three targets are ZH-translated.
   {
@@ -1151,11 +1151,9 @@ export const faqPages: FaqSeoPage[] = [
   // indoor-venue query set (ตีกอล์ฟในร่ม / บาร์กอล์ฟในร่ม) that currently lands
   // on the EN homepage. Every figure traces to the EN entry faq-8: premium club
   // rental ~150 บาท/ชั่วโมง and the on-site glove at ~600 บาท — both carry the
-  // as-of marker. No LENGOLF price is tokenized here: the FAQ route
-  // (app/[locale]/faq/[slug]/page.tsx → components/faq/FaqPage.tsx) renders
-  // answer_intro/answer_body verbatim and never calls interpolateFacts, so a
-  // {{token}} would ship literally to the reader (only /guide/ and llms.txt
-  // interpolate). Matches all 14 shipped TH FAQ entries, which carry literals.
+  // as-of marker. No LENGOLF price is tokenized here. (Written when the FAQ
+  // route rendered answer text verbatim; since 2026-10-18 it resolves
+  // {{tokens}} with interpolateFactsDeep, so a token would now work.)
   // related_* point only at th.staticRoutes targets (lib/translated-routes.ts):
   // the two FAQ siblings, the TH dress-code guide, and /golf.
   {
@@ -1299,20 +1297,20 @@ export const faqPages: FaqSeoPage[] = [
     slug: 'can-kids-play-golf-simulators',
     title: 'Can Kids Play Golf Simulators?',
     meta_description:
-      'Yes, kids can play golf simulators. Most children aged 5+ can swing a club and enjoy the experience. LENGOLF welcomes families and offers junior golf lessons.',
+      'Yes, kids can play golf simulators. Most children can swing a junior club and enjoy it, and the LENGOLF Junior Academy teaches golf to kids aged 4 to 12.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
     category: 'general',
     locale: 'en',
-    related_slugs: ['/faq/do-i-need-experience-to-play-golf-simulator', '/activities/family-activities-bangkok', '/lessons'],
+    related_slugs: ['/faq/do-i-need-experience-to-play-golf-simulator', '/activities/family-activities-bangkok', '/junior-golf-academy', '/lessons'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-11T00:00:00.000Z',
     content: {
       answer_intro:
-        'Yes, kids can play golf simulators — and most love it. Children aged 5 and up can generally swing a club well enough to enjoy the experience. The animated ball flights, instant scoring, and game-like format make simulators more engaging for kids than a real golf course. LENGOLF welcomes families during all hours and has lighter clubs suitable for younger players.',
+        'Yes, kids can play golf simulators, and most love it. Most children aged 4 and up can swing a junior club well enough to enjoy the experience. The animated ball flights, instant scoring, and game-like format make simulators more engaging for kids than a real golf course. LENGOLF welcomes families during all hours and has lighter clubs suitable for younger players.',
       answer_body:
-        'Golf simulators are actually one of the best ways to introduce kids to golf. Here\'s what parents should know.\n\n**Why Kids Love Simulators**\n- **Instant feedback:** Kids see exactly where the ball goes on a big screen — it\'s like a video game with a real club\n- **No frustration:** Unlike a real course, there\'s no lost balls, long walks, or waiting. Hit, watch, hit again.\n- **Competitive games:** Closest-to-the-pin and longest-drive challenges work for all ages\n- **Air-conditioned comfort:** No heat exhaustion or sunburn (a real concern in Bangkok)\n\n**Age Guidelines**\n- **Under 5:** Most kids this age struggle with club weight and coordination. Better to wait.\n- **5–8 years:** Can participate and have fun, but attention spans are short. 30–60 minutes is ideal.\n- **9–12 years:** Fully capable of playing rounds and competing. Often the most enthusiastic players.\n- **Teens:** Treat it as a social activity. Great for family bonding without screen time.\n\n**Junior Golf Lessons at LENGOLF**\nAll three of our PGA-certified coaches (PRO Boss, PRO Ratchavin, and PRO Min) have junior golf development experience. They offer tailored programs to build proper fundamentals in a fun, supportive environment. Lessons start at ~1,800 THB per hour with simulator usage included.\n\n**Practical Details**\nBay rental is ~550 THB/hour for up to 5 people — the whole family can play together. Free standard clubs are provided, and we have sets suitable for smaller players. Located at Mercury Ville, BTS Chidlom (Exit 4), we\'re easy to reach and there\'s plenty to do in the surrounding mall.',
+        'Golf simulators are actually one of the best ways to introduce kids to golf. Here\'s what parents should know.\n\n**Why Kids Love Simulators**\n- **Instant feedback:** Kids see exactly where the ball goes on a big screen: it\'s like a video game with a real club\n- **No frustration:** Unlike a real course, there\'s no lost balls, long walks, or waiting. Hit, watch, hit again.\n- **Competitive games:** Closest-to-the-pin and longest-drive challenges work for all ages\n- **Air-conditioned comfort:** No heat exhaustion or sunburn (a real concern in Bangkok)\n\n**Age Guidelines**\n- **Under 5:** Standard clubs are too heavy for most kids this age, so start with junior clubs and a coach. The LENGOLF Junior Academy takes children from age 4.\n- **5–8 years:** Can participate and have fun, but attention spans are short. 30–60 minutes is ideal.\n- **9–12 years:** Fully capable of playing rounds and competing. Often the most enthusiastic players.\n- **Teens:** Treat it as a social activity. Great for family bonding without screen time.\n\n**LENGOLF Junior Academy**\nFor structured lessons, the LENGOLF Junior Academy is a 10-lesson program for kids aged 4 to 12: private 60-minute lessons with our PGA coaches, each hour half movement and games and half golf, assessments at lessons 5 and 10, Level 1 and Level 2 certificates, 5 hours of family practice time, and junior clubs provided, fitted to height. It costs 16,900 THB and is valid for 1 year.\n\n**Practical Details**\nBay rental is ~550 THB/hour for up to 5 people, so the whole family can play together. Free standard clubs are provided, and we have sets suitable for smaller players. Located at Mercury Ville, BTS Chidlom (Exit 4), we\'re easy to reach and there\'s plenty to do in the surrounding mall.',
       related_questions: [
         { slug: 'do-i-need-experience-to-play-golf-simulator', question: 'Do I Need Golf Experience to Play a Golf Simulator?' },
         { slug: 'can-beginners-play-golf-simulators', question: 'Can Beginners Play Golf Simulators?' },
@@ -1328,20 +1326,20 @@ export const faqPages: FaqSeoPage[] = [
     slug: 'can-kids-play-golf-simulators',
     title: 'เด็กเล่นกอล์ฟซิมมูเลเตอร์ได้ไหม',
     meta_description:
-      'เด็กเล่นกอล์ฟซิมมูเลเตอร์ได้แน่นอน เด็กส่วนใหญ่อายุตั้งแต่ 5 ขวบขึ้นไปสามารถสวิงไม้และสนุกกับประสบการณ์นี้ได้ LENGOLF ต้อนรับครอบครัวและมีคอร์สเรียนกอล์ฟสำหรับเยาวชนด้วย',
+      'เด็กเล่นกอล์ฟซิมมูเลเตอร์ได้แน่นอน เด็กส่วนใหญ่สวิงไม้กอล์ฟจูเนียร์และสนุกกับประสบการณ์นี้ได้ ส่วน LENGOLF Junior Academy คือคอร์สเรียนกอล์ฟสำหรับเด็กอายุ 4-12 ปี',
     featured_image: null,
     schema_markup: null,
     status: 'published',
     category: 'general',
     locale: 'th',
-    related_slugs: ['/faq/do-i-need-experience-to-play-golf-simulator', '/lessons', '/faq/best-way-to-learn-golf-in-bangkok'],
+    related_slugs: ['/faq/do-i-need-experience-to-play-golf-simulator', '/junior-golf-academy', '/lessons', '/faq/best-way-to-learn-golf-in-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-11T00:00:00.000Z',
     content: {
       answer_intro:
-        'เด็กเล่นกอล์ฟซิมมูเลเตอร์ได้แน่นอน และส่วนใหญ่ก็ชอบมากด้วย เด็กอายุตั้งแต่ 5 ขวบขึ้นไปโดยทั่วไปสวิงไม้ได้ดีพอที่จะสนุกกับประสบการณ์นี้ วิถีลูกแบบภาพเคลื่อนไหว การคำนวณคะแนนทันที และรูปแบบคล้ายเกมทำให้ซิมมูเลเตอร์น่าสนใจสำหรับเด็กมากกว่าสนามกอล์ฟจริง LENGOLF ต้อนรับครอบครัวได้ทุกช่วงเวลาที่เปิดให้บริการ และมีไม้กอล์ฟน้ำหนักเบาที่เหมาะกับผู้เล่นตัวเล็ก',
+        'เด็กเล่นกอล์ฟซิมมูเลเตอร์ได้แน่นอน และส่วนใหญ่ก็ชอบมากด้วย เด็กส่วนใหญ่อายุตั้งแต่ 4 ขวบขึ้นไปสวิงไม้กอล์ฟจูเนียร์ได้ดีพอที่จะสนุกกับประสบการณ์นี้ วิถีลูกแบบภาพเคลื่อนไหว การคำนวณคะแนนทันที และรูปแบบคล้ายเกมทำให้ซิมมูเลเตอร์น่าสนใจสำหรับเด็กมากกว่าสนามกอล์ฟจริง LENGOLF ต้อนรับครอบครัวได้ทุกช่วงเวลาที่เปิดให้บริการ และมีไม้กอล์ฟน้ำหนักเบาที่เหมาะกับผู้เล่นตัวเล็ก',
       answer_body:
-        'กอล์ฟซิมมูเลเตอร์ถือเป็นหนึ่งในวิธีที่ดีที่สุดในการแนะนำกอล์ฟให้เด็กๆ รู้จัก นี่คือสิ่งที่พ่อแม่ควรรู้\n\n**ทำไมเด็กๆ ถึงชอบซิมมูเลเตอร์**\n- **เห็นผลทันที:** เด็กๆ เห็นชัดเจนว่าลูกไปทางไหนบนจอขนาดใหญ่ เหมือนเล่นวิดีโอเกมด้วยไม้กอล์ฟจริง\n- **ไม่หงุดหงิด:** ต่างจากสนามจริงที่ต้องเดินไกลตามหาลูกที่หายหรือรอคิว ที่นี่แค่ตี ดูผล แล้วตีใหม่\n- **เกมแข่งขันสนุกๆ:** ความท้าทายตีเข้าใกล้ธงและไดรฟ์ไกลเล่นได้ทุกวัย\n- **สบายด้วยเครื่องปรับอากาศ:** ไม่ต้องกังวลเรื่องอากาศร้อนหรือแดดเผา ซึ่งเป็นเรื่องจริงจังในกรุงเทพฯ\n\n**แนวทางตามช่วงอายุ**\n- **ต่ำกว่า 5 ขวบ:** เด็กวัยนี้ส่วนใหญ่ยังจับน้ำหนักไม้และการทรงตัวได้ยาก ควรรอก่อน\n- **5-8 ขวบ:** เล่นและสนุกได้ แต่สมาธิยังสั้น ควรเล่นประมาณ 30-60 นาทีจะเหมาะที่สุด\n- **9-12 ขวบ:** เล่นและแข่งขันได้เต็มที่ มักเป็นกลุ่มที่กระตือรือร้นที่สุด\n- **วัยรุ่น:** ให้เป็นกิจกรรมสังสรรค์ เหมาะสำหรับสานสัมพันธ์ครอบครัวโดยไม่ต้องจ้องหน้าจอมือถือ\n\n**คอร์สเรียนกอล์ฟสำหรับเยาวชนที่ LENGOLF**\nโค้ชที่ได้รับการรับรองจาก PGA Thailand ทั้ง 3 ท่านของเรา (โปร Boss, โปร Ratchavin และโปร Min) มีประสบการณ์ด้านการพัฒนากอล์ฟเยาวชน มีโปรแกรมที่ปรับให้เหมาะกับแต่ละคนเพื่อสร้างพื้นฐานที่ถูกต้องในบรรยากาศสนุกและเป็นกันเอง คอร์สเรียนเริ่มต้นที่ประมาณ 1,800 บาทต่อชั่วโมง (ข้อมูล ณ กรกฎาคม 2026) รวมการใช้ซิมมูเลเตอร์\n\n**รายละเอียดที่ควรรู้**\nค่าเช่าเบย์อยู่ที่ประมาณ 550 บาท/ชั่วโมง สำหรับผู้เล่นสูงสุด 5 คน ทั้งครอบครัวเล่นด้วยกันได้ มีไม้มาตรฐานให้ใช้ฟรี และมีชุดไม้ที่เหมาะกับผู้เล่นตัวเล็กด้วย ตั้งอยู่ที่ Mercury Ville, BTS ชิดลม (ทางออก 4) เดินทางสะดวก และมีสิ่งให้ทำอีกมากมายในห้างโดยรอบ',
+        'กอล์ฟซิมมูเลเตอร์ถือเป็นหนึ่งในวิธีที่ดีที่สุดในการแนะนำกอล์ฟให้เด็กๆ รู้จัก นี่คือสิ่งที่พ่อแม่ควรรู้\n\n**ทำไมเด็กๆ ถึงชอบซิมมูเลเตอร์**\n- **เห็นผลทันที:** เด็กๆ เห็นชัดเจนว่าลูกไปทางไหนบนจอขนาดใหญ่ เหมือนเล่นวิดีโอเกมด้วยไม้กอล์ฟจริง\n- **ไม่หงุดหงิด:** ต่างจากสนามจริงที่ต้องเดินไกลตามหาลูกที่หายหรือรอคิว ที่นี่แค่ตี ดูผล แล้วตีใหม่\n- **เกมแข่งขันสนุกๆ:** ความท้าทายตีเข้าใกล้ธงและไดรฟ์ไกลเล่นได้ทุกวัย\n- **สบายด้วยเครื่องปรับอากาศ:** ไม่ต้องกังวลเรื่องอากาศร้อนหรือแดดเผา ซึ่งเป็นเรื่องจริงจังในกรุงเทพฯ\n\n**แนวทางตามช่วงอายุ**\n- **ต่ำกว่า 5 ขวบ:** ไม้กอล์ฟมาตรฐานยังหนักเกินไปสำหรับเด็กวัยนี้ส่วนใหญ่ ควรเริ่มด้วยไม้กอล์ฟจูเนียร์และมีโค้ชดูแล LENGOLF Junior Academy รับเด็กตั้งแต่อายุ 4 ขวบ\n- **5-8 ขวบ:** เล่นและสนุกได้ แต่สมาธิยังสั้น ควรเล่นประมาณ 30-60 นาทีจะเหมาะที่สุด\n- **9-12 ขวบ:** เล่นและแข่งขันได้เต็มที่ มักเป็นกลุ่มที่กระตือรือร้นที่สุด\n- **วัยรุ่น:** ให้เป็นกิจกรรมสังสรรค์ เหมาะสำหรับสานสัมพันธ์ครอบครัวโดยไม่ต้องจ้องหน้าจอมือถือ\n\n**LENGOLF Junior Academy**\nหากต้องการให้ลูกเรียนแบบมีหลักสูตร LENGOLF มี Junior Academy ซึ่งเป็นคอร์ส 10 ครั้งสำหรับเด็กอายุ 4-12 ปี เรียนตัวต่อตัวครั้งละ 60 นาทีกับโค้ช PGA ทุกชั่วโมงแบ่งเป็นกิจกรรมเคลื่อนไหวและเกมครึ่งหนึ่ง และกอล์ฟอีกครึ่งหนึ่ง ประเมินทักษะในครั้งที่ 5 และครั้งที่ 10 รับใบประกาศ Level 1 และ Level 2 พร้อมเวลาซ้อมสำหรับครอบครัว 5 ชั่วโมง และมีไม้กอล์ฟจูเนียร์ให้ใช้ เลือกขนาดตามส่วนสูง ราคา 16,900 บาท แพ็กเกจใช้ได้ 1 ปี (ข้อมูล ณ ตุลาคม 2026)\n\n**รายละเอียดที่ควรรู้**\nค่าเช่าเบย์อยู่ที่ประมาณ 550 บาท/ชั่วโมง สำหรับผู้เล่นสูงสุด 5 คน ทั้งครอบครัวเล่นด้วยกันได้ มีไม้มาตรฐานให้ใช้ฟรี และมีชุดไม้ที่เหมาะกับผู้เล่นตัวเล็กด้วย ตั้งอยู่ที่ Mercury Ville, BTS ชิดลม (ทางออก 4) เดินทางสะดวก และมีสิ่งให้ทำอีกมากมายในห้างโดยรอบ',
       related_questions: [
         { slug: 'do-i-need-experience-to-play-golf-simulator', question: 'ต้องมีประสบการณ์กอล์ฟมาก่อนไหมถึงจะเล่นกอล์ฟซิมมูเลเตอร์ได้' },
         { slug: 'can-beginners-play-golf-simulators', question: 'มือใหม่เล่นกอล์ฟซิมมูเลเตอร์ได้ไหม' },
@@ -1351,23 +1349,31 @@ export const faqPages: FaqSeoPage[] = [
   },
 
   // ─── JA: can-kids-play-golf-simulators ───
-  // Every figure traces to the EN entry faq-9 (5歳以上, 5歳未満／5〜8歳／9〜12歳,
-  // 30〜60分, コーチ3名, 1時間1,800THBほど, 1時間550THBほど, 5人まで, 4番出口);
-  // the two LENGOLF prices carry （2026年7月現在）.
-  // "PGA-certified" is rendered PGA認定 WITHOUT "Thailand" — the TH sibling says
-  // PGA Thailand, but this slug's EN source does not, and per-source fidelity
-  // wins over cross-page harmonization.
-  // related_slugs: the EN /activities/family-activities-bangkok has no JA
-  // translation and would 301 a JA reader to English, so it is replaced with the
-  // JA-translated /faq/best-way-to-learn-golf-in-bangkok (same substitution the
-  // TH sibling made). No language/coach claim is added — the EN makes none.
+  // Every figure traces to the EN entry faq-9 (4歳以上, 5歳未満／5〜8歳／9〜12歳,
+  // 30〜60分, 1時間550THBほど, 5人まで, 4番出口). The Junior Academy paragraph
+  // mirrors the EN paragraph and adds nothing to it (4〜12歳, 全10回, 60分の
+  // マンツーマン, 運動とゲームが半分・ゴルフが半分, 5回目と10回目の評価, Level 1と
+  // Level 2の認定証, 5時間の練習時間, 身長に合わせたジュニア用クラブ, 16,900THB,
+  // 有効期間1年). The practical-details paragraph keeps its （2026年7月現在）, which
+  // closes the free-clubs sentence; the Academy price carries
+  // （2026年10月現在）, the month it went on sale.
+  // "PGA coaches" is rendered PGAコーチ: since 2026-10-11 the EN entry says "our
+  // PGA coaches", not "PGA-certified", and never says "Thailand".
+  // related_slugs: the EN /activities/family-activities-bangkok was replaced with
+  // the JA-translated /faq/best-way-to-learn-golf-in-bangkok (same substitution
+  // the TH sibling made) on the premise that it had no JA translation. act-10-ja
+  // shipped in the same PR (#90), so that premise never held on main; restoring
+  // the link is a separate decision. /junior-golf-academy is
+  // deliberately NOT added: the page is EN and TH only, so the card would 301 a
+  // JA reader to English (owner decision, 2026-10-11). No language/coach claim
+  // is added: the EN makes none.
   {
     id: 'faq-9-ja',
     page_type: 'faq',
     slug: 'can-kids-play-golf-simulators',
     title: '子どもでもゴルフシミュレーターで遊べる？ — 年齢の目安とジュニアレッスン',
     meta_description:
-      '子どもでもゴルフシミュレーターは楽しめます。5歳以上ならたいていクラブを振って遊べるようになり、画面に映る弾道と即時のスコアがゲーム感覚。LENGOLFはご家族でのご来店を歓迎し、ジュニア向けのレッスンもご用意しています。',
+      '子どもでもゴルフシミュレーターは楽しめます。ジュニア用クラブならほとんどの子が振って遊べ、LENGOLF Junior Academy（ジュニアアカデミー）では4〜12歳のお子さまにゴルフを教えています。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1375,12 +1381,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/faq/do-i-need-experience-to-play-golf-simulator', '/lessons', '/faq/best-way-to-learn-golf-in-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       answer_intro:
-        '子どもでもゴルフシミュレーターで遊べます。しかも、ほとんどの子が夢中になります。5歳以上であれば、たいていは十分にクラブを振れて、この体験を楽しめるでしょう。画面に描かれる弾道、すぐ出るスコア、ゲームのような形式 — 実際のゴルフ場よりも子どもを引きつける要素が揃っているのです。LENGOLFは営業時間中いつでもご家族を歓迎しており、体の小さい方向けの軽いクラブもご用意しています。',
+        '子どもでもゴルフシミュレーターで遊べます。しかも、ほとんどの子が夢中になります。4歳以上であれば、たいていはジュニア用クラブを十分に振れて、この体験を楽しめるでしょう。画面に描かれる弾道、すぐ出るスコア、ゲームのような形式と、実際のゴルフ場よりも子どもを引きつける要素が揃っているのです。LENGOLFは営業時間中いつでもご家族を歓迎しており、体の小さい方向けの軽いクラブもご用意しています。',
       answer_body:
-        'ゴルフシミュレーターは、子どもをゴルフに触れさせる方法として実はとても優れています。保護者の方に知っておいていただきたい点をまとめます。\n\n**子どもがシミュレーターを気に入る理由**\n- **結果がすぐわかる:** 大きな画面にボールの行方がはっきり映ります。本物のクラブで遊ぶビデオゲームのような感覚です\n- **いらいらしない:** 実際のコースと違い、ボールをなくすことも、長く歩くことも、待つこともありません。打って、見て、また打つだけ\n- **競い合えるゲーム:** ピンに近づけるチャレンジやドラコンは、年齢を問わず盛り上がります\n- **空調の効いた快適さ:** 熱中症や日焼けの心配がありません（バンコクでは現実的な問題です）\n\n**年齢別の目安**\n- **5歳未満:** クラブの重さと体の使い方に苦戦する子がほとんどです。もう少し待ったほうがよいでしょう\n- **5〜8歳:** 参加して楽しめますが、集中が続く時間は短めです。30〜60分がちょうどよい長さ\n- **9〜12歳:** ラウンドも対戦も問題なくこなせます。いちばん夢中になる年代です\n- **ティーンエイジャー:** 社交的なアクティビティとして。画面から離れて家族で過ごす時間になります\n\n**LENGOLFのジュニアレッスン**\n当施設のPGA認定コーチ3名（PRO Boss、PRO Ratchavin、PRO Min）は、いずれもジュニアゴルフ育成の経験があります。楽しく前向きな雰囲気のなかで正しい基礎を身につけられるよう、一人ひとりに合わせたプログラムをご用意しています。レッスンは1時間1,800THBほどから、シミュレーターの利用料込みです（2026年7月現在）。\n\n**ご利用にあたっての実務的な情報**\nベイのレンタルは1時間550THBほどで5人までご利用いただけるため、ご家族全員で一緒にプレーできます。標準クラブは無料で付属し、体の小さいお子さま向けのセットもございます（2026年7月現在）。場所はザ・マーキュリービル、BTSチットロム駅（4番出口）。アクセスがよく、周辺のモールにも過ごせる場所がたくさんあります。',
+        'ゴルフシミュレーターは、子どもをゴルフに触れさせる方法として実はとても優れています。保護者の方に知っておいていただきたい点をまとめます。\n\n**子どもがシミュレーターを気に入る理由**\n- **結果がすぐわかる:** 大きな画面にボールの行方がはっきり映ります。本物のクラブで遊ぶビデオゲームのような感覚です\n- **いらいらしない:** 実際のコースと違い、ボールをなくすことも、長く歩くことも、待つこともありません。打って、見て、また打つだけ\n- **競い合えるゲーム:** ピンに近づけるチャレンジやドラコンは、年齢を問わず盛り上がります\n- **空調の効いた快適さ:** 熱中症や日焼けの心配がありません（バンコクでは現実的な問題です）\n\n**年齢別の目安**\n- **5歳未満:** 標準クラブはこの年齢のほとんどの子には重すぎるので、ジュニア用クラブを使い、コーチと一緒に始めましょう。LENGOLF Junior Academy（ジュニアアカデミー）には4歳から参加できます\n- **5〜8歳:** 参加して楽しめますが、集中が続く時間は短めです。30〜60分がちょうどよい長さ\n- **9〜12歳:** ラウンドも対戦も問題なくこなせます。いちばん夢中になる年代です\n- **ティーンエイジャー:** 社交的なアクティビティとして。画面から離れて家族で過ごす時間になります\n\n**LENGOLF Junior Academy**\n体系的に学びたい方のために、LENGOLF Junior Academyをご用意しています。4〜12歳のお子さま向けの全10回のプログラムで、当施設のPGAコーチによる60分のマンツーマンレッスン。毎回の1時間は、半分が運動とゲーム、もう半分がゴルフです。5回目と10回目に評価があり、Level 1とLevel 2の認定証、ご家族で使える5時間の練習時間、身長に合わせたジュニア用クラブも含まれます。料金は16,900THBで、有効期間は1年です（2026年10月現在）。\n\n**ご利用にあたっての実務的な情報**\nベイのレンタルは1時間550THBほどで5人までご利用いただけるため、ご家族全員で一緒にプレーできます。標準クラブは無料で付属し、体の小さいお子さま向けのセットもございます（2026年7月現在）。場所はザ・マーキュリービル、BTSチットロム駅（4番出口）。アクセスがよく、周辺のモールにも過ごせる場所がたくさんあります。',
       related_questions: [
         { slug: 'do-i-need-experience-to-play-golf-simulator', question: 'ゴルフ経験がなくてもシミュレーターで遊べる？ — 必要な準備と当日の流れ' },
         { slug: 'can-beginners-play-golf-simulators', question: 'ゴルフシミュレーターは初心者でも楽しめる？ — 未経験から始める手順' },
@@ -1390,22 +1396,33 @@ export const faqPages: FaqSeoPage[] = [
   },
 
   // ─── KO: can-kids-play-golf-simulators ───
-  // Age bands, the 1,800바트 lesson rate and the 550바트 bay rate all trace to
-  // the EN entry faq-9; both LENGOLF prices are literals with the as-of marker
-  // (2026년 7월 기준). Coaches are rendered "PGA 인증 코치" WITHOUT "Thailand"
-  // because this slug's EN source says only "PGA-certified" — per-source
-  // fidelity over cross-page harmonization. The EN "without screen time" is
-  // rendered as 휴대폰 화면, matching the TH sibling's reading.
-  // related_slugs: the EN /activities/family-activities-bangkok has no KO
-  // route, so it is replaced with /faq/best-way-to-learn-golf-in-bangkok
-  // (the same substitution the TH sibling made).
+  // Age bands (4세 이상, 5세 미만, 5~8세, 9~12세) and the 550바트 bay rate trace
+  // to the EN entry faq-9. The Junior Academy paragraph mirrors the EN paragraph
+  // and adds nothing to it (4~12세, 10회, 60분 1:1, 신체 활동과 게임 절반·골프
+  // 절반, 5회차와 10회차 평가, Level 1·Level 2 수료증, 가족 연습 시간 5시간, 키에
+  // 맞춘 주니어 클럽, 16,900바트, 유효기간 1년). Its price carries (2026년 10월
+  // 기준), the month it went on sale; the bay rate has no marker, as in EN and TH.
+  // The validity comes BEFORE the price so the marker sits beside the price: 기준
+  // right after 유효기간은 1년 reads as the date the year is counted from.
+  // Coaches are rendered "PGA 코치": since 2026-10-11 the EN entry says "our PGA
+  // coaches", not "PGA-certified", and never says "Thailand". The Latin program
+  // name never takes a particle directly: 과정 carries it (과정은, 과정이,
+  // 과정에서). The EN "without screen time" is rendered as 휴대폰 화면, matching
+  // the TH sibling's reading.
+  // related_slugs: the EN /activities/family-activities-bangkok was replaced with
+  // /faq/best-way-to-learn-golf-in-bangkok (the same substitution the TH sibling
+  // made) on the premise that it had no KO route. act-10-ko shipped in the same
+  // PR (#90), so that premise never held on main; restoring the link is a
+  // separate decision. /junior-golf-academy is deliberately NOT added: the
+  // page is EN and TH only, so the card would 301 a KO reader to English (owner
+  // decision, 2026-10-11).
   {
     id: 'faq-9-ko',
     page_type: 'faq',
     slug: 'can-kids-play-golf-simulators',
     title: '아이도 골프 시뮬레이터 칠 수 있나요? — 연령별 안내',
     meta_description:
-      '아이도 골프 시뮬레이터를 칠 수 있어요. 보통 5세 이상이면 클럽을 휘두르며 충분히 즐길 수 있어요. LENGOLF는 가족 손님을 환영하고 주니어 골프 레슨도 준비돼 있어요.',
+      '아이도 골프 시뮬레이터를 칠 수 있어요. 주니어 클럽이라면 대부분 충분히 휘두르며 즐길 수 있고, LENGOLF Junior Academy 과정에서 4~12세 아이에게 골프를 가르쳐요.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1413,12 +1430,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/faq/do-i-need-experience-to-play-golf-simulator', '/lessons', '/faq/best-way-to-learn-golf-in-bangkok'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       answer_intro:
-        '아이도 골프 시뮬레이터를 칠 수 있고, 대부분 아주 좋아해요. 5세 이상이면 대체로 클럽을 휘둘러 충분히 즐길 수 있어요. 화면에 그려지는 볼 비행, 바로 나오는 스코어, 게임 같은 진행 방식 덕분에 아이에게는 실제 골프장보다 시뮬레이터가 훨씬 재미있어요. LENGOLF는 영업시간 내내 가족 손님을 환영하고, 체구가 작은 플레이어에게 맞는 가벼운 클럽도 갖추고 있어요.',
+        '아이도 골프 시뮬레이터를 칠 수 있고, 대부분 아주 좋아해요. 4세 이상이면 대체로 주니어 클럽을 휘둘러 충분히 즐길 수 있어요. 화면에 그려지는 볼 비행, 바로 나오는 스코어, 게임 같은 진행 방식 덕분에 아이에게는 실제 골프장보다 시뮬레이터가 훨씬 재미있어요. LENGOLF는 영업시간 내내 가족 손님을 환영하고, 체구가 작은 플레이어에게 맞는 가벼운 클럽도 갖추고 있어요.',
       answer_body:
-        '골프 시뮬레이터는 아이에게 골프를 소개하는 가장 좋은 방법 중 하나예요. 부모님이 알아두시면 좋을 내용을 정리했어요.\n\n**아이들이 시뮬레이터를 좋아하는 이유**\n- **바로 나오는 피드백:** 큰 화면으로 공이 어디로 갔는지 정확히 보여요. 진짜 클럽으로 하는 비디오 게임 같아요\n- **답답할 일이 없어요:** 실제 코스와 달리 공을 잃어버리거나, 한참 걷거나, 기다릴 일이 없어요. 치고, 보고, 또 치면 돼요\n- **겨루는 재미:** 니어핀과 롱기스트 드라이브 챌린지는 나이에 상관없이 즐길 수 있어요\n- **시원한 실내:** 더위에 지치거나 햇볕에 탈 일이 없어요 (방콕에서는 꽤 현실적인 걱정이에요)\n\n**연령별 안내**\n- **5세 미만:** 이 나이대는 클럽 무게와 몸의 협응이 아직 어려운 경우가 많아요. 조금 더 기다리시는 편이 좋아요\n- **5~8세:** 함께 치며 즐길 수 있지만 집중 시간이 짧아요. 30~60분이 알맞아요\n- **9~12세:** 라운딩과 시합까지 충분히 소화해요. 가장 열정적인 플레이어인 경우가 많아요\n- **10대:** 어울려 노는 활동으로 접근해 보세요. 휴대폰 화면에서 벗어나 가족이 함께 시간을 보내기에 좋아요\n\n**LENGOLF의 주니어 골프 레슨**\nPGA 인증 코치 세 분(PRO Boss, PRO Ratchavin, PRO Min) 모두 주니어 골프 육성 경험이 있어요. 즐겁고 편안한 분위기에서 올바른 기본기를 쌓도록 아이에게 맞춘 프로그램을 진행해요. 레슨은 시뮬레이터 이용을 포함해 시간당 약 1,800바트부터예요 (2026년 7월 기준).\n\n**알아두면 좋은 정보**\n베이 이용료는 최대 5명까지 시간당 약 550바트라서 온 가족이 함께 칠 수 있어요. 기본 클럽은 무료로 제공되고, 체구가 작은 플레이어에게 맞는 세트도 있어요. 위치는 The Mercury Ville, BTS 칫롬역(4번 출구)이라 찾아오기 쉽고, 같은 건물 쇼핑몰에도 즐길 거리가 많아요.',
+        '골프 시뮬레이터는 아이에게 골프를 소개하는 가장 좋은 방법 중 하나예요. 부모님이 알아두시면 좋을 내용을 정리했어요.\n\n**아이들이 시뮬레이터를 좋아하는 이유**\n- **바로 나오는 피드백:** 큰 화면으로 공이 어디로 갔는지 정확히 보여요. 진짜 클럽으로 하는 비디오 게임 같아요\n- **답답할 일이 없어요:** 실제 코스와 달리 공을 잃어버리거나, 한참 걷거나, 기다릴 일이 없어요. 치고, 보고, 또 치면 돼요\n- **겨루는 재미:** 니어핀과 롱기스트 드라이브 챌린지는 나이에 상관없이 즐길 수 있어요\n- **시원한 실내:** 더위에 지치거나 햇볕에 탈 일이 없어요 (방콕에서는 꽤 현실적인 걱정이에요)\n\n**연령별 안내**\n- **5세 미만:** 기본 클럽은 이 나이대 아이 대부분에게 너무 무거워요. 주니어 클럽을 쓰고 코치와 함께 시작하는 편이 좋아요. LENGOLF Junior Academy 과정은 4세부터 참여할 수 있어요\n- **5~8세:** 함께 치며 즐길 수 있지만 집중 시간이 짧아요. 30~60분이 알맞아요\n- **9~12세:** 라운딩과 시합까지 충분히 소화해요. 가장 열정적인 플레이어인 경우가 많아요\n- **10대:** 어울려 노는 활동으로 접근해 보세요. 휴대폰 화면에서 벗어나 가족이 함께 시간을 보내기에 좋아요\n\n**LENGOLF Junior Academy**\n체계적으로 배우고 싶다면 LENGOLF Junior Academy 과정이 있어요. 4~12세 아이를 위한 10회 프로그램으로, PGA 코치에게 60분씩 1:1 개인 레슨을 받아요. 레슨 한 시간 중 절반은 신체 활동과 게임, 나머지 절반은 골프예요. 5회차와 10회차에 평가가 있고, Level 1·Level 2 수료증, 가족 연습 시간 5시간, 키에 맞춘 주니어 클럽이 포함돼요. 유효기간은 1년이고, 요금은 16,900바트예요 (2026년 10월 기준).\n\n**알아두면 좋은 정보**\n베이 이용료는 최대 5명까지 시간당 약 550바트라서 온 가족이 함께 칠 수 있어요. 기본 클럽은 무료로 제공되고, 체구가 작은 플레이어에게 맞는 세트도 있어요. 위치는 The Mercury Ville, BTS 칫롬역(4번 출구)이라 찾아오기 쉽고, 같은 건물 쇼핑몰에도 즐길 거리가 많아요.',
       related_questions: [
         { slug: 'do-i-need-experience-to-play-golf-simulator', question: '골프 경험이 없어도 시뮬레이터를 즐길 수 있나요? — 준비물과 이용 흐름' },
         { slug: 'can-beginners-play-golf-simulators', question: '스크린골프, 초보자도 즐길 수 있을까? — 처음 시작하는 방법' },
@@ -1428,22 +1445,32 @@ export const faqPages: FaqSeoPage[] = [
   },
 
   // ─── ZH: can-kids-play-golf-simulators ───
-  // Ages, durations and prices all trace to EN faq-9 (5岁以上, 5岁以下建议再等,
-  // 5–8岁30–60分钟, 9–12岁, 青少年; 课程每小时约1,800泰铢起含模拟器; 球位每小时约
-  // 550泰铢最多5人). "PGA-certified" is rendered 获PGA认证 WITHOUT "Thailand" —
-  // this slug's EN source does not say Thailand, and per-source fidelity beats
-  // cross-page harmonization. 认证 (not the 认定 seen in some older ZH FAQ
-  // entries) is the Mainland form used by messages/zh.json and the ZH guides.
-  // No language claim exists in the EN source, so none is added. related_*:
-  // the EN /activities/family-activities-bangkok has no ZH translation and is
-  // replaced with the ZH learning FAQ.
+  // Ages, durations and prices all trace to EN faq-9 (4岁以上, 5岁以下先用儿童
+  // 球杆并跟教练起步, 5–8岁30–60分钟, 9–12岁, 青少年; 球位每小时约550泰铢最多5人).
+  // The Junior Academy paragraph mirrors the EN paragraph and adds nothing to it
+  // (4–12岁, 10节, 一对一每节60分钟, 一半身体活动和游戏、一半高尔夫, 第5节和第10节
+  // 评估, Level 1和Level 2证书, 家人可用的5小时练习时间, 按身高配的儿童球杆,
+  // 16,900泰铢, 有效期1年). Its price carries 截至2026年10月, the month it went on
+  // sale, placed BEFORE the price: after 有效期1年 it would read as the end date of
+  // the validity. "Family practice time" is 家人可用的…练习时间, not 家庭练习时间,
+  // which reads as practice at home. "Junior clubs" is 儿童球杆, not 青少年球杆:
+  // the same entry uses 青少年 for the Teens bullet, and the Academy starts at
+  // age 4. Coaches are rendered PGA教练: since 2026-10-11 the EN entry says "our
+  // PGA coaches", not "PGA-certified", and never says "Thailand". No language
+  // claim exists in the EN source, so none is added. related_*: the EN
+  // /activities/family-activities-bangkok was replaced with the ZH learning FAQ
+  // on the premise that it had no ZH translation. act-10-zh shipped in the same
+  // PR (#90), so that premise never held on main; restoring the link is a
+  // separate decision. /junior-golf-academy is deliberately NOT added: the page
+  // is EN and TH only, so the card would 301 a ZH reader to English (owner
+  // decision, 2026-10-11).
   {
     id: 'faq-9-zh',
     page_type: 'faq',
     slug: 'can-kids-play-golf-simulators',
     title: '小朋友能玩高尔夫模拟器吗？ — 年龄建议与青少年课程',
     meta_description:
-      '小朋友可以玩高尔夫模拟器。5岁以上的孩子一般都挥得动杆，也玩得开心。LENGOLF营业时间内全天欢迎家庭客人，并提供青少年高尔夫课程。',
+      '小朋友可以玩高尔夫模拟器。多数孩子用儿童球杆就挥得动，也玩得开心。LENGOLF Junior Academy教4–12岁的孩子打高尔夫。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1451,12 +1478,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/faq/do-i-need-experience-to-play-golf-simulator', '/faq/best-way-to-learn-golf-in-bangkok', '/lessons'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-13T00:00:00.000Z',
     content: {
       answer_intro:
-        '可以，而且多数小朋友都很喜欢。5岁以上的孩子一般已经能把杆挥起来，足够享受这项活动。动画呈现的球飞行轨迹、即时计分和游戏化的形式，让模拟器对孩子的吸引力比真实球场更大。LENGOLF在营业时间内全天欢迎家庭客人，也备有适合小球员的轻量球杆。',
+        '可以，而且多数小朋友都很喜欢。4岁以上的孩子大多已经能把儿童球杆挥起来，足够享受这项活动。动画呈现的球飞行轨迹、即时计分和游戏化的形式，让模拟器对孩子的吸引力比真实球场更大。LENGOLF在营业时间内全天欢迎家庭客人，也备有适合小球员的轻量球杆。',
       answer_body:
-        '高尔夫模拟器其实是带孩子入门高尔夫最好的方式之一。以下是家长需要知道的。\n\n**孩子为什么喜欢模拟器**\n- **即时反馈：** 球去了哪里，大屏幕上一清二楚，像是拿真球杆玩电子游戏\n- **不会有挫败感：** 不像真实球场会丢球、要走很远、还得等前面一组。打完看结果，接着再打一杆。\n- **好玩的比赛：** 最接近旗杆和最远开球的挑战，各个年龄都能玩\n- **空调里的舒适：** 不必担心中暑或晒伤，这在曼谷是很实际的问题\n\n**各年龄段的建议**\n- **5岁以下：** 这个年纪的孩子多半还应付不了球杆的重量和协调性，建议再等等。\n- **5–8岁：** 能参与，也玩得开心，但注意力持续的时间短，30–60分钟最合适。\n- **9–12岁：** 完全可以打完整轮、参加比赛，往往是最投入的一群。\n- **青少年：** 当成社交活动来安排，是不用盯着手机的家庭相处时间。\n\n**LENGOLF的青少年高尔夫课程**\n我们三位获PGA认证的教练（PRO Boss、PRO Ratchavin和PRO Min）都有青少年高尔夫培养的经验。他们会针对孩子设计课程，在轻松、有鼓励的氛围里打好正确的基本功。课程每小时约1,800泰铢起，含模拟器使用，截至2026年7月。\n\n**实用信息**\n球位收费每小时约550泰铢，最多可容纳5人，你们全家可以一起打。标准球杆免费提供，也备有适合小球员的套装。地点在The Mercury Ville，BTS Chidlom站（4号出口），过去很方便，周边商场里也有很多可以逛的。',
+        '高尔夫模拟器其实是带孩子入门高尔夫最好的方式之一。以下是家长需要知道的。\n\n**孩子为什么喜欢模拟器**\n- **即时反馈：** 球去了哪里，大屏幕上一清二楚，像是拿真球杆玩电子游戏\n- **不会有挫败感：** 不像真实球场会丢球、要走很远、还得等前面一组。打完看结果，接着再打一杆。\n- **好玩的比赛：** 最接近旗杆和最远开球的挑战，各个年龄都能玩\n- **空调里的舒适：** 不必担心中暑或晒伤，这在曼谷是很实际的问题\n\n**各年龄段的建议**\n- **5岁以下：** 标准球杆对这个年纪的大多数孩子来说太重，建议先用儿童球杆，在教练指导下起步。LENGOLF Junior Academy从4岁起就可以参加。\n- **5–8岁：** 能参与，也玩得开心，但注意力持续的时间短，30–60分钟最合适。\n- **9–12岁：** 完全可以打完整轮、参加比赛，往往是最投入的一群。\n- **青少年：** 当成社交活动来安排，是不用盯着手机的家庭相处时间。\n\n**LENGOLF Junior Academy**\n如果想让孩子系统地学，可以选择LENGOLF Junior Academy。这是为4–12岁孩子设计的10节课程，由我们的PGA教练一对一授课，每节60分钟，一半时间做身体活动和游戏，一半时间打高尔夫。第5节和第10节课进行评估，颁发Level 1和Level 2证书，另含家人可用的5小时练习时间，以及按身高配好的儿童球杆。截至2026年10月，费用为16,900泰铢，有效期1年。\n\n**实用信息**\n球位收费每小时约550泰铢，最多可容纳5人，你们全家可以一起打。标准球杆免费提供，也备有适合小球员的套装。地点在The Mercury Ville，BTS Chidlom站（4号出口），过去很方便，周边商场里也有很多可以逛的。',
       related_questions: [
         { slug: 'do-i-need-experience-to-play-golf-simulator', question: '没打过高尔夫也能玩模拟器吗？ — 要准备什么、当天怎么进行' },
         { slug: 'can-beginners-play-golf-simulators', question: '零基础也能玩高尔夫模拟器吗？ — 初学者上手指南' },
@@ -1479,12 +1506,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'en',
     related_slugs: ['/faq/do-i-need-experience-to-play-golf-simulator', '/faq/best-way-to-learn-golf-in-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-18T00:00:00.000Z',
     content: {
       answer_intro:
         'Absolutely — golf simulators are one of the best places for beginners to try golf. You don\'t need experience, equipment, or any knowledge of rules. The simulator handles scoring, shows you where each shot goes, and gives real-time data on your swing. At LENGOLF, staff show beginners how to get started in about 2 minutes, and free clubs are included.',
       answer_body:
-        'Golf simulators remove almost every barrier that makes real golf intimidating for beginners.\n\n**Why Simulators Are Great for Beginners**\n- **No equipment needed:** Free standard clubs provided at LENGOLF. Just walk in.\n- **No rules to learn:** The simulator applies rules automatically. You just hit the ball.\n- **No embarrassment:** Your bay is semi-private — no one on an adjacent fairway watching your swing.\n- **Instant improvement:** Real-time data shows what changed between swings. Beginners often see noticeable improvement in a single session.\n- **No time pressure:** Unlike a course with groups waiting behind you, simulators let you take as long as you want.\n\n**What a Beginner Session Looks Like**\n1. Staff hand you a club and show you the basic grip and stance (2 minutes)\n2. You take a few swings — the screen shows ball flight and distance\n3. You start a game mode (closest-to-the-pin is popular for beginners)\n4. Order drinks, compete with friends, and enjoy the atmosphere\n5. After 30 minutes, most beginners are making consistent contact\n\n**If You Want to Actually Learn Golf**\nLENGOLF has three PGA-certified coaches who specialize in teaching beginners. Lessons start at ~1,800 THB/hour and include simulator usage with swing analysis data. We also offer a free 1-hour trial lesson — contact us on LINE @lengolf to book.\n\n**Beginner Tip**\nStart with a 7-iron (medium-length club). It\'s the easiest to hit and gives satisfying results quickly. Staff will set you up with the right club.\n\nBay rental at LENGOLF is ~550 THB/hour for up to 5 people at Mercury Ville, BTS Chidlom (Exit 4).',
+        'Golf simulators remove almost every barrier that makes real golf intimidating for beginners.\n\n**Why Simulators Are Great for Beginners**\n- **No equipment needed:** Free standard clubs provided at LENGOLF. Just walk in.\n- **No rules to learn:** The simulator applies rules automatically. You just hit the ball.\n- **No embarrassment:** Your bay is semi-private — no one on an adjacent fairway watching your swing.\n- **Instant improvement:** Real-time data shows what changed between swings. Beginners often see noticeable improvement in a single session.\n- **No time pressure:** Unlike a course with groups waiting behind you, simulators let you take as long as you want.\n\n**What a Beginner Session Looks Like**\n1. Staff hand you a club and show you the basic grip and stance (2 minutes)\n2. You take a few swings — the screen shows ball flight and distance\n3. You start a game mode (closest-to-the-pin is popular for beginners)\n4. Order drinks, compete with friends, and enjoy the atmosphere\n5. After 30 minutes, most beginners are making consistent contact\n\n**If You Want to Actually Learn Golf**\nLENGOLF has three PGA-certified coaches who specialize in teaching beginners. New students start with a free 1-hour trial, with clubs and the simulator included: contact us on LINE @lengolf to book. After that, lessons are {{lessonHourlyNum}} THB per hour, or from {{lesson50hRateNum}} THB per hour on packages, and include simulator usage with swing analysis data.\n\n**Beginner Tip**\nStart with a 7-iron (medium-length club). It\'s the easiest to hit and gives satisfying results quickly. Staff will set you up with the right club.\n\nBay rental at LENGOLF is ~550 THB/hour for up to 5 people at Mercury Ville, BTS Chidlom (Exit 4).',
       related_questions: [
         { slug: 'do-i-need-experience-to-play-golf-simulator', question: 'Do I Need Golf Experience to Play a Golf Simulator?' },
         { slug: 'best-way-to-learn-golf-in-bangkok', question: 'What Is the Best Way to Learn Golf in Bangkok?' },
@@ -1508,12 +1535,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'th',
     related_slugs: ['/faq/do-i-need-experience-to-play-golf-simulator', '/faq/best-way-to-learn-golf-in-bangkok', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-18T00:00:00.000Z',
     content: {
       answer_intro:
         'ได้แน่นอน กอล์ฟซิมมูเลเตอร์เป็นหนึ่งในสถานที่ที่ดีที่สุดสำหรับมือใหม่ที่อยากลองเล่นกอล์ฟ ไม่ต้องมีประสบการณ์ ไม่ต้องมีอุปกรณ์ และไม่ต้องรู้กติกามาก่อน ซิมมูเลเตอร์คำนวณคะแนนให้ แสดงให้เห็นว่าแต่ละช็อตไปทางไหน และให้ข้อมูลการสวิงแบบเรียลไทม์ ที่ LENGOLF ทีมงานจะสอนมือใหม่ให้เริ่มเล่นได้ในประมาณ 2 นาที และมีไม้ให้ใช้ฟรี',
       answer_body:
-        'กอล์ฟซิมมูเลเตอร์ตัดอุปสรรคเกือบทั้งหมดที่ทำให้กอล์ฟจริงดูน่ากลัวสำหรับมือใหม่ออกไป\n\n**ทำไมซิมมูเลเตอร์ถึงเหมาะกับมือใหม่**\n- **ไม่ต้องมีอุปกรณ์:** LENGOLF มีไม้มาตรฐานให้ใช้ฟรี แค่เดินเข้ามาก็เล่นได้\n- **ไม่ต้องเรียนกติกา:** ซิมมูเลเตอร์จัดการกติกาให้อัตโนมัติ คุณแค่ตีลูกเท่านั้น\n- **ไม่ต้องเขินอาย:** เบย์เป็นพื้นที่กึ่งส่วนตัว ไม่มีใครในแฟร์เวย์ข้างๆ มองสวิงของคุณ\n- **เห็นพัฒนาการทันที:** ข้อมูลแบบเรียลไทม์แสดงให้เห็นว่าอะไรเปลี่ยนไปในแต่ละสวิง มือใหม่มักเห็นพัฒนาการชัดเจนตั้งแต่ครั้งแรกที่เล่น\n- **ไม่มีแรงกดดันเรื่องเวลา:** ต่างจากสนามจริงที่มีกลุ่มอื่นรออยู่ข้างหลัง ซิมมูเลเตอร์ให้คุณใช้เวลาได้นานเท่าที่ต้องการ\n\n**เซสชันสำหรับมือใหม่เป็นอย่างไร**\n1. ทีมงานส่งไม้ให้และสอนวิธีจับไม้กับท่ายืนพื้นฐาน (2 นาที)\n2. ลองสวิงสองสามครั้ง หน้าจอจะแสดงวิถีลูกและระยะทาง\n3. เริ่มโหมดเกม (ตีเข้าใกล้ธงเป็นที่นิยมสำหรับมือใหม่)\n4. สั่งเครื่องดื่ม แข่งกับเพื่อน และเพลิดเพลินกับบรรยากาศ\n5. หลังจากผ่านไป 30 นาที มือใหม่ส่วนใหญ่จะตีโดนลูกได้สม่ำเสมอขึ้น\n\n**หากอยากเรียนกอล์ฟจริงจัง**\nLENGOLF มีโค้ชที่ได้รับการรับรองจาก PGA Thailand 3 ท่านที่เชี่ยวชาญการสอนมือใหม่ คอร์สเรียนเริ่มต้นที่ประมาณ 1,800 บาท/ชั่วโมง (ข้อมูล ณ กรกฎาคม 2026) รวมการใช้ซิมมูเลเตอร์พร้อมข้อมูลวิเคราะห์วงสวิง นอกจากนี้ยังมีเรียนทดลองฟรี 1 ชั่วโมง ติดต่อจองผ่าน LINE @lengolf\n\n**เคล็ดลับสำหรับมือใหม่**\nเริ่มจากเหล็ก 7 (ไม้ความยาวปานกลาง) เพราะตีง่ายที่สุดและให้ผลลัพธ์ที่น่าพอใจได้เร็ว ทีมงานจะช่วยจัดไม้ที่เหมาะกับคุณให้\n\nค่าเช่าเบย์ที่ LENGOLF อยู่ที่ประมาณ 550 บาท/ชั่วโมง สำหรับผู้เล่นสูงสุด 5 คน ที่ Mercury Ville, BTS ชิดลม (ทางออก 4)',
+        'กอล์ฟซิมมูเลเตอร์ตัดอุปสรรคเกือบทั้งหมดที่ทำให้กอล์ฟจริงดูน่ากลัวสำหรับมือใหม่ออกไป\n\n**ทำไมซิมมูเลเตอร์ถึงเหมาะกับมือใหม่**\n- **ไม่ต้องมีอุปกรณ์:** LENGOLF มีไม้มาตรฐานให้ใช้ฟรี แค่เดินเข้ามาก็เล่นได้\n- **ไม่ต้องเรียนกติกา:** ซิมมูเลเตอร์จัดการกติกาให้อัตโนมัติ คุณแค่ตีลูกเท่านั้น\n- **ไม่ต้องเขินอาย:** เบย์เป็นพื้นที่กึ่งส่วนตัว ไม่มีใครในแฟร์เวย์ข้างๆ มองสวิงของคุณ\n- **เห็นพัฒนาการทันที:** ข้อมูลแบบเรียลไทม์แสดงให้เห็นว่าอะไรเปลี่ยนไปในแต่ละสวิง มือใหม่มักเห็นพัฒนาการชัดเจนตั้งแต่ครั้งแรกที่เล่น\n- **ไม่มีแรงกดดันเรื่องเวลา:** ต่างจากสนามจริงที่มีกลุ่มอื่นรออยู่ข้างหลัง ซิมมูเลเตอร์ให้คุณใช้เวลาได้นานเท่าที่ต้องการ\n\n**เซสชันสำหรับมือใหม่เป็นอย่างไร**\n1. ทีมงานส่งไม้ให้และสอนวิธีจับไม้กับท่ายืนพื้นฐาน (2 นาที)\n2. ลองสวิงสองสามครั้ง หน้าจอจะแสดงวิถีลูกและระยะทาง\n3. เริ่มโหมดเกม (ตีเข้าใกล้ธงเป็นที่นิยมสำหรับมือใหม่)\n4. สั่งเครื่องดื่ม แข่งกับเพื่อน และเพลิดเพลินกับบรรยากาศ\n5. หลังจากผ่านไป 30 นาที มือใหม่ส่วนใหญ่จะตีโดนลูกได้สม่ำเสมอขึ้น\n\n**หากอยากเรียนกอล์ฟจริงจัง**\nLENGOLF มีโค้ชที่ได้รับการรับรองจาก PGA Thailand 3 ท่านที่เชี่ยวชาญการสอนมือใหม่ คนที่ยังไม่เคยเรียนกับเราเริ่มจากทดลองเรียนฟรี 1 ชั่วโมงได้ มีไม้กอล์ฟและห้องซิมให้พร้อม ติดต่อจองผ่าน LINE @lengolf หลังจากนั้นเรียนชั่วโมงละ {{lessonHourlyNum}} บาท ถ้าซื้อแพ็กเกจ ต่ำสุดเหลือชั่วโมงละ {{lesson50hRateNum}} บาท ทุกแพ็กเกจรวมค่าห้องซิมและข้อมูลวิเคราะห์วงสวิงแล้ว (ข้อมูล ณ ตุลาคม 2026)\n\n**เคล็ดลับสำหรับมือใหม่**\nเริ่มจากเหล็ก 7 (ไม้ความยาวปานกลาง) เพราะตีง่ายที่สุดและให้ผลลัพธ์ที่น่าพอใจได้เร็ว ทีมงานจะช่วยจัดไม้ที่เหมาะกับคุณให้\n\nค่าเช่าเบย์ที่ LENGOLF อยู่ที่ประมาณ 550 บาท/ชั่วโมง สำหรับผู้เล่นสูงสุด 5 คน ที่ Mercury Ville, BTS ชิดลม (ทางออก 4)',
       related_questions: [
         { slug: 'do-i-need-experience-to-play-golf-simulator', question: 'ต้องมีประสบการณ์กอล์ฟมาก่อนไหมถึงจะเล่นกอล์ฟซิมมูเลเตอร์ได้' },
         { slug: 'best-way-to-learn-golf-in-bangkok', question: 'วิธีที่ดีที่สุดในการเรียนกอล์ฟในกรุงเทพฯ คืออะไร' },
@@ -1527,7 +1554,7 @@ export const faqPages: FaqSeoPage[] = [
   // the required LENGOLF-scoped construction — 日本人コーチ／日本語でのレッスン
   // negated for LENGOLF only, paired with the LINE @lengolf Japanese booking
   // allowance. No city-wide negative about Bangkok, no claim of JA lessons.
-  // Coach count (3), 1,800THB/hour, free 1-hour trial, 550THB bay rate, 5
+  // Coach count (3), the free 1-hour trial, 550THB bay rate, 5
   // players and the Chidlom address all trace to the EN entry; place names use
   // the settled JA transliterations (ザ・マーキュリービル / BTSチットロム駅).
   {
@@ -1544,12 +1571,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/faq/best-way-to-learn-golf-in-bangkok', '/guide/golf-thailand-beginners', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-18T00:00:00.000Z',
     content: {
       answer_intro:
         'もちろん楽しめます——ゴルフシミュレーターは、初心者がゴルフを試す場所として最適です。経験も道具も、ルールの知識も必要ありません。スコアはシミュレーターが管理し、打った球がどこへ飛んだかを表示し、スイングのデータをリアルタイムで教えてくれます。LENGOLFではスタッフが2分ほどで始め方をご案内し、クラブは無料でお使いいただけます。',
       answer_body:
-        'ゴルフシミュレーターは、初心者が実際のゴルフに感じるハードルを、ほとんど取り払ってくれます。\n\n**初心者にシミュレーターが向いている理由**\n- **道具が不要:** LENGOLFでは標準クラブを無料でご用意。手ぶらでお越しいただけます。\n- **ルールを覚えなくてよい:** ルールはシミュレーターが自動で適用します。あなたは球を打つだけ。\n- **恥ずかしくない:** ベイは半個室のような空間なので、隣のフェアウェイから誰かにスイングを見られることもありません。\n- **すぐに上達を実感:** リアルタイムのデータが、スイングごとに何が変わったかを示します。初心者でも1回のセッションではっきり違いを感じられることがよくあります。\n- **時間に追われない:** 後ろの組を待たせるコースと違い、シミュレーターなら好きなだけ時間をかけられます。\n\n**初心者のセッションの流れ**\n1. スタッフがクラブを渡し、基本のグリップとスタンスをご案内（2分）\n2. 何球か打ってみると、画面に弾道と飛距離が表示されます\n3. ゲームモードを開始（初心者にはニアピンが人気）\n4. ドリンクを注文し、友人と競い、雰囲気を楽しむ\n5. 30分もすれば、多くの初心者が安定して芯に当たるようになります\n\n**本格的にゴルフを習いたい場合**\nLENGOLFには、初心者の指導を得意とするPGA認定コーチが3名在籍しています。レッスンは1時間1,800THB程度から、スイング分析データ付きのシミュレーター利用込みです。1時間の無料体験レッスンもご用意しています。なお、LENGOLFには日本人コーチや日本語でのレッスンはありませんが、ご予約や事前のご相談はLINE @lengolfにて日本語で承っています。\n\n**初心者へのひとこと**\n最初は7番アイアン（中間の長さのクラブ）から始めてみてください。最も打ちやすく、手応えのある結果がすぐ出ます。適したクラブはスタッフがご用意します。\n\nLENGOLFのベイ料金は、最大5名まで1時間550THB程度（2026年7月現在）。ザ・マーキュリービル、BTSチットロム駅（4番出口）にあります。',
+        'ゴルフシミュレーターは、初心者が実際のゴルフに感じるハードルを、ほとんど取り払ってくれます。\n\n**初心者にシミュレーターが向いている理由**\n- **道具が不要:** LENGOLFでは標準クラブを無料でご用意。手ぶらでお越しいただけます。\n- **ルールを覚えなくてよい:** ルールはシミュレーターが自動で適用します。あなたは球を打つだけ。\n- **恥ずかしくない:** ベイは半個室のような空間なので、隣のフェアウェイから誰かにスイングを見られることもありません。\n- **すぐに上達を実感:** リアルタイムのデータが、スイングごとに何が変わったかを示します。初心者でも1回のセッションではっきり違いを感じられることがよくあります。\n- **時間に追われない:** 後ろの組を待たせるコースと違い、シミュレーターなら好きなだけ時間をかけられます。\n\n**初心者のセッションの流れ**\n1. スタッフがクラブを渡し、基本のグリップとスタンスをご案内（2分）\n2. 何球か打ってみると、画面に弾道と飛距離が表示されます\n3. ゲームモードを開始（初心者にはニアピンが人気）\n4. ドリンクを注文し、友人と競い、雰囲気を楽しむ\n5. 30分もすれば、多くの初心者が安定して芯に当たるようになります\n\n**本格的にゴルフを習いたい場合**\nLENGOLFには、初心者の指導を得意とするPGA認定コーチが3名在籍しています。まずは1時間の無料体験から始められます（LENGOLFで初めてレッスンを受ける方が対象、クラブとシミュレーターの利用込み）。その後のレッスンは1時間{{lessonHourlyNum}}THB、パッケージなら1時間あたり{{lesson50hRateNum}}THBからで、スイング分析データ付きのシミュレーター利用込みです（2026年10月現在）。なお、LENGOLFには日本人コーチや日本語でのレッスンはありませんが、ご予約や事前のご相談はLINE @lengolfにて日本語で承っています。\n\n**初心者へのひとこと**\n最初は7番アイアン（中間の長さのクラブ）から始めてみてください。最も打ちやすく、手応えのある結果がすぐ出ます。適したクラブはスタッフがご用意します。\n\nLENGOLFのベイ料金は、最大5名まで1時間550THB程度（2026年7月現在）。ザ・マーキュリービル、BTSチットロム駅（4番出口）にあります。',
       related_questions: [
         { slug: 'best-way-to-learn-golf-in-bangkok', question: 'バンコクのゴルフレッスン、効率よく上達するには？ — 料金と選び方' },
         { slug: 'how-accurate-are-golf-simulators', question: 'ゴルフシミュレーターの精度は？ — 実際のゴルフとの違いを正直に解説' },
@@ -1563,7 +1590,7 @@ export const faqPages: FaqSeoPage[] = [
   // the required LENGOLF-scoped construction — 한국인 코치／한국어 레슨 negated
   // for LENGOLF only, paired with the LINE @lengolf Korean booking allowance.
   // No city-wide negative about Bangkok, no claim of KO-language lessons.
-  // Coach count (3), 1,800바트/hour, free 1-hour trial, 550바트 bay rate, 5
+  // Coach count (3), the free 1-hour trial, 550바트 bay rate, 5
   // players and the Chidlom address all trace to the EN entry; the EN source
   // does not name a floor, so none is added (KO transliterates the station as
   // BTS 칫롬역 but keeps The Mercury Ville in Latin). Title front-loads the KO
@@ -1582,12 +1609,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/faq/best-way-to-learn-golf-in-bangkok', '/guide/golf-thailand-beginners', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-18T00:00:00.000Z',
     content: {
       answer_intro:
         '물론 즐길 수 있어요 — 골프 시뮬레이터(스크린골프)는 초보자가 골프를 처음 시도해 보기에 가장 좋은 곳 중 하나예요. 경험도, 장비도, 규칙 지식도 필요 없어요. 점수는 시뮬레이터가 계산하고, 친 공이 어디로 갔는지 보여주며, 스윙 데이터를 실시간으로 알려줘요. LENGOLF에서는 스태프가 2분 정도면 시작하는 법을 안내해 드리고, 클럽은 무료로 쓰실 수 있어요.',
       answer_body:
-        '골프 시뮬레이터는 초보자가 실제 골프에서 느끼는 문턱을 거의 다 없애 줘요.\n\n**초보자에게 시뮬레이터가 잘 맞는 이유**\n- **장비가 필요 없어요:** LENGOLF에서는 기본 클럽을 무료로 준비해 둬요. 빈손으로 오셔도 돼요.\n- **규칙을 외울 필요가 없어요:** 규칙은 시뮬레이터가 자동으로 적용해요. 여러분은 공만 치시면 돼요.\n- **부끄러울 일이 없어요:** 베이는 반쯤 독립된 공간이라, 옆 페어웨이에서 누가 스윙을 지켜보는 일도 없어요.\n- **바로 느껴지는 향상:** 실시간 데이터가 스윙마다 무엇이 달라졌는지 보여줘요. 초보자도 한 세션 만에 확실한 차이를 느끼는 경우가 많아요.\n- **시간에 쫓기지 않아요:** 뒤 팀을 기다리게 하는 코스와 달리, 시뮬레이터에서는 원하는 만큼 시간을 들일 수 있어요.\n\n**초보자 세션은 이렇게 진행돼요**\n1. 스태프가 클럽을 건네고 기본 그립과 스탠스를 알려드려요 (2분)\n2. 몇 번 쳐 보시면 화면에 탄도와 비거리가 표시돼요\n3. 게임 모드를 시작해요 (초보자에게는 니어핀이 인기예요)\n4. 음료를 주문하고, 친구들과 겨루고, 분위기를 즐겨요\n5. 30분쯤 지나면 대부분의 초보자가 안정적으로 공을 맞히게 돼요\n\n**본격적으로 골프를 배우고 싶다면**\nLENGOLF에는 초보자 지도를 전문으로 하는 PGA 인증 코치 3명이 있어요. 레슨은 시간당 1,800바트 정도부터고, 스윙 분석 데이터가 포함된 시뮬레이터 이용도 함께예요 (2026년 7월 기준). 1시간 무료 체험 레슨도 준비돼 있어요. 참고로 LENGOLF에 한국인 코치나 한국어 레슨은 없지만, 예약과 사전 상담은 LINE @lengolf에서 한국어로 도와드려요.\n\n**초보자를 위한 한마디**\n처음에는 7번 아이언(중간 길이 클럽)부터 시작해 보세요. 가장 치기 쉽고, 만족스러운 결과가 금방 나와요. 알맞은 클럽은 스태프가 챙겨드려요.\n\nLENGOLF의 베이 요금은 최대 5명까지 시간당 550바트 정도예요. The Mercury Ville, BTS 칫롬역(4번 출구)에 있어요.',
+        '골프 시뮬레이터는 초보자가 실제 골프에서 느끼는 문턱을 거의 다 없애 줘요.\n\n**초보자에게 시뮬레이터가 잘 맞는 이유**\n- **장비가 필요 없어요:** LENGOLF에서는 기본 클럽을 무료로 준비해 둬요. 빈손으로 오셔도 돼요.\n- **규칙을 외울 필요가 없어요:** 규칙은 시뮬레이터가 자동으로 적용해요. 여러분은 공만 치시면 돼요.\n- **부끄러울 일이 없어요:** 베이는 반쯤 독립된 공간이라, 옆 페어웨이에서 누가 스윙을 지켜보는 일도 없어요.\n- **바로 느껴지는 향상:** 실시간 데이터가 스윙마다 무엇이 달라졌는지 보여줘요. 초보자도 한 세션 만에 확실한 차이를 느끼는 경우가 많아요.\n- **시간에 쫓기지 않아요:** 뒤 팀을 기다리게 하는 코스와 달리, 시뮬레이터에서는 원하는 만큼 시간을 들일 수 있어요.\n\n**초보자 세션은 이렇게 진행돼요**\n1. 스태프가 클럽을 건네고 기본 그립과 스탠스를 알려드려요 (2분)\n2. 몇 번 쳐 보시면 화면에 탄도와 비거리가 표시돼요\n3. 게임 모드를 시작해요 (초보자에게는 니어핀이 인기예요)\n4. 음료를 주문하고, 친구들과 겨루고, 분위기를 즐겨요\n5. 30분쯤 지나면 대부분의 초보자가 안정적으로 공을 맞히게 돼요\n\n**본격적으로 골프를 배우고 싶다면**\nLENGOLF에는 초보자 지도를 전문으로 하는 PGA 인증 코치 3명이 있어요. 먼저 1시간 무료 체험으로 시작하실 수 있어요(LENGOLF 레슨이 처음인 분 대상, 클럽과 시뮬레이터 이용 포함). 이후 레슨은 시간당 {{lessonHourlyNum}}바트, 패키지는 시간당 {{lesson50hRateNum}}바트부터고, 스윙 분석 데이터가 포함된 시뮬레이터 이용도 함께예요 (2026년 10월 기준). 참고로 LENGOLF에 한국인 코치나 한국어 레슨은 없지만, 예약과 사전 상담은 LINE @lengolf에서 한국어로 도와드려요.\n\n**초보자를 위한 한마디**\n처음에는 7번 아이언(중간 길이 클럽)부터 시작해 보세요. 가장 치기 쉽고, 만족스러운 결과가 금방 나와요. 알맞은 클럽은 스태프가 챙겨드려요.\n\nLENGOLF의 베이 요금은 최대 5명까지 시간당 550바트 정도예요. The Mercury Ville, BTS 칫롬역(4번 출구)에 있어요.',
       related_questions: [
         { slug: 'best-way-to-learn-golf-in-bangkok', question: '방콕에서 골프 배우는 가장 좋은 방법 — 레슨 요금과 선택 기준' },
         { slug: 'how-accurate-are-golf-simulators', question: '골프 시뮬레이터 정확도는? — 실제 골프와 무엇이 다를까' },
@@ -1602,7 +1629,7 @@ export const faqPages: FaqSeoPage[] = [
   // LENGOLF only, paired with the LINE @lengolf Chinese booking allowance
   // (same wording as the shipped exp-32-zh guide). No city-wide negative about
   // Bangkok, no claim of Chinese-language lessons.
-  // Coach count (3), 1,800泰铢/hour, free 1-hour trial, 550泰铢 bay rate, 5
+  // Coach count (3), the free 1-hour trial, 550泰铢 bay rate, 5
   // players and the Chidlom address all trace to the EN entry; the EN source
   // does not name a floor, so none is added. ZH keeps The Mercury Ville and
   // BTS Chidlom in Latin per the transliteration note. Price-bearing lines
@@ -1621,12 +1648,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/faq/best-way-to-learn-golf-in-bangkok', '/guide/golf-thailand-beginners', '/golf'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-18T00:00:00.000Z',
     content: {
       answer_intro:
         '当然可以——高尔夫模拟器是初学者接触高尔夫最好的地方之一。你不需要经验、不需要装备，也不用懂规则。模拟器会自动记分，显示每一球飞到哪里，还会实时给出挥杆数据。在LENGOLF，工作人员大约2分钟就能教你上手，球杆免费提供。',
       answer_body:
-        '高尔夫模拟器几乎把真实高尔夫让初学者望而生畏的门槛都拿掉了。\n\n**模拟器为什么适合初学者**\n- **不需要装备：** LENGOLF免费提供标准球杆，空手来就行。\n- **不用先学规则：** 规则由模拟器自动处理，你只管把球打出去。\n- **不会尴尬：** 球位是半独立的空间，不会有人在隔壁球道盯着你的挥杆。\n- **进步看得见：** 实时数据会告诉你这一杆和上一杆之间改变了什么。初学者常常在一次体验里就能感到明显变化。\n- **不赶时间：** 不像球场后面还有组在等，模拟器可以让你慢慢来。\n\n**初学者的一次体验大致是这样**\n1. 工作人员递上球杆，讲解基本握杆和站姿（2分钟）\n2. 你先试打几球，屏幕上会显示弹道和距离\n3. 开始一个游戏模式（近洞比赛在初学者中很受欢迎）\n4. 点上饮料，和朋友较量一番，享受气氛\n5. 30分钟左右，多数初学者就能比较稳定地击中球了\n\n**如果你想认真学高尔夫**\nLENGOLF有三位专精初学者教学的PGA认定教练。课程每小时1,800泰铢起，含带挥杆分析数据的模拟器使用，截至2026年7月。另外还有1小时的免费体验课。需要说明的是，LENGOLF没有中国人教练，也没有中文课程，但预订和事前咨询可以通过LINE @lengolf用中文办理。\n\n**给初学者的一句建议**\n先从7号铁（中等长度的球杆）开始。它最好打，也最快能打出让人满意的结果。合适的球杆工作人员会帮你准备。\n\nLENGOLF的球位收费约为每小时550泰铢，最多可5人同时使用；地点在The Mercury Ville，BTS Chidlom站（4号出口）。',
+        '高尔夫模拟器几乎把真实高尔夫让初学者望而生畏的门槛都拿掉了。\n\n**模拟器为什么适合初学者**\n- **不需要装备：** LENGOLF免费提供标准球杆，空手来就行。\n- **不用先学规则：** 规则由模拟器自动处理，你只管把球打出去。\n- **不会尴尬：** 球位是半独立的空间，不会有人在隔壁球道盯着你的挥杆。\n- **进步看得见：** 实时数据会告诉你这一杆和上一杆之间改变了什么。初学者常常在一次体验里就能感到明显变化。\n- **不赶时间：** 不像球场后面还有组在等，模拟器可以让你慢慢来。\n\n**初学者的一次体验大致是这样**\n1. 工作人员递上球杆，讲解基本握杆和站姿（2分钟）\n2. 你先试打几球，屏幕上会显示弹道和距离\n3. 开始一个游戏模式（近洞比赛在初学者中很受欢迎）\n4. 点上饮料，和朋友较量一番，享受气氛\n5. 30分钟左右，多数初学者就能比较稳定地击中球了\n\n**如果你想认真学高尔夫**\nLENGOLF有三位专精初学者教学的PGA认定教练。可以先预约1小时免费体验（适用于首次在LENGOLF上课的学员，含球杆和模拟器使用）。之后的课程每小时{{lessonHourlyNum}}泰铢，套餐低至每小时{{lesson50hRateNum}}泰铢，含带挥杆分析数据的模拟器使用，截至2026年10月。需要说明的是，LENGOLF没有中国人教练，也没有中文课程，但预订和事前咨询可以通过LINE @lengolf用中文办理。\n\n**给初学者的一句建议**\n先从7号铁（中等长度的球杆）开始。它最好打，也最快能打出让人满意的结果。合适的球杆工作人员会帮你准备。\n\nLENGOLF的球位收费约为每小时550泰铢，最多可5人同时使用；地点在The Mercury Ville，BTS Chidlom站（4号出口）。',
       related_questions: [
         { slug: 'best-way-to-learn-golf-in-bangkok', question: '在曼谷学高尔夫的最佳方式 — 课程收费与选择标准' },
         { slug: 'how-accurate-are-golf-simulators', question: '高尔夫模拟器的精度如何？ — 和真实球场差在哪里' },
@@ -1641,7 +1668,7 @@ export const faqPages: FaqSeoPage[] = [
     slug: 'best-way-to-learn-golf-in-bangkok',
     title: 'What Is the Best Way to Learn Golf in Bangkok?',
     meta_description:
-      'The best way to learn golf in Bangkok is with a PGA-certified coach on a simulator. Lessons from 1,800 THB/hour include swing analysis and real-time feedback.',
+      'The best way to learn golf in Bangkok is with a PGA-certified coach on a simulator. At LENGOLF, start with a free 1-hour trial, then {{lessonHourlyNum}} THB per hour, or from {{lesson50hRateNum}} THB per hour on packages.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1649,12 +1676,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'en',
     related_slugs: ['/faq/can-beginners-play-golf-simulators', '/faq/how-much-does-indoor-golf-cost-in-bangkok', '/lessons'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-18T00:00:00.000Z',
     content: {
       answer_intro:
-        'The best way to learn golf in Bangkok is with a PGA-certified coach using a golf simulator. Simulator lessons give you real-time swing data (ball speed, launch angle, spin rate) that\'s impossible to get on a driving range, plus video analysis and instant feedback. At LENGOLF, lessons with PGA-certified coaches start at 1,800 THB per hour with simulator usage included.',
+        'The best way to learn golf in Bangkok is with a PGA-certified coach using a golf simulator. Simulator lessons give you real-time swing data (ball speed, launch angle, spin rate) that\'s impossible to get on a driving range, plus video analysis and instant feedback. At LENGOLF, new students start with a free 1-hour trial with a Thailand PGA coach, then pay {{lessonHourlyNum}} THB per hour, or from {{lesson50hRateNum}} THB per hour on packages, with simulator usage included.',
       answer_body:
-        'Bangkok has several options for learning golf, each with trade-offs.\n\n**1. Simulator Lessons with a Coach (Recommended)**\nGolf simulators provide data-driven instruction that accelerates learning. At LENGOLF, three Thailand PGA-certified coaches (PRO Boss, PRO Ratchavin, and PRO Min) teach all levels using Bravo simulator technology. You see exactly what your club is doing at impact — club path, face angle, ball speed, spin — which means faster improvement than guesswork on a range.\n\nLESSON PRICING:\n- 1 hour: 1,800 THB (1 golfer)\n- 5 hours: 8,500 THB (valid 6 months)\n- 10 hours: 16,000 THB (valid 12 months)\n- Starter Package: 11,000 THB (5 hours coaching + 5 hours practice + free golf glove)\n- Free 1-hour trial lesson available — contact LINE @lengolf\n\n**2. Driving Range with a Pro**\nBangkok has several driving ranges with coaches available. These are good for hitting lots of balls but lack the data feedback of simulators. Ranges are also hot, noisy, and you can\'t see exactly where your ball lands.\n\n**3. On-Course Lessons**\nSome courses offer on-course instruction. Better for advanced players learning course management than for beginners learning swing mechanics.\n\n**4. Self-Teaching on YouTube**\nFree but risky. Without feedback, beginners often build bad habits that are harder to fix later.\n\n**Our Recommendation for Beginners**\nStart with the Starter Package at LENGOLF (5 hours coaching + 5 hours practice for 11,000 THB). Build fundamentals on the simulator with data-driven feedback, then move to the Sim to Fairway package (13,499 THB) when you\'re ready for a real course.',
+        'Bangkok has several options for learning golf, each with trade-offs.\n\n**1. Simulator Lessons with a Coach (Recommended)**\nGolf simulators provide data-driven instruction that accelerates learning. At LENGOLF, three Thailand PGA-certified coaches (PRO Boss, PRO Ratchavin, and PRO Min) teach all levels using Bravo simulator technology. You see exactly what your club is doing at impact — club path, face angle, ball speed, spin — which means faster improvement than guesswork on a range.\n\nLESSON PRICING:\n- Free 1-hour trial for new students (clubs and simulator included): book on LINE @lengolf\n- 1 hour: {{lessonHourlyNum}} THB (1 golfer)\n- 5 hours: {{lesson5hNum}} THB ({{lesson5hRateNum}} THB per hour, valid 6 months)\n- 10 hours: {{lesson10hNum}} THB ({{lesson10hRateNum}} THB per hour, valid 12 months)\n- 50 hours: {{lesson50hNum}} THB ({{lesson50hRateNum}} THB per hour, valid 24 months)\n- Starter Package: {{lessonStarterNum}} THB (5 hours coaching + 5 hours practice + free golf glove)\n\n**2. Driving Range with a Pro**\nBangkok has several driving ranges with coaches available. These are good for hitting lots of balls but lack the data feedback of simulators. Ranges are also hot, noisy, and you can\'t see exactly where your ball lands.\n\n**3. On-Course Lessons**\nSome courses offer on-course instruction. Better for advanced players learning course management than for beginners learning swing mechanics.\n\n**4. Self-Teaching on YouTube**\nFree but risky. Without feedback, beginners often build bad habits that are harder to fix later.\n\n**Our Recommendation for Beginners**\nStart with the Starter Package at LENGOLF (5 hours coaching + 5 hours practice for {{lessonStarterNum}} THB). Build fundamentals on the simulator with data-driven feedback, then move to the Sim to Fairway package ({{lessonSimToFairwayNum}} THB) when you\'re ready for a real course.',
       related_questions: [
         { slug: 'can-beginners-play-golf-simulators', question: 'Can Beginners Play Golf Simulators?' },
         { slug: 'how-much-does-indoor-golf-cost-in-bangkok', question: 'How Much Does Indoor Golf Cost in Bangkok?' },
@@ -1664,23 +1691,17 @@ export const faqPages: FaqSeoPage[] = [
   },
 
   // ─── TH: best-way-to-learn-golf-in-bangkok ───
-  // Static content mirroring the EN entry's literal prices — this is what the
-  // FAQ renderer actually serves. NOTE: the EN sibling once carried an
-  // unwired dynamic-pricing getter for this entry. It was deleted along with
-  // its two siblings and getPriceGuideTokens: nothing called any of them, and
-  // their imports were the only edges tying this file to lib/pricing. These
-  // static entries are now the single source of truth. If a live-price
-  // version is ever wired up, the consuming route must declare its own
-  // `export const revalidate` — `npm run validate:pricing-revalidate` enforces
-  // that, because the pricing fetch caches for 30 days and would otherwise
-  // set the page's interval.
+  // Lesson prices are {{lesson…}} fact tokens (lib/site-facts.ts), resolved
+  // with interpolateFactsDeep() in app/[locale]/faq/[slug]/page.tsx and
+  // llms-full.txt, so they move with /lessons/. The answer leads with the free
+  // 1-hour trial, as /lessons/ does.
   {
     id: 'faq-11-th',
     page_type: 'faq',
     slug: 'best-way-to-learn-golf-in-bangkok',
     title: 'วิธีที่ดีที่สุดในการเรียนกอล์ฟในกรุงเทพฯ คืออะไร',
     meta_description:
-      'วิธีที่ดีที่สุดในการเรียนกอล์ฟในกรุงเทพฯ คือเรียนกับโค้ชที่ได้รับการรับรองจาก PGA บนซิมมูเลเตอร์ คอร์สเรียนเริ่มต้นที่ 1,800 บาท/ชั่วโมง รวมการวิเคราะห์วงสวิงและข้อมูลป้อนกลับแบบเรียลไทม์',
+      'วิธีที่ดีที่สุดในการเรียนกอล์ฟในกรุงเทพฯ คือเรียนกับโค้ชที่ได้รับการรับรองจาก PGA บนซิมมูเลเตอร์ ที่ LENGOLF เริ่มจากทดลองเรียนฟรี 1 ชั่วโมง จากนั้นชั่วโมงละ {{lessonHourlyNum}} บาท ถ้าซื้อแพ็กเกจ ต่ำสุดเหลือชั่วโมงละ {{lesson50hRateNum}} บาท รวมการวิเคราะห์วงสวิงและข้อมูลป้อนกลับแบบเรียลไทม์',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1688,12 +1709,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'th',
     related_slugs: ['/faq/can-beginners-play-golf-simulators', '/lessons', '/guide/golf-thailand-beginners'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-18T00:00:00.000Z',
     content: {
       answer_intro:
-        'วิธีที่ดีที่สุดในการเรียนกอล์ฟในกรุงเทพฯ คือเรียนกับโค้ชที่ได้รับการรับรองจาก PGA Thailand โดยใช้กอล์ฟซิมมูเลเตอร์ คอร์สเรียนบนซิมมูเลเตอร์ให้ข้อมูลการสวิงแบบเรียลไทม์ (ความเร็วลูก มุมปล่อยลูก อัตราการหมุน) ซึ่งหาไม่ได้จากสนามไดรฟ์ทั่วไป พร้อมทั้งวิเคราะห์วิดีโอและข้อมูลป้อนกลับทันที ที่ LENGOLF คอร์สเรียนกับโค้ชที่ได้รับการรับรองจาก PGA Thailand เริ่มต้นที่ 1,800 บาทต่อชั่วโมง รวมการใช้ซิมมูเลเตอร์',
+        'วิธีที่ดีที่สุดในการเรียนกอล์ฟในกรุงเทพฯ คือเรียนกับโค้ชที่ได้รับการรับรองจาก PGA Thailand โดยใช้กอล์ฟซิมมูเลเตอร์ คอร์สเรียนบนซิมมูเลเตอร์ให้ข้อมูลการสวิงแบบเรียลไทม์ (ความเร็วลูก มุมปล่อยลูก อัตราการหมุน) ซึ่งหาไม่ได้จากสนามไดรฟ์ทั่วไป พร้อมทั้งวิเคราะห์วิดีโอและข้อมูลป้อนกลับทันที ที่ LENGOLF คนที่ยังไม่เคยเรียนกับเราเริ่มจากทดลองเรียนฟรี 1 ชั่วโมงกับโค้ชที่ได้รับการรับรองจาก PGA Thailand จากนั้นเรียนชั่วโมงละ {{lessonHourlyNum}} บาท ถ้าซื้อแพ็กเกจ ต่ำสุดเหลือชั่วโมงละ {{lesson50hRateNum}} บาท ทุกแพ็กเกจรวมค่าห้องซิมแล้ว',
       answer_body:
-        'กรุงเทพฯ มีตัวเลือกหลายแบบสำหรับการเรียนกอล์ฟ แต่ละแบบก็มีข้อดีข้อเสียต่างกันไป\n\n**1. คอร์สเรียนบนซิมมูเลเตอร์กับโค้ช (แนะนำ)**\nกอล์ฟซิมมูเลเตอร์ให้การสอนที่อ้างอิงข้อมูลจริง ช่วยให้พัฒนาได้เร็วขึ้น ที่ LENGOLF มีโค้ชที่ได้รับการรับรองจาก PGA Thailand 3 ท่าน (โปร Boss, โปร Ratchavin และโปร Min) สอนทุกระดับโดยใช้เทคโนโลยีซิมมูเลเตอร์ Bravo คุณจะเห็นชัดเจนว่าไม้ของคุณทำอะไรบ้าง ณ จังหวะปะทะลูก ทั้งวิถีการเหวี่ยงไม้ มุมหน้าไม้ ความเร็วลูก และการหมุน ซึ่งหมายถึงการพัฒนาที่เร็วกว่าการลองผิดลองถูกที่สนามไดรฟ์ทั่วไป\n\nราคาคอร์สเรียน (ข้อมูล ณ กรกฎาคม 2026):\n- 1 ชั่วโมง: 1,800 บาท (นักกอล์ฟ 1 คน)\n- 5 ชั่วโมง: 8,500 บาท (ใช้ได้ 6 เดือน)\n- 10 ชั่วโมง: 16,000 บาท (ใช้ได้ 12 เดือน)\n- แพ็กเกจเริ่มต้น: 11,000 บาท (คอร์สเรียน 5 ชั่วโมง + ฝึกซ้อม 5 ชั่วโมง + ถุงมือกอล์ฟฟรี)\n- มีเรียนทดลองฟรี 1 ชั่วโมง ติดต่อผ่าน LINE @lengolf\n\n**2. สนามไดรฟ์พร้อมโปร**\nกรุงเทพฯ มีสนามไดรฟ์หลายแห่งที่มีโค้ชให้บริการ เหมาะสำหรับการตีลูกจำนวนมาก แต่ขาดข้อมูลป้อนกลับแบบซิมมูเลเตอร์ สนามไดรฟ์ยังร้อนและมีเสียงดัง อีกทั้งมองไม่เห็นชัดว่าลูกตกตรงไหน\n\n**3. คอร์สเรียนในสนามจริง**\nบางสนามมีการสอนในสนามจริง เหมาะกับผู้เล่นระดับสูงที่ต้องการเรียนรู้การบริหารจัดการสนาม มากกว่ามือใหม่ที่ต้องการเรียนกลไกการสวิง\n\n**4. เรียนรู้ด้วยตัวเองผ่าน YouTube**\nฟรีแต่มีความเสี่ยง เพราะไม่มีข้อมูลป้อนกลับ มือใหม่มักสร้างนิสัยที่ผิดซึ่งแก้ไขได้ยากขึ้นในภายหลัง\n\n**คำแนะนำของเราสำหรับมือใหม่**\nเริ่มต้นด้วยแพ็กเกจเริ่มต้นที่ LENGOLF (คอร์สเรียน 5 ชั่วโมง + ฝึกซ้อม 5 ชั่วโมง ราคา 11,000 บาท) สร้างพื้นฐานบนซิมมูเลเตอร์ด้วยข้อมูลป้อนกลับที่แม่นยำ จากนั้นค่อยต่อยอดด้วยแพ็กเกจ Sim to Fairway (13,499 บาท) เมื่อพร้อมออกไปเล่นสนามจริง',
+        'กรุงเทพฯ มีตัวเลือกหลายแบบสำหรับการเรียนกอล์ฟ แต่ละแบบก็มีข้อดีข้อเสียต่างกันไป\n\n**1. คอร์สเรียนบนซิมมูเลเตอร์กับโค้ช (แนะนำ)**\nกอล์ฟซิมมูเลเตอร์ให้การสอนที่อ้างอิงข้อมูลจริง ช่วยให้พัฒนาได้เร็วขึ้น ที่ LENGOLF มีโค้ชที่ได้รับการรับรองจาก PGA Thailand 3 ท่าน (โปร Boss, โปร Ratchavin และโปร Min) สอนทุกระดับโดยใช้เทคโนโลยีซิมมูเลเตอร์ Bravo คุณจะเห็นชัดเจนว่าไม้ของคุณทำอะไรบ้าง ณ จังหวะปะทะลูก ทั้งวิถีการเหวี่ยงไม้ มุมหน้าไม้ ความเร็วลูก และการหมุน ซึ่งหมายถึงการพัฒนาที่เร็วกว่าการลองผิดลองถูกที่สนามไดรฟ์ทั่วไป\n\nราคาคอร์สเรียน (ข้อมูล ณ ตุลาคม 2026):\n- ทดลองเรียนฟรี 1 ชั่วโมง สำหรับคนที่ยังไม่เคยเรียนกับ LENGOLF (มีไม้กอล์ฟและห้องซิมให้) จองทาง LINE @lengolf\n- 1 ชั่วโมง: {{lessonHourlyNum}} บาท (นักกอล์ฟ 1 คน)\n- 5 ชั่วโมง: {{lesson5hNum}} บาท (ตกชั่วโมงละ {{lesson5hRateNum}} บาท ใช้ได้ 6 เดือน)\n- 10 ชั่วโมง: {{lesson10hNum}} บาท (ตกชั่วโมงละ {{lesson10hRateNum}} บาท ใช้ได้ 12 เดือน)\n- 50 ชั่วโมง: {{lesson50hNum}} บาท (ตกชั่วโมงละ {{lesson50hRateNum}} บาท ใช้ได้ 24 เดือน)\n- แพ็กเกจ Starter: {{lessonStarterNum}} บาท (คอร์สเรียน 5 ชั่วโมง + ฝึกซ้อม 5 ชั่วโมง + ถุงมือกอล์ฟฟรี)\n\n**2. สนามไดรฟ์พร้อมโปร**\nกรุงเทพฯ มีสนามไดรฟ์หลายแห่งที่มีโค้ชให้บริการ เหมาะสำหรับการตีลูกจำนวนมาก แต่ขาดข้อมูลป้อนกลับแบบซิมมูเลเตอร์ สนามไดรฟ์ยังร้อนและมีเสียงดัง อีกทั้งมองไม่เห็นชัดว่าลูกตกตรงไหน\n\n**3. คอร์สเรียนในสนามจริง**\nบางสนามมีการสอนในสนามจริง เหมาะกับผู้เล่นระดับสูงที่ต้องการเรียนรู้การบริหารจัดการสนาม มากกว่ามือใหม่ที่ต้องการเรียนกลไกการสวิง\n\n**4. เรียนรู้ด้วยตัวเองผ่าน YouTube**\nฟรีแต่มีความเสี่ยง เพราะไม่มีข้อมูลป้อนกลับ มือใหม่มักสร้างนิสัยที่ผิดซึ่งแก้ไขได้ยากขึ้นในภายหลัง\n\n**คำแนะนำของเราสำหรับมือใหม่**\nเริ่มด้วยแพ็กเกจ Starter ของ LENGOLF (คอร์สเรียน 5 ชั่วโมง + ฝึกซ้อม 5 ชั่วโมง ราคา {{lessonStarterNum}} บาท) สร้างพื้นฐานบนซิมมูเลเตอร์ด้วยข้อมูลป้อนกลับที่แม่นยำ จากนั้นค่อยต่อยอดด้วยแพ็กเกจ Sim to Fairway ({{lessonSimToFairwayNum}} บาท) เมื่อพร้อมออกไปเล่นสนามจริง',
       related_questions: [
         { slug: 'can-beginners-play-golf-simulators', question: 'มือใหม่เล่นกอล์ฟซิมมูเลเตอร์ได้ไหม' },
         { slug: '/guide/golf-thailand-beginners', question: 'กอล์ฟในไทยสำหรับมือใหม่ — ทุกสิ่งที่คุณต้องรู้' },
@@ -1703,16 +1724,10 @@ export const faqPages: FaqSeoPage[] = [
   },
 
   // ─── JA: best-way-to-learn-golf-in-bangkok ───
-  // Static content mirroring the EN entry's literal prices — this is what the
-  // FAQ renderer actually serves. NOTE: the EN sibling once carried an
-  // unwired dynamic-pricing getter for this entry. It was deleted along with
-  // its two siblings and getPriceGuideTokens: nothing called any of them, and
-  // their imports were the only edges tying this file to lib/pricing. These
-  // static entries are now the single source of truth. If a live-price
-  // version is ever wired up, the consuming route must declare its own
-  // `export const revalidate` — `npm run validate:pricing-revalidate` enforces
-  // that, because the pricing fetch caches for 30 days and would otherwise
-  // set the page's interval.
+  // Lesson prices are {{lesson…}} fact tokens (lib/site-facts.ts), resolved
+  // with interpolateFactsDeep() in app/[locale]/faq/[slug]/page.tsx and
+  // llms-full.txt, so they move with /lessons/. The answer leads with the free
+  // 1-hour trial, as /lessons/ does.
   // HONESTY: language support uses the required LENGOLF-scoped construction —
   // 日本人コーチ／日本語でのレッスン negated for LENGOLF only, paired with the
   // LINE @lengolf Japanese booking allowance and the on-screen-numbers point.
@@ -1724,7 +1739,7 @@ export const faqPages: FaqSeoPage[] = [
     slug: 'best-way-to-learn-golf-in-bangkok',
     title: 'バンコクのゴルフレッスン、効率よく上達するには？ — 料金と選び方',
     meta_description:
-      'バンコクでゴルフを学ぶなら、PGA認定コーチによるシミュレーターレッスンが最短ルートです。LENGOLFは1時間1,800THBから、スイングデータとリアルタイムのフィードバック付き。1時間の無料体験もご用意しています（2026年7月現在）。',
+      'バンコクでゴルフを学ぶなら、PGA認定コーチによるシミュレーターレッスンが最短ルートです。LENGOLFは1時間の無料体験から始められ、その後は1時間{{lessonHourlyNum}}THB、パッケージなら1時間あたり{{lesson50hRateNum}}THBから。スイングデータとリアルタイムのフィードバック付きです（2026年10月現在）。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1732,12 +1747,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/faq/can-beginners-play-golf-simulators', '/lessons', '/guide/golf-lessons-bangkok-coaches'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-18T00:00:00.000Z',
     content: {
       answer_intro:
-        'バンコクでゴルフを学ぶ最も効率的な方法は、PGA認定コーチのもとでゴルフシミュレーターを使うことです。シミュレーターレッスンなら、ドライビングレンジでは得られないリアルタイムのスイングデータ（ボールスピード、打ち出し角、スピン量）に加え、動画分析と即時のフィードバックが得られます。LENGOLFでは、PGA認定コーチによるレッスンを1時間1,800THBから、シミュレーター利用込みでご提供しています（2026年7月現在）。',
+        'バンコクでゴルフを学ぶ最も効率的な方法は、PGA認定コーチのもとでゴルフシミュレーターを使うことです。シミュレーターレッスンなら、ドライビングレンジでは得られないリアルタイムのスイングデータ（ボールスピード、打ち出し角、スピン量）に加え、動画分析と即時のフィードバックが得られます。LENGOLFでは、PGA認定コーチによる1時間の無料体験から始められ、その後のレッスンは1時間{{lessonHourlyNum}}THB、パッケージなら1時間あたり{{lesson50hRateNum}}THBからで、いずれもシミュレーター利用込みです（2026年10月現在）。',
       answer_body:
-        'バンコクでゴルフを学ぶ方法はいくつかあり、それぞれに一長一短があります。\n\n**1. コーチによるシミュレーターレッスン（おすすめ）**\nゴルフシミュレーターは数値にもとづいた指導を可能にし、上達のスピードを引き上げてくれます。LENGOLFでは、タイPGA認定コーチ3名（PRO Boss、PRO Ratchavin、PRO Min）がBravoのシミュレーター技術を使い、あらゆるレベルの方を指導しています。インパクトの瞬間にクラブがどう動いているか——クラブパス、フェース角、ボールスピード、スピン量——が正確に見えるため、レンジで感覚を頼りに試行錯誤するより早く上達できます。\n\nなお、LENGOLFには日本人コーチや日本語でのレッスンはありませんが、ご予約や事前のご相談はLINE @lengolfにて日本語で承っています。レッスン中は画面にヘッドスピードや打ち出し角といった数値が表示されるため、言葉の壁があっても改善点を目で確認しやすいのが特長です。\n\nレッスン料金:\n- 1時間: 1,800THB（1名）\n- 5時間: 8,500THB（有効期限6か月）\n- 10時間: 16,000THB（有効期限12か月）\n- スターターパッケージ: 11,000THB（レッスン5時間 + 練習5時間 + ゴルフグローブ付き）\n- 1時間の無料体験レッスンあり——ご連絡はLINE @lengolfまで\n\n**2. ドライビングレンジでのプロレッスン**\nバンコクには、コーチが常駐するドライビングレンジがいくつもあります。球数を打ちたい方には向きますが、シミュレーターのようなデータフィードバックはありません。暑さや騒音もあり、球がどこに落ちたか正確には見えにくいという難点もあります。\n\n**3. オンコースレッスン**\n実際のコースで指導を受けられる施設もあります。スイングの基礎を固めたい初心者より、コースマネジメントを学びたい上級者に向いた形式です。\n\n**4. YouTubeでの独学**\n無料ですが、リスクもあります。フィードバックがないため、初心者は後から直しにくい悪い癖を身につけてしまいがちです。\n\n**初心者の方へのおすすめ**\nまずはLENGOLFのスターターパッケージ（レッスン5時間 + 練習5時間で11,000THB）から。シミュレーターのデータフィードバックで基礎を固め、実際のコースに出る準備が整ったらSim to Fairwayパッケージ（13,499THB）へ進む、という流れがおすすめです。',
+        'バンコクでゴルフを学ぶ方法はいくつかあり、それぞれに一長一短があります。\n\n**1. コーチによるシミュレーターレッスン（おすすめ）**\nゴルフシミュレーターは数値にもとづいた指導を可能にし、上達のスピードを引き上げてくれます。LENGOLFでは、タイPGA認定コーチ3名（PRO Boss、PRO Ratchavin、PRO Min）がBravoのシミュレーター技術を使い、あらゆるレベルの方を指導しています。インパクトの瞬間にクラブがどう動いているか——クラブパス、フェース角、ボールスピード、スピン量——が正確に見えるため、レンジで感覚を頼りに試行錯誤するより早く上達できます。\n\nなお、LENGOLFには日本人コーチや日本語でのレッスンはありませんが、ご予約や事前のご相談はLINE @lengolfにて日本語で承っています。レッスン中は画面にヘッドスピードや打ち出し角といった数値が表示されるため、言葉の壁があっても改善点を目で確認しやすいのが特長です。\n\nレッスン料金:\n- 1時間の無料体験: LENGOLFで初めてレッスンを受ける方が対象（クラブとシミュレーターの利用込み）。ご予約はLINE @lengolfまで\n- 1時間: {{lessonHourlyNum}}THB（1名）\n- 5時間: {{lesson5hNum}}THB（1時間あたり{{lesson5hRateNum}}THB、有効期限6か月）\n- 10時間: {{lesson10hNum}}THB（1時間あたり{{lesson10hRateNum}}THB、有効期限12か月）\n- 50時間: {{lesson50hNum}}THB（1時間あたり{{lesson50hRateNum}}THB、有効期限24か月）\n- スターターパッケージ: {{lessonStarterNum}}THB（レッスン5時間 + 練習5時間 + ゴルフグローブ付き）\n\n**2. ドライビングレンジでのプロレッスン**\nバンコクには、コーチが常駐するドライビングレンジがいくつもあります。球数を打ちたい方には向きますが、シミュレーターのようなデータフィードバックはありません。暑さや騒音もあり、球がどこに落ちたか正確には見えにくいという難点もあります。\n\n**3. オンコースレッスン**\n実際のコースで指導を受けられる施設もあります。スイングの基礎を固めたい初心者より、コースマネジメントを学びたい上級者に向いた形式です。\n\n**4. YouTubeでの独学**\n無料ですが、リスクもあります。フィードバックがないため、初心者は後から直しにくい悪い癖を身につけてしまいがちです。\n\n**初心者の方へのおすすめ**\nまずはLENGOLFのスターターパッケージ（レッスン5時間 + 練習5時間で{{lessonStarterNum}}THB）から。シミュレーターのデータフィードバックで基礎を固め、実際のコースに出る準備が整ったらSim to Fairwayパッケージ（{{lessonSimToFairwayNum}}THB）へ進む、という流れがおすすめです。',
       related_questions: [
         { slug: 'can-beginners-play-golf-simulators', question: 'ゴルフシミュレーターは初心者でも楽しめる？ — 未経験から始める手順' },
         { slug: '/guide/golf-lessons-bangkok-coaches', question: 'バンコクのゴルフレッスン — 費用とコーチの選び方' },
@@ -1747,16 +1762,10 @@ export const faqPages: FaqSeoPage[] = [
   },
 
   // ─── KO: best-way-to-learn-golf-in-bangkok ───
-  // Static content mirroring the EN entry's literal prices — this is what the
-  // FAQ renderer actually serves. NOTE: the EN sibling once carried an
-  // unwired dynamic-pricing getter for this entry. It was deleted along with
-  // its two siblings and getPriceGuideTokens: nothing called any of them, and
-  // their imports were the only edges tying this file to lib/pricing. These
-  // static entries are now the single source of truth. If a live-price
-  // version is ever wired up, the consuming route must declare its own
-  // `export const revalidate` — `npm run validate:pricing-revalidate` enforces
-  // that, because the pricing fetch caches for 30 days and would otherwise
-  // set the page's interval.
+  // Lesson prices are {{lesson…}} fact tokens (lib/site-facts.ts), resolved
+  // with interpolateFactsDeep() in app/[locale]/faq/[slug]/page.tsx and
+  // llms-full.txt, so they move with /lessons/. The answer leads with the free
+  // 1-hour trial, as /lessons/ does.
   // HONESTY: language support uses the required LENGOLF-scoped construction —
   // 한국인 코치／한국어 레슨 negated for LENGOLF only, paired with the LINE
   // @lengolf Korean booking allowance and the on-screen-numbers point. No
@@ -1769,7 +1778,7 @@ export const faqPages: FaqSeoPage[] = [
     slug: 'best-way-to-learn-golf-in-bangkok',
     title: '방콕에서 골프 배우는 가장 좋은 방법 — 레슨 요금과 선택 기준',
     meta_description:
-      '방콕에서 골프를 배운다면 PGA 인증 코치의 시뮬레이터 레슨이 가장 빠른 길이에요. LENGOLF는 시간당 1,800바트부터, 스윙 데이터와 실시간 피드백이 포함돼요. 1시간 무료 체험 레슨도 준비돼 있어요 (2026년 7월 기준).',
+      '방콕에서 골프를 배운다면 PGA 인증 코치의 시뮬레이터 레슨이 가장 빠른 길이에요. LENGOLF는 1시간 무료 체험으로 시작하고, 이후 시간당 {{lessonHourlyNum}}바트, 패키지는 시간당 {{lesson50hRateNum}}바트부터예요. 스윙 데이터와 실시간 피드백이 포함돼요 (2026년 10월 기준).',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1777,12 +1786,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/faq/can-beginners-play-golf-simulators', '/lessons', '/guide/golf-lessons-bangkok-coaches'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-18T00:00:00.000Z',
     content: {
       answer_intro:
-        '방콕에서 골프를 배우는 가장 좋은 방법은 PGA 인증 코치와 함께 골프 시뮬레이터를 쓰는 거예요. 시뮬레이터 레슨은 드라이빙 레인지에서는 얻을 수 없는 실시간 스윙 데이터(볼 스피드, 발사각, 스핀량)에 더해 영상 분석과 즉각적인 피드백까지 제공해요. LENGOLF에서는 PGA 인증 코치의 레슨을 시간당 1,800바트부터, 시뮬레이터 이용 포함으로 받으실 수 있어요 (2026년 7월 기준).',
+        '방콕에서 골프를 배우는 가장 좋은 방법은 PGA 인증 코치와 함께 골프 시뮬레이터를 쓰는 거예요. 시뮬레이터 레슨은 드라이빙 레인지에서는 얻을 수 없는 실시간 스윙 데이터(볼 스피드, 발사각, 스핀량)에 더해 영상 분석과 즉각적인 피드백까지 제공해요. LENGOLF에서는 PGA 인증 코치와 1시간 무료 체험으로 시작하실 수 있고, 이후 레슨은 시간당 {{lessonHourlyNum}}바트, 패키지는 시간당 {{lesson50hRateNum}}바트부터, 시뮬레이터 이용 포함이에요 (2026년 10월 기준).',
       answer_body:
-        '방콕에서 골프를 배우는 방법은 여러 가지고, 각각 장단점이 있어요.\n\n**1. 코치와 함께하는 시뮬레이터 레슨 (추천)**\n골프 시뮬레이터는 숫자에 근거한 지도를 가능하게 해서 상승 속도를 끌어올려 줘요. LENGOLF에는 태국 PGA 인증 코치 3명(PRO Boss, PRO Ratchavin, PRO Min)이 Bravo 시뮬레이터 기술을 활용해 모든 레벨을 지도하고 있어요. 임팩트 순간에 클럽이 어떻게 움직이는지 — 클럽 패스, 페이스 앵글, 볼 스피드, 스핀량 — 가 그대로 보이기 때문에, 레인지에서 감으로 시행착오를 겪는 것보다 빠르게 늘어요.\n\n참고로 LENGOLF에 한국인 코치나 한국어 레슨은 없지만, 예약과 사전 상담은 LINE @lengolf에서 한국어로 도와드려요. 레슨 중에는 헤드 스피드나 발사각 같은 수치가 화면에 표시돼서, 언어의 장벽이 있어도 고쳐야 할 부분을 눈으로 확인하기 쉬워요.\n\n레슨 요금:\n- 1시간: 1,800바트 (골퍼 1명)\n- 5시간: 8,500바트 (6개월 유효)\n- 10시간: 16,000바트 (12개월 유효)\n- 스타터 패키지: 11,000바트 (레슨 5시간 + 연습 5시간 + 골프 장갑 증정)\n- 1시간 무료 체험 레슨 가능 — 문의는 LINE @lengolf로\n\n**2. 드라이빙 레인지에서 프로에게 배우기**\n방콕에는 코치가 상주하는 드라이빙 레인지가 여러 곳 있어요. 공을 많이 치고 싶은 분에게는 맞지만, 시뮬레이터 같은 데이터 피드백은 없어요. 덥고 시끄러운 데다, 공이 정확히 어디에 떨어졌는지 보기 어렵다는 점도 아쉬워요.\n\n**3. 온코스 레슨**\n실제 코스에서 지도를 받을 수 있는 곳도 있어요. 스윙 기초를 다지려는 초보자보다는, 코스 매니지먼트를 배우려는 상급자에게 맞는 형식이에요.\n\n**4. YouTube로 독학**\n무료지만 위험도 있어요. 피드백이 없다 보니 초보자는 나중에 고치기 어려운 나쁜 습관을 들이기 쉬워요.\n\n**초보자에게 드리는 추천**\n먼저 LENGOLF의 스타터 패키지(레슨 5시간 + 연습 5시간 11,000바트)로 시작해 보세요. 시뮬레이터의 데이터 피드백으로 기초를 다지고, 실제 코스에 나갈 준비가 되면 Sim to Fairway 패키지(13,499바트)로 넘어가는 흐름을 추천해요.',
+        '방콕에서 골프를 배우는 방법은 여러 가지고, 각각 장단점이 있어요.\n\n**1. 코치와 함께하는 시뮬레이터 레슨 (추천)**\n골프 시뮬레이터는 숫자에 근거한 지도를 가능하게 해서 상승 속도를 끌어올려 줘요. LENGOLF에는 태국 PGA 인증 코치 3명(PRO Boss, PRO Ratchavin, PRO Min)이 Bravo 시뮬레이터 기술을 활용해 모든 레벨을 지도하고 있어요. 임팩트 순간에 클럽이 어떻게 움직이는지 — 클럽 패스, 페이스 앵글, 볼 스피드, 스핀량 — 가 그대로 보이기 때문에, 레인지에서 감으로 시행착오를 겪는 것보다 빠르게 늘어요.\n\n참고로 LENGOLF에 한국인 코치나 한국어 레슨은 없지만, 예약과 사전 상담은 LINE @lengolf에서 한국어로 도와드려요. 레슨 중에는 헤드 스피드나 발사각 같은 수치가 화면에 표시돼서, 언어의 장벽이 있어도 고쳐야 할 부분을 눈으로 확인하기 쉬워요.\n\n레슨 요금:\n- 1시간 무료 체험: LENGOLF 레슨이 처음인 분 대상 (클럽과 시뮬레이터 이용 포함), 예약은 LINE @lengolf로\n- 1시간: {{lessonHourlyNum}}바트 (골퍼 1명)\n- 5시간: {{lesson5hNum}}바트 (시간당 {{lesson5hRateNum}}바트, 6개월 유효)\n- 10시간: {{lesson10hNum}}바트 (시간당 {{lesson10hRateNum}}바트, 12개월 유효)\n- 50시간: {{lesson50hNum}}바트 (시간당 {{lesson50hRateNum}}바트, 24개월 유효)\n- 스타터 패키지: {{lessonStarterNum}}바트 (레슨 5시간 + 연습 5시간 + 골프 장갑 증정)\n\n**2. 드라이빙 레인지에서 프로에게 배우기**\n방콕에는 코치가 상주하는 드라이빙 레인지가 여러 곳 있어요. 공을 많이 치고 싶은 분에게는 맞지만, 시뮬레이터 같은 데이터 피드백은 없어요. 덥고 시끄러운 데다, 공이 정확히 어디에 떨어졌는지 보기 어렵다는 점도 아쉬워요.\n\n**3. 온코스 레슨**\n실제 코스에서 지도를 받을 수 있는 곳도 있어요. 스윙 기초를 다지려는 초보자보다는, 코스 매니지먼트를 배우려는 상급자에게 맞는 형식이에요.\n\n**4. YouTube로 독학**\n무료지만 위험도 있어요. 피드백이 없다 보니 초보자는 나중에 고치기 어려운 나쁜 습관을 들이기 쉬워요.\n\n**초보자에게 드리는 추천**\n먼저 LENGOLF의 스타터 패키지(레슨 5시간 + 연습 5시간 {{lessonStarterNum}}바트)로 시작해 보세요. 시뮬레이터의 데이터 피드백으로 기초를 다지고, 실제 코스에 나갈 준비가 되면 Sim to Fairway 패키지({{lessonSimToFairwayNum}}바트)로 넘어가는 흐름을 추천해요.',
       related_questions: [
         { slug: 'can-beginners-play-golf-simulators', question: '스크린골프, 초보자도 즐길 수 있을까? — 처음 시작하는 방법' },
         { slug: '/guide/golf-lessons-bangkok-coaches', question: '방콕 골프레슨 — 요금·코치 선택 가이드' },
@@ -1792,16 +1801,10 @@ export const faqPages: FaqSeoPage[] = [
   },
 
   // ─── ZH: best-way-to-learn-golf-in-bangkok ───
-  // Static content mirroring the EN entry's literal prices — this is what the
-  // FAQ renderer actually serves. NOTE: the EN sibling once carried an
-  // unwired dynamic-pricing getter for this entry. It was deleted along with
-  // its two siblings and getPriceGuideTokens: nothing called any of them, and
-  // their imports were the only edges tying this file to lib/pricing. These
-  // static entries are now the single source of truth. If a live-price
-  // version is ever wired up, the consuming route must declare its own
-  // `export const revalidate` — `npm run validate:pricing-revalidate` enforces
-  // that, because the pricing fetch caches for 30 days and would otherwise
-  // set the page's interval.
+  // Lesson prices are {{lesson…}} fact tokens (lib/site-facts.ts), resolved
+  // with interpolateFactsDeep() in app/[locale]/faq/[slug]/page.tsx and
+  // llms-full.txt, so they move with /lessons/. The answer leads with the free
+  // 1-hour trial, as /lessons/ does.
   // HONESTY: language support uses the required LENGOLF-scoped construction —
   // 中国人教练／中文课程 negated for LENGOLF only, paired with the LINE @lengolf
   // Chinese booking allowance and the on-screen-numbers point (the same wording
@@ -1815,7 +1818,7 @@ export const faqPages: FaqSeoPage[] = [
     slug: 'best-way-to-learn-golf-in-bangkok',
     title: '在曼谷学高尔夫的最佳方式 — 课程收费与选择标准',
     meta_description:
-      '在曼谷学高尔夫，最快的路径是跟PGA认定教练上模拟器课程。LENGOLF每小时1,800泰铢起，含挥杆数据与即时反馈，还有1小时免费体验课，截至2026年7月。',
+      '在曼谷学高尔夫，最快的路径是跟PGA认定教练上模拟器课程。LENGOLF可先预约1小时免费体验，之后每小时{{lessonHourlyNum}}泰铢，套餐低至每小时{{lesson50hRateNum}}泰铢，含挥杆数据与即时反馈，截至2026年10月。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1823,12 +1826,12 @@ export const faqPages: FaqSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/faq/can-beginners-play-golf-simulators', '/lessons', '/guide/golf-lessons-bangkok-coaches'],
     created_at: now,
-    updated_at: now,
+    updated_at: '2026-10-18T00:00:00.000Z',
     content: {
       answer_intro:
-        '在曼谷学高尔夫，最好的方式是跟着PGA认定教练用高尔夫模拟器上课。模拟器课程能给你练习场拿不到的实时挥杆数据（球速、发射角、旋转速率），还有视频分析和即时反馈。在LENGOLF，由PGA认定教练授课的课程每小时1,800泰铢起，含模拟器使用，截至2026年7月。',
+        '在曼谷学高尔夫，最好的方式是跟着PGA认定教练用高尔夫模拟器上课。模拟器课程能给你练习场拿不到的实时挥杆数据（球速、发射角、旋转速率），还有视频分析和即时反馈。在LENGOLF，可以先预约PGA认定教练的1小时免费体验，之后的课程每小时{{lessonHourlyNum}}泰铢，套餐低至每小时{{lesson50hRateNum}}泰铢，含模拟器使用，截至2026年10月。',
       answer_body:
-        '在曼谷学高尔夫有好几条路，各有取舍。\n\n**1. 跟教练上模拟器课程（推荐）**\n高尔夫模拟器让教学建立在数据之上，能明显加快进步速度。在LENGOLF，三位泰国PGA认定教练（PRO Boss、PRO Ratchavin、PRO Min）使用Bravo模拟器技术，指导各种水平的球友。击球瞬间球杆到底在做什么——杆头轨迹、杆面角度、球速、旋转——都看得一清二楚，比在练习场靠感觉摸索快得多。\n\n需要说明的是，LENGOLF没有中国人教练，也没有中文课程，但预订和事前咨询可以通过LINE @lengolf用中文办理；而且上课时，杆头速度、发射角这些模拟器数据会显示在屏幕上，即使有语言隔阂，你也能用眼睛看懂该改哪里。\n\n课程收费：\n- 1小时：1,800泰铢（1位球友）\n- 5小时：8,500泰铢（有效期6个月）\n- 10小时：16,000泰铢（有效期12个月）\n- 入门套餐：11,000泰铢（5小时授课 + 5小时练习 + 赠高尔夫手套）\n- 提供1小时免费体验课——请通过LINE @lengolf联系\n\n**2. 练习场的驻场教练**\n曼谷有不少配有教练的练习场，适合想多打球数的人，但没有模拟器那样的数据反馈。练习场还热、噪音大，而且看不清球到底落在哪里。\n\n**3. 球场实地课程**\n有些球场提供下场教学。比起要打基础的初学者，这种形式更适合想学球场策略的进阶球友。\n\n**4. 在YouTube上自学**\n免费，但有风险。缺少反馈，初学者往往会养成日后更难纠正的坏习惯。\n\n**给初学者的建议**\n先从LENGOLF的入门套餐开始（5小时授课 + 5小时练习，11,000泰铢），用模拟器的数据反馈把基本功打扎实；等到准备好下真实球场，再接上Sim to Fairway套餐（13,499泰铢）。',
+        '在曼谷学高尔夫有好几条路，各有取舍。\n\n**1. 跟教练上模拟器课程（推荐）**\n高尔夫模拟器让教学建立在数据之上，能明显加快进步速度。在LENGOLF，三位泰国PGA认定教练（PRO Boss、PRO Ratchavin、PRO Min）使用Bravo模拟器技术，指导各种水平的球友。击球瞬间球杆到底在做什么——杆头轨迹、杆面角度、球速、旋转——都看得一清二楚，比在练习场靠感觉摸索快得多。\n\n需要说明的是，LENGOLF没有中国人教练，也没有中文课程，但预订和事前咨询可以通过LINE @lengolf用中文办理；而且上课时，杆头速度、发射角这些模拟器数据会显示在屏幕上，即使有语言隔阂，你也能用眼睛看懂该改哪里。\n\n课程收费：\n- 1小时免费体验：适用于首次在LENGOLF上课的学员（含球杆和模拟器使用），请通过LINE @lengolf预约\n- 1小时：{{lessonHourlyNum}}泰铢（1位球友）\n- 5小时：{{lesson5hNum}}泰铢（合每小时{{lesson5hRateNum}}泰铢，有效期6个月）\n- 10小时：{{lesson10hNum}}泰铢（合每小时{{lesson10hRateNum}}泰铢，有效期12个月）\n- 50小时：{{lesson50hNum}}泰铢（合每小时{{lesson50hRateNum}}泰铢，有效期24个月）\n- 入门套餐：{{lessonStarterNum}}泰铢（5小时授课 + 5小时练习 + 赠高尔夫手套）\n\n**2. 练习场的驻场教练**\n曼谷有不少配有教练的练习场，适合想多打球数的人，但没有模拟器那样的数据反馈。练习场还热、噪音大，而且看不清球到底落在哪里。\n\n**3. 球场实地课程**\n有些球场提供下场教学。比起要打基础的初学者，这种形式更适合想学球场策略的进阶球友。\n\n**4. 在YouTube上自学**\n免费，但有风险。缺少反馈，初学者往往会养成日后更难纠正的坏习惯。\n\n**给初学者的建议**\n先从LENGOLF的入门套餐开始（5小时授课 + 5小时练习，{{lessonStarterNum}}泰铢），用模拟器的数据反馈把基本功打扎实；等到准备好下真实球场，再接上Sim to Fairway套餐（{{lessonSimToFairwayNum}}泰铢）。',
       related_questions: [
         { slug: 'can-beginners-play-golf-simulators', question: '零基础也能玩高尔夫模拟器吗？ — 初学者上手指南' },
         { slug: '/guide/golf-lessons-bangkok-coaches', question: '曼谷高尔夫课程 — 费用、教练选择与预约指南' },
@@ -1856,7 +1859,7 @@ export const faqPages: FaqSeoPage[] = [
       answer_intro:
         'For most travelers, renting golf clubs in Thailand is cheaper and more convenient than bringing your own. Airline fees for golf bags range from 2,000 to 6,000+ THB each way, plus the hassle of oversized luggage. Rental clubs in Bangkok are widely available — at LENGOLF, premium Callaway sets rent from just ~150 THB per hour or ~1,200 THB for a full day.',
       answer_body:
-        'Here\'s a practical comparison to help you decide.\n\n**The Case for Renting**\n- No airline baggage fees (2,000–6,000+ THB saved each way)\n- No risk of damage in transit (hard cases add weight and cost)\n- No dragging a golf bag through airports, taxis, and hotels\n- Quality rental clubs are available everywhere in Bangkok\n- You can try different equipment without commitment\n\n**The Case for Bringing Your Own**\n- You\'re already dialed in with your setup — distances and feel are consistent\n- You\'re playing multiple rounds over a week or more\n- Your airline includes sports equipment in your baggage allowance\n- You have a premium set that\'s hard to replace with rentals\n\n**Rental Options in Bangkok**\n\n*At LENGOLF (Best Value for Simulators):*\n- Free standard clubs with every bay booking\n- Premium Callaway Warbird (men\'s) / Callaway REVA (women\'s): ~150 THB/hour, ~400 THB/4 hours, or ~1,200 THB/full day\n- Same-day delivery anywhere in Bangkok: ~500 THB\n\n*At Golf Courses:*\n- Most courses rent sets for 1,000–2,500 THB per round\n- Quality varies widely — some courses have outdated or worn sets\n\n**Our Recommendation**\n- Playing 1–2 casual rounds? Rent. The savings and convenience outweigh any benefit of playing your own clubs.\n- Playing 4+ competitive rounds over a week? Consider bringing your own, but factor in airline fees.\n- Playing simulators only? Always rent. Free standard clubs are included at LENGOLF.\n\nLENGOLF is located at Mercury Ville, BTS Chidlom (Exit 4). Book clubs and bays at booking.len.golf.',
+        'Here\'s a practical comparison to help you decide.\n\n**The Case for Renting**\n- No airline baggage fees (2,000–6,000+ THB saved each way)\n- No risk of damage in transit (hard cases add weight and cost)\n- No dragging a golf bag through airports, taxis, and hotels\n- Quality rental clubs are available everywhere in Bangkok\n- You can try different equipment without commitment\n\n**The Case for Bringing Your Own**\n- You\'re already dialed in with your setup — distances and feel are consistent\n- You\'re playing multiple rounds over a week or more\n- Your airline includes sports equipment in your baggage allowance\n- You have a premium set that\'s hard to replace with rentals\n\n**Rental Options in Bangkok**\n\n*At LENGOLF (Best Value for Simulators):*\n- Free standard clubs with every bay booking\n- Premium Callaway Warbird (men\'s) / Callaway REVA (women\'s): ~150 THB/hour, ~400 THB/4 hours, or ~1,200 THB/full day\n- Same-day delivery to your hotel or course: from 500 THB\n\n*At Golf Courses:*\n- Most courses rent sets for 1,000–2,500 THB per round\n- Quality varies widely — some courses have outdated or worn sets\n\n**Our Recommendation**\n- Playing 1–2 casual rounds? Rent. The savings and convenience outweigh any benefit of playing your own clubs.\n- Playing 4+ competitive rounds over a week? Consider bringing your own, but factor in airline fees.\n- Playing simulators only? Always rent. Free standard clubs are included at LENGOLF.\n\nLENGOLF is located at Mercury Ville, BTS Chidlom (Exit 4). Book clubs and bays at booking.len.golf.',
       related_questions: [
         { slug: 'cost-to-fly-with-golf-clubs-to-thailand', question: 'How Much Does It Cost to Fly with Golf Clubs to Thailand?' },
         { slug: 'can-i-rent-golf-clubs-in-bangkok', question: 'Can I Rent Golf Clubs in Bangkok?' },
@@ -1894,7 +1897,7 @@ export const faqPages: FaqSeoPage[] = [
       answer_intro:
         '多くの旅行者にとって、タイでゴルフクラブをレンタルするほうが、自分のクラブを持ち込むより安く、手間もかかりません。ゴルフバッグにかかる航空会社の手数料は片道2,000〜6,000THB以上、これに大型手荷物を運ぶ煩わしさが加わります。バンコクではレンタルクラブが広く手配でき、LENGOLFならCallawayのプレミアムセットが1時間約150THB、1日約1,200THBからご利用いただけます（2026年7月現在）。',
       answer_body:
-        '判断の材料になるよう、実際的な比較を挙げてみます。\n\n**レンタルが向いている理由**\n- 航空会社の受託手荷物料金がかからない（片道2,000〜6,000THB以上の節約）\n- 輸送中の破損リスクがない（ハードケースは重量もコストも増やします）\n- 空港、タクシー、ホテルとゴルフバッグを引きずって回らずに済む\n- バンコクではどこでも質の良いレンタルクラブが手配できる\n- 気になる道具を、購入せずに試せる\n\n**自分のクラブを持参したほうがよい場合**\n- すでに自分のセッティングが仕上がっている（距離感も打感も一定）\n- 1週間以上の滞在で何ラウンドもプレーする\n- 利用する航空会社の手荷物許容量にスポーツ用具が含まれている\n- レンタルでは代えのきかない上級モデルを使っている\n\n**バンコクのレンタルの選択肢**\n\n*LENGOLF（シミュレーター利用なら最もお得）:*\n- ベイのご予約すべてに標準クラブが無料で付属\n- プレミアムのCallaway Warbird（メンズ）／Callaway REVA（レディース）: 1時間約150THB、4時間約400THB、1日約1,200THB\n- バンコク市内どこへでも当日配送: 約500THB\n\n*ゴルフ場:*\n- 多くのコースが1ラウンド1,000〜2,500THBでセットを貸し出し\n- 品質の幅は大きく、年式の古いセットや傷んだセットしか置いていないコースもあります\n\n**おすすめの判断基準**\n- 気軽なラウンドが1〜2回なら、レンタル。節約と身軽さのメリットが、自分のクラブで打つ利点を上回ります。\n- 1週間で4ラウンド以上を本気で回るなら、持参も検討。ただし航空会社の手数料は計算に入れてください。\n- シミュレーターだけなら、迷わずレンタル。LENGOLFでは標準クラブが無料で付いています。\n\nLENGOLFはザ・マーキュリービル、BTSチットロム駅（4番出口）にあります。クラブとベイのご予約はbooking.len.golfから。',
+        '判断の材料になるよう、実際的な比較を挙げてみます。\n\n**レンタルが向いている理由**\n- 航空会社の受託手荷物料金がかからない（片道2,000〜6,000THB以上の節約）\n- 輸送中の破損リスクがない（ハードケースは重量もコストも増やします）\n- 空港、タクシー、ホテルとゴルフバッグを引きずって回らずに済む\n- バンコクではどこでも質の良いレンタルクラブが手配できる\n- 気になる道具を、購入せずに試せる\n\n**自分のクラブを持参したほうがよい場合**\n- すでに自分のセッティングが仕上がっている（距離感も打感も一定）\n- 1週間以上の滞在で何ラウンドもプレーする\n- 利用する航空会社の手荷物許容量にスポーツ用具が含まれている\n- レンタルでは代えのきかない上級モデルを使っている\n\n**バンコクのレンタルの選択肢**\n\n*LENGOLF（シミュレーター利用なら最もお得）:*\n- ベイのご予約すべてに標準クラブが無料で付属\n- プレミアムのCallaway Warbird（メンズ）／Callaway REVA（レディース）: 1時間約150THB、4時間約400THB、1日約1,200THB\n- ホテルやゴルフ場への当日配送: 500THB〜\n\n*ゴルフ場:*\n- 多くのコースが1ラウンド1,000〜2,500THBでセットを貸し出し\n- 品質の幅は大きく、年式の古いセットや傷んだセットしか置いていないコースもあります\n\n**おすすめの判断基準**\n- 気軽なラウンドが1〜2回なら、レンタル。節約と身軽さのメリットが、自分のクラブで打つ利点を上回ります。\n- 1週間で4ラウンド以上を本気で回るなら、持参も検討。ただし航空会社の手数料は計算に入れてください。\n- シミュレーターだけなら、迷わずレンタル。LENGOLFでは標準クラブが無料で付いています。\n\nLENGOLFはザ・マーキュリービル、BTSチットロム駅（4番出口）にあります。クラブとベイのご予約はbooking.len.golfから。',
       related_questions: [
         { slug: 'cost-to-fly-with-golf-clubs-to-thailand', question: 'ゴルフクラブを飛行機で運ぶ費用は？ — タイ旅行はレンタルとどちらが安いか' },
         { slug: 'can-i-rent-golf-clubs-in-bangkok', question: 'バンコクでゴルフクラブはレンタルできる？ — 料金と受け取り方' },
@@ -1933,7 +1936,7 @@ export const faqPages: FaqSeoPage[] = [
       answer_intro:
         '대부분의 여행자에게는 태국에서 골프 클럽을 대여하는 편이 내 클럽을 가져오는 것보다 저렴하고 편해요. 골프백에 붙는 항공사 수수료는 편도 2,000~6,000바트 이상이고, 여기에 대형 수하물을 끌고 다니는 번거로움까지 더해져요. 방콕에서는 대여 클럽을 어렵지 않게 구할 수 있고, LENGOLF라면 Callaway 프리미엄 세트를 시간당 약 150바트, 하루 약 1,200바트부터 이용하실 수 있어요 (2026년 7월 기준).',
       answer_body:
-        '판단에 도움이 되도록 현실적인 비교를 정리해 볼게요.\n\n**대여가 나은 이유**\n- 항공사 수하물 요금이 들지 않아요 (편도 2,000~6,000바트 이상 절약)\n- 운송 중 파손 위험이 없어요 (하드케이스는 무게도 비용도 늘려요)\n- 공항, 택시, 호텔로 골프백을 끌고 다니지 않아도 돼요\n- 방콕에서는 어디서나 품질 좋은 대여 클럽을 구할 수 있어요\n- 마음에 두고 있던 장비를 구입 없이 시험해 볼 수 있어요\n\n**내 클럽을 가져오는 편이 나은 경우**\n- 이미 자기 세팅이 잡혀 있는 경우 (거리감도 타감도 일정해요)\n- 일주일 이상 머물며 여러 라운드를 치는 경우\n- 이용하는 항공사의 수하물 허용량에 스포츠 장비가 포함되는 경우\n- 대여로는 대체하기 어려운 상급 모델을 쓰는 경우\n\n**방콕의 대여 선택지**\n\n*LENGOLF (시뮬레이터 이용이라면 가장 알뜰):*\n- 베이 예약마다 기본 클럽이 무료로 포함돼요\n- 프리미엄 Callaway Warbird(남성용) / Callaway REVA(여성용): 시간당 약 150바트, 4시간 약 400바트, 하루 약 1,200바트\n- 방콕 시내 어디든 당일 배송: 약 500바트\n\n*골프장:*\n- 대부분의 코스가 1라운드에 1,000~2,500바트로 세트를 빌려줘요\n- 품질 편차가 커서, 연식이 오래됐거나 상한 세트만 갖춘 코스도 있어요\n\n**추천하는 판단 기준**\n- 가벼운 라운딩이 1~2회라면 대여하세요. 절약과 홀가분함이 내 클럽으로 치는 이점을 넘어서요.\n- 일주일에 4라운드 이상을 진지하게 도신다면 가져오는 것도 고려해 보세요. 다만 항공사 수수료는 계산에 넣으셔야 해요.\n- 시뮬레이터만 이용하신다면 망설이지 말고 대여하세요. LENGOLF에서는 기본 클럽이 무료로 포함돼요.\n\nLENGOLF는 The Mercury Ville, BTS 칫롬역(4번 출구)에 있어요. 클럽과 베이 예약은 booking.len.golf에서 하실 수 있어요.',
+        '판단에 도움이 되도록 현실적인 비교를 정리해 볼게요.\n\n**대여가 나은 이유**\n- 항공사 수하물 요금이 들지 않아요 (편도 2,000~6,000바트 이상 절약)\n- 운송 중 파손 위험이 없어요 (하드케이스는 무게도 비용도 늘려요)\n- 공항, 택시, 호텔로 골프백을 끌고 다니지 않아도 돼요\n- 방콕에서는 어디서나 품질 좋은 대여 클럽을 구할 수 있어요\n- 마음에 두고 있던 장비를 구입 없이 시험해 볼 수 있어요\n\n**내 클럽을 가져오는 편이 나은 경우**\n- 이미 자기 세팅이 잡혀 있는 경우 (거리감도 타감도 일정해요)\n- 일주일 이상 머물며 여러 라운드를 치는 경우\n- 이용하는 항공사의 수하물 허용량에 스포츠 장비가 포함되는 경우\n- 대여로는 대체하기 어려운 상급 모델을 쓰는 경우\n\n**방콕의 대여 선택지**\n\n*LENGOLF (시뮬레이터 이용이라면 가장 알뜰):*\n- 베이 예약마다 기본 클럽이 무료로 포함돼요\n- 프리미엄 Callaway Warbird(남성용) / Callaway REVA(여성용): 시간당 약 150바트, 4시간 약 400바트, 하루 약 1,200바트\n- 호텔이나 골프장으로 당일 배송: 500바트부터\n\n*골프장:*\n- 대부분의 코스가 1라운드에 1,000~2,500바트로 세트를 빌려줘요\n- 품질 편차가 커서, 연식이 오래됐거나 상한 세트만 갖춘 코스도 있어요\n\n**추천하는 판단 기준**\n- 가벼운 라운딩이 1~2회라면 대여하세요. 절약과 홀가분함이 내 클럽으로 치는 이점을 넘어서요.\n- 일주일에 4라운드 이상을 진지하게 도신다면 가져오는 것도 고려해 보세요. 다만 항공사 수수료는 계산에 넣으셔야 해요.\n- 시뮬레이터만 이용하신다면 망설이지 말고 대여하세요. LENGOLF에서는 기본 클럽이 무료로 포함돼요.\n\nLENGOLF는 The Mercury Ville, BTS 칫롬역(4번 출구)에 있어요. 클럽과 베이 예약은 booking.len.golf에서 하실 수 있어요.',
       related_questions: [
         { slug: 'cost-to-fly-with-golf-clubs-to-thailand', question: '골프 클럽 항공 운송 비용은? — 태국 여행, 대여와 비교하면' },
         { slug: 'can-i-rent-golf-clubs-in-bangkok', question: '방콕에서 골프 클럽 대여되나요? — 요금과 수령 방법' },
@@ -1973,7 +1976,7 @@ export const faqPages: FaqSeoPage[] = [
       answer_intro:
         '对大多数旅客来说，在泰国租高尔夫球杆比带自己的更便宜，也更方便。球包要付的航空公司费用单程就是2,000–6,000泰铢以上，还得额外应付超大件行李的麻烦。曼谷各处都能租到球杆——在LENGOLF，Callaway的高级套装每小时约150泰铢起，整日约1,200泰铢，截至2026年7月。',
       answer_body:
-        '给你一份实用的对比，方便自己做判断。\n\n**租借更划算的理由**\n- 省下航空公司的行李费（单程能省2,000–6,000泰铢以上）\n- 不必担心运输途中的损坏（硬壳箱本身既加重量又加成本）\n- 不用拖着球包穿过机场、出租车和酒店\n- 曼谷各处都能租到品质不错的球杆\n- 想试的装备可以先用用看，不必先买下来\n\n**自带球杆更合适的情况**\n- 你的配置已经调顺了，距离和手感都很稳定\n- 你要在一周或更长的时间里打好几场\n- 你搭的航空公司把运动器材算进了行李额度里\n- 你手上那套是租借替代不了的高阶球杆\n\n**曼谷的租借选择**\n\n*LENGOLF（打模拟器最划算）：*\n- 每次球位预订都免费附带标准球杆\n- 高级Callaway Warbird（男士）／Callaway REVA（女士）：每小时约150泰铢，4小时约400泰铢，整日约1,200泰铢\n- 曼谷市内当日配送：约500泰铢\n\n*高尔夫球场：*\n- 多数球场一轮1,000–2,500泰铢出租整套球杆\n- 品质差异很大，有些球场只有过时或磨损严重的套装\n\n**我们的建议**\n- 只打1–2场轻松的球？租。省下的钱和省下的麻烦，比用自己球杆的好处更实在。\n- 一周里要认真打4场以上？可以考虑自带，但记得把航空公司的费用算进去。\n- 只玩模拟器？一律租借。LENGOLF的标准球杆本来就免费包含。\n\nLENGOLF位于The Mercury Ville，BTS Chidlom站4号出口。球杆和球位都可以在booking.len.golf上预订。',
+        '给你一份实用的对比，方便自己做判断。\n\n**租借更划算的理由**\n- 省下航空公司的行李费（单程能省2,000–6,000泰铢以上）\n- 不必担心运输途中的损坏（硬壳箱本身既加重量又加成本）\n- 不用拖着球包穿过机场、出租车和酒店\n- 曼谷各处都能租到品质不错的球杆\n- 想试的装备可以先用用看，不必先买下来\n\n**自带球杆更合适的情况**\n- 你的配置已经调顺了，距离和手感都很稳定\n- 你要在一周或更长的时间里打好几场\n- 你搭的航空公司把运动器材算进了行李额度里\n- 你手上那套是租借替代不了的高阶球杆\n\n**曼谷的租借选择**\n\n*LENGOLF（打模拟器最划算）：*\n- 每次球位预订都免费附带标准球杆\n- 高级Callaway Warbird（男士）／Callaway REVA（女士）：每小时约150泰铢，4小时约400泰铢，整日约1,200泰铢\n- 曼谷市内当日配送：500泰铢起\n\n*高尔夫球场：*\n- 多数球场一轮1,000–2,500泰铢出租整套球杆\n- 品质差异很大，有些球场只有过时或磨损严重的套装\n\n**我们的建议**\n- 只打1–2场轻松的球？租。省下的钱和省下的麻烦，比用自己球杆的好处更实在。\n- 一周里要认真打4场以上？可以考虑自带，但记得把航空公司的费用算进去。\n- 只玩模拟器？一律租借。LENGOLF的标准球杆本来就免费包含。\n\nLENGOLF位于The Mercury Ville，BTS Chidlom站4号出口。球杆和球位都可以在booking.len.golf上预订。',
       related_questions: [
         { slug: 'cost-to-fly-with-golf-clubs-to-thailand', question: '把高尔夫球杆带上飞机要花多少钱？ — 飞泰国自带与租借对比' },
         { slug: 'can-i-rent-golf-clubs-in-bangkok', question: '曼谷能租到高尔夫球杆吗？ — 收费、球杆套装与配送方式' },
@@ -2013,7 +2016,7 @@ export const faqPages: FaqSeoPage[] = [
       answer_intro:
         'สำหรับนักเดินทางส่วนใหญ่ การเช่าไม้กอล์ฟในประเทศไทยถูกกว่าและสะดวกกว่าการนำไม้ของตัวเองมา ค่าธรรมเนียมสายการบินสำหรับถุงกอล์ฟอยู่ที่ 2,000 ถึงกว่า 6,000 บาทต่อเที่ยว บวกกับความยุ่งยากของสัมภาระขนาดใหญ่ ไม้กอล์ฟให้เช่าในกรุงเทพฯ หาได้ทั่วไป ที่ LENGOLF ชุดพรีเมียม Callaway ให้เช่าเริ่มต้นเพียงประมาณ 150 บาทต่อชั่วโมง หรือประมาณ 1,200 บาทต่อวันเต็ม (ข้อมูล ณ กรกฎาคม 2026)',
       answer_body:
-        'นี่คือการเปรียบเทียบเชิงปฏิบัติเพื่อช่วยให้คุณตัดสินใจ\n\n**เหตุผลที่ควรเช่า**\n- ไม่ต้องเสียค่าสัมภาระของสายการบิน (ประหยัด 2,000 ถึงกว่า 6,000 บาทต่อเที่ยว)\n- ไม่มีความเสี่ยงที่ไม้จะเสียหายระหว่างขนส่ง (กล่องแข็งยังเพิ่มทั้งน้ำหนักและค่าใช้จ่าย)\n- ไม่ต้องลากถุงกอล์ฟผ่านสนามบิน แท็กซี่ และโรงแรม\n- ไม้กอล์ฟให้เช่าคุณภาพดีหาได้ทั่วกรุงเทพฯ\n- ได้ลองอุปกรณ์หลายแบบโดยไม่ต้องผูกมัด\n\n**เหตุผลที่ควรนำไม้ของตัวเองมา**\n- คุณคุ้นเคยกับชุดของตัวเองอยู่แล้ว ทั้งระยะและสัมผัสสม่ำเสมอ\n- คุณจะออกรอบหลายครั้งตลอดหนึ่งสัปดาห์หรือมากกว่านั้น\n- สายการบินของคุณรวมอุปกรณ์กีฬาไว้ในน้ำหนักสัมภาระที่ได้รับอยู่แล้ว\n- คุณมีชุดไม้ระดับพรีเมียมที่หาไม้เช่ามาแทนได้ยาก\n\n**ตัวเลือกการเช่าในกรุงเทพฯ**\n\n*ที่ LENGOLF (คุ้มค่าที่สุดสำหรับซิมมูเลเตอร์):*\n- ไม้มาตรฐานฟรีในทุกการจองเบย์\n- ชุดพรีเมียม Callaway Warbird (ผู้ชาย) / Callaway REVA (ผู้หญิง): ประมาณ 150 บาท/ชั่วโมง ประมาณ 400 บาท/4 ชั่วโมง หรือประมาณ 1,200 บาท/วันเต็ม\n- จัดส่งภายในวันเดียวกันทั่วกรุงเทพฯ: ประมาณ 500 บาท\n\n*ที่สนามกอล์ฟ:*\n- สนามส่วนใหญ่ให้เช่าชุดไม้ในราคา 1,000-2,500 บาทต่อรอบ\n- คุณภาพแตกต่างกันมาก บางสนามมีเฉพาะชุดที่เก่าหรือผ่านการใช้งานหนัก\n\n**คำแนะนำของเรา**\n- ออกรอบสบายๆ 1-2 ครั้ง: เช่าเลย เพราะเงินที่ประหยัดได้และความสะดวกคุ้มกว่าข้อดีของการใช้ไม้ตัวเอง\n- ออกรอบจริงจัง 4 ครั้งขึ้นไปในหนึ่งสัปดาห์: พิจารณานำไม้มาเอง แต่ต้องคำนวณค่าธรรมเนียมสายการบินเข้าไปด้วย\n- เล่นเฉพาะซิมมูเลเตอร์: เช่าเสมอ เพราะที่ LENGOLF มีไม้มาตรฐานให้ใช้ฟรีอยู่แล้ว\n\nLENGOLF ตั้งอยู่ที่ Mercury Ville, BTS ชิดลม (ทางออก 4) จองไม้กอล์ฟและเบย์ได้ที่ booking.len.golf',
+        'นี่คือการเปรียบเทียบเชิงปฏิบัติเพื่อช่วยให้คุณตัดสินใจ\n\n**เหตุผลที่ควรเช่า**\n- ไม่ต้องเสียค่าสัมภาระของสายการบิน (ประหยัด 2,000 ถึงกว่า 6,000 บาทต่อเที่ยว)\n- ไม่มีความเสี่ยงที่ไม้จะเสียหายระหว่างขนส่ง (กล่องแข็งยังเพิ่มทั้งน้ำหนักและค่าใช้จ่าย)\n- ไม่ต้องลากถุงกอล์ฟผ่านสนามบิน แท็กซี่ และโรงแรม\n- ไม้กอล์ฟให้เช่าคุณภาพดีหาได้ทั่วกรุงเทพฯ\n- ได้ลองอุปกรณ์หลายแบบโดยไม่ต้องผูกมัด\n\n**เหตุผลที่ควรนำไม้ของตัวเองมา**\n- คุณคุ้นเคยกับชุดของตัวเองอยู่แล้ว ทั้งระยะและสัมผัสสม่ำเสมอ\n- คุณจะออกรอบหลายครั้งตลอดหนึ่งสัปดาห์หรือมากกว่านั้น\n- สายการบินของคุณรวมอุปกรณ์กีฬาไว้ในน้ำหนักสัมภาระที่ได้รับอยู่แล้ว\n- คุณมีชุดไม้ระดับพรีเมียมที่หาไม้เช่ามาแทนได้ยาก\n\n**ตัวเลือกการเช่าในกรุงเทพฯ**\n\n*ที่ LENGOLF (คุ้มค่าที่สุดสำหรับซิมมูเลเตอร์):*\n- ไม้มาตรฐานฟรีในทุกการจองเบย์\n- ชุดพรีเมียม Callaway Warbird (ผู้ชาย) / Callaway REVA (ผู้หญิง): ประมาณ 150 บาท/ชั่วโมง ประมาณ 400 บาท/4 ชั่วโมง หรือประมาณ 1,200 บาท/วันเต็ม\n- จัดส่งภายในวันเดียวกันถึงโรงแรมหรือสนาม: เริ่มต้น 500 บาท\n\n*ที่สนามกอล์ฟ:*\n- สนามส่วนใหญ่ให้เช่าชุดไม้ในราคา 1,000-2,500 บาทต่อรอบ\n- คุณภาพแตกต่างกันมาก บางสนามมีเฉพาะชุดที่เก่าหรือผ่านการใช้งานหนัก\n\n**คำแนะนำของเรา**\n- ออกรอบสบายๆ 1-2 ครั้ง: เช่าเลย เพราะเงินที่ประหยัดได้และความสะดวกคุ้มกว่าข้อดีของการใช้ไม้ตัวเอง\n- ออกรอบจริงจัง 4 ครั้งขึ้นไปในหนึ่งสัปดาห์: พิจารณานำไม้มาเอง แต่ต้องคำนวณค่าธรรมเนียมสายการบินเข้าไปด้วย\n- เล่นเฉพาะซิมมูเลเตอร์: เช่าเสมอ เพราะที่ LENGOLF มีไม้มาตรฐานให้ใช้ฟรีอยู่แล้ว\n\nLENGOLF ตั้งอยู่ที่ Mercury Ville, BTS ชิดลม (ทางออก 4) จองไม้กอล์ฟและเบย์ได้ที่ booking.len.golf',
       related_questions: [
         { slug: 'cost-to-fly-with-golf-clubs-to-thailand', question: 'พาไม้กอล์ฟขึ้นเครื่องมาไทยเสียเท่าไหร่ — ค่าธรรมเนียมสายการบินและทางเลือกเช่า' },
         { slug: 'can-i-rent-golf-clubs-in-bangkok', question: 'เช่าไม้กอล์ฟในกรุงเทพฯ ได้ไหม' },
@@ -2041,7 +2044,7 @@ export const faqPages: FaqSeoPage[] = [
       answer_intro:
         'Flying with golf clubs to Thailand typically costs 2,000 to 6,000+ THB (USD $55–170) each way, depending on the airline and your ticket class. Some full-service airlines include sports equipment in checked baggage, while budget carriers charge hefty oversized baggage fees. For short trips, renting clubs in Bangkok is often cheaper than the round-trip airline fees.',
       answer_body:
-        'Here\'s what airlines typically charge for golf bags on Thailand routes.\n\n**Full-Service Airlines**\n- **Thai Airways:** Golf bags accepted as checked baggage within standard weight allowance (usually 30kg on economy). No extra fee if within weight limit. Excess baggage charged per kg.\n- **Singapore Airlines / Cathay Pacific / Emirates:** Similar policy — sports equipment counts toward total checked baggage weight. Typically 30kg economy, 40kg business.\n- **Japan Airlines / ANA:** Generally include golf bags within checked luggage allowance on international flights.\n\n**Budget Airlines (Higher Fees)**\n- **AirAsia:** Sports equipment fee of approximately 350 THB/kg. A typical golf bag weighs 12–18kg, so expect 4,200–6,300 THB each way.\n- **Thai VietJet:** Oversized baggage fees vary, typically 3,000–5,000 THB each way for a golf bag.\n- **Scoot / Nok Air:** Similar range, 2,500–5,000 THB each way.\n\n**Additional Costs to Consider**\n- Travel hard case for clubs: 5,000–15,000 THB to buy (recommended to prevent damage)\n- Airport transfers: Oversized luggage may require a larger taxi or minivan\n- Risk of damage: Airlines do damage clubs occasionally, and claims are difficult\n\n**Cost Comparison: Bring vs. Rent**\nFor a 5-day trip with 2 rounds of golf:\n- Bring your own: 4,000–12,000 THB in airline fees (round trip) + hard case cost\n- Rent at courses: 1,000–3,000 THB total for 2 rounds\n- Rent premium clubs at LENGOLF: ~1,200 THB/day (Callaway full set) with same-day delivery in Bangkok for ~500 THB\n\nFor most travelers, renting is the clear winner on cost.',
+        'Here\'s what airlines typically charge for golf bags on Thailand routes.\n\n**Full-Service Airlines**\n- **Thai Airways:** Golf bags accepted as checked baggage within standard weight allowance (usually 30kg on economy). No extra fee if within weight limit. Excess baggage charged per kg.\n- **Singapore Airlines / Cathay Pacific / Emirates:** Similar policy — sports equipment counts toward total checked baggage weight. Typically 30kg economy, 40kg business.\n- **Japan Airlines / ANA:** Generally include golf bags within checked luggage allowance on international flights.\n\n**Budget Airlines (Higher Fees)**\n- **AirAsia:** Sports equipment fee of approximately 350 THB/kg. A typical golf bag weighs 12–18kg, so expect 4,200–6,300 THB each way.\n- **Thai VietJet:** Oversized baggage fees vary, typically 3,000–5,000 THB each way for a golf bag.\n- **Scoot / Nok Air:** Similar range, 2,500–5,000 THB each way.\n\n**Additional Costs to Consider**\n- Travel hard case for clubs: 5,000–15,000 THB to buy (recommended to prevent damage)\n- Airport transfers: Oversized luggage may require a larger taxi or minivan\n- Risk of damage: Airlines do damage clubs occasionally, and claims are difficult\n\n**Cost Comparison: Bring vs. Rent**\nFor a 5-day trip with 2 rounds of golf:\n- Bring your own: 4,000–12,000 THB in airline fees (round trip) + hard case cost\n- Rent at courses: 1,000–3,000 THB total for 2 rounds\n- Rent premium clubs at LENGOLF: ~1,200 THB/day (Callaway full set) with same-day delivery in Bangkok from 500 THB\n\nFor most travelers, renting is the clear winner on cost.',
       related_questions: [
         { slug: 'should-i-bring-golf-clubs-to-thailand-or-rent', question: 'Should I Bring My Golf Clubs to Thailand or Rent?' },
         { slug: 'can-i-rent-golf-clubs-in-bangkok', question: 'Can I Rent Golf Clubs in Bangkok?' },
@@ -2077,7 +2080,7 @@ export const faqPages: FaqSeoPage[] = [
       answer_intro:
         'ゴルフクラブを飛行機でタイへ運ぶ費用は、航空会社と座席クラスにもよりますが、片道2,000〜6,000THB以上（55〜170米ドル）が目安です。フルサービス系の航空会社にはスポーツ用具を受託手荷物に含めるところがある一方、LCCは高額な大型手荷物料金を課します。短期の旅行なら、バンコクでクラブをレンタルするほうが往復の航空手数料より安く済むことも少なくありません。',
       answer_body:
-        'タイ路線でゴルフバッグにかかる料金の目安を、航空会社のタイプ別にまとめます。\n\n**フルサービス系航空会社**\n- **Thai Airways:** 標準の重量許容範囲内（エコノミーで通常30kg）であれば、ゴルフバッグを受託手荷物として預けられます。重量内なら追加料金はなし。超過分は1kgごとに課金されます。\n- **Singapore Airlines／Cathay Pacific／Emirates:** 方針はおおむね同様で、スポーツ用具は受託手荷物の総重量に算入されます。一般にエコノミー30kg、ビジネス40kgです。\n- **Japan Airlines／ANA:** 国際線では、ゴルフバッグは受託手荷物の許容量に含まれるのが一般的です。\n\n**LCC（料金は高め）**\n- **AirAsia:** スポーツ用具の料金は1kgあたり約350THB。ゴルフバッグは12〜18kgが一般的なので、片道4,200〜6,300THBを見込んでおきましょう。\n- **Thai VietJet:** 大型手荷物料金は条件により幅がありますが、ゴルフバッグで片道3,000〜5,000THBが目安です。\n- **Scoot／Nok Air:** 同程度の水準で、片道2,500〜5,000THBです。\n\n**見落としがちな追加コスト**\n- クラブ用のハードケース: 購入に5,000〜15,000THB（破損を防ぐためおすすめ）\n- 空港からの移動: 大型の荷物には、大きめのタクシーやミニバンが必要になることがあります\n- 破損のリスク: 航空会社がクラブを破損させることは時折あり、補償の請求は簡単ではありません\n\n**持参とレンタルの費用比較**\n5日間の旅行で2ラウンドする場合:\n- 持参: 航空手数料が往復4,000〜12,000THB、これにハードケース代が加わります\n- ゴルフ場でレンタル: 2ラウンド合計で1,000〜3,000THB\n- LENGOLFでプレミアムクラブをレンタル: 1日約1,200THB（Callawayのフルセット）、バンコク市内の当日配送は約500THB（2026年7月現在）\n\n多くの旅行者にとって、費用の面ではレンタルに軍配が上がります。',
+        'タイ路線でゴルフバッグにかかる料金の目安を、航空会社のタイプ別にまとめます。\n\n**フルサービス系航空会社**\n- **Thai Airways:** 標準の重量許容範囲内（エコノミーで通常30kg）であれば、ゴルフバッグを受託手荷物として預けられます。重量内なら追加料金はなし。超過分は1kgごとに課金されます。\n- **Singapore Airlines／Cathay Pacific／Emirates:** 方針はおおむね同様で、スポーツ用具は受託手荷物の総重量に算入されます。一般にエコノミー30kg、ビジネス40kgです。\n- **Japan Airlines／ANA:** 国際線では、ゴルフバッグは受託手荷物の許容量に含まれるのが一般的です。\n\n**LCC（料金は高め）**\n- **AirAsia:** スポーツ用具の料金は1kgあたり約350THB。ゴルフバッグは12〜18kgが一般的なので、片道4,200〜6,300THBを見込んでおきましょう。\n- **Thai VietJet:** 大型手荷物料金は条件により幅がありますが、ゴルフバッグで片道3,000〜5,000THBが目安です。\n- **Scoot／Nok Air:** 同程度の水準で、片道2,500〜5,000THBです。\n\n**見落としがちな追加コスト**\n- クラブ用のハードケース: 購入に5,000〜15,000THB（破損を防ぐためおすすめ）\n- 空港からの移動: 大型の荷物には、大きめのタクシーやミニバンが必要になることがあります\n- 破損のリスク: 航空会社がクラブを破損させることは時折あり、補償の請求は簡単ではありません\n\n**持参とレンタルの費用比較**\n5日間の旅行で2ラウンドする場合:\n- 持参: 航空手数料が往復4,000〜12,000THB、これにハードケース代が加わります\n- ゴルフ場でレンタル: 2ラウンド合計で1,000〜3,000THB\n- LENGOLFでプレミアムクラブをレンタル: 1日約1,200THB（Callawayのフルセット）、バンコク市内の当日配送は500THB〜（2026年7月現在）\n\n多くの旅行者にとって、費用の面ではレンタルに軍配が上がります。',
       related_questions: [
         { slug: 'should-i-bring-golf-clubs-to-thailand-or-rent', question: 'ゴルフクラブレンタルか持参か — タイ旅行で得なのはどちら？' },
         { slug: 'can-i-rent-golf-clubs-in-bangkok', question: 'バンコクでゴルフクラブはレンタルできる？ — 料金と受け取り方' },
@@ -2115,7 +2118,7 @@ export const faqPages: FaqSeoPage[] = [
       answer_intro:
         '골프 클럽을 비행기로 태국까지 옮기는 비용은 항공사와 좌석 등급에 따라 다르지만, 편도 2,000~6,000바트 이상(55~170달러)이 기준이에요. 풀서비스 항공사 중에는 스포츠 장비를 위탁 수하물에 포함해 주는 곳이 있는 반면, 저비용 항공사는 대형 수하물 요금을 비싸게 받아요. 짧은 여행이라면 방콕에서 클럽을 빌리는 편이 왕복 항공 수수료보다 저렴한 경우가 많아요.',
       answer_body:
-        '태국 노선에서 골프백에 드는 요금을 항공사 유형별로 정리해 볼게요.\n\n**풀서비스 항공사**\n- **Thai Airways:** 표준 무게 허용 범위(이코노미는 보통 30kg) 안이라면 골프백을 위탁 수하물로 부칠 수 있어요. 무게 안이면 추가 요금은 없고, 초과분은 kg당 부과돼요.\n- **Singapore Airlines / Cathay Pacific / Emirates:** 방침은 대체로 같아서, 스포츠 장비가 위탁 수하물 총중량에 포함돼요. 보통 이코노미 30kg, 비즈니스 40kg이에요.\n- **Japan Airlines / ANA:** 국제선에서는 골프백이 위탁 수하물 허용량에 포함되는 것이 일반적이에요.\n\n**저비용 항공사 (요금이 더 높아요)**\n- **AirAsia:** 스포츠 장비 요금이 kg당 약 350바트예요. 골프백은 보통 12~18kg이니 편도 4,200~6,300바트를 예상하시면 돼요.\n- **Thai VietJet:** 대형 수하물 요금은 조건에 따라 다르지만, 골프백 기준 편도 3,000~5,000바트가 일반적이에요.\n- **Scoot / Nok Air:** 비슷한 수준으로 편도 2,500~5,000바트예요.\n\n**놓치기 쉬운 추가 비용**\n- 클럽용 하드케이스: 구입에 5,000~15,000바트 (파손을 막기 위해 권해 드려요)\n- 공항 이동: 큰 짐 때문에 넉넉한 택시나 밴이 필요할 수 있어요\n- 파손 위험: 항공사가 클럽을 손상시키는 일은 가끔 있고, 보상 청구는 간단하지 않아요\n\n**가져가기와 대여, 비용 비교**\n5일 일정에 2라운드를 치는 경우를 계산해 보면 다음과 같아요.\n- 가져가기: 항공 수수료가 왕복 4,000~12,000바트, 여기에 하드케이스 값이 더해져요\n- 골프장에서 대여: 2라운드 합쳐 1,000~3,000바트\n- LENGOLF에서 프리미엄 클럽 대여: 하루 약 1,200바트 (Callaway 풀세트), 방콕 시내 당일 배송은 약 500바트 (2026년 7월 기준)\n\n대부분의 여행자에게는 비용 면에서 대여가 확실히 유리해요.',
+        '태국 노선에서 골프백에 드는 요금을 항공사 유형별로 정리해 볼게요.\n\n**풀서비스 항공사**\n- **Thai Airways:** 표준 무게 허용 범위(이코노미는 보통 30kg) 안이라면 골프백을 위탁 수하물로 부칠 수 있어요. 무게 안이면 추가 요금은 없고, 초과분은 kg당 부과돼요.\n- **Singapore Airlines / Cathay Pacific / Emirates:** 방침은 대체로 같아서, 스포츠 장비가 위탁 수하물 총중량에 포함돼요. 보통 이코노미 30kg, 비즈니스 40kg이에요.\n- **Japan Airlines / ANA:** 국제선에서는 골프백이 위탁 수하물 허용량에 포함되는 것이 일반적이에요.\n\n**저비용 항공사 (요금이 더 높아요)**\n- **AirAsia:** 스포츠 장비 요금이 kg당 약 350바트예요. 골프백은 보통 12~18kg이니 편도 4,200~6,300바트를 예상하시면 돼요.\n- **Thai VietJet:** 대형 수하물 요금은 조건에 따라 다르지만, 골프백 기준 편도 3,000~5,000바트가 일반적이에요.\n- **Scoot / Nok Air:** 비슷한 수준으로 편도 2,500~5,000바트예요.\n\n**놓치기 쉬운 추가 비용**\n- 클럽용 하드케이스: 구입에 5,000~15,000바트 (파손을 막기 위해 권해 드려요)\n- 공항 이동: 큰 짐 때문에 넉넉한 택시나 밴이 필요할 수 있어요\n- 파손 위험: 항공사가 클럽을 손상시키는 일은 가끔 있고, 보상 청구는 간단하지 않아요\n\n**가져가기와 대여, 비용 비교**\n5일 일정에 2라운드를 치는 경우를 계산해 보면 다음과 같아요.\n- 가져가기: 항공 수수료가 왕복 4,000~12,000바트, 여기에 하드케이스 값이 더해져요\n- 골프장에서 대여: 2라운드 합쳐 1,000~3,000바트\n- LENGOLF에서 프리미엄 클럽 대여: 하루 약 1,200바트 (Callaway 풀세트), 방콕 시내 당일 배송은 500바트부터 (2026년 7월 기준)\n\n대부분의 여행자에게는 비용 면에서 대여가 확실히 유리해요.',
       related_questions: [
         { slug: 'should-i-bring-golf-clubs-to-thailand-or-rent', question: '골프 클럽 대여할까 가져갈까 — 태국 여행에서 이득인 쪽은?' },
         { slug: 'can-i-rent-golf-clubs-in-bangkok', question: '방콕에서 골프 클럽 대여되나요? — 요금과 수령 방법' },
@@ -2157,7 +2160,7 @@ export const faqPages: FaqSeoPage[] = [
       answer_intro:
         '把高尔夫球杆带上飞机飞往泰国，单程通常要2,000到6,000泰铢以上（55–170美元），具体取决于航空公司和你的舱位等级。有些全服务航空会把运动器材算进托运行李额度里，廉价航空（LCC）则会收取高昂的超大件行李费。行程较短的话，在曼谷租借球杆往往比来回的航空费用还便宜。',
       answer_body:
-        '下面按航空公司类型，列出泰国航线上球包大致的收费情况。\n\n**全服务航空**\n- **泰国国际航空（Thai Airways）：** 只要在标准重量额度内（经济舱通常30公斤），球包可以当作托运行李交运。没超重就不另外收费，超出部分按公斤计价。\n- **新加坡航空（Singapore Airlines）／国泰航空（Cathay Pacific）／阿联酋航空（Emirates）：** 政策大致相同——运动器材计入托运行李的总重量，一般是经济舱30公斤、商务舱40公斤。\n- **Japan Airlines／ANA：** 在国际航线上，球包通常包含在托运行李额度之内。\n\n**廉价航空（费用更高）**\n- **亚洲航空（AirAsia）：** 运动器材每公斤约350泰铢。球包一般12–18公斤，所以单程要准备4,200–6,300泰铢。\n- **Thai VietJet：** 超大件行李的收费视条件而定，球包单程一般3,000–5,000泰铢。\n- **酷航（Scoot）／皇雀航空（Nok Air）：** 水平相近，单程2,500–5,000泰铢。\n\n**容易被忽略的额外开销**\n- 球杆硬壳箱：购买要5,000–15,000泰铢（为防损坏，建议备一个）\n- 机场接送：大件行李可能得叫大一点的出租车或商务车\n- 损坏风险：航空公司偶尔确实会弄坏球杆，而索赔并不容易\n\n**自带与租借的费用对比**\n以5天行程、打2场球来算：\n- 自带：来回航空费用4,000–12,000泰铢，再加上硬壳箱的钱\n- 在球场租：2场合计1,000–3,000泰铢\n- 在LENGOLF租高级球杆：整日约1,200泰铢（Callaway全套），曼谷市内当日配送约500泰铢，截至2026年7月\n\n对大多数旅客来说，单看费用，租借明显更胜一筹。',
+        '下面按航空公司类型，列出泰国航线上球包大致的收费情况。\n\n**全服务航空**\n- **泰国国际航空（Thai Airways）：** 只要在标准重量额度内（经济舱通常30公斤），球包可以当作托运行李交运。没超重就不另外收费，超出部分按公斤计价。\n- **新加坡航空（Singapore Airlines）／国泰航空（Cathay Pacific）／阿联酋航空（Emirates）：** 政策大致相同——运动器材计入托运行李的总重量，一般是经济舱30公斤、商务舱40公斤。\n- **Japan Airlines／ANA：** 在国际航线上，球包通常包含在托运行李额度之内。\n\n**廉价航空（费用更高）**\n- **亚洲航空（AirAsia）：** 运动器材每公斤约350泰铢。球包一般12–18公斤，所以单程要准备4,200–6,300泰铢。\n- **Thai VietJet：** 超大件行李的收费视条件而定，球包单程一般3,000–5,000泰铢。\n- **酷航（Scoot）／皇雀航空（Nok Air）：** 水平相近，单程2,500–5,000泰铢。\n\n**容易被忽略的额外开销**\n- 球杆硬壳箱：购买要5,000–15,000泰铢（为防损坏，建议备一个）\n- 机场接送：大件行李可能得叫大一点的出租车或商务车\n- 损坏风险：航空公司偶尔确实会弄坏球杆，而索赔并不容易\n\n**自带与租借的费用对比**\n以5天行程、打2场球来算：\n- 自带：来回航空费用4,000–12,000泰铢，再加上硬壳箱的钱\n- 在球场租：2场合计1,000–3,000泰铢\n- 在LENGOLF租高级球杆：整日约1,200泰铢（Callaway全套），曼谷市内当日配送500泰铢起，截至2026年7月\n\n对大多数旅客来说，单看费用，租借明显更胜一筹。',
       related_questions: [
         { slug: 'should-i-bring-golf-clubs-to-thailand-or-rent', question: '高尔夫球杆租借还是自带？ — 泰国旅行哪种更省钱省事' },
         { slug: 'can-i-rent-golf-clubs-in-bangkok', question: '曼谷能租到高尔夫球杆吗？ — 收费、球杆套装与配送方式' },
@@ -2199,7 +2202,7 @@ export const faqPages: FaqSeoPage[] = [
       answer_intro:
         'การพาไม้กอล์ฟขึ้นเครื่องมาประเทศไทยโดยทั่วไปมีค่าใช้จ่าย 2,000 ถึงกว่า 6,000 บาทต่อเที่ยว (ประมาณ 55-170 ดอลลาร์สหรัฐ) ขึ้นอยู่กับสายการบินและชั้นโดยสารของคุณ สายการบินแบบเต็มรูปแบบบางแห่งรวมอุปกรณ์กีฬาไว้ในสัมภาระใต้ท้องเครื่องอยู่แล้ว ขณะที่สายการบินราคาประหยัดคิดค่าสัมภาระขนาดใหญ่ในอัตราสูง สำหรับทริปสั้น การเช่าไม้กอล์ฟในกรุงเทพฯ มักถูกกว่าค่าธรรมเนียมสายการบินไปกลับ',
       answer_body:
-        'นี่คือค่าใช้จ่ายโดยทั่วไปที่สายการบินคิดสำหรับถุงกอล์ฟในเส้นทางมาประเทศไทย\n\n**สายการบินแบบเต็มรูปแบบ**\n- **Thai Airways:** รับถุงกอล์ฟเป็นสัมภาระใต้ท้องเครื่องภายในน้ำหนักมาตรฐานที่ได้รับ (ปกติ 30 กิโลกรัมสำหรับชั้นประหยัด) หากไม่เกินน้ำหนักที่กำหนดจะไม่มีค่าใช้จ่ายเพิ่ม ส่วนน้ำหนักส่วนเกินคิดเป็นรายกิโลกรัม\n- **Singapore Airlines / Cathay Pacific / Emirates:** นโยบายใกล้เคียงกัน อุปกรณ์กีฬานับรวมอยู่ในน้ำหนักสัมภาระใต้ท้องเครื่องทั้งหมด โดยทั่วไปชั้นประหยัด 30 กิโลกรัม และชั้นธุรกิจ 40 กิโลกรัม\n- **Japan Airlines / ANA:** โดยทั่วไปรวมถุงกอล์ฟไว้ในน้ำหนักสัมภาระใต้ท้องเครื่องที่ได้รับสำหรับเที่ยวบินระหว่างประเทศ\n\n**สายการบินราคาประหยัด (ค่าธรรมเนียมสูงกว่า)**\n- **AirAsia:** ค่าอุปกรณ์กีฬาประมาณ 350 บาทต่อกิโลกรัม ถุงกอล์ฟทั่วไปหนัก 12-18 กิโลกรัม จึงควรเตรียมงบ 4,200-6,300 บาทต่อเที่ยว\n- **Thai VietJet:** ค่าสัมภาระขนาดใหญ่แตกต่างกันไป โดยทั่วไปอยู่ที่ 3,000-5,000 บาทต่อเที่ยวสำหรับถุงกอล์ฟ\n- **Scoot / Nok Air:** อยู่ในช่วงใกล้เคียงกันที่ 2,500-5,000 บาทต่อเที่ยว\n\n**ค่าใช้จ่ายอื่นที่ควรคำนึงถึง**\n- กล่องแข็งสำหรับเดินทาง: ราคาซื้อ 5,000-15,000 บาท (แนะนำให้มีไว้เพื่อป้องกันความเสียหาย)\n- การเดินทางจากสนามบิน: สัมภาระขนาดใหญ่อาจต้องใช้แท็กซี่คันใหญ่หรือรถตู้\n- ความเสี่ยงที่ไม้จะเสียหาย: สายการบินทำไม้กอล์ฟเสียหายได้เป็นครั้งคราว และการเรียกร้องค่าเสียหายก็ทำได้ยาก\n\n**เปรียบเทียบค่าใช้จ่าย: นำมาเอง หรือเช่า**\nสำหรับทริป 5 วันที่ออกรอบ 2 ครั้ง\n- นำไม้มาเอง: ค่าธรรมเนียมสายการบินไปกลับ 4,000-12,000 บาท บวกค่ากล่องแข็ง\n- เช่าที่สนามกอล์ฟ: รวม 1,000-3,000 บาทสำหรับ 2 รอบ\n- เช่าไม้พรีเมียมที่ LENGOLF: ประมาณ 1,200 บาทต่อวัน (ชุดเต็ม Callaway) พร้อมจัดส่งภายในวันเดียวกันในกรุงเทพฯ ประมาณ 500 บาท (ข้อมูล ณ กรกฎาคม 2026)\n\nสำหรับนักเดินทางส่วนใหญ่ การเช่าชนะขาดในแง่ของค่าใช้จ่าย',
+        'นี่คือค่าใช้จ่ายโดยทั่วไปที่สายการบินคิดสำหรับถุงกอล์ฟในเส้นทางมาประเทศไทย\n\n**สายการบินแบบเต็มรูปแบบ**\n- **Thai Airways:** รับถุงกอล์ฟเป็นสัมภาระใต้ท้องเครื่องภายในน้ำหนักมาตรฐานที่ได้รับ (ปกติ 30 กิโลกรัมสำหรับชั้นประหยัด) หากไม่เกินน้ำหนักที่กำหนดจะไม่มีค่าใช้จ่ายเพิ่ม ส่วนน้ำหนักส่วนเกินคิดเป็นรายกิโลกรัม\n- **Singapore Airlines / Cathay Pacific / Emirates:** นโยบายใกล้เคียงกัน อุปกรณ์กีฬานับรวมอยู่ในน้ำหนักสัมภาระใต้ท้องเครื่องทั้งหมด โดยทั่วไปชั้นประหยัด 30 กิโลกรัม และชั้นธุรกิจ 40 กิโลกรัม\n- **Japan Airlines / ANA:** โดยทั่วไปรวมถุงกอล์ฟไว้ในน้ำหนักสัมภาระใต้ท้องเครื่องที่ได้รับสำหรับเที่ยวบินระหว่างประเทศ\n\n**สายการบินราคาประหยัด (ค่าธรรมเนียมสูงกว่า)**\n- **AirAsia:** ค่าอุปกรณ์กีฬาประมาณ 350 บาทต่อกิโลกรัม ถุงกอล์ฟทั่วไปหนัก 12-18 กิโลกรัม จึงควรเตรียมงบ 4,200-6,300 บาทต่อเที่ยว\n- **Thai VietJet:** ค่าสัมภาระขนาดใหญ่แตกต่างกันไป โดยทั่วไปอยู่ที่ 3,000-5,000 บาทต่อเที่ยวสำหรับถุงกอล์ฟ\n- **Scoot / Nok Air:** อยู่ในช่วงใกล้เคียงกันที่ 2,500-5,000 บาทต่อเที่ยว\n\n**ค่าใช้จ่ายอื่นที่ควรคำนึงถึง**\n- กล่องแข็งสำหรับเดินทาง: ราคาซื้อ 5,000-15,000 บาท (แนะนำให้มีไว้เพื่อป้องกันความเสียหาย)\n- การเดินทางจากสนามบิน: สัมภาระขนาดใหญ่อาจต้องใช้แท็กซี่คันใหญ่หรือรถตู้\n- ความเสี่ยงที่ไม้จะเสียหาย: สายการบินทำไม้กอล์ฟเสียหายได้เป็นครั้งคราว และการเรียกร้องค่าเสียหายก็ทำได้ยาก\n\n**เปรียบเทียบค่าใช้จ่าย: นำมาเอง หรือเช่า**\nสำหรับทริป 5 วันที่ออกรอบ 2 ครั้ง\n- นำไม้มาเอง: ค่าธรรมเนียมสายการบินไปกลับ 4,000-12,000 บาท บวกค่ากล่องแข็ง\n- เช่าที่สนามกอล์ฟ: รวม 1,000-3,000 บาทสำหรับ 2 รอบ\n- เช่าไม้พรีเมียมที่ LENGOLF: ประมาณ 1,200 บาทต่อวัน (ชุดเต็ม Callaway) พร้อมจัดส่งภายในวันเดียวกันในกรุงเทพฯ เริ่มต้น 500 บาท (ข้อมูล ณ กรกฎาคม 2026)\n\nสำหรับนักเดินทางส่วนใหญ่ การเช่าชนะขาดในแง่ของค่าใช้จ่าย',
       related_questions: [
         { slug: 'should-i-bring-golf-clubs-to-thailand-or-rent', question: 'เช่าไม้กอล์ฟในไทยหรือขนมาเอง — แบบไหนคุ้มกว่าสำหรับนักเดินทาง' },
         { slug: 'can-i-rent-golf-clubs-in-bangkok', question: 'เช่าไม้กอล์ฟในกรุงเทพฯ ได้ไหม' },
@@ -2247,9 +2250,8 @@ export const faqPages: FaqSeoPage[] = [
   // entries say PGA Thailand, but this slug's EN source does not, and per-source
   // fidelity wins over cross-page harmonization. The EN "Ramindra/Ratchaphruek"
   // and "no ranges in the Lumphini area" notes are third-party geography and
-  // stay static. LENGOLF prices are literals, not {{tokens}}: the FAQ route
-  // never calls interpolateFacts (only /guide/ and llms.txt do), so a token
-  // would ship as literal "{{…}}" — matches all shipped TH FAQ entries.
+  // stay static. LENGOLF prices are literals (written before the FAQ route
+  // resolved {{tokens}}, which it does since 2026-10-18).
   // related_* are all in th.staticRoutes (lib/translated-routes.ts).
   {
     id: 'faq-14-th',

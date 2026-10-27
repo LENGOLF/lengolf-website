@@ -163,7 +163,7 @@ There are 101 location pages targeting local search queries across approximately
    - `bts_route`, `walking_directions`, `taxi_fare_estimate` -- directions info
    - `nearby_landmarks`, `nearby_hotels`, `nearby_offices` -- comma-separated lists
    - `meta_description` -- SEO description
-   - `schema_markup` -- JSON-LD structured data (JSON object)
+   - `schema_markup` -- not rendered any more; leave it empty. The page's JSON-LD is built in code (`getLocationWebPageJsonLd` in `lib/jsonld.ts`)
    - `internal_links` -- semicolon-separated URLs to related location pages
 
 5. Click **Save**. The page appears within 1 hour.

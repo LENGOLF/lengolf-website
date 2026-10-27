@@ -5,9 +5,10 @@ import { Link } from '@/i18n/navigation'
 import SectionWrapper from '@/components/shared/SectionWrapper'
 import ImageGallery from '@/components/shared/ImageGallery'
 import { storageUrl, SITE_URL, BUSINESS_INFO } from '@/lib/constants'
-import { getAlternates, getCanonical } from '@/lib/translated-routes'
+import { getAlternates, getCanonical, hasTranslationForLocale } from '@/lib/translated-routes'
+import { getJuniorAcademyContent, JUNIOR_ACADEMY_PATH } from '@/data/junior-academy'
 import { coaches } from '@/data/coaches'
-import { getLessonPricingData, type LessonPackage } from '@/data/pricing'
+import { getLessonPricingData, getLessonPriceFacts, type LessonPackage } from '@/data/pricing'
 import { getLessonsPricingJsonLd, getLessonsServiceJsonLd, getFaqPageJsonLd, getBreadcrumbJsonLd, getCoachesJsonLd } from '@/lib/jsonld'
 import FaqSection from '@/components/shared/FaqSection'
 import ClickableImage from '@/components/shared/ClickableImage'
@@ -25,14 +26,19 @@ const faqLinks: Record<string, { href: string; external?: boolean }> = {
   'booking.len.golf': { href: 'https://booking.len.golf/', external: true },
   '@lengolf': { href: 'https://lin.ee/uxQpIXn', external: true },
   'Google Maps': { href: BUSINESS_INFO.googleMapsUrl, external: true },
+  // LessonsFaq.a7 in en/th; the phrase does not occur in ja/ko/zh.
+  'Junior Academy page': { href: '/junior-golf-academy' },
+  'หน้า Junior Academy': { href: '/junior-golf-academy' },
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'Lessons' })
+  const { lessonPricing } = await getLessonPricingData()
+  const priceFacts = getLessonPriceFacts(lessonPricing)
   return {
     title: t('metaTitle'),
-    description: t('metaDescription'),
+    description: t('metaDescription', priceFacts),
     alternates: {
       canonical: getCanonical(locale, '/lessons/'),
       languages: getAlternates('/lessons/'),
@@ -43,26 +49,30 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 const promoImages = [
   { src: storageUrl('lessons/promo-free-trial.jpg'), alt: 'Free 1-hour trial lesson with a PGA Pro — simple techniques, solid fundamentals, get course-ready fast' },
-  { src: storageUrl('lessons/promo-starter-package.jpg'), alt: 'Starter Package — 5 hours coaching plus 5 hours practice with free golf glove for 11,000 THB' },
+  { src: storageUrl('lessons/starter-package-2026-10.jpg'), alt: 'LENGOLF Starter Package: 5 coaching lesson hours and 5 hours of practice, plus 1 golf glove per golfer. 11,000 THB for 1 golfer, 13,500 THB for 2 golfers, valid for 6 months, VAT included' },
   { src: storageUrl('lessons/promo-coaching-package.jpg'), alt: 'Coaching package options with hourly and multi-hour lesson bundles at LENGOLF' },
   { src: storageUrl('lessons/promo-lesson.jpg'), alt: 'Golf lesson promotion with PGA-certified coach on simulator bay' },
 ]
 
+// width/height are each file's real pixel size (measured 2026-10-13). ImageGallery
+// sizes the desktop tiles from them, so a guessed value crops the photo. The
+// gallery's `rows` must add up to this list's length: a leftover photo gets a
+// full-width row of its own.
 const studentImages = [
-  { src: storageUrl('lessons/student-01.jpg'), alt: 'Student practicing iron shots with PRO Boss on golf simulator', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-02.jpg'), alt: 'Adult student working on swing technique during a coaching session', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-03.jpg'), alt: 'Coach analyzing student swing data on simulator screen', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-04.jpg'), alt: 'Student and coach reviewing shot trajectory after a drive', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-05.jpg'), alt: 'Beginner golfer learning proper grip and stance fundamentals', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-06.jpg'), alt: 'Junior golfer learning swing fundamentals with coach guidance', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-07.jpg'), alt: 'Young golfer practicing on simulator during junior development program', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-08.jpg'), alt: 'Student improving driving distance with simulator feedback', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-09.jpg'), alt: 'Student working on short game technique with coach', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-10.jpg'), alt: 'Advanced player refining shot shaping skills on simulator', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-11.jpg'), alt: 'Student receiving real-time swing feedback during lesson', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-kids-01.jpg'), alt: 'Kids group lesson with age-appropriate golf instruction', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-kids-02.jpg'), alt: 'Child learning to swing with junior-sized clubs on simulator', width: 1200, height: 800 },
-  { src: storageUrl('lessons/student-kids-03.jpg'), alt: 'Junior coaching session focused on building proper swing mechanics', width: 1200, height: 800 },
+  { src: storageUrl('lessons/student-01.jpg'), alt: 'Student practicing iron shots with PRO Boss on golf simulator', width: 2560, height: 1440 },
+  { src: storageUrl('lessons/student-02.jpg'), alt: 'Adult student working on swing technique during a coaching session', width: 2560, height: 1440 },
+  { src: storageUrl('lessons/student-03.jpg'), alt: 'Coach analyzing student swing data on simulator screen', width: 1440, height: 2560 },
+  { src: storageUrl('lessons/student-04.jpg'), alt: 'Student and coach reviewing shot trajectory after a drive', width: 1920, height: 3413 },
+  { src: storageUrl('lessons/student-05.jpg'), alt: 'Beginner golfer learning proper grip and stance fundamentals', width: 1920, height: 3413 },
+  { src: storageUrl('lessons/student-06.jpg'), alt: 'Junior golfer learning swing fundamentals with coach guidance', width: 1920, height: 2560 },
+  { src: storageUrl('lessons/student-07.jpg'), alt: 'Young golfer practicing on simulator during junior development program', width: 1920, height: 2560 },
+  { src: storageUrl('lessons/student-08.jpg'), alt: 'Student improving driving distance with simulator feedback', width: 1920, height: 2560 },
+  { src: storageUrl('lessons/student-09.jpg'), alt: 'Student working on short game technique with coach', width: 1920, height: 2009 },
+  { src: storageUrl('lessons/student-10.jpg'), alt: 'Advanced player refining shot shaping skills on simulator', width: 1920, height: 2560 },
+  { src: storageUrl('lessons/student-11.jpg'), alt: 'Student receiving real-time swing feedback during lesson', width: 1920, height: 2560 },
+  { src: storageUrl('lessons/student-kids-01.jpg'), alt: 'Coach showing a young boy how to hold the club in front of the simulator screen', width: 1440, height: 2560 },
+  { src: storageUrl('lessons/student-kids-02.jpg'), alt: 'Coach crouching beside a boy, guiding his putter on the indoor putting green', width: 1440, height: 2560 },
+  { src: storageUrl('lessons/student-kids-03.jpg'), alt: 'Boy swinging in a simulator bay while the coach watches from behind', width: 1440, height: 2560 },
 ]
 
 const FAQ_COUNT = 15
@@ -74,12 +84,15 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
   const tFaq = await getTranslations('LessonsFaq')
   const tCommon = await getTranslations('Common')
 
+  const { lessonPricing, lessonNotes: _ignoredLessonNotes } = await getLessonPricingData()
+  // Per-hour figures quoted in copy (LessonsFaq.a2, the stat chips), derived
+  // from the same live rows the pricing table renders.
+  const priceFacts = getLessonPriceFacts(lessonPricing)
+
   const faqItems = Array.from({ length: FAQ_COUNT }, (_, i) => ({
     question: tFaq(`q${i + 1}`),
-    answer: tFaq(`a${i + 1}`),
+    answer: tFaq(`a${i + 1}`, priceFacts),
   }))
-
-  const { lessonPricing, lessonNotes: _ignoredLessonNotes } = await getLessonPricingData()
 
   // ── Row-level i18n helpers (structured → translated display) ──
   // Names and remarks are translated via their `nameKind` / `remarkKind`
@@ -113,7 +126,7 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
     row.featured === 'bestValue' ? { label: tCommon('badgeBestValue'), tone: 'gold' as const } : null
 
   const pricingJsonLd = getLessonsPricingJsonLd(lessonPricing)
-  const serviceJsonLd = getLessonsServiceJsonLd(lessonPricing[0]?.oneGolfer)
+  const serviceJsonLd = getLessonsServiceJsonLd(priceFacts)
   const faqJsonLd = getFaqPageJsonLd(faqItems)
   const coachesJsonLd = getCoachesJsonLd(
     coaches.map((coach) => {
@@ -134,8 +147,15 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
   )
   const breadcrumbJsonLd = getBreadcrumbJsonLd([
     { name: 'Home', url: `${SITE_URL}/` },
-    { name: t('metaTitle'), url: `${SITE_URL}/lessons/` },
+    { name: t('heroTitle'), url: `${SITE_URL}/lessons/` },
   ])
+
+  // The Junior Academy page is EN + TH only, so the callout renders only where
+  // it can link to the reader's own language.
+  const juniorCallout =
+    locale === 'en' || hasTranslationForLocale(locale, JUNIOR_ACADEMY_PATH)
+      ? getJuniorAcademyContent(locale).lessonsCallout
+      : null
 
   return (
     <>
@@ -239,7 +259,7 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
           <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="rounded-lg border border-primary/15 bg-primary/5 px-4 py-4">
-                <div className="text-2xl font-bold" style={{ color: '#007429' }}>{t(`stat${i}Value`)}</div>
+                <div className="text-2xl font-bold" style={{ color: '#007429' }}>{t(`stat${i}Value`, priceFacts)}</div>
                 <div className="mt-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">{t(`stat${i}Label`)}</div>
               </div>
             ))}
@@ -263,6 +283,46 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
               {t('pricing')}
             </a>
           </div>
+
+          {/* Junior Academy: kids-golf searches land on this page today.
+              Outside #free-trial and #lessons-cta, and no JSON-LD (smoke H2
+              pins this page's structured data). */}
+          {juniorCallout && (
+            <div
+              id="junior-academy"
+              className="mt-12 flex flex-col overflow-hidden rounded-xl border-2 border-primary/20 text-left md:flex-row"
+              style={{ backgroundColor: '#F6FFFA' }}
+            >
+              <div className="shrink-0 md:w-2/5">
+                <Image
+                  src={storageUrl('lessons/student-kids-02.jpg')}
+                  alt={juniorCallout.imageAlt}
+                  width={1440}
+                  height={2560}
+                  className="h-52 w-full object-cover md:h-full"
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                />
+              </div>
+              <div className="flex flex-col justify-center p-6 md:p-8">
+                <span
+                  className="inline-block w-fit rounded px-3 py-1 text-xs font-bold uppercase tracking-widest text-white"
+                  style={{ backgroundColor: '#7CB342' }}
+                >
+                  {juniorCallout.badge}
+                </span>
+                <h2 className="mt-3 text-2xl font-bold lg:text-3xl" style={{ color: '#007429' }}>
+                  {juniorCallout.title}
+                </h2>
+                <p className="mt-2 leading-relaxed text-muted-foreground">{juniorCallout.body}</p>
+                <Link
+                  href="/junior-golf-academy"
+                  className="mt-5 inline-flex min-h-12 w-fit items-center justify-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-light"
+                >
+                  {juniorCallout.cta}
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
       </SectionWrapper>
 
@@ -446,8 +506,8 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
           <h3>Current Lesson Promotions at LENGOLF</h3>
           <ul>
             <li>Free 1-Hour Trial Lesson: Try a complimentary lesson with a PGA-certified coach — simple techniques, solid fundamentals, get course-ready fast</li>
-            <li>Starter Package: 5 hours coaching plus 5 hours practice with a free golf glove for 11,000 THB — valid for 6 months</li>
-            <li>Coaching Packages: Hourly and multi-hour lesson bundles from 1,800 THB/hr, with volume discounts up to 50 hours</li>
+            <li>Starter Package: 5 hours coaching plus 5 hours practice, with a free golf glove per golfer, for 11,000 THB (1 golfer) or 13,500 THB (2 golfers), valid for 6 months</li>
+            <li>Coaching Packages: {priceFacts.hourly} THB for a single hour, or from {priceFacts.fiftyHourRate} THB/hr on multi-hour packages, with volume discounts up to 50 hours</li>
             <li>Lesson Promotion: Book multiple sessions with PGA-certified coaches on simulator bays with real-time swing data</li>
           </ul>
         </div>
@@ -468,7 +528,7 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
           <span style={{ color: '#007429' }}>{t('studentsTitle')}</span>{' '}
           <span className="text-foreground">{t('studentsTitleSuffix')}</span>
         </h2>
-        <ImageGallery images={studentImages} rows={[3, 2, 2, 2, 2, 3]} />
+        <ImageGallery images={studentImages} rows={[2, 4, 4, 4]} />
       </SectionWrapper>
 
       {/* ── Explore More ── */}

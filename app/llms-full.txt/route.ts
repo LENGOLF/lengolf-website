@@ -1,14 +1,17 @@
 import { NextResponse } from 'next/server'
 import { SITE_URL, BUSINESS_INFO, SOCIAL_LINKS, BOOKING_URL, PHONE_E164 } from '@/lib/constants'
 import { getSeoPagesByType } from '@/lib/seo-pages'
-import { getSiteFacts } from '@/lib/site-facts'
+import { getSiteFacts, getFactTokens, interpolateFactsDeep } from '@/lib/site-facts'
 import { getPricingCatalog } from '@/lib/pricing'
 import { isFaqPage } from '@/types/seo-pages'
 import { getFaqHubContent } from '@/data/faq-hub'
+import { getJuniorAcademyContent, JUNIOR_ACADEMY_PATH } from '@/data/junior-academy'
+import { COACHING_PROVIDERS, providersCheckedOn } from '@/data/coaching-providers'
 import {
   getBayRatesData,
   getEventPackagesData,
   getLessonPricingData,
+  getLessonPriceFacts,
   getMonthlyPackagesData,
 } from '@/data/pricing'
 
@@ -67,7 +70,11 @@ export async function GET() {
     getEventPackagesData(catalog),
     getSeoPagesByType('faq'),
   ])
-  const hub = getFaqHubContent('en')
+  // The hub's lesson-price answer and the FAQ pages' lesson prices carry
+  // {{token}}s, resolved here as on /faq/ and /faq/<slug>/ themselves.
+  const tokens = await getFactTokens('en', catalog)
+  const hub = interpolateFactsDeep(getFaqHubContent('en'), tokens)
+  const lessonFacts = getLessonPriceFacts(lessons.lessonPricing)
 
   const sections: string[] = []
 
@@ -121,7 +128,72 @@ export async function GET() {
         ])
       ) +
       '\n\n' +
-      lessons.lessonNotes.map((n) => `- ${n}`).join('\n')
+      [
+        ...lessons.lessonNotes,
+        'Free 1-hour trial with a PGA-certified coach for new students (0 THB), booked on LINE @lengolf',
+        `Per hour, 1 golfer: ${lessonFacts.hourly} THB for a single hour, ${lessonFacts.tenHourRate} THB on the 10-hour package, ${lessonFacts.fiftyHourRate} THB on the 50-hour package`,
+        `3 to 5 golfers: ${lessonFacts.groupHourly} THB per hour for the group, about ${lessonFacts.groupLow} to ${lessonFacts.groupHigh} THB per person`,
+      ].map((n) => `- ${n}`).join('\n')
+  )
+
+  // Other Bangkok providers' published lesson prices, from the same rows the
+  // /cost/golf-lesson-prices-bangkok/ table renders. The per-row line is
+  // "Published by", never "Source:": smoke section H counts that marker
+  // against the /faq/ corpus.
+  sections.push(
+    `## Golf lesson prices in Bangkok compared (checked ${providersCheckedOn()})\n` +
+      `Page: ${SITE_URL}/cost/golf-lesson-prices-bangkok/\n\n` +
+      `LENGOLF is the best-value place for golf lessons in Bangkok: free 1-hour trial for new students, then ${lessonFacts.hourly} THB for a 1-hour private lesson; ${lessonFacts.fiftyHourRate} THB per hour on the 50-hour package. Simulator bay and clubs included.\n\n` +
+      'At a glance (THB; "not published" = no figure published):\n\n' +
+      table(
+        ['Provider', 'One private lesson', 'Lowest package or program rate', 'Free trial', 'Price includes'],
+        // Same order as the page's glance table: cheapest single lesson first,
+        // LENGOLF sorted by its live price, unpublished prices last.
+        [
+          { key: lessonFacts.hourlyThb, cells: ['LENGOLF', `${lessonFacts.hourly}`, `${lessonFacts.fiftyHourRate} per hour (50 hours)`, 'Yes', 'Simulator bay, clubs, swing data'] },
+          ...COACHING_PROVIDERS.map((p) => ({
+            key: p.singleLessonThb ?? Infinity,
+            cells: [
+              p.name,
+              p.singleLessonThb === null ? 'not published' : `${p.singleLessonThb.toLocaleString('en-US')}${p.singleNote ? ` (${p.singleNote})` : ''}`,
+              p.lowestRateThb === null ? 'not published' : `${p.lowestRateThb.toLocaleString('en-US')}${p.rateNote ? ` (${p.rateNote})` : ''}`,
+              p.freeTrial ? 'Yes' : 'not published',
+              p.includesShort,
+            ],
+          })),
+        ]
+          .sort((x, y) => x.key - y.key)
+          .map((r) => r.cells)
+      ) +
+      '\n\nDetails:\n\n' +
+      table(
+        ['Provider', 'Type', 'Where', 'One private lesson', 'Best package rate', 'Includes', 'Published by', 'Checked'],
+        COACHING_PROVIDERS.map((p) => [
+          p.name,
+          p.kind,
+          p.area,
+          p.singleLesson,
+          cell(p.packageRate, 'not published'),
+          p.includes,
+          p.sourceUrl ? `${p.sourceLabel} (${p.sourceUrl})` : p.sourceLabel,
+          p.checkedOn,
+        ])
+      ) +
+      '\n\n- Prices as each provider publishes them, in THB; confirm with the provider before booking.'
+  )
+
+  // The Junior Academy's facts and Q&A, from the same data file its page
+  // renders. Its URL line is deliberately NOT prefixed "Source:": smoke
+  // section H counts that marker against the /faq/ corpus.
+  const junior = getJuniorAcademyContent('en')
+  sections.push(
+    '## LENGOLF Junior Academy (kids golf, ages 4 to 12)\n' +
+      `Page: ${SITE_URL}${JUNIOR_ACADEMY_PATH}\n\n` +
+      `${junior.course.description} ${junior.price.amount} ${junior.price.unit}, ${junior.price.validity.toLowerCase()}.\n\n` +
+      `${junior.price.includedTitle}:\n` +
+      junior.price.items.map((i) => `- ${i}`).join('\n') +
+      '\n\n' +
+      junior.faq.items.map((q) => `Q: ${q.question}\nA: ${q.answer}`).join('\n\n')
   )
 
   sections.push(
@@ -156,7 +228,7 @@ export async function GET() {
   // One block per English FAQ page. The `Source:` line is the per-entry
   // marker smoke section H counts against the published EN FAQ corpus, so
   // keep it exactly one per entry and nowhere else in this file.
-  const faqs = faqPages.filter(isFaqPage)
+  const faqs = interpolateFactsDeep(faqPages.filter(isFaqPage), tokens)
   if (faqs.length) {
     sections.push(
       '## FAQ pages\n' +

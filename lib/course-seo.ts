@@ -501,7 +501,7 @@ const FAQ_L10N: Record<CourseSeoLocale, CourseFaqL10n> = {
     rentalQuestion: (name) => `Can I rent golf clubs to play ${name}?`,
     rentalAnswer: (name, availability, fee) => {
       const lengolf =
-        'For current-generation sets, LENGOLF in central Bangkok (BTS Chidlom) rents premium Callaway clubs with hotel delivery, so you can arrange equipment before you travel.'
+        'For current-generation sets, LENGOLF in central Bangkok (BTS Chidlom) rents premium Callaway clubs with delivery to your Bangkok hotel, so you can arrange equipment before you travel.'
       if (availability === true) {
         return `${name} offers rental clubs on-site${fee ? ` for about ${thb(fee)} per round` : ''}. ${lengolf}`
       }
@@ -556,7 +556,7 @@ const FAQ_L10N: Record<CourseSeoLocale, CourseFaqL10n> = {
     rentalQuestion: (name) => `เช่าไม้กอล์ฟเพื่อออกรอบที่ ${name} ได้หรือไม่`,
     rentalAnswer: (name, availability, fee) => {
       const lengolf =
-        'หากต้องการชุดไม้กอล์ฟรุ่นปัจจุบัน LENGOLF ในใจกลางกรุงเทพฯ (BTS ชิดลม) มีบริการเช่าไม้กอล์ฟ Callaway ระดับพรีเมียมพร้อมส่งถึงโรงแรม จึงจัดเตรียมอุปกรณ์ได้ตั้งแต่ก่อนเดินทาง'
+        'หากต้องการชุดไม้กอล์ฟรุ่นปัจจุบัน LENGOLF ในใจกลางกรุงเทพฯ (BTS ชิดลม) มีบริการเช่าไม้กอล์ฟ Callaway ระดับพรีเมียมพร้อมส่งถึงโรงแรมในกรุงเทพฯ จึงจัดเตรียมอุปกรณ์ได้ตั้งแต่ก่อนเดินทาง'
       if (availability === true) {
         return `${name} มีบริการเช่าไม้กอล์ฟภายในสนาม${fee ? ` ค่าบริการประมาณ ${n(fee)} บาทต่อรอบ` : ''} ${lengolf}`
       }
@@ -613,7 +613,7 @@ const FAQ_L10N: Record<CourseSeoLocale, CourseFaqL10n> = {
     rentalQuestion: (name) => `${name}でプレーする際にゴルフクラブをレンタルできますか？`,
     rentalAnswer: (name, availability, fee) => {
       const lengolf =
-        '現行モデルのセットをご希望なら、バンコク中心部（BTSチットロム駅）のLENGOLFがプレミアムなCallawayクラブをホテル配送付きでレンタルしているので、旅行前に道具を手配できます。'
+        '現行モデルのセットをご希望なら、バンコク中心部（BTSチットロム駅）のLENGOLFがプレミアムなCallawayクラブをバンコクのホテルへの配送付きでレンタルしているので、旅行前に道具を手配できます。'
       if (availability === true) {
         return `${name}ではコース内でレンタルクラブを利用できます${fee ? `（1ラウンド約${n(fee)}THB）` : ''}。${lengolf}`
       }
@@ -680,7 +680,7 @@ const FAQ_L10N: Record<CourseSeoLocale, CourseFaqL10n> = {
     rentalQuestion: (name) => `${name}에서 플레이할 때 골프 클럽을 대여할 수 있나요?`,
     rentalAnswer: (name, availability, fee) => {
       const lengolf =
-        '현행 모델 세트를 원하신다면, 방콕 도심(BTS 칫롬역)의 LENGOLF에서 프리미엄 Callaway 클럽을 호텔 배송과 함께 대여할 수 있어 여행 전에 미리 장비를 준비하실 수 있습니다.'
+        '현행 모델 세트를 원하신다면, 방콕 도심(BTS 칫롬역)의 LENGOLF에서 프리미엄 Callaway 클럽을 방콕 호텔 배송과 함께 대여할 수 있어 여행 전에 미리 장비를 준비하실 수 있습니다.'
       if (availability === true) {
         return `${name}에서는 코스 내 클럽 대여를 이용할 수 있습니다${fee ? ` (1라운드 약 ${n(fee)}바트)` : ''}. ${lengolf}`
       }
@@ -741,7 +741,7 @@ const FAQ_L10N: Record<CourseSeoLocale, CourseFaqL10n> = {
     rentalQuestion: (name) => `在${name}打球可以租借球杆吗？`,
     rentalAnswer: (name, availability, fee) => {
       const lengolf =
-        '如果想用现行款球杆，位于曼谷市中心（BTS Chidlom）的LENGOLF提供高端Callaway球杆租借并可送达酒店，出发前就能安排好装备。'
+        '如果想用现行款球杆，位于曼谷市中心（BTS Chidlom）的LENGOLF提供高端Callaway球杆租借并可送达曼谷的酒店，出发前就能安排好装备。'
       if (availability === true) {
         return `${name}在球场内提供球杆租借${fee ? `（每轮约${n(fee)}泰铢）` : ''}。${lengolf}`
       }

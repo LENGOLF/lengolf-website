@@ -24,6 +24,11 @@ const TRANSLATED_ROUTES: Record<
       // redirect to the EN sheet rather than serving a half-translated page.
       "/golf-club-specs",
       "/lessons",
+      // TH only (alongside EN): copy in data/junior-academy.ts. ja/ko/zh are
+      // deliberately absent and 301 to the EN page.
+      "/junior-golf-academy",
+      // TH only (alongside EN): copy in data/line-page.ts. ja/ko/zh 301 to EN.
+      "/line",
       "/about-us",
       "/blog",
       "/menu",
@@ -388,7 +393,7 @@ const TRANSLATED_ROUTES: Record<
       // and origin/main's ko block simply had no "/golf-courses" entry. The
       // GolfCourseHub namespace was added to messages/ko.json in the same
       // batch, but a missing namespace never redirects — next-intl logs
-      // MISSING_MESSAGE per render and silently serves the English strings
+      // MISSING_MESSAGE per render and shows the raw dotted key path as visible text
       // under a /ko/ URL, which is the worse failure this pairing avoids.
       "/golf-courses",
       // Translated guide pages (data/explainer-pages.ts entries with
@@ -747,7 +752,7 @@ const TRANSLATED_ROUTES: Record<
       // and origin/main's zh block simply had no "/golf-courses" entry. The
       // GolfCourseHub namespace was added to messages/zh.json in the same
       // batch, but a missing namespace never redirects — next-intl logs
-      // MISSING_MESSAGE per render and silently serves the English strings
+      // MISSING_MESSAGE per render and shows the raw dotted key path as visible text
       // under a /zh/ URL, which is the worse failure this pairing avoids.
       "/golf-courses",
       // Translated guide pages (data/explainer-pages.ts entries with

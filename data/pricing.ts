@@ -110,7 +110,7 @@ export const eventPackages: EventPackage[] = [
     beers: '10 Beers (Singha or Asahi)',
     cocktails: '5 Cocktails',
     softDrinks: 'Unlimited Soft Drinks',
-    food: ['1 Calamari', '1 French Fries', '3 Burgers', '2 Toast', 'Crab or Shrimp Ebiko', '2 Sliders', 'Crispy Chicken & BBQ Brisket', '1 Salad'],
+    food: ['1 Calamari', '1 French Fries', '3 Burgers', '2 Toast (Crab or Shrimp Ebiko)', '2 Sliders (Crispy Chicken & Pulled Pork)', '1 Salad'],
     caterer: 'Smith & Co.',
     price: '9,999 THB',
     exclusive: false,
@@ -123,7 +123,7 @@ export const eventPackages: EventPackage[] = [
     beers: '20 Beers (Singha or Asahi)',
     cocktails: '10 Cocktails',
     softDrinks: 'Unlimited Soft Drinks',
-    food: ['2 Calamari', '2 French Fries', '3 Large Pizzas', '4 Toast', 'Crab or Shrimp Ebiko', '4 Sliders', 'Crispy Chicken & BBQ Brisket', '2 Salads'],
+    food: ['2 Calamari', '2 French Fries', '3 Large Pizzas', '4 Toast (Crab or Shrimp Ebiko)', '4 Sliders (Crispy Chicken & Pulled Pork)', '2 Salads'],
     caterer: 'Smith & Co. & Pizza Mania',
     price: '21,999 THB',
     exclusive: true,
@@ -189,7 +189,7 @@ export const lessonsFaqItems = [
   },
   {
     question: 'Who are the golf coaches at LENGOLF?',
-    answer: 'We have three Thailand PGA-certified professional coaches: PRO Boss (Parin Phokan), specializing in drive training and course management; PRO Ratchavin (Ratchavin Tanakasempipat), specializing in beginner programs and short game; and PRO Min (Varuth Kjonkittiskul), specializing in course management and putting.',
+    answer: 'We have three Thailand PGA-certified professional coaches: PRO Boss (Prin Phokan), specializing in drive training and course management; PRO Ratchavin (Ratchavin Tanakasempipat), specializing in beginner programs and short game; and PRO Min (Varuth Kjonkittiskul), specializing in course management and putting.',
   },
   {
     question: 'How do I book a golf lesson?',
@@ -344,7 +344,7 @@ export const clubRentalFaqItems = [
   },
   {
     question: 'Can I use rented clubs outside of LENGOLF?',
-    answer: 'Yes! Premium club rentals can be used at LENGOLF or taken to any golf course in Bangkok. We also offer same-day club delivery for 500 THB anywhere in Bangkok — contact us on LINE @lengolf to arrange.',
+    answer: 'Yes! Premium club rentals can be used at LENGOLF or taken to any golf course in Bangkok. We also offer same-day club delivery to your hotel or course from 500 THB round trip, priced by distance. Contact us on LINE @lengolf to arrange.',
   },
   {
     question: 'How much does premium club rental cost per hour?',
@@ -352,7 +352,7 @@ export const clubRentalFaqItems = [
   },
   {
     question: 'Do you deliver golf clubs in Bangkok?',
-    answer: 'Yes, we offer same-day delivery of premium club sets anywhere in Bangkok for 500 THB. Contact us on LINE @lengolf to book delivery. You can also find us on Google Maps at The Mercury Ville, BTS Chidlom.',
+    answer: 'Yes, we offer same-day delivery of premium club sets to hotels and golf courses in and around Bangkok, from 500 THB round trip (up to 15 km from LENGOLF; 650 THB up to 35 km, 1,200 THB up to 50 km). Contact us on LINE @lengolf to book delivery. You can also find us on Google Maps at The Mercury Ville, BTS Chidlom.',
   },
   {
     question: 'Can I try clubs before buying second-hand?',
@@ -580,6 +580,73 @@ export async function getLessonPricingData(catalog?: PricingCatalog | null): Pro
       return updated
     }),
     lessonNotes,
+  }
+}
+
+/**
+ * Per-hour lesson figures, derived from the package rows so the copy that
+ * quotes them (LessonsFaq.a2, Lessons.metaDescription, the hero stat chip,
+ * the JSON-LD and llms-full.txt) moves with the POS prices instead of being
+ * typed into five catalogs by hand. A row whose price does not parse falls
+ * back to the static row of the same name.
+ *
+ * Group per-person figures use the 1-hour 3-5 golfer price split 5 ways
+ * (low) and 3 ways (high), rounded to the nearest 10 because the copy says
+ * "about".
+ */
+// A type alias, not an interface: next-intl's `values` parameter is an
+// index-signature record, which an interface is not assignable to.
+export type LessonPriceFacts = {
+  hourly: string
+  tenHourTotal: string
+  tenHourRate: string
+  fiftyHourTotal: string
+  fiftyHourRate: string
+  groupHourly: string
+  groupLow: string
+  groupHigh: string
+  /** Raw numbers for JSON-LD. */
+  hourlyThb: number
+  fiftyHourRateThb: number
+}
+
+const thbNumber = (s: string): number => Number(s.replace(/[^\d.]/g, ''))
+
+/**
+ * One lesson price in THB from the (possibly live) package rows. A row whose
+ * price does not parse to a positive number falls back to the static row of
+ * the same name. Shared with the `{{lesson…}}` fact tokens in lib/site-facts.ts.
+ */
+export function lessonRowThb(
+  rows: LessonPackage[],
+  name: string,
+  field: 'oneGolfer' | 'twoGolfers' | 'threeToFiveGolfers'
+): number {
+  const live = thbNumber(rows.find((r) => r.name === name)?.[field] ?? '')
+  if (Number.isFinite(live) && live > 0) return live
+  return thbNumber(lessonPricing.find((r) => r.name === name)![field])
+}
+
+export function getLessonPriceFacts(rows: LessonPackage[]): LessonPriceFacts {
+  const pick = (name: string, field: 'oneGolfer' | 'threeToFiveGolfers'): number =>
+    lessonRowThb(rows, name, field)
+  const fmt = (n: number) => n.toLocaleString('en-US')
+  const hourly = pick('1 Hour', 'oneGolfer')
+  const ten = pick('10 Hour', 'oneGolfer')
+  const fifty = pick('50 Hour', 'oneGolfer')
+  const group = pick('1 Hour', 'threeToFiveGolfers')
+  const fiftyRate = Math.round(fifty / 50)
+  return {
+    hourly: fmt(hourly),
+    tenHourTotal: fmt(ten),
+    tenHourRate: fmt(Math.round(ten / 10)),
+    fiftyHourTotal: fmt(fifty),
+    fiftyHourRate: fmt(fiftyRate),
+    groupHourly: fmt(group),
+    groupLow: fmt(Math.round(group / 5 / 10) * 10),
+    groupHigh: fmt(Math.round(group / 3 / 10) * 10),
+    hourlyThb: hourly,
+    fiftyHourRateThb: fiftyRate,
   }
 }
 

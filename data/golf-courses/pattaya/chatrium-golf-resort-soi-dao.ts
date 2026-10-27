@@ -38,7 +38,7 @@ export const course: GolfCourse = {
   locales: {
     en: {
       title: `Chatrium Golf Resort Soi Dao — Green Fees, Course Guide & Golf Club Rentals`,
-      meta_description: `Chatrium Golf Resort Soi Dao Chanthaburi green fees, course overview, tips, and how to arrange golf club rentals delivered to your hotel.`,
+      meta_description: `Chatrium Golf Resort Soi Dao Chanthaburi green fees, course overview, tips, and how to arrange golf club rentals delivered to your Bangkok hotel before you drive down.`,
     },
     th: {
       title: `Chatrium Golf Resort Soi Dao จันทบุรี — ค่ากรีนฟี รีวิวสนาม และเช่าไม้กอล์ฟ`,

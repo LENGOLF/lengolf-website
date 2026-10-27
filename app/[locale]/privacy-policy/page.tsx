@@ -27,7 +27,7 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
     <SectionWrapper>
       <div className="mx-auto max-w-3xl prose prose-headings:text-foreground prose-p:text-muted-foreground prose-li:text-muted-foreground prose-strong:text-foreground">
         <h1>Privacy Policy</h1>
-        <p>Last updated: 7 August 2026</p>
+        <p>Last updated: 18 October 2026</p>
         <p>
           This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.
         </p>
@@ -92,6 +92,19 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
           not receive or store Your full card number. We retain only the record of the payment, such as the amount,
           the date, the result, and the reference issued by our payment provider.
         </p>
+        <h4>TikTok</h4>
+        <p>
+          LENGOLF connects its own TikTok business account (@lengolf.bkk) to an internal publishing and reporting
+          tool through TikTok&apos;s official API. With the account owner&apos;s permission, the tool reads the
+          account&apos;s own profile information (display name, username, bio, profile picture and link, verification
+          status, and follower, following, like and video counts) and, for each of the account&apos;s own videos, its
+          title, description, duration, link, and view, like, comment and share counts. We store this information,
+          including a daily snapshot of the counts, to track how the account performs. The tool also sends videos that
+          our team has approved to the account&apos;s TikTok drafts, where our team reviews and posts them from the
+          TikTok app. It does not access other TikTok users&apos; data, and does not post or message on anyone&apos;s
+          behalf. Access tokens are stored securely on our servers and can be revoked at any time from the app
+          permissions in TikTok&apos;s settings.
+        </p>
 
         <h3>Use of Your Personal Data</h3>
         <p>The Company may use Personal Data for the following purposes:</p>
@@ -126,6 +139,10 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
           <li>
             <strong>Website analytics</strong> - retained according to the settings of the tools listed above,
             generally no more than 14 months.
+          </li>
+          <li>
+            <strong>TikTok account performance data</strong> - retained for as long as We use it to measure the
+            performance of Our own TikTok account.
           </li>
         </ul>
         <p>When Personal Data is no longer needed, We delete it or irreversibly anonymise it.</p>

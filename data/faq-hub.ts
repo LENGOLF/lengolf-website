@@ -85,10 +85,14 @@ const en: FaqHubContent = {
       answer:
         'Bay rental is 550–950 THB per hour for the whole bay (not per person), and up to 5 players can share one bay. Weekdays (Mon–Thu) are 550 THB/hour before 2pm and 750 THB/hour after 2pm; Fridays, weekends, and public holidays are 750 THB/hour before 2pm and 950 THB/hour after 2pm. Free standard golf clubs are always included. See the bay rates page for details and monthly packages.',
     },
+    // Same answer shape as /lessons/ (free 1-hour trial first, then per-hour
+    // values). The {{lesson…}} tokens (lib/site-facts.ts) are resolved by
+    // app/[locale]/faq/page.tsx in every locale, and by app/llms-full.txt/route.ts
+    // for EN.
     {
       question: 'How much do golf lessons cost?',
       answer:
-        'Private lessons with our Thailand PGA-certified coaches start at 1,800 THB per hour, with simulator time and clubs included. Multi-hour packages lower the rate (for example 10 hours for 16,000 THB), and new students can book a free trial lesson. See the lessons page or message us on LINE @lengolf.',
+        'Start with a free 1-hour trial with one of our Thailand PGA-certified coaches. It is for new students, and clubs and the simulator are included. After that, a 1-hour lesson is {{lessonHourlyNum}} THB, and packages lower the hourly rate: 10 hours for {{lesson10hNum}} THB works out to {{lesson10hRateNum}} THB per hour, and 50 hours for {{lesson50hNum}} THB to {{lesson50hRateNum}} THB per hour. Book the trial on LINE @lengolf, or see the lessons page for every package.',
     },
     {
       question: 'Do I need to bring my own golf clubs or equipment?',
@@ -135,7 +139,7 @@ const en: FaqHubContent = {
     {
       question: 'Do I need golf experience to play?',
       answer:
-        'Not at all. Around half of our guests are complete beginners. The simulator tracks every shot automatically and our staff will have you hitting balls within a couple of minutes. If you would like structured help, book a free trial lesson with one of our coaches.',
+        'Not at all. Around half of our guests are complete beginners. The simulator tracks every shot automatically and our staff will have you hitting balls within a couple of minutes. If you would like structured help, new students can book a free 1-hour trial with one of our coaches on LINE @lengolf.',
     },
   ],
   faqLinks: {
@@ -220,7 +224,7 @@ const th: FaqHubContent = {
     {
       question: 'เรียนกอล์ฟที่ LENGOLF ราคาเท่าไหร่',
       answer:
-        'คอร์สเรียนส่วนตัวกับโค้ชที่ได้รับการรับรองจาก Thailand PGA เริ่มต้นที่ 1,800 บาทต่อชั่วโมง รวมค่าเบย์ซิมมูเลเตอร์และไม้กอล์ฟแล้ว แพ็กเกจหลายชั่วโมงคุ้มกว่า เช่น 10 ชั่วโมง 16,000 บาท และนักเรียนใหม่จองทดลองเรียนฟรี 1 ชั่วโมงได้ ดูรายละเอียดที่หน้าคอร์สเรียนกอล์ฟ หรือทักไลน์ @lengolf',
+        'เริ่มจากทดลองเรียนฟรี 1 ชั่วโมงกับโค้ชที่ได้รับการรับรองจาก Thailand PGA ได้เลย สำหรับคนที่ยังไม่เคยเรียนกับเรา มีไม้กอล์ฟและเบย์ซิมมูเลเตอร์ให้พร้อม หลังจากนั้นเรียนชั่วโมงละ {{lessonHourlyNum}} บาท ถ้าซื้อแพ็กเกจจะถูกลง เช่น แพ็กเกจ 10 ชั่วโมง {{lesson10hNum}} บาท ตกชั่วโมงละ {{lesson10hRateNum}} บาท และแพ็กเกจ 50 ชั่วโมง {{lesson50hNum}} บาท ตกชั่วโมงละ {{lesson50hRateNum}} บาท จองทดลองเรียนทางไลน์ @lengolf หรือดูแพ็กเกจทั้งหมดที่หน้าคอร์สเรียนกอล์ฟ',
     },
     {
       question: 'ต้องนำไม้กอล์ฟหรืออุปกรณ์มาเองไหม',
@@ -265,7 +269,7 @@ const th: FaqHubContent = {
     {
       question: 'ไม่เคยเล่นกอล์ฟมาก่อน เล่นได้ไหม',
       answer:
-        'เล่นได้แน่นอน ลูกค้าประมาณครึ่งหนึ่งของเราเป็นมือใหม่ที่ไม่เคยจับไม้กอล์ฟมาก่อน ระบบซิมมูเลเตอร์บันทึกทุกช็อตให้อัตโนมัติ และทีมงานจะช่วยให้เริ่มตีได้ภายในไม่กี่นาที หากอยากเรียนแบบจริงจัง จองทดลองเรียนฟรีกับโค้ชของเราได้',
+        'เล่นได้แน่นอน ลูกค้าประมาณครึ่งหนึ่งของเราเป็นมือใหม่ที่ไม่เคยจับไม้กอล์ฟมาก่อน ระบบซิมมูเลเตอร์บันทึกทุกช็อตให้อัตโนมัติ และทีมงานจะช่วยให้เริ่มตีได้ภายในไม่กี่นาที หากอยากเรียนแบบจริงจัง คนที่ยังไม่เคยเรียนกับเราจองทดลองเรียนฟรี 1 ชั่วโมงกับโค้ชได้ทาง LINE @lengolf',
     },
   ],
   faqLinks: {
@@ -351,7 +355,7 @@ const ja: FaqHubContent = {
     {
       question: 'ゴルフレッスンの料金はいくらですか？',
       answer:
-        'タイPGA認定コーチによるプライベートレッスンは1時間1,800THBから。シミュレーターのご利用時間とクラブ代も含まれています。複数時間のパッケージなら単価が下がり、たとえば10時間で16,000THB。初めての方は無料体験レッスンをご予約いただけます。詳しくはレッスンページをご覧いただくか、LINE @lengolfまでメッセージをお送りください。',
+        'まずはタイPGA認定コーチによる1時間の無料体験から始められます。LENGOLFで初めてレッスンを受ける方が対象で、クラブとシミュレーターの利用込みです。その後のレッスンは1時間{{lessonHourlyNum}}THBです。パッケージなら1時間あたりの料金が下がり、10時間{{lesson10hNum}}THBで1時間あたり{{lesson10hRateNum}}THB、50時間{{lesson50hNum}}THBで1時間あたり{{lesson50hRateNum}}THBです。無料体験はLINE @lengolfからご予約ください。すべてのパッケージはレッスンページでご覧いただけます。',
     },
     {
       question: 'ゴルフクラブや道具は持参する必要がありますか？',
@@ -398,7 +402,7 @@ const ja: FaqHubContent = {
     {
       question: 'ゴルフの経験がなくてもプレーできますか？',
       answer:
-        'まったく問題ありません。ご来店のお客様のおよそ半数は、ゴルフがまったくの初めてという方です。シミュレーターが1球ごとに自動で計測しますので、スタッフのご案内で数分後にはボールを打ち始められます。しっかり教わりたい方は、コーチによる無料体験レッスンをご予約ください。',
+        'まったく問題ありません。ご来店のお客様のおよそ半数は、ゴルフがまったくの初めてという方です。シミュレーターが1球ごとに自動で計測しますので、スタッフのご案内で数分後にはボールを打ち始められます。しっかり教わりたい方は、コーチによる1時間の無料体験（LENGOLFで初めてレッスンを受ける方が対象）をLINE @lengolfからご予約ください。',
     },
   ],
   faqLinks: {
@@ -483,7 +487,7 @@ const ko: FaqHubContent = {
     {
       question: '골프 레슨 요금은 얼마인가요?',
       answer:
-        '태국 PGA 공인 코치와 함께하는 1:1 레슨은 시간당 1,800바트부터이고, 시뮬레이터 이용과 클럽이 포함돼요. 여러 시간을 묶은 패키지는 시간당 요금이 낮아지고(예: 10시간 16,000바트), 처음 오시는 분은 무료 체험 레슨을 예약하실 수 있어요. 자세한 내용은 레슨 페이지를 보시거나 LINE @lengolf로 문의해 주세요.',
+        '먼저 태국 PGA 공인 코치와 1시간 무료 체험으로 시작하실 수 있어요. LENGOLF 레슨이 처음인 분 대상이고, 클럽과 시뮬레이터 이용이 포함돼요. 이후 레슨은 시간당 {{lessonHourlyNum}}바트이고, 패키지는 시간당 요금이 낮아져요. 10시간 패키지({{lesson10hNum}}바트)는 시간당 {{lesson10hRateNum}}바트, 50시간 패키지({{lesson50hNum}}바트)는 시간당 {{lesson50hRateNum}}바트예요. 무료 체험은 LINE @lengolf로 예약하시고, 전체 패키지는 레슨 페이지에서 확인해 주세요.',
     },
     {
       question: '골프 클럽이나 장비를 직접 가져와야 하나요?',
@@ -530,7 +534,7 @@ const ko: FaqHubContent = {
     {
       question: '골프를 쳐 본 적이 없어도 괜찮나요?',
       answer:
-        '전혀 문제없어요. 저희를 찾아 주시는 분의 절반 정도는 골프가 처음이세요. 시뮬레이터가 모든 샷을 자동으로 기록하고, 스태프가 몇 분 안에 공을 칠 수 있도록 도와드려요. 좀 더 체계적으로 배우고 싶으시다면 코치와 함께하는 무료 체험 레슨을 예약해 보세요.',
+        '전혀 문제없어요. 저희를 찾아 주시는 분의 절반 정도는 골프가 처음이세요. 시뮬레이터가 모든 샷을 자동으로 기록하고, 스태프가 몇 분 안에 공을 칠 수 있도록 도와드려요. 좀 더 체계적으로 배우고 싶으시다면 코치와 함께하는 1시간 무료 체험(LENGOLF 레슨이 처음인 분 대상)을 LINE @lengolf로 예약해 보세요.',
     },
   ],
   faqLinks: {
@@ -614,7 +618,7 @@ const zh: FaqHubContent = {
     {
       question: '高尔夫课程多少钱？',
       answer:
-        '与我们Thailand PGA认证教练的一对一课程每小时1,800泰铢起，已包含模拟器使用时间和球杆。多小时套餐的单价更低，例如10小时16,000泰铢；新学员还可以预约一次免费试课。详情请见课程页面，或者通过LINE @lengolf联系我们。',
+        '可以先预约我们泰国PGA认证教练的1小时免费体验（适用于首次在LENGOLF上课的学员，含球杆和模拟器使用）。之后的课程每小时{{lessonHourlyNum}}泰铢；套餐单价更低，10小时{{lesson10hNum}}泰铢，合每小时{{lesson10hRateNum}}泰铢；50小时{{lesson50hNum}}泰铢，合每小时{{lesson50hRateNum}}泰铢。免费体验请通过LINE @lengolf预约，全部套餐请见课程页面。',
     },
     {
       question: '需要自己带球杆或装备吗？',
@@ -661,7 +665,7 @@ const zh: FaqHubContent = {
     {
       question: '完全没打过高尔夫也能来吗？',
       answer:
-        '完全可以。我们大约一半的客人都是零基础的新手。模拟器会自动记录每一杆，工作人员几分钟内就能让你开始击球。如果想要更系统的指导，可以预约与教练的一次免费试课。',
+        '完全可以。我们大约一半的客人都是零基础的新手。模拟器会自动记录每一杆，工作人员几分钟内就能让你开始击球。如果想要更系统的指导，首次在LENGOLF上课的学员可以通过LINE @lengolf预约教练的1小时免费体验。',
     },
   ],
   faqLinks: {

@@ -3,10 +3,11 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getAllSeoPageParams, getSeoPageBySlug } from '@/lib/seo-pages'
 import { getAlternates, getCanonical } from '@/lib/translated-routes'
-import { getPriceGuidePageJsonLd } from '@/lib/jsonld'
+import { getPriceGuidePageJsonLd, getCoachingComparisonJsonLd, getFaqPageJsonLd } from '@/lib/jsonld'
 import PriceGuidePageComponent from '@/components/prices/PriceGuidePage'
 import type { PriceGuideSeoPage } from '@/types/seo-pages'
 import { siteOpenGraph } from '@/lib/open-graph'
+import { getFactTokens, interpolateFactsDeep } from '@/lib/site-facts'
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>
@@ -46,11 +47,13 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params
-  const page = await getSeoPageBySlug(slug, 'price_guide', locale)
+  const raw = await getSeoPageBySlug(slug, 'price_guide', locale)
 
-  if (!page) {
+  if (!raw) {
     return { title: 'Page Not Found' }
   }
+  // Lesson prices in the meta description are {{token}}s (lib/site-facts.ts).
+  const page = interpolateFactsDeep(raw, await getFactTokens(locale))
 
   const languages = getAlternates(`/cost/${slug}/`)
   return {
@@ -75,13 +78,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function PriceGuidePage({ params }: Props) {
   const { locale, slug } = await params
   setRequestLocale(locale)
-  const page = await getSeoPageBySlug(slug, 'price_guide', locale) as PriceGuideSeoPage | null
+  const raw = await getSeoPageBySlug(slug, 'price_guide', locale) as PriceGuideSeoPage | null
 
-  if (!page) {
+  if (!raw) {
     notFound()
   }
+  // Resolve {{token}} prices once, before both the JSON-LD and the body read
+  // the page, so the Offer figures and the visible table agree.
+  const page = interpolateFactsDeep(raw, await getFactTokens(locale))
 
   const jsonLd = getPriceGuidePageJsonLd(page, locale)
+  // Optional blocks, emitted only by pages that carry them (today the EN
+  // lesson-price comparison): the provider ItemList and the visible Q&A.
+  const comparisonJsonLd = getCoachingComparisonJsonLd(page, locale)
+  const faqJsonLd = page.content.faq?.items.length
+    ? getFaqPageJsonLd(page.content.faq.items)
+    : null
 
   return (
     <>
@@ -89,6 +101,18 @@ export default async function PriceGuidePage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {comparisonJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(comparisonJsonLd) }}
+        />
+      )}
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
       <PriceGuidePageComponent data={page} />
     </>
   )

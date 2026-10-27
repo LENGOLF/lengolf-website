@@ -1,8 +1,18 @@
 'use client'
 
+import { usePathname } from '@/i18n/navigation'
 import { SOCIAL_LINKS } from '@/lib/constants'
 
+// Pages whose own LINE buttons use a TRACKED link (a separate lin.ee link to
+// the same OA, so LINE OA Manager can attribute friend adds to the page). The
+// generic bubble would route taps around that link, so it stays off there.
+const HIDDEN_PATHS = ['/junior-golf-academy']
+
 export default function LineChatWidget() {
+  // next-intl's usePathname: the locale prefix is already stripped.
+  const pathname = usePathname()
+  if (HIDDEN_PATHS.some((p) => pathname.startsWith(p))) return null
+
   return (
     <a
       href={SOCIAL_LINKS.line}

@@ -7,7 +7,7 @@ import BookingCTA from '@/components/shared/BookingCTA'
 import ImageGallery from '@/components/shared/ImageGallery'
 import ServicesCarousel from '@/components/home/ServicesCarousel'
 import HeroVideo from '@/components/home/HeroVideo'
-import { services } from '@/data/pricing'
+import { services, getLessonPricingData, getLessonPriceFacts } from '@/data/pricing'
 import { BUSINESS_INFO, SITE_URL, SOCIAL_LINKS, storageUrl, storageImageUrl } from '@/lib/constants'
 import { getSiteFacts } from '@/lib/site-facts'
 import { getAlternates, getCanonical, OG_LOCALES, type Locale } from '@/lib/translated-routes'
@@ -59,7 +59,7 @@ const faqLinks: Record<string, { href: string; external?: boolean }> = {
 }
 
 const galleryImages = [
-  { src: storageUrl('venue/venue-simulator-01.jpg'), alt: 'Golf simulator bay with Korean Bravo Golf technology and auto tee system at LENGOLF', width: 1024, height: 683 },
+  { src: storageUrl('venue/venue-simulator-01.jpg'), alt: 'Golf simulator bay with Korean Bravo Golf technology and auto tee system at LENGOLF', width: 800, height: 1000 },
   { src: storageUrl('venue/venue-interior-01.jpg'), alt: 'LENGOLF bar and lounge area with full drinks menu', width: 1024, height: 1024 },
   { src: storageUrl('venue/venue-interior-02.jpg'), alt: 'Interior view of LENGOLF showing multiple simulator bays and seating', width: 1024, height: 1024 },
   { src: storageUrl('venue/venue-interior-03.jpg'), alt: 'LENGOLF welcome area and lobby on the 4th floor of The Mercury Ville', width: 1024, height: 1024 },
@@ -86,18 +86,22 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const facts = await getSiteFacts()
   const tCommon = await getTranslations('Common')
   const tFaq = await getTranslations('HomeFaq')
+  // The lessons card (Home.service2Description) and HomeFaq.a6 quote the same
+  // per-hour figures as /lessons/ (getLessonPriceFacts), never a typed price.
+  const { lessonPricing } = await getLessonPricingData()
+  const lessonValues = getLessonPriceFacts(lessonPricing)
 
   // Build FAQ items from translations
   const faqItems = Array.from({ length: 8 }, (_, i) => ({
     question: tFaq(`q${i + 1}`),
-    answer: tFaq(`a${i + 1}`),
+    answer: i + 1 === 6 ? tFaq('a6', lessonValues) : tFaq(`a${i + 1}`),
   }))
 
   const faqJsonLd = getFaqPageJsonLd(faqItems)
   const breadcrumbJsonLd = getBreadcrumbJsonLd([
     { name: 'Home', url: `${SITE_URL}/` },
   ])
-  const homePricingJsonLd = getHomePricingJsonLd()
+  const homePricingJsonLd = getHomePricingJsonLd(lessonValues)
   const reviewsData = await getGoogleReviews(locale)
 
   const stats = [
@@ -137,7 +141,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     },
     {
       title: t('service2Title'),
-      description: t('service2Description'),
+      description: t('service2Description', lessonValues),
       image: storageUrl('lessons/lessons-cover.jpg'),
       href: '/lessons' as const,
     },

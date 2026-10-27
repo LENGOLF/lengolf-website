@@ -1,8 +1,10 @@
 import { SITE_URL, SITE_NAME, BUSINESS_INFO, SOCIAL_LINKS, PHONE_E164, storageUrl } from '@/lib/constants'
 import { relatedQuestionPath } from '@/lib/seo-links'
 import type { UsedClub } from '@/lib/clubs'
-import type { BayRateRow, MonthlyPackageRow, LessonPackage, EventPackage } from '@/data/pricing'
+import type { BayRateRow, MonthlyPackageRow, LessonPackage, LessonPriceFacts, EventPackage } from '@/data/pricing'
 import type { MenuGroup } from '@/data/food-menu'
+import type { CoachingComparison } from '@/types/seo-pages'
+import { comparisonThb } from '@/data/coaching-providers'
 
 /**
  * Single source of truth for the schema.org PostalAddress, reused across every
@@ -17,6 +19,38 @@ export function getPostalAddressJsonLd() {
     addressRegion: BUSINESS_INFO.addressParts.addressRegion,
     postalCode: BUSINESS_INFO.addressParts.postalCode,
     addressCountry: BUSINESS_INFO.addressParts.addressCountry,
+  }
+}
+
+/**
+ * The course club-rental delivery Offer, shared by both rental catalogs.
+ * Checkout (booking-new `delivery-distance.ts`) prices delivery by
+ * straight-line km from the venue: ฿500 to 15 km, ฿650 to 35 km, ฿1,200 to
+ * 50 km, refused online beyond 50 km, plus a flat ฿250 for 4 to 5 sets
+ * (so the most an online order pays is ฿1,450). `price` is the starting
+ * price. Change these with the bands.
+ */
+function getClubDeliveryOfferJsonLd() {
+  return {
+    '@type': 'Offer' as const,
+    name: 'Club Delivery (Bangkok and nearby courses)',
+    description: 'Round-trip delivery of premium club sets to your hotel or golf course, priced by distance from LENGOLF: 500 THB up to 15 km, 650 THB up to 35 km, 1,200 THB up to 50 km, plus 250 THB per order for 4 to 5 sets',
+    priceSpecification: {
+      '@type': 'PriceSpecification',
+      price: 500,
+      minPrice: 500,
+      maxPrice: 1450,
+      priceCurrency: 'THB',
+    },
+    areaServed: {
+      '@type': 'GeoCircle',
+      geoMidpoint: {
+        '@type': 'GeoCoordinates',
+        latitude: BUSINESS_INFO.coordinates.lat,
+        longitude: BUSINESS_INFO.coordinates.lng,
+      },
+      geoRadius: 50000,
+    },
   }
 }
 
@@ -171,24 +205,25 @@ export function getWebSiteJsonLd() {
     // reuse the shared NAP helpers so they cannot drift from the
     // EntertainmentBusiness node above.
     //
-    // Known gap, named rather than fixed: the layout's EntertainmentBusiness
-    // is the only LENGOLF business/Organization node with an '@id'
-    // (BUSINESS_ENTITY_ID, referenced so far only by the /lessons/ coach and
-    // lesson nodes). Before the /location/* DB nodes below get this '@id',
-    // fix their data: measured 2026-10-07, all 85 say openingHours 10:00-23:00
-    // (the venue opens 09:00), carry a different geo point, and 84 of 85 have
-    // a `url` missing the /location/ prefix that 404s. Sharing the id would
-    // merge those values into the canonical business entity. This publisher
-    // node does not, and the thinner publisher Organizations elsewhere in the repo
-    // (/guide/, /blog/, /blog/[slug]) describe the same business with less
-    // detail and nothing ties them together. The in-repo nodes are NOT the
-    // whole set: each of the 85 /location/* pages also renders a DB-sourced
-    // LocalBusiness from location_pages.schema_markup — queried 2026-08-23,
-    // all 85 carry an address and none carries a contactPoint or an '@id' —
-    // so those pages ship THREE unlinked LENGOLF nodes each. An '@id' of
-    // `${SITE_URL}/#organization` referenced from the thin nodes is the fix
-    // that scales, and it has to reach the DB blobs too; adding NAP to each
-    // in-repo node is round one of a four-round pattern.
+    // '@id' BUSINESS_ENTITY_ID makes this the SAME entity as the layout's
+    // EntertainmentBusiness, so a consumer that resolves '@id' merges the two
+    // instead of reading two unlinked LENGOLF nodes. Safe because each value
+    // the two nodes share (name, legalName, url, address, telephone, email,
+    // sameAs) comes from the same constant or helper on both, and the rest
+    // (logo, contactPoint here; image, geo, hours there) only adds. The
+    // /location/* pages no longer add a third node (getLocationWebPageJsonLd
+    // below replaced the DB blob).
+    //
+    // Known gap, named rather than fixed: other id-less LENGOLF nodes still
+    // ship. The thin publisher Organizations on /guide/, /blog/ and
+    // /blog/[slug] (plus the blog post's author Organization); the
+    // aggregate-rating EntertainmentBusiness on / and /about-us/
+    // (getAggregateRatingJsonLd); the LENGOLF item on the /best/ listicle; and
+    // getHotelConciergePageJsonLd's LocalBusiness on every /hotels/<slug>/,
+    // which carries a per-page url, the exact pattern removed from /location/.
+    // Pointing them at BUSINESS_ENTITY_ID is the fix that scales; check each
+    // one's values agree with this node first, because sharing the id merges
+    // them, and a per-page url or description must move off the business.
     //
     // Deliberately NO `description`: SITE_DESCRIPTION is English-only and
     // this node renders on every ja/ko/zh/th page, so adding it would put an
@@ -197,7 +232,11 @@ export function getWebSiteJsonLd() {
     // native QA, i.e. a translation batch, not a line here.
     publisher: {
       '@type': 'Organization',
-      name: SITE_NAME,
+      '@id': BUSINESS_ENTITY_ID,
+      // BUSINESS_INFO.name, not SITE_NAME: this node now merges into the
+      // business entity, whose name comes from BUSINESS_INFO.name. Both are
+      // 'LENGOLF' today, but two literals can drift and the merge must not.
+      name: BUSINESS_INFO.name,
       legalName: BUSINESS_INFO.legalName,
       url: SITE_URL,
       logo: {
@@ -226,6 +265,40 @@ export function getWebSiteJsonLd() {
       contactPoint: getContactPointJsonLd(),
       sameAs: [SOCIAL_LINKS.facebook, SOCIAL_LINKS.instagram, SOCIAL_LINKS.lineProfile],
     },
+  }
+}
+
+/**
+ * The JSON-LD for a /location/<slug>/ page: a WebPage ABOUT the business, not
+ * a second copy of it. The business itself is described once, by the
+ * layout's EntertainmentBusiness (BUSINESS_ENTITY_ID), on every page.
+ *
+ * Replaces location_pages.schema_markup, which these pages used to print
+ * verbatim. Measured 2026-10-07, all 85 blobs said openingHours
+ * "Mo-Su 10:00-23:00" (the venue opens 09:00), carried geo 13.7437,100.5436
+ * (canonical: BUSINESS_INFO.coordinates), used a second address spelling,
+ * and 84 of 85 had a `url` without the /location/ prefix (about 70 of those
+ * 404; 14 hit rootLocationRedirects in next.config.js and redirect). Those
+ * values were copied once at import and nothing kept them in step with
+ * BUSINESS_INFO. Building the node here means there is no copy to drift.
+ *
+ * Why not a LocalBusiness with the shared '@id': a consumer merges every node
+ * that shares an '@id', so per-page values (this page's description and URL)
+ * would land on the one business entity, 85 times over. They belong to the
+ * page, which `about` links to the business.
+ */
+export function getLocationWebPageJsonLd(page: { slug: string; title: string; description: string | null }) {
+  const url = `${SITE_URL}/location/${page.slug}/`
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': url,
+    url,
+    name: page.title,
+    ...(page.description ? { description: page.description } : {}),
+    // The route is EN-only (generateStaticParams emits locale 'en').
+    inLanguage: 'en',
+    about: getBusinessRef(),
   }
 }
 
@@ -422,6 +495,16 @@ export function getEventsServiceJsonLd() {
   }
 }
 
+/** The free 1-hour trial: a "trial", never a "free lesson" (owner wording rule). */
+const LESSON_TRIAL_OFFER = {
+  '@type': 'Offer',
+  name: 'Free 1-Hour Trial',
+  description: 'A free 1-hour trial with a Thailand PGA-certified coach for new students, golf clubs and simulator included. Book on LINE @lengolf.',
+  price: '0',
+  priceCurrency: 'THB',
+  eligibleDuration: { '@type': 'QuantitativeValue', value: 1, unitCode: 'HUR' },
+}
+
 export function getLessonsPricingJsonLd(dynamicLessonPricing?: LessonPackage[]) {
   const lessonDescriptions: Record<string, { description: string; unitCode?: string; duration?: number }> = {
     '1 Hour': { description: 'One-on-one coaching with a PGA-certified professional, golf simulator usage included', unitCode: 'HUR', duration: 1 },
@@ -438,10 +521,17 @@ export function getLessonsPricingJsonLd(dynamicLessonPricing?: LessonPackage[]) 
     ? dynamicLessonPricing.map((pkg) => {
         const meta = lessonDescriptions[pkg.name]
         const offerName = pkg.name.replace(/\*$/, '').trim()
+        // Multi-hour packages state their per-hour value, which is the figure
+        // a price comparison needs and the one the total hides.
+        const total = Number(parseThbToString(pkg.oneGolfer))
+        const perHour =
+          pkg.nameKind === 'hour' && (pkg.nameHours ?? 0) > 1 && total > 0
+            ? `, ${Math.round(total / pkg.nameHours!).toLocaleString('en-US')} THB per hour`
+            : ''
         const offer: Record<string, unknown> = {
           '@type': 'Offer',
           name: offerName.includes('Package') ? offerName : `${offerName} Golf Lesson Package`,
-          description: meta?.description || `${pkg.name} golf coaching package`,
+          description: (meta?.description || `${pkg.name} golf coaching package`) + perHour,
           price: parseThbToString(pkg.oneGolfer),
           priceCurrency: 'THB',
         }
@@ -468,7 +558,7 @@ export function getLessonsPricingJsonLd(dynamicLessonPricing?: LessonPackage[]) 
     name: 'LENGOLF Golf Lesson Packages',
     description: 'Golf coaching packages with Thailand PGA-certified professionals at LENGOLF Bangkok. Simulator usage included.',
     provider: getBusinessRef(),
-    itemListElement: offers,
+    itemListElement: [LESSON_TRIAL_OFFER, ...offers],
   }
 }
 
@@ -579,18 +669,18 @@ export function getClubRentalPricingJsonLd() {
         price: '400',
         priceCurrency: 'THB',
       },
-      {
-        '@type': 'Offer',
-        name: 'Club Delivery in Bangkok',
-        description: 'Same-day delivery of premium club sets anywhere in Bangkok',
-        price: '500',
-        priceCurrency: 'THB',
-      },
+      getClubDeliveryOfferJsonLd(),
     ],
   }
 }
 
-export function getHomePricingJsonLd() {
+/**
+ * The home page's OfferCatalog. The lesson Offer takes its price from the
+ * same rows /lessons/ renders (getLessonPriceFacts) and sits after the free
+ * trial, so the structured data answers "how much are lessons" the way the
+ * visible page does.
+ */
+export function getHomePricingJsonLd(lessonFacts: LessonPriceFacts) {
   return {
     '@context': 'https://schema.org',
     '@type': 'OfferCatalog',
@@ -618,11 +708,12 @@ export function getHomePricingJsonLd() {
         price: '3000',
         priceCurrency: 'THB',
       },
+      LESSON_TRIAL_OFFER,
       {
         '@type': 'Offer',
         name: 'Golf Lessons',
-        description: 'One-on-one coaching with PGA-certified professionals, simulator usage included',
-        price: '1800',
+        description: `One-on-one coaching with PGA-certified professionals, simulator usage included. Packages from ${lessonFacts.fiftyHourRate} THB per hour.`,
+        price: String(lessonFacts.hourlyThb),
         priceCurrency: 'THB',
         unitCode: 'HUR',
         eligibleDuration: { '@type': 'QuantitativeValue', value: 1, unitCode: 'HUR' },
@@ -669,7 +760,7 @@ export function getFaqPageJsonLd(faqItems: { question: string; answer: string }[
   }
 }
 
-export function getLessonsServiceJsonLd(startingPrice?: string) {
+export function getLessonsServiceJsonLd(facts: LessonPriceFacts) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
@@ -682,10 +773,23 @@ export function getLessonsServiceJsonLd(startingPrice?: string) {
       name: 'Bangkok',
     },
     offers: {
-      '@type': 'Offer',
-      price: startingPrice ? parseThbToString(startingPrice) : '1800',
+      '@type': 'AggregateOffer',
       priceCurrency: 'THB',
-      description: '1-hour lesson with a PGA-certified coach, simulator usage included',
+      lowPrice: '0',
+      highPrice: String(facts.hourlyThb),
+      offerCount: 2,
+      description: `Free 1-hour trial for new students, then ${facts.hourly} THB for a 1-hour lesson, or from ${facts.fiftyHourRate} THB per hour on lesson packages. Simulator usage included.`,
+      offers: [
+        LESSON_TRIAL_OFFER,
+        {
+          '@type': 'Offer',
+          name: '1 Hour Golf Lesson',
+          price: String(facts.hourlyThb),
+          priceCurrency: 'THB',
+          eligibleDuration: { '@type': 'QuantitativeValue', value: 1, unitCode: 'HUR' },
+          description: '1-hour lesson with a PGA-certified coach, simulator usage included',
+        },
+      ],
     },
   }
 }
@@ -737,12 +841,89 @@ export function getCoachesJsonLd(
   }
 }
 
+/**
+ * The Junior Academy as a schema.org Course, provided by the layout's business
+ * node (by '@id', not a second LENGOLF entity). Strings arrive localized from
+ * data/junior-academy.ts; this builder adds only schema vocabulary. Google
+ * retired the Course Info rich result in 2025, so this is for entity grounding
+ * (search, AI assistants), not a SERP feature.
+ */
+export function getJuniorAcademyCourseJsonLd(c: {
+  name: string
+  description: string
+  pageUrl: string
+  /** Locale-independent: the same program is one entity on every locale page. */
+  entityId: string
+  image: string
+  priceThb: number
+  offerDescription: string
+  credentials: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Course',
+    '@id': c.entityId,
+    name: c.name,
+    description: c.description,
+    url: c.pageUrl,
+    image: c.image,
+    provider: getBusinessRef(),
+    typicalAgeRange: '4-12',
+    educationalCredentialAwarded: c.credentials,
+    hasCourseInstance: {
+      '@type': 'CourseInstance',
+      courseMode: 'onsite',
+      // 10 lessons of 60 minutes.
+      courseWorkload: 'PT10H',
+      location: getBusinessRef(),
+    },
+    offers: {
+      '@type': 'Offer',
+      name: c.name,
+      description: c.offerDescription,
+      price: String(c.priceThb),
+      priceCurrency: 'THB',
+      category: 'Paid',
+      availability: 'https://schema.org/InStock',
+      url: c.pageUrl,
+      seller: getBusinessRef(),
+    },
+  }
+}
+
+export function getVideoObjectJsonLd(v: {
+  name: string
+  description: string
+  thumbnailUrl: string
+  contentUrl: string
+  /** ISO 8601 date-time with offset. A literal, never `new Date()`. */
+  uploadDate: string
+  /** ISO 8601 duration, e.g. 'PT25S'. */
+  duration: string
+  inLanguage: string
+  transcript: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'VideoObject',
+    name: v.name,
+    description: v.description,
+    thumbnailUrl: [v.thumbnailUrl],
+    contentUrl: v.contentUrl,
+    uploadDate: v.uploadDate,
+    duration: v.duration,
+    inLanguage: v.inLanguage,
+    transcript: v.transcript,
+    publisher: getBusinessRef(),
+  }
+}
+
 export function getClubRentalServiceJsonLd() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: 'Golf Club Rental at LENGOLF',
-    description: 'Golf club rental service in Bangkok — free standard house sets with every bay booking, premium Callaway Warbird and Callaway REVA rentals, gear add-ons, and same-day delivery anywhere in Bangkok.',
+    description: 'Golf club rental service in Bangkok — free standard house sets with every bay booking, premium Callaway Warbird and Callaway REVA rentals, gear add-ons, and same-day delivery in Bangkok and to nearby courses from 500 THB.',
     provider: {
       '@type': 'EntertainmentBusiness',
       name: BUSINESS_INFO.name,
@@ -1039,6 +1220,77 @@ export function getPriceGuidePageJsonLd(page: {
   }
 }
 
+/**
+ * The /cost/ lesson-price comparison as an ItemList of golf-lesson Services,
+ * one per provider, in table order. LENGOLF's node points at the layout's
+ * business by `@id` (never restated); a competitor's provider is a plain
+ * Organization carrying its own name. A provider that publishes no price gets
+ * a Service with no Offer, so the entity is still listed without a made-up
+ * figure. `singleLessonThb` arrives already resolved from its fact token.
+ */
+export function getCoachingComparisonJsonLd(
+  page: {
+    title: string
+    slug: string
+    updated_at: string
+    content: { coaching_comparison?: CoachingComparison }
+  },
+  locale: string = 'en'
+) {
+  const comparison = page.content.coaching_comparison
+  if (!comparison) return null
+  const localePrefix = locale === 'en' ? '' : `/${locale}`
+  const pageUrl = `${SITE_URL}${localePrefix}/cost/${page.slug}/`
+  // Locale-independent @id base: one provider is one entity across locales.
+  const idBase = `${SITE_URL}/cost/${page.slug}/`
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: comparison.heading,
+    url: pageUrl,
+    dateModified: page.updated_at,
+    numberOfItems: comparison.rows.length,
+    itemListElement: comparison.rows.map((row, i) => {
+      const price = comparisonThb(row.singleLessonThb)
+      const isLengolf = row.id === 'lengolf'
+      return {
+        '@type': 'ListItem',
+        position: i + 1,
+        item: {
+          '@type': 'Service',
+          '@id': `${idBase}#provider-${row.id}`,
+          name: `Golf lessons at ${row.name}`,
+          serviceType: 'Golf lesson',
+          description: `${row.kind}. ${row.area}.`,
+          areaServed: { '@type': 'City', name: 'Bangkok' },
+          provider: isLengolf
+            ? getBusinessRef()
+            : {
+                '@type': 'Organization',
+                name: row.name,
+                // The homepage, never the price-source page (a booking
+                // platform or a price list is not the organisation).
+                ...(row.websiteUrl ? { url: row.websiteUrl } : {}),
+              },
+          ...(price !== null
+            ? {
+                offers: {
+                  '@type': 'Offer',
+                  name: 'One private lesson',
+                  price: String(price),
+                  priceCurrency: 'THB',
+                  description: row.singleLesson,
+                  ...(row.sourceUrl ? { url: row.sourceUrl } : {}),
+                },
+              }
+            : {}),
+        },
+      }
+    }),
+  }
+}
+
 export function getExplainerPageJsonLd(page: {
   title: string
   slug: string
@@ -1092,7 +1344,7 @@ export function getCourseClubRentalServiceJsonLd() {
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: 'Golf Course Club Rental Bangkok — LENGOLF',
-    description: 'Rent premium golf clubs for any Bangkok golf course. Callaway Paradym Forged Carbon (tour-grade), Callaway Warbird, or Callaway REVA full sets. Full-day and multi-day packages. Delivery anywhere in Bangkok for 500 THB. Book and pay online with instant confirmation.',
+    description: 'Rent premium golf clubs for any Bangkok golf course. Callaway Paradym Forged Carbon (tour-grade), Callaway Warbird, or Callaway REVA full sets. Full-day and multi-day packages. Delivery to your hotel or course from 500 THB, priced by distance. Book and pay online with instant confirmation.',
     provider: {
       '@type': 'EntertainmentBusiness',
       name: BUSINESS_INFO.name,
@@ -1184,7 +1436,7 @@ export function getCourseClubRentalPricingJsonLd() {
       { '@type': 'Offer', name: '3-Day Premium+ Course Rental', price: '3600', priceCurrency: 'THB' },
       { '@type': 'Offer', name: '7-Day Premium+ Course Rental', price: '7200', priceCurrency: 'THB' },
       { '@type': 'Offer', name: '14-Day Premium+ Course Rental', price: '12600', priceCurrency: 'THB' },
-      { '@type': 'Offer', name: 'Club Delivery (anywhere in Bangkok)', price: '500', priceCurrency: 'THB' },
+      getClubDeliveryOfferJsonLd(),
       { '@type': 'Offer', name: 'Golf Gloves Add-On', price: '600', priceCurrency: 'THB' },
       { '@type': 'Offer', name: 'Golf Balls Add-On (1 dozen)', price: '400', priceCurrency: 'THB' },
     ],
