@@ -23,6 +23,38 @@ export function getPostalAddressJsonLd() {
 }
 
 /**
+ * The course club-rental delivery Offer, shared by both rental catalogs.
+ * Checkout (booking-new `delivery-distance.ts`) prices delivery by
+ * straight-line km from the venue: ฿500 to 15 km, ฿650 to 35 km, ฿1,200 to
+ * 50 km, refused online beyond 50 km, plus a flat ฿250 for 4 to 5 sets
+ * (so the most an online order pays is ฿1,450). `price` is the starting
+ * price. Change these with the bands.
+ */
+function getClubDeliveryOfferJsonLd() {
+  return {
+    '@type': 'Offer' as const,
+    name: 'Club Delivery (Bangkok and nearby courses)',
+    description: 'Round-trip delivery of premium club sets to your hotel or golf course, priced by distance from LENGOLF: 500 THB up to 15 km, 650 THB up to 35 km, 1,200 THB up to 50 km, plus 250 THB per order for 4 to 5 sets',
+    priceSpecification: {
+      '@type': 'PriceSpecification',
+      price: 500,
+      minPrice: 500,
+      maxPrice: 1450,
+      priceCurrency: 'THB',
+    },
+    areaServed: {
+      '@type': 'GeoCircle',
+      geoMidpoint: {
+        '@type': 'GeoCoordinates',
+        latitude: BUSINESS_INFO.coordinates.lat,
+        longitude: BUSINESS_INFO.coordinates.lng,
+      },
+      geoRadius: 50000,
+    },
+  }
+}
+
+/**
  * Customer-service ContactPoints for the Organization publisher node below.
  * They exist so a consumer reading the structured data can find a way to
  * reach the business; /about-us/ carries the same email and the same phone
@@ -637,13 +669,7 @@ export function getClubRentalPricingJsonLd() {
         price: '400',
         priceCurrency: 'THB',
       },
-      {
-        '@type': 'Offer',
-        name: 'Club Delivery in Bangkok',
-        description: 'Same-day delivery of premium club sets anywhere in Bangkok',
-        price: '500',
-        priceCurrency: 'THB',
-      },
+      getClubDeliveryOfferJsonLd(),
     ],
   }
 }
@@ -897,7 +923,7 @@ export function getClubRentalServiceJsonLd() {
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: 'Golf Club Rental at LENGOLF',
-    description: 'Golf club rental service in Bangkok — free standard house sets with every bay booking, premium Callaway Warbird and Callaway REVA rentals, gear add-ons, and same-day delivery anywhere in Bangkok.',
+    description: 'Golf club rental service in Bangkok — free standard house sets with every bay booking, premium Callaway Warbird and Callaway REVA rentals, gear add-ons, and same-day delivery in Bangkok and to nearby courses from 500 THB.',
     provider: {
       '@type': 'EntertainmentBusiness',
       name: BUSINESS_INFO.name,
@@ -1318,7 +1344,7 @@ export function getCourseClubRentalServiceJsonLd() {
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: 'Golf Course Club Rental Bangkok — LENGOLF',
-    description: 'Rent premium golf clubs for any Bangkok golf course. Callaway Paradym Forged Carbon (tour-grade), Callaway Warbird, or Callaway REVA full sets. Full-day and multi-day packages. Delivery anywhere in Bangkok for 500 THB. Book and pay online with instant confirmation.',
+    description: 'Rent premium golf clubs for any Bangkok golf course. Callaway Paradym Forged Carbon (tour-grade), Callaway Warbird, or Callaway REVA full sets. Full-day and multi-day packages. Delivery to your hotel or course from 500 THB, priced by distance. Book and pay online with instant confirmation.',
     provider: {
       '@type': 'EntertainmentBusiness',
       name: BUSINESS_INFO.name,
@@ -1410,7 +1436,7 @@ export function getCourseClubRentalPricingJsonLd() {
       { '@type': 'Offer', name: '3-Day Premium+ Course Rental', price: '3600', priceCurrency: 'THB' },
       { '@type': 'Offer', name: '7-Day Premium+ Course Rental', price: '7200', priceCurrency: 'THB' },
       { '@type': 'Offer', name: '14-Day Premium+ Course Rental', price: '12600', priceCurrency: 'THB' },
-      { '@type': 'Offer', name: 'Club Delivery (anywhere in Bangkok)', price: '500', priceCurrency: 'THB' },
+      getClubDeliveryOfferJsonLd(),
       { '@type': 'Offer', name: 'Golf Gloves Add-On', price: '600', priceCurrency: 'THB' },
       { '@type': 'Offer', name: 'Golf Balls Add-On (1 dozen)', price: '400', priceCurrency: 'THB' },
     ],

@@ -11,9 +11,13 @@ Each entry includes a source and date so we know how fresh it is.
 
 **What LENGOLF offers:**
 LENGOLF provides premium golf club rentals for use at any Bangkok course, with
-hotel AND course delivery for 500 THB (the earlier "hotel only, not delivered to
-courses" line here was false). Source: messages/en.json CourseClubRental
-(heroSubtitle, courseBannerText in ClubRental) | Verified: 2026-09-24
+hotel AND course delivery from 500 THB round trip (the earlier "hotel only, not
+delivered to courses" line here was false). Delivery is priced by straight-line
+distance from LENGOLF: 500 THB up to 15 km, 650 THB up to 35 km, 1,200 THB up to
+50 km, plus 250 THB per order for 4 to 5 sets; beyond 50 km or 6+ sets is quoted
+on LINE. Never write a flat 500 THB. Source: lengolf-booking-new
+lib/club-rental/delivery-distance.ts + messages/en.json CourseClubRental
+(deliveryBand1-3, deliveryBandNote) | Verified: 2026-10-26
 
 **Rental brands available:**
 Callaway: Premium+ Paradym Forged Carbon, Premium Warbird (men), Premium REVA
@@ -23,8 +27,10 @@ offered on request only, which is not the default offer. Majesty is retired.
 Source: rental_club_sets table (Supabase) + messages/en.json CourseClubRental | Verified: 2026-09-24
 
 **Delivery area:**
-Bangkok hotels. Not Phuket, Hua Hin, or Pattaya (as of April 2026).
-Source: lengolf.com | Verified: 2026-04
+Hotels and golf courses up to 50 km straight-line from LENGOLF (all of Bangkok
+and the nearby courses). Not Pattaya (about 98 km), Hua Hin, Khao Yai or Phuket:
+for courses there, frame delivery as "to your Bangkok hotel before you travel".
+Source: lengolf-booking-new lib/club-rental/delivery-distance.ts | Verified: 2026-10-26
 
 **CTA framing:**
 The value proposition for course pages is: "Skip airline baggage fees: rent clubs delivered to your Bangkok hotel."
