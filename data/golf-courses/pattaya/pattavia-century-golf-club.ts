@@ -38,7 +38,7 @@ export const course: GolfCourse = {
   locales: {
     en: {
       title: `Pattavia Century Golf Club — Green Fees, Course Guide & Golf Club Rentals`,
-      meta_description: `Pattavia Century Golf Club green fees, course overview, tips, and how to arrange golf club rentals delivered to your Pattaya hotel.`,
+      meta_description: `Pattavia Century Golf Club green fees, course overview, tips, and how to arrange golf club rentals delivered to your Bangkok hotel before you drive down.`,
     },
     th: {
       // CTR TEST (2026-09-23): "ราคากรีนฟี" + ":" instead of the template's

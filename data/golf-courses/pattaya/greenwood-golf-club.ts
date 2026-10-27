@@ -38,7 +38,7 @@ export const course: GolfCourse = {
   locales: {
     en: {
       title: `Greenwood Golf Club — Green Fees, Course Guide & Golf Club Rentals`,
-      meta_description: `Greenwood Golf Club green fees, course overview, tips, and how to arrange golf club rentals delivered to your Pattaya hotel.`,
+      meta_description: `Greenwood Golf Club green fees, course overview, tips, and how to arrange golf club rentals delivered to your Bangkok hotel before you drive down.`,
     },
     th: {
       title: `Greenwood Golf Club ชลบุรี — ค่ากรีนฟี รีวิวสนาม และเช่าไม้กอล์ฟ`,

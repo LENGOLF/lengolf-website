@@ -32,12 +32,12 @@ export const course: GolfCourse = {
     layout_and_experience: `Rancho Charnvee plays across a combination of flat and gently rolling fairways, making it accessible to mid- and high-handicap golfers while providing enough variation to hold the attention of lower handicappers. Bob McFarland's routing uses established tree corridors to define each hole, placing a premium on accurate ball placement over raw power. The design reflects the Pak Chong foothills landscape — more topographic variety than typical central-plains courses closer to Bangkok, without the steep climbing of a true mountain layout.\n\nWater hazards feature on several holes, integrated in a way that adds strategic interest without turning the course into a penalty-laden challenge. The par 3s offer some of the most scenic moments, framed by the surrounding countryside of Nakhon Ratchasima. Greens are maintained to a standard consistent with the resort tier — adequate and true, with moderate pace.\n\nAt par 72 with a layout suited to recreational play, Rancho Charnvee functions primarily as an enjoyable resort round rather than a serious championship venue. Pace of play is generally comfortable, particularly on weekdays when the course operates at lighter capacity. The 19th hole is well-served by the resort's facilities, including a clubhouse and on-site accommodation options for visitors staying overnight.\n\nThe course sits within easy reach of other Khao Yai region layouts, including Kirimaya Golf Course and Khao Yai Golf Club, making it straightforward to pair rounds across multiple days.`,
     tips: `Weekday visits offer both lighter traffic and a lower green fee — roughly 1,050 THB versus weekend rates approaching 1,850 THB. The caddie is included in the green fee; no separate payment at the desk is needed, though a tip of around 400 THB is the customary courtesy at the end of an 18-hole round. Cart hire is 600 THB, optional but worthwhile given the hills and tropical heat, particularly between March and May when daytime temperatures peak.\n\nEarly tee times are recommended year-round: mornings in Pak Chong are cooler than Bangkok and provide the best light across the rolling fairways. Afternoon rounds in the wet season (May–October) carry a meaningful chance of afternoon showers, though the Khao Yai area's higher elevation moderates conditions compared to the Bangkok plains. The dry season (November–February) offers the most reliably clear mornings.\n\nThe resort location makes Rancho Charnvee a natural fit for a two-night Khao Yai itinerary — combining a round here with a tee time at nearby Kirimaya or Khao Yai Golf Club gives a full golf weekend without repeating the same course twice.`,
     location_and_access: `Rancho Charnvee Resort & Country Club is located approximately 180 km northeast of Bangkok in Pak Chong district, Nakhon Ratchasima — the same gateway town as Khao Yai National Park. The drive from central Bangkok takes around 2 hours and 15 minutes off-peak via Highway 2 (Mittraphap Road). There is no direct public transport to the course; most visitors drive or arrange a private transfer from Bangkok or from Pak Chong town. The resort address is 333/2 Moo 12, Khanong Phra, Pak Chong District, Nakhon Ratchasima 30130. The main contact line is +66 44 756 210; a golf-specific line (+66 88 375 4466) is also listed.`,
-    rental_cta_context: `Planning a round at Rancho Charnvee as part of a Khao Yai trip? LENGOLF delivers a full set of premium rental clubs to your resort or hotel so you can travel light and step straight onto the first tee.`,
+    rental_cta_context: `Planning a round at Rancho Charnvee as part of a Khao Yai trip? LENGOLF delivers a full set of premium rental clubs to your Bangkok hotel before you drive up, so you can travel light and step straight onto the first tee.`,
   },
   locales: {
     en: {
       title: `Rancho Charnvee Resort & Country Club — Green Fees, Course Guide & Golf Club Rentals`,
-      meta_description: `Rancho Charnvee Khao Yai: 18-hole par-72 by Bob McFarland. Green fees from ฿1,050 — caddie included. 180 km from Bangkok. Club rentals delivered to your hotel.`,
+      meta_description: `Rancho Charnvee Khao Yai: 18-hole par-72 by Bob McFarland. Green fees from ฿1,050 — caddie included. 180 km from Bangkok. Club rentals delivered to your Bangkok hotel.`,
     },
     th: {
       title: `Rancho Charnvee Resort & Country Club เขาใหญ่ — ค่ากรีนฟี รีวิวสนาม และเช่าไม้กอล์ฟ`,
@@ -57,7 +57,7 @@ export const course: GolfCourse = {
 
 ทำเลแบบรีสอร์ตทำให้ Rancho Charnvee เข้ากับแผนเที่ยวเขาใหญ่แบบค้างสองคืนได้อย่างลงตัว การจับคู่การออกรอบที่นี่กับทีไทม์ที่ Kirimaya หรือ Khao Yai Golf Club ที่อยู่ใกล้เคียงทำให้ได้สุดสัปดาห์กอล์ฟเต็มรูปแบบโดยไม่ต้องเล่นสนามเดิมซ้ำ`,
         location_and_access: `Rancho Charnvee Resort & Country Club ตั้งอยู่ห่างจากกรุงเทพฯ ไปทางตะวันออกเฉียงเหนือประมาณ 180 กิโลเมตร ในอำเภอปากช่อง จังหวัดนครราชสีมา ซึ่งเป็นเมืองประตูสู่อุทยานแห่งชาติเขาใหญ่เช่นเดียวกัน การขับรถจากใจกลางกรุงเทพฯ ใช้เวลาราว 2 ชั่วโมง 15 นาทีในช่วงที่รถไม่ติด ผ่านทางหลวงหมายเลข 2 (ถนนมิตรภาพ) ไม่มีขนส่งสาธารณะที่ไปถึงสนามโดยตรง ผู้มาเยือนส่วนใหญ่จึงขับรถเองหรือจัดรถรับส่งส่วนตัวจากกรุงเทพฯ หรือจากตัวอำเภอปากช่อง ที่อยู่ของรีสอร์ตคือ 333/2 หมู่ 12 ตำบลขนงพระ อำเภอปากช่อง จังหวัดนครราชสีมา 30130 เบอร์ติดต่อหลักคือ +66 44 756 210 และยังมีสายตรงสำหรับกอล์ฟที่ +66 88 375 4466`,
-        rental_cta_context: `กำลังวางแผนออกรอบที่ Rancho Charnvee เป็นส่วนหนึ่งของทริปเขาใหญ่อยู่ใช่ไหม LENGOLF ส่งชุดไม้กอล์ฟให้เช่าระดับพรีเมียมแบบครบเซ็ตถึงรีสอร์ตหรือโรงแรมของคุณ ให้คุณเดินทางแบบเบาสบายและก้าวขึ้นแท่นทีแรกได้ทันที`,
+        rental_cta_context: `กำลังวางแผนออกรอบที่ Rancho Charnvee เป็นส่วนหนึ่งของทริปเขาใหญ่อยู่ใช่ไหม LENGOLF ส่งชุดไม้กอล์ฟให้เช่าระดับพรีเมียมแบบครบเซ็ตถึงโรงแรมของคุณในกรุงเทพฯ ก่อนออกเดินทาง ให้คุณเดินทางแบบเบาสบายและก้าวขึ้นแท่นทีแรกได้ทันที`,
       },
     },
     ja: {
@@ -78,12 +78,12 @@ export const course: GolfCourse = {
 
 リゾート立地であることから、Rancho Charnveeはカオヤイでの2泊の行程に自然に収まります。ここでの1ラウンドに、近くのKirimayaやKhao Yai Golf Clubのティータイムを組み合わせれば、同じコースを2度回ることなくゴルフ中心の週末が完成します。`,
         location_and_access: `Rancho Charnvee Resort & Country Clubは、バンコクの北東およそ180km、ナコンラーチャシーマー県パクチョン郡 — カオヤイ国立公園と同じ玄関口の町 — にあります。バンコク中心部からは国道2号線（ミットラパープ道路）経由で、渋滞を避ければ2時間15分ほどのドライブです。コースへの直通の公共交通機関はないため、多くの訪問者は自家用車を使うか、バンコクまたはパクチョンの町から専用の送迎を手配します。リゾートの住所は333/2 Moo 12, Khanong Phra, Pak Chong District, Nakhon Ratchasima 30130。代表の連絡先は+66 44 756 210で、ゴルフ専用の番号（+66 88 375 4466）も案内されています。`,
-        rental_cta_context: `カオヤイ旅行の一環としてRancho Charnveeでのラウンドをご計画ですか。LENGOLFがプレミアムなレンタルクラブのフルセットをリゾートやホテルまでお届けしますので、身軽に移動して、そのまま1番ホールのティーに立てます。`,
+        rental_cta_context: `カオヤイ旅行の一環としてRancho Charnveeでのラウンドをご計画ですか。LENGOLFが出発前にプレミアムなレンタルクラブのフルセットをバンコクのホテルまでお届けしますので、身軽に移動して、そのまま1番ホールのティーに立てます。`,
       },
     },
     ko: {
       title: `Rancho Charnvee Resort & Country Club 그린피 — 카오야이 18홀 코스 가이드`,
-      meta_description: `Rancho Charnvee는 나콘랏차시마주 Pak Chong의 Bob McFarland 설계 18홀 파 72 코스예요. 그린피는 평일 약 1,050바트이고 캐디가 포함됩니다. 방콕에서 180km 거리이고, 호텔로 배달되는 클럽 대여까지 안내해요.`,
+      meta_description: `Rancho Charnvee는 나콘랏차시마주 Pak Chong의 Bob McFarland 설계 18홀 파 72 코스예요. 그린피는 평일 약 1,050바트이고 캐디가 포함됩니다. 방콕에서 180km 거리이고, 방콕 호텔로 배달되는 클럽 대여까지 안내해요.`,
       prose: {
         overview: `Rancho Charnvee Resort & Country Club은 나콘랏차시마주 Pak Chong 지구, 카오야이 축 가장자리에 자리한 18홀 리조트 코스예요. Bob McFarland가 설계해 2010년에 문을 열었고, 더 넓은 Charnvee Resort 부지의 일부입니다. 이 리조트는 Pak Chong 일대의 선선한 공기와 시골 풍경에 끌린 방콕 주말 여행객에게 인기 있는 호텔·레저 복합 시설이에요. 코스는 카오야이 국립공원으로 다가가는 완만한 구릉을 활용해, 굴곡지고 나무가 늘어선 지형 위에서 파 72로 플레이합니다. 평일 약 1,050바트라는 요금은 리조트급 18홀 레이아웃치고 탄탄한 가치를 주는데, 캐디피가 그린피에 묶여 있어 계산이 단순해요. 더 넓은 카오야이 리조트 체류의 일부로 이곳을 쓰는 태국 골퍼와 외국인 거주자, 그리고 풍경을 바꾸려 일부러 차를 몰고 오는 방콕 골퍼가 고루 찾습니다.`,
         layout_and_experience: `Rancho Charnvee는 평탄한 페어웨이와 완만하게 굽이치는 페어웨이가 섞인 코스라, 중·고핸디캐퍼도 편하게 접근할 수 있으면서 로우 핸디캐퍼의 흥미를 붙잡을 만한 변화도 충분해요. Bob McFarland의 루팅은 이미 자리 잡은 나무 통로로 홀마다 윤곽을 잡아, 힘보다 정확한 볼 배치를 우선합니다. 설계는 Pak Chong 구릉지대의 풍경을 그대로 반영해요. 방콕에 더 가까운 전형적인 중부 평야 코스보다 지형 변화가 많지만, 진짜 산악 레이아웃처럼 가파르게 올라가지는 않습니다.
@@ -99,12 +99,12 @@ export const course: GolfCourse = {
 
 리조트라는 위치 덕분에 Rancho Charnvee는 2박짜리 카오야이 일정에 자연스럽게 어울려요. 이곳에서 한 라운드를 돌고 가까운 Kirimaya나 Khao Yai Golf Club에서 티타임을 잡으면, 같은 코스를 두 번 돌지 않고도 온전한 골프 주말을 채울 수 있습니다.`,
         location_and_access: `Rancho Charnvee Resort & Country Club은 방콕에서 북동쪽으로 약 180km, 카오야이 국립공원의 관문 도시이기도 한 나콘랏차시마주 Pak Chong 지구에 있어요. 방콕 도심에서 2번 국도(Mittraphap Road)를 이용하면 혼잡 시간을 피해 두 시간 15분쯤 걸립니다. 코스로 바로 가는 대중교통은 없어서, 대부분 자가용을 이용하거나 방콕 또는 Pak Chong 시내에서 프라이빗 트랜스퍼를 준비해요. 리조트 주소는 나콘랏차시마주 30130, Pak Chong 지구 Khanong Phra의 333/2 Moo 12입니다. 대표 전화는 +66 44 756 210이고, 골프 전용 번호 +66 88 375 4466도 함께 안내돼 있어요.`,
-        rental_cta_context: `카오야이 여행의 일부로 Rancho Charnvee 라운딩을 계획 중이라면, LENGOLF가 프리미엄 대여 클럽 풀세트를 리조트나 호텔로 배달해 드려요. 짐을 가볍게 꾸리고 바로 첫 홀 티로 나설 수 있습니다.`,
+        rental_cta_context: `카오야이 여행의 일부로 Rancho Charnvee 라운딩을 계획 중이라면, LENGOLF가 출발 전에 프리미엄 대여 클럽 풀세트를 방콕 호텔로 배달해 드려요. 짐을 가볍게 꾸리고 바로 첫 홀 티로 나설 수 있습니다.`,
       },
     },
     zh: {
       title: `Rancho Charnvee Resort & Country Club果岭费 — 考艾18洞球场攻略与球杆租借`,
-      meta_description: `Rancho Charnvee果岭费平日约1,050泰铢、已含球童费，是呵叻府Pak Chong由Bob McFarland设计的18洞度假球场，距曼谷180公里，另附送到你酒店的LENGOLF球杆租借。`,
+      meta_description: `Rancho Charnvee果岭费平日约1,050泰铢、已含球童费，是呵叻府Pak Chong由Bob McFarland设计的18洞度假球场，距曼谷180公里，另附送到你曼谷酒店的LENGOLF球杆租借。`,
       prose: {
         overview: `Rancho Charnvee Resort & Country Club是一座18洞度假球场，位于呵叻府Pak Chong县、考艾走廊的边缘。球场由Bob McFarland设计，2010年开放，隶属于范围更大的Charnvee Resort园区——这是一处酒店与休闲综合体，很受被Pak Chong一带凉爽空气与乡野风光吸引的曼谷周末客欢迎。球场标准杆72，铺展在起伏的林荫地形上，把通往考艾国家公园的那片缓丘用得恰到好处。平日约1,050泰铢，对于一套度假村水准的18洞布局来说相当超值，球童费已并入果岭费，价格一目了然。来打球的既有把这里当作考艾度假行程一部分的泰国本地球手和外籍常住者，也有专程从曼谷开车上来换个环境的人。`,
         layout_and_experience: `Rancho Charnvee的球道在平坦与缓坡之间交替，中高差点球手打起来不吃力，变化又足以让低差点的人保持注意力。Bob McFarland的路线利用既有的林木廊道界定每一个球洞，把落点的准确性看得比纯粹的力量更重。这套设计呼应着Pak Chong的丘陵地貌——比曼谷近郊那些中部平原球场更有地形层次，却又没有真正山地球场那种陡峭的攀爬。
@@ -120,7 +120,7 @@ export const course: GolfCourse = {
 
 度假村的位置让Rancho Charnvee很适合排进两晚的考艾行程——在这里打一场，再去附近的Kirimaya或Khao Yai Golf Club订一个开球时间，就凑成一个完整的高尔夫周末，也不必把同一座球场打两遍。`,
         location_and_access: `Rancho Charnvee Resort & Country Club位于曼谷东北方向约180公里的呵叻府Pak Chong县——正是考艾国家公园的门户小镇。从曼谷市中心驾车，非高峰时段走2号公路（Mittraphap路）约需2小时15分钟。没有直达球场的公共交通，多数访客自驾，或从曼谷、从Pak Chong镇安排包车。度假村地址为呵叻府Pak Chong县Khanong Phra 333/2 Moo 12，邮编30130。主要联系电话是+66 44 756 210，另外也列有一条高尔夫专线+66 88 375 4466。`,
-        rental_cta_context: `打算把Rancho Charnvee排进考艾的行程吗？LENGOLF会把一整套高级租借球杆送到你的度假村或酒店，让你轻装出发，到了就能直接站上第一洞发球台。`,
+        rental_cta_context: `打算把Rancho Charnvee排进考艾的行程吗？LENGOLF会在出发前把一整套高级租借球杆送到你曼谷的酒店，让你轻装出发，到了就能直接站上第一洞发球台。`,
       },
     },
   },
