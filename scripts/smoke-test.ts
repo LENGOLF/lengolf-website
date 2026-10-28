@@ -6383,7 +6383,7 @@ async function runLlmDiscoverabilityTests() {
   // registry does not serve. next-intl's middleware emitted `rel="alternate";
   // hreflang=...` for ALL five locales plus x-default on every non-redirect
   // page, blind to lib/translated-routes.ts, until `alternateLinks: false` in
-  // i18n/routing.ts: /privacy-policy/ advertised ja/ko/zh URLs that 301 to
+  // i18n/routing.ts: /privacy-policy/ advertised th/ko/ja/zh URLs that 301 to
   // English. This guards "no phantom locales", NOT "header absent": a header
   // naming exactly the served locales would pass, as would no header at all.
   // Two hardcoded fixtures, an EN-only route and an EN+TH route; the served

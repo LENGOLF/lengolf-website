@@ -273,11 +273,11 @@ This differs from the [WordPress path handling strategy](./wordpress-path-handli
 
 ### Hreflang Tags
 
-Pages with translations include hreflang tags for all available language versions:
+Pages with translations include hreflang tags for all available language versions. For example, `/golf-club-specs/` (translated into Thai only):
 
 ```html
-<link rel="alternate" hreflang="en" href="https://www.len.golf/golf/" />
-<link rel="alternate" hreflang="th" href="https://www.len.golf/th/golf/" />
+<link rel="alternate" hreflang="en" href="https://www.len.golf/golf-club-specs/" />
+<link rel="alternate" hreflang="th" href="https://www.len.golf/th/golf-club-specs/" />
 ```
 
 Pages without Thai translation do **not** include a `hreflang="th"` tag, as the Thai URL doesn't exist (it redirects).
