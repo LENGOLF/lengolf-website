@@ -49,7 +49,7 @@ export const lessonPricing: LessonPackage[] = [
   { name: '30 Hour',          nameKind: 'hour', nameHours: 30, oneGolfer: '45,000 THB', twoGolfers: '57,000 THB', threeToFiveGolfers: '72,000 THB', remark: 'Valid for 24 months',                                                 remarkKind: 'validity',     remarkMonths: 24 },
   { name: '50 Hour',          nameKind: 'hour', nameHours: 50, oneGolfer: '72,000 THB', twoGolfers: '92,500 THB', threeToFiveGolfers: '117,500 THB', remark: 'Valid for 24 months',                                                remarkKind: 'validity',     remarkMonths: 24 },
   { name: 'Starter Package*', nameKind: 'starter',             oneGolfer: '11,000 THB', twoGolfers: '13,500 THB', threeToFiveGolfers: '-',           remark: 'Valid for 6 months & Free 1 golf glove/golfer',                      remarkKind: 'starter' },
-  { name: 'Sim to Fairway*',  nameKind: 'simToFairway',        oneGolfer: '13,499 THB', twoGolfers: '-',          threeToFiveGolfers: '-',           remark: 'On courses fee for both student and coach must be covered by the customer', remarkKind: 'simToFairway' },
+  { name: 'Sim to Fairway*',  nameKind: 'simToFairway',        oneGolfer: '13,499 THB', twoGolfers: '17,999 THB', threeToFiveGolfers: '-',           remark: 'On courses fee for both student and coach must be covered by the customer', remarkKind: 'simToFairway' },
 ]
 
 export const lessonNotes = [

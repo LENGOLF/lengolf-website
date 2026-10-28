@@ -8,7 +8,7 @@ import { storageUrl, SITE_URL, BUSINESS_INFO } from '@/lib/constants'
 import { getAlternates, getCanonical, hasTranslationForLocale } from '@/lib/translated-routes'
 import { getJuniorAcademyContent, JUNIOR_ACADEMY_PATH } from '@/data/junior-academy'
 import { coaches } from '@/data/coaches'
-import { getLessonPricingData, getLessonPriceFacts, type LessonPackage } from '@/data/pricing'
+import { getLessonPricingData, getLessonPriceFacts, lessonRowThb, type LessonPackage } from '@/data/pricing'
 import { getLessonsPricingJsonLd, getLessonsServiceJsonLd, getFaqPageJsonLd, getBreadcrumbJsonLd, getCoachesJsonLd } from '@/lib/jsonld'
 import FaqSection from '@/components/shared/FaqSection'
 import ClickableImage from '@/components/shared/ClickableImage'
@@ -47,11 +47,13 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
+// Each alt says what its printed card says, prices included, so it must change
+// whenever the image file does.
 const promoImages = [
-  { src: storageUrl('lessons/promo-free-trial.jpg'), alt: 'Free 1-hour trial lesson with a PGA Pro — simple techniques, solid fundamentals, get course-ready fast' },
+  { src: storageUrl('lessons/promo-free-trial.jpg'), alt: 'Free 1-hour trial with our PGA Pro: simple and effective techniques, solid fundamentals, get course-ready fast. Book now on LINE' },
   { src: storageUrl('lessons/starter-package-2026-10.jpg'), alt: 'LENGOLF Starter Package: 5 coaching lesson hours and 5 hours of practice, plus 1 golf glove per golfer. 11,000 THB for 1 golfer, 13,500 THB for 2 golfers, valid for 6 months, VAT included' },
-  { src: storageUrl('lessons/promo-coaching-package.jpg'), alt: 'Coaching package options with hourly and multi-hour lesson bundles at LENGOLF' },
-  { src: storageUrl('lessons/promo-lesson.jpg'), alt: 'Golf lesson promotion with PGA-certified coach on simulator bay' },
+  { src: storageUrl('lessons/promo-coaching-package.jpg'), alt: 'LENGOLF 10 Hour Golf Lesson Package, 16,000 THB, simulator usage included, with expert guidance from PRO Boss (Thailand PGA certified). Master swing, short game and putting fundamentals, improve strength and conditioning, enhance lateral rotation, learn warm-up exercises, play courses with more confidence and hit precise shots consistently. Book on LINE' },
+  { src: storageUrl('lessons/promo-lesson.jpg'), alt: 'LENGOLF From Sim to Fairway Package: 5 hours of indoor coaching plus 1 on-course lesson, 13,499 THB. Course fees, tips and carts (if required) for both the student and the coach are paid by the customer' },
 ]
 
 // width/height are each file's real pixel size (measured 2026-10-13). ImageGallery
@@ -88,10 +90,21 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
   // Per-hour figures quoted in copy (LessonsFaq.a2, the stat chips), derived
   // from the same live rows the pricing table renders.
   const priceFacts = getLessonPriceFacts(lessonPricing)
+  // LessonsFaq.a9 also quotes the Starter and Sim to Fairway packages for 1
+  // and 2 golfers, from the same rows (as GolfFaq.a10 does on /golf/).
+  const rowThb = (name: string, field: 'oneGolfer' | 'twoGolfers') =>
+    lessonRowThb(lessonPricing, name, field).toLocaleString('en-US')
+  const faqValues = {
+    ...priceFacts,
+    starterTotal: rowThb('Starter Package*', 'oneGolfer'),
+    starterTwoTotal: rowThb('Starter Package*', 'twoGolfers'),
+    simToFairwayTotal: rowThb('Sim to Fairway*', 'oneGolfer'),
+    simToFairwayTwoTotal: rowThb('Sim to Fairway*', 'twoGolfers'),
+  }
 
   const faqItems = Array.from({ length: FAQ_COUNT }, (_, i) => ({
     question: tFaq(`q${i + 1}`),
-    answer: tFaq(`a${i + 1}`, priceFacts),
+    answer: tFaq(`a${i + 1}`, faqValues),
   }))
 
   // ── Row-level i18n helpers (structured → translated display) ──
@@ -505,10 +518,10 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
         <div className="sr-only">
           <h3>Current Lesson Promotions at LENGOLF</h3>
           <ul>
-            <li>Free 1-Hour Trial Lesson: Try a complimentary lesson with a PGA-certified coach — simple techniques, solid fundamentals, get course-ready fast</li>
-            <li>Starter Package: 5 hours coaching plus 5 hours practice, with a free golf glove per golfer, for 11,000 THB (1 golfer) or 13,500 THB (2 golfers), valid for 6 months</li>
-            <li>Coaching Packages: {priceFacts.hourly} THB for a single hour, or from {priceFacts.fiftyHourRate} THB/hr on multi-hour packages, with volume discounts up to 50 hours</li>
-            <li>Lesson Promotion: Book multiple sessions with PGA-certified coaches on simulator bays with real-time swing data</li>
+            <li>Free 1-Hour Trial: book a free 1-hour trial with a PGA-certified coach on LINE. Simple and effective techniques, solid fundamentals, get course-ready fast</li>
+            <li>Starter Package: 5 hours coaching plus 5 hours practice, with a free golf glove per golfer, for {faqValues.starterTotal} THB (1 golfer) or {faqValues.starterTwoTotal} THB (2 golfers), valid for 6 months</li>
+            <li>10 Hour Golf Lesson Package: {priceFacts.tenHourTotal} THB for 1 golfer ({priceFacts.tenHourRate} THB per hour), simulator usage included. Other packages run from a single hour at {priceFacts.hourly} THB to 50 hours at {priceFacts.fiftyHourRate} THB per hour</li>
+            <li>From Sim to Fairway Package: 5 hours of indoor coaching plus 1 on-course lesson, {faqValues.simToFairwayTotal} THB for 1 golfer or {faqValues.simToFairwayTwoTotal} THB for 2 golfers. Course fees, tips and carts (if required) for both the student and the coach are paid by the customer</li>
           </ul>
         </div>
       </SectionWrapper>
