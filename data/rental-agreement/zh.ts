@@ -24,12 +24,12 @@ import type { RentalAgreementContent } from './types'
 //   The Mercury Ville in Latin, LINE @lengolf and booking.len.golf verbatim.
 // - No em dashes (neither U+2014 nor the doubled Chinese form), per house style.
 export const zh: RentalAgreementContent = {
-  sourceVersion: '2026-10-06',
+  sourceVersion: '2026-10-31',
   title: '高尔夫球场球杆租赁协议',
   metaTitle: '高尔夫球场球杆租赁协议',
   metaDescription:
     'LENGOLF高尔夫球场球杆租赁协议：适用于每一笔外场（球场）高尔夫球杆租赁的条款。',
-  lastUpdated: '最后更新：2026年10月6日',
+  lastUpdated: '最后更新：2026年10月31日',
   notice: {
     text: '本页面为本协议的中文译本，仅为方便起见而提供；如中文译本与英文版本有任何冲突，以英文版本为准。',
     linkText: '阅读英文版本',
@@ -90,8 +90,9 @@ export const zh: RentalAgreementContent = {
     {
       heading: '7. 配送与取件',
       items: [
-        '我们按约定在曼谷及周边地区提供配送。配送及归还取件的时间和地点于预订时约定。大曼谷地区以外的地点按个案处理，请与我们联系。',
-        '须有人于约定的时间在约定的地点等候，以便在配送时接收器材，并在归还取件时交还器材。',
+        '我们按约定在曼谷及周边地区提供配送。您可以预订配送及归还取件、仅配送（由您将器材送还至LENGOLF），或仅归还取件（由您到LENGOLF领取器材）。由我们负责部分的时间和地点于预订时约定；如有变更，请尽快告知我们。大曼谷地区以外的地点按个案处理，请与我们联系。',
+        '须有人于约定的时间在约定的地点等候，以便在我们配送时接收器材，并在我们取件时交还器材。',
+        '如您到LENGOLF领取器材或自行归还器材，请于约定时间、在我们的营业时间内办理。',
         '如因无人在场或所提供的信息有误，导致我们无法完成配送或取件，可能会产生额外费用或延误。',
       ],
     },

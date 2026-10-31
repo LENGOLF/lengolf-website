@@ -30,12 +30,12 @@ import type { RentalAgreementContent } from './types'
 //   follow CourseClubRental.contact*Label.
 // - Currency is spelled 바트 (glossary); Latin "THB" is not used in prose.
 export const ko: RentalAgreementContent = {
-  sourceVersion: '2026-10-06',
+  sourceVersion: '2026-10-31',
   title: '골프장 클럽 대여 약관',
   metaTitle: '골프장 클럽 대여 약관',
   metaDescription:
     'LENGOLF 골프장 클럽 대여 약관: 모든 외부(골프장) 골프 클럽 대여에 적용되는 조건입니다.',
-  lastUpdated: '최종 수정일: 2026년 10월 6일',
+  lastUpdated: '최종 수정일: 2026년 10월 31일',
   notice: {
     text: '이 한국어 번역본은 편의를 위해 제공되며, 영문본과 내용이 상충하는 경우 영문본이 우선합니다.',
     linkText: '영문본 보기',
@@ -96,8 +96,9 @@ export const ko: RentalAgreementContent = {
     {
       heading: '7. 배송 및 픽업',
       items: [
-        '당사는 협의에 따라 방콕 및 인근 지역 내에서 배송합니다. 배송 및 반납 픽업 시간과 장소는 예약 시 합의합니다. 방콕 광역권 외의 지역은 사안별로 처리되므로 당사에 문의해 주십시오.',
-        '배송 시 장비를 수령하고 반납 픽업 시 장비를 돌려주기 위해, 합의된 장소와 시간에 누군가가 대기하고 있어야 합니다.',
+        '당사는 협의에 따라 방콕 및 인근 지역 내에서 배송합니다. 귀하는 배송과 반납 픽업 모두, 배송만(귀하가 장비를 LENGOLF로 반납), 또는 반납 픽업만(귀하가 LENGOLF에서 장비를 수령) 중에서 선택하여 예약할 수 있습니다. 당사가 담당하는 부분의 시간과 장소는 예약 시 합의합니다. 변경 사항이 있으면 가능한 한 빨리 당사에 알려 주십시오. 방콕 광역권 외의 지역은 사안별로 처리되므로 당사에 문의해 주십시오.',
+        '당사가 배송할 때 장비를 수령하고 당사가 회수할 때 장비를 돌려주기 위해, 합의된 장소와 시간에 누군가가 대기하고 있어야 합니다.',
+        '귀하가 LENGOLF에서 장비를 수령하거나 직접 반납하는 경우, 합의된 시간에 당사 영업시간 내에 해 주십시오.',
         '대기하는 사람이 없거나 제공된 정보가 잘못되어 당사가 배송 또는 픽업을 완료할 수 없는 경우, 추가 요금이 부과되거나 지연이 발생할 수 있습니다.',
       ],
     },
