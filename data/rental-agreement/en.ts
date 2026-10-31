@@ -6,12 +6,12 @@ import type { RentalAgreementContent } from './types'
 // ./types.ts, the date in `lastUpdated`, the mirror in lengolf-booking-new,
 // and every translation's `sourceVersion` (typecheck enforces the last one).
 export const en: RentalAgreementContent = {
-  sourceVersion: '2026-10-06',
+  sourceVersion: '2026-10-31',
   title: 'Golf Course Club Rental Agreement',
   metaTitle: 'Golf Course Club Rental Agreement',
   metaDescription:
     'LENGOLF Golf Course Club Rental Agreement - the terms that apply to every off-site (course) golf club rental.',
-  lastUpdated: 'Last updated: 6 October 2026',
+  lastUpdated: 'Last updated: 31 October 2026',
   intro: [
     'This Agreement governs the rental of golf club sets and related equipment (the "Equipment") by LENGOLF CO., LTD. ("LENGOLF", "we", "us") to you ("you", the "Renter") for off-site use at golf courses. It applies to every off-site (course) rental you make with us, whether booked at booking.len.golf, by LINE, phone, email, or in person. Indoor and in-store simulator club rentals are not covered by this Agreement.',
     'By confirming a course rental booking with us, you agree to this Agreement.',
@@ -29,7 +29,7 @@ export const en: RentalAgreementContent = {
       heading: '2. Fees and Payment',
       items: [
         'Rental fees, delivery fees, and add-on prices are those shown at booking, in Thai Baht (THB) and inclusive of VAT.',
-        'Payment is normally made online by credit or debit card at booking time. Delivery orders must be paid in full before delivery: online at booking, or by bank transfer as arranged with our team where online payment is not available for your booking. Pickup orders may instead be paid at LENGOLF when you collect the Equipment, using any payment method we accept there, such as cash, QR code payment, or card.',
+        'Payment is normally made online by credit or debit card at booking time. Orders that include delivery or return pickup must be paid in full before the Equipment is handed over: online at booking, or by bank transfer as arranged with our team where online payment is not available for your booking. Orders with neither delivery nor return pickup may instead be paid at LENGOLF when you collect the Equipment, using any payment method we accept there, such as cash, QR code payment, or card.',
         'In some cases, such as bookings made with our team by LINE, phone, email, or in person, we may instead send you a payment link or bank transfer details. If we send you a payment link or bank transfer details, payment is due by the time we tell you. If it is not received in time, we may cancel the booking and release the Equipment.',
         'No security deposit is required.',
         'If you pay online at booking, your reservation is held for up to 2 hours while you complete payment. If payment is not completed within that time, the reservation is automatically cancelled and the Equipment released.',
@@ -68,8 +68,9 @@ export const en: RentalAgreementContent = {
     {
       heading: '7. Delivery and Pickup',
       items: [
-        'We deliver within Bangkok and surrounding areas by arrangement. Delivery and return-pickup times and locations are agreed at booking. Locations beyond Greater Bangkok are handled case by case, so please contact us.',
-        'Someone must be available at the agreed location and time to receive the Equipment at delivery and to hand it back at return pickup.',
+        'We deliver within Bangkok and surrounding areas by arrangement. You can book delivery and return pickup, delivery only (you bring the Equipment back to LENGOLF), or return pickup only (you collect the Equipment from LENGOLF). The time of each handover, and the address for each delivery or return pickup we make, are agreed at booking; please tell us as soon as possible if any of them change. Locations beyond Greater Bangkok are handled case by case, so please contact us.',
+        'Someone must be available at the agreed location and time to receive the Equipment when we deliver it and to hand it back when we pick it up.',
+        'If you collect the Equipment from LENGOLF or bring it back yourself, you must do so at the agreed time and within our opening hours. Equipment brought back after the agreed return time is a late return under Section 8.',
         'If we cannot complete delivery or pickup because no one is available or the details were incorrect, additional charges or delays may apply.',
       ],
     },
