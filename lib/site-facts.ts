@@ -149,8 +149,8 @@ export async function getSiteFacts(
 // Numeric formatting is SHARED across locales (Arabic digits + thousands
 // separators). Only the currency word and its spacing differ, matching the
 // shipped guide copy:
-//   en → "1,800 THB" (space)   ja → "1,800THB" (no space, majority spelling)
-//   ko → "1,800바트" (no space)  zh → "1,800泰铢" (no space)
+//   en → "1,950 THB" (space)   ja → "1,950THB" (no space, majority spelling)
+//   ko → "1,950바트" (no space)  zh → "1,950泰铢" (no space)
 //
 // The JA corpus is INCONSISTENT: most JA entries (screen-golf, lessons, tee
 // times) write THB, but two (exp-25-ja, exp-39-ja) write バーツ. We standardize
@@ -199,7 +199,7 @@ export function money(locale: string, value: number): string {
  * consumed by guide content or intentionally exposed for future use.
  *
  * Price tokens come in two shapes:
- *  - currency-carrying (e.g. `lessonHourly` → "1,800 THB"): used where the
+ *  - currency-carrying (e.g. `lessonHourly` → "1,950 THB"): used where the
  *    entry's currency word matches the locale default.
  *  - number-only (e.g. `courseRentalDayNum` → "1,200"): used for ranges (so the
  *    locale-specific separator stays literal) and for the JA バーツ minority (so
