@@ -39,9 +39,14 @@ export interface PricingCatalog {
 const PRICING_API_BASE =
   process.env.NEXT_PUBLIC_PRICING_API_URL || 'https://lengolf-forms.vercel.app/api/pricing'
 
-// Cache key for the 30-day Data Cache below. Change it to the date of a POS
-// price change to force every page onto the new prices (the API ignores it).
-// 2026-11-03: lesson prices changed on the POS on 2026-10-28.
+// The Data Cache keys a fetch by its URL, so changing this string is how a
+// price change reaches the site before the 30-day interval below runs out
+// (consequence #1 in the block that follows). The API ignores the parameter.
+// Bump it to the date of the change whenever the POS prices move. 2026-11-03:
+// the 28 Oct 2026 lesson prices (1 hour 1,950, 5 hours 8,750, 20 hours 30,000)
+// were still serving as 1,800 / 8,500 / 31,000 from the pre-change entry.
+// Appended in code rather than baked into the default so it also applies when
+// NEXT_PUBLIC_PRICING_API_URL is set.
 const PRICING_CACHE_VERSION = '2026-11-03'
 const PRICING_API = `${PRICING_API_BASE}${PRICING_API_BASE.includes('?') ? '&' : '?'}v=${PRICING_CACHE_VERSION}`
 
@@ -92,7 +97,7 @@ const PRICING_API = `${PRICING_API_BASE}${PRICING_API_BASE.includes('?') ? '&' :
 //    next 30 days, while a build that restores it does not. Never plan a price
 //    change around a deploy: it might land, and you cannot tell which.
 //
-//    To force a refresh, either bump PRICING_CACHE_VERSION (a code change,
+//    To force a refresh, either bump this value / PRICING_API (a code change,
 //    so it ships like anything else), or purge manually:
 //      Vercel project -> CDN -> Caches -> Purge cache -> All content
 //      -> "Runtime and Data Cache".
