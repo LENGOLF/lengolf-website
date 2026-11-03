@@ -5991,6 +5991,123 @@ async function runLessonsCoachTests() {
   }
 }
 
+// ── H3) Home page lesson Offers match /lessons/ ──
+// The home OfferCatalog priced "Golf Lessons" at the single 1-hour rate
+// (1,950) while /lessons/ led with the package hourly rate (1,440), so an
+// answer engine reading the home page alone quoted the single hour (gap named
+// in PR #187). The home catalog must state the trial, then the lowest package
+// hourly rate for 50 hours, then the single hour, at the prices /lessons/
+// states. The oracle is the /lessons/ OfferCatalog's own package TOTALS
+// divided by their hours, not the home builder's input, so a wrong fact on
+// the home side cannot satisfy both. Only "/" and "/th/" render this catalog:
+// ja/ko/zh return a bespoke landing page first.
+const HOME_LESSON_OFFER_PATHS = ["/", "/th/"];
+
+function jsonLdNodesOf(body: string): Record<string, unknown>[] {
+  return body
+    .split("<script")
+    .filter((chunk) => chunk.includes("application/ld+json"))
+    .flatMap((chunk) => {
+      const start = chunk.indexOf(">") + 1;
+      const end = chunk.indexOf("</script>");
+      if (start <= 0 || end < start) return [];
+      try {
+        const b = JSON.parse(chunk.slice(start, end));
+        return Array.isArray(b["@graph"]) ? b["@graph"] : [b];
+      } catch {
+        return [];
+      }
+    });
+}
+
+async function runHomeLessonOfferTests() {
+  console.log("\n\x1b[1mH3) Home page lesson Offers\x1b[0m");
+  const specs = (o: Record<string, unknown>): Record<string, unknown>[] =>
+    Array.isArray(o.priceSpecification) ? (o.priceSpecification as Record<string, unknown>[]) : [];
+  const oneHourSpec = (o: Record<string, unknown>) =>
+    specs(o).find((sp) => (sp.referenceQuantity as Record<string, unknown> | undefined)?.value === 1);
+  const catalogOf = (nodes: Record<string, unknown>[]) => {
+    const c = nodes.find((n) => n["@type"] === "OfferCatalog");
+    return Array.isArray(c?.itemListElement) ? (c!.itemListElement as Record<string, unknown>[]) : [];
+  };
+
+  // Oracle, from the EN /lessons/ page.
+  let lowestRate = NaN;
+  let singleHour = NaN;
+  try {
+    const res = await fetch(`${BASE}/lessons/`, { redirect: "manual" });
+    const offers = catalogOf(jsonLdNodesOf(await res.text()));
+    const rates = offers.flatMap((o) => {
+      const hours = Number((/^(\d+) Hour Golf Lesson/.exec(String(o.name)) ?? [])[1]);
+      return hours > 0 && Number(o.price) > 0 ? [Math.round(Number(o.price) / hours)] : [];
+    });
+    if (rates.length === 6) lowestRate = Math.min(...rates);
+    singleHour = Number(offers.find((o) => o.name === "1 Hour Golf Lesson")?.price);
+  } catch (err) {
+    fail("H3) /lessons/ oracle", (err as Error).message);
+    return;
+  }
+  if (!(lowestRate > 0) || !(singleHour > lowestRate)) {
+    fail("H3) /lessons/ oracle", `could not derive the package rate and single hour (got ${lowestRate} / ${singleHour})`);
+    return;
+  }
+
+  let judged = 0;
+  for (const path of HOME_LESSON_OFFER_PATHS) {
+    const label = `H3) ${path} lesson Offers`;
+    try {
+      const res = await fetch(`${BASE}${path}`, { redirect: "manual" });
+      const body = await res.text();
+      const issues: string[] = [];
+      if (res.status !== 200) issues.push(`expected 200, got ${res.status}`);
+      const offers = catalogOf(jsonLdNodesOf(body));
+      const trialAt = offers.findIndex((o) => o.price === "0" && /trial/i.test(String(o.name)));
+      const rateAt = offers.findIndex((o) => /package hourly rate/i.test(String(o.name)));
+      const singleAt = offers.findIndex((o) => o.name === "1 Hour Golf Lesson");
+      if (trialAt < 0) issues.push("no 0 THB trial Offer");
+      const rate = offers[rateAt];
+      const rateSpec = rate && oneHourSpec(rate);
+      if (
+        !rate || Number(rate.price) !== lowestRate || !rateSpec ||
+        rateSpec["@type"] !== "UnitPriceSpecification" || rateSpec.unitText !== "HOUR" ||
+        rateSpec.unitCode !== "HUR" || Number(rateSpec.price) !== lowestRate
+      ) {
+        issues.push(`no package-rate Offer with a 1-hour UnitPriceSpecification at ${lowestRate}: ${JSON.stringify(rate)}`);
+      }
+      const qty = rate?.eligibleQuantity as Record<string, unknown> | undefined;
+      if (Number(qty?.value) !== 50 || qty?.unitCode !== "HUR") {
+        issues.push(`package-rate Offer eligibleQuantity is ${JSON.stringify(qty)}, expected 50 HUR`);
+      }
+      const single = offers[singleAt];
+      if (!single || Number(single.price) !== singleHour || Number(single && oneHourSpec(single)?.price) !== singleHour) {
+        issues.push(`no 1-hour lesson Offer at ${singleHour}: ${JSON.stringify(single)}`);
+      }
+      if (!(trialAt >= 0 && trialAt < rateAt && rateAt < singleAt)) {
+        issues.push(`lesson Offers are not in trial, package rate, single hour order (${trialAt}, ${rateAt}, ${singleAt})`);
+      }
+      // Any other lesson-named Offer is the pre-fix shape coming back.
+      const known = new Set([trialAt, rateAt, singleAt]);
+      offers.forEach((o, i) => {
+        if (!known.has(i) && /lesson/i.test(String(o.name))) issues.push(`unexpected lesson Offer ${JSON.stringify(o.name)} at ${JSON.stringify(o.price)}`);
+        if (/free\b[^.]{0,20}\blesson|complimentary lesson|first lesson (is )?free/i.test(`${o.name} ${o.description}`)) {
+          issues.push(`Offer ${JSON.stringify(o.name)} calls the trial a "free lesson"`);
+        }
+      });
+      if (issues.length === 0) {
+        pass(`${label} (trial, ${lowestRate}/hr for 50 hours, ${singleHour} single hour)`);
+      } else {
+        fail(label, issues.join("; "));
+      }
+      judged++;
+    } catch (err) {
+      fail(label, (err as Error).message);
+    }
+  }
+  if (judged !== HOME_LESSON_OFFER_PATHS.length || HOME_LESSON_OFFER_PATHS.length !== 2) {
+    fail("H3) anti-vacuity", `${judged} of 2 pinned home pages reached a verdict`);
+  }
+}
+
 async function runLlmDiscoverabilityTests() {
   console.log("\n\x1b[1mH) LLM / AI discoverability\x1b[0m");
 
@@ -9698,6 +9815,7 @@ async function main() {
     fail("H) section completion", "runLlmDiscoverabilityTests returned before its last check ran");
   }
   await runLessonsCoachTests();
+  await runHomeLessonOfferTests();
   await runRegistryConsistencyTests();
   await runRegionHubRegistryConsistencyTests();
   await runPriceTierRegistryConsistencyTests();
