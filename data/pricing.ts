@@ -42,10 +42,10 @@ export interface LessonPackage {
 }
 
 export const lessonPricing: LessonPackage[] = [
-  { name: '1 Hour',           nameKind: 'hour', nameHours: 1,  oneGolfer: '1,800 THB',  twoGolfers: '2,400 THB',  threeToFiveGolfers: '2,900 THB',  remark: '-',                                                                  remarkKind: 'dash' },
-  { name: '5 Hour',           nameKind: 'hour', nameHours: 5,  oneGolfer: '8,500 THB',  twoGolfers: '11,000 THB', threeToFiveGolfers: '13,650 THB', remark: 'Valid for 6 months',                                                  remarkKind: 'validity',     remarkMonths: 6 },
+  { name: '1 Hour',           nameKind: 'hour', nameHours: 1,  oneGolfer: '1,950 THB',  twoGolfers: '2,550 THB',  threeToFiveGolfers: '2,900 THB',  remark: '-',                                                                  remarkKind: 'dash' },
+  { name: '5 Hour',           nameKind: 'hour', nameHours: 5,  oneGolfer: '8,750 THB',  twoGolfers: '11,000 THB', threeToFiveGolfers: '13,650 THB', remark: 'Valid for 6 months',                                                  remarkKind: 'validity',     remarkMonths: 6 },
   { name: '10 Hour',          nameKind: 'hour', nameHours: 10, oneGolfer: '16,000 THB', twoGolfers: '20,500 THB', threeToFiveGolfers: '25,500 THB', remark: 'Valid for 12 months',                                                 remarkKind: 'validity',     remarkMonths: 12, featured: 'bestValue' },
-  { name: '20 Hour',          nameKind: 'hour', nameHours: 20, oneGolfer: '31,000 THB', twoGolfers: '39,000 THB', threeToFiveGolfers: '49,000 THB', remark: 'Valid for 24 months',                                                 remarkKind: 'validity',     remarkMonths: 24 },
+  { name: '20 Hour',          nameKind: 'hour', nameHours: 20, oneGolfer: '30,000 THB', twoGolfers: '39,000 THB', threeToFiveGolfers: '49,000 THB', remark: 'Valid for 24 months',                                                 remarkKind: 'validity',     remarkMonths: 24 },
   { name: '30 Hour',          nameKind: 'hour', nameHours: 30, oneGolfer: '45,000 THB', twoGolfers: '57,000 THB', threeToFiveGolfers: '72,000 THB', remark: 'Valid for 24 months',                                                 remarkKind: 'validity',     remarkMonths: 24 },
   { name: '50 Hour',          nameKind: 'hour', nameHours: 50, oneGolfer: '72,000 THB', twoGolfers: '92,500 THB', threeToFiveGolfers: '117,500 THB', remark: 'Valid for 24 months',                                                remarkKind: 'validity',     remarkMonths: 24 },
   { name: 'Starter Package*', nameKind: 'starter',             oneGolfer: '11,000 THB', twoGolfers: '13,500 THB', threeToFiveGolfers: '-',           remark: 'Valid for 6 months & Free 1 golf glove/golfer',                      remarkKind: 'starter' },
@@ -181,7 +181,7 @@ export const lessonsFaqItems = [
   },
   {
     question: 'How much do golf lessons cost at LENGOLF?',
-    answer: 'Lesson packages start at 1,800 THB for a 1-hour session (1 golfer). Multi-hour packages offer better value — for example, 10 hours for 16,000 THB (valid 12 months) or 30 hours for 45,000 THB (valid 24 months). Group rates are available for 2 golfers or 3–5 golfers. Golf simulator usage is included in all lesson packages.',
+    answer: 'Lesson packages start at 1,950 THB for a 1-hour session (1 golfer). Multi-hour packages offer better value — for example, 10 hours for 16,000 THB (valid 12 months) or 30 hours for 45,000 THB (valid 24 months). Group rates are available for 2 golfers or 3–5 golfers. Golf simulator usage is included in all lesson packages.',
   },
   {
     question: 'What skill levels do your coaches teach?',
@@ -302,7 +302,7 @@ export const golfFaqItems = [
   },
   {
     question: 'How much do golf lessons cost?',
-    answer: 'Lesson packages start at 1,800 THB for a 1-hour session (1 golfer). Multi-hour packages offer better value: 10 hours for 16,000 THB (valid 12 months) or 30 hours for 45,000 THB (valid 24 months). We also have a Starter Package at 11,000 THB which includes 5 hours of coaching plus 5 hours of practice. Golf simulator usage is included in all lesson packages.',
+    answer: 'Lesson packages start at 1,950 THB for a 1-hour session (1 golfer). Multi-hour packages offer better value: 10 hours for 16,000 THB (valid 12 months) or 30 hours for 45,000 THB (valid 24 months). We also have a Starter Package at 11,000 THB which includes 5 hours of coaching plus 5 hours of practice. Golf simulator usage is included in all lesson packages.',
   },
 ]
 
@@ -447,7 +447,7 @@ export const homeFaqItems = [
   },
   {
     question: 'Do you offer golf lessons?',
-    answer: 'Yes! We have three Thailand PGA-certified coaches on staff — PRO Boss, PRO Ratchavin, and PRO Min. They teach all skill levels from complete beginners to advanced players. Lessons start at 1,800 THB per hour and we offer a free 1-hour trial lesson. Visit our lessons page for packages and pricing.',
+    answer: 'Yes! We have three Thailand PGA-certified coaches on staff — PRO Boss, PRO Ratchavin, and PRO Min. They teach all skill levels from complete beginners to advanced players. Lessons start at 1,950 THB per hour and we offer a free 1-hour trial lesson. Visit our lessons page for packages and pricing.',
   },
   {
     question: 'Can I host an event or party at LENGOLF?',
