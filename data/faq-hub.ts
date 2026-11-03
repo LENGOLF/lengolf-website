@@ -92,7 +92,7 @@ const en: FaqHubContent = {
     {
       question: 'How much do golf lessons cost?',
       answer:
-        'Start with a free 1-hour trial with one of our Thailand PGA-certified coaches. It is for new students, and clubs and the simulator are included. After that, a 1-hour lesson is {{lessonHourlyNum}} THB, and packages lower the hourly rate: 10 hours for {{lesson10hNum}} THB works out to {{lesson10hRateNum}} THB per hour, and 50 hours for {{lesson50hNum}} THB to {{lesson50hRateNum}} THB per hour. Book the trial on LINE @lengolf, or see the lessons page for every package.',
+        'Start with a free 1-hour trial with one of our Thailand PGA-certified coaches. It is for new students, and clubs and the simulator are included. After that, lessons cost from {{lesson50hRateNum}} THB per hour on the 50-hour package ({{lesson50hNum}} THB) and {{lesson10hRateNum}} THB per hour on the 10-hour package ({{lesson10hNum}} THB). A single 1-hour lesson is {{lessonHourlyNum}} THB. Book the trial on LINE @lengolf, or see the lessons page for every package.',
     },
     {
       question: 'Do I need to bring my own golf clubs or equipment?',
@@ -224,7 +224,7 @@ const th: FaqHubContent = {
     {
       question: 'เรียนกอล์ฟที่ LENGOLF ราคาเท่าไหร่',
       answer:
-        'เริ่มจากทดลองเรียนฟรี 1 ชั่วโมงกับโค้ชที่ได้รับการรับรองจาก Thailand PGA ได้เลย สำหรับคนที่ยังไม่เคยเรียนกับเรา มีไม้กอล์ฟและเบย์ซิมมูเลเตอร์ให้พร้อม หลังจากนั้นเรียนชั่วโมงละ {{lessonHourlyNum}} บาท ถ้าซื้อแพ็กเกจจะถูกลง เช่น แพ็กเกจ 10 ชั่วโมง {{lesson10hNum}} บาท ตกชั่วโมงละ {{lesson10hRateNum}} บาท และแพ็กเกจ 50 ชั่วโมง {{lesson50hNum}} บาท ตกชั่วโมงละ {{lesson50hRateNum}} บาท จองทดลองเรียนทางไลน์ @lengolf หรือดูแพ็กเกจทั้งหมดที่หน้าคอร์สเรียนกอล์ฟ',
+        'เริ่มจากทดลองเรียนฟรี 1 ชั่วโมงกับโค้ชที่ได้รับการรับรองจาก Thailand PGA ได้เลย สำหรับคนที่ยังไม่เคยเรียนกับเรา มีไม้กอล์ฟและเบย์ซิมมูเลเตอร์ให้พร้อม หลังจากนั้นค่าเรียนแบบแพ็กเกจเริ่มต้นชั่วโมงละ {{lesson50hRateNum}} บาท (แพ็กเกจ 50 ชั่วโมง {{lesson50hNum}} บาท) แพ็กเกจ 10 ชั่วโมง {{lesson10hNum}} บาท ตกชั่วโมงละ {{lesson10hRateNum}} บาท ส่วนเรียนรายชั่วโมงอยู่ที่ชั่วโมงละ {{lessonHourlyNum}} บาท จองทดลองเรียนทางไลน์ @lengolf หรือดูแพ็กเกจทั้งหมดที่หน้าคอร์สเรียนกอล์ฟ',
     },
     {
       question: 'ต้องนำไม้กอล์ฟหรืออุปกรณ์มาเองไหม',
@@ -355,7 +355,7 @@ const ja: FaqHubContent = {
     {
       question: 'ゴルフレッスンの料金はいくらですか？',
       answer:
-        'まずはタイPGA認定コーチによる1時間の無料体験から始められます。LENGOLFで初めてレッスンを受ける方が対象で、クラブとシミュレーターの利用込みです。その後のレッスンは1時間{{lessonHourlyNum}}THBです。パッケージなら1時間あたりの料金が下がり、10時間{{lesson10hNum}}THBで1時間あたり{{lesson10hRateNum}}THB、50時間{{lesson50hNum}}THBで1時間あたり{{lesson50hRateNum}}THBです。無料体験はLINE @lengolfからご予約ください。すべてのパッケージはレッスンページでご覧いただけます。',
+        'まずはタイPGA認定コーチによる1時間の無料体験から始められます。LENGOLFで初めてレッスンを受ける方が対象で、クラブとシミュレーターの利用込みです。その後はパッケージなら1時間あたりの料金がお得で、50時間{{lesson50hNum}}THBで1時間あたり{{lesson50hRateNum}}THB、10時間{{lesson10hNum}}THBで1時間あたり{{lesson10hRateNum}}THBです。単発のレッスンは1時間{{lessonHourlyNum}}THBです。無料体験はLINE @lengolfからご予約ください。すべてのパッケージはレッスンページでご覧いただけます。',
     },
     {
       question: 'ゴルフクラブや道具は持参する必要がありますか？',
@@ -487,7 +487,7 @@ const ko: FaqHubContent = {
     {
       question: '골프 레슨 요금은 얼마인가요?',
       answer:
-        '먼저 태국 PGA 공인 코치와 1시간 무료 체험으로 시작하실 수 있어요. LENGOLF 레슨이 처음인 분 대상이고, 클럽과 시뮬레이터 이용이 포함돼요. 이후 레슨은 시간당 {{lessonHourlyNum}}바트이고, 패키지는 시간당 요금이 낮아져요. 10시간 패키지({{lesson10hNum}}바트)는 시간당 {{lesson10hRateNum}}바트, 50시간 패키지({{lesson50hNum}}바트)는 시간당 {{lesson50hRateNum}}바트예요. 무료 체험은 LINE @lengolf로 예약하시고, 전체 패키지는 레슨 페이지에서 확인해 주세요.',
+        '먼저 태국 PGA 공인 코치와 1시간 무료 체험으로 시작하실 수 있어요. LENGOLF 레슨이 처음인 분 대상이고, 클럽과 시뮬레이터 이용이 포함돼요. 이후에는 패키지로 시간당 {{lesson50hRateNum}}바트부터(50시간 패키지 {{lesson50hNum}}바트) 배우실 수 있고, 10시간 패키지({{lesson10hNum}}바트)는 시간당 {{lesson10hRateNum}}바트예요. 1회 레슨은 시간당 {{lessonHourlyNum}}바트예요. 무료 체험은 LINE @lengolf로 예약하시고, 전체 패키지는 레슨 페이지에서 확인해 주세요.',
     },
     {
       question: '골프 클럽이나 장비를 직접 가져와야 하나요?',
@@ -618,7 +618,7 @@ const zh: FaqHubContent = {
     {
       question: '高尔夫课程多少钱？',
       answer:
-        '可以先预约我们泰国PGA认证教练的1小时免费体验（适用于首次在LENGOLF上课的学员，含球杆和模拟器使用）。之后的课程每小时{{lessonHourlyNum}}泰铢；套餐单价更低，10小时{{lesson10hNum}}泰铢，合每小时{{lesson10hRateNum}}泰铢；50小时{{lesson50hNum}}泰铢，合每小时{{lesson50hRateNum}}泰铢。免费体验请通过LINE @lengolf预约，全部套餐请见课程页面。',
+        '可以先预约我们泰国PGA认证教练的1小时免费体验（适用于首次在LENGOLF上课的学员，含球杆和模拟器使用）。之后购买套餐每小时{{lesson50hRateNum}}泰铢起：50小时{{lesson50hNum}}泰铢，合每小时{{lesson50hRateNum}}泰铢；10小时{{lesson10hNum}}泰铢，合每小时{{lesson10hRateNum}}泰铢。单节课每小时{{lessonHourlyNum}}泰铢。免费体验请通过LINE @lengolf预约，全部套餐请见课程页面。',
     },
     {
       question: '需要自己带球杆或装备吗？',

@@ -100,7 +100,7 @@
     "service1Title": "Golf Simulator Bays",
     "service1Description": "Hourly simulator rentals from 550 THB. Up to 5 players per bay with free club rental.",
     "service2Title": "Golf Lessons",
-    "service2Description": "PGA-certified coaching for all levels. Start with a free 1-hour trial, then {hourly} THB per hour, or from {fiftyHourRate} THB per hour on packages.",
+    "service2Description": "PGA-certified coaching for all levels. Start with a free 1-hour trial, then from {fiftyHourRate} THB per hour on packages, or {hourly} THB for a single hour.",
     "service3Title": "Events & Parties",
     "service3Description": "Corporate events, team building, and private parties for 10–50+ guests from 9,999 THB.",
     "service4Title": "Club Rental",
@@ -127,7 +127,7 @@
     "q5": "Do I need to bring my own golf clubs?",
     "a5": "No — standard golf club sets are provided free with every bay booking, including ladies' sets. We also offer premium Callaway Warbird and Callaway REVA rentals from 150 THB per hour. Visit our club rental page for details.",
     "q6": "Do you offer golf lessons?",
-    "a6": "Yes. We have three Thailand PGA-certified coaches on staff: PRO Boss, PRO Ratchavin, and PRO Min. They teach all skill levels from complete beginners to advanced players. New students start with a free 1-hour trial, clubs and simulator included, booked on LINE @lengolf. After that, a 1-hour lesson is {hourly} THB, or from {fiftyHourRate} THB per hour on packages. Visit our lessons page for every package.",
+    "a6": "Yes. We have three Thailand PGA-certified coaches on staff: PRO Boss, PRO Ratchavin, and PRO Min. They teach all skill levels from complete beginners to advanced players. New students start with a free 1-hour trial, clubs and simulator included, booked on LINE @lengolf. After that, lessons cost from {fiftyHourRate} THB per hour on packages, or {hourly} THB for a single hour. Visit our lessons page for every package.",
     "q7": "Can I host an event or party at LENGOLF?",
     "a7": "Absolutely! We host corporate events, team building, birthdays, and private parties for up to 50+ guests. Packages start at 9,999 THB and include golf bays, drinks, and catered food. Visit our events page or contact us on LINE @lengolf to plan your event.",
     "q8": "How do I book a bay at LENGOLF?",
@@ -261,7 +261,7 @@
     "q9": "Do you offer golf lessons?",
     "a9": "Yes, we have three Thailand PGA-certified professional coaches on staff — PRO Boss, PRO Ratchavin, and PRO Min. They offer personalized instruction for all skill levels, from beginners to advanced players, including junior golf development. Lessons use our simulators for swing analysis and data-driven improvement. Visit our lessons page for details.",
     "q10": "How much do golf lessons cost?",
-    "a10": "Start with a free 1-hour trial with one of our PGA coaches. It is for new students, and clubs and the simulator are included. After that, a 1-hour lesson is {hourly} THB for 1 golfer, and packages bring the hourly rate down: the 10-hour package ({tenHourTotal} THB, valid 12 months) works out to {tenHourRate} THB per hour and the 50-hour package ({fiftyHourTotal} THB, valid 24 months) to {fiftyHourRate} THB per hour. We also have a Starter Package at {starterTotal} THB with 5 hours of coaching plus 5 hours of practice. Golf simulator usage is included in all lesson packages. Book the trial on LINE @lengolf."
+    "a10": "Start with a free 1-hour trial with one of our PGA coaches. It is for new students, and clubs and the simulator are included. After that, lessons cost from {fiftyHourRate} THB per hour on the 50-hour package ({fiftyHourTotal} THB, valid 24 months) and {tenHourRate} THB per hour on the 10-hour package ({tenHourTotal} THB, valid 12 months). A single 1-hour lesson is {hourly} THB for 1 golfer. We also have a Starter Package at {starterTotal} THB with 5 hours of coaching plus 5 hours of practice. Golf simulator usage is included in all lesson packages. Book the trial on LINE @lengolf."
   },
   "Events": {
     "metaTitle": "Events & Parties",

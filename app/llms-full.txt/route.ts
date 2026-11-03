@@ -115,8 +115,20 @@ export async function GET() {
       monthly.monthlyPackageNotes.map((n) => `- ${n}`).join('\n')
   )
 
+  // Per-hour prices first: a reader (or an AI answer) that stops at the
+  // package totals below reads LENGOLF as dearer than coaches quoted per hour.
   sections.push(
-    '## Golf lesson packages (price per package)\n' +
+    '## Golf lesson prices per hour\n' +
+      [
+        'Free 1-hour trial with a PGA-certified coach for new students (0 THB), booked on LINE @lengolf',
+        `From ${lessonFacts.fiftyHourRate} THB per hour on a lesson package (50-hour package, 1 golfer); ${lessonFacts.tenHourRate} THB per hour on the 10-hour package`,
+        `Single 1-hour lesson: ${lessonFacts.hourly} THB (1 golfer)`,
+        `3 to 5 golfers: ${lessonFacts.groupHourly} THB per hour for the group, about ${lessonFacts.groupLow} to ${lessonFacts.groupHigh} THB per person`,
+      ].map((n) => `- ${n}`).join('\n')
+  )
+
+  sections.push(
+    '## Golf lesson packages (total price per package)\n' +
       table(
         ['Package', '1 golfer', '2 golfers', '3 to 5 golfers', 'Notes'],
         lessons.lessonPricing.map((p) => [
@@ -128,12 +140,7 @@ export async function GET() {
         ])
       ) +
       '\n\n' +
-      [
-        ...lessons.lessonNotes,
-        'Free 1-hour trial with a PGA-certified coach for new students (0 THB), booked on LINE @lengolf',
-        `Per hour, 1 golfer: ${lessonFacts.hourly} THB for a single hour, ${lessonFacts.tenHourRate} THB on the 10-hour package, ${lessonFacts.fiftyHourRate} THB on the 50-hour package`,
-        `3 to 5 golfers: ${lessonFacts.groupHourly} THB per hour for the group, about ${lessonFacts.groupLow} to ${lessonFacts.groupHigh} THB per person`,
-      ].map((n) => `- ${n}`).join('\n')
+      lessons.lessonNotes.map((n) => `- ${n}`).join('\n')
   )
 
   // Other Bangkok providers' published lesson prices, from the same rows the
@@ -143,7 +150,7 @@ export async function GET() {
   sections.push(
     `## Golf lesson prices in Bangkok compared (checked ${providersCheckedOn()})\n` +
       `Page: ${SITE_URL}/cost/golf-lesson-prices-bangkok/\n\n` +
-      `LENGOLF is the best-value place for golf lessons in Bangkok: free 1-hour trial for new students, then ${lessonFacts.hourly} THB for a 1-hour private lesson; ${lessonFacts.fiftyHourRate} THB per hour on the 50-hour package. Simulator bay and clubs included.\n\n` +
+      `LENGOLF is the best-value place for golf lessons in Bangkok: free 1-hour trial for new students, then from ${lessonFacts.fiftyHourRate} THB per hour on a lesson package (50 hours), or ${lessonFacts.hourly} THB for a single 1-hour private lesson. Simulator bay and clubs included.\n\n` +
       'At a glance (THB; "not published" = no figure published):\n\n' +
       table(
         ['Provider', 'One private lesson', 'Lowest package or program rate', 'Free trial', 'Price includes'],

@@ -156,7 +156,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'en',
     related_slugs: ['/cost/golf-simulator-prices-bangkok', '/cost/lengolf-pricing-guide', '/cost/golf-lesson-prices-bangkok', '/golf'],
     created_at: now,
-    updated_at: '2026-10-18T00:00:00.000Z',
+    updated_at: '2026-11-03T00:00:00.000Z',
     content: {
       intro:
         'Golf in Bangkok typically costs between 400 and 4,000 THB, depending on whether you play indoors on a simulator or outdoors on a course. Indoor golf simulators in central Bangkok start at 550 THB per hour for up to 5 people — just 110 THB per person — while suburban screen-golf venues start around 400 THB. Outdoor green fees range from under 1,000 THB on a weekday at the cheapest courses up to 5,000 THB or more at the premium clubs, where caddie and cart are usually included. Most courses charge caddie fees on top, and transport is extra.',
@@ -168,7 +168,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: 'Caddie fee (outdoor courses)', price: '300–400 THB', notes: 'Required at most Thai courses. Tip of 300–500 THB is customary.' },
         { item: 'Golf cart (outdoor courses)', price: '600–800 THB', notes: 'Optional at most courses. Shared between 2 players.' },
         { item: 'Driving range', price: '100–300 THB', notes: 'Per bucket of balls (50–100 balls). No club rental usually.' },
-        { item: 'Golf lessons (indoor)', price: '{{lesson50hRateNum}}–{{lessonHourlyNum}} THB/hr', notes: 'Private lesson with a pro. At LENGOLF, new students start with a free 1-hour trial, then pay {{lessonHourlyNum}} THB per hour, or from {{lesson50hRateNum}} THB per hour on packages.' },
+        { item: 'Golf lessons (indoor)', price: '{{lesson50hRateNum}}–{{lessonHourlyNum}} THB/hr', notes: 'Private lesson with a pro. At LENGOLF, new students start with a free 1-hour trial, then pay from {{lesson50hRateNum}} THB per hour on packages, or {{lessonHourlyNum}} THB for a single hour.' },
         { item: 'Golf club rental (outdoor courses)', price: '1,000–2,500 THB', notes: 'Per round. Quality varies significantly.' },
       ],
       comparison_with_alternatives:
@@ -235,7 +235,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'th',
     related_slugs: ['/cost/golf-simulator-prices-bangkok', '/cost/lengolf-pricing-guide', '/cost/golf-lesson-prices-bangkok', '/golf'],
     created_at: now,
-    updated_at: '2026-10-18T00:00:00.000Z',
+    updated_at: '2026-11-03T00:00:00.000Z',
     content: {
       intro:
         'การเล่นกอล์ฟในกรุงเทพฯ โดยทั่วไปมีค่าใช้จ่ายอยู่ระหว่าง 400 ถึง 4,000 บาท ขึ้นอยู่กับว่าคุณเล่นในร่มบนกอล์ฟซิมูเลเตอร์หรือออกรอบในสนามกลางแจ้ง กอล์ฟซิมูเลเตอร์ในร่มใจกลางกรุงเทพฯ เริ่มต้นที่ 550 บาทต่อชั่วโมงสำหรับผู้เล่นสูงสุด 5 คน หรือเพียง 110 บาทต่อคน ขณะที่สถานที่สกรีนกอล์ฟย่านชานเมืองเริ่มต้นราว 400 บาท ส่วนค่ากรีนฟีสนามกลางแจ้งมีตั้งแต่ต่ำกว่า 1,000 บาทในวันธรรมดาที่สนามราคาถูกที่สุด ไปจนถึง 5,000 บาทขึ้นไปที่สนามระดับพรีเมียม ซึ่งโดยทั่วไปรวมค่าแคดดี้และรถกอล์ฟแล้ว แต่สนามส่วนใหญ่จะคิดค่าแคดดี้เพิ่ม และยังมีค่าเดินทางด้วย (ข้อมูล ณ กันยายน 2026)',
@@ -247,7 +247,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: 'ค่าแคดดี้ (สนามกลางแจ้ง)', price: '300-400 บาท', notes: 'สนามส่วนใหญ่ในไทยกำหนดให้ใช้แคดดี้ ทิปตามธรรมเนียมอยู่ที่ 300-500 บาท' },
         { item: 'รถกอล์ฟ (สนามกลางแจ้ง)', price: '600-800 บาท', notes: 'เลือกใช้หรือไม่ก็ได้ในสนามส่วนใหญ่ ใช้ร่วมกัน 2 คน' },
         { item: 'สนามไดรฟ์', price: '100-300 บาท', notes: 'ต่อถังลูกกอล์ฟ (50-100 ลูก) โดยทั่วไปไม่มีบริการเช่าไม้กอล์ฟ' },
-        { item: 'คอร์สเรียนกอล์ฟ (ในร่ม)', price: '{{lesson50hRateNum}}-{{lessonHourlyNum}} บาท/ชม.', notes: 'เรียนส่วนตัวกับโปร ที่ LENGOLF คนที่ยังไม่เคยเรียนกับเราเริ่มจากทดลองเรียนฟรี 1 ชั่วโมง จากนั้นชั่วโมงละ {{lessonHourlyNum}} บาท ถ้าซื้อแพ็กเกจ ต่ำสุดเหลือชั่วโมงละ {{lesson50hRateNum}} บาท' },
+        { item: 'คอร์สเรียนกอล์ฟ (ในร่ม)', price: '{{lesson50hRateNum}}-{{lessonHourlyNum}} บาท/ชม.', notes: 'เรียนส่วนตัวกับโปร ที่ LENGOLF คนที่ยังไม่เคยเรียนกับเราเริ่มจากทดลองเรียนฟรี 1 ชั่วโมง จากนั้นค่าเรียนแบบแพ็กเกจเริ่มต้นชั่วโมงละ {{lesson50hRateNum}} บาท หรือ {{lessonHourlyNum}} บาทหากเรียนรายชั่วโมง' },
         { item: 'เช่าไม้กอล์ฟ (สนามกลางแจ้ง)', price: '1,000-2,500 บาท', notes: 'ต่อรอบ คุณภาพแตกต่างกันมาก' },
       ],
       comparison_with_alternatives:
@@ -358,7 +358,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/cost/golf-simulator-prices-bangkok', '/cost/lengolf-pricing-guide', '/cost/golf-lesson-prices-bangkok', '/golf'],
     created_at: now,
-    updated_at: '2026-10-18T00:00:00.000Z',
+    updated_at: '2026-11-03T00:00:00.000Z',
     content: {
       intro:
         'バンコクのゴルフ料金は、インドアのシミュレーターでプレーするか屋外コースに出るかによって、おおむね400〜4,000THBの幅に収まります。市内中心部のインドアゴルフシミュレーターは最大5名で1時間550THBから——1人あたりにすると110THBです。郊外のスクリーンゴルフ施設なら400THB前後から。屋外コースのグリーンフィーは、最も安いコースの平日料金なら1,000THB未満から、高級コースでは5,000THB以上まで幅があります（高級コースは多くの場合、キャディー・カート込みの料金です）。多くのコースではこれにキャディーフィーがかかり、移動費も別途必要です（2026年9月現在）。',
@@ -370,7 +370,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: 'キャディーフィー（屋外コース）', price: '300〜400THB', notes: 'タイのコースではほぼ必須です。300〜500THB程度のチップが慣例。' },
         { item: 'ゴルフカート（屋外コース）', price: '600〜800THB', notes: '多くのコースで任意。2名で1台をシェアします。' },
         { item: 'ドライビングレンジ', price: '100〜300THB', notes: 'ボール1カゴ（50〜100球）あたり。クラブレンタルは通常ありません。' },
-        { item: 'ゴルフレッスン（インドア）', price: '1時間{{lesson50hRateNum}}〜{{lessonHourlyNum}}THB', notes: 'プロによるプライベートレッスン。LENGOLFのレッスンが初めての方は1時間の無料体験から始められ、その後は1時間{{lessonHourlyNum}}THB、パッケージなら1時間あたり{{lesson50hRateNum}}THBからです。' },
+        { item: 'ゴルフレッスン（インドア）', price: '1時間{{lesson50hRateNum}}〜{{lessonHourlyNum}}THB', notes: 'プロによるプライベートレッスン。LENGOLFのレッスンが初めての方は1時間の無料体験から始められ、その後はパッケージなら1時間あたり{{lesson50hRateNum}}THBから、単発なら1時間{{lessonHourlyNum}}THBです。' },
         { item: 'クラブレンタル（屋外コース）', price: '1,000〜2,500THB', notes: '1ラウンドあたり。品質の差は小さくありません。' },
       ],
       comparison_with_alternatives:
@@ -481,7 +481,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/cost/golf-simulator-prices-bangkok', '/cost/lengolf-pricing-guide', '/cost/golf-lesson-prices-bangkok', '/golf'],
     created_at: now,
-    updated_at: '2026-10-18T00:00:00.000Z',
+    updated_at: '2026-11-03T00:00:00.000Z',
     content: {
       intro:
         '방콕에서 골프를 치는 비용은 실내 시뮬레이터냐 실외 코스냐에 따라 보통 400~4,000바트예요. 도심의 실내 골프 시뮬레이터는 5명까지 시간당 550바트부터 시작해서 1인당 110바트 수준이고, 외곽의 스크린골프 매장은 400바트 안팎부터예요. 실외 코스의 그린피는 가장 저렴한 코스의 평일 요금 1,000바트 미만부터 프리미엄 클럽의 5,000바트 이상(보통 캐디와 카트 포함)까지 다양해요. 대부분의 코스에서는 캐디피가 따로 붙고, 이동 비용도 들어요 (2026년 9월 기준).',
@@ -493,7 +493,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: '캐디피 (실외 코스)', price: '300~400바트', notes: '태국 대부분의 코스에서 필수예요. 300~500바트 팁이 관례예요.' },
         { item: '골프 카트 (실외 코스)', price: '600~800바트', notes: '대부분의 코스에서 선택 사항이고, 2명이 함께 써요.' },
         { item: '드라이빙 레인지', price: '100~300바트', notes: '볼 한 바구니(50~100개)당. 보통 클럽 대여는 없어요.' },
-        { item: '골프 레슨 (실내)', price: '{{lesson50hRateNum}}~{{lessonHourlyNum}}바트/시간', notes: '프로와 1대1 개인 레슨. LENGOLF에서는 1시간 무료 체험으로 시작하실 수 있고(LENGOLF 레슨이 처음인 분 대상), 이후 시간당 {{lessonHourlyNum}}바트, 패키지는 시간당 {{lesson50hRateNum}}바트부터예요.' },
+        { item: '골프 레슨 (실내)', price: '{{lesson50hRateNum}}~{{lessonHourlyNum}}바트/시간', notes: '프로와 1대1 개인 레슨. LENGOLF에서는 1시간 무료 체험으로 시작하실 수 있고(LENGOLF 레슨이 처음인 분 대상), 이후 패키지는 시간당 {{lesson50hRateNum}}바트부터, 1회 레슨은 시간당 {{lessonHourlyNum}}바트예요.' },
         { item: '골프 클럽 대여 (실외 코스)', price: '1,000~2,500바트', notes: '1라운드당. 품질 편차가 커요.' },
       ],
       comparison_with_alternatives:
@@ -607,7 +607,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/cost/golf-simulator-prices-bangkok', '/cost/lengolf-pricing-guide', '/cost/golf-lesson-prices-bangkok', '/golf'],
     created_at: now,
-    updated_at: '2026-10-18T00:00:00.000Z',
+    updated_at: '2026-11-03T00:00:00.000Z',
     content: {
       intro:
         '在曼谷打一场高尔夫，通常要花400–4,000泰铢，差别在于你是在室内用模拟器打，还是到室外球场下场。市中心的室内高尔夫模拟器每小时550泰铢起，最多可5人同用——平摊下来一个人只要110泰铢；市郊的屏幕高尔夫场馆则从约400泰铢起。室外球场的果岭费，从最便宜的球场平日不到1,000泰铢，到高端球会的5,000泰铢或以上不等，后者通常已含球童和球车；在大多数球场，还得另算球童费，再加上往返交通，截至2026年9月。',
@@ -619,7 +619,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: '球童费（室外球场）', price: '300–400泰铢', notes: '泰国多数球场都必须请球童。另给300–500泰铢小费是惯例。' },
         { item: '高尔夫球车（室外球场）', price: '600–800泰铢', notes: '多数球场可选。2人共用一辆。' },
         { item: '练习场', price: '100–300泰铢', notes: '每桶球（50–100颗）。通常不含球杆租借。' },
-        { item: '高尔夫课程（室内）', price: '{{lesson50hRateNum}}–{{lessonHourlyNum}}泰铢/小时', notes: '教练一对一。在LENGOLF，新学员可先预约1小时免费体验，之后每小时{{lessonHourlyNum}}泰铢，套餐低至每小时{{lesson50hRateNum}}泰铢。' },
+        { item: '高尔夫课程（室内）', price: '{{lesson50hRateNum}}–{{lessonHourlyNum}}泰铢/小时', notes: '教练一对一。在LENGOLF，新学员可先预约1小时免费体验，之后购买套餐每小时{{lesson50hRateNum}}泰铢起，单节课每小时{{lessonHourlyNum}}泰铢。' },
         { item: '球杆租借（室外球场）', price: '1,000–2,500泰铢', notes: '每轮。品质差异很大。' },
       ],
       comparison_with_alternatives:
@@ -1544,7 +1544,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     slug: 'lengolf-pricing-guide',
     title: 'LENGOLF Pricing Guide: Bay Rates, Packages & Lessons (2026)',
     meta_description:
-      'Complete LENGOLF pricing: bay rental from 550 THB/hr (up to 5 people), monthly packages from 3,000 THB, golf lessons starting with a free 1-hour trial, then {{lessonHourlyNum}} THB/hr or from {{lesson50hRateNum}} THB/hr on packages, event packages from 9,999 THB. All rates for 2026.',
+      'Complete LENGOLF pricing: bay rental from 550 THB/hr (up to 5 people), monthly packages from 3,000 THB, golf lessons starting with a free 1-hour trial, then from {{lesson50hRateNum}} THB/hr on packages or {{lessonHourlyNum}} THB for a single hour, event packages from 9,999 THB. All rates for 2026.',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1552,7 +1552,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'en',
     related_slugs: ['/golf', '/lessons', '/events', '/golf-club-rental', '/cost/golf-simulator-prices-bangkok'],
     created_at: now,
-    updated_at: '2026-10-18T00:00:00.000Z',
+    updated_at: '2026-11-03T00:00:00.000Z',
     content: {
       intro:
         'LENGOLF bay rental starts at 550 THB per hour for up to 5 people — that\'s 110 THB per person. We also offer monthly packages, golf lessons, event packages, and premium club rental. Here\'s our complete 2026 pricing.',
@@ -1569,8 +1569,8 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: 'Early Bird (10 hrs / 6 months)', price: '4,800 THB', notes: 'Before 14:00 only. 480 THB/hr effective rate.' },
         { item: 'Early Bird+ Unlimited (1 month)', price: '5,000 THB', notes: 'Before 14:00 only. Unlimited hours. 5% off food & drinks.' },
         { item: 'Free 1-hour trial (golf coaching)', price: '0 THB', notes: 'For new students: 1 hour with a Thailand PGA coach, clubs and simulator included. No obligation. Book on LINE @lengolf.' },
-        { item: 'Private lesson (1 golfer, 1 hr)', price: '{{lessonHourlyNum}} THB', notes: 'With a Thailand PGA coach. Book on LINE @lengolf.' },
         { item: 'Lesson packages (1 golfer, 5 to 50 hrs)', price: '{{lesson50hRateNum}}–{{lesson5hRateNum}} THB/hr', notes: '5 hrs {{lesson5hNum}} THB, 10 hrs {{lesson10hNum}} THB, 20 hrs {{lesson20hNum}} THB, 30 hrs {{lesson30hNum}} THB, 50 hrs {{lesson50hNum}} THB. The more hours, the lower the hourly rate.' },
+        { item: 'Private lesson (1 golfer, 1 hr)', price: '{{lessonHourlyNum}} THB', notes: 'With a Thailand PGA coach. Book on LINE @lengolf.' },
         { item: 'Starter Package (5 coaching + 5 practice hrs)', price: '{{lessonStarterNum}} THB', notes: 'Best for beginners. Includes free golf glove. 6-month validity.' },
         { item: 'Small Event Package (10–15 guests)', price: '9,999 THB', notes: '2 bays, 3 hours. Includes 10 beers, 5 cocktails, unlimited soft drinks, food.' },
         { item: 'Medium Event Package (15–25 guests)', price: '21,999 THB', notes: '4 bays (exclusive), 3 hours. Includes 20 beers, 10 cocktails, unlimited soft drinks, food.' },
@@ -1613,7 +1613,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     slug: 'lengolf-pricing-guide',
     title: 'ราคา LENGOLF ทั้งหมด: ค่าเช่าเบย์ แพ็กเกจ และคอร์สเรียน (2026)',
     meta_description:
-      'ราคา LENGOLF ครบทุกรายการ ค่าเช่าเบย์เริ่มต้น 550 บาท/ชั่วโมง (สูงสุด 5 คน) แพ็กเกจรายเดือนเริ่ม 3,000 บาท คอร์สเรียนเริ่มจากทดลองเรียนฟรี 1 ชั่วโมง จากนั้นชั่วโมงละ {{lessonHourlyNum}} บาท ถ้าซื้อแพ็กเกจ ต่ำสุดเหลือชั่วโมงละ {{lesson50hRateNum}} บาท ส่วนแพ็กเกจจัดงานเริ่ม 9,999 บาท อัตราปี 2026',
+      'ราคา LENGOLF ครบทุกรายการ ค่าเช่าเบย์เริ่มต้น 550 บาท/ชั่วโมง (สูงสุด 5 คน) แพ็กเกจรายเดือนเริ่ม 3,000 บาท คอร์สเรียนเริ่มจากทดลองเรียนฟรี 1 ชั่วโมง จากนั้นค่าเรียนแบบแพ็กเกจเริ่มต้นชั่วโมงละ {{lesson50hRateNum}} บาท หรือ {{lessonHourlyNum}} บาทหากเรียนรายชั่วโมง ส่วนแพ็กเกจจัดงานเริ่ม 9,999 บาท อัตราปี 2026',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1621,7 +1621,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'th',
     related_slugs: ['/golf', '/lessons', '/events', '/golf-club-rental', '/cost/golf-simulator-prices-bangkok'],
     created_at: now,
-    updated_at: '2026-10-18T00:00:00.000Z',
+    updated_at: '2026-11-03T00:00:00.000Z',
     content: {
       intro:
         'ค่าเช่าเบย์ของ LENGOLF เริ่มต้นที่ 550 บาทต่อชั่วโมงสำหรับผู้เล่นสูงสุด 5 คน หรือเท่ากับ 110 บาทต่อคน นอกจากนี้เรายังมีแพ็กเกจรายเดือน คอร์สเรียนกอล์ฟ แพ็กเกจจัดงาน และบริการเช่าไม้กอล์ฟระดับพรีเมียม ด้านล่างนี้คือราคาทั้งหมดของเราสำหรับปี 2026 (ข้อมูล ณ กุมภาพันธ์ 2026)',
@@ -1638,8 +1638,8 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: 'Early Bird (10 ชั่วโมง / 6 เดือน)', price: '4,800 บาท', notes: 'ใช้ได้ก่อน 14:00 น. เท่านั้น เท่ากับ 480 บาท/ชม.' },
         { item: 'Early Bird+ Unlimited (1 เดือน)', price: '5,000 บาท', notes: 'ใช้ได้ก่อน 14:00 น. เท่านั้น เล่นไม่จำกัดชั่วโมง ลดอาหารและเครื่องดื่ม 5 เปอร์เซ็นต์' },
         { item: 'ทดลองเรียนฟรี 1 ชั่วโมง', price: '0 บาท', notes: 'สำหรับคนที่ยังไม่เคยเรียนกับ LENGOLF เรียนกับโปร PGA Thailand 1 ชั่วโมง มีไม้กอล์ฟและห้องซิมให้ ไม่มีข้อผูกมัด จองทาง LINE @lengolf' },
-        { item: 'คอร์สเรียนส่วนตัว (1 คน 1 ชั่วโมง)', price: '{{lessonHourlyNum}} บาท', notes: 'สอนโดยโปรที่ผ่านการรับรองจาก PGA Thailand จองทาง LINE @lengolf' },
         { item: 'แพ็กเกจคอร์สเรียน (1 คน 5-50 ชั่วโมง)', price: '{{lesson50hRateNum}}-{{lesson5hRateNum}} บาท/ชม.', notes: '5 ชั่วโมง {{lesson5hNum}} บาท / 10 ชั่วโมง {{lesson10hNum}} บาท / 20 ชั่วโมง {{lesson20hNum}} บาท / 30 ชั่วโมง {{lesson30hNum}} บาท / 50 ชั่วโมง {{lesson50hNum}} บาท ยิ่งซื้อหลายชั่วโมง ค่าเรียนต่อชั่วโมงยิ่งถูก' },
+        { item: 'คอร์สเรียนส่วนตัว (1 คน 1 ชั่วโมง)', price: '{{lessonHourlyNum}} บาท', notes: 'สอนโดยโปรที่ผ่านการรับรองจาก PGA Thailand จองทาง LINE @lengolf' },
         { item: 'แพ็กเกจ Starter (เรียน 5 ชั่วโมง + ซ้อม 5 ชั่วโมง)', price: '{{lessonStarterNum}} บาท', notes: 'เหมาะที่สุดสำหรับผู้เริ่มต้น แถมถุงมือกอล์ฟฟรี ใช้ได้ภายใน 6 เดือน' },
         { item: 'แพ็กเกจจัดงานขนาดเล็ก (10-15 คน)', price: '9,999 บาท', notes: '2 เบย์ 3 ชั่วโมง รวมเบียร์ 10 ขวด ค็อกเทล 5 แก้ว น้ำอัดลมไม่จำกัด และอาหาร' },
         { item: 'แพ็กเกจจัดงานขนาดกลาง (15-25 คน)', price: '21,999 บาท', notes: '4 เบย์ (เหมาทั้งร้าน) 3 ชั่วโมง รวมเบียร์ 20 ขวด ค็อกเทล 10 แก้ว น้ำอัดลมไม่จำกัด และอาหาร' },
@@ -1691,7 +1691,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     slug: 'lengolf-pricing-guide',
     title: 'LENGOLF料金ガイド — ベイ利用料・パッケージ・レッスン（2026年）',
     meta_description:
-      'LENGOLFの料金をまとめて掲載。ベイ利用料は最大5名で1時間550THBから、月額パッケージは3,000THBから、レッスンは1時間の無料体験から始められ、その後は1時間{{lessonHourlyNum}}THB、パッケージなら1時間あたり{{lesson50hRateNum}}THBから、イベントパッケージは9,999THBから。2026年の全レートです（2026年2月現在）。',
+      'LENGOLFの料金をまとめて掲載。ベイ利用料は最大5名で1時間550THBから、月額パッケージは3,000THBから、レッスンは1時間の無料体験から始められ、その後はパッケージなら1時間あたり{{lesson50hRateNum}}THBから、単発なら1時間{{lessonHourlyNum}}THB、イベントパッケージは9,999THBから。2026年の全レートです（2026年2月現在）。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1699,7 +1699,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/golf', '/lessons', '/events', '/golf-club-rental', '/cost/golf-simulator-prices-bangkok'],
     created_at: now,
-    updated_at: '2026-10-18T00:00:00.000Z',
+    updated_at: '2026-11-03T00:00:00.000Z',
     content: {
       intro:
         'LENGOLFのベイ利用料は最大5名で1時間550THBから——1人あたりにすると110THBです。このほかに月額パッケージ、ゴルフレッスン、イベントパッケージ、プレミアムクラブのレンタルもご用意しています。2026年の料金をすべてご案内します（2026年2月現在）。',
@@ -1716,8 +1716,8 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: 'Early Bird（10時間・6か月）', price: '4,800THB', notes: '14:00までの利用限定。実質1時間480THB。' },
         { item: 'Early Bird+ Unlimited（1か月）', price: '5,000THB', notes: '14:00までの利用限定。時間無制限。フードとドリンクが5%オフ。' },
         { item: 'ゴルフレッスンの無料体験（1時間）', price: '0THB', notes: 'LENGOLFのレッスンが初めての方向け。タイPGA認定コーチと1時間、クラブとシミュレーターの利用込みです。ご契約の必要はありません。ご予約はLINE @lengolfから（日本語で承ります）。' },
-        { item: 'プライベートレッスン（1名・1時間）', price: '{{lessonHourlyNum}}THB', notes: 'タイPGA認定コーチが担当します。ご予約はLINE @lengolfから（日本語で承ります）。' },
         { item: 'レッスンパッケージ（1名・5〜50時間）', price: '1時間{{lesson50hRateNum}}〜{{lesson5hRateNum}}THB', notes: '5時間{{lesson5hNum}}THB、10時間{{lesson10hNum}}THB、20時間{{lesson20hNum}}THB、30時間{{lesson30hNum}}THB、50時間{{lesson50hNum}}THB。時間数が多いほど1時間あたりの料金が下がります。' },
+        { item: 'プライベートレッスン（1名・1時間）', price: '{{lessonHourlyNum}}THB', notes: 'タイPGA認定コーチが担当します。ご予約はLINE @lengolfから（日本語で承ります）。' },
         { item: 'Starterパッケージ（コーチング5時間と練習5時間）', price: '{{lessonStarterNum}}THB', notes: '初心者の方に最適。ゴルフグローブが無料で付きます。有効期限6か月。' },
         { item: 'スモールイベントパッケージ（10〜15名）', price: '9,999THB', notes: '2ベイ・3時間。ビール10杯、カクテル5杯、ソフトドリンク飲み放題、フード付き。' },
         { item: 'ミディアムイベントパッケージ（15〜25名）', price: '21,999THB', notes: '4ベイ貸切・3時間。ビール20杯、カクテル10杯、ソフトドリンク飲み放題、フード付き。' },
@@ -1770,7 +1770,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     slug: 'lengolf-pricing-guide',
     title: 'LENGOLF 요금 안내 — 베이 요금, 패키지, 레슨 (2026년)',
     meta_description:
-      'LENGOLF 전체 요금 안내. 베이 대여는 최대 5명 시간당 550바트부터, 월 패키지 3,000바트부터, 레슨은 1시간 무료 체험 후 시간당 {{lessonHourlyNum}}바트, 레슨 패키지는 시간당 {{lesson50hRateNum}}바트부터, 이벤트 패키지 9,999바트부터예요 (2026년 2월 기준).',
+      'LENGOLF 전체 요금 안내. 베이 대여는 최대 5명 시간당 550바트부터, 월 패키지 3,000바트부터, 레슨은 1시간 무료 체험 후 패키지로 시간당 {{lesson50hRateNum}}바트부터, 1회 레슨은 시간당 {{lessonHourlyNum}}바트, 이벤트 패키지 9,999바트부터예요 (2026년 2월 기준).',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1778,7 +1778,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/golf', '/lessons', '/events', '/golf-club-rental', '/cost/golf-simulator-prices-bangkok'],
     created_at: now,
-    updated_at: '2026-10-18T00:00:00.000Z',
+    updated_at: '2026-11-03T00:00:00.000Z',
     content: {
       intro:
         'LENGOLF 베이 대여는 최대 5명까지 시간당 550바트부터, 1인당 110바트예요. 월 패키지와 골프 레슨, 이벤트 패키지, 프리미엄 클럽 대여도 준비돼 있어요. 아래가 2026년 전체 요금이에요 (2026년 2월 기준).',
@@ -1795,8 +1795,8 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: 'Early Bird (10시간 / 6개월)', price: '4,800바트', notes: '14:00 이전 전용. 실질 시간당 480바트.' },
         { item: 'Early Bird+ 무제한 (1개월)', price: '5,000바트', notes: '14:00 이전 전용. 시간 무제한. 식음료 5% 할인.' },
         { item: '1시간 무료 체험 (골프 레슨)', price: '0바트', notes: 'LENGOLF 레슨이 처음인 분 대상이에요. 태국 PGA 공인 코치와 1시간, 클럽과 시뮬레이터 이용 포함. 부담 없이 받아보세요. LINE @lengolf로 예약하시면 돼요.' },
-        { item: '개인 레슨 (1명, 1시간)', price: '{{lessonHourlyNum}}바트', notes: 'PGA 자격을 갖춘 프로와 함께해요.' },
         { item: '레슨 패키지 (1명, 5~50시간)', price: '시간당 {{lesson50hRateNum}}~{{lesson5hRateNum}}바트', notes: '5시간 {{lesson5hNum}}바트, 10시간 {{lesson10hNum}}바트, 20시간 {{lesson20hNum}}바트, 30시간 {{lesson30hNum}}바트, 50시간 {{lesson50hNum}}바트. 시간이 많을수록 시간당 요금이 낮아져요.' },
+        { item: '개인 레슨 (1명, 1시간)', price: '{{lessonHourlyNum}}바트', notes: 'PGA 자격을 갖춘 프로와 함께해요.' },
         { item: 'Starter 패키지 (코칭 5시간 + 연습 5시간)', price: '{{lessonStarterNum}}바트', notes: '입문자에게 가장 좋아요. 골프 장갑을 함께 드려요. 유효 기간 6개월.' },
         { item: '소규모 이벤트 패키지 (10~15명)', price: '9,999바트', notes: '베이 2개, 3시간. 맥주 10잔, 칵테일 5잔, 소프트드링크 무제한, 음식 포함.' },
         { item: '중규모 이벤트 패키지 (15~25명)', price: '21,999바트', notes: '베이 4개(단독 이용), 3시간. 맥주 20잔, 칵테일 10잔, 소프트드링크 무제한, 음식 포함.' },
@@ -1851,7 +1851,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     slug: 'lengolf-pricing-guide',
     title: 'LENGOLF价格指南 — 球位、月卡套餐与课程收费（2026）',
     meta_description:
-      'LENGOLF完整价格：球位每小时550泰铢起、最多5人，月卡套餐3,000泰铢起，课程可先预约1小时免费体验，之后每小时{{lessonHourlyNum}}泰铢，套餐低至每小时{{lesson50hRateNum}}泰铢，活动套餐9,999泰铢起，截至2026年2月。',
+      'LENGOLF完整价格：球位每小时550泰铢起、最多5人，月卡套餐3,000泰铢起，课程可先预约1小时免费体验，之后购买套餐每小时{{lesson50hRateNum}}泰铢起，单节课每小时{{lessonHourlyNum}}泰铢，活动套餐9,999泰铢起，截至2026年2月。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1859,7 +1859,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/golf', '/lessons', '/events', '/golf-club-rental', '/cost/golf-simulator-prices-bangkok'],
     created_at: now,
-    updated_at: '2026-10-25T00:00:00.000Z',
+    updated_at: '2026-11-03T00:00:00.000Z',
     content: {
       intro:
         'LENGOLF的球位租用每小时550泰铢起，最多可5人同用——平摊下来每人110泰铢。我们同时提供月卡套餐、高尔夫课程、活动套餐和高级球杆租借。以下是2026年的完整价格，截至2026年2月。',
@@ -1876,8 +1876,8 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         { item: 'Early Bird（10小时／6个月）', price: '4,800泰铢', notes: '仅限14:00前使用。折合480泰铢/小时。' },
         { item: 'Early Bird+不限时（1个月）', price: '5,000泰铢', notes: '仅限14:00前使用。时数不限。餐饮95折。' },
         { item: '1小时免费体验（高尔夫课程）', price: '0泰铢', notes: '适用于首次在LENGOLF上课的学员。与泰国PGA教练体验1小时，含球杆和模拟器使用，无任何附带条件。通过LINE @lengolf预约。' },
-        { item: '一对一课程（1人，1小时）', price: '{{lessonHourlyNum}}泰铢', notes: '由具PGA资格的教练授课。' },
         { item: '课程套餐（1人，5–50小时）', price: '每小时{{lesson50hRateNum}}–{{lesson5hRateNum}}泰铢', notes: '5小时套餐{{lesson5hNum}}泰铢、10小时{{lesson10hNum}}泰铢、20小时{{lesson20hNum}}泰铢、30小时{{lesson30hNum}}泰铢、50小时{{lesson50hNum}}泰铢。小时数越多，每小时越便宜。' },
+        { item: '一对一课程（1人，1小时）', price: '{{lessonHourlyNum}}泰铢', notes: '由具PGA资格的教练授课。' },
         { item: 'Starter入门套餐（5小时教学＋5小时练习）', price: '{{lessonStarterNum}}泰铢', notes: '最适合新手。赠一只高尔夫手套。有效期6个月。' },
         { item: '小型活动套餐（10–15人）', price: '9,999泰铢', notes: '2个球位，3小时。含啤酒10瓶、鸡尾酒5杯、软饮无限畅饮及餐点。' },
         { item: '中型活动套餐（15–25人）', price: '21,999泰铢', notes: '4个球位（包场），3小时。含啤酒20瓶、鸡尾酒10杯、软饮无限畅饮及餐点。' },
