@@ -470,7 +470,7 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
               columns={[
                 { key: 'name', label: t('pkgCourse'), primary: true, thClassName: 'whitespace-nowrap', tdClassName: 'whitespace-nowrap' },
                 { key: 'oneGolfer', label: t('pkg1Golfer'), align: 'right', emphasis: true, thClassName: 'whitespace-nowrap', tdClassName: 'whitespace-nowrap' },
-                { key: 'perHour', label: t('pkgPerHour'), align: 'right', thClassName: 'whitespace-nowrap', tdClassName: 'whitespace-nowrap' },
+                { key: 'perHour', label: t('pkgPerHour'), align: 'right', tdClassName: 'whitespace-nowrap' },
                 { key: 'twoGolfers', label: t('pkg2Golfers'), align: 'right', thClassName: 'whitespace-nowrap', tdClassName: 'whitespace-nowrap' },
                 { key: 'threeToFiveGolfers', label: t('pkg3To5Golfers'), align: 'right', thClassName: 'whitespace-nowrap', tdClassName: 'whitespace-nowrap' },
                 { key: 'remark', label: t('pkgRemark') },

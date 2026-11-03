@@ -601,7 +601,7 @@
     "lessonNote1": "*Starter Package：5小时教学 + 5小时练习",
     "lessonNote2": "*Sim to Fairway：5小时教学 + 1次实地教学",
     "lessonNote3": "*所有教学套餐均含高尔夫模拟器使用",
-    "pkgTotalsNote": "表中价格为套餐总价，“每小时”一栏是1人上课时折合的每小时价格。",
+    "pkgTotalsNote": "表中价格为套餐总价。“每小时”一栏是1人上课时折合的每小时价格。",
     "hourPackage": "{n}小时",
     "starterPackageName": "Starter Package*",
     "simToFairwayName": "Sim to Fairway*",
