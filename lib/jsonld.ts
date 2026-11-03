@@ -522,6 +522,37 @@ function lessonHourPriceSpec(priceThb: number, hours = 1) {
   }
 }
 
+/**
+ * The lowest package hourly rate and the single-hour price, in that order
+ * after the trial. Shared by the home OfferCatalog and the /lessons/ Service
+ * so the two pages state lesson prices the same way.
+ */
+function lessonPackageRateOffer(facts: LessonPriceFacts) {
+  return {
+    '@type': 'Offer',
+    name: 'Golf Lesson Package Hourly Rate',
+    price: String(facts.fiftyHourRateThb),
+    priceCurrency: 'THB',
+    // Bought as 50 hours: without this the 1,440 reads as the price of
+    // a single lesson, the mirror of the misreading this offer fixes.
+    eligibleQuantity: { '@type': 'QuantitativeValue', value: 50, unitCode: 'HUR' },
+    priceSpecification: [lessonHourPriceSpec(facts.fiftyHourRateThb)],
+    description: `Lowest hourly rate on a lesson package (50 hours for ${facts.fiftyHourTotal} THB, 1 golfer), simulator usage included`,
+  }
+}
+
+function lessonSingleHourOffer(facts: LessonPriceFacts) {
+  return {
+    '@type': 'Offer',
+    name: '1 Hour Golf Lesson',
+    price: String(facts.hourlyThb),
+    priceCurrency: 'THB',
+    priceSpecification: [lessonHourPriceSpec(facts.hourlyThb)],
+    eligibleDuration: { '@type': 'QuantitativeValue', value: 1, unitCode: 'HUR' },
+    description: '1-hour lesson with a PGA-certified coach, simulator usage included',
+  }
+}
+
 export function getLessonsPricingJsonLd(dynamicLessonPricing?: LessonPackage[]) {
   const lessonDescriptions: Record<string, { description: string; unitCode?: string; duration?: number }> = {
     '1 Hour': { description: 'One-on-one coaching with a PGA-certified professional, golf simulator usage included', unitCode: 'HUR', duration: 1 },
@@ -709,10 +740,9 @@ export function getClubRentalPricingJsonLd() {
 }
 
 /**
- * The home page's OfferCatalog. The lesson Offer takes its price from the
- * same rows /lessons/ renders (getLessonPriceFacts) and sits after the free
- * trial, so the structured data answers "how much are lessons" the way the
- * visible page does.
+ * The home page's OfferCatalog. The lesson Offers take their prices from the
+ * same rows /lessons/ renders (getLessonPriceFacts) and follow the free trial
+ * in the /lessons/ order: the package hourly rate, then the single hour.
  */
 export function getHomePricingJsonLd(lessonFacts: LessonPriceFacts) {
   return {
@@ -743,15 +773,8 @@ export function getHomePricingJsonLd(lessonFacts: LessonPriceFacts) {
         priceCurrency: 'THB',
       },
       LESSON_TRIAL_OFFER,
-      {
-        '@type': 'Offer',
-        name: 'Golf Lessons',
-        description: `One-on-one coaching with PGA-certified professionals, simulator usage included. Packages from ${lessonFacts.fiftyHourRate} THB per hour.`,
-        price: String(lessonFacts.hourlyThb),
-        priceCurrency: 'THB',
-        unitCode: 'HUR',
-        eligibleDuration: { '@type': 'QuantitativeValue', value: 1, unitCode: 'HUR' },
-      },
+      lessonPackageRateOffer(lessonFacts),
+      lessonSingleHourOffer(lessonFacts),
       {
         '@type': 'Offer',
         name: 'Event Packages',
@@ -815,26 +838,8 @@ export function getLessonsServiceJsonLd(facts: LessonPriceFacts) {
       description: `Free 1-hour trial for new students, then from ${facts.fiftyHourRate} THB per hour on lesson packages, or ${facts.hourly} THB for a single 1-hour lesson. Simulator usage included.`,
       offers: [
         LESSON_TRIAL_OFFER,
-        {
-          '@type': 'Offer',
-          name: 'Golf Lesson Package Hourly Rate',
-          price: String(facts.fiftyHourRateThb),
-          priceCurrency: 'THB',
-          // Bought as 50 hours: without this the 1,440 reads as the price of
-          // a single lesson, the mirror of the misreading this offer fixes.
-          eligibleQuantity: { '@type': 'QuantitativeValue', value: 50, unitCode: 'HUR' },
-          priceSpecification: [lessonHourPriceSpec(facts.fiftyHourRateThb)],
-          description: `Lowest hourly rate on a lesson package (50 hours for ${facts.fiftyHourTotal} THB, 1 golfer), simulator usage included`,
-        },
-        {
-          '@type': 'Offer',
-          name: '1 Hour Golf Lesson',
-          price: String(facts.hourlyThb),
-          priceCurrency: 'THB',
-          priceSpecification: [lessonHourPriceSpec(facts.hourlyThb)],
-          eligibleDuration: { '@type': 'QuantitativeValue', value: 1, unitCode: 'HUR' },
-          description: '1-hour lesson with a PGA-certified coach, simulator usage included',
-        },
+        lessonPackageRateOffer(facts),
+        lessonSingleHourOffer(facts),
       ],
     },
   }
