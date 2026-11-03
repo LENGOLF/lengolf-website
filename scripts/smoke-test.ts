@@ -5998,10 +5998,16 @@ async function runLessonsCoachTests() {
 // in PR #187). The home catalog must state the trial, then the lowest package
 // hourly rate for 50 hours, then the single hour, at the prices /lessons/
 // states. The oracle is the /lessons/ OfferCatalog's own package TOTALS
-// divided by their hours, not the home builder's input, so a wrong fact on
-// the home side cannot satisfy both. Only "/" and "/th/" render this catalog:
+// divided by their hours, not getLessonPriceFacts(), so a wrong derivation on
+// the home side cannot satisfy both; a wrong POS row feeds both sides and is
+// not caught here. The oracle takes the cheapest of the six packages, so if
+// another package undercuts the 50-hour rate H3 goes red, correctly (the
+// eligibleQuantity of 50 would then be false). Only "/" and "/th/" render this catalog:
 // ja/ko/zh return a bespoke landing page first.
 const HOME_LESSON_OFFER_PATHS = ["/", "/th/"];
+// Set on the last line of the runner and checked in main(): a `return`
+// inside its loop would otherwise skip the anti-vacuity check and exit green.
+let homeLessonTestsCompleted = false;
 
 function jsonLdNodesOf(body: string): Record<string, unknown>[] {
   return body
@@ -6034,6 +6040,7 @@ async function runHomeLessonOfferTests() {
   // Oracle, from the EN /lessons/ page.
   let lowestRate = NaN;
   let singleHour = NaN;
+  let rateCount = 0;
   try {
     const res = await fetch(`${BASE}/lessons/`, { redirect: "manual" });
     const offers = catalogOf(jsonLdNodesOf(await res.text()));
@@ -6041,6 +6048,7 @@ async function runHomeLessonOfferTests() {
       const hours = Number((/^(\d+) Hour Golf Lesson/.exec(String(o.name)) ?? [])[1]);
       return hours > 0 && Number(o.price) > 0 ? [Math.round(Number(o.price) / hours)] : [];
     });
+    rateCount = rates.length;
     if (rates.length === 6) lowestRate = Math.min(...rates);
     singleHour = Number(offers.find((o) => o.name === "1 Hour Golf Lesson")?.price);
   } catch (err) {
@@ -6048,7 +6056,7 @@ async function runHomeLessonOfferTests() {
     return;
   }
   if (!(lowestRate > 0) || !(singleHour > lowestRate)) {
-    fail("H3) /lessons/ oracle", `could not derive the package rate and single hour (got ${lowestRate} / ${singleHour})`);
+    fail("H3) /lessons/ oracle", `could not derive the package rate and single hour (got ${lowestRate} / ${singleHour}; ${rateCount} of 6 hour packages priced)`);
     return;
   }
 
@@ -6061,7 +6069,12 @@ async function runHomeLessonOfferTests() {
       const issues: string[] = [];
       if (res.status !== 200) issues.push(`expected 200, got ${res.status}`);
       const offers = catalogOf(jsonLdNodesOf(body));
-      const trialAt = offers.findIndex((o) => o.price === "0" && /trial/i.test(String(o.name)));
+      const isTrial = (o: Record<string, unknown>) => o.price === "0" && /trial/i.test(String(o.name));
+      const trialAt = offers.findIndex(isTrial);
+      const trials = offers.filter(isTrial);
+      if (trials.length > 1) issues.push(`${trials.length} 0 THB trial Offers, expected 1`);
+      // The trial is a "trial", never a lesson (owner wording rule).
+      if (trials.some((o) => /lesson/i.test(String(o.name)))) issues.push(`trial Offer is named a lesson: ${JSON.stringify(trials.map((o) => o.name))}`);
       const rateAt = offers.findIndex((o) => /package hourly rate/i.test(String(o.name)));
       const singleAt = offers.findIndex((o) => o.name === "1 Hour Golf Lesson");
       if (trialAt < 0) issues.push("no 0 THB trial Offer");
@@ -6078,7 +6091,20 @@ async function runHomeLessonOfferTests() {
       if (Number(qty?.value) !== 50 || qty?.unitCode !== "HUR") {
         issues.push(`package-rate Offer eligibleQuantity is ${JSON.stringify(qty)}, expected 50 HUR`);
       }
-      const single = offers[singleAt];
+      // A 1-hour duration on the package rate brings back "1,440 for a
+      // 1-hour lesson"; a quantity on the single hour is the mirror.
+      if (rate?.eligibleDuration !== undefined) issues.push("package-rate Offer carries an eligibleDuration");
+      const singleOffer = offers[singleAt];
+      if (singleOffer?.eligibleQuantity !== undefined) issues.push("1-hour lesson Offer carries an eligibleQuantity");
+      for (const o of [rate, singleOffer]) {
+        if (!o) continue;
+        for (const x of [o, ...specs(o)]) {
+          if (x.priceCurrency !== "THB") issues.push(`${JSON.stringify(o.name)} has priceCurrency ${JSON.stringify(x.priceCurrency)}`);
+        }
+        const ref = oneHourSpec(o)?.referenceQuantity as Record<string, unknown> | undefined;
+        if (ref?.unitCode !== "HUR") issues.push(`${JSON.stringify(o.name)} 1-hour spec referenceQuantity unitCode is ${JSON.stringify(ref?.unitCode)}`);
+      }
+      const single = singleOffer;
       if (!single || Number(single.price) !== singleHour || Number(single && oneHourSpec(single)?.price) !== singleHour) {
         issues.push(`no 1-hour lesson Offer at ${singleHour}: ${JSON.stringify(single)}`);
       }
@@ -6088,7 +6114,11 @@ async function runHomeLessonOfferTests() {
       // Any other lesson-named Offer is the pre-fix shape coming back.
       const known = new Set([trialAt, rateAt, singleAt]);
       offers.forEach((o, i) => {
-        if (!known.has(i) && /lesson/i.test(String(o.name))) issues.push(`unexpected lesson Offer ${JSON.stringify(o.name)} at ${JSON.stringify(o.price)}`);
+        // By name or by price: the pre-fix shape renamed ("Golf Coaching" at
+        // the single-hour price) must not pass either.
+        if (!known.has(i) && (/lesson|coach/i.test(String(o.name)) || [lowestRate, singleHour].includes(Number(o.price)))) {
+          issues.push(`unexpected lesson Offer ${JSON.stringify(o.name)} at ${JSON.stringify(o.price)}`);
+        }
         if (/free\b[^.]{0,20}\blesson|complimentary lesson|first lesson (is )?free/i.test(`${o.name} ${o.description}`)) {
           issues.push(`Offer ${JSON.stringify(o.name)} calls the trial a "free lesson"`);
         }
@@ -6103,9 +6133,11 @@ async function runHomeLessonOfferTests() {
       fail(label, (err as Error).message);
     }
   }
-  if (judged !== HOME_LESSON_OFFER_PATHS.length || HOME_LESSON_OFFER_PATHS.length !== 2) {
-    fail("H3) anti-vacuity", `${judged} of 2 pinned home pages reached a verdict`);
+  // Pinned by identity, not count: ["/", "/"] holds the length at 2.
+  if (judged !== 2 || HOME_LESSON_OFFER_PATHS.join(" ") !== "/ /th/") {
+    fail("H3) anti-vacuity", `${judged} of the 2 pinned home pages (/ and /th/) reached a verdict; paths ${JSON.stringify(HOME_LESSON_OFFER_PATHS)}`);
   }
+  homeLessonTestsCompleted = true;
 }
 
 async function runLlmDiscoverabilityTests() {
@@ -9816,6 +9848,9 @@ async function main() {
   }
   await runLessonsCoachTests();
   await runHomeLessonOfferTests();
+  if (!homeLessonTestsCompleted) {
+    fail("H3) section completion", "runHomeLessonOfferTests returned before its last check ran");
+  }
   await runRegistryConsistencyTests();
   await runRegionHubRegistryConsistencyTests();
   await runPriceTierRegistryConsistencyTests();
