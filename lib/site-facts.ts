@@ -11,8 +11,8 @@
 //
 // CRITICAL DESIGN RULE
 // If the pricing API is unreachable, every token resolves to the pinned
-// FALLBACK value below — pinned to today's shipped figures — so rendered output
-// is byte-identical to the previously hardcoded text. The fallback path is the
+// FALLBACK value below — pinned to the last-known POS figures — so rendered
+// output stays correct while the API is down. The fallback path is the
 // common case in CI/sandbox (the POS API is not reachable there).
 //
 // SCOPE
@@ -63,8 +63,9 @@ export interface SiteFacts {
   fetchedAt: string | null
 }
 
-// Pinned to today's shipped figures. Changing the POS updates the live path;
-// these keep the fallback path byte-identical to the previously hardcoded copy.
+// Last-known POS figures, used when the pricing API is unreachable. Changing the
+// POS updates the live path; update these by hand to match (lessonHourly
+// 1,800 -> 1,950 on 2026-10-28).
 const FALLBACK: SiteFacts = {
   lessonHourly: 1950,
   bayHourlyMin: 550,
