@@ -11,8 +11,8 @@
 //
 // CRITICAL DESIGN RULE
 // If the pricing API is unreachable, every token resolves to the pinned
-// FALLBACK value below — pinned to today's shipped figures — so rendered output
-// is byte-identical to the previously hardcoded text. The fallback path is the
+// FALLBACK value below — pinned to the last-known POS figures — so rendered
+// output stays correct while the API is down. The fallback path is the
 // common case in CI/sandbox (the POS API is not reachable there).
 //
 // SCOPE
@@ -63,8 +63,9 @@ export interface SiteFacts {
   fetchedAt: string | null
 }
 
-// Pinned to today's shipped figures. Changing the POS updates the live path;
-// these keep the fallback path byte-identical to the previously hardcoded copy.
+// Last-known POS figures, used when the pricing API is unreachable. Changing the
+// POS updates the live path; update these by hand to match (lessonHourly
+// 1,800 -> 1,950 on 2026-10-28).
 const FALLBACK: SiteFacts = {
   lessonHourly: 1950,
   bayHourlyMin: 550,
@@ -148,8 +149,8 @@ export async function getSiteFacts(
 // Numeric formatting is SHARED across locales (Arabic digits + thousands
 // separators). Only the currency word and its spacing differ, matching the
 // shipped guide copy:
-//   en → "1,800 THB" (space)   ja → "1,800THB" (no space, majority spelling)
-//   ko → "1,800바트" (no space)  zh → "1,800泰铢" (no space)
+//   en → "1,950 THB" (space)   ja → "1,950THB" (no space, majority spelling)
+//   ko → "1,950바트" (no space)  zh → "1,950泰铢" (no space)
 //
 // The JA corpus is INCONSISTENT: most JA entries (screen-golf, lessons, tee
 // times) write THB, but two (exp-25-ja, exp-39-ja) write バーツ. We standardize
@@ -198,7 +199,7 @@ export function money(locale: string, value: number): string {
  * consumed by guide content or intentionally exposed for future use.
  *
  * Price tokens come in two shapes:
- *  - currency-carrying (e.g. `lessonHourly` → "1,800 THB"): used where the
+ *  - currency-carrying (e.g. `lessonHourly` → "1,950 THB"): used where the
  *    entry's currency word matches the locale default.
  *  - number-only (e.g. `courseRentalDayNum` → "1,200"): used for ranges (so the
  *    locale-specific separator stays literal) and for the JA バーツ minority (so

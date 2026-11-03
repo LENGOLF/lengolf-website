@@ -181,7 +181,7 @@ export const lessonsFaqItems = [
   },
   {
     question: 'How much do golf lessons cost at LENGOLF?',
-    answer: 'Lesson packages start at 1,800 THB for a 1-hour session (1 golfer). Multi-hour packages offer better value — for example, 10 hours for 16,000 THB (valid 12 months) or 30 hours for 45,000 THB (valid 24 months). Group rates are available for 2 golfers or 3–5 golfers. Golf simulator usage is included in all lesson packages.',
+    answer: 'Lesson packages start at 1,950 THB for a 1-hour session (1 golfer). Multi-hour packages offer better value — for example, 10 hours for 16,000 THB (valid 12 months) or 30 hours for 45,000 THB (valid 24 months). Group rates are available for 2 golfers or 3–5 golfers. Golf simulator usage is included in all lesson packages.',
   },
   {
     question: 'What skill levels do your coaches teach?',
@@ -302,7 +302,7 @@ export const golfFaqItems = [
   },
   {
     question: 'How much do golf lessons cost?',
-    answer: 'Lesson packages start at 1,800 THB for a 1-hour session (1 golfer). Multi-hour packages offer better value: 10 hours for 16,000 THB (valid 12 months) or 30 hours for 45,000 THB (valid 24 months). We also have a Starter Package at 11,000 THB which includes 5 hours of coaching plus 5 hours of practice. Golf simulator usage is included in all lesson packages.',
+    answer: 'Lesson packages start at 1,950 THB for a 1-hour session (1 golfer). Multi-hour packages offer better value: 10 hours for 16,000 THB (valid 12 months) or 30 hours for 45,000 THB (valid 24 months). We also have a Starter Package at 11,000 THB which includes 5 hours of coaching plus 5 hours of practice. Golf simulator usage is included in all lesson packages.',
   },
 ]
 
@@ -447,7 +447,7 @@ export const homeFaqItems = [
   },
   {
     question: 'Do you offer golf lessons?',
-    answer: 'Yes! We have three Thailand PGA-certified coaches on staff — PRO Boss, PRO Ratchavin, and PRO Min. They teach all skill levels from complete beginners to advanced players. Lessons start at 1,800 THB per hour and we offer a free 1-hour trial lesson. Visit our lessons page for packages and pricing.',
+    answer: 'Yes! We have three Thailand PGA-certified coaches on staff — PRO Boss, PRO Ratchavin, and PRO Min. They teach all skill levels from complete beginners to advanced players. Lessons start at 1,950 THB per hour and we offer a free 1-hour trial lesson. Visit our lessons page for packages and pricing.',
   },
   {
     question: 'Can I host an event or party at LENGOLF?',
