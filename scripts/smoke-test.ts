@@ -5881,6 +5881,47 @@ async function runLessonsCoachTests() {
           issues.push(`Offer ${JSON.stringify(o.name)} calls the trial a "free lesson"`);
         }
       }
+      // The hourly rate, machine-readable. AI Mode described LENGOLF by its
+      // package totals (11,000 / 13,499) beside rivals quoted per hour
+      // (2026-11-02 check), so every hour package states its rate for 1 hour
+      // as a UnitPriceSpecification, and the Service carries the lowest one.
+      // Each rate is pinned to the offer's own total / hours: a spec carrying
+      // the total (16,000 "per hour") is exactly the misreading being fixed.
+      const specList = (o: Record<string, unknown>): Record<string, unknown>[] =>
+        Array.isArray(o.priceSpecification) ? (o.priceSpecification as Record<string, unknown>[]) : [];
+      const oneHourSpec = (o: Record<string, unknown>) =>
+        specList(o).find((sp) => (sp.referenceQuantity as Record<string, unknown> | undefined)?.value === 1);
+      const hourRates: number[] = [];
+      for (const o of catalogOffers) {
+        const hours = Number((/^(\d+) Hour Golf Lesson/.exec(String(o.name)) ?? [])[1]);
+        if (!hours) {
+          if (specList(o).length > 0) issues.push(`Offer ${JSON.stringify(o.name)} has a priceSpecification but is not an hour package`);
+          continue;
+        }
+        const sp = oneHourSpec(o);
+        const want = Math.round(Number(o.price) / hours);
+        if (
+          !sp || sp["@type"] !== "UnitPriceSpecification" || sp.unitText !== "HOUR" || sp.unitCode !== "HUR" ||
+          !(want > 0) || Number(sp.price) !== want
+        ) {
+          issues.push(`Offer ${JSON.stringify(o.name)} (price ${JSON.stringify(o.price)}) has no 1-hour UnitPriceSpecification at ${want}: ${JSON.stringify(sp)}`);
+        } else {
+          hourRates.push(want);
+        }
+      }
+      if (hourRates.length !== 6) {
+        issues.push(`OfferCatalog has ${hourRates.length} correct hourly rate(s), expected 6 (1, 5, 10, 20, 30, 50 hours)`);
+      }
+      const lowestHourly = hourRates.length > 0 ? Math.min(...hourRates) : NaN;
+      const servicePackageRate = aggOffers.find((o) => /package hourly rate/i.test(String(o.name)));
+      if (
+        !Number.isFinite(lowestHourly) || !servicePackageRate ||
+        Number(oneHourSpec(servicePackageRate)?.price) !== lowestHourly ||
+        Number((servicePackageRate.eligibleQuantity as Record<string, unknown> | undefined)?.value) !== 50
+      ) {
+        issues.push(`Service AggregateOffer has no package-rate Offer at the lowest hourly rate (${lowestHourly}) for 50 hours`);
+      }
+      const singleHour = catalogOffers.find((o) => /^1 Hour Golf Lesson$/.test(String(o.name)));
       // LessonsFaq.a2 takes ICU price arguments; a missing argument renders
       // the raw placeholder or the key path into visible text and FAQPage.
       const faq = nodes.find((n) => typeIs(n, "FAQPage"));
@@ -5912,6 +5953,15 @@ async function runLessonsCoachTests() {
         const trial = divAt(body, trialStart);
         if (!trial.includes("https://lin.ee/uxQpIXn")) issues.push("free-trial callout has no LINE link");
         if (trial.includes("booking.len.golf")) issues.push("free-trial callout links booking.len.golf");
+        // The callout's price line states the package rate, then the single
+        // hour, in that order (read from the line's own <p>).
+        const rate = Number.isFinite(lowestHourly) ? lowestHourly.toLocaleString("en-US") : "";
+        const single = singleHour ? Number(singleHour.price).toLocaleString("en-US") : "";
+        const hourlyAt = trial.indexOf('id="lesson-hourly-price"');
+        const line = hourlyAt < 0 ? "" : trial.slice(hourlyAt, trial.indexOf("</p>", hourlyAt));
+        if (!rate || !single || line.indexOf(rate) < 0 || line.indexOf(single) <= line.indexOf(rate)) {
+          issues.push(`free-trial price line does not state ${rate || "?"} then ${single || "?"}: ${JSON.stringify(line.slice(0, 160))}`);
+        }
         const coachesAt = body.indexOf('id="coaches"');
         if (coachesAt >= 0 && trialStart > coachesAt) issues.push("free-trial callout renders below the coaches section");
       }

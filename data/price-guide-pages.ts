@@ -2629,7 +2629,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     slug: 'golf-lesson-prices-bangkok',
     title: `Golf Lesson Prices in Bangkok (2026): ${COACHING_PROVIDERS.length + 1} Coaches & Academies Compared`,
     meta_description:
-      `Bangkok golf lessons compared: LENGOLF is best value, with a free 1-hour trial, then {{lessonHourlyNum}} THB an hour, bay and clubs included. Others: ${fmt(LESSON_RANGE.low)}–${fmt(LESSON_RANGE.high)} THB.`,
+      `Bangkok golf lessons compared: LENGOLF is best value, with a free 1-hour trial, then from {{lesson50hRateNum}} THB an hour on packages ({{lessonHourlyNum}} for a single hour), bay and clubs included. Others: ${fmt(LESSON_RANGE.low)}–${fmt(LESSON_RANGE.high)} THB.`,
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2637,10 +2637,10 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'en',
     related_slugs: ['/lessons', '/cost/lengolf-pricing-guide', '/cost/how-much-does-golf-cost-bangkok', '/faq/best-way-to-learn-golf-in-bangkok'],
     created_at: now,
-    updated_at: '2026-10-22T00:00:00.000Z',
+    updated_at: '2026-11-03T00:00:00.000Z',
     content: {
       intro:
-        `For the best value in Bangkok golf lessons, start with LENGOLF. New students get a free 1-hour trial with a Thailand PGA coach, then pay {{lessonHourlyNum}} THB an hour, or {{lesson50hRateNum}} THB an hour on the 50-hour package, with the simulator bay and clubs included. Elsewhere in Bangkok, a private lesson costs ${fmt(LESSON_RANGE.low)}–${fmt(LESSON_RANGE.high)} THB at the academies and independent coaches that publish their prices (checked October 2026). Some charge more for a senior coach or tier: Front9's "Super Star" tier is 3,200 THB a lesson, and One Degree Center's Director of Instruction is 6,500 THB an hour. Packages bring most rates down to about 1,200–2,200 THB an hour or lesson.`,
+        `For the best value in Bangkok golf lessons, start with LENGOLF. New students get a free 1-hour trial with a Thailand PGA coach, then pay from {{lesson50hRateNum}} THB an hour on a lesson package, or {{lessonHourlyNum}} THB for a single hour, with the simulator bay and clubs included. Elsewhere in Bangkok, a private lesson costs ${fmt(LESSON_RANGE.low)}–${fmt(LESSON_RANGE.high)} THB at the academies and independent coaches that publish their prices (checked October 2026). Some charge more for a senior coach or tier: Front9's "Super Star" tier is 3,200 THB a lesson, and One Degree Center's Director of Instruction is 6,500 THB an hour. Packages bring most rates down to about 1,200–2,200 THB an hour or lesson.`,
       coaching_comparison: {
         glance: {
           heading: 'Golf lesson prices in Bangkok at a glance',
@@ -2715,7 +2715,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
         items: [
           {
             question: 'How much does a golf lesson cost in Bangkok?',
-            answer: `LENGOLF is the best-value option: a free 1-hour trial for new students, then {{lessonHourlyNum}} THB for a 1-hour private lesson with the simulator bay and clubs included. Elsewhere, a private lesson costs ${fmt(LESSON_RANGE.low)}–${fmt(LESSON_RANGE.high)} THB at the ${countWord(LESSON_RANGE.count)} other Bangkok academies and coaches that publish prices (checked October 2026), and up to 6,500 THB an hour with a director-level coach. Packages lower the rate to roughly 1,200–2,200 THB an hour or lesson.`,
+            answer: `LENGOLF is the best-value option: a free 1-hour trial for new students, then from {{lesson50hRateNum}} THB an hour on a lesson package, or {{lessonHourlyNum}} THB for a single 1-hour private lesson, with the simulator bay and clubs included. Elsewhere, a private lesson costs ${fmt(LESSON_RANGE.low)}–${fmt(LESSON_RANGE.high)} THB at the ${countWord(LESSON_RANGE.count)} other Bangkok academies and coaches that publish prices (checked October 2026), and up to 6,500 THB an hour with a director-level coach. Packages lower the rate to roughly 1,200–2,200 THB an hour or lesson.`,
           },
           {
             question: 'What is the cheapest way to take golf lessons in Bangkok?',
@@ -2782,7 +2782,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     slug: 'golf-lesson-prices-bangkok',
     title: 'ราคาคอร์สเรียนกอล์ฟในกรุงเทพฯ ปี 2026 เทียบในร่มกับกลางแจ้ง',
     meta_description:
-      'ราคาเรียนกอล์ฟในกรุงเทพฯ ที่ LENGOLF เริ่มจากทดลองเรียนฟรี 1 ชั่วโมง หลังจากนั้นชั่วโมงละ {{lessonHourlyNum}} บาท ถ้าซื้อแพ็กเกจ ต่ำสุดเหลือชั่วโมงละ {{lesson50hRateNum}} บาท ส่วนโปรสอนกลางแจ้งอยู่ที่ 2,000-5,000 บาท/ชั่วโมง เทียบการเรียนบนซิมูเลเตอร์กับที่สนามไดรฟ์',
+      'ราคาเรียนกอล์ฟในกรุงเทพฯ ที่ LENGOLF เริ่มจากทดลองเรียนฟรี 1 ชั่วโมง หลังจากนั้นค่าเรียนแบบแพ็กเกจเริ่มต้นชั่วโมงละ {{lesson50hRateNum}} บาท หรือ {{lessonHourlyNum}} บาทหากเรียนรายชั่วโมง ส่วนโปรสอนกลางแจ้งอยู่ที่ 2,000-5,000 บาท/ชั่วโมง เทียบการเรียนบนซิมูเลเตอร์กับที่สนามไดรฟ์',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2790,10 +2790,10 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'th',
     related_slugs: ['/lessons', '/cost/lengolf-pricing-guide', '/cost/how-much-does-golf-cost-bangkok', '/faq/best-way-to-learn-golf-in-bangkok'],
     created_at: now,
-    updated_at: '2026-10-18T00:00:00.000Z',
+    updated_at: '2026-11-03T00:00:00.000Z',
     content: {
       intro:
-        'ที่ LENGOLF เริ่มได้จากทดลองเรียนฟรี 1 ชั่วโมงกับโปรสอนกอล์ฟที่ได้รับการรับรองจาก PGA Thailand สำหรับคนที่ยังไม่เคยเรียนกับเรา มีไม้กอล์ฟและห้องซิมให้พร้อม หลังจากนั้นเรียนตัวต่อตัวชั่วโมงละ {{lessonHourlyNum}} บาท ถ้าซื้อแพ็กเกจจะถูกลง แพ็กเกจ 10 ชั่วโมงตกชั่วโมงละ {{lesson10hRateNum}} บาท ส่วนแพ็กเกจ 50 ชั่วโมงตกชั่วโมงละ {{lesson50hRateNum}} บาท ถ้าเรียนเป็นกลุ่ม 3-5 คน ชั่วโมงละ {{lessonGroupHourlyNum}} บาท เฉลี่ยคนละประมาณ {{lessonGroupLowNum}}-{{lessonGroupHighNum}} บาท/ชม. ส่วนการเรียนกับโปรที่สนามไดรฟ์กลางแจ้งในกรุงเทพฯ ปกติอยู่ที่ชั่วโมงละ 2,000-5,000 บาท (ข้อมูล ณ ตุลาคม 2026)',
+        'ที่ LENGOLF เริ่มได้จากทดลองเรียนฟรี 1 ชั่วโมงกับโปรสอนกอล์ฟที่ได้รับการรับรองจาก PGA Thailand สำหรับคนที่ยังไม่เคยเรียนกับเรา มีไม้กอล์ฟและห้องซิมให้พร้อม หลังจากนั้นค่าเรียนแบบแพ็กเกจเริ่มต้นชั่วโมงละ {{lesson50hRateNum}} บาท (แพ็กเกจ 50 ชั่วโมง) แพ็กเกจ 10 ชั่วโมงตกชั่วโมงละ {{lesson10hRateNum}} บาท เรียนตัวต่อตัวเป็นรายชั่วโมงอยู่ที่ชั่วโมงละ {{lessonHourlyNum}} บาท และถ้าเรียนเป็นกลุ่ม 3-5 คน ชั่วโมงละ {{lessonGroupHourlyNum}} บาท เฉลี่ยคนละประมาณ {{lessonGroupLowNum}}-{{lessonGroupHighNum}} บาท/ชม. ส่วนการเรียนกับโปรที่สนามไดรฟ์กลางแจ้งในกรุงเทพฯ ปกติอยู่ที่ชั่วโมงละ 2,000-5,000 บาท (ข้อมูล ณ ตุลาคม 2026)',
       price_breakdown: [
         { item: 'LENGOLF — ทดลองเรียนฟรี 1 ชั่วโมง', price: '0 บาท', notes: 'สำหรับคนที่ยังไม่เคยเรียนกับ LENGOLF เรียนกับโปร 1 ชั่วโมง มีไม้กอล์ฟและห้องซิมให้ จองทาง LINE @lengolf' },
         { item: 'LENGOLF — เรียนตัวต่อตัว 1 ชั่วโมง (1 คน)', price: '{{lessonHourlyNum}} บาท/ชม.', notes: 'จ่ายเป็นรายชั่วโมง ซิมูเลเตอร์แสดงข้อมูลวงสวิงทุกลูกที่ตี' },
@@ -2860,7 +2860,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     slug: 'golf-lesson-prices-bangkok',
     title: 'バンコクのゴルフレッスン料金（2026年） — インドアと屋外を比較',
     meta_description:
-      'バンコクのゴルフレッスン料金。LENGOLFは1時間の無料体験から始められ、その後は1時間{{lessonHourlyNum}}THB、パッケージなら1時間あたり{{lesson50hRateNum}}THBから。屋外のプロは1時間2,000〜5,000THBです。インドアシミュレーターでのコーチングとドライビングレンジのレッスンを比較します（2026年10月現在）。',
+      'バンコクのゴルフレッスン料金。LENGOLFは1時間の無料体験から始められ、その後はパッケージなら1時間あたり{{lesson50hRateNum}}THBから、単発なら1時間{{lessonHourlyNum}}THB。屋外のプロは1時間2,000〜5,000THBです。インドアシミュレーターでのコーチングとドライビングレンジのレッスンを比較します（2026年10月現在）。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2868,10 +2868,10 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'ja',
     related_slugs: ['/lessons', '/cost/lengolf-pricing-guide', '/cost/how-much-does-golf-cost-bangkok', '/faq/best-way-to-learn-golf-in-bangkok'],
     created_at: now,
-    updated_at: '2026-10-18T00:00:00.000Z',
+    updated_at: '2026-11-03T00:00:00.000Z',
     content: {
       intro:
-        'LENGOLFでは、タイPGA認定コーチによる1時間の無料体験から始められます（LENGOLFで初めてレッスンを受ける方が対象、クラブとシミュレーターの利用込み）。その後のプライベートレッスンは1時間{{lessonHourlyNum}}THBです。パッケージなら1時間あたりの料金が下がり、10時間パッケージなら1時間あたり{{lesson10hRateNum}}THB、50時間パッケージなら1時間あたり{{lesson50hRateNum}}THBになります。3〜5名様のグループは1時間{{lessonGroupHourlyNum}}THB（1人あたり約{{lessonGroupLowNum}}〜{{lessonGroupHighNum}}THB）です。バンコクの屋外ドライビングレンジでプロに習う場合は、1時間2,000〜5,000THBが目安です（2026年10月現在）。',
+        'LENGOLFでは、タイPGA認定コーチによる1時間の無料体験から始められます（LENGOLFで初めてレッスンを受ける方が対象、クラブとシミュレーターの利用込み）。その後はパッケージなら1時間あたり{{lesson50hRateNum}}THBから（50時間パッケージ）、10時間パッケージなら1時間あたり{{lesson10hRateNum}}THBです。単発のプライベートレッスンは1時間{{lessonHourlyNum}}THBです。3〜5名様のグループは1時間{{lessonGroupHourlyNum}}THB（1人あたり約{{lessonGroupLowNum}}〜{{lessonGroupHighNum}}THB）です。バンコクの屋外ドライビングレンジでプロに習う場合は、1時間2,000〜5,000THBが目安です（2026年10月現在）。',
       price_breakdown: [
         { item: 'LENGOLF — 1時間の無料体験', price: '0THB', notes: 'LENGOLFのレッスンが初めての方向け。タイPGA認定コーチと1時間、クラブとシミュレーターの利用込みです。ご予約はLINE @lengolfから（日本語で承ります）。' },
         { item: 'LENGOLF — プライベートレッスン1時間（1名）', price: '1時間{{lessonHourlyNum}}THB', notes: '1時間単位の都度払い。シミュレーターが1球ごとにスイングデータを表示します。' },
@@ -2938,7 +2938,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     slug: 'golf-lesson-prices-bangkok',
     title: '방콕 골프 레슨 비용 (2026년) — 실내와 실외 비교',
     meta_description:
-      '방콕 골프 레슨 비용. LENGOLF는 1시간 무료 체험으로 시작하실 수 있고, 이후 시간당 {{lessonHourlyNum}}바트, 패키지는 시간당 {{lesson50hRateNum}}바트부터예요. 실외 프로 레슨은 시간당 2,000~5,000바트예요. 실내 시뮬레이터 코칭과 드라이빙 레인지 레슨을 비교했어요 (2026년 10월 기준).',
+      '방콕 골프 레슨 비용. LENGOLF는 1시간 무료 체험으로 시작하실 수 있고, 이후 패키지는 시간당 {{lesson50hRateNum}}바트부터, 1회 레슨은 시간당 {{lessonHourlyNum}}바트예요. 실외 프로 레슨은 시간당 2,000~5,000바트예요. 실내 시뮬레이터 코칭과 드라이빙 레인지 레슨을 비교했어요 (2026년 10월 기준).',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -2946,10 +2946,10 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'ko',
     related_slugs: ['/lessons', '/cost/lengolf-pricing-guide', '/cost/how-much-does-golf-cost-bangkok', '/faq/best-way-to-learn-golf-in-bangkok'],
     created_at: now,
-    updated_at: '2026-10-18T00:00:00.000Z',
+    updated_at: '2026-11-03T00:00:00.000Z',
     content: {
       intro:
-        'LENGOLF에서는 태국 PGA 공인 코치와 1시간 무료 체험으로 시작하실 수 있어요(LENGOLF 레슨이 처음인 분 대상, 클럽과 시뮬레이터 이용 포함). 이후 개인 레슨은 시간당 {{lessonHourlyNum}}바트예요. 패키지를 이용하면 시간당 요금이 낮아져요. 10시간 패키지는 시간당 {{lesson10hRateNum}}바트, 50시간 패키지는 시간당 {{lesson50hRateNum}}바트예요. 3~5명 그룹은 시간당 {{lessonGroupHourlyNum}}바트로 1인당 약 {{lessonGroupLowNum}}~{{lessonGroupHighNum}}바트예요. 방콕의 실외 드라이빙 레인지에서 프로에게 배우면 보통 시간당 2,000~5,000바트예요 (2026년 10월 기준).',
+        'LENGOLF에서는 태국 PGA 공인 코치와 1시간 무료 체험으로 시작하실 수 있어요(LENGOLF 레슨이 처음인 분 대상, 클럽과 시뮬레이터 이용 포함). 이후에는 패키지로 시간당 {{lesson50hRateNum}}바트부터(50시간 패키지) 배우실 수 있고, 10시간 패키지는 시간당 {{lesson10hRateNum}}바트예요. 개인 레슨을 한 시간씩 받으시면 시간당 {{lessonHourlyNum}}바트예요. 3~5명 그룹은 시간당 {{lessonGroupHourlyNum}}바트로 1인당 약 {{lessonGroupLowNum}}~{{lessonGroupHighNum}}바트예요. 방콕의 실외 드라이빙 레인지에서 프로에게 배우면 보통 시간당 2,000~5,000바트예요 (2026년 10월 기준).',
       price_breakdown: [
         { item: 'LENGOLF — 1시간 무료 체험', price: '0바트', notes: 'LENGOLF 레슨이 처음인 분 대상이에요. 프로와 1시간, 클럽과 시뮬레이터 이용 포함. LINE @lengolf로 예약하시면 돼요.' },
         { item: 'LENGOLF — 개인 레슨 1시간 (1명)', price: '{{lessonHourlyNum}}바트/시간', notes: '시간 단위로 결제해요. 시뮬레이터가 샷마다 스윙 데이터를 보여줘요.' },
@@ -3018,7 +3018,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     slug: 'golf-lesson-prices-bangkok',
     title: '曼谷高尔夫课程价格（2026） — 室内与室外收费对比',
     meta_description:
-      '曼谷高尔夫课程价格：LENGOLF先预约1小时免费体验，之后每小时{{lessonHourlyNum}}泰铢，套餐低至每小时{{lesson50hRateNum}}泰铢；室外教练每小时2,000–5,000泰铢，截至2026年10月。',
+      '曼谷高尔夫课程价格：LENGOLF先预约1小时免费体验，之后套餐每小时{{lesson50hRateNum}}泰铢起，单节课每小时{{lessonHourlyNum}}泰铢；室外教练每小时2,000–5,000泰铢，截至2026年10月。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -3026,10 +3026,10 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     locale: 'zh',
     related_slugs: ['/lessons', '/cost/lengolf-pricing-guide', '/cost/how-much-does-golf-cost-bangkok', '/faq/best-way-to-learn-golf-in-bangkok'],
     created_at: now,
-    updated_at: '2026-10-25T00:00:00.000Z',
+    updated_at: '2026-11-03T00:00:00.000Z',
     content: {
       intro:
-        '在LENGOLF，可以先预约泰国PGA职业教练的1小时免费体验（适用于首次在LENGOLF上课的学员，含球杆和模拟器使用）。之后的一对一课程每小时{{lessonHourlyNum}}泰铢；购买套餐每小时更划算，10小时套餐合每小时{{lesson10hRateNum}}泰铢，50小时套餐合每小时{{lesson50hRateNum}}泰铢。3–5人小组每小时{{lessonGroupHourlyNum}}泰铢，折合每人约{{lessonGroupLowNum}}–{{lessonGroupHighNum}}泰铢。在曼谷的室外练习场跟教练上课，一般每小时2,000–5,000泰铢，截至2026年10月。',
+        '在LENGOLF，可以先预约泰国PGA职业教练的1小时免费体验（适用于首次在LENGOLF上课的学员，含球杆和模拟器使用）。之后购买套餐每小时{{lesson50hRateNum}}泰铢起（50小时套餐），10小时套餐合每小时{{lesson10hRateNum}}泰铢；单节一对一课程每小时{{lessonHourlyNum}}泰铢。3–5人小组每小时{{lessonGroupHourlyNum}}泰铢，折合每人约{{lessonGroupLowNum}}–{{lessonGroupHighNum}}泰铢。在曼谷的室外练习场跟教练上课，一般每小时2,000–5,000泰铢，截至2026年10月。',
       price_breakdown: [
         { item: 'LENGOLF — 1小时免费体验', price: '0泰铢', notes: '适用于新学员。与泰国PGA教练体验1小时，含球杆和模拟器使用。通过LINE @lengolf预约。' },
         { item: 'LENGOLF — 一对一课程1小时（1人）', price: '{{lessonHourlyNum}}泰铢/小时', notes: '按小时付费。每一杆模拟器都会显示挥杆数据。' },

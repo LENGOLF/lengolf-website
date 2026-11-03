@@ -91,7 +91,10 @@ export default function PricingTable<T>({
   return (
     <>
       {/* ── Desktop table (sm and up) ── */}
-      <div className="hidden sm:block overflow-hidden rounded-xl border border-primary/10 shadow-sm bg-white">
+      {/* overflow-x-auto, not hidden: between 640 and ~700px a six-column
+          table (the lessons per-hour column) is wider than its box, and hidden
+          clipped the right-hand columns instead of letting them scroll. */}
+      <div className="hidden sm:block overflow-x-auto rounded-xl border border-primary/10 shadow-sm bg-white">
         <table className="w-full text-sm">
           <caption className="sr-only">{caption}</caption>
           <thead>
