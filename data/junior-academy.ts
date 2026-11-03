@@ -74,7 +74,7 @@ export const JUNIOR_ACADEMY_UPDATED_AT = '2026-10-13'
 
 export const JUNIOR_ACADEMY_IMAGES = {
   /** The program poster: the Course node's image (no longer shown on the page). */
-  poster: { src: storageUrl('junior-academy/poster-4x5.jpg'), width: 1080, height: 1350 },
+  poster: { src: storageUrl('junior-academy/poster-4x5-2026-11.jpg'), width: 1080, height: 1350 },
   og: { src: storageUrl('junior-academy/og-1200x630.jpg'), width: 1200, height: 630 },
   /** Real lesson photos (portrait files), also in the /lessons/ gallery. */
   photos: {
