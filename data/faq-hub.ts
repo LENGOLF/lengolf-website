@@ -355,7 +355,7 @@ const ja: FaqHubContent = {
     {
       question: 'ゴルフレッスンの料金はいくらですか？',
       answer:
-        'まずはタイPGA認定コーチによる1時間の無料体験から始められます。LENGOLFで初めてレッスンを受ける方が対象で、クラブとシミュレーターの利用込みです。その後はパッケージなら1時間あたりの料金がお得で、50時間{{lesson50hNum}}THBで1時間あたり{{lesson50hRateNum}}THB、10時間{{lesson10hNum}}THBで1時間あたり{{lesson10hRateNum}}THBです。単発のレッスンは1時間{{lessonHourlyNum}}THBです。無料体験はLINE @lengolfからご予約ください。すべてのパッケージはレッスンページでご覧いただけます。',
+        'まずはタイPGA認定コーチによる1時間の無料体験から始められます。LENGOLFで初めてレッスンを受ける方が対象で、クラブとシミュレーターの利用込みです。その後はパッケージなら1時間あたりの料金がお得で、50時間パッケージは1時間あたり{{lesson50hRateNum}}THB（合計{{lesson50hNum}}THB）、10時間パッケージは1時間あたり{{lesson10hRateNum}}THB（合計{{lesson10hNum}}THB）です。単発のレッスンは1時間{{lessonHourlyNum}}THBです。無料体験はLINE @lengolfからご予約ください。すべてのパッケージはレッスンページでご覧いただけます。',
     },
     {
       question: 'ゴルフクラブや道具は持参する必要がありますか？',
