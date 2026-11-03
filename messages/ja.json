@@ -331,7 +331,7 @@
     "service1Desc": "1ベイ最大5名、スタンダードクラブレンタル込み。100以上のコース収録。",
     "service2Title": "ゴルフレッスン",
     "service2Price": "1時間 無料体験",
-    "service2PriceApprox": "体験後はパッケージで1時間 {fiftyHourRate} THB〜（約 ¥{fiftyHourRateLocal}）",
+    "service2PriceApprox": "体験後はパッケージなら1時間あたり {fiftyHourRate} THB〜（約 ¥{fiftyHourRateLocal}）",
     "service2Desc": "タイPGA認定プロが個別指導。無料体験はLENGOLFのレッスンが初めての方向け。単発レッスンは1時間{hourly} THB。シミュレーター利用込み。",
     "service3Title": "コース用クラブ配送",
     "service3Price": "1日 1,200 THB〜",

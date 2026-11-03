@@ -1691,7 +1691,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     slug: 'lengolf-pricing-guide',
     title: 'LENGOLF料金ガイド — ベイ利用料・パッケージ・レッスン（2026年）',
     meta_description:
-      'LENGOLFの料金をまとめて掲載。ベイ利用料は最大5名で1時間550THBから、月額パッケージは3,000THBから、レッスンは1時間の無料体験から始められ、その後はパッケージなら1時間あたり{{lesson50hRateNum}}THBから、単発なら1時間{{lessonHourlyNum}}THB、イベントパッケージは9,999THBから。2026年の全レートです（2026年2月現在）。',
+      'LENGOLFの料金をまとめて掲載。ベイ利用料は最大5名で1時間550THBから、月額パッケージは3,000THBから、レッスンは1時間の無料体験から始められ、その後はパッケージなら1時間あたり{{lesson50hRateNum}}THBから、単発レッスンは1時間{{lessonHourlyNum}}THB。イベントパッケージは9,999THBから。2026年の全レートです（2026年2月現在）。',
     featured_image: null,
     schema_markup: null,
     status: 'published',
@@ -1770,7 +1770,7 @@ export const priceGuidePages: PriceGuideSeoPage[] = [
     slug: 'lengolf-pricing-guide',
     title: 'LENGOLF 요금 안내 — 베이 요금, 패키지, 레슨 (2026년)',
     meta_description:
-      'LENGOLF 전체 요금 안내. 베이 대여는 최대 5명 시간당 550바트부터, 월 패키지 3,000바트부터, 레슨은 1시간 무료 체험 후 패키지로 시간당 {{lesson50hRateNum}}바트부터, 1회 레슨은 시간당 {{lessonHourlyNum}}바트, 이벤트 패키지 9,999바트부터예요 (2026년 2월 기준).',
+      'LENGOLF 전체 요금 안내. 베이 대여는 최대 5명 시간당 550바트부터, 월 패키지 3,000바트부터, 레슨은 1시간 무료 체험 후 패키지로 시간당 {{lesson50hRateNum}}바트부터(1회는 시간당 {{lessonHourlyNum}}바트), 이벤트 패키지 9,999바트부터예요 (2026년 2월 기준).',
     featured_image: null,
     schema_markup: null,
     status: 'published',
