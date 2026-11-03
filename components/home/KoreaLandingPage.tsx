@@ -31,8 +31,8 @@ export default async function KoreaLandingPage() {
   const lesson = getLessonPriceFacts(lessonPricing)
   // Digits only (e.g. "7,920"): the card's message adds its own currency
   // word, as the sibling cards write theirs.
-  const hourlyLocal = (getApproxCurrency(lesson.hourlyThb, 'ko') ?? '').replace(/[^\d,]/g, '')
-  const lessonValues = { ...lesson, hourlyLocal }
+  const fiftyHourRateLocal = (getApproxCurrency(lesson.fiftyHourRateThb, 'ko') ?? '').replace(/[^\d,]/g, '')
+  const lessonValues = { ...lesson, fiftyHourRateLocal }
 
   const trustChips = [
     {
