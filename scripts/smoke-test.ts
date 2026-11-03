@@ -5881,6 +5881,28 @@ async function runLessonsCoachTests() {
           issues.push(`Offer ${JSON.stringify(o.name)} calls the trial a "free lesson"`);
         }
       }
+      // The hourly rate, machine-readable. AI Mode described LENGOLF by its
+      // package totals (11,000 / 13,499) beside rivals quoted per hour
+      // (2026-11-02 check), so every hour package states its per-hour price
+      // as a UnitPriceSpecification, and the Service carries the lowest one.
+      const hourSpecs = catalogOffers
+        .map((o) => o.priceSpecification as Record<string, unknown> | undefined)
+        .filter((s): s is Record<string, unknown> => !!s);
+      if (hourSpecs.length !== 6) {
+        issues.push(`OfferCatalog has ${hourSpecs.length} hourly priceSpecification(s), expected 6 (1, 5, 10, 20, 30, 50 hours)`);
+      }
+      for (const s of hourSpecs) {
+        if (s["@type"] !== "UnitPriceSpecification" || s.unitText !== "HOUR" || s.unitCode !== "HUR" || !(Number(s.price) > 0)) {
+          issues.push(`hourly priceSpecification is malformed: ${JSON.stringify(s)}`);
+        }
+      }
+      const lowestHourly = Math.min(...hourSpecs.map((s) => Number(s.price)).filter((n) => n > 0));
+      const servicePackageRate = aggOffers.find(
+        (o) => Number((o.priceSpecification as Record<string, unknown> | undefined)?.price) === lowestHourly,
+      );
+      if (!Number.isFinite(lowestHourly) || !servicePackageRate) {
+        issues.push(`Service AggregateOffer has no hourly Offer at the lowest package rate (${lowestHourly})`);
+      }
       // LessonsFaq.a2 takes ICU price arguments; a missing argument renders
       // the raw placeholder or the key path into visible text and FAQPage.
       const faq = nodes.find((n) => typeIs(n, "FAQPage"));
@@ -5912,6 +5934,12 @@ async function runLessonsCoachTests() {
         const trial = divAt(body, trialStart);
         if (!trial.includes("https://lin.ee/uxQpIXn")) issues.push("free-trial callout has no LINE link");
         if (trial.includes("booking.len.golf")) issues.push("free-trial callout links booking.len.golf");
+        // The page's first price is the hourly one, inside this callout.
+        const rate = Number.isFinite(lowestHourly) ? lowestHourly.toLocaleString("en-US") : "";
+        const hourlyLine = trial.indexOf('id="lesson-hourly-price"');
+        if (hourlyLine < 0 || !rate || !trial.slice(hourlyLine).includes(rate)) {
+          issues.push(`free-trial callout does not state the lowest hourly rate (${rate || "unknown"})`);
+        }
         const coachesAt = body.indexOf('id="coaches"');
         if (coachesAt >= 0 && trialStart > coachesAt) issues.push("free-trial callout renders below the coaches section");
       }

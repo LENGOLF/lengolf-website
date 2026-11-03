@@ -128,12 +128,22 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
       default:             return row.remark
     }
   }
+  // The per-hour column puts each hour package's rate beside its total, so a
+  // reader (or an AI answer) compares the hourly figure, not the 16,000. The
+  // Starter and Sim to Fairway rows bundle practice hours or an on-course
+  // lesson, so they have no single hourly rate and show a dash.
+  const perHourFor = (row: LessonPackage): string => {
+    if (row.nameKind !== 'hour' || !row.nameHours) return t('remarkDash')
+    const rate = Math.round(lessonRowThb(lessonPricing, row.name, 'oneGolfer') / row.nameHours)
+    return `${rate.toLocaleString('en-US')} THB`
+  }
   const translatedLessonPricing = lessonPricing.map((p) => ({
     ...p,
     name: translateName(p),
     remark: translateRemark(p),
+    perHour: perHourFor(p),
   }))
-  const lessonNotes = [t('lessonNote1'), t('lessonNote2'), t('lessonNote3')]
+  const lessonNotes = [t('pkgTotalsNote'), t('lessonNote1'), t('lessonNote2'), t('lessonNote3')]
 
   const lessonBadge = (row: LessonPackage) =>
     row.featured === 'bestValue' ? { label: tCommon('badgeBestValue'), tone: 'gold' as const } : null
@@ -249,6 +259,12 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
                 {t('trialTitle')}
               </h2>
               <p className="mt-2 leading-relaxed text-muted-foreground">{t('trialText')}</p>
+              {/* The first price on the page, so it is the hourly one: AI answers
+                  quoted the package totals further down and read LENGOLF as
+                  expensive beside rivals quoted per hour (Nov 2026 check). */}
+              <p id="lesson-hourly-price" className="mt-3 font-semibold" style={{ color: '#007429' }}>
+                {t('trialPrice', priceFacts)}
+              </p>
             </div>
             <div className="flex shrink-0 flex-col gap-2 md:max-w-[18rem]">
               <a
@@ -448,12 +464,13 @@ export default async function LessonsPage({ params }: { params: Promise<{ locale
             <span className="text-foreground">{t('lessonPricingTitleSuffix')}</span>
           </h2>
           <div className="mx-auto max-w-4xl">
-            <PricingTable<LessonPackage>
+            <PricingTable<LessonPackage & { perHour: string }>
               caption={t('pkgCaption')}
               rowKey={(row) => row.name}
               columns={[
                 { key: 'name', label: t('pkgCourse'), primary: true, thClassName: 'whitespace-nowrap', tdClassName: 'whitespace-nowrap' },
                 { key: 'oneGolfer', label: t('pkg1Golfer'), align: 'right', emphasis: true, thClassName: 'whitespace-nowrap', tdClassName: 'whitespace-nowrap' },
+                { key: 'perHour', label: t('pkgPerHour'), align: 'right', thClassName: 'whitespace-nowrap', tdClassName: 'whitespace-nowrap' },
                 { key: 'twoGolfers', label: t('pkg2Golfers'), align: 'right', thClassName: 'whitespace-nowrap', tdClassName: 'whitespace-nowrap' },
                 { key: 'threeToFiveGolfers', label: t('pkg3To5Golfers'), align: 'right', thClassName: 'whitespace-nowrap', tdClassName: 'whitespace-nowrap' },
                 { key: 'remark', label: t('pkgRemark') },

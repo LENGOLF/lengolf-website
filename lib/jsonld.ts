@@ -505,6 +505,18 @@ const LESSON_TRIAL_OFFER = {
   eligibleDuration: { '@type': 'QuantitativeValue', value: 1, unitCode: 'HUR' },
 }
 
+/** A per-hour lesson price: one golfer, one hour of coaching. */
+function lessonHourPriceSpec(priceThb: number) {
+  return {
+    '@type': 'UnitPriceSpecification',
+    price: String(priceThb),
+    priceCurrency: 'THB',
+    unitCode: 'HUR',
+    unitText: 'HOUR',
+    referenceQuantity: { '@type': 'QuantitativeValue', value: 1, unitCode: 'HUR' },
+  }
+}
+
 export function getLessonsPricingJsonLd(dynamicLessonPricing?: LessonPackage[]) {
   const lessonDescriptions: Record<string, { description: string; unitCode?: string; duration?: number }> = {
     '1 Hour': { description: 'One-on-one coaching with a PGA-certified professional, golf simulator usage included', unitCode: 'HUR', duration: 1 },
@@ -524,9 +536,13 @@ export function getLessonsPricingJsonLd(dynamicLessonPricing?: LessonPackage[]) 
         // Multi-hour packages state their per-hour value, which is the figure
         // a price comparison needs and the one the total hides.
         const total = Number(parseThbToString(pkg.oneGolfer))
+        const hourlyRate =
+          pkg.nameKind === 'hour' && (pkg.nameHours ?? 0) > 0 && total > 0
+            ? Math.round(total / pkg.nameHours!)
+            : null
         const perHour =
-          pkg.nameKind === 'hour' && (pkg.nameHours ?? 0) > 1 && total > 0
-            ? `, ${Math.round(total / pkg.nameHours!).toLocaleString('en-US')} THB per hour`
+          hourlyRate !== null && pkg.nameHours! > 1
+            ? `, ${hourlyRate.toLocaleString('en-US')} THB per hour`
             : ''
         const offer: Record<string, unknown> = {
           '@type': 'Offer',
@@ -539,13 +555,19 @@ export function getLessonsPricingJsonLd(dynamicLessonPricing?: LessonPackage[]) 
           offer.unitCode = meta.unitCode
           offer.eligibleDuration = { '@type': 'QuantitativeValue', value: meta.duration, unitCode: meta.unitCode }
         }
+        // The hourly price in machine-readable form, beside the package
+        // total in `price`: AI answers compare providers per hour, and a
+        // bare total (16,000) reads as the price of a lesson.
+        if (hourlyRate !== null) {
+          offer.priceSpecification = lessonHourPriceSpec(hourlyRate)
+        }
         return offer
       })
     : [
-        { '@type': 'Offer', name: '1 Hour Golf Lesson', description: lessonDescriptions['1 Hour'].description, price: '1800', priceCurrency: 'THB', unitCode: 'HUR', eligibleDuration: { '@type': 'QuantitativeValue', value: 1, unitCode: 'HUR' } },
-        { '@type': 'Offer', name: '5 Hour Golf Lesson Package', description: lessonDescriptions['5 Hour'].description, price: '8500', priceCurrency: 'THB' },
+        { '@type': 'Offer', name: '1 Hour Golf Lesson', description: lessonDescriptions['1 Hour'].description, price: '1950', priceCurrency: 'THB', unitCode: 'HUR', eligibleDuration: { '@type': 'QuantitativeValue', value: 1, unitCode: 'HUR' } },
+        { '@type': 'Offer', name: '5 Hour Golf Lesson Package', description: lessonDescriptions['5 Hour'].description, price: '8750', priceCurrency: 'THB' },
         { '@type': 'Offer', name: '10 Hour Golf Lesson Package', description: lessonDescriptions['10 Hour'].description, price: '16000', priceCurrency: 'THB' },
-        { '@type': 'Offer', name: '20 Hour Golf Lesson Package', description: lessonDescriptions['20 Hour'].description, price: '31000', priceCurrency: 'THB' },
+        { '@type': 'Offer', name: '20 Hour Golf Lesson Package', description: lessonDescriptions['20 Hour'].description, price: '30000', priceCurrency: 'THB' },
         { '@type': 'Offer', name: '30 Hour Golf Lesson Package', description: lessonDescriptions['30 Hour'].description, price: '45000', priceCurrency: 'THB' },
         { '@type': 'Offer', name: '50 Hour Golf Lesson Package', description: lessonDescriptions['50 Hour'].description, price: '72000', priceCurrency: 'THB' },
         { '@type': 'Offer', name: 'Starter Package', description: lessonDescriptions['Starter Package*'].description, price: '11000', priceCurrency: 'THB' },
@@ -777,15 +799,24 @@ export function getLessonsServiceJsonLd(facts: LessonPriceFacts) {
       priceCurrency: 'THB',
       lowPrice: '0',
       highPrice: String(facts.hourlyThb),
-      offerCount: 2,
-      description: `Free 1-hour trial for new students, then ${facts.hourly} THB for a 1-hour lesson, or from ${facts.fiftyHourRate} THB per hour on lesson packages. Simulator usage included.`,
+      offerCount: 3,
+      description: `Free 1-hour trial for new students, then from ${facts.fiftyHourRate} THB per hour on lesson packages, or ${facts.hourly} THB for a single 1-hour lesson. Simulator usage included.`,
       offers: [
         LESSON_TRIAL_OFFER,
+        {
+          '@type': 'Offer',
+          name: 'Golf Lesson Package Hourly Rate',
+          price: String(facts.fiftyHourRateThb),
+          priceCurrency: 'THB',
+          priceSpecification: lessonHourPriceSpec(facts.fiftyHourRateThb),
+          description: `Lowest hourly rate on a lesson package (50 hours for ${facts.fiftyHourTotal} THB, 1 golfer), simulator usage included`,
+        },
         {
           '@type': 'Offer',
           name: '1 Hour Golf Lesson',
           price: String(facts.hourlyThb),
           priceCurrency: 'THB',
+          priceSpecification: lessonHourPriceSpec(facts.hourlyThb),
           eligibleDuration: { '@type': 'QuantitativeValue', value: 1, unitCode: 'HUR' },
           description: '1-hour lesson with a PGA-certified coach, simulator usage included',
         },

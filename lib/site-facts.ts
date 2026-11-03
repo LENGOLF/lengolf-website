@@ -66,7 +66,7 @@ export interface SiteFacts {
 // Pinned to today's shipped figures. Changing the POS updates the live path;
 // these keep the fallback path byte-identical to the previously hardcoded copy.
 const FALLBACK: SiteFacts = {
-  lessonHourly: 1800,
+  lessonHourly: 1950,
   bayHourlyMin: 550,
   bayHourlyMax: 950,
   courseRentalDay: 1200,
