@@ -27,7 +27,7 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
     <SectionWrapper>
       <div className="mx-auto max-w-3xl prose prose-headings:text-foreground prose-p:text-muted-foreground prose-li:text-muted-foreground prose-strong:text-foreground">
         <h1>Privacy Policy</h1>
-        <p>Last updated: 18 October 2026</p>
+        <p>Last updated: 9 November 2026</p>
         <p>
           This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.
         </p>
@@ -106,6 +106,18 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
           permissions in TikTok&apos;s settings.
         </p>
 
+        <h4>Identity Documents for Club Rentals</h4>
+        <p>
+          When You rent golf clubs to take away from our venue, We ask for a copy of Your passport or national ID card
+          before the clubs are handed over or delivered. We use it only to confirm who has the clubs and, if needed, to
+          resolve a dispute about clubs that are lost, damaged or not returned. We do not use it for marketing.
+        </p>
+        <p>
+          The copy is kept in a private, access-restricted storage area. Only LENGOLF staff can view it, and only
+          through a link that expires after a short time. We do not sell it or share it with anyone else for their own
+          purposes.
+        </p>
+
         <h3>Use of Your Personal Data</h3>
         <p>The Company may use Personal Data for the following purposes:</p>
         <ul>
@@ -135,6 +147,11 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
           <li>
             <strong>Marketing consent</strong> - retained until You withdraw it, together with a record of when and how
             it was given, so that We can show We had Your permission.
+          </li>
+          <li>
+            <strong>Identity documents for club rentals</strong> - the copy kept with Your rental is deleted
+            automatically 1 year after the rental ends. You can ask Us to delete it sooner once the clubs have been
+            returned and any charges are settled.
           </li>
           <li>
             <strong>Website analytics</strong> - retained according to the settings of the tools listed above,
