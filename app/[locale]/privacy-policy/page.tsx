@@ -27,7 +27,7 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
     <SectionWrapper>
       <div className="mx-auto max-w-3xl prose prose-headings:text-foreground prose-p:text-muted-foreground prose-li:text-muted-foreground prose-strong:text-foreground">
         <h1>Privacy Policy</h1>
-        <p>Last updated: 9 November 2026</p>
+        <p>Last updated: 11 November 2026</p>
         <p>
           This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.
         </p>
@@ -122,10 +122,15 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
           the copy is taken. We do not need them.
         </p>
         <p>
-          The copy is kept in a private, access-restricted storage area. Only authorised LENGOLF office staff can view
-          it, each view is logged, and it opens only through a link that expires after a short time. We do not sell
-          it. We share it only with service providers that store it for Us and, if clubs are not returned, with the
-          police or a court where needed to recover them.
+          The copy is kept in a private, access-restricted storage area. It can be viewed by LENGOLF staff who handle
+          the rental, each view is logged, and it opens only through a link that expires after a short time. If You send
+          Us a copy in a chat message, We move it to this private storage area and remove it from the chat. We do not
+          sell it. We share it only with service providers that store it for Us and, if clubs are not returned, with
+          the police or a court where needed to recover them.
+        </p>
+        <p>
+          Chat messages You send Us may be processed by an AI assistant that helps our staff write replies. We do not
+          use Your messages to train AI models.
         </p>
 
         <h3>Use of Your Personal Data</h3>
@@ -165,8 +170,8 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
           </li>
           <li>
             <strong>Identity documents for club rentals</strong> - the copy kept with Your rental is deleted
-            automatically about 1 year after the rental ends. You can ask Us to delete it sooner, and We will do so
-            once the clubs have been returned and any charges are settled.
+            automatically about 1 year after the rental ends. If You ask Us to delete it sooner, We will delete it 7
+            days after all of the rented clubs have been returned. If the clubs are not returned, We keep the copy.
           </li>
           <li>
             <strong>Website analytics</strong> - retained according to the settings of the tools listed above,
