@@ -122,10 +122,9 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
           the copy is taken. We do not need them.
         </p>
         <p>
-          The copy is kept in a private, access-restricted storage area. It can be viewed by LENGOLF staff who handle
-          the rental, each view is logged, and it opens only through a link that expires after a short time. If You send
-          Us a copy in a LINE chat, Our staff move it to this private storage area and remove it from the chat. We do
-          not sell it. We share it only with service providers that store it or help Us process chat messages for Us
+          The copy is kept in a private, access-restricted storage area. It can be viewed by LENGOLF operations staff, each view is logged, and it opens only through a link that expires after a short time. If You send
+          Us a copy in a LINE chat, Our staff move it to this private storage area and remove it from Our chat system. A copy may remain in
+          the LINE app and on LINE's servers, which We cannot delete. We do not sell it. We share it only with service providers that store it or help Us process chat messages for Us
           and, if clubs are not returned, with the police or a court where needed to recover them.
         </p>
         <h3>Use of Your Personal Data</h3>
@@ -144,8 +143,10 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
           </li>
         </ul>
         <p>
-          Chat messages You send Us may be processed by an AI assistant that helps our staff write replies. We do not
-          use Your messages to train AI models.
+          Chat messages You send Us, including any photos, may be processed by an AI assistant that helps our staff
+          write replies. To do this, the assistant may also see Your name and Your booking, package and rental details.
+          The assistant is provided by an AI service provider that processes this data outside Thailand on Our behalf.
+          We do not use Your messages to train AI models.
         </p>
 
         <h3>Retention of Your Personal Data</h3>
