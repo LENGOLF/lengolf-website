@@ -14,23 +14,37 @@ import { getLocalBusinessJsonLd, getWebSiteJsonLd } from '@/lib/jsonld'
 import { routing } from '@/i18n/routing'
 import '@/app/globals.css'
 
-// Fonts are self-hosted from app/fonts/, so `next build` makes no network call
-// for them. They were loaded through next/font/google, which fetches the
-// family CSS from Google at build time and downloads every unicode-range slice
-// it lists (1,775 files, about 68 MB, with Noto Sans KR/JP/SC). Google
-// sometimes answers the JP and SC requests with extensionless
-// `fonts.gstatic.com/l/font?kit=...` URLs, and next/font's
+// Fonts are self-hosted from app/fonts/, so next/font makes no network call
+// at build time. They were loaded through next/font/google, which fetches the
+// family CSS from Google during `next build` and downloads every
+// unicode-range slice it lists (367 files, about 14 MB, almost all of it
+// Noto Sans KR/JP/SC). Google sometimes answers the JP and SC requests with
+// extensionless `fonts.gstatic.com/l/font?kit=...` URLs, and next/font's
 // `/\.(woff|woff2|eot|ttf|otf)$/.exec(url)[1]` then threw on null, failing CI
 // at random. Do not move these back to next/font/google.
 //
-// The files are the exact slices Google serves (Poppins v24 `latin`, Noto Sans
-// Thai v29 `thai`), with Google's unicode-range for each. Licences (OFL) sit
-// beside them. Noto Sans Thai is a variable font, so one file covers 300-700.
+// The files are the exact slices Google serves (Poppins v24 `latin` and
+// `latin-ext`, Noto Sans Thai v29 `thai`), each with Google's unicode-range.
+// Licences (OFL) sit beside them. Noto Sans Thai is a variable font (wght
+// 100-900), so one file covers 300-700.
+//
+// next/font/local names each @font-face family after the CONST it is assigned
+// to, so these consts are named `Poppins` deliberately: Header.tsx and
+// Footer.tsx set `fontFamily: '"Poppins", sans-serif'` inline and must match.
+// Renaming the const silently drops those components to the system font.
+//
+// Poppins latin-ext is a second family (one localFont call carries one
+// unicode-range for all its files). It is listed BEFORE Poppins in every font
+// stack, because --font-poppins also carries Poppins' generated Arial fallback
+// face, which has no unicode-range and would otherwise draw latin-ext letters
+// first; the ext face's own unicode-range keeps it off plain Latin. It is not
+// preloaded: the site's own copy has no latin-ext letters, it
+// only covers names and text from the database (reviews, blog posts).
 //
 // CJK text uses each device's own font (see the html[lang] stacks in
 // app/globals.css), not a web font: self-hosting Noto Sans KR/JP/SC would mean
-// committing ~67 MB of slices.
-const poppins = localFont({
+// committing about 13.5 MB (349 slice files).
+const Poppins = localFont({
   src: [
     { path: '../fonts/poppins-latin-300.woff2', weight: '300', style: 'normal' },
     { path: '../fonts/poppins-latin-400.woff2', weight: '400', style: 'normal' },
@@ -45,6 +59,27 @@ const poppins = localFont({
       prop: 'unicode-range',
       value:
         'U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD',
+    },
+  ],
+})
+
+const PoppinsLatinExt = localFont({
+  src: [
+    { path: '../fonts/poppins-latin-ext-300.woff2', weight: '300', style: 'normal' },
+    { path: '../fonts/poppins-latin-ext-400.woff2', weight: '400', style: 'normal' },
+    { path: '../fonts/poppins-latin-ext-500.woff2', weight: '500', style: 'normal' },
+    { path: '../fonts/poppins-latin-ext-600.woff2', weight: '600', style: 'normal' },
+    { path: '../fonts/poppins-latin-ext-700.woff2', weight: '700', style: 'normal' },
+  ],
+  variable: '--font-poppins-ext',
+  display: 'swap',
+  preload: false,
+  adjustFontFallback: false,
+  declarations: [
+    {
+      prop: 'unicode-range',
+      value:
+        'U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF',
     },
   ],
 })
@@ -131,7 +166,7 @@ export default async function LocaleLayout({
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID
 
   return (
-    <html lang={locale} className={`${poppins.variable} ${notoSansThai.variable}`}>
+    <html lang={locale} className={`${Poppins.variable} ${PoppinsLatinExt.variable} ${notoSansThai.variable}`}>
       <head>
         {/* Google Ads (AW-16456389020) is loaded by GTM tag 90 "Google Tag AW-16456389020",
             which fires on All Pages and configures enhanced conversions with user_data.

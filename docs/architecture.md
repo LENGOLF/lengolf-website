@@ -308,7 +308,7 @@ Configuration lives in `tailwind.config.ts`. The theme extends the default Tailw
 
 ### Font
 
-The site uses **Poppins** (weights 300--700) and **Noto Sans Thai**, self-hosted from `app/fonts/` through `next/font/local`, so the build makes no request to Google Fonts. The CSS variables `--font-poppins` and `--font-noto-thai` are applied to the `<html>` element and referenced in the Tailwind font family config and the per-locale stacks in `app/globals.css`. Japanese, Korean and Chinese text uses the device's own CJK font (`--font-cjk-jp`/`-kr`/`-sc` in `app/globals.css`); there is no CJK web font. Do not move the fonts back to `next/font/google`: it made every build download about 68 MB of CJK slices, and Google's occasional extensionless `/l/font?kit=` URLs crashed `next build` at random.
+The site uses **Poppins** (weights 300--700, `latin` plus a non-preloaded `latin-ext` face) and **Noto Sans Thai**, self-hosted from `app/fonts/` through `next/font/local`, so the build makes no request to Google Fonts. The CSS variables `--font-poppins` and `--font-noto-thai` are applied to the `<html>` element and referenced in the Tailwind font family config and the per-locale stacks in `app/globals.css`. Japanese, Korean and Chinese text uses the device's own CJK font (`--font-cjk-jp`/`-kr`/`-sc` in `app/globals.css`); there is no CJK web font. Do not move the fonts back to `next/font/google`: it made every build download about 14 MB of font slices (367 files, nearly all CJK), and Google's occasional extensionless `/l/font?kit=` URLs crashed `next build` at random.
 
 ### UI Primitives
 
@@ -392,5 +392,5 @@ The 101 location pages target local search queries across approximately 15 Bangk
 - **`next/image`** with remote patterns configured for Supabase Storage and the LENGOLF domain.
 - **Image cache TTL**: `minimumCacheTTL` is set to 30 days in `next.config.js`.
 - **Static asset caching**: Custom headers set `Cache-Control: public, max-age=31536000, immutable` for images and fonts.
-- **Font optimization**: Poppins and Noto Sans Thai are self-hosted via `next/font/local` with `display: 'swap'` and a size-adjusted fallback to limit layout shift.
+- **Font optimization**: Poppins and Noto Sans Thai are self-hosted via `next/font/local` with `display: 'swap'` and a metric-adjusted Arial fallback (size-adjusted for Poppins) to limit layout shift.
 - **Singleton Supabase client**: A single client instance avoids redundant connections.
