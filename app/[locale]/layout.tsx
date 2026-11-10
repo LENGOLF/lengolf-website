@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Script from 'next/script'
-import { Poppins, Noto_Sans_Thai, Noto_Sans_KR, Noto_Sans_JP, Noto_Sans_SC } from 'next/font/google'
+import localFont from 'next/font/local'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, setRequestLocale } from 'next-intl/server'
 import Header from '@/components/layout/Header'
@@ -14,39 +14,50 @@ import { getLocalBusinessJsonLd, getWebSiteJsonLd } from '@/lib/jsonld'
 import { routing } from '@/i18n/routing'
 import '@/app/globals.css'
 
-const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
+// Fonts are self-hosted from app/fonts/, so `next build` makes no network call
+// for them. They were loaded through next/font/google, which fetches the
+// family CSS from Google at build time and downloads every unicode-range slice
+// it lists (1,775 files, about 68 MB, with Noto Sans KR/JP/SC). Google
+// sometimes answers the JP and SC requests with extensionless
+// `fonts.gstatic.com/l/font?kit=...` URLs, and next/font's
+// `/\.(woff|woff2|eot|ttf|otf)$/.exec(url)[1]` then threw on null, failing CI
+// at random. Do not move these back to next/font/google.
+//
+// The files are the exact slices Google serves (Poppins v24 `latin`, Noto Sans
+// Thai v29 `thai`), with Google's unicode-range for each. Licences (OFL) sit
+// beside them. Noto Sans Thai is a variable font, so one file covers 300-700.
+//
+// CJK text uses each device's own font (see the html[lang] stacks in
+// app/globals.css), not a web font: self-hosting Noto Sans KR/JP/SC would mean
+// committing ~67 MB of slices.
+const poppins = localFont({
+  src: [
+    { path: '../fonts/poppins-latin-300.woff2', weight: '300', style: 'normal' },
+    { path: '../fonts/poppins-latin-400.woff2', weight: '400', style: 'normal' },
+    { path: '../fonts/poppins-latin-500.woff2', weight: '500', style: 'normal' },
+    { path: '../fonts/poppins-latin-600.woff2', weight: '600', style: 'normal' },
+    { path: '../fonts/poppins-latin-700.woff2', weight: '700', style: 'normal' },
+  ],
   variable: '--font-poppins',
   display: 'swap',
+  declarations: [
+    {
+      prop: 'unicode-range',
+      value:
+        'U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD',
+    },
+  ],
 })
 
-const notoSansThai = Noto_Sans_Thai({
-  subsets: ['thai'],
-  weight: ['300', '400', '500', '600', '700'],
+const notoSansThai = localFont({
+  src: '../fonts/noto-sans-thai-thai-variable.woff2',
+  weight: '300 700',
+  style: 'normal',
   variable: '--font-noto-thai',
   display: 'swap',
-})
-
-const notoSansKR = Noto_Sans_KR({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-noto-kr',
-  display: 'swap',
-})
-
-const notoSansJP = Noto_Sans_JP({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-noto-jp',
-  display: 'swap',
-})
-
-const notoSansSC = Noto_Sans_SC({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-noto-sc',
-  display: 'swap',
+  declarations: [
+    { prop: 'unicode-range', value: 'U+02D7, U+0303, U+0331, U+0E01-0E5B, U+200C-200D, U+25CC' },
+  ],
 })
 
 export function generateStaticParams() {
@@ -120,7 +131,7 @@ export default async function LocaleLayout({
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID
 
   return (
-    <html lang={locale} className={`${poppins.variable} ${notoSansThai.variable} ${notoSansKR.variable} ${notoSansJP.variable} ${notoSansSC.variable}`}>
+    <html lang={locale} className={`${poppins.variable} ${notoSansThai.variable}`}>
       <head>
         {/* Google Ads (AW-16456389020) is loaded by GTM tag 90 "Google Tag AW-16456389020",
             which fires on All Pages and configures enhanced conversions with user_data.

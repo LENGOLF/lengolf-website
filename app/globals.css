@@ -5,6 +5,13 @@
 @layer base {
   :root {
     --font-poppins: 'Poppins', system-ui, sans-serif;
+    /* CJK text uses the device's own font, not a web font (see the comment
+       above the font declarations in app/[locale]/layout.tsx). Each stack
+       names the macOS/iOS face, then Windows, then the Noto CJK family that
+       Android and most Linux desktops ship. */
+    --font-cjk-jp: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic UI', 'Yu Gothic', Meiryo, 'Noto Sans JP', 'Noto Sans CJK JP';
+    --font-cjk-kr: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', 'Noto Sans CJK KR';
+    --font-cjk-sc: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', 'Noto Sans CJK SC';
   }
 
   * {
@@ -16,7 +23,7 @@
   }
 
   /* Locale-aware CJK font stack. Without this, the global Tailwind font-sans
-     stack in tailwind.config.ts puts Noto Sans KR before JP/SC, so Kanji on
+     stack in tailwind.config.ts puts the Korean font before JP/SC, so Kanji on
      /ja/ and Hanzi on /zh/ render with Korean glyph variants (traditional
      radicals that look like "old letters" to native readers). These rules
      outrank body.font-sans on specificity (0,1,2 vs 0,1,1), so applying a
@@ -25,16 +32,16 @@
      a JA/ZH page ever renders CJK text inside such a component, that element
      will fall through to the browser default. None do today. */
   html[lang="ja"] body {
-    font-family: var(--font-poppins), var(--font-noto-jp), var(--font-noto-kr), var(--font-noto-sc), var(--font-noto-thai), system-ui, sans-serif;
+    font-family: var(--font-poppins), var(--font-cjk-jp), var(--font-cjk-kr), var(--font-cjk-sc), var(--font-noto-thai), system-ui, sans-serif;
   }
   html[lang="ko"] body {
-    font-family: var(--font-poppins), var(--font-noto-kr), var(--font-noto-jp), var(--font-noto-sc), var(--font-noto-thai), system-ui, sans-serif;
+    font-family: var(--font-poppins), var(--font-cjk-kr), var(--font-cjk-jp), var(--font-cjk-sc), var(--font-noto-thai), system-ui, sans-serif;
   }
   html[lang="zh"] body {
-    font-family: var(--font-poppins), var(--font-noto-sc), var(--font-noto-jp), var(--font-noto-kr), var(--font-noto-thai), system-ui, sans-serif;
+    font-family: var(--font-poppins), var(--font-cjk-sc), var(--font-cjk-jp), var(--font-cjk-kr), var(--font-noto-thai), system-ui, sans-serif;
   }
   html[lang="th"] body {
-    font-family: var(--font-poppins), var(--font-noto-thai), var(--font-noto-jp), var(--font-noto-kr), var(--font-noto-sc), system-ui, sans-serif;
+    font-family: var(--font-poppins), var(--font-noto-thai), var(--font-cjk-jp), var(--font-cjk-kr), var(--font-cjk-sc), system-ui, sans-serif;
   }
 }
 
