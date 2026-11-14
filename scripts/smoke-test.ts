@@ -6096,13 +6096,19 @@ async function runHomeLessonOfferTests() {
       if (rate?.eligibleDuration !== undefined) issues.push("package-rate Offer carries an eligibleDuration");
       const singleOffer = offers[singleAt];
       if (singleOffer?.eligibleQuantity !== undefined) issues.push("1-hour lesson Offer carries an eligibleQuantity");
+      const trial = offers[trialAt];
+      if (trial && trial.priceCurrency !== "THB") issues.push(`trial Offer has priceCurrency ${JSON.stringify(trial.priceCurrency)}`);
       for (const o of [rate, singleOffer]) {
         if (!o) continue;
         for (const x of [o, ...specs(o)]) {
           if (x.priceCurrency !== "THB") issues.push(`${JSON.stringify(o.name)} has priceCurrency ${JSON.stringify(x.priceCurrency)}`);
         }
-        const ref = oneHourSpec(o)?.referenceQuantity as Record<string, unknown> | undefined;
+        const spec = oneHourSpec(o);
+        const ref = spec?.referenceQuantity as Record<string, unknown> | undefined;
         if (ref?.unitCode !== "HUR") issues.push(`${JSON.stringify(o.name)} 1-hour spec referenceQuantity unitCode is ${JSON.stringify(ref?.unitCode)}`);
+        if (spec?.["@type"] !== "UnitPriceSpecification" || spec?.unitText !== "HOUR" || spec?.unitCode !== "HUR") {
+          issues.push(`${JSON.stringify(o.name)} 1-hour spec is not a UnitPriceSpecification in HOUR/HUR: ${JSON.stringify(spec)}`);
+        }
       }
       const single = singleOffer;
       if (!single || Number(single.price) !== singleHour || Number(single && oneHourSpec(single)?.price) !== singleHour) {
@@ -6116,8 +6122,10 @@ async function runHomeLessonOfferTests() {
       offers.forEach((o, i) => {
         // By name or by price: the pre-fix shape renamed ("Golf Coaching" at
         // the single-hour price) must not pass either.
-        if (!known.has(i) && (/lesson|coach/i.test(String(o.name)) || [lowestRate, singleHour].includes(Number(o.price)))) {
-          issues.push(`unexpected lesson Offer ${JSON.stringify(o.name)} at ${JSON.stringify(o.price)}`);
+        // A second 0 THB Offer under another name ("Intro Session") is a
+        // trial duplicate the /trial/ name match would not count.
+        if (!known.has(i) && (/lesson|coach/i.test(String(o.name)) || [0, lowestRate, singleHour].includes(Number(o.price)))) {
+          issues.push(`unexpected lesson or 0 THB Offer ${JSON.stringify(o.name)} at ${JSON.stringify(o.price)}`);
         }
         if (/free\b[^.]{0,20}\blesson|complimentary lesson|first lesson (is )?free/i.test(`${o.name} ${o.description}`)) {
           issues.push(`Offer ${JSON.stringify(o.name)} calls the trial a "free lesson"`);
