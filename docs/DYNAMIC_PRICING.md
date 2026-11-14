@@ -68,10 +68,10 @@ These functions now accept optional dynamic pricing data:
 |----------|----------------|
 | `getGolfPricingJsonLd(bayRates?, monthlyPackages?)` | Bay rate rows + package rows |
 | `getLessonsPricingJsonLd(lessonPricing?)` | Lesson package array |
-| `getLessonsServiceJsonLd(startingPrice?)` | Starting price string (e.g. `"1,800 THB"`) |
+| `getLessonsServiceJsonLd(facts)` | `LessonPriceFacts` from `getLessonPriceFacts()` (required) |
 | `getEventsPricingJsonLd(eventPackages?)` | Event package array |
 
-When params are provided, JSON-LD offers are built from dynamic data. When omitted, hardcoded values are used (backwards compatible).
+When params are provided, JSON-LD offers are built from dynamic data. When omitted, hardcoded values are used (backwards compatible). `getLessonsServiceJsonLd` is the exception: its `facts` argument is required.
 
 ### 4. Page Components
 
@@ -92,7 +92,8 @@ const pricingJsonLd = getGolfPricingJsonLd(bayRates, monthlyPackages)
 ```typescript
 const { lessonPricing, lessonNotes } = await getLessonPricingData()
 const pricingJsonLd = getLessonsPricingJsonLd(lessonPricing)
-const serviceJsonLd = getLessonsServiceJsonLd(lessonPricing[0]?.oneGolfer)
+const priceFacts = getLessonPriceFacts(lessonPricing)
+const serviceJsonLd = getLessonsServiceJsonLd(priceFacts)
 ```
 
 **Events page** (`app/[locale]/events/page.tsx`):
