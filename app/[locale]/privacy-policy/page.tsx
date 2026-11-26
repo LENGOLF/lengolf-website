@@ -27,7 +27,7 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
     <SectionWrapper>
       <div className="mx-auto max-w-3xl prose prose-headings:text-foreground prose-p:text-muted-foreground prose-li:text-muted-foreground prose-strong:text-foreground">
         <h1>Privacy Policy</h1>
-        <p>Last updated: 11 November 2026</p>
+        <p>Last updated: 26 November 2026</p>
         <p>
           This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.
         </p>
@@ -120,6 +120,14 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
         <p>
           If You give Us a Thai national ID card, please cover the religion field (and blood type, if shown) before
           the copy is taken. We do not need them.
+        </p>
+        <p>
+          We may send You a private link, in the confirmation of Your rental by email or LINE, so that You can upload
+          the copy Yourself. The link works only for Your rental. It stops working once We have Your copy, once the clubs
+          have been handed over or delivered, if the rental is cancelled, or at the end of the rental&apos;s last day,
+          whichever comes first. The upload page shows only Your rental code, Your first name and the rental dates, and it
+          never shows the copy You uploaded. A copy You upload through it goes straight to the private storage area
+          described below. Please do not forward the link to anyone else.
         </p>
         <p>
           The copy is kept in a private, access-restricted storage area. It can be viewed by LENGOLF operations staff, each view is logged, and it opens only through a link that expires after a short time. If You send
