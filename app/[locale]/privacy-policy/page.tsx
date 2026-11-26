@@ -118,10 +118,6 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
           returned. We do not use it for marketing.
         </p>
         <p>
-          If You give Us a Thai national ID card, please cover the religion field (and blood type, if shown) before
-          the copy is taken. We do not need them.
-        </p>
-        <p>
           We may send You a private link so that You can upload the copy Yourself: in the confirmation of Your rental
           by email or LINE, or in a LINE message from Our staff. The link works only for Your rental. It stops working
           once We have Your copy, once the clubs have been handed over or delivered, if the rental is cancelled or
