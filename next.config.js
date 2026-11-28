@@ -324,17 +324,20 @@ const nextConfig = {
     // Second-hand club sales are unlisted (2026-11-28, owner's call): the
     // listing and every /<id>/ detail page go to the club rental hub. TEMPORARY
     // (307, permanent: false) on purpose: the page, its components and the
-    // used_clubs_inventory rows are all kept, so relisting is deleting these
-    // two lines plus restoring the course-rental cross-link card and the
-    // llms.txt entry. A 308 would be cached by browsers and would tell Google
-    // the move is final. Locale forms need no rule: the route is EN-only, so
+    // used_clubs_inventory rows are all kept. Relist by reverting the whole
+    // unlisting PR (#196), not by deleting these lines alone: it also removed
+    // the course-rental cross-link card, the llms.txt entry, the
+    // /golf-club-rental/ FAQ q6 and four smoke-test entries/floors, all of
+    // which must come back together. A 308 would be cached by browsers and
+    // would tell Google the move is final. Locale forms need no rule: the route is EN-only, so
     // middleware 301s /:locale/second-hand-golf-clubs-bangkok/ to the root form,
     // which then lands here.
     // TRAP: redirects match before the filesystem, so the page cannot come
     // back while these entries exist.
     const unlistedPageRedirects = [
       { source: '/second-hand-golf-clubs-bangkok', destination: '/golf-club-rental/', permanent: false },
-      { source: '/second-hand-golf-clubs-bangkok/:id', destination: '/golf-club-rental/', permanent: false },
+      // :path+ (not :id) so deeper paths land here too instead of a 404.
+      { source: '/second-hand-golf-clubs-bangkok/:path+', destination: '/golf-club-rental/', permanent: false },
     ]
 
     return [

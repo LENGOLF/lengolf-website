@@ -62,6 +62,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 const FAQ_COUNT = 7
+// q6 is "Can I try clubs before buying second-hand?". Second-hand sales are
+// unlisted since 2026-11-28 (unlistedPageRedirects in next.config.js send the
+// old listing here), so it is skipped on screen and in the FAQPage JSON-LD.
+// The strings stay in messages/*.json; relisting removes this skip.
+const SKIPPED_FAQ = new Set([6])
 
 export default async function ClubRentalPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
@@ -70,10 +75,12 @@ export default async function ClubRentalPage({ params }: { params: Promise<{ loc
   const tFaq = await getTranslations('ClubRentalFaq')
   const tCommon = await getTranslations('Common')
 
-  const faqItems = Array.from({ length: FAQ_COUNT }, (_, i) => ({
-    question: tFaq(`q${i + 1}`),
-    answer: tFaq(`a${i + 1}`),
-  }))
+  const faqItems = Array.from({ length: FAQ_COUNT }, (_, i) => i + 1)
+    .filter((n) => !SKIPPED_FAQ.has(n))
+    .map((n) => ({
+      question: tFaq(`q${n}`),
+      answer: tFaq(`a${n}`),
+    }))
 
   const { indoor: indoorPricing } = await getRentalClubPricing()
   const pricingJsonLd = getClubRentalPricingJsonLd()

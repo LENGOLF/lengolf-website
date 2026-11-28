@@ -3709,7 +3709,9 @@ const seoTests: SeoTest[] = [
  * pinned entry and adding any other URL holds this count. Nor does it cover
  * the share-card assertions; see REQUIRED_OWN_OG_CARDS.
  */
-const MIN_SEO_URLS = 47;
+// -1 on 2026-11-28: /second-hand-golf-clubs-bangkok/ left seoTests (unlisted,
+// now a 307). Restore it with the seoTests entry.
+const MIN_SEO_URLS = 46;
 
 /**
  * Anti-vacuity for the `titleContains` assertions in `seoTests`. Two-sided by
