@@ -62,7 +62,6 @@ const KEY_PAGES: { title: string; path: string; desc: string }[] = [
   { title: 'About LENGOLF', path: '/about-us/', desc: 'About the venue, location, and contact details.' },
   { title: 'FAQ', path: '/faq/', desc: 'Quick answers: bay prices, lessons, free club rental, walk-ins, group events, food and drink, opening hours, and step-by-step directions from BTS Chidlom.' },
   { title: 'Golf Courses in Thailand', path: '/golf-courses/', desc: 'Directory of Thai golf courses by region with green fees and course guides.' },
-  { title: 'Second-Hand Golf Clubs', path: '/second-hand-golf-clubs-bangkok/', desc: 'Used Callaway and TaylorMade clubs for sale, testable in our simulators.' },
 ]
 
 function link(title: string, url: string, desc?: string): string {
