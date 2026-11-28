@@ -3161,6 +3161,13 @@ const redirectTests: RedirectTest[] = [
   // that locale keeps landing on English and this assertion keeps it green.
   // Change the rule and this expectation together.
   { path: "/zh/privacy/", expectedStatus: 308, expectedLocation: "/privacy-policy/" },
+  // Second-hand club sales are unlisted (unlistedPageRedirects in
+  // next.config.js). 307, NOT 308: the move is deliberately temporary so the
+  // page can be relisted, and a 308 would be cached by browsers. Both the
+  // listing and a detail page are asserted because they are separate rules;
+  // the id is a real used_clubs_inventory row a customer shared on 2026-11-27.
+  { path: "/second-hand-golf-clubs-bangkok/", expectedStatus: 307, expectedLocation: "/golf-club-rental/" },
+  { path: "/second-hand-golf-clubs-bangkok/7ca3ae10-6e49-4e0e-b13d-2b5bb33dc8ab/", expectedStatus: 307, expectedLocation: "/golf-club-rental/" },
   // Test with trailing slashes — trailingSlash:true causes a 308 hop first,
   // so we test the path that actually triggers the next.config.js redirect.
   // Next.js uses 308 for permanent: true redirects.
@@ -3536,7 +3543,9 @@ const seoTests: SeoTest[] = [
         "query term in the TH metaTitle.",
     },
   },
-  { path: "/second-hand-golf-clubs-bangkok/", locale: "en" },
+  // /second-hand-golf-clubs-bangkok/ was here until 2026-11-28; it now 307s to
+  // /golf-club-rental/ (unlistedPageRedirects in next.config.js, asserted in
+  // redirectTests). Restore this entry when the page is relisted.
   // A blog POST, not the hub: /blog/[slug] and /guide/[slug] are the only
   // routes that emit og:type="article", so without one of them the
   // allowlist's article arm is never exercised by any real page.
@@ -9479,13 +9488,15 @@ const MIN_RAW_HOSTILE_PATHS = 10;
 // +14 on 2026-10-18 for the pricing guide and golf-cost guide in five locales,
 // the EN beginner and best-way FAQ pages, the EN non-golfers guide and the
 // th lessons-coaches guide.
-const MIN_IMAGE_PAGES = 505;
-/** Used-club detail pages reached from the listing. DB rows (43 on
- *  2026-09-24), so a floor of one rather than an exact count. Today they add
- *  no pair the listing lacks (the listing shows every club's photo); the crawl
- *  is there so ClubDetailGallery stays exercised. If the inventory ever sells
- *  out entirely this goes red, and lowering it to 0 is a deliberate edit. */
-const MIN_CLUB_DETAIL_PAGES = 1;
+// -1 on 2026-11-28: /second-hand-golf-clubs-bangkok/ left seoTests (unlisted,
+// now a 307). Restore it with the seoTests entry.
+const MIN_IMAGE_PAGES = 504;
+/** Used-club detail pages reached from the listing. 0 since 2026-11-28: the
+ *  listing is unlisted (307 to /golf-club-rental/), so no detail page is
+ *  reachable and ClubDetailGallery is not exercised. When the page is
+ *  relisted, put this back to 1 (DB rows, 43 on 2026-09-24, so a floor of one
+ *  rather than an exact count) together with the seoTests entry. */
+const MIN_CLUB_DETAIL_PAGES = 0;
 /** Folders only CODE writes to (storageUrl() paths in app/, components/,
  *  data/). clubs/ is left out on purpose: it mixes hardcoded paths with
  *  rental_club_sets rows. used-clubs/ and promotions/ are DB-only. */
@@ -9610,10 +9621,12 @@ async function runImageOptimizerTests() {
   }
 
   // Collect every (src, q) the scanned pages render. routeTests alone is NOT
-  // enough: /golf-club-specs/ and /second-hand-golf-clubs-bangkok/ are only in
-  // seoTests, and the used-club detail pages (ClubDetailGallery, their only
-  // consumer) are in neither list because their ids are DB rows. So the page
-  // set is routeTests ∪ seoTests, plus every detail page the listing links to.
+  // enough: /golf-club-specs/ is only in seoTests, and the used-club detail
+  // pages (ClubDetailGallery, their only consumer) are in neither list because
+  // their ids are DB rows. So the page set is routeTests ∪ seoTests, plus every
+  // detail page the listing links to. While second-hand sales are unlisted
+  // (2026-11-28) the listing is not in seoTests, so the discovery below finds
+  // nothing; it is kept so relisting needs no code here.
   const pairs = new Map<string, { src: string; w: number; q: number; page: string }>();
   const pagePaths = [
     ...new Set([...routeTests.map((t) => t.path), ...seoTests.map((t) => t.path)]),

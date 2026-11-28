@@ -139,6 +139,5 @@ export const FOOTER_MENU = [
   { label: 'LESSONS', href: '/lessons' },
   { label: 'CLUBS AT LENGOLF', href: '/golf-club-rental' },
   { label: 'RENT FOR A COURSE', href: '/golf-course-club-rental' },
-  { label: 'SECOND-HAND CLUBS', href: '/second-hand-golf-clubs-bangkok' },
   { label: 'BLOG', href: '/blog' },
 ] as const

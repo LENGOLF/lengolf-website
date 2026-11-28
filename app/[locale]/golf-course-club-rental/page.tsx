@@ -19,7 +19,6 @@ import {
   Phone,
   MapPin,
   CreditCard,
-  ShoppingBag,
   Target,
   GraduationCap,
 } from 'lucide-react'
@@ -611,7 +610,7 @@ export default async function GolfCourseClubRentalPage({ params }: { params: Pro
           <span style={{ color: '#007429' }}>{t('crossLinksTitle')}</span>{' '}
           <span className="text-foreground">{t('crossLinksTitleSuffix')}</span>
         </h2>
-        <div className="mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-6 sm:grid-cols-2">
+        <div className="mx-auto mt-8 grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-3">
           <Link
             href="/golf-club-rental"
             className="group rounded-xl border border-primary/15 bg-white p-6 transition-shadow hover:shadow-md block"
@@ -621,16 +620,6 @@ export default async function GolfCourseClubRentalPage({ params }: { params: Pro
             </div>
             <h3 className="mb-1 font-bold text-foreground group-hover:text-primary transition-colors">{t('crossLink1Label')}</h3>
             <p className="text-sm text-muted-foreground">{t('crossLink1Desc')}</p>
-          </Link>
-          <Link
-            href="/second-hand-golf-clubs-bangkok"
-            className="group rounded-xl border border-primary/15 bg-white p-6 transition-shadow hover:shadow-md block"
-          >
-            <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-primary/10" style={{ color: '#007429' }}>
-              <ShoppingBag size={20} />
-            </div>
-            <h3 className="mb-1 font-bold text-foreground group-hover:text-primary transition-colors">{t('crossLink2Label')}</h3>
-            <p className="text-sm text-muted-foreground">{t('crossLink2Desc')}</p>
           </Link>
           <Link
             href="/golf"
